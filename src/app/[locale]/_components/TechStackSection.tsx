@@ -29,7 +29,7 @@ export function TechStackSection({ locale }: { locale: Locale }) {
           {t.persuasion.techSubheading}
         </p>
       </div>
-      <div className="mt-12 grid grid-cols-2 gap-6 sm:grid-cols-4">
+      <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
         {items.map((item) => (
           <MagneticIcon key={item.key} label={item.label} description={item.description} tip={item.tip} />
         ))}

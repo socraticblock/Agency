@@ -124,7 +124,7 @@ function StickyCard({
       <h3 className="mt-4 text-2xl font-semibold text-slate-50 sm:text-3xl">
         {title}
       </h3>
-      <p className="mt-4 text-sm leading-relaxed text-slate-300 sm:text-base">
+      <p className="mt-4 text-slate-300 text-base leading-relaxed md:text-lg">
         {bodyContent}
       </p>
     </motion.article>

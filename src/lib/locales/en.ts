@@ -105,7 +105,21 @@ export const en = {
   apply: {
     title: "Digital Maturity Audit",
     questionFind: "How do you want your customers to find you online?",
+    step1Label: "Business Name",
+    step2Label: "Biggest Digital Bottleneck",
+    step3Label: "Target Monthly Revenue",
+    step4Label: "Current Website URL",
+    next: "Next",
     submit: "Submit",
     back: "Back",
+    thanks: "Thanks — we'll be in touch soon.",
+    placeholder1: "e.g. Acme Ltd",
+    placeholder2: "e.g. slow site, no leads",
+    placeholder3: "e.g. 5000",
+    placeholder4: "https://",
+  },
+  footer: {
+    headline: "Your Footprint Starts Here.",
+    cta: "Start Your Audit",
   },
 };

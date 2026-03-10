@@ -6,6 +6,7 @@ import { TechStackSection } from "./_components/TechStackSection";
 import { BusinessDictionary } from "./_components/BusinessDictionary";
 import { ROICalculator } from "./_components/ROICalculator";
 import { TrustSection } from "./_components/TrustSection";
+import { GlobalFooter } from "./_components/GlobalFooter";
 import type { Locale } from "@/lib/i18n";
 
 export default async function Home({
@@ -27,6 +28,7 @@ export default async function Home({
         <BusinessDictionary locale={lang} />
         <ROICalculator locale={lang} />
         <TrustSection locale={lang} />
+        <GlobalFooter locale={lang} />
       </main>
     </>
   );
