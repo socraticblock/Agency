@@ -1,5 +1,7 @@
 import "./globals.css";
 import { inter, notoGeorgian } from "@/fonts";
+import { LenisProvider } from "@/components/providers/LenisProvider";
+import { CustomCursor } from "@/components/ui/CustomCursor";
 
 export default function RootLayout({
   children,
@@ -18,7 +20,10 @@ export default function RootLayout({
               backgroundSize: "280px 280px, auto",
             }}
           />
-          <div className="relative z-10">{children}</div>
+          <div className="relative z-10">
+            <LenisProvider>{children}</LenisProvider>
+            <CustomCursor />
+          </div>
         </div>
       </body>
     </html>

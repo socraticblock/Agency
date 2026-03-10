@@ -56,7 +56,7 @@ function GlassCardSpotlight({
       variants={itemVariants}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 shadow-[0_0_0_1px_rgba(15,23,42,0.4)] backdrop-blur-xl transition hover:border-emerald-400/50 hover:shadow-[0_0_40px_rgba(16,185,129,0.25)]"
+      className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.3)] backdrop-blur-xl transition hover:border-emerald-400/50 hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.3),0_0_40px_rgba(16,185,129,0.2)]"
     >
       <motion.div
         aria-hidden

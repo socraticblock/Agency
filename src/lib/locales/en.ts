@@ -4,6 +4,7 @@ export const en = {
     contact: "Contact",
   },
   hero: {
+    statusBadge: "Accepting 2 new partners for Q3",
     headline: "Your Business Deserves a Footprint",
     subhead:
       "Web-as-a-Service: We build it, we optimize it, we put you on the map, and we keep it running.",

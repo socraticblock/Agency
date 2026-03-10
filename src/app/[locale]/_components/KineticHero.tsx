@@ -9,6 +9,8 @@ import {
 } from "framer-motion";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
+import { TopographyGrid } from "./TopographyGrid";
+import { StatusBadge } from "./StatusBadge";
 
 export function KineticHero({ locale }: { locale: Locale }) {
   const t = getMessages(locale);
@@ -49,7 +51,7 @@ export function KineticHero({ locale }: { locale: Locale }) {
     glowY.set(35);
   };
 
-  const handleCtaMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleCtaMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const relX = (e.clientX - rect.left) / rect.width - 0.5;
     const relY = (e.clientY - rect.top) / rect.height - 0.5;
@@ -72,6 +74,7 @@ export function KineticHero({ locale }: { locale: Locale }) {
       onMouseLeave={handleSectionLeave}
       className="relative flex min-h-[70vh] flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-black via-[#020617] to-black px-4 py-20 text-center"
     >
+      <TopographyGrid />
       <motion.div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 blur-3xl"
@@ -79,6 +82,7 @@ export function KineticHero({ locale }: { locale: Locale }) {
           backgroundImage: glowBackground,
         }}
       />
+      <StatusBadge locale={locale} />
       <motion.div
         initial="hidden"
         animate="visible"
@@ -86,7 +90,7 @@ export function KineticHero({ locale }: { locale: Locale }) {
           hidden: { opacity: 0 },
           visible: {
             opacity: 1,
-            transition: { staggerChildren: 0.06, delayChildren: 0.1 },
+            transition: { staggerChildren: 0.05, delayChildren: 0.1 },
           },
         }}
         className="max-w-4xl text-balance text-4xl font-bold leading-tight text-white sm:text-5xl md:text-6xl"
@@ -128,8 +132,8 @@ export function KineticHero({ locale }: { locale: Locale }) {
         transition={{ delay: 0.55, duration: 0.5 }}
         className="mt-10 flex flex-wrap items-center justify-center gap-4"
       >
-        <motion.button
-          type="button"
+        <motion.a
+          href="#contact"
           onMouseMove={handleCtaMove}
           onMouseLeave={handleCtaLeave}
           style={{ x: ctaX, y: ctaY }}
@@ -138,7 +142,7 @@ export function KineticHero({ locale }: { locale: Locale }) {
         >
           <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.4),_transparent_60%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           <span className="relative z-10">{t.hero.cta}</span>
-        </motion.button>
+        </motion.a>
         <a
           href="https://wa.me/995"
           target="_blank"
