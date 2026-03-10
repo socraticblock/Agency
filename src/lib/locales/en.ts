@@ -103,6 +103,19 @@ export const en = {
       { tech: "Local SEO", result: "You appear when people search nearby." },
     ],
   },
+  pointOneStack: {
+    tagline: "The Infrastructure of Your Growth.",
+    label: "THE 0.1% STACK",
+    items: [
+      { name: "Next.js 16 & React 19", headline: "Instant Sales.", body: "In 2026, a 1-second delay is a lost customer. This hybrid-rendering technology ensures your site loads before they can even blink, capturing every lead the moment they arrive." },
+      { name: "Vercel & The Edge", headline: "Unbreakable Reliability.", body: "Your site is hosted on a global edge network. Whether you have 10 or 10,000 visitors at once, your digital footprint stays fast and never goes down." },
+      { name: "Tailwind CSS 4", headline: "Future-Proof Agility.", body: "A modular design system that allows us to update your brand or add new features in hours, not weeks. Your business evolves, and your site stays ahead of the curve." },
+      { name: "Framer Motion 11", headline: "The 'Premium' Premium.", body: "We add a layer of silky, physics-based motion that subconsciously signals quality. It tells your customer: 'This business is high-end, detailed, and trustworthy.'" },
+      { name: "Lenis Smooth Scroll", headline: "Effortless Browsing.", body: "We hijack the native browser scroll to create a weighted, frictionless glide. It makes reading your content feel like a luxury experience, keeping users engaged longer." },
+      { name: "Structured Data (Schema)", headline: "Google VIP Treatment.", body: "We embed a hidden 'cheat sheet' into your code. This tells search engines exactly what you sell, pushing you to the top with rich results like stars and FAQs." },
+      { name: "Local SEO Strategy", headline: "Hyper-Local Dominance.", body: "We engineer your footprint so you are the undisputed first choice when someone in your city searches for your exact service. We put you on the map, literally." },
+    ],
+  },
   apply: {
     title: "Digital Maturity Audit",
     questionFind: "How do you want your customers to find you online?",

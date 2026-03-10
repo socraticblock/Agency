@@ -1,103 +1,67 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion } from "framer-motion";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 
-type TechKey = "next" | "vercel" | "tailwind" | "framer";
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.08 },
+  },
+};
+
+const rowVariants = {
+  hidden: { opacity: 0, y: 12 },
+  visible: { opacity: 1, y: 0 },
+};
 
 export function TechStackSection({ locale }: { locale: Locale }) {
   const t = getMessages(locale);
-
-  const tooltips = t.tooltips;
-  const items: { key: TechKey; label: string; description: string; tip: string; url: string }[] = [
-    { key: "next", label: "Next.js 15", description: t.persuasion.techLogos.next, tip: tooltips.nextjs, url: "https://nextjs.org" },
-    { key: "vercel", label: "Vercel", description: t.persuasion.techLogos.vercel, tip: tooltips.vercel, url: "https://vercel.com" },
-    { key: "tailwind", label: "Tailwind", description: t.persuasion.techLogos.tailwind, tip: tooltips.tailwind, url: "https://tailwindcss.com" },
-    { key: "framer", label: "Framer Motion", description: t.persuasion.techLogos.framer, tip: tooltips.framer, url: "https://www.framer.com/motion/" },
-  ];
+  const { tagline, label, items } = t.pointOneStack;
 
   return (
     <section className="mx-auto max-w-5xl px-4 pb-16 pt-2 sm:px-6">
       <div className="mx-auto max-w-3xl text-center">
-        <h2 className="text-2xl font-semibold text-slate-100 sm:text-3xl">
-          {t.persuasion.techHeading}
+        <p className="text-sm font-medium uppercase tracking-wider text-emerald-400/90">
+          {label}
+        </p>
+        <h2 className="mt-2 text-2xl font-semibold text-slate-100 sm:text-3xl">
+          {tagline}
         </h2>
-        <p className="mt-2 text-sm font-medium text-emerald-400/90 sm:text-base">
-          {t.persuasion.techForResults}
-        </p>
-        <p className="mt-2 text-sm text-slate-400 sm:text-base">
-          {t.persuasion.techSubheading}
-        </p>
       </div>
-      <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
-        {items.map((item) => (
-          <MagneticIcon key={item.key} label={item.label} description={item.description} tip={item.tip} url={item.url} />
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-40px" }}
+        className="mt-8 flex flex-col gap-4 sm:mx-auto"
+      >
+        {items.map((item, i) => (
+          <motion.div
+            key={i}
+            variants={rowVariants}
+            whileHover={{
+              scale: 1.01,
+              x: 4,
+              backgroundColor: "rgba(255,255,255,0.08)",
+              borderColor: "rgba(16,185,129,0.3)",
+            }}
+            className="mb-4 flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md last:mb-0 md:flex-row md:items-start md:gap-6"
+          >
+            <div className="md:w-[30%] md:shrink-0">
+              <h3 className="font-bold text-emerald-400">{item.name}</h3>
+            </div>
+            <div className="min-w-0 md:w-[70%]">
+              <p className="mb-1 font-medium text-white">{item.headline}</p>
+              <p className="text-sm leading-relaxed text-slate-300 md:text-base">
+                {item.body}
+              </p>
+            </div>
+          </motion.div>
         ))}
-      </div>
-      <p className="mt-10 text-center text-sm text-slate-500 sm:text-base">
-        {t.persuasion.techTagline}
-      </p>
+      </motion.div>
     </section>
   );
 }
-function MagneticIcon({
-  label,
-  description,
-  tip,
-  url,
-}: {
-  label: string;
-  description: string;
-  tip: string;
-  url: string;
-}) {
-  const ref = useRef<HTMLAnchorElement | null>(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const springX = useSpring(x, { stiffness: 300, damping: 26 });
-  const springY = useSpring(y, { stiffness: 300, damping: 26 });
-
-  const handleMove = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const relX = (event.clientX - rect.left) / rect.width - 0.5;
-    const relY = (event.clientY - rect.top) / rect.height - 0.5;
-    const strength = 10;
-    x.set(relX * -strength);
-    y.set(relY * -strength);
-  };
-
-  const handleLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
-
-  return (
-    <motion.a
-      ref={ref}
-      href={url}
-      target="_blank"
-      rel="noopener noreferrer"
-      onMouseMove={handleMove}
-      onMouseLeave={handleLeave}
-      style={{ x: springX, y: springY, willChange: "transform" }}
-      whileTap={{ scale: 0.98 }}
-      whileHover={{ y: -2 }}
-      className="flex flex-col items-center text-center transition-colors hover:text-slate-100"
-    >
-      <div className="group relative flex h-24 w-24 items-center justify-center rounded-3xl border border-white/10 bg-white/5 shadow-[0_10px_40px_rgba(0,0,0,0.6)] backdrop-blur-xl transition-colors hover:border-emerald-500/30 hover:bg-white/10">
-        <span className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-100">
-          {label}
-        </span>
-      </div>
-      <p className="mt-2 max-w-[11rem] text-emerald-400/80 text-[clamp(0.75rem,2vw,0.875rem)]">
-        {tip}
-      </p>
-      <p className="mt-1 max-w-[11rem] text-xs text-slate-400">{description}</p>
-    </motion.a>
-  );
-}
-
-
