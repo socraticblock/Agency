@@ -114,6 +114,7 @@ export const ka = {
     submit: "გაგზავნა",
     back: "უკან",
     thanks: "მადლობა — მალე დაგიკავშირდებით.",
+    scanningMessage: "ციფრული ფეხის ანაბეჭდის სკანირება...",
     placeholder1: "მაგ. Acme Ltd",
     placeholder2: "მაგ. ნელი საიტი, ლიდები არ არის",
     placeholder3: "მაგ. 5000",

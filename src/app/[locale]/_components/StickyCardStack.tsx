@@ -5,7 +5,6 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 import { TopographyGrid } from "./TopographyGrid";
-import { JargonTooltip } from "@/components/ui/JargonTooltip";
 
 const TOP_CLASSES = ["top-24", "top-28", "top-32", "top-36"] as const;
 
@@ -47,7 +46,7 @@ export function StickyCardStack({ locale }: { locale: Locale }) {
   return (
     <section
       ref={sectionRef}
-      className="relative mx-auto mt-8 max-w-5xl px-4 pb-24 pt-8 sm:px-6"
+      className="relative mx-auto mt-8 max-w-5xl px-4 pb-16 pt-8 sm:px-6"
     >
       <TopographyGrid />
       <div className="relative z-10">
@@ -59,7 +58,7 @@ export function StickyCardStack({ locale }: { locale: Locale }) {
             {t.persuasion.stackSubheading}
           </p>
         </div>
-        <div className="mt-16 space-y-10 pb-[60vh]">
+        <div className="mt-10 space-y-8 pb-24">
           {cards.map((card, index) => (
             <StickyCard
               key={card.key}
@@ -100,17 +99,7 @@ function StickyCard({
   const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.96]);
 
   const topClass = TOP_CLASSES[index] ?? TOP_CLASSES[TOP_CLASSES.length - 1];
-
-  const bodyContent =
-    tooltipTerm && tooltipTip && body.includes(tooltipTerm) ? (
-      <>
-        {body.split(tooltipTerm)[0]}
-        <JargonTooltip tip={tooltipTip}>{tooltipTerm}</JargonTooltip>
-        {body.split(tooltipTerm)[1]}
-      </>
-    ) : (
-      body
-    );
+  const showBenefit = Boolean(tooltipTerm && tooltipTip);
 
   return (
     <motion.article
@@ -125,8 +114,13 @@ function StickyCard({
         {title}
       </h3>
       <p className="mt-4 text-slate-300 text-base leading-relaxed md:text-lg">
-        {bodyContent}
+        {body}
       </p>
+      {showBenefit && (
+        <p className="mt-2 text-emerald-400/80 text-[clamp(0.75rem,2vw,0.875rem)]">
+          {tooltipTerm}: {tooltipTip}
+        </p>
+      )}
     </motion.article>
   );
 }

@@ -4,7 +4,6 @@ import { useRef } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
-import { JargonTooltip } from "@/components/ui/JargonTooltip";
 
 type TechKey = "next" | "vercel" | "tailwind" | "framer";
 
@@ -20,7 +19,7 @@ export function TechStackSection({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <section className="mx-auto max-w-5xl px-4 pb-24 pt-4 sm:px-6">
+    <section className="mx-auto max-w-5xl px-4 pb-16 pt-2 sm:px-6">
       <div className="mx-auto max-w-3xl text-center">
         <h2 className="text-2xl font-semibold text-slate-100 sm:text-3xl">
           {t.persuasion.techHeading}
@@ -29,7 +28,7 @@ export function TechStackSection({ locale }: { locale: Locale }) {
           {t.persuasion.techSubheading}
         </p>
       </div>
-      <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
+      <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
         {items.map((item) => (
           <MagneticIcon key={item.key} label={item.label} description={item.description} tip={item.tip} />
         ))}
@@ -80,13 +79,14 @@ function MagneticIcon({
         style={{ x: springX, y: springY, willChange: "transform" }}
         className="group relative flex h-24 w-24 items-center justify-center rounded-3xl border border-white/10 bg-white/5 shadow-[0_10px_40px_rgba(0,0,0,0.6)] backdrop-blur-xl"
       >
-        <JargonTooltip tip={tip}>
-          <span className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-100">
-            {label}
-          </span>
-        </JargonTooltip>
+        <span className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-100">
+          {label}
+        </span>
       </motion.div>
-      <p className="mt-3 max-w-[11rem] text-xs text-slate-400">{description}</p>
+      <p className="mt-2 max-w-[11rem] text-emerald-400/80 text-[clamp(0.75rem,2vw,0.875rem)]">
+        {tip}
+      </p>
+      <p className="mt-1 max-w-[11rem] text-xs text-slate-400">{description}</p>
     </div>
   );
 }

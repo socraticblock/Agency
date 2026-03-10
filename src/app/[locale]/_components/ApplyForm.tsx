@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, animate, useMotionValueEvent } from "framer-motion";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 
 const SCRAMBLE_CHARS = "#*0X";
 const SCRAMBLE_DURATION_MS = 800;
 const SCRAMBLE_INTERVAL_MS = 50;
+const SCANNING_DURATION_MS = 2500;
 
 function scrambleString(len: number): string {
   let s = "";
@@ -23,12 +24,18 @@ export function ApplyForm({ locale }: { locale: Locale }) {
   const finalTitle = t.apply.title;
 
   const [step, setStep] = useState(1);
+  const [scanning, setScanning] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [displayTitle, setDisplayTitle] = useState(finalTitle);
   const [businessName, setBusinessName] = useState("");
   const [bottleneck, setBottleneck] = useState("");
   const [targetRevenue, setTargetRevenue] = useState("");
   const [websiteUrl, setWebsiteUrl] = useState("");
+
+  const progressMotion = useMotionValue(0);
+  const [displayPercent, setDisplayPercent] = useState(0);
+
+  useMotionValueEvent(progressMotion, "change", (v) => setDisplayPercent(Math.round(v)));
 
   useEffect(() => {
     const len = finalTitle.length;
@@ -45,18 +52,40 @@ export function ApplyForm({ locale }: { locale: Locale }) {
     return () => clearInterval(id);
   }, [finalTitle]);
 
+  useEffect(() => {
+    if (!scanning) return;
+    progressMotion.set(0);
+    setDisplayPercent(0);
+    const controls = animate(progressMotion, 100, {
+      duration: SCANNING_DURATION_MS / 1000,
+      ease: [0.22, 1, 0.36, 1],
+    });
+    const timeout = setTimeout(() => {
+      setScanning(false);
+      setSubmitted(true);
+    }, SCANNING_DURATION_MS);
+    return () => {
+      controls.stop();
+      clearTimeout(timeout);
+    };
+  }, [scanning, progressMotion]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (step < 4) {
       setStep((s) => s + 1);
       return;
     }
-    setSubmitted(true);
+    setScanning(true);
   };
 
   const goBack = () => {
     if (step > 1) setStep((s) => s - 1);
   };
+
+  const showForm = !scanning && !submitted;
+  const showScanning = scanning;
+  const showThanks = submitted;
 
   return (
     <>
@@ -71,9 +100,9 @@ export function ApplyForm({ locale }: { locale: Locale }) {
       </h1>
 
       <AnimatePresence mode="wait">
-        {!submitted ? (
+        {showForm && (
           <motion.form
-            key={step}
+            key="form"
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
@@ -173,7 +202,33 @@ export function ApplyForm({ locale }: { locale: Locale }) {
               </button>
             </div>
           </motion.form>
-        ) : (
+        )}
+
+        {showScanning && (
+          <motion.div
+            key="scanning"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2 }}
+            className="mt-10 space-y-4"
+          >
+            <p className="text-slate-300">{t.apply.scanningMessage}</p>
+            <div className="h-2 w-full overflow-hidden rounded-full bg-slate-800">
+              <motion.div
+                className="h-full rounded-full bg-emerald-500"
+                initial={{ width: "0%" }}
+                animate={{ width: "100%" }}
+                transition={{ duration: SCANNING_DURATION_MS / 1000, ease: [0.22, 1, 0.36, 1] }}
+              />
+            </div>
+            <p className="text-2xl font-semibold text-emerald-400 tabular-nums">
+              {displayPercent}%
+            </p>
+          </motion.div>
+        )}
+
+        {showThanks && (
           <motion.p
             key="thanks"
             initial={{ opacity: 0, y: 8 }}

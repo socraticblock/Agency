@@ -113,6 +113,7 @@ export const en = {
     submit: "Submit",
     back: "Back",
     thanks: "Thanks — we'll be in touch soon.",
+    scanningMessage: "Scanning Digital Footprint...",
     placeholder1: "e.g. Acme Ltd",
     placeholder2: "e.g. slow site, no leads",
     placeholder3: "e.g. 5000",
