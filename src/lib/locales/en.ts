@@ -65,6 +65,7 @@ export const en = {
       },
     },
     techHeading: "The Engine Under the Hood",
+    techForResults: "The tech we use for the results for you.",
     techSubheading: "We build high-speed revenue infrastructure on battle-tested tools.",
     techTagline: "Every millisecond we win back for you becomes more traffic, more trust, and more booked work.",
     techLogos: {

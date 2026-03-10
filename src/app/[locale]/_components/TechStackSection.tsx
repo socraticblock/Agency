@@ -11,11 +11,11 @@ export function TechStackSection({ locale }: { locale: Locale }) {
   const t = getMessages(locale);
 
   const tooltips = t.tooltips;
-  const items: { key: TechKey; label: string; description: string; tip: string }[] = [
-    { key: "next", label: "Next.js 15", description: t.persuasion.techLogos.next, tip: tooltips.nextjs },
-    { key: "vercel", label: "Vercel", description: t.persuasion.techLogos.vercel, tip: tooltips.vercel },
-    { key: "tailwind", label: "Tailwind", description: t.persuasion.techLogos.tailwind, tip: tooltips.tailwind },
-    { key: "framer", label: "Framer Motion", description: t.persuasion.techLogos.framer, tip: tooltips.framer },
+  const items: { key: TechKey; label: string; description: string; tip: string; url: string }[] = [
+    { key: "next", label: "Next.js 15", description: t.persuasion.techLogos.next, tip: tooltips.nextjs, url: "https://nextjs.org" },
+    { key: "vercel", label: "Vercel", description: t.persuasion.techLogos.vercel, tip: tooltips.vercel, url: "https://vercel.com" },
+    { key: "tailwind", label: "Tailwind", description: t.persuasion.techLogos.tailwind, tip: tooltips.tailwind, url: "https://tailwindcss.com" },
+    { key: "framer", label: "Framer Motion", description: t.persuasion.techLogos.framer, tip: tooltips.framer, url: "https://www.framer.com/motion/" },
   ];
 
   return (
@@ -24,13 +24,16 @@ export function TechStackSection({ locale }: { locale: Locale }) {
         <h2 className="text-2xl font-semibold text-slate-100 sm:text-3xl">
           {t.persuasion.techHeading}
         </h2>
-        <p className="mt-4 text-sm text-slate-400 sm:text-base">
+        <p className="mt-2 text-sm font-medium text-emerald-400/90 sm:text-base">
+          {t.persuasion.techForResults}
+        </p>
+        <p className="mt-2 text-sm text-slate-400 sm:text-base">
           {t.persuasion.techSubheading}
         </p>
       </div>
       <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
         {items.map((item) => (
-          <MagneticIcon key={item.key} label={item.label} description={item.description} tip={item.tip} />
+          <MagneticIcon key={item.key} label={item.label} description={item.description} tip={item.tip} url={item.url} />
         ))}
       </div>
       <p className="mt-10 text-center text-sm text-slate-500 sm:text-base">
@@ -39,23 +42,24 @@ export function TechStackSection({ locale }: { locale: Locale }) {
     </section>
   );
 }
-
 function MagneticIcon({
   label,
   description,
   tip,
+  url,
 }: {
   label: string;
   description: string;
   tip: string;
+  url: string;
 }) {
-  const ref = useRef<HTMLDivElement | null>(null);
+  const ref = useRef<HTMLAnchorElement | null>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const springX = useSpring(x, { stiffness: 300, damping: 26 });
   const springY = useSpring(y, { stiffness: 300, damping: 26 });
 
-  const handleMove = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleMove = (event: React.MouseEvent<HTMLAnchorElement>) => {
     if (!ref.current) return;
     const rect = ref.current.getBoundingClientRect();
     const relX = (event.clientX - rect.left) / rect.width - 0.5;
@@ -71,23 +75,29 @@ function MagneticIcon({
   };
 
   return (
-    <div className="flex flex-col items-center text-center">
-      <motion.div
-        ref={ref}
-        onMouseMove={handleMove}
-        onMouseLeave={handleLeave}
-        style={{ x: springX, y: springY, willChange: "transform" }}
-        className="group relative flex h-24 w-24 items-center justify-center rounded-3xl border border-white/10 bg-white/5 shadow-[0_10px_40px_rgba(0,0,0,0.6)] backdrop-blur-xl"
-      >
+    <motion.a
+      ref={ref}
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      onMouseMove={handleMove}
+      onMouseLeave={handleLeave}
+      style={{ x: springX, y: springY, willChange: "transform" }}
+      whileTap={{ scale: 0.98 }}
+      whileHover={{ y: -2 }}
+      className="flex flex-col items-center text-center transition-colors hover:text-slate-100"
+    >
+      <div className="group relative flex h-24 w-24 items-center justify-center rounded-3xl border border-white/10 bg-white/5 shadow-[0_10px_40px_rgba(0,0,0,0.6)] backdrop-blur-xl transition-colors hover:border-emerald-500/30 hover:bg-white/10">
         <span className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-100">
           {label}
         </span>
-      </motion.div>
+      </div>
       <p className="mt-2 max-w-[11rem] text-emerald-400/80 text-[clamp(0.75rem,2vw,0.875rem)]">
         {tip}
       </p>
       <p className="mt-1 max-w-[11rem] text-xs text-slate-400">{description}</p>
-    </div>
+    </motion.a>
   );
 }
+
 
