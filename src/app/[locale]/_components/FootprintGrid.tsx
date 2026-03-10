@@ -2,13 +2,13 @@
 
 import {
   motion,
-  useInView,
   useMotionTemplate,
   useMotionValue,
 } from "framer-motion";
 import { useRef } from "react";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
+import { JargonTooltip } from "@/components/ui/JargonTooltip";
 
 const containerVariants = {
   hidden: { opacity: 0, y: 40 },
@@ -92,12 +92,18 @@ export function FootprintGrid({ locale }: { locale: Locale }) {
         <GlassCardSpotlight>
           <div className="mb-3 text-2xl">⚡</div>
           <h3 className="font-bold text-slate-50">{t.bento.build.title}</h3>
-          <p className="mt-2 text-sm text-slate-400">{t.bento.build.desc}</p>
+          <p className="mt-2 text-sm text-slate-400">
+            {t.bento.build.desc.split("Next.js")[0]}
+            <JargonTooltip tip={t.tooltips.nextjs}>Next.js</JargonTooltip>
+            {t.bento.build.desc.split("Next.js")[1]}
+          </p>
         </GlassCardSpotlight>
 
         <GlassCardSpotlight>
           <div className="mb-3 text-2xl">🔍</div>
-          <h3 className="font-bold text-slate-50">{t.bento.seo.title}</h3>
+          <h3 className="font-bold text-slate-50">
+            <JargonTooltip tip={t.tooltips.seo}>{t.bento.seo.title}</JargonTooltip>
+          </h3>
           <p className="mt-2 text-sm text-slate-400">{t.bento.seo.desc}</p>
           <div className="mt-4 rounded-lg border border-slate-700 bg-slate-900/60 p-3 text-left text-xs text-slate-300">
             <div className="text-emerald-300">Your Business — Tbilisi</div>

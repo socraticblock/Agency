@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion, useMotionValue, animate, useMotionValueEvent } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, animate, useMotionValueEvent } from "framer-motion";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 
@@ -24,6 +24,7 @@ export function ROICalculator({ locale }: { locale: Locale }) {
   const recoveredMotion = useMotionValue(0);
   const [displayLoss, setDisplayLoss] = useState(0);
   const [displayRecovered, setDisplayRecovered] = useState(0);
+  const [speedTipOpen, setSpeedTipOpen] = useState(false);
 
   useMotionValueEvent(lossMotion, "change", (v) => setDisplayLoss(v));
   useMotionValueEvent(recoveredMotion, "change", (v) => setDisplayRecovered(v));
@@ -57,9 +58,29 @@ export function ROICalculator({ locale }: { locale: Locale }) {
         <h2 className="text-center text-2xl font-semibold text-slate-100 sm:text-3xl">
           {t.roi.title}
         </h2>
-        <p className="mt-3 text-center text-sm text-slate-400">
+        <p className="mt-3 flex flex-wrap items-center justify-center gap-2 text-center text-sm text-slate-400">
           {t.roi.subheading}
+          <button
+            type="button"
+            onClick={() => setSpeedTipOpen((v) => !v)}
+            className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-slate-500/60 bg-white/5 text-slate-400 transition hover:bg-white/10 hover:text-slate-300"
+            aria-label={t.roi.speedTip}
+          >
+            <span className="text-[10px] font-semibold">i</span>
+          </button>
         </p>
+        <AnimatePresence>
+          {speedTipOpen && (
+            <motion.p
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              className="mt-3 rounded-xl border border-white/10 bg-slate-900/80 px-4 py-2.5 text-center text-xs text-slate-300 backdrop-blur-xl"
+            >
+              {t.roi.speedTip}
+            </motion.p>
+          )}
+        </AnimatePresence>
 
         <div className="mt-10">
           <label className="block text-sm font-medium text-slate-300">

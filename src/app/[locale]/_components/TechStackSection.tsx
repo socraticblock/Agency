@@ -4,33 +4,19 @@ import { useRef } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
+import { JargonTooltip } from "@/components/ui/JargonTooltip";
 
 type TechKey = "next" | "vercel" | "tailwind" | "framer";
 
 export function TechStackSection({ locale }: { locale: Locale }) {
   const t = getMessages(locale);
 
-  const items: { key: TechKey; label: string; description: string }[] = [
-    {
-      key: "next",
-      label: "Next.js 15",
-      description: t.persuasion.techLogos.next,
-    },
-    {
-      key: "vercel",
-      label: "Vercel",
-      description: t.persuasion.techLogos.vercel,
-    },
-    {
-      key: "tailwind",
-      label: "Tailwind",
-      description: t.persuasion.techLogos.tailwind,
-    },
-    {
-      key: "framer",
-      label: "Framer Motion",
-      description: t.persuasion.techLogos.framer,
-    },
+  const tooltips = t.tooltips;
+  const items: { key: TechKey; label: string; description: string; tip: string }[] = [
+    { key: "next", label: "Next.js 15", description: t.persuasion.techLogos.next, tip: tooltips.nextjs },
+    { key: "vercel", label: "Vercel", description: t.persuasion.techLogos.vercel, tip: tooltips.vercel },
+    { key: "tailwind", label: "Tailwind", description: t.persuasion.techLogos.tailwind, tip: tooltips.tailwind },
+    { key: "framer", label: "Framer Motion", description: t.persuasion.techLogos.framer, tip: tooltips.framer },
   ];
 
   return (
@@ -45,7 +31,7 @@ export function TechStackSection({ locale }: { locale: Locale }) {
       </div>
       <div className="mt-12 grid grid-cols-2 gap-6 sm:grid-cols-4">
         {items.map((item) => (
-          <MagneticIcon key={item.key} label={item.label} description={item.description} />
+          <MagneticIcon key={item.key} label={item.label} description={item.description} tip={item.tip} />
         ))}
       </div>
       <p className="mt-10 text-center text-sm text-slate-500 sm:text-base">
@@ -58,9 +44,11 @@ export function TechStackSection({ locale }: { locale: Locale }) {
 function MagneticIcon({
   label,
   description,
+  tip,
 }: {
   label: string;
   description: string;
+  tip: string;
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const x = useMotionValue(0);
@@ -74,7 +62,6 @@ function MagneticIcon({
     const relX = (event.clientX - rect.left) / rect.width - 0.5;
     const relY = (event.clientY - rect.top) / rect.height - 0.5;
     const strength = 10;
-    // inverted magnetic: move slightly opposite to cursor direction
     x.set(relX * -strength);
     y.set(relY * -strength);
   };
@@ -91,11 +78,13 @@ function MagneticIcon({
         onMouseMove={handleMove}
         onMouseLeave={handleLeave}
         style={{ x: springX, y: springY, willChange: "transform" }}
-        className="flex h-24 w-24 items-center justify-center rounded-3xl border border-white/10 bg-white/5 shadow-[0_10px_40px_rgba(0,0,0,0.6)] backdrop-blur-xl"
+        className="group relative flex h-24 w-24 items-center justify-center rounded-3xl border border-white/10 bg-white/5 shadow-[0_10px_40px_rgba(0,0,0,0.6)] backdrop-blur-xl"
       >
-        <span className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-100">
-          {label}
-        </span>
+        <JargonTooltip tip={tip}>
+          <span className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-100">
+            {label}
+          </span>
+        </JargonTooltip>
       </motion.div>
       <p className="mt-3 max-w-[11rem] text-xs text-slate-400">{description}</p>
     </div>

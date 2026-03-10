@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 import { TopographyGrid } from "./TopographyGrid";
+import { JargonTooltip } from "@/components/ui/JargonTooltip";
 
 const TOP_CLASSES = ["top-24", "top-28", "top-32", "top-36"] as const;
 
@@ -17,23 +18,31 @@ export function StickyCardStack({ locale }: { locale: Locale }) {
       key: "engine",
       title: t.persuasion.cards.engine.title,
       body: t.persuasion.cards.engine.body,
+      tooltipTerm: "Next.js 15",
+      tooltipTip: t.tooltips.nextjs,
     },
     {
       key: "map",
       title: t.persuasion.cards.map.title,
       body: t.persuasion.cards.map.body,
+      tooltipTerm: null,
+      tooltipTip: null,
     },
     {
       key: "shield",
       title: t.persuasion.cards.shield.title,
       body: t.persuasion.cards.shield.body,
+      tooltipTerm: null,
+      tooltipTip: null,
     },
     {
       key: "compound",
       title: t.persuasion.cards.compound.title,
       body: t.persuasion.cards.compound.body,
+      tooltipTerm: null,
+      tooltipTip: null,
     },
-  ] as const;
+  ];
 
   return (
     <section
@@ -57,6 +66,8 @@ export function StickyCardStack({ locale }: { locale: Locale }) {
               index={index}
               title={card.title}
               body={card.body}
+              tooltipTerm={card.tooltipTerm}
+              tooltipTip={card.tooltipTip}
             />
           ))}
         </div>
@@ -69,10 +80,14 @@ function StickyCard({
   index,
   title,
   body,
+  tooltipTerm,
+  tooltipTip,
 }: {
   index: number;
   title: string;
   body: string;
+  tooltipTerm: string | null;
+  tooltipTip: string | null;
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const { scrollYProgress } = useScroll({
@@ -85,6 +100,17 @@ function StickyCard({
   const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.96]);
 
   const topClass = TOP_CLASSES[index] ?? TOP_CLASSES[TOP_CLASSES.length - 1];
+
+  const bodyContent =
+    tooltipTerm && tooltipTip && body.includes(tooltipTerm) ? (
+      <>
+        {body.split(tooltipTerm)[0]}
+        <JargonTooltip tip={tooltipTip}>{tooltipTerm}</JargonTooltip>
+        {body.split(tooltipTerm)[1]}
+      </>
+    ) : (
+      body
+    );
 
   return (
     <motion.article
@@ -99,7 +125,7 @@ function StickyCard({
         {title}
       </h3>
       <p className="mt-4 text-sm leading-relaxed text-slate-300 sm:text-base">
-        {body}
+        {bodyContent}
       </p>
     </motion.article>
   );

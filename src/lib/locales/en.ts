@@ -81,5 +81,31 @@ export const en = {
     potentialLoss: "Potential annual revenue loss",
     kvaliRecovered: "Kvali recovered revenue",
     valueTagline: "Most websites are a cost. Kvali is an asset. Calculate the difference.",
+    speedTip: "Every second of delay is a customer walking out of your virtual door.",
+  },
+  tooltips: {
+    nextjs: "Fast, reliable site that loads in a blink.",
+    seo: "You show up first when locals search.",
+    schema: "Search engines understand your business and show it right.",
+    vercel: "Your site stays fast for everyone, everywhere.",
+    tailwind: "Consistent look and quick design changes.",
+    framer: "Smooth, premium feel without slowing the site.",
+  },
+  dictionary: {
+    heading: "The tech we use. The result for you.",
+    rows: [
+      { tech: "Next.js 15", result: "Sites that load instantly and convert." },
+      { tech: "Vercel Edge", result: "Same speed in Tbilisi or London." },
+      { tech: "Tailwind CSS", result: "Clean design that’s easy to update." },
+      { tech: "Framer Motion", result: "Polished interactions that feel premium." },
+      { tech: "Structured data (Schema)", result: "Google shows your business correctly." },
+      { tech: "Local SEO", result: "You appear when people search nearby." },
+    ],
+  },
+  apply: {
+    title: "Digital Maturity Audit",
+    questionFind: "How do you want your customers to find you online?",
+    submit: "Submit",
+    back: "Back",
   },
 };
