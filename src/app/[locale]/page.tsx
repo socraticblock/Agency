@@ -1,0 +1,25 @@
+import { Navbar } from "./_components/Navbar";
+import { KineticHero } from "./_components/KineticHero";
+import { FootprintGrid } from "./_components/FootprintGrid";
+import { TrustSection } from "./_components/TrustSection";
+import type { Locale } from "@/lib/i18n";
+
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const lang = (locale === "en" ? "en" : "ka") as Locale; // safe: default "ka" for empty/undefined
+
+  return (
+    <>
+      <Navbar locale={lang} />
+      <main>
+        <KineticHero locale={lang} />
+        <FootprintGrid locale={lang} />
+        <TrustSection locale={lang} />
+      </main>
+    </>
+  );
+}
