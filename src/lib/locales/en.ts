@@ -28,6 +28,14 @@ export const en = {
       title: "Maintenance",
       desc: "Always-on uptime. No surprises.",
     },
+    aiAutomation: {
+      title: "The Silent Salesman",
+      desc: "Custom AI agents in WhatsApp handling leads 24/7.",
+    },
+    reputation: {
+      title: "The Trust Engine",
+      desc: "Automated 5-star Google Review growth and friction filtering.",
+    },
   },
   trust: {
     stat: "80%",
@@ -65,5 +73,13 @@ export const en = {
       tailwind: "Tailwind CSS — consistent, fast-to-iterate design system.",
       framer: "Framer Motion — micro-interactions that feel expensive, not noisy.",
     },
+  },
+  roi: {
+    title: "The Cost of Inaction",
+    subheading: "Speed-to-revenue: every second of delay costs conversions. See what you're leaving on the table.",
+    sliderLabel: "Monthly revenue (thousands GEL)",
+    potentialLoss: "Potential annual revenue loss",
+    kvaliRecovered: "Kvali recovered revenue",
+    valueTagline: "Most websites are a cost. Kvali is an asset. Calculate the difference.",
   },
 };

@@ -87,7 +87,7 @@ export function FootprintGrid({ locale }: { locale: Locale }) {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-50px" }}
-        className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4"
+        className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
       >
         <GlassCardSpotlight>
           <div className="mb-3 text-2xl">⚡</div>
@@ -171,6 +171,26 @@ export function FootprintGrid({ locale }: { locale: Locale }) {
             />
           </div>
           <p className="mt-2 text-xs text-slate-400">99.9% uptime</p>
+        </GlassCardSpotlight>
+
+        <GlassCardSpotlight>
+          <div className="mb-3 text-2xl">🤖</div>
+          <h3 className="font-bold text-slate-50">
+            {t.bento.aiAutomation.title}
+          </h3>
+          <p className="mt-2 text-sm text-slate-400">
+            {t.bento.aiAutomation.desc}
+          </p>
+        </GlassCardSpotlight>
+
+        <GlassCardSpotlight>
+          <div className="mb-3 text-2xl">⭐</div>
+          <h3 className="font-bold text-slate-50">
+            {t.bento.reputation.title}
+          </h3>
+          <p className="mt-2 text-sm text-slate-400">
+            {t.bento.reputation.desc}
+          </p>
         </GlassCardSpotlight>
       </motion.div>
     </section>
