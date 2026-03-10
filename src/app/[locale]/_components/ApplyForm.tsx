@@ -186,20 +186,24 @@ export function ApplyForm({ locale }: { locale: Locale }) {
 
             <div className="flex flex-wrap items-center gap-3">
               {step > 1 && (
-                <button
+                <motion.button
                   type="button"
                   onClick={goBack}
+                  whileTap={{ scale: 0.98 }}
+                  whileHover={{ y: -2 }}
                   className="text-sm text-slate-400 transition hover:text-slate-200"
                 >
                   ← {t.apply.back}
-                </button>
+                </motion.button>
               )}
-              <button
+              <motion.button
                 type="submit"
+                whileTap={{ scale: 0.98 }}
+                whileHover={{ y: -2 }}
                 className="rounded-xl bg-emerald-500/20 px-6 py-3 font-medium text-emerald-200 transition hover:bg-emerald-500/30"
               >
                 {step < 4 ? t.apply.next : t.apply.submit}
-              </button>
+              </motion.button>
             </div>
           </motion.form>
         )}
@@ -229,14 +233,37 @@ export function ApplyForm({ locale }: { locale: Locale }) {
         )}
 
         {showThanks && (
-          <motion.p
+          <motion.div
             key="thanks"
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-10 text-slate-300"
+            className="mt-10 space-y-6"
           >
-            {t.apply.thanks}
-          </motion.p>
+            <div className="flex justify-center">
+              <svg
+                width="64"
+                height="64"
+                viewBox="0 0 64 64"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="text-emerald-400"
+                aria-hidden
+              >
+                <motion.path
+                  d="M12 32l14 14 26-28"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  fill="none"
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ pathLength: { duration: 0.5, ease: "easeOut" } }}
+                />
+              </svg>
+            </div>
+            <p className="text-slate-300">{t.apply.thanks}</p>
+          </motion.div>
         )}
       </AnimatePresence>
     </>

@@ -42,6 +42,7 @@ export function Navbar({ locale }: { locale: Locale }) {
                 onClick={() => switchTo(code)}
                 className="relative rounded-full px-3 py-1.5 text-sm font-medium text-white/80"
                 whileTap={{ scale: 0.98 }}
+                whileHover={{ y: -2 }}
               >
                 {locale === code && (
                   <motion.span

@@ -43,7 +43,8 @@ export function GlobalFooter({ locale }: { locale: Locale }) {
           onMouseMove={handleCtaMove}
           onMouseLeave={handleCtaLeave}
           style={{ x: springX, y: springY }}
-          whileTap={{ scale: 0.97 }}
+          whileTap={{ scale: 0.98 }}
+          whileHover={{ y: -2 }}
           className="group relative inline-block overflow-hidden rounded-full border border-emerald-400/60 bg-emerald-500/10 px-8 py-3 text-sm font-semibold text-emerald-100 shadow-[0_0_40px_rgba(16,185,129,0.25)] transition-colors hover:bg-emerald-500/20"
         >
           <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.4),_transparent_60%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
