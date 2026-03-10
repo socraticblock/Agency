@@ -1,6 +1,8 @@
 import { Navbar } from "./_components/Navbar";
 import { KineticHero } from "./_components/KineticHero";
 import { FootprintGrid } from "./_components/FootprintGrid";
+import { StickyCardStack } from "./_components/StickyCardStack";
+import { TechStackSection } from "./_components/TechStackSection";
 import { TrustSection } from "./_components/TrustSection";
 import type { Locale } from "@/lib/i18n";
 
@@ -18,6 +20,8 @@ export default async function Home({
       <main>
         <KineticHero locale={lang} />
         <FootprintGrid locale={lang} />
+        <StickyCardStack locale={lang} />
+        <TechStackSection locale={lang} />
         <TrustSection locale={lang} />
       </main>
     </>

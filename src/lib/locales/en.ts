@@ -34,4 +34,36 @@ export const en = {
     headline: "80% of your customers are looking for you on their phones right now.",
     body: "If you aren't there, you don't exist. We get you on the map, on Google, and always reachable.",
   },
+  persuasion: {
+    stackHeading: "The Architecture of Your Digital Footprint",
+    stackSubheading:
+      "We don’t ship pretty brochures. We design a revenue engine that keeps working when the lights are off.",
+    cards: {
+      engine: {
+        title: "The Engine",
+        body: "High-speed, resilient infrastructure built on Next.js 15, tuned for conversion and uptime.",
+      },
+      map: {
+        title: "The Map",
+        body: "Local SEO, Maps, and location signals aligned so customers never lose you in the scroll.",
+      },
+      shield: {
+        title: "The Shield",
+        body: "Monitoring, maintenance, and guardrails that protect your brand and your revenue surface.",
+      },
+      compound: {
+        title: "The Compound Effect",
+        body: "Every optimization stacks: faster pages, better rankings, more booked calls, more lifetime value.",
+      },
+    },
+    techHeading: "The Engine Under the Hood",
+    techSubheading: "We build high-speed revenue infrastructure on battle-tested tools.",
+    techTagline: "Every millisecond we win back for you becomes more traffic, more trust, and more booked work.",
+    techLogos: {
+      next: "Next.js 15 — hybrid rendering at the edge.",
+      vercel: "Vercel Edge Network — global delivery for local businesses.",
+      tailwind: "Tailwind CSS — consistent, fast-to-iterate design system.",
+      framer: "Framer Motion — micro-interactions that feel expensive, not noisy.",
+    },
+  },
 };
