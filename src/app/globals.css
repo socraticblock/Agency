@@ -53,3 +53,9 @@ body {
 .locale-ka {
   line-height: 1.6;
 }
+
+@media print {
+  .noise-overlay {
+    display: none;
+  }
+}
