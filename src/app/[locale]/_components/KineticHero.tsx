@@ -83,6 +83,9 @@ export function KineticHero({ locale }: { locale: Locale }) {
         }}
       />
       <StatusBadge locale={locale} />
+      <p className="mt-4 text-xs font-medium uppercase tracking-[0.3em] text-emerald-400">
+        {t.sovereign?.tagline}
+      </p>
       <motion.div
         initial="hidden"
         animate="visible"
@@ -133,7 +136,7 @@ export function KineticHero({ locale }: { locale: Locale }) {
         className="mt-10 flex flex-wrap items-center justify-center gap-4"
       >
         <motion.a
-          href="#contact"
+          href={`/${locale}/apply`}
           onMouseMove={handleCtaMove}
           onMouseLeave={handleCtaLeave}
           style={{ x: ctaX, y: ctaY }}

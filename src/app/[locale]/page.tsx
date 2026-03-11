@@ -1,11 +1,10 @@
 import { Navbar } from "./_components/Navbar";
 import { KineticHero } from "./_components/KineticHero";
-import { FootprintGrid } from "./_components/FootprintGrid";
-import { StickyCardStack } from "./_components/StickyCardStack";
 import { TechStackSection } from "./_components/TechStackSection";
-import { ROICalculator } from "./_components/ROICalculator";
-import { TrustSection } from "./_components/TrustSection";
 import { GlobalFooter } from "./_components/GlobalFooter";
+import { SovereignSummary } from "./_components/SovereignSummary";
+import { InefficiencyCalculator } from "./_components/InefficiencyCalculator";
+import { SovereignCommandCenter } from "./_components/SovereignCommandCenter";
 import type { Locale } from "@/lib/i18n";
 
 export default async function Home({
@@ -21,11 +20,10 @@ export default async function Home({
       <Navbar locale={lang} />
       <main>
         <KineticHero locale={lang} />
-        <FootprintGrid locale={lang} />
-        <StickyCardStack locale={lang} />
+        <SovereignSummary locale={lang} />
         <TechStackSection locale={lang} />
-        <ROICalculator locale={lang} />
-        <TrustSection locale={lang} />
+        <InefficiencyCalculator locale={lang} />
+        <SovereignCommandCenter locale={lang} />
         <GlobalFooter locale={lang} />
       </main>
     </>

@@ -5,11 +5,42 @@ export const en = {
   },
   hero: {
     statusBadge: "Accepting 2 new partners for Q3",
-    headline: "Your Business Deserves a Footprint",
+    headline: "Stop Renting Your Audience. Reclaim Your Revenue.",
     subhead:
-      "Web-as-a-Service: We build it, we optimize it, we put you on the map, and we keep it running.",
-    cta: "Book a Footprint Call",
-    ctaSecondary: "WhatsApp",
+      "The Instagram Algorithm is a 20% Inefficiency Tax. We build high-speed, autonomous environments that turn impulse scrollers into owned capital.",
+    cta: "Book Sovereign Audit",
+    ctaSecondary: "WhatsApp: Talk to the Architect",
+  },
+  sovereign: {
+    tagline: "Sovereign Extraction Engine Architect",
+    bridgeTitle: "The Bridge",
+    bridgeBody:
+      "100/100 Lighthouse-grade environments that move you from rented feeds to owned, high-speed infrastructure.",
+    interceptTitle: "The Intercept",
+    interceptBody:
+      "Agentic DM-to-Web flows that catch impulse scrollers mid-swipe and route them into your owned funnels.",
+    vaultTitle: "The Vault",
+    vaultBody:
+      "Edge-deployed infrastructure and data ownership that keep your revenue surface sovereign, not platform-dependent.",
+    summaryHeading: "The Sovereign Extraction Engine",
+    summarySubheading:
+      "Bridge the gap between rented attention and owned capital. Three pillars, one objective: convert algorithmic volatility into predictable revenue.",
+    calcTitle: "Algorithmic Inefficiency Calculator",
+    calcSubheading:
+      "Estimate how much revenue the feed is taxing from your audience before they ever reach owned ground.",
+    calcFollowersLabel: "Monthly Instagram Reach / Followers",
+    calcAovLabel: "Average Order Value (GEL)",
+    calcResultLabel: "Estimated Algorithmic Bleed (per month)",
+    calcCta: "Quantify the Bleed",
+    commandCenterTitle: "Sovereign Command Center",
+    commandCenterSubheading:
+      "Simulated agentic audit of your handle. From DM friction to recovered GEL, see what sovereignty would return.",
+    commandInputLabel: "Instagram handle to audit",
+    commandPlaceholder: "@their_cafe_or_studio",
+    commandRunLabel: "Run Sovereign Audit",
+    commandOutputLead:
+      "Deploying a Sovereign Bridge would recover approximately",
+    commandOutputTail: "GEL per month.",
   },
   bento: {
     build: {
@@ -115,6 +146,23 @@ export const en = {
       { name: "Structured Data (Schema)", headline: "Google VIP Treatment.", body: "We embed a hidden 'cheat sheet' into your code. This tells search engines exactly what you sell, pushing you to the top with rich results like stars and FAQs." },
       { name: "Local SEO Strategy", headline: "Hyper-Local Dominance.", body: "We engineer your footprint so you are the undisputed first choice when someone in your city searches for your exact service. We put you on the map, literally." },
     ],
+  },
+  psychology: {
+    lossAversion: {
+      title: "The Cost of Staying Dependent",
+      body:
+        "Every month you stay rented on social platforms, you compound invisible losses in speed, trust, and owned demand.",
+    },
+    authority: {
+      title: "Evidence, Not Hype",
+      body:
+        "We cite global benchmarks from Deloitte, Google, and Forrester so every recommendation is defensible in the boardroom.",
+    },
+    exclusivity: {
+      title: "Deliberate Scarcity",
+      body:
+        "We only accept a limited number of Sovereign partners per quarter to protect implementation quality and long-term performance.",
+    },
   },
   digitalEconomics: {
     heroTitle: "The Laws of Digital Revenue",
