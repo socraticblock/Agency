@@ -24,7 +24,7 @@ export function TechStackSection({ locale }: { locale: Locale }) {
   return (
     <section className="mx-auto max-w-5xl px-4 pb-16 pt-2 sm:px-6">
       <div className="mx-auto max-w-3xl text-center">
-        <p className="text-sm font-medium uppercase tracking-wider text-emerald-4/90">
+        <p className="text-sm font-medium uppercase tracking-wider text-emerald-400">
           {label}
         </p>
         <h2 className="mt-2 text-2xl font-semibold text-slate-100 sm:text-3xl">
@@ -55,7 +55,7 @@ export function TechStackSection({ locale }: { locale: Locale }) {
             </div>
             <div className="min-w-0 md:w-[70%] max-w-[640px] mx-auto md:mx-0">
               <p className="mb-1.5 font-medium text-white">{item.headline}</p>
-              <p className="text-sm leading-relaxed text-white md:text-white">
+              <p className="text-sm leading-relaxed text-white/60 md:text-white/60">
                 {item.body}
               </p>
             </div>

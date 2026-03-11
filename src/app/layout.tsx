@@ -9,7 +9,7 @@ export default function RootLayout({
   return (
     <html lang="ka">
       <body
-        className={`${inter.variable} ${notoGeorgian.variable} font-sans antialiased bg-[#050505] text-foreground`}
+        className={`${inter.variable} ${notoGeorgian.variable} font-sans antialiased bg-[#0a0a0a] text-foreground`}
       >
         <div className="relative min-h-screen overflow-hidden">
           <div
