@@ -9,7 +9,7 @@ export default function RootLayout({
   return (
     <html lang="ka">
       <body
-        className={`${inter.variable} ${notoGeorgian.variable} font-sans antialiased bg-[#0a0a0a] text-foreground`}
+        className={`${inter.variable} ${notoGeorgian.variable} font-sans antialiased bg-[#050505] text-foreground`}
       >
         <div className="relative min-h-screen overflow-hidden">
           <div
@@ -20,6 +20,7 @@ export default function RootLayout({
               backgroundSize: "280px 280px, auto",
             }}
           />
+          <div className="noise-overlay" aria-hidden />
           <div className="relative z-10">
             <LenisProvider>{children}</LenisProvider>
             <CustomCursor />

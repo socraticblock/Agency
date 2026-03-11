@@ -5,6 +5,11 @@ import { GlobalFooter } from "./_components/GlobalFooter";
 import { SovereignSummary } from "./_components/SovereignSummary";
 import { InefficiencyCalculator } from "./_components/InefficiencyCalculator";
 import { SovereignCommandCenter } from "./_components/SovereignCommandCenter";
+import { InefficiencyTerminal } from "./_components/InefficiencyTerminal";
+import { SovereignTriptych } from "./_components/SovereignTriptych";
+import { PackageGrid } from "./_components/PackageGrid";
+import { SovereignFaq } from "./_components/SovereignFaq";
+import { ChatTerminal } from "@/components/ui/ChatTerminal";
 import type { Locale } from "@/lib/i18n";
 
 export default async function Home({
@@ -22,8 +27,15 @@ export default async function Home({
         <KineticHero locale={lang} />
         <SovereignSummary locale={lang} />
         <TechStackSection locale={lang} />
+        <InefficiencyTerminal locale={lang} />
+        <SovereignTriptych locale={lang} />
+        <PackageGrid locale={lang} />
         <InefficiencyCalculator locale={lang} />
+        <SovereignFaq locale={lang} />
         <SovereignCommandCenter locale={lang} />
+        <section className="mx-auto max-w-4xl px-4 py-16 sm:px-6">
+          <ChatTerminal locale={lang} />
+        </section>
         <GlobalFooter locale={lang} />
       </main>
     </>
