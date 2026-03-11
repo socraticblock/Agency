@@ -65,7 +65,7 @@ export function KineticHero({ locale }: { locale: Locale }) {
     if (typeof ctaY.set === "function") ctaY.set(0);
   };
 
-  const words = t.hero.headline.split(" ");
+  const words: string[] = t.hero.headline.split(" ");
 
   return (
     <section
@@ -96,7 +96,7 @@ export function KineticHero({ locale }: { locale: Locale }) {
         className="max-w-4xl text-balance text-4xl font-bold leading-tight text-white sm:text-5xl md:text-6xl"
         style={{ x: offsetX, y: offsetY }}
       >
-        {words.map((word, index) => (
+        {words.map((word: string, index: number) => (
           <motion.span
             key={`${word}-${index}`}
             className="inline-block mr-2"
@@ -122,7 +122,7 @@ export function KineticHero({ locale }: { locale: Locale }) {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.5 }}
-        className="mt-6 max-w-2xl text-lg text-slate-300 sm:text-xl"
+        className="mt-6 max-w-2xl text-lg text-white/70 sm:text-xl"
       >
         {t.hero.subhead}
       </motion.p>
@@ -144,14 +144,16 @@ export function KineticHero({ locale }: { locale: Locale }) {
           <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.4),_transparent_60%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           <span className="relative z-10">{t.hero.cta}</span>
         </motion.a>
-        <a
+        <motion.a
           href="https://wa.me/995"
           target="_blank"
           rel="noopener noreferrer"
-          className="rounded-full border border-slate-500/60 px-8 py-3 text-sm font-medium text-slate-100 transition hover:bg-white/5"
+          whileTap={{ scale: 0.98 }}
+          whileHover={{ y: -2 }}
+          className="rounded-full border border-slate-500/60 px-8 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5"
         >
           {t.hero.ctaSecondary}
-        </a>
+        </motion.a>
       </motion.div>
     </section>
   );

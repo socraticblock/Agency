@@ -35,7 +35,7 @@ export function Navbar({ locale }: { locale: Locale }) {
             {t.nav.contact}
           </a>
           <div className="flex rounded-full bg-[#0f172a]/80 p-0.5">
-            {locales.map(({ code, label }) => (
+            {locales.map(({ code, label }: { code: Locale; label: string }) => (
               <motion.button
                 key={code}
                 type="button"

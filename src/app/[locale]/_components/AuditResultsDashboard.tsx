@@ -198,7 +198,7 @@ export function AuditResultsDashboard({ locale }: { locale: Locale }) {
         </div>
 
         <div className="grid gap-4 md:grid-cols-4">
-          {pillars.map((item, i) => (
+          {pillars.map((item, i: number) => (
             <motion.div
               key={item.title}
               initial={{ opacity: 0, y: 20 }}

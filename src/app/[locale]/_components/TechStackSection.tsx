@@ -38,7 +38,8 @@ export function TechStackSection({ locale }: { locale: Locale }) {
         viewport={{ once: true, margin: "-40px" }}
         className="mt-8 flex flex-col gap-4 sm:mx-auto"
       >
-        {items.map((item, i) => (
+        {items.map(
+          (item: (typeof items)[number], i: number) => (
           <motion.div
             key={i}
             variants={rowVariants}
