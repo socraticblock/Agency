@@ -1,0 +1,12 @@
+---
+description: Standards for Framer Motion, Tailwind, and spatial UI design.
+globs:
+  - "**/*.{tsx,jsx,css}"
+---
+
+# Kinetic Design & Styling
+
+- **Spatial Depth**: Utilize Tailwind shadow, blur, and opacity utilities to create multi-layered visual hierarchies.
+- **Kinetic Data Storytelling**: Implement Framer Motion for layout transitions and data reveals. Default to spring physics (e.g., `stiffness: 300, damping: 30`) over linear easings.
+- **Performance Threshold**: Ensure all animations run on the compositor thread (transform/opacity) to maintain 100/100 Lighthouse scores.
+

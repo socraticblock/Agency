@@ -1,0 +1,15 @@
+---
+description: Rules for task planning, subagent usage, and workflow state.
+globs:
+  - "**/*"
+---
+
+# Workflow Orchestration
+
+- Enter plan mode for ANY non-trivial task (3+ steps or architectural decisions).
+- If something goes sideways, STOP and re-plan immediately.
+- Use subagents liberally for research/parallel analysis to keep main context clean.
+- One task per subagent for focused execution.
+- **Subagent I/O Contract**: When spinning up a subagent, provide it with a strict, singular objective and a defined output format (e.g., "Return only the optimized Next.js component code").
+- **Handoff Verification**: The primary agent MUST verify the subagent's output against the `tasks/todo.md` criteria before integrating the code.
+
