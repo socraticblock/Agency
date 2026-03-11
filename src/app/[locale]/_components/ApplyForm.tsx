@@ -1,15 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence, useMotionValue, animate, useMotionValueEvent } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
+import { parseUrlOrGenesis } from "@/utils/sanitizeUrl";
+import { BoardroomScanner } from "@/components/ui/BoardroomScanner";
 
 const SCRAMBLE_CHARS = "#*0X";
 const SCRAMBLE_DURATION_MS = 800;
 const SCRAMBLE_INTERVAL_MS = 50;
-const SCANNING_DURATION_MS = 2500;
+const AUDIT_PAYLOAD_KEY = "kvali_audit_payload";
 
 function scrambleString(len: number): string {
   let s = "";
@@ -23,19 +26,15 @@ export function ApplyForm({ locale }: { locale: Locale }) {
   const t = getMessages(locale);
   const finalTitle = t.apply.title;
 
+  const router = useRouter();
   const [step, setStep] = useState(1);
-  const [scanning, setScanning] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [showBoardroomScanner, setShowBoardroomScanner] = useState(false);
+  const [isGenesisForScanner, setIsGenesisForScanner] = useState(false);
   const [displayTitle, setDisplayTitle] = useState(finalTitle);
   const [businessName, setBusinessName] = useState("");
   const [bottleneck, setBottleneck] = useState("");
   const [targetRevenue, setTargetRevenue] = useState("");
   const [websiteUrl, setWebsiteUrl] = useState("");
-
-  const progressMotion = useMotionValue(0);
-  const [displayPercent, setDisplayPercent] = useState(0);
-
-  useMotionValueEvent(progressMotion, "change", (v) => setDisplayPercent(Math.round(v)));
 
   useEffect(() => {
     const len = finalTitle.length;
@@ -52,23 +51,10 @@ export function ApplyForm({ locale }: { locale: Locale }) {
     return () => clearInterval(id);
   }, [finalTitle]);
 
-  useEffect(() => {
-    if (!scanning) return;
-    progressMotion.set(0);
-    setDisplayPercent(0);
-    const controls = animate(progressMotion, 100, {
-      duration: SCANNING_DURATION_MS / 1000,
-      ease: [0.22, 1, 0.36, 1],
-    });
-    const timeout = setTimeout(() => {
-      setScanning(false);
-      setSubmitted(true);
-    }, SCANNING_DURATION_MS);
-    return () => {
-      controls.stop();
-      clearTimeout(timeout);
-    };
-  }, [scanning, progressMotion]);
+  const handleScannerComplete = useCallback(() => {
+    setShowBoardroomScanner(false);
+    router.push(`/${locale}/audit-results`);
+  }, [locale, router]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,16 +62,32 @@ export function ApplyForm({ locale }: { locale: Locale }) {
       setStep((s) => s + 1);
       return;
     }
-    setScanning(true);
+    const { url, isGenesis } = parseUrlOrGenesis(websiteUrl);
+    setWebsiteUrl(url);
+    setIsGenesisForScanner(isGenesis);
+    try {
+      sessionStorage.setItem(
+        AUDIT_PAYLOAD_KEY,
+        JSON.stringify({
+          businessName,
+          bottleneck,
+          targetRevenue,
+          websiteUrl: url,
+          isGenesis,
+          locale,
+        })
+      );
+    } catch {
+      // ignore storage errors
+    }
+    setShowBoardroomScanner(true);
   };
 
   const goBack = () => {
     if (step > 1) setStep((s) => s - 1);
   };
 
-  const showForm = !scanning && !submitted;
-  const showScanning = scanning;
-  const showThanks = submitted;
+  const showForm = !showBoardroomScanner;
 
   return (
     <>
@@ -178,6 +180,10 @@ export function ApplyForm({ locale }: { locale: Locale }) {
                   type="url"
                   value={websiteUrl}
                   onChange={(e) => setWebsiteUrl(e.target.value)}
+                  onBlur={(e) => {
+                    const val = e.target.value;
+                    if (val !== undefined) setWebsiteUrl(parseUrlOrGenesis(val).url);
+                  }}
                   placeholder={t.apply.placeholder4}
                   className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-slate-100 placeholder-slate-500 backdrop-blur-xl focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
                 />
@@ -207,65 +213,14 @@ export function ApplyForm({ locale }: { locale: Locale }) {
             </div>
           </motion.form>
         )}
-
-        {showScanning && (
-          <motion.div
-            key="scanning"
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.2 }}
-            className="mt-10 space-y-4"
-          >
-            <p className="text-slate-300">{t.apply.scanningMessage}</p>
-            <div className="h-2 w-full overflow-hidden rounded-full bg-slate-800">
-              <motion.div
-                className="h-full rounded-full bg-emerald-500"
-                initial={{ width: "0%" }}
-                animate={{ width: "100%" }}
-                transition={{ duration: SCANNING_DURATION_MS / 1000, ease: [0.22, 1, 0.36, 1] }}
-              />
-            </div>
-            <p className="text-2xl font-semibold text-emerald-400 tabular-nums">
-              {displayPercent}%
-            </p>
-          </motion.div>
-        )}
-
-        {showThanks && (
-          <motion.div
-            key="thanks"
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-10 space-y-6"
-          >
-            <div className="flex justify-center">
-              <svg
-                width="64"
-                height="64"
-                viewBox="0 0 64 64"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="text-emerald-400"
-                aria-hidden
-              >
-                <motion.path
-                  d="M12 32l14 14 26-28"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  fill="none"
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{ pathLength: { duration: 0.5, ease: "easeOut" } }}
-                />
-              </svg>
-            </div>
-            <p className="text-slate-300">{t.apply.thanks}</p>
-          </motion.div>
-        )}
       </AnimatePresence>
+
+      {showBoardroomScanner && (
+        <BoardroomScanner
+          isGenesis={isGenesisForScanner}
+          onComplete={handleScannerComplete}
+        />
+      )}
     </>
   );
 }

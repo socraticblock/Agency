@@ -13,12 +13,12 @@ export const en = {
   },
   bento: {
     build: {
-      title: "Build",
-      desc: "Custom high-speed Next.js sites that just work.",
+      title: "Core Infrastructure",
+      desc: "Custom high-speed infrastructure that loads in a blink. Every millisecond of delay is a lost customer; we capture them instantly.",
     },
     seo: {
-      title: "SEO",
-      desc: "Page-one results for your Tbilisi business.",
+      title: "Local Market Dominance",
+      desc: "We engineer your infrastructure to perfectly match local search criteria, positioning you as the undisputed authority when ready-to-buy customers search in Tbilisi or Batumi.",
     },
     maps: {
       title: "Maps",
@@ -29,12 +29,12 @@ export const en = {
       desc: "Always-on uptime. No surprises.",
     },
     aiAutomation: {
-      title: "The Silent Salesman",
-      desc: "Custom AI agents in WhatsApp handling leads 24/7.",
+      title: "Digital Revenue Agent",
+      desc: "Custom WhatsApp AI agents trained on your business data. They qualify leads, answer FAQs, and book appointments at 3 AM while you sleep.",
     },
     reputation: {
-      title: "The Trust Engine",
-      desc: "Automated 5-star Google Review growth and friction filtering.",
+      title: "The Reputation Shield",
+      desc: "A dual-funnel system. We route private negative feedback directly to your boardroom, while frictionlessly pushing happy clients to leave public Google Maps reviews.",
     },
   },
   trust: {
@@ -136,5 +136,57 @@ export const en = {
   footer: {
     headline: "Your Footprint Starts Here.",
     cta: "Start Your Audit",
+  },
+  auditResults: {
+    badge: "Audit Complete",
+    title: "Your Infrastructure Blueprint",
+    titleGenesis: "Digital Opportunity Assessment",
+    leakCardTitle: "Estimated Annual Revenue Leak",
+    leakCardTitleGenesis: "Unclaimed Annual Revenue",
+    leakCardBody:
+      "Based on current digital maturity, you are losing approximately 20% of leads to infrastructure lag and search invisibility in the local market.",
+    leakCardBodyGenesis:
+      "You are missing 100% of your digital market share. This is revenue ready-to-buy customers would spend with you if you had a visible footprint.",
+    gradeLabel: "Infrastructure Grade",
+    gradeValue: "D-",
+    gradeValueGenesis: "Offline",
+    gradeLatency: "Latency: High Risk",
+    gradeMobile: "Mobile: Non-Optimized",
+    gradeSearch: "Search: Ghost Status",
+    gradeSubtextGenesis: "Search Visibility: 0% | Trust Factor: Critical",
+    engineTitle: "The Engine",
+    engineDesc: "High-speed delivery so every visitor becomes a lead.",
+    engineSpec: "Specs: <100ms TTLB / Edge Network",
+    shieldTitle: "The Shield",
+    shieldDesc: "Automated reputation filtering and feedback routing.",
+    shieldSpec: "Status: Automated Friction Filter Active",
+    mapTitle: "The Map",
+    mapDesc: "Aggressive local intent capture for true market dominance.",
+    mapSpec: "Target: Latent Intent Capture",
+    agentTitle: "The Agent",
+    agentDesc: "24/7 lead qualification and booking.",
+    agentSpec: "Capability: Multi-Language / 365 Uptime",
+    cta: "Claim Your Infrastructure Blueprint",
+    scarcity: "Available Q3 Capacity: 2 Partners Only",
+    research: {
+      speedTitle: "Milliseconds Make Millions",
+      speedSource: "Deloitte & Google (2020)",
+      speedQuote:
+        "A 0.1s improvement in speed boosts conversion by 8.4%. Every 1s delay is a 7% loss in revenue.",
+      trustTitle: "The Trust Gap",
+      trustSource: "BrightLocal Survey (2024)",
+      trustQuote:
+        "88% of consumers trust online reviews as much as personal recommendations. Lack of proof kills high-intent leads.",
+      genesisTitle: "The Digital Shift",
+      genesisSource: "Google Consumer Barometer",
+      genesisQuote:
+        "80% of customers start their journey on a phone. If you are not digitally reachable, your revenue goes to competitors.",
+    },
+    researchDisclaimer: "Revenue impact metrics grounded in Deloitte & Google (2020) and BrightLocal (2024) research.",
+    currencyLabel: "GEL",
+  },
+  bookStrategy: {
+    title: "Secure Your Implementation Slot. Q3 Capacity: 2 Partners Only.",
+    back: "Back",
   },
 };

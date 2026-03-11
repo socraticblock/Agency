@@ -33,7 +33,7 @@ function GlassCardSpotlight({
   const ref = useRef<HTMLDivElement | null>(null);
   const mouseX = useMotionValue(50);
   const mouseY = useMotionValue(50);
-  const spotlight = useMotionTemplate`radial-gradient(circle at ${mouseX}% ${mouseY}%, rgba(148,163,184,0.25), transparent 60%)`;
+  const spotlight = useMotionTemplate`radial-gradient(circle at ${mouseX}% ${mouseY}%, rgba(0,255,128,0.35), transparent 55%)`;
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!ref.current) return;
@@ -55,7 +55,7 @@ function GlassCardSpotlight({
       variants={itemVariants}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.3)] backdrop-blur-xl transition hover:border-emerald-400/50 hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.3),0_0_40px_rgba(16,185,129,0.2)]"
+      className="group relative isolate z-10 overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.3)] backdrop-blur-xl transition hover:border-emerald-400/50 hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.3),0_0_40px_rgba(16,185,129,0.2)]"
     >
       <motion.div
         aria-hidden
@@ -91,7 +91,7 @@ export function FootprintGrid({ locale }: { locale: Locale }) {
         <GlassCardSpotlight>
           <div className="mb-3 text-2xl">⚡</div>
           <h3 className="font-bold text-slate-50">{t.bento.build.title}</h3>
-          <p className="mt-2 text-sm text-slate-400">{t.bento.build.desc}</p>
+          <p className="mt-2 text-sm text-slate-400 group-hover:text-slate-200">{t.bento.build.desc}</p>
           <p className="mt-1.5 text-emerald-400/80 text-[clamp(0.75rem,2vw,0.875rem)]">
             Next.js: {t.tooltips.nextjs}
           </p>
@@ -100,7 +100,7 @@ export function FootprintGrid({ locale }: { locale: Locale }) {
         <GlassCardSpotlight>
           <div className="mb-3 text-2xl">🔍</div>
           <h3 className="font-bold text-slate-50">{t.bento.seo.title}</h3>
-          <p className="mt-2 text-sm text-slate-400">{t.bento.seo.desc}</p>
+          <p className="mt-2 text-sm text-slate-400 group-hover:text-slate-200">{t.bento.seo.desc}</p>
           <p className="mt-1.5 text-emerald-400/80 text-[clamp(0.75rem,2vw,0.875rem)]">
             {t.tooltips.seo}
           </p>
@@ -135,7 +135,7 @@ export function FootprintGrid({ locale }: { locale: Locale }) {
             </span>
           </div>
           <h3 className="font-bold text-slate-50">{t.bento.maps.title}</h3>
-          <p className="mt-2 text-sm text-slate-400">{t.bento.maps.desc}</p>
+          <p className="mt-2 text-sm text-slate-400 group-hover:text-slate-200">{t.bento.maps.desc}</p>
           <div className="mt-4 rounded-lg border border-slate-700 bg-slate-900/60 p-3">
             <div className="flex items-center gap-2">
               <div className="flex text-amber-300">
@@ -163,7 +163,7 @@ export function FootprintGrid({ locale }: { locale: Locale }) {
           <h3 className="font-bold text-slate-50">
             {t.bento.maintenance.title}
           </h3>
-          <p className="mt-2 text-sm text-slate-400">
+          <p className="mt-2 text-sm text-slate-400 group-hover:text-slate-200">
             {t.bento.maintenance.desc}
           </p>
           <div className="mt-4 h-2 rounded-full bg-slate-800">
@@ -183,7 +183,7 @@ export function FootprintGrid({ locale }: { locale: Locale }) {
           <h3 className="font-bold text-slate-50">
             {t.bento.aiAutomation.title}
           </h3>
-          <p className="mt-2 text-sm text-slate-400">
+          <p className="mt-2 text-sm text-slate-400 group-hover:text-slate-200">
             {t.bento.aiAutomation.desc}
           </p>
         </GlassCardSpotlight>
@@ -193,7 +193,7 @@ export function FootprintGrid({ locale }: { locale: Locale }) {
           <h3 className="font-bold text-slate-50">
             {t.bento.reputation.title}
           </h3>
-          <p className="mt-2 text-sm text-slate-400">
+          <p className="mt-2 text-sm text-slate-400 group-hover:text-slate-200">
             {t.bento.reputation.desc}
           </p>
         </GlassCardSpotlight>
