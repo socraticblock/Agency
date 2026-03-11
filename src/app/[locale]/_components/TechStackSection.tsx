@@ -24,7 +24,7 @@ export function TechStackSection({ locale }: { locale: Locale }) {
   return (
     <section className="mx-auto max-w-5xl px-4 pb-16 pt-2 sm:px-6">
       <div className="mx-auto max-w-3xl text-center">
-        <p className="text-sm font-medium uppercase tracking-wider text-emerald-400/90">
+        <p className="text-sm font-medium uppercase tracking-wider text-emerald-4/90">
           {label}
         </p>
         <h2 className="mt-2 text-2xl font-semibold text-slate-100 sm:text-3xl">
@@ -46,16 +46,16 @@ export function TechStackSection({ locale }: { locale: Locale }) {
               scale: 1.01,
               x: 4,
               backgroundColor: "rgba(255,255,255,0.08)",
-              borderColor: "rgba(16,185,129,0.3)",
+              borderColor: "rgba(61, 244, 33, 0.3)",
             }}
-            className="mb-4 flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md last:mb-0 md:flex-row md:items-start md:gap-6"
+            className="group relative isolate z-10 mb-4 flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md last:mb-0 md:flex-row md:items-start md:gap-6"
           >
             <div className="md:w-[30%] md:shrink-0">
               <h3 className="font-bold text-emerald-400">{item.name}</h3>
             </div>
-            <div className="min-w-0 md:w-[70%]">
-              <p className="mb-1 font-medium text-white">{item.headline}</p>
-              <p className="text-sm leading-relaxed text-slate-300 md:text-base">
+            <div className="min-w-0 md:w-[70%] max-w-[640px] mx-auto md:mx-0">
+              <p className="mb-1.5 font-medium text-white">{item.headline}</p>
+              <p className="text-sm leading-relaxed text-white md:text-white">
                 {item.body}
               </p>
             </div>

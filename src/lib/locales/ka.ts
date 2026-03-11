@@ -185,6 +185,28 @@ export const ka = {
     },
     researchDisclaimer: "შემოსავლის ზემოქმედების მეტრიკა დაფუძნებულია Deloitte & Google (2020) და BrightLocal (2024) კვლევებზე.",
     currencyLabel: "₾",
+    diagnosticComplete: "დიაგნოსტიკა დასრულებულია",
+    recommendedDeployment: "რეკომენდებული ინფრასტრუქტურა:",
+    tiers: {
+      genesis: {
+        name: "Genesis Blueprint",
+        description:
+          "სრული ციფრული ფუნდამენტი. მაღალსიჩქარიანი ინფრასტრუქტურა, Google Maps და ავტომატური ლიდების გენერაცია.",
+        cta: "დაჯავშნეთ Genesis სლოტი",
+      },
+      localAuthority: {
+        name: "Local Authority Stack",
+        description:
+          "თქვენი საიტი არსებობს, მაგრამ უხილავია. ჩვენ დავნერგავთ ფარს (რეპუტაცია) და რუკას (ლოკალური SEO), რათა დომინირებდეთ ქალაქში.",
+        cta: "დანერგეთ Authority Stack",
+      },
+      enterpriseEdge: {
+        name: "Enterprise Edge",
+        description:
+          "ბაზა გაქვთ. ახლა ჩვენ ვრთავთ 24/7 AI გაყიდვების აგენტებს და Next.js 16 Edge არქიტექტურას მასშტაბირებისთვის.",
+        cta: "გადადით Enterprise Edge-ზე",
+      },
+    },
   },
   bookStrategy: {
     title: "დაჯავშნეთ იმპლემენტაციის სლოტი. Q3 სიმძლავრე: მხოლოდ 2 პარტნიორი.",

@@ -116,6 +116,48 @@ export const en = {
       { name: "Local SEO Strategy", headline: "Hyper-Local Dominance.", body: "We engineer your footprint so you are the undisputed first choice when someone in your city searches for your exact service. We put you on the map, literally." },
     ],
   },
+  digitalEconomics: {
+    heroTitle: "The Laws of Digital Revenue",
+    heroSubheading:
+      "Why your current footprint is bleeding capital. We don't guess your revenue leak; we calculate it using global economic benchmarks.",
+    slider: {
+      title: "The Cost of Inaction",
+      subheading:
+        "Speed-to-revenue: Every second of delay costs conversions. See what you're leaving on the table.",
+      monthlyLabel: "Monthly Revenue Bracket (GEL)",
+      potentialLoss: "Potential Annual Revenue Loss",
+      kvaliRecovered: "Kvali Recovered Revenue",
+      disclaimer:
+        "Calculations benchmarked against Google, Deloitte, and Forrester global conversion data frameworks.",
+    },
+    evidence: [
+      {
+        key: "speed",
+        title: "The Speed Tax",
+        body: "A 0.1s improvement in mobile speed boosts conversion by 8.4%. Every 1s delay is a 7% loss in total revenue.",
+        source: "Deloitte & Google (2020)",
+      },
+      {
+        key: "trust",
+        title: "The Trust Tax",
+        body: "88% of consumers trust online reviews. Products with reviews are 270% more likely to be purchased.",
+        source: "BrightLocal (2024)",
+      },
+      {
+        key: "mobile",
+        title: "The Mobile Tax",
+        body: "53% of mobile site visits are abandoned if pages take longer than 3 seconds to load.",
+        source: "Google DoubleClick",
+      },
+      {
+        key: "ux",
+        title: "The UX Yield",
+        body: "Every 1 GEL invested in premium UX design yields a 100 GEL return (9,900% ROI) by eliminating friction.",
+        source: "Forrester Research",
+      },
+    ],
+    ctaLabel: "Stop the Leak. Start your Forensic Diagnostic.",
+  },
   apply: {
     title: "Digital Maturity Audit",
     questionFind: "How do you want your customers to find you online?",
@@ -132,6 +174,25 @@ export const en = {
     placeholder2: "e.g. slow site, no leads",
     placeholder3: "e.g. 5000",
     placeholder4: "https://",
+    revenueTier: {
+      label: "Select your current monthly revenue bracket",
+      startup: "Startup (< 5,000 ₾ / mo)",
+      established: "Established (5,000 - 20,000 ₾ / mo)",
+      scaling: "Scaling (20,000 - 100,000 ₾ / mo)",
+      enterprise: "Enterprise (100,000+ ₾ / mo)",
+    },
+    diagnosticMaps: {
+      question:
+        "When locals search for your service, do you appear in the Top 3 on Google Maps?",
+      yes: "Yes, we dominate the map.",
+      no: "No, or I'm not sure.",
+    },
+    diagnosticReviews: {
+      question:
+        "Do you have an automated system that intercepts negative feedback and drives 5-star Google reviews?",
+      yes: "Yes, our reputation is automated.",
+      no: "No, we rely on organic reviews.",
+    },
   },
   footer: {
     headline: "Your Footprint Starts Here.",
@@ -184,6 +245,28 @@ export const en = {
     },
     researchDisclaimer: "Revenue impact metrics grounded in Deloitte & Google (2020) and BrightLocal (2024) research.",
     currencyLabel: "GEL",
+    diagnosticComplete: "Diagnostic Complete",
+    recommendedDeployment: "Recommended Deployment:",
+    tiers: {
+      genesis: {
+        name: "The Genesis Blueprint",
+        description:
+          "A complete ground-up digital foundation. Core high-speed infrastructure, Google Maps setup, and automated lead capture.",
+        cta: "Secure Your Genesis Slot",
+      },
+      localAuthority: {
+        name: "The Local Authority Stack",
+        description:
+          "Your site exists, but it is invisible. We will deploy The Shield (Reputation) and The Map (Local SEO) to dominate your city's search intent.",
+        cta: "Deploy The Authority Stack",
+      },
+      enterpriseEdge: {
+        name: "The Enterprise Edge",
+        description:
+          "You have the basics. Now we deploy 24/7 AI Sales Agents and Next.js 16 Edge architecture to scale your volume and eliminate latency.",
+        cta: "Upgrade to Enterprise Edge",
+      },
+    },
   },
   bookStrategy: {
     title: "Secure Your Implementation Slot. Q3 Capacity: 2 Partners Only.",
