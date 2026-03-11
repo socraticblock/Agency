@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Plus } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 
 type Truth = {
@@ -42,19 +43,19 @@ const TRUTHS: Truth[] = [
     reality:
       "If you answer DMs hours later, most buyers have already moved on. Your revenue is stuck in your inbox.",
     solution:
-      "We give customers clear ‘Buy now’ and ‘Book now’ paths so they can act immediately without waiting on replies.",
+      "We give customers clear 'Buy now' and 'Book now' paths so they can act immediately without waiting on replies.",
   },
   {
     id: 5,
     title: "Platform ownership",
     reality:
-      "You don’t own your followers. A single algorithm change or account issue can erase your income overnight.",
+      "You don't own your followers. A single algorithm change or account issue can erase your income overnight.",
     solution:
       "We move your audience into a list you own forever—email, phone, and first-party data that no platform can take away.",
   },
   {
     id: 6,
-    title: "‘Cheap’ websites",
+    title: "'Cheap' websites",
     reality:
       "Slow, clunky sites silently lose thousands in missed sales every year, even if they were cheap to build.",
     solution:
@@ -72,71 +73,123 @@ const TRUTHS: Truth[] = [
     id: 8,
     title: "Follower illusion",
     reality:
-      "Likes and views look good, but they don’t pay salaries, rent, or suppliers.",
+      "Likes and views look good, but they don't pay salaries, rent, or suppliers.",
     solution:
       "We build a direct pipeline from your content to your bank account: visit → trust → checkout.",
   },
 ];
 
+const container = {
+  hidden: { opacity: 0 },
+  visible: (i = 1) => ({
+    opacity: 1,
+    transition: { staggerChildren: 0.06, delayChildren: 0.08 },
+  }),
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 12 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] },
+  },
+};
+
+function ExpandIcon({ isOpen }: { isOpen: boolean }) {
+  return (
+    <motion.div
+      initial={false}
+      animate={{ rotate: isOpen ? 45 : 0 }}
+      transition={{ duration: 0.25, ease: "easeInOut" }}
+      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-400"
+      aria-hidden
+    >
+      <Plus className="h-4 w-4" strokeWidth={2.5} />
+    </motion.div>
+  );
+}
+
 export function SovereignFaq({ locale }: { locale: Locale }) {
-  const [openId, setOpenId] = useState<number | null>(1);
+  const [openId, setOpenId] = useState<number | null>(null);
 
   const toggle = (id: number) => {
     setOpenId((current) => (current === id ? null : id));
   };
 
   return (
-    <section className="mx-auto max-w-5xl px-4 pb-20 pt-8 sm:px-6">
-      <div className="mb-8 text-center">
-        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-400">
+    <section className="relative mx-auto max-w-4xl px-4 pb-24 pt-10 sm:px-6">
+      <div className="mb-10 text-center">
+        <motion.p
+          initial={{ opacity: 0, y: 8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-20px" }}
+          transition={{ duration: 0.4 }}
+          className="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-400"
+        >
           Hard Truths
-        </p>
-        <p className="mt-2 text-lg font-semibold text-white">
-          The honest version of what’s really happening.
-        </p>
+        </motion.p>
+        <motion.p
+          initial={{ opacity: 0, y: 8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-20px" }}
+          transition={{ duration: 0.4, delay: 0.06 }}
+          className="mt-2 text-lg font-semibold text-white"
+        >
+          The honest version of what&apos;s really happening.
+        </motion.p>
       </div>
-      <div className="grid gap-4 md:grid-cols-2">
+
+      <motion.div
+        variants={container}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-40px" }}
+        className="flex w-full flex-col gap-3"
+      >
         {TRUTHS.map((item) => {
           const isOpen = openId === item.id;
           return (
             <motion.article
               key={item.id}
+              variants={cardVariants}
               layout
-              className="group relative cursor-pointer overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-5 shadow-[0_16px_40px_rgba(0,0,0,0.7)] backdrop-blur-xl"
+              className={`relative flex w-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-white/10 bg-black/50 p-5 shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-xl transition-all duration-300 ${
+                isOpen
+                  ? "border-emerald-500/30 shadow-[0_0_24px_rgba(16,185,129,0.12)] ring-1 ring-emerald-500/20"
+                  : "hover:border-white/20 hover:shadow-[0_24px_56px_rgba(0,0,0,0.6)]"
+              }`}
               onClick={() => toggle(item.id)}
             >
-              <div className="flex items-center justify-between gap-3">
-                <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-200">
+              <div className="flex items-start justify-between gap-3">
+                <h3 className="text-sm font-bold uppercase leading-tight tracking-[0.2em] text-white">
                   {item.title}
                 </h3>
-                <motion.span
-                  initial={false}
-                  animate={{ rotate: isOpen ? 90 : 0 }}
-                  className="text-xs text-slate-400"
-                >
-                  ▶
-                </motion.span>
+                <ExpandIcon isOpen={isOpen} />
               </div>
               <AnimatePresence initial={false}>
                 {isOpen && (
                   <motion.div
                     key="content"
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    className="mt-3 space-y-2 text-sm"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    className="overflow-hidden"
                   >
-                    <div>
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
-                        The Reality
-                      </p>
-                      <p className="mt-1 text-slate-300">{item.reality}</p>
-                    </div>
-                    <div>
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-emerald-400">
-                        The Solution
-                      </p>
-                      <p className="mt-1 text-emerald-200">{item.solution}</p>
+                    <div className="mt-4 space-y-3 pb-1 text-sm">
+                      <div>
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+                          The Reality
+                        </p>
+                        <p className="mt-1 leading-relaxed text-slate-300">{item.reality}</p>
+                      </div>
+                      <div>
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-emerald-400">
+                          The Solution
+                        </p>
+                        <p className="mt-1 leading-relaxed text-[#10b981]">{item.solution}</p>
+                      </div>
                     </div>
                   </motion.div>
                 )}
@@ -144,8 +197,7 @@ export function SovereignFaq({ locale }: { locale: Locale }) {
             </motion.article>
           );
         })}
-      </div>
+      </motion.div>
     </section>
   );
 }
-
