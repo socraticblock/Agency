@@ -79,22 +79,6 @@ const TRUTHS: Truth[] = [
   },
 ];
 
-const container = {
-  hidden: { opacity: 0 },
-  visible: (i = 1) => ({
-    opacity: 1,
-    transition: { staggerChildren: 0.06, delayChildren: 0.08 },
-  }),
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 12 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] },
-  },
-};
 
 function ExpandIcon({ isOpen }: { isOpen: boolean }) {
   return (
@@ -140,24 +124,25 @@ export function SovereignFaq({ locale }: { locale: Locale }) {
         </motion.p>
       </div>
 
-      <motion.div
-        variants={container}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-40px" }}
-        className="flex w-full flex-col gap-3"
-      >
+      <div className="flex w-full flex-col gap-3">
         {TRUTHS.map((item) => {
           const isOpen = openId === item.id;
           return (
             <motion.article
               key={item.id}
-              variants={cardVariants}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{
+                duration: 0.5,
+                ease: [0.25, 0.46, 0.45, 0.94],
+              }}
+              whileHover={{ scale: 1.02, y: -3 }}
               layout
-              className={`relative flex w-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-white/10 bg-black/50 p-5 shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-xl transition-all duration-300 ${
+              className={`relative flex w-full cursor-pointer flex-col overflow-hidden rounded-2xl border bg-black/50 p-5 backdrop-blur-xl ${
                 isOpen
                   ? "border-emerald-500/30 shadow-[0_0_24px_rgba(16,185,129,0.12)] ring-1 ring-emerald-500/20"
-                  : "hover:border-white/20 hover:shadow-[0_24px_56px_rgba(0,0,0,0.6)]"
+                  : "border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:border-white/20 hover:shadow-[0_28px_60px_rgba(0,0,0,0.6)]"
               }`}
               onClick={() => toggle(item.id)}
             >
@@ -197,7 +182,7 @@ export function SovereignFaq({ locale }: { locale: Locale }) {
             </motion.article>
           );
         })}
-      </motion.div>
+      </div>
     </section>
   );
 }
