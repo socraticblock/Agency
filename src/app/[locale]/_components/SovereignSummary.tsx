@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
-import { sovereignModel } from "@/lib/services/sovereignModel";
 
 const containerVariants = {
   hidden: { opacity: 0, y: 24 },
@@ -50,9 +49,6 @@ export function SovereignSummary({ locale }: { locale: Locale }) {
           <p className="mt-2 text-sm text-white/80">
             {t.sovereign?.bridgeBody}
           </p>
-          <p className="mt-3 text-[11px] text-emerald-300/80">
-            {sovereignModel.BRIDGE}
-          </p>
         </motion.div>
 
         <motion.div
@@ -65,9 +61,6 @@ export function SovereignSummary({ locale }: { locale: Locale }) {
           <p className="mt-2 text-sm text-white/80">
             {t.sovereign?.interceptBody}
           </p>
-          <p className="mt-3 text-[11px] text-emerald-300/80">
-            {sovereignModel.INTERCEPT}
-          </p>
         </motion.div>
 
         <motion.div
@@ -79,9 +72,6 @@ export function SovereignSummary({ locale }: { locale: Locale }) {
           </div>
           <p className="mt-2 text-sm text-white/80">
             {t.sovereign?.vaultBody}
-          </p>
-          <p className="mt-3 text-[11px] text-emerald-300/80">
-            {sovereignModel.VAULT}
           </p>
         </motion.div>
       </motion.div>

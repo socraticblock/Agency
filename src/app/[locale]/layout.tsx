@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { createLocalBusinessSeo } from "@/lib/seo";
 import type { Locale } from "@/lib/i18n";
+import { LangSetter } from "@/components/providers/LangSetter";
 
 const SITE_NAME = "Kvali Digital";
 const SITE_DESCRIPTION =
-  "Web-as-a-Service for physical businesses in Georgia. We build, optimize, and maintain your digital footprint.";
+  "Escape the social media trap. We build a permanent, high-speed digital home for your brand that sells 24/7.";
 
 function normalizeLocale(locale: string | undefined): Locale {
   return locale === "en" ? "en" : "ka";
@@ -44,6 +45,7 @@ export default async function LocaleLayout({
 
   return (
     <>
+      <LangSetter lang={lang} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

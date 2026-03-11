@@ -83,9 +83,11 @@ export function KineticHero({ locale }: { locale: Locale }) {
         }}
       />
       <StatusBadge locale={locale} />
-      <p className="mt-4 text-xs font-medium uppercase tracking-[0.3em] text-emerald-400">
-        {t.sovereign?.tagline}
-      </p>
+      <div className="mt-4">
+        <span className="inline-flex items-center rounded-full border border-emerald-400/40 bg-emerald-500/10 px-4 py-1 text-[10px] font-semibold tracking-[0.3em] text-emerald-300 font-mono shadow-[0_0_30px_rgba(16,185,129,0.45)]">
+          {t.sovereign?.tagline}
+        </span>
+      </div>
       <motion.div
         initial="hidden"
         animate="visible"
@@ -136,7 +138,7 @@ export function KineticHero({ locale }: { locale: Locale }) {
         className="mt-10 flex flex-wrap items-center justify-center gap-4"
       >
         <motion.a
-          href={`/${locale}/apply`}
+          href="#reality-check"
           onMouseMove={handleCtaMove}
           onMouseLeave={handleCtaLeave}
           style={{ x: ctaX, y: ctaY }}
@@ -148,7 +150,7 @@ export function KineticHero({ locale }: { locale: Locale }) {
           <span className="relative z-10">{t.hero.cta}</span>
         </motion.a>
         <motion.a
-          href="https://wa.me/995"
+          href="https://wa.me/995555555555?text=I%20saw%20the%20Kvali%20site%20and%20want%20help%20escaping%20the%20social%20media%20trap."
           target="_blank"
           rel="noopener noreferrer"
           whileTap={{ scale: 0.98 }}

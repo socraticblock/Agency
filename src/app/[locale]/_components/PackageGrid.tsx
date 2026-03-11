@@ -3,12 +3,14 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Locale } from "@/lib/i18n";
+import { getMessages } from "@/lib/i18n";
 import { SOVEREIGN_PACKAGES, type SovereignPackageId } from "@/lib/packages";
 import { getCheckoutUrl } from "@/lib/payments/checkout";
 
 type SelectedPackage = (typeof SOVEREIGN_PACKAGES)[number] | null;
 
 export function PackageGrid({ locale }: { locale: Locale }) {
+  const t = getMessages(locale);
   const [selected, setSelected] = useState<SelectedPackage>(null);
 
   const handleDeploy = (id: SovereignPackageId) => {
@@ -17,14 +19,19 @@ export function PackageGrid({ locale }: { locale: Locale }) {
     window.location.href = url;
   };
 
+  const handleEmpireContact = () => {
+    window.location.href = `/${locale}/book-strategy`;
+  };
+
   return (
     <section className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
       <div className="mx-auto max-w-3xl text-center">
         <p className="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-400">
-          Sovereign Revenue Matrix
+          {t.packages?.sectionLabel ?? "Choose your growth"}
         </p>
         <p className="mt-3 text-base text-white/70 sm:text-lg">
-          Choose the grade of sovereignty that matches your current ambition.
+          {t.packages?.sectionSubheading ??
+            "Pick the option that matches where you are now. Every tier gets you off the algorithm and into a business you own."}
         </p>
       </div>
 
@@ -44,7 +51,7 @@ export function PackageGrid({ locale }: { locale: Locale }) {
             </p>
             <p className="mt-1 text-xs text-slate-400">{pkg.mrr}</p>
             <button className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 hover:text-white">
-              View Infrastructure →
+              View the Blueprint →
             </button>
           </motion.article>
         ))}
@@ -97,10 +104,16 @@ export function PackageGrid({ locale }: { locale: Locale }) {
                   type="button"
                   whileTap={{ scale: 0.98 }}
                   whileHover={{ y: -1 }}
-                  onClick={() => handleDeploy(selected.id)}
+                  onClick={() =>
+                    selected.id === "empire"
+                      ? handleEmpireContact()
+                      : handleDeploy(selected.id)
+                  }
                   className="rounded-full bg-emerald-500 px-7 py-3 text-xs font-semibold uppercase tracking-[0.25em] text-black shadow-[0_0_35px_rgba(16,185,129,0.7)] transition hover:bg-emerald-400"
                 >
-                  Deploy Now
+                  {selected.id === "empire"
+                    ? "Talk Directly with the Architect"
+                    : "Deploy Now"}
                 </motion.button>
               </div>
             </motion.div>

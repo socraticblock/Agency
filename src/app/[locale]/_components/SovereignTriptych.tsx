@@ -16,18 +16,18 @@ export function SovereignTriptych({ locale }: { locale: Locale }) {
   const items: TriptychItem[] = [
     {
       key: "bridge",
-      title: "The Bridge",
-      subtitle: "Next.js 16 + Vercel Edge for 100ms delivery.",
+      title: t.sovereign?.bridgeTitle ?? "The 1-Second Rule",
+      subtitle: t.sovereign?.bridgeBody ?? "",
     },
     {
       key: "intercept",
-      title: "The Intercept",
-      subtitle: "24/7 AI concierge that turns DMs into booked revenue.",
+      title: t.sovereign?.interceptTitle ?? "Your 24/7 Sales Partner",
+      subtitle: t.sovereign?.interceptBody ?? "",
     },
     {
       key: "vault",
-      title: "The Vault",
-      subtitle: "Owned email and WhatsApp data, not rented feeds.",
+      title: t.sovereign?.vaultTitle ?? "The Safety Net",
+      subtitle: t.sovereign?.vaultBody ?? "",
     },
   ];
 
@@ -35,10 +35,11 @@ export function SovereignTriptych({ locale }: { locale: Locale }) {
     <section className="mx-auto max-w-5xl px-4 pb-16 pt-4 sm:px-6">
       <div className="mx-auto max-w-3xl text-center">
         <p className="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-400">
-          Sovereign Stack
+          {t.sovereign?.triptychLabel ?? "Your peace of mind"}
         </p>
         <p className="mt-2 text-base text-white/70 sm:text-lg">
-          Three pillars that move you from rented attention to owned revenue.
+          {t.sovereign?.triptychSubheading ??
+            "Three ways we get you off the algorithm's leash and into a business that runs even when you're not online."}
         </p>
       </div>
       <div className="mt-8 grid gap-4 md:grid-cols-3">

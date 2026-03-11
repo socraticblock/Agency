@@ -2,10 +2,8 @@ import { Navbar } from "./_components/Navbar";
 import { KineticHero } from "./_components/KineticHero";
 import { TechStackSection } from "./_components/TechStackSection";
 import { GlobalFooter } from "./_components/GlobalFooter";
-import { SovereignSummary } from "./_components/SovereignSummary";
 import { InefficiencyCalculator } from "./_components/InefficiencyCalculator";
 import { SovereignCommandCenter } from "./_components/SovereignCommandCenter";
-import { InefficiencyTerminal } from "./_components/InefficiencyTerminal";
 import { SovereignTriptych } from "./_components/SovereignTriptych";
 import { PackageGrid } from "./_components/PackageGrid";
 import { SovereignFaq } from "./_components/SovereignFaq";
@@ -25,12 +23,10 @@ export default async function Home({
       <Navbar locale={lang} />
       <main>
         <KineticHero locale={lang} />
-        <SovereignSummary locale={lang} />
-        <TechStackSection locale={lang} />
-        <InefficiencyTerminal locale={lang} />
         <SovereignTriptych locale={lang} />
-        <PackageGrid locale={lang} />
+        <TechStackSection locale={lang} />
         <InefficiencyCalculator locale={lang} />
+        <PackageGrid locale={lang} />
         <SovereignFaq locale={lang} />
         <SovereignCommandCenter locale={lang} />
         <section className="mx-auto max-w-4xl px-4 py-16 sm:px-6">

@@ -144,7 +144,7 @@ export function AuditResultsDashboard({ locale }: { locale: Locale }) {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
-            className="rounded-3xl border border-red-500/20 bg-red-500/5 p-8 backdrop-blur-xl isolate z-10"
+            className="rounded-3xl border border-red-500/30 bg-red-500/10 p-8 backdrop-blur-xl isolate z-10"
           >
             <div className="flex items-center gap-4 text-red-400">
               <TrendingDown size={24} />
@@ -152,13 +152,18 @@ export function AuditResultsDashboard({ locale }: { locale: Locale }) {
                 {leakCardTitle}
               </h3>
             </div>
-            <div className="mt-6 flex items-baseline gap-2 text-6xl font-black text-white">
+            <motion.div
+              initial={{ x: 0 }}
+              animate={{ x: [0, -2, 2, -2, 2, 0] }}
+              transition={{ duration: 0.4 }}
+              className="mt-6 flex items-baseline gap-2 text-6xl font-black text-red-200"
+            >
               <KineticGEL
                 value={estimatedLeak}
                 currencyLabel={t.auditResults.currencyLabel}
               />
               <CitationBadge locale={locale} variant="speed" />
-            </div>
+            </motion.div>
             <p className="mt-4 leading-relaxed text-slate-400">
               {leakCardBody}
             </p>

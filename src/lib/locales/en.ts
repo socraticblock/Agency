@@ -5,42 +5,59 @@ export const en = {
   },
   hero: {
     statusBadge: "Accepting 2 new partners for Q3",
-    headline: "Stop Renting Your Audience. Reclaim Your Revenue.",
+    headline: "You work too hard to let an algorithm decide if you get paid.",
     subhead:
-      "The Instagram Algorithm is a 20% Inefficiency Tax. We build high-speed, autonomous environments that turn impulse scrollers into owned capital.",
-    cta: "Book Sovereign Audit",
-    ctaSecondary: "WhatsApp: Talk to the Architect",
+      "Most businesses are renting their audience from Instagram. If the app glitches or the algorithm changes, your sales stop. We build a permanent digital home for your brand that loads instantly, sells 24/7, and puts you back in the driver’s seat.",
+    cta: "See my missing revenue",
+    ctaSecondary: "Chat with us on WhatsApp",
   },
   sovereign: {
-    tagline: "Sovereign Extraction Engine Architect",
-    bridgeTitle: "The Bridge",
+    tagline: "The end of the social media trap.",
+    bridgeTitle: "The 1-Second Rule",
     bridgeBody:
-      "100/100 Lighthouse-grade environments that move you from rented feeds to owned, high-speed infrastructure.",
-    interceptTitle: "The Intercept",
+      "Your site loads before they can blink. In a world of 3-second attention spans, we make sure you are the first thing they see.",
+    interceptTitle: "Your 24/7 Sales Partner",
     interceptBody:
-      "Agentic DM-to-Web flows that catch impulse scrollers mid-swipe and route them into your owned funnels.",
-    vaultTitle: "The Vault",
+      "An automated assistant that lives on your site. It answers questions, takes orders, and books calls while you sleep.",
+    vaultTitle: "The Safety Net",
     vaultBody:
-      "Edge-deployed infrastructure and data ownership that keep your revenue surface sovereign, not platform-dependent.",
-    summaryHeading: "The Sovereign Extraction Engine",
+      "We turn Followers into a private contact list. If Instagram disappeared tomorrow, your business wouldn't.",
+    summaryHeading: "Three ways we get you off the algorithm's leash.",
     summarySubheading:
-      "Bridge the gap between rented attention and owned capital. Three pillars, one objective: convert algorithmic volatility into predictable revenue.",
-    calcTitle: "Algorithmic Inefficiency Calculator",
+      "Speed, a real sales assistant, and a list you own forever. No more hoping the feed shows your post—or that you're awake when DMs pour in.",
+    calcTitle: "See what you're leaving on the table.",
     calcSubheading:
-      "Estimate how much revenue the feed is taxing from your audience before they ever reach owned ground.",
-    calcFollowersLabel: "Monthly Instagram Reach / Followers",
-    calcAovLabel: "Average Order Value (GEL)",
-    calcResultLabel: "Estimated Algorithmic Bleed (per month)",
+      "Plug in your numbers. We'll show you—in plain GEL—what's slipping away every year.",
+    calcFollowersLabel: "How many people follow you?",
+    calcAovLabel: "What's your average sale price? (GEL)",
+    calcDmsLabel: "How many messages do you get a month?",
+    calcResultHeadline: "THIS IS THE REVENUE YOU ARE MISSING EVERY YEAR.",
+    calcResultFollowUp:
+      "Most of this disappears because of slow replies and 'hidden' posts. We help you get it back.",
+    calcResultLabel: "Annual Revenue Leak",
+    calcBreakdownTitle: "How this is calculated",
+    calcVisibilityTitle: "20% Visibility Tax.",
+    calcVisibilityBody:
+      "Instagram and TikTok only show your posts to a slice of your own followers. You’re effectively paying with most of your reach just to stay on their platform.",
+    calcDelayTitle: "15% Delay Friction.",
+    calcDelayBody:
+      "For every hour a customer waits for a DM reply, the chance they buy drops fast. If you aren’t replying in seconds, you’re losing money while you sleep.",
+    calcFormulaLabel:
+      "Total Annual Leak = (Followers × Average Order Value × 0.20) + (Monthly DMs × Average Order Value × 0.15 × 12).",
     calcCta: "Quantify the Bleed",
-    commandCenterTitle: "Sovereign Command Center",
+    commandCenterTitle: "See what we'd recover for your brand.",
     commandCenterSubheading:
-      "Simulated agentic audit of your handle. From DM friction to recovered GEL, see what sovereignty would return.",
-    commandInputLabel: "Instagram handle to audit",
-    commandPlaceholder: "@their_cafe_or_studio",
-    commandRunLabel: "Run Sovereign Audit",
+      "Enter your Instagram handle. We'll show you a ballpark of how much revenue a proper digital home could bring back every month.",
+    commandInputLabel: "Your Instagram handle",
+    commandPlaceholder: "@your_cafe_or_shop",
+    commandRunLabel: "See my number",
     commandOutputLead:
-      "Deploying a Sovereign Bridge would recover approximately",
+      "A fast, owned sales page could recover roughly",
     commandOutputTail: "GEL per month.",
+    commandCta: "See my missing revenue",
+    triptychLabel: "Your peace of mind",
+    triptychSubheading:
+      "Speed, a real sales assistant, and a list you own forever. No more hoping the feed shows your post—or that you're awake when DMs pour in.",
   },
   bento: {
     build: {
@@ -107,8 +124,8 @@ export const en = {
     },
   },
   roi: {
-    title: "The Cost of Inaction",
-    subheading: "Speed-to-revenue: every second of delay costs conversions. See what you're leaving on the table.",
+  title: "Deep Cost of Inaction Diagnostic",
+  subheading: "When you're ready for the full picture, this deep diagnostic models how much revenue your current footprint quietly bleeds every year.",
     sliderLabel: "Monthly revenue (thousands GEL)",
     potentialLoss: "Potential annual revenue loss",
     kvaliRecovered: "Kvali recovered revenue",
@@ -135,16 +152,16 @@ export const en = {
     ],
   },
   pointOneStack: {
-    tagline: "The Infrastructure of Your Growth.",
-    label: "THE 0.1% STACK",
+    tagline: "The tech behind your growth.",
+    label: "What we build with",
     items: [
-      { name: "Next.js 16 & React 19", headline: "Instant Sales.", body: "In 2026, a 1-second delay is a lost customer. This hybrid-rendering technology ensures your site loads before they can even blink, capturing every lead the moment they arrive." },
-      { name: "Vercel & The Edge", headline: "Unbreakable Reliability.", body: "Your site is hosted on a global edge network. Whether you have 10 or 10,000 visitors at once, your digital footprint stays fast and never goes down." },
-      { name: "Tailwind CSS 4", headline: "Future-Proof Agility.", body: "A modular design system that allows us to update your brand or add new features in hours, not weeks. Your business evolves, and your site stays ahead of the curve." },
-      { name: "Framer Motion 11", headline: "The 'Premium' Premium.", body: "We add a layer of silky, physics-based motion that subconsciously signals quality. It tells your customer: 'This business is high-end, detailed, and trustworthy.'" },
-      { name: "Lenis Smooth Scroll", headline: "Effortless Browsing.", body: "We hijack the native browser scroll to create a weighted, frictionless glide. It makes reading your content feel like a luxury experience, keeping users engaged longer." },
-      { name: "Structured Data (Schema)", headline: "Google VIP Treatment.", body: "We embed a hidden 'cheat sheet' into your code. This tells search engines exactly what you sell, pushing you to the top with rich results like stars and FAQs." },
-      { name: "Local SEO Strategy", headline: "Hyper-Local Dominance.", body: "We engineer your footprint so you are the undisputed first choice when someone in your city searches for your exact service. We put you on the map, literally." },
+      { name: "Next.js 16 & React 19", headline: "Instant sales.", sublabel: "The same tech used by Netflix and TikTok for absolute speed.", body: "A one-second delay loses customers. We build so your page loads before they can blink—so you're the first thing they see, not the one they scroll past." },
+      { name: "Vercel & The Edge", headline: "Fast everywhere.", sublabel: "Your site lives everywhere at once, meaning no extra delay for your customers.", body: "Your site runs on a global network. Ten visitors or ten thousand—it stays fast and up. No crashes, no \"under maintenance\" surprises." },
+      { name: "Tailwind CSS 4", headline: "Easy to update.", body: "We can refresh your look or add features in hours, not weeks. As your business grows, your site keeps up without a full rebuild." },
+      { name: "Framer Motion 11", headline: "Feels premium.", body: "Smooth, subtle motion that makes your brand feel polished and trustworthy—without slowing the page down." },
+      { name: "Lenis Smooth Scroll", headline: "Smooth scrolling.", body: "Reading and scrolling feel effortless. It keeps people on the page longer and signals that you care about the details." },
+      { name: "Structured Data (Schema)", headline: "Google shows you right.", body: "We add the right signals so search engines understand what you sell. You show up with stars, prices, and FAQs—so you look like the obvious choice." },
+      { name: "Local SEO Strategy", headline: "First when locals search.", body: "When someone in your city searches for what you offer, we make sure you're the one they see. You get on the map and stay there." },
     ],
   },
   psychology: {
@@ -242,9 +259,14 @@ export const en = {
       no: "No, we rely on organic reviews.",
     },
   },
+  packages: {
+    sectionLabel: "Choose your growth",
+    sectionSubheading:
+      "Pick the option that matches where you are now. Every tier gets you off the algorithm and into a business you own.",
+  },
   footer: {
-    headline: "Your Footprint Starts Here.",
-    cta: "Start Your Audit",
+    headline: "Your new business foundation starts here.",
+    cta: "Deploy my site now",
   },
   auditResults: {
     badge: "Audit Complete",

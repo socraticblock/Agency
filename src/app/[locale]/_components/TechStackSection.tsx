@@ -56,6 +56,11 @@ export function TechStackSection({ locale }: { locale: Locale }) {
             </div>
             <div className="min-w-0 md:w-[70%] max-w-[640px] mx-auto md:mx-0">
               <p className="mb-1.5 font-medium text-white">{item.headline}</p>
+              {"sublabel" in item && item.sublabel && (
+                <p className="mb-2 text-sm italic text-emerald-300/90">
+                  {item.sublabel}
+                </p>
+              )}
               <p className="text-sm leading-relaxed text-white md:text-white/70">
                 {item.body}
               </p>

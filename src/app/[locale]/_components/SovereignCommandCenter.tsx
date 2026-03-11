@@ -126,10 +126,10 @@ export function SovereignCommandCenter({ locale }: Props) {
               {t.sovereign?.commandOutputTail}
             </p>
             <a
-              href={`/${locale}/apply`}
+              href="#reality-check"
               className="inline-flex items-center justify-center rounded-full border border-emerald-400/70 bg-black/40 px-4 py-1.5 text-xs font-semibold text-emerald-100 hover:bg-emerald-500/20"
             >
-              Book Sovereign Audit
+              {t.sovereign?.commandCta}
             </a>
           </motion.div>
         )}
