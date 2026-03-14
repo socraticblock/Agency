@@ -1,60 +1,21 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
-import { parseUrlOrGenesis } from "@/utils/sanitizeUrl";
-import { BoardroomScanner } from "@/components/ui/BoardroomScanner";
-
-const SCRAMBLE_CHARS = "#*0X";
-const SCRAMBLE_DURATION_MS = 800;
-const SCRAMBLE_INTERVAL_MS = 50;
-const AUDIT_PAYLOAD_KEY = "kvali_audit_payload";
-
-function scrambleString(len: number): string {
-  let s = "";
-  for (let i = 0; i < len; i++) {
-    s += SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
-  }
-  return s;
-}
 
 export function ApplyForm({ locale }: { locale: Locale }) {
   const t = getMessages(locale);
-  const finalTitle = t.apply.title;
-
   const router = useRouter();
   const [step, setStep] = useState(1);
-  const [showBoardroomScanner, setShowBoardroomScanner] = useState(false);
-  const [isGenesisForScanner, setIsGenesisForScanner] = useState(false);
-  const [displayTitle, setDisplayTitle] = useState(finalTitle);
   const [businessName, setBusinessName] = useState("");
   const [bottleneck, setBottleneck] = useState("");
   const [targetRevenue, setTargetRevenue] = useState("");
   const [websiteUrl, setWebsiteUrl] = useState("");
-
-  useEffect(() => {
-    const len = finalTitle.length;
-    setDisplayTitle(scrambleString(len));
-    const deadline = Date.now() + SCRAMBLE_DURATION_MS;
-    const id = setInterval(() => {
-      if (Date.now() >= deadline) {
-        clearInterval(id);
-        setDisplayTitle(finalTitle);
-        return;
-      }
-      setDisplayTitle(scrambleString(len));
-    }, SCRAMBLE_INTERVAL_MS);
-    return () => clearInterval(id);
-  }, [finalTitle]);
-
-  const handleScannerComplete = useCallback(() => {
-    setShowBoardroomScanner(false);
-    router.push(`/${locale}/audit-results`);
-  }, [locale, router]);
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,32 +23,31 @@ export function ApplyForm({ locale }: { locale: Locale }) {
       setStep((s) => s + 1);
       return;
     }
-    const { url, isGenesis } = parseUrlOrGenesis(websiteUrl);
-    setWebsiteUrl(url);
-    setIsGenesisForScanner(isGenesis);
+    // Submit the form data
     try {
       sessionStorage.setItem(
-        AUDIT_PAYLOAD_KEY,
+        "kvali_lead",
         JSON.stringify({
           businessName,
           bottleneck,
           targetRevenue,
-          websiteUrl: url,
-          isGenesis,
+          websiteUrl,
           locale,
         })
       );
     } catch {
       // ignore storage errors
     }
-    setShowBoardroomScanner(true);
+    setSubmitted(true);
+    // Redirect to success or book-strategy after a short delay
+    setTimeout(() => {
+      router.push(`/${locale}/book-strategy`);
+    }, 2000);
   };
 
   const goBack = () => {
     if (step > 1) setStep((s) => s - 1);
   };
-
-  const showForm = !showBoardroomScanner;
 
   return (
     <>
@@ -98,11 +58,11 @@ export function ApplyForm({ locale }: { locale: Locale }) {
         ← {t.apply.back}
       </Link>
       <h1 className="text-2xl font-semibold text-slate-100 sm:text-3xl">
-        {displayTitle}
+        {t.apply.title}
       </h1>
 
       <AnimatePresence mode="wait">
-        {showForm && (
+        {!submitted ? (
           <motion.form
             key="form"
             initial={{ opacity: 0, y: 8 }}
@@ -180,10 +140,6 @@ export function ApplyForm({ locale }: { locale: Locale }) {
                   type="url"
                   value={websiteUrl}
                   onChange={(e) => setWebsiteUrl(e.target.value)}
-                  onBlur={(e) => {
-                    const val = e.target.value;
-                    if (val !== undefined) setWebsiteUrl(parseUrlOrGenesis(val).url);
-                  }}
                   placeholder={t.apply.placeholder4}
                   className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-slate-100 placeholder-slate-500 backdrop-blur-xl focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
                 />
@@ -212,15 +168,22 @@ export function ApplyForm({ locale }: { locale: Locale }) {
               </motion.button>
             </div>
           </motion.form>
+        ) : (
+          <motion.div
+            key="thanks"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-10 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-8 text-center"
+          >
+            <p className="text-lg font-semibold text-emerald-200">
+              {t.apply.thanks}
+            </p>
+            <p className="mt-2 text-sm text-slate-400">
+              Redirecting you to schedule a call...
+            </p>
+          </motion.div>
         )}
       </AnimatePresence>
-
-      {showBoardroomScanner && (
-        <BoardroomScanner
-          isGenesis={isGenesisForScanner}
-          onComplete={handleScannerComplete}
-        />
-      )}
     </>
   );
 }

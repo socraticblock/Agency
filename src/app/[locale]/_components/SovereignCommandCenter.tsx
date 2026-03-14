@@ -10,9 +10,9 @@ type Props = {
 };
 
 const steps = [
-  "Analyzing conversion bottlenecks in your DM-to-sale flow...",
-  "Estimating algorithmic friction and lost booked slots...",
-  "Projecting recovered GEL with a Sovereign Bridge deployment...",
+  "Looking at your current online presence...",
+  "Estimating how many customers you're missing each month...",
+  "Calculating what a proper website could recover for you...",
 ];
 
 export function SovereignCommandCenter({ locale }: Props) {
@@ -57,7 +57,7 @@ export function SovereignCommandCenter({ locale }: Props) {
             <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
           </div>
           <span className="text-xs font-mono text-slate-400">
-            audit @{handle || "their_handle"}
+            checking @{handle || "your_business"}
           </span>
         </div>
 
@@ -93,7 +93,7 @@ export function SovereignCommandCenter({ locale }: Props) {
                 exit={{ opacity: 0 }}
                 className="text-slate-400"
               >
-                $ waiting for handle...
+                $ enter your handle above to get started...
               </motion.p>
             )}
             {activeStep !== null && (

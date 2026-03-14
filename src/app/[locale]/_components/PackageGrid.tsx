@@ -41,7 +41,7 @@ export function PackageGrid({ locale }: { locale: Locale }) {
             key={pkg.id}
             layoutId={pkg.id}
             onClick={() => setSelected(pkg)}
-            className="cursor-pointer rounded-2xl border border-white/10 bg-white/5 p-6 text-left shadow-[0_20px_60px_rgba(0,0,0,0.7)] backdrop-blur-xl transition hover:border-emerald-400/40"
+            className="cursor-pointer rounded-2xl glass-card p-6 text-left transition-all hover:border-emerald-400/40 hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(16,185,129,0.15)] group"
           >
             <h3 className="text-sm font-semibold uppercase tracking-[0.25em] text-emerald-300">
               {pkg.name}
@@ -51,7 +51,7 @@ export function PackageGrid({ locale }: { locale: Locale }) {
             </p>
             <p className="mt-1 text-xs text-slate-400">{pkg.mrr}</p>
             <button className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 hover:text-white">
-              View the Blueprint →
+              See what's included →
             </button>
           </motion.article>
         ))}
@@ -67,7 +67,7 @@ export function PackageGrid({ locale }: { locale: Locale }) {
           >
             <motion.div
               layoutId={selected.id}
-              className="relative w-full max-w-xl rounded-3xl border border-white/10 bg-[#020617] p-10 shadow-[0_30px_80px_rgba(0,0,0,0.9)]"
+              className="relative w-full max-w-xl rounded-3xl glass-card p-10"
             >
               <button
                 type="button"
@@ -76,7 +76,7 @@ export function PackageGrid({ locale }: { locale: Locale }) {
               >
                 Close [X]
               </button>
-              <h2 className="text-2xl font-black uppercase tracking-tight text-white sm:text-3xl">
+              <h2 className="text-3xl font-space font-black uppercase tracking-tight text-white sm:text-4xl">
                 {selected.name}
               </h2>
               <p className="mt-1 text-xs text-slate-400">{selected.mrr}</p>
@@ -94,7 +94,7 @@ export function PackageGrid({ locale }: { locale: Locale }) {
               <div className="mt-10 flex items-end justify-between border-t border-white/10 pt-6">
                 <div>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-slate-500">
-                    Initialization Fee
+                    One-time setup
                   </p>
                   <p className="mt-1 text-3xl font-bold text-white">
                     {selected.initFee}
@@ -112,8 +112,8 @@ export function PackageGrid({ locale }: { locale: Locale }) {
                   className="rounded-full bg-emerald-500 px-7 py-3 text-xs font-semibold uppercase tracking-[0.25em] text-black shadow-[0_0_35px_rgba(16,185,129,0.7)] transition hover:bg-emerald-400"
                 >
                   {selected.id === "empire"
-                    ? "Talk Directly with the Architect"
-                    : "Deploy Now"}
+                    ? "Let's talk about your project"
+                    : "Get started"}
                 </motion.button>
               </div>
             </motion.div>

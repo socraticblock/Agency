@@ -11,7 +11,7 @@ export function BookStrategyView({ locale }: { locale: Locale }) {
   return (
     <div className="mx-auto max-w-3xl text-white">
       <Link
-        href={`/${locale}/audit-results`}
+        href={`/${locale}`}
         className="mb-8 inline-block text-sm text-slate-400 transition hover:text-slate-200"
       >
         ← {t.bookStrategy.back}
@@ -74,18 +74,17 @@ export function BookStrategyView({ locale }: { locale: Locale }) {
             type="submit"
             className="mt-4 inline-flex items-center justify-center rounded-full bg-white px-8 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-black transition hover:bg-emerald-500 hover:text-white"
           >
-            Request Implementation Call
+            Request a Call
           </button>
         </form>
         <div className="space-y-4 text-sm text-slate-300">
           <p className="font-mono text-xs text-emerald-300">
-            We hold a maximum of two Sovereign build slots per quarter. This
-            call is where we confirm fit and timeline—not a generic sales demo.
+            We take on a maximum of two new projects per quarter so every client gets our full attention.
           </p>
           <p>
-            After you submit, we&apos;ll reply with two concrete time options
-            and a secure link. If you prefer, you can also reach out via
-            WhatsApp using the Architect link in the header.
+            After you submit, we&apos;ll reply with a couple of time options
+            and a meeting link. You can also reach us directly via
+            WhatsApp anytime.
           </p>
         </div>
       </motion.div>

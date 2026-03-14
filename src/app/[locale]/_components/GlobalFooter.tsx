@@ -31,6 +31,11 @@ export function GlobalFooter({ locale }: { locale: Locale }) {
       <p className="text-3xl font-semibold text-slate-100 sm:text-4xl md:text-5xl">
         {t.footer.headline}
       </p>
+      {t.footer.subheadline && (
+        <p className="mt-4 max-w-xl text-lg text-slate-400">
+          {t.footer.subheadline}
+        </p>
+      )}
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -50,6 +55,11 @@ export function GlobalFooter({ locale }: { locale: Locale }) {
           <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.4),_transparent_60%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           <span className="relative z-10">{t.footer.cta}</span>
         </motion.a>
+        {t.footer.disclaimer && (
+          <p className="mt-6 text-sm text-slate-500 max-w-sm mx-auto">
+            {t.footer.disclaimer}
+          </p>
+        )}
       </motion.div>
     </footer>
   );

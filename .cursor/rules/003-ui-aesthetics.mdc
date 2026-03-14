@@ -1,0 +1,22 @@
+---
+description: 2026 God-Tier design standards (Native CSS Animations, OKLCH, Anti-Grid, Glassmorphism 2.0).
+globs: src/components/ui/**/*.{ts,tsx}, src/app/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# 003: THE VISIONARY PROTOCOL (2026 STANDARD)
+
+Adhere to bleeding-edge browser APIs and modern design pillars:
+
+## 1. Advanced CSS & Color Science (OKLCH)
+- **OKLCH Colors:** Use `oklch()` for all gradients, shadows, and color mixing. It provides physically accurate lightness and prevents the "gray dead zone" in gradients.
+- **CSS `@property`:** Use typed CSS variables for smooth, native animation of complex properties (e.g., conic gradients).
+
+## 2. Liquid Glass & Soft Depth
+- Implement "Liquid Glass" using multi-layered refraction, ultra-subtle SVG noise overlays, color-tinted dynamic shadows, and embossed inner-shadows.
+- Use advanced Tailwind v4 CSS variables to create localized glow and specular highlights.
+
+## 3. Native Engine Motion & Anti-Grid
+- **View Transitions:** Use the native View Transitions API for seamless, app-like routing.
+- **Scroll-Driven Animations:** Use CSS `animation-timeline: scroll()` and `view()` instead of JS-heavy scroll listeners.
+- **Anti-Grid / Organic Layouts:** Introduce visual tension via asymmetrical layouts, structural whitespace, and CSS container queries (`@container`). Break the 12-column conformity.

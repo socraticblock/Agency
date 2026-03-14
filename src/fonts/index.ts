@@ -1,8 +1,14 @@
-import { Inter, Noto_Sans_Georgian } from "next/font/google";
+import { Inter, Noto_Sans_Georgian, Space_Grotesk } from "next/font/google";
 
 export const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+export const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space",
   display: "swap",
 });
 

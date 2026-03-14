@@ -1,0 +1,21 @@
+---
+description: WebGL, WebGPU, and high-frequency rendering constraints. Enforces Zero-GC, Compute Shaders, and physics math.
+globs: src/components/canvas/**/*.{ts,tsx}, src/lib/shaders/**/*.{glsl,wgsl}, src/hooks/use-*.{ts,tsx}
+alwaysApply: false
+---
+
+# 002: THE PHYSICIST & SHADER ARTIST PROTOCOL
+
+## 1. Zero-GC & High-Frequency State
+- **BANNED IN LOOPS:** `new THREE.Vector3()`, `useState`, array instantiation.
+- **Transient State:** Use Zustand with transient updates (subscribe to state without triggering React renders) or standard `useRef` for all 60-120fps mutable data.
+- **Object Pooling:** For particles or heavy meshes, pre-instantiate an object pool. Never create/destroy geometries during runtime.
+
+## 2. Mathematical Determinism
+- Spring motion must use the Damped Harmonic Oscillator:
+  $$m\frac{d^2x}{dt^2} + c\frac{dx}{dt} + kx = 0$$
+- Define Mass ($m$), Friction ($c$), and Stiffness ($k$) based on simulated physical material.
+
+## 3. WebGPU & VRAM Management
+- When scaling beyond 10k entities, offload matrix calculations to WebGPU Compute Shaders (WGSL).
+- Every Geometry, Material, and Texture MUST be explicitly disposed of in a `useEffect` cleanup.

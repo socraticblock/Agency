@@ -9,7 +9,6 @@ import {
 } from "framer-motion";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
-import { TopographyGrid } from "./TopographyGrid";
 import { StatusBadge } from "./StatusBadge";
 
 export function KineticHero({ locale }: { locale: Locale }) {
@@ -74,7 +73,6 @@ export function KineticHero({ locale }: { locale: Locale }) {
       onMouseLeave={handleSectionLeave}
       className="relative flex min-h-[70vh] flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-black via-[#020617] to-black px-4 py-20 text-center"
     >
-      <TopographyGrid />
       <motion.div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 blur-3xl"
@@ -95,10 +93,10 @@ export function KineticHero({ locale }: { locale: Locale }) {
           hidden: { opacity: 0 },
           visible: {
             opacity: 1,
-            transition: { staggerChildren: 0.05, delayChildren: 0.1 },
+            transition: { staggerChildren: 0.08, delayChildren: 0.2 },
           },
         }}
-        className="max-w-4xl text-balance text-4xl font-bold leading-tight text-white sm:text-5xl md:text-6xl"
+        className="max-w-4xl text-balance font-space text-5xl font-bold leading-[1.1] tracking-tight bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-white/60 sm:text-6xl md:text-7xl pb-4"
         style={{ x: offsetX, y: offsetY }}
       >
         {words.map((word: string, index: number) => (
@@ -108,8 +106,8 @@ export function KineticHero({ locale }: { locale: Locale }) {
             variants={{
               hidden: {
                 opacity: 0,
-                y: 20,
-                filter: "blur(10px)",
+                y: 10,
+                filter: "blur(4px)",
               },
               visible: {
                 opacity: 1,
@@ -142,9 +140,9 @@ export function KineticHero({ locale }: { locale: Locale }) {
           onMouseMove={handleCtaMove}
           onMouseLeave={handleCtaLeave}
           style={{ x: ctaX, y: ctaY }}
-          whileTap={{ scale: 0.98 }}
-          whileHover={{ y: -2 }}
-          className="group relative overflow-hidden rounded-full border border-emerald-400/60 bg-emerald-500/10 px-8 py-3 text-sm font-semibold text-emerald-100 shadow-[0_0_40px_rgba(16,185,129,0.25)] transition-colors hover:bg-emerald-500/20"
+          whileTap={{ scale: 0.96 }}
+          whileHover={{ y: -2, scale: 1.02 }}
+          className="group relative overflow-hidden rounded-full border border-emerald-400/30 bg-emerald-500/10 px-8 py-3.5 text-sm font-semibold text-emerald-100 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2),0_0_40px_rgba(16,185,129,0.15)] transition-all hover:bg-emerald-500/20 hover:border-emerald-400/60 hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2),0_0_60px_rgba(16,185,129,0.3)]"
         >
           <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.4),_transparent_60%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           <span className="relative z-10">{t.hero.cta}</span>
@@ -153,9 +151,9 @@ export function KineticHero({ locale }: { locale: Locale }) {
           href="https://wa.me/995555555555?text=I%20saw%20the%20Kvali%20site%20and%20want%20help%20escaping%20the%20social%20media%20trap."
           target="_blank"
           rel="noopener noreferrer"
-          whileTap={{ scale: 0.98 }}
-          whileHover={{ y: -2 }}
-          className="rounded-full border border-slate-500/60 px-8 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5"
+          whileTap={{ scale: 0.96 }}
+          whileHover={{ y: -2, scale: 1.02, backgroundColor: "rgba(255,255,255,0.05)" }}
+          className="rounded-full border border-white/10 bg-white/5 px-8 py-3.5 text-sm font-medium text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] transition-all"
         >
           {t.hero.ctaSecondary}
         </motion.a>

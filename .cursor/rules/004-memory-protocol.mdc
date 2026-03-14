@@ -1,0 +1,17 @@
+---
+description: Enforces the progressive disclosure memory update workflow and self-healing.
+globs: *
+alwaysApply: true
+---
+
+# 004: MEMORY WRITE-BACK PROTOCOL
+
+## 1. The Write Phase (Automatic Capture)
+When a major architectural decision, non-trivial fix, or new convention is successfully completed, you MUST:
+1. **De-duplicate:** Scan the `docs/MEMORY.md` Index to ensure this decision isn't already logged.
+2. **Increment:** Determine the next available, strictly sequential ID.
+3. **Index:** Append a 1-line Index entry to `docs/MEMORY.md`.
+4. **Log:** Append a 3-bullet block to the Detailed Observations formatted exactly as:
+   - **Context:** [Brief setup]
+   - **Decision:** [The technical choice made]
+   - **Impact:** [How it affects the system/performance/tokens]

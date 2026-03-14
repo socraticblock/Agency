@@ -12,70 +12,70 @@ type Truth = {
   solution: string;
 };
 
-const TRUTHS: Truth[] = [
+const TRUTHS_EN: Truth[] = [
   {
     id: 1,
-    title: "Site builders",
+    title: "\"I already have a website from Wix / Squarespace\"",
     reality:
-      "Generic site builders are digital malls. You rent a tiny spot and compete with everyone else for attention.",
+      "Template builders give you a rented spot in a crowded digital mall. You're competing with millions of identical sites for attention, and you don't control the speed, the SEO, or the checkout experience.",
     solution:
-      "We build your own private, high-speed shop that exists to do one thing: sell your offer on your terms.",
+      "We build a private, high-speed shop that does one thing: turn visitors into paying customers — on your terms, not a template's.",
   },
   {
     id: 2,
-    title: "The assistant",
+    title: "\"Chatbots feel fake and annoying\"",
     reality:
-      "Most chatbots feel fake and frustrating. They answer in scripts and your customer gives up.",
+      "Most chatbots recite scripts and frustrate people until they give up. They hurt your brand more than they help.",
     solution:
-      "Our assistant is trained on your brand, offers, and objections so it can answer, guide, and sell 24/7 while you sleep.",
+      "Our AI assistant is trained on your specific business — your products, your prices, your most common objections. It has real conversations, takes orders, and books calls while you sleep.",
   },
   {
     id: 3,
-    title: "The monthly fee",
+    title: "\"Why do I need to pay monthly?\"",
     reality:
-      "A website is not a poster you print once. It breaks, slows down, and falls behind every month.",
+      "A website isn't a poster you print once. It slows down, breaks, gets hacked, and falls behind competitors every single month you ignore it.",
     solution:
-      "You are hiring a tech team to keep your digital shop fast, secure, and always tuned to make you more money.",
+      "Your monthly fee is a tiny tech team keeping your digital shop fast, secure, and constantly tuned to make you more money.",
   },
   {
     id: 4,
-    title: "DM slavery",
+    title: "\"I just answer DMs, it works fine\"",
     reality:
-      "If you answer DMs hours later, most buyers have already moved on. Your revenue is stuck in your inbox.",
+      "If you reply hours later, most buyers have already moved on. Your revenue is trapped inside your inbox — and you're chained to your phone.",
     solution:
-      "We give customers clear 'Buy now' and 'Book now' paths so they can act immediately without waiting on replies.",
+      "We give customers clear 'Buy now' and 'Book now' buttons so they can act immediately. No waiting, no lost sales, no slavery to your notifications.",
   },
   {
     id: 5,
-    title: "Platform ownership",
+    title: "\"My followers are my customers\"",
     reality:
-      "You don't own your followers. A single algorithm change or account issue can erase your income overnight.",
+      "You don't own your followers. One algorithm change, one account suspension, one glitch — and your income evaporates overnight.",
     solution:
-      "We move your audience into a list you own forever—email, phone, and first-party data that no platform can take away.",
+      "We move your audience into a list you own forever — emails, phone numbers, first-party data that no platform can take away.",
   },
   {
     id: 6,
-    title: "'Cheap' websites",
+    title: "\"A cheap website is good enough\"",
     reality:
-      "Slow, clunky sites silently lose thousands in missed sales every year, even if they were cheap to build.",
+      "Slow, clunky sites silently lose you thousands in missed sales every year. They make your business look unprofessional — even if your product is great.",
     solution:
-      "We use elite, modern tech that loads before your customer can blink, so they stay, trust, and buy.",
+      "We use the same technology as Netflix and Airbnb. Your site loads before your customer can blink, so they stay, trust you, and buy.",
   },
   {
     id: 7,
-    title: "Admin vs. boss",
+    title: "\"I spend all day answering the same questions\"",
     reality:
-      "Answering the same questions all day turns you into an admin, not the CEO of your business.",
+      "Answering the same 10 questions 50 times a day makes you an administrator, not a business owner.",
     solution:
-      "We automate the boring, repetitive work so you can focus on decisions, product, and growth.",
+      "We automate the repetitive stuff so you can focus on the big decisions — product, growth, and actually living your life.",
   },
   {
     id: 8,
-    title: "Follower illusion",
+    title: "\"But I get lots of likes!\"",
     reality:
-      "Likes and views look good, but they don't pay salaries, rent, or suppliers.",
+      "Likes don't pay rent. Views don't pay suppliers. A viral post with zero sales is just entertainment, not business.",
     solution:
-      "We build a direct pipeline from your content to your bank account: visit → trust → checkout.",
+      "We build a direct pipeline from your content to your bank account: visit → trust → checkout. Real revenue, not vanity metrics.",
   },
 ];
 
@@ -111,21 +111,21 @@ export function SovereignFaq({ locale }: { locale: Locale }) {
           transition={{ duration: 0.4 }}
           className="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-400"
         >
-          Hard Truths
+          Honest answers
         </motion.p>
         <motion.p
           initial={{ opacity: 0, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-20px" }}
           transition={{ duration: 0.4, delay: 0.06 }}
-          className="mt-2 text-lg font-semibold text-white"
+          className="mt-2 text-2xl font-space font-semibold text-white sm:text-3xl"
         >
-          The honest version of what&apos;s really happening.
+          You&apos;re probably thinking one of these. Let&apos;s talk about it.
         </motion.p>
       </div>
 
       <div className="flex w-full flex-col gap-3">
-        {TRUTHS.map((item) => {
+        {TRUTHS_EN.map((item) => {
           const isOpen = openId === item.id;
           return (
             <motion.article
@@ -137,17 +137,17 @@ export function SovereignFaq({ locale }: { locale: Locale }) {
                 duration: 0.5,
                 ease: [0.25, 0.46, 0.45, 0.94],
               }}
-              whileHover={{ scale: 1.02, y: -3 }}
+              whileHover={{ scale: 1.01, y: -2 }}
               layout
-              className={`relative flex w-full cursor-pointer flex-col overflow-hidden rounded-2xl border bg-black/50 p-5 backdrop-blur-xl ${
+              className={`relative flex w-full cursor-pointer flex-col overflow-hidden rounded-2xl glass-card p-5 transition-all ${
                 isOpen
-                  ? "border-emerald-500/30 shadow-[0_0_24px_rgba(16,185,129,0.12)] ring-1 ring-emerald-500/20"
-                  : "border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:border-white/20 hover:shadow-[0_28px_60px_rgba(0,0,0,0.6)]"
+                  ? "border-emerald-500/40 shadow-[inset_0_1px_0_0_rgba(16,185,129,0.2),0_0_24px_rgba(16,185,129,0.12)]"
+                  : "hover:-translate-y-1 hover:border-emerald-500/20"
               }`}
               onClick={() => toggle(item.id)}
             >
               <div className="flex items-start justify-between gap-3">
-                <h3 className="text-sm font-bold uppercase leading-tight tracking-[0.2em] text-white">
+                <h3 className="text-sm font-bold leading-tight tracking-wide text-white">
                   {item.title}
                 </h3>
                 <ExpandIcon isOpen={isOpen} />
@@ -164,16 +164,16 @@ export function SovereignFaq({ locale }: { locale: Locale }) {
                   >
                     <div className="mt-4 space-y-3 pb-1 text-sm">
                       <div>
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
-                          The Reality
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-red-400/80">
+                          The reality
                         </p>
                         <p className="mt-1 leading-relaxed text-slate-300">{item.reality}</p>
                       </div>
                       <div>
                         <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-emerald-400">
-                          The Solution
+                          What we do instead
                         </p>
-                        <p className="mt-1 leading-relaxed text-[#10b981]">{item.solution}</p>
+                        <p className="mt-1 leading-relaxed text-emerald-200/80">{item.solution}</p>
                       </div>
                     </div>
                   </motion.div>

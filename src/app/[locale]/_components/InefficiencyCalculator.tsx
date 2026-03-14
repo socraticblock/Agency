@@ -55,7 +55,7 @@ export function InefficiencyCalculator({ locale }: Props) {
 
       <div className="mt-8 grid gap-6 md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
         <div className="space-y-4">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-md">
+          <div className="rounded-2xl glass-card border border-white/5 bg-white/[0.02] p-5">
             <label className="block text-sm font-medium text-white/80">
               {t.sovereign?.calcFollowersLabel}
             </label>
@@ -67,7 +67,7 @@ export function InefficiencyCalculator({ locale }: Props) {
               onChange={(e) => setFollowers(Number(e.target.value) || 0)}
             />
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-md">
+          <div className="rounded-2xl glass-card border border-white/5 bg-white/[0.02] p-5">
             <label className="block text-sm font-medium text-white/80">
               {t.sovereign?.calcAovLabel}
             </label>
@@ -79,7 +79,7 @@ export function InefficiencyCalculator({ locale }: Props) {
               onChange={(e) => setAov(Number(e.target.value) || 0)}
             />
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-md">
+          <div className="rounded-2xl glass-card border border-white/5 bg-white/[0.02] p-5">
             <label className="block text-sm font-medium text-white/80">
               {t.sovereign?.calcDmsLabel}
             </label>
@@ -97,7 +97,7 @@ export function InefficiencyCalculator({ locale }: Props) {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
-          className="group relative isolate z-10 overflow-hidden rounded-2xl border border-red-500/30 bg-red-500/10 p-6 shadow-[0_18px_45px_rgba(0,0,0,0.6)] backdrop-blur-xl"
+          className="group relative isolate z-10 overflow-hidden rounded-2xl border border-red-500/40 bg-red-500/10 p-6 shadow-[inset_0_1px_0_0_rgba(248,113,113,0.3),0_18px_45px_rgba(0,0,0,0.6)] backdrop-blur-xl"
         >
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-red-300">
             {t.sovereign?.calcResultHeadline}
@@ -106,7 +106,7 @@ export function InefficiencyCalculator({ locale }: Props) {
             key={Math.round(displayBleed)}
             initial={{ x: -4, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            className="mt-4 text-4xl font-black text-red-200 sm:text-5xl"
+            className="mt-4 font-space text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-red-200 to-red-500/80 sm:text-5xl"
           >
             {Math.round(displayBleed).toLocaleString("en-US")} GEL
           </motion.p>
@@ -129,17 +129,41 @@ export function InefficiencyCalculator({ locale }: Props) {
               {t.sovereign?.calcBreakdownTitle}
             </p>
             <ul className="mt-3 space-y-1.5">
-              <li>
-                <span className="font-semibold">
-                  {t.sovereign?.calcVisibilityTitle}
-                </span>{" "}
-                <span>{t.sovereign?.calcVisibilityBody}</span>
+              <li className="flex flex-col gap-1 pb-2">
+                <div>
+                  <span className="font-semibold text-red-200">
+                    {t.sovereign?.calcVisibilityTitle}
+                  </span>{" "}
+                  <span>{t.sovereign?.calcVisibilityBody}</span>
+                </div>
+                {t.sovereign?.calcVisibilitySource && t.sovereign?.calcVisibilityUrl && (
+                  <a
+                    href={t.sovereign.calcVisibilityUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[10px] text-red-300/60 hover:text-red-300 underline underline-offset-2 transition-colors inline-block w-max"
+                  >
+                    {t.sovereign.calcVisibilitySource}
+                  </a>
+                )}
               </li>
-              <li>
-                <span className="font-semibold">
-                  {t.sovereign?.calcDelayTitle}
-                </span>{" "}
-                <span>{t.sovereign?.calcDelayBody}</span>
+              <li className="flex flex-col gap-1">
+                <div>
+                  <span className="font-semibold text-red-200">
+                    {t.sovereign?.calcDelayTitle}
+                  </span>{" "}
+                  <span>{t.sovereign?.calcDelayBody}</span>
+                </div>
+                {t.sovereign?.calcDelaySource && t.sovereign?.calcDelayUrl && (
+                  <a
+                    href={t.sovereign.calcDelayUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[10px] text-red-300/60 hover:text-red-300 underline underline-offset-2 transition-colors inline-block w-max"
+                  >
+                    {t.sovereign.calcDelaySource}
+                  </a>
+                )}
               </li>
             </ul>
             <p className="mt-3 text-[11px] text-red-100/80">

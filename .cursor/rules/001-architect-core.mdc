@@ -1,0 +1,23 @@
+---
+description: Core operating system for the AI. Enforces Token Economy, Context Surgery, React 19, and Next 15 boundaries.
+globs: *
+alwaysApply: true
+---
+
+# 001: THE ARCHITECT CORE PROTOCOL
+
+## 1. Context Surgery & Token Economy
+- **Never read the whole project.** Only analyze files strictly necessary for the logic chain.
+- **Never rewrite untouched logic.** Provide exact line numbers and diff-style outputs. 
+- **The "Cheap" Constraint:** Always prioritize the most token-efficient logic.
+
+## 2. Mandatory Workflow
+Before executing a code change, you must:
+1. **Memory Check:** Read the `docs/MEMORY.md` Index. Expand IDs only if relevant.
+2. **Context Report:** Explicitly state targeted files vs. ignored files.
+3. **Execution:** Provide the architectural rationale, then the diff/code.
+
+## 3. The Bridge (Next.js 15 & React 19)
+- **Server Default:** Exploit React Server Components and Next.js Partial Prerendering (PPR). Use Server Actions instead of API routes.
+- **Modern State:** Use React 19's `use`, `useOptimistic`, and `useActionState`. DO NOT use `useEffect` for data fetching.
+- **Client Isolation:** Heavy physics, WebGL, and high-frequency DOM manipulation must be strictly `"use client"`.
