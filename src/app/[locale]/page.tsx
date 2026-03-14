@@ -2,7 +2,7 @@ import { Navbar } from "./_components/Navbar";
 import { KineticHero } from "./_components/KineticHero";
 import { TechStackSection } from "./_components/TechStackSection";
 import { GlobalFooter } from "./_components/GlobalFooter";
-import { InefficiencyCalculator } from "./_components/InefficiencyCalculator";
+import { LeadGenHub } from "./_components/lead-gen/LeadGenHub";
 import { SovereignTriptych } from "./_components/SovereignTriptych";
 import { PackageGrid } from "./_components/PackageGrid";
 import { SovereignFaq } from "./_components/SovereignFaq";
@@ -22,7 +22,7 @@ export default async function Home({
       <main>
         <KineticHero locale={lang} />
         <SovereignTriptych locale={lang} />
-        <InefficiencyCalculator locale={lang} />
+        <LeadGenHub locale={lang} />
         <PackageGrid locale={lang} />
         <SovereignFaq locale={lang} />
         <TechStackSection locale={lang} />
