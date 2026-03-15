@@ -7,9 +7,10 @@ import { LostWeekendCalculator } from "./LostWeekendCalculator";
 import { FrictionRaceSimulator } from "./FrictionRaceSimulator";
 import { TimeDebtReceipt } from "./TimeDebtReceipt";
 import { PlatformRiskMeter } from "./PlatformRiskMeter";
+import type { Locale } from "@/lib/i18n";
 
 interface LeadGenHubProps {
-  locale: string;
+  locale: Locale;
 }
 
 const tools = [
