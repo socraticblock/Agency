@@ -31,7 +31,7 @@ export function RoadmapTimeline() {
         </p>
       </div>
 
-      <div className="max-w-3xl mx-auto py-12 px-6 sm:px-12 bg-slate-900/40 rounded-3xl shadow-2xl border border-slate-800/50">
+      <div className="clay-card clay-card-hover max-w-3xl mx-auto py-12 px-6 sm:px-12 border-emerald-500/40 shadow-[inset_0_1px_0_0_rgba(16,185,129,0.2),0_0_30px_rgba(16,185,129,0.15)]">
         <div className="flex flex-col">
           {phases.map((phase, i) => (
             <motion.div

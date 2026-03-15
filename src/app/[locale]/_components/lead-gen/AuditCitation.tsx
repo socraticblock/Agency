@@ -12,7 +12,7 @@ export interface AuditCitationProps {
 
 export function AuditCitation({ source, explanation, dataPoint }: AuditCitationProps) {
   return (
-    <div className="mt-4 rounded-xl bg-white/[0.02] border border-white/5 p-4 relative overflow-hidden">
+    <div className="mt-4 p-4 relative overflow-hidden clay-card clay-card-hover">
       {/* GLOW BAR AT TOP */}
       <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-emerald-500/30 to-transparent" />
 

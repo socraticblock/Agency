@@ -52,11 +52,10 @@ export function PackageGrid({ locale }: { locale: Locale }) {
               key={pkg.id}
               layoutId={pkg.id}
               onClick={() => setSelected(pkg)}
-              className={`relative cursor-pointer rounded-2xl glass-card p-6 text-left transition-all hover:-translate-y-1 group ${
-                pkg.isPopular
+              className={`relative cursor-pointer p-6 text-left transition-all hover:-translate-y-1 group clay-card clay-card-hover ${pkg.isPopular
                   ? "border-emerald-500/40 shadow-[0_0_30px_rgba(16,185,129,0.15)] md:scale-105 z-10"
-                  : "hover:border-emerald-400/40 hover:shadow-[0_20px_60px_rgba(16,185,129,0.15)]"
-              }`}
+                  : ""
+                }`}
             >
               {pkg.isPopular && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-emerald-500 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-black shadow-lg z-20">
@@ -91,7 +90,7 @@ export function PackageGrid({ locale }: { locale: Locale }) {
               key={pkg.id}
               layoutId={pkg.id}
               onClick={() => setSelected(pkg)}
-              className="relative cursor-pointer rounded-2xl border border-white/5 bg-white/[0.02] p-6 text-left transition-all hover:-translate-y-1 hover:border-emerald-500/20 hover:bg-white/[0.04]"
+              className="relative cursor-pointer p-6 text-left transition-all hover:-translate-y-1 clay-card clay-card-hover"
             >
               <h3 className="text-sm font-semibold uppercase tracking-[0.25em] text-emerald-300/80">
                 {pkg.name}

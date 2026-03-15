@@ -48,10 +48,6 @@ const tools = [
 ];
 
 export function LeadGenHub({ locale }: LeadGenHubProps) {
-  const [activeTab, setActiveTab] = useState(0);
-
-  const ActiveComponent = tools[activeTab].component;
-
   return (
     <section id="interactive-audit" className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
       <div className="mx-auto max-w-3xl text-center mb-12">
@@ -69,46 +65,23 @@ export function LeadGenHub({ locale }: LeadGenHubProps) {
         </p>
       </div>
 
-      {/* Tabs */}
-      <div className="mb-12 flex flex-wrap justify-center gap-2 sm:gap-4">
-        {tools.map((tool, index) => (
-          <button
-            key={tool.id}
-            onClick={() => setActiveTab(index)}
-            className={`relative rounded-xl px-4 py-3 text-sm font-medium transition-all sm:px-6 ${
-              activeTab === index
-                ? "text-white"
-                : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
-            }`}
-          >
-            {activeTab === index && (
-              <motion.div
-                layoutId="active-tab"
-                className="absolute inset-0 rounded-xl bg-emerald-500/20 border border-emerald-500/30"
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              />
-            )}
-            <span className="relative z-10 block">{tool.name}</span>
-            <span className="relative z-10 mt-1 hidden text-xs opacity-70 sm:block">
-              {tool.description}
-            </span>
-          </button>
-        ))}
-      </div>
-
-      {/* Active Tool Container */}
-      <div className="relative">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-          >
-            <ActiveComponent locale={locale} />
-          </motion.div>
-        </AnimatePresence>
+      {/* Horizontal Scroll Container */}
+      <div className="flex flex-nowrap gap-0 overflow-x-auto pb-16 snap-x snap-mandatory scrollbar-hide select-none">
+        {tools.map((tool) => {
+          const ToolComponent = tool.component;
+          return (
+            <div
+              key={tool.id}
+              className="min-w-full snap-center px-4 md:px-6 transition-transform"
+            >
+              <div className="text-center mb-4">
+                <h3 className="text-xl font-bold text-emerald-400 font-space">{tool.name}</h3>
+                <p className="text-xs text-slate-400 mt-0.5">{tool.description}</p>
+              </div>
+              <ToolComponent locale={locale} />
+            </div>
+          );
+        })}
       </div>
     </section>
   );

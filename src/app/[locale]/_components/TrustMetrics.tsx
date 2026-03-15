@@ -41,7 +41,7 @@ const MetricBar = ({ label, smValue, webValue }: { label: string; smValue: numbe
 
 export function TrustMetrics() {
   return (
-    <div className="clay-card clay-card-hover bg-slate-900/50 rounded-2xl shadow-xl p-8 sm:p-10 border border-slate-800/50 h-full max-w-3xl mx-auto">
+    <div className="clay-card clay-card-hover rounded-2xl shadow-xl p-8 sm:p-10 h-full max-w-3xl mx-auto">
       <h2 className="text-2xl font-bold text-slate-100 mb-3 sm:text-3xl">
         Trust & Conversion Metrics
       </h2>

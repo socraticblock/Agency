@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #050505;
+  --background: #030717;
   --foreground: #e5e7eb;
   --primary: #0f172a;
   --accent: #10b981;
@@ -26,7 +26,7 @@ body {
 
 @layer base {
   body {
-    background-color: #050505;
+    background-color: #060c22;
     color: #ffffff;
     cursor: crosshair;
   }
@@ -45,22 +45,22 @@ body {
   }
 
   .glass-card {
-    background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255,255,255,0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
   }
 
   .clay-card {
-    background: linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
     border-radius: 2rem;
     border: 1px solid rgba(255, 255, 255, 0.06);
     box-shadow:
-      inset 2px 2px 4px rgba(255,255,255,0.05),
-      inset -2px -2px 4px rgba(0,0,0,0.4),
-      0 10px 40px rgba(0,0,0,0.6),
-      0 2px 8px rgba(0,0,0,0.3);
+      inset 2px 2px 4px rgba(255, 255, 255, 0.05),
+      inset -2px -2px 4px rgba(0, 0, 0, 0.4),
+      0 10px 40px rgba(0, 0, 0, 0.6),
+      0 2px 8px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
   }
@@ -68,12 +68,13 @@ body {
   .clay-card-hover {
     transition: box-shadow 0.3s ease, transform 0.3s ease;
   }
+
   .clay-card-hover:hover {
     box-shadow:
-      inset 2px 2px 6px rgba(255,255,255,0.08),
-      inset -2px -2px 6px rgba(0,0,0,0.5),
-      0 16px 48px rgba(0,0,0,0.7),
-      0 4px 12px rgba(0,0,0,0.4);
+      inset 2px 2px 6px rgba(255, 255, 255, 0.08),
+      inset -2px -2px 6px rgba(0, 0, 0, 0.5),
+      0 16px 48px rgba(0, 0, 0, 0.7),
+      0 4px 12px rgba(0, 0, 0, 0.4);
     transform: translateY(-2px);
   }
 
@@ -81,6 +82,7 @@ body {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }

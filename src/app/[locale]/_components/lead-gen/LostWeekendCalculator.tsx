@@ -46,7 +46,7 @@ export function LostWeekendCalculator({ locale }: LostWeekendCalculatorProps) {
   }, [dailySales, hoursOnline]);
 
   return (
-    <div className="clay-card clay-card-hover mx-auto max-w-3xl p-6 shadow-2xl sm:p-10">
+    <div className="clay-card clay-card-hover mx-auto max-w-3xl p-6 shadow-2xl sm:p-10 border-emerald-500/40 shadow-[inset_0_1px_0_0_rgba(16,185,129,0.2),0_0_30px_rgba(16,185,129,0.15)]">
       <div className="mb-8 text-center">
         <h2 className="text-2xl font-bold text-slate-100 sm:text-3xl">
           {t.midnightCalc.title}
@@ -103,7 +103,7 @@ export function LostWeekendCalculator({ locale }: LostWeekendCalculatorProps) {
               {t.midnightCalc.frictionSuffix}
             </p>
 
-            <AuditCitation 
+            <AuditCitation
               dataPoint="82% of consumers demand an immediate response."
               explanation="Modern commerce operates 24/7. When your business sleeps, your competitors don't. Studies show 82% of buyers expect responses in under 10 minutes for sales queries, else they abandon the purchase."
               source="HubSpot Consumer Survey / Sprout Social Index"

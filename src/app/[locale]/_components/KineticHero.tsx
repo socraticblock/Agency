@@ -69,11 +69,11 @@ export function KineticHero({ locale }: { locale: Locale }) {
     >
       {/* Deep blue ambient glow behind hero */}
       <div className="pointer-events-none absolute inset-0 -z-20" style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(30,64,175,0.15) 0%, rgba(6,12,34,0.5) 50%, #050505 100%)' }} />
-      <div className="pointer-events-none absolute inset-0 -z-20 bg-gradient-to-b from-[#050505] via-transparent to-[#050505]" />
-      
+      <div className="pointer-events-none absolute inset-0 -z-20 bg-gradient-to-b from-background via-transparent to-background" />
+
       {/* Heavy bottom fade edge to blend transparent canvas down */}
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#050505] to-transparent z-10" />
-      
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-background to-transparent z-10" />
+
       {/* Interactive Nano Banana WebGL Canvas */}
       <NanoBananaBackground />
 
@@ -133,27 +133,27 @@ export function KineticHero({ locale }: { locale: Locale }) {
           transition={{ delay: 0.55, duration: 0.5 }}
           className="mt-10 flex flex-wrap items-center justify-center gap-4"
         >
-        <MagneticButton
-          as="a"
-          href="#reality-check"
-          magneticStrength={20}
-          textStrength={10}
-          className="group relative overflow-hidden rounded-full border border-emerald-400/30 bg-emerald-500/10 px-8 py-3.5 text-sm font-semibold text-emerald-100 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2),0_0_40px_rgba(16,185,129,0.15)] transition-colors hover:bg-emerald-500/20 hover:border-emerald-400/60 hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2),0_0_60px_rgba(16,185,129,0.3)]"
-        >
-          <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.4),_transparent_60%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-          <span className="relative z-10 block">{t.hero.cta}</span>
-        </MagneticButton>
-        <MagneticButton
-          as="a"
-          href="https://wa.me/995555555555?text=I%20saw%20the%20Kvali%20site%20and%20want%20help%20escaping%20the%20social%20media%20trap."
-          target="_blank"
-          rel="noopener noreferrer"
-          magneticStrength={10}
-          textStrength={4}
-          className="rounded-full border border-white/10 bg-white/5 px-8 py-3.5 text-sm font-medium text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] transition-colors hover:bg-white/10"
-        >
-          <span className="block">{t.hero.ctaSecondary}</span>
-        </MagneticButton>
+          <MagneticButton
+            as="a"
+            href="#reality-check"
+            magneticStrength={20}
+            textStrength={10}
+            className="group relative overflow-hidden rounded-full border border-emerald-400/30 bg-emerald-500/10 px-8 py-3.5 text-sm font-semibold text-emerald-100 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2),0_0_40px_rgba(16,185,129,0.15)] transition-colors hover:bg-emerald-500/20 hover:border-emerald-400/60 hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2),0_0_60px_rgba(16,185,129,0.3)]"
+          >
+            <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.4),_transparent_60%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            <span className="relative z-10 block">{t.hero.cta}</span>
+          </MagneticButton>
+          <MagneticButton
+            as="a"
+            href="https://wa.me/995555555555?text=I%20saw%20the%20Kvali%20site%20and%20want%20help%20escaping%20the%20social%20media%20trap."
+            target="_blank"
+            rel="noopener noreferrer"
+            magneticStrength={10}
+            textStrength={4}
+            className="rounded-full border border-white/10 bg-white/5 px-8 py-3.5 text-sm font-medium text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] transition-colors hover:bg-white/10"
+          >
+            <span className="block">{t.hero.ctaSecondary}</span>
+          </MagneticButton>
         </motion.div>
       </motion.div>
     </section>

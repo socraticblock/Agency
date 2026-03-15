@@ -20,14 +20,14 @@ export function AmbientGlow() {
   const g3g = useTransform(scrollYProgress, [0, 1], [165, 85]);
   const g3b = useTransform(scrollYProgress, [0, 1], [233, 247]);
 
-  const bg1 = useMotionTemplate`radial-gradient(ellipse 65% 55% at 10% 25%, rgba(${g1r}, ${g1g}, ${g1b}, 0.12), transparent 50%)`;
-  const bg2 = useMotionTemplate`radial-gradient(ellipse 65% 55% at 85% 65%, rgba(${g2r}, ${g2g}, ${g2b}, 0.14), transparent 50%)`;
-  const bg3 = useMotionTemplate`radial-gradient(ellipse 60% 50% at 40% 95%, rgba(${g3r}, ${g3g}, ${g3b}, 0.08), transparent 45%)`;
+  const bg1 = useMotionTemplate`radial-gradient(ellipse 65% 55% at 10% 25%, rgba(${g1r}, ${g1g}, ${g1b}, 0.07), transparent 150%)`;
+  const bg2 = useMotionTemplate`radial-gradient(ellipse 65% 55% at 85% 65%, rgba(${g2r}, ${g2g}, ${g2b}, 0.08), transparent 50%)`;
+  const bg3 = useMotionTemplate`radial-gradient(ellipse 60% 50% at 40% 95%, rgba(${g3r}, ${g3g}, ${g3b}, 0.04), transparent 45%)`;
   const combined = useMotionTemplate`${bg1}, ${bg2}, ${bg3}`;
 
   return (
     <motion.div
-      className="pointer-events-none fixed inset-0 z-0"
+      className="pointer-events-none fixed inset-0 -z-10"
       style={{ backgroundImage: combined }}
     />
   );

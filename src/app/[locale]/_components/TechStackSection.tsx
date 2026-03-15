@@ -38,7 +38,7 @@ export function TechStackSection({ locale }: { locale: Locale }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.5, delay: i * 0.08 }}
-            className="group relative isolate z-10 mb-4 flex flex-col gap-3 rounded-2xl border border-white/5 bg-[#050505] p-6 last:mb-0 md:flex-row md:items-start md:gap-6 overflow-hidden"
+            className="group relative isolate z-10 mb-4 flex flex-col gap-3 p-6 last:mb-0 md:flex-row md:items-start md:gap-6 overflow-hidden clay-card clay-card-hover border-emerald-500/40 shadow-[inset_0_1px_0_0_rgba(16,185,129,0.2),0_0_30px_rgba(16,185,129,0.15)]"
           >
             {/* Background Grid Pattern */}
             <div 

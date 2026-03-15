@@ -23,9 +23,17 @@ export function SovereignTriptych({ locale }: { locale: Locale }) {
     if (!isVaultActive || isPaused) return;
     const interval = setInterval(() => {
       setConversationIndex((prev) => (prev === 2 ? 0 : prev + 1));
-    }, 9000); 
+    }, 9000);
     return () => clearInterval(interval);
   }, [activeTab, activeTabMobile, isPaused]);
+
+  // Auto-resume after 12s of no interaction
+  useEffect(() => {
+    if (isPaused) {
+      const timeout = setTimeout(() => setIsPaused(false), 12000);
+      return () => clearTimeout(timeout);
+    }
+  }, [isPaused]);
 
   const stages = [
     {
@@ -98,11 +106,10 @@ export function SovereignTriptych({ locale }: { locale: Locale }) {
                     setActiveTabMobile(isActive ? null : stage.key);
                     setActiveTab(stage.key); // keep desktop state synced just in case
                   }}
-                  className={`relative w-full text-left p-4 rounded-xl border transition-all cursor-pointer ${
-                    isActive
-                      ? "border-emerald-500/30 bg-white/[0.03]"
-                      : "border-white/5 bg-transparent"
-                  }`}
+                  className={`relative w-full text-left p-4 rounded-xl border transition-all cursor-pointer ${isActive
+                    ? "border-emerald-500/30 bg-white/[0.03]"
+                    : "border-white/5 bg-transparent"
+                    }`}
                   layout
                 >
                   <div className="flex items-center justify-between gap-4">
@@ -123,7 +130,7 @@ export function SovereignTriptych({ locale }: { locale: Locale }) {
                       <span className="text-[10px] uppercase tracking-wider text-slate-500 font-medium">
                         {isActive ? "Close" : "Expand"}
                       </span>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`text-slate-500 transition-transform ${isActive ? "rotate-180" : ""}`}><path d="m6 9 6 6 6-6"/></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`text-slate-500 transition-transform ${isActive ? "rotate-180" : ""}`}><path d="m6 9 6 6 6-6" /></svg>
                     </div>
                   </div>
                 </motion.button>
@@ -194,19 +201,19 @@ export function SovereignTriptych({ locale }: { locale: Locale }) {
                             </AnimatePresence>
 
                             {/* Left Arrow */}
-                            <button 
-                              onClick={() => { setIsPaused(true); setConversationIndex((prev) => (prev === 0 ? 2 : prev - 1)); }} 
+                            <button
+                              onClick={() => { setIsPaused(true); setConversationIndex((prev) => (prev === 0 ? 2 : prev - 1)); }}
                               className="absolute left-0 top-1/2 -translate-y-1/2 bg-black/60 backdrop-blur-md p-1.5 rounded-r-xl border border-white/5 border-l-0 text-white z-20"
                             >
-                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
                             </button>
 
                             {/* Right Arrow */}
-                            <button 
-                              onClick={() => { setIsPaused(true); setConversationIndex((prev) => (prev === 2 ? 0 : prev + 1)); }} 
+                            <button
+                              onClick={() => { setIsPaused(true); setConversationIndex((prev) => (prev === 2 ? 0 : prev + 1)); }}
                               className="absolute right-0 top-1/2 -translate-y-1/2 bg-black/60 backdrop-blur-md p-1.5 rounded-l-xl border border-white/5 border-r-0 text-white z-20"
                             >
-                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
                             </button>
 
                             {/* Paged Dots at Bottom center */}
@@ -236,11 +243,10 @@ export function SovereignTriptych({ locale }: { locale: Locale }) {
               <motion.button
                 key={stage.key}
                 onClick={() => setActiveTab(stage.key)}
-                className={`relative w-full text-left p-5 rounded-2xl border transition-all cursor-pointer ${
-                  isActive
-                    ? "border-emerald-500/30 bg-white/[0.03] shadow-[0_0_40px_rgba(16,185,129,0.05)]"
-                    : "border-white/5 hover:border-white/10 bg-transparent"
-                }`}
+                className={`relative w-full text-left p-5 rounded-2xl border transition-all cursor-pointer ${isActive
+                  ? "clay-card border-emerald-500/40 shadow-[inset_0_1px_0_0_rgba(16,185,129,0.2),0_0_24px_rgba(16,185,129,0.12)]"
+                  : "border-white/5 hover:border-white/10 bg-transparent"
+                  }`}
                 whileHover={{ x: isActive ? 0 : 4 }}
                 layout
               >
@@ -278,10 +284,10 @@ export function SovereignTriptych({ locale }: { locale: Locale }) {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.35, ease: "easeOut" }}
-              className="static md:sticky md:top-24 rounded-3xl border border-white/10 bg-[#050505] p-8 shadow-[0_30px_90px_rgba(0,0,0,0.8)] flex flex-col justify-between overflow-hidden group min-h-[400px]"
+              className="clay-card static md:sticky md:top-24 rounded-3xl border border-emerald-500/40 p-8 shadow-[inset_0_1px_0_0_rgba(16,185,129,0.2),0_0_30px_rgba(16,185,129,0.15)] flex flex-col justify-between overflow-hidden group min-h-[400px]"
             >
               <div className="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(circle_at_center,_rgba(16,185,129,0.4),_transparent_60%)] group-hover:opacity-30 transition-opacity" />
-              
+
               <div className="relative z-10 flex-1">
                 <p className="text-sm leading-relaxed text-slate-200">
                   {activeStage.body}
@@ -306,7 +312,7 @@ export function SovereignTriptych({ locale }: { locale: Locale }) {
               </div>
 
               {/* Dynamic Visual Indicator at Bottom */}
-              <div className="relative mt-auto h-52 w-full overflow-hidden rounded-xl border border-white/5 bg-white/[0.02]">
+              <div className="relative mt-5 h-52 w-full overflow-hidden rounded-xl border border-white/5 bg-white/[0.02]">
                 <div className="absolute inset-0 flex items-center justify-center p-2">
                   {activeTab === "bridge" && (
                     <motion.div className="flex flex-col items-center gap-2">
@@ -388,18 +394,18 @@ export function SovereignTriptych({ locale }: { locale: Locale }) {
                       </AnimatePresence>
 
                       {/* Manual Navigation Arrows for Desktop */}
-                      <button 
-                        onClick={() => { setIsPaused(true); setConversationIndex((prev) => (prev === 0 ? 2 : prev - 1)); }} 
+                      <button
+                        onClick={() => { setIsPaused(true); setConversationIndex((prev) => (prev === 0 ? 2 : prev - 1)); }}
                         className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 backdrop-blur-md p-2 rounded-full border border-white/5 text-white/50 hover:text-white z-20 transition-all"
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
                       </button>
 
-                      <button 
-                        onClick={() => { setIsPaused(true); setConversationIndex((prev) => (prev === 2 ? 0 : prev + 1)); }} 
+                      <button
+                        onClick={() => { setIsPaused(true); setConversationIndex((prev) => (prev === 2 ? 0 : prev + 1)); }}
                         className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 backdrop-blur-md p-2 rounded-full border border-white/5 text-white/50 hover:text-white z-20 transition-all"
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
                       </button>
 
                       {/* Dots inside bottom panel footer layout centered */}
