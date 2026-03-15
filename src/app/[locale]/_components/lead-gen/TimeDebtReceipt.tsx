@@ -3,16 +3,20 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { LeadCaptureForm } from "./LeadCaptureForm";
+import { getMessages, type Locale } from "@/lib/i18n";
+import { AuditCitation } from "./AuditCitation";
 
 interface TimeDebtReceiptProps {
-  locale: string;
+  locale: Locale;
 }
 
 export function TimeDebtReceipt({ locale }: TimeDebtReceiptProps) {
   const [hoursPerWeek, setHoursPerWeek] = useState(15);
-  const [hourlyRate, setHourlyRate] = useState(50);
+  // Default to 15.6 GEL/hr which is ~2500 GEL net + 20% + 2% = ~3050 GEL monthly burden
+  const [hourlyRate, setHourlyRate] = useState(15.6);
   const [isPrinting, setIsPrinting] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const t = getMessages(locale);
 
   const monthlyHours = hoursPerWeek * 4;
   const monthlyDebt = monthlyHours * hourlyRate;
@@ -26,10 +30,10 @@ export function TimeDebtReceipt({ locale }: TimeDebtReceiptProps) {
     <div className="mx-auto max-w-3xl rounded-3xl border border-white/10 bg-black/40 p-6 shadow-2xl backdrop-blur-xl sm:p-10">
       <div className="mb-8 text-center">
         <h2 className="text-2xl font-bold text-slate-100 sm:text-3xl">
-          The "Hourly Wage" DM Eliminator
+          {t.calcReceipt.title}
         </h2>
         <p className="mt-2 text-slate-400">
-          You didn't start a business to be a full-time messaging assistant.
+          {t.calcReceipt.subtitle}
         </p>
       </div>
 
@@ -38,7 +42,7 @@ export function TimeDebtReceipt({ locale }: TimeDebtReceiptProps) {
         <div className="space-y-6">
           <div>
             <label className="mb-2 flex justify-between text-sm font-medium text-slate-300">
-              <span>Hours/week answering DMs</span>
+              <span>{t.calcReceipt.hoursLabel}</span>
               <span className="text-emerald-400">{hoursPerWeek} hrs</span>
             </label>
             <input
@@ -54,14 +58,14 @@ export function TimeDebtReceipt({ locale }: TimeDebtReceiptProps) {
 
           <div>
             <label className="mb-2 flex justify-between text-sm font-medium text-slate-300">
-              <span>Your Hourly CEO Rate (GEL)</span>
-              <span className="text-emerald-400">{hourlyRate}₾/hr</span>
+              <span>{t.calcReceipt.rateLabel}</span>
+              <span className="text-emerald-400">{hourlyRate.toFixed(1)}₾/hr</span>
             </label>
             <input
               type="range"
-              min="10"
-              max="500"
-              step="10"
+              min="5"
+              max="100"
+              step="0.5"
               value={hourlyRate}
               onChange={(e) => setHourlyRate(Number(e.target.value))}
               className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-white/10 accent-emerald-500"
@@ -72,8 +76,14 @@ export function TimeDebtReceipt({ locale }: TimeDebtReceiptProps) {
             onClick={handlePrint}
             className="w-full rounded-xl bg-slate-800 px-6 py-3 font-medium text-slate-200 transition hover:bg-slate-700"
           >
-            Calculate Time Debt
+            {t.calcReceipt.calculateBtn}
           </button>
+
+          <AuditCitation 
+            dataPoint="Context switching costs 23 minutes of focus per interruption."
+            explanation="Every time you pause deep work to answer a basic 'how much is this?' DM, you pay a massive Time Debt. Research shows it takes the human brain an average of 23 minutes to fully recover focus after a single context switch."
+            source="UC Irvine 'The Cost of Interrupted Work' Study"
+          />
 
           {isPrinting && !showForm && (
             <motion.button
@@ -83,7 +93,7 @@ export function TimeDebtReceipt({ locale }: TimeDebtReceiptProps) {
               onClick={() => setShowForm(true)}
               className="mt-4 w-full rounded-xl bg-emerald-500/20 px-6 py-3 font-medium text-emerald-200 transition hover:bg-emerald-500/30"
             >
-              Automate Your DMs. Reclaim {hoursPerWeek} hours/week.
+              {t.calcReceipt.protectBtn}
             </motion.button>
           )}
         </div>
@@ -103,30 +113,30 @@ export function TimeDebtReceipt({ locale }: TimeDebtReceiptProps) {
                 }}
               >
                 <div className="mb-4 border-b-2 border-dashed border-gray-400 pb-4 text-center">
-                  <h3 className="text-lg font-bold">TIME DEBT RECEIPT</h3>
-                  <p className="text-xs text-gray-500">Monthly Statement</p>
+                  <h3 className="text-lg font-bold">{t.calcReceipt.receiptTitle}</h3>
+                  <p className="text-xs text-gray-500">{t.calcReceipt.receiptSub}</p>
                 </div>
 
                 <div className="mb-4 space-y-2">
                   <div className="flex justify-between">
-                    <span>Admin Tasks:</span>
+                    <span>{t.calcReceipt.receiptAdmin}</span>
                     <span>{monthlyHours} hrs</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>CEO Rate:</span>
-                    <span>{hourlyRate}₾/hr</span>
+                    <span>{t.calcReceipt.receiptBurden}</span>
+                    <span>{hourlyRate.toFixed(1)}₾/hr</span>
                   </div>
                 </div>
 
                 <div className="border-t-2 border-dashed border-gray-400 pt-4">
                   <div className="flex justify-between text-base font-bold text-red-600">
-                    <span>TOTAL LOST:</span>
-                    <span>{monthlyDebt.toLocaleString()}₾</span>
+                    <span>{t.calcReceipt.receiptTotal}</span>
+                    <span>{monthlyDebt.toLocaleString(undefined, { maximumFractionDigits: 0 })}₾</span>
                   </div>
                 </div>
 
                 <div className="mt-6 text-center text-xs text-gray-500">
-                  <p>Stop acting as a customer service bot.</p>
+                  <p>{t.calcReceipt.receiptFooter}</p>
                 </div>
               </motion.div>
             )}
@@ -139,8 +149,8 @@ export function TimeDebtReceipt({ locale }: TimeDebtReceiptProps) {
         <LeadCaptureForm
           locale={locale}
           toolName="Time Debt Receipt"
-          painPoint={`Losing ${monthlyDebt} GEL/mo on manual DMs`}
-          ctaText="Automate your DMs. Reclaim your time."
+          painPoint={`Reclaiming ${monthlyDebt} GEL/mo worth of time`}
+          ctaText={t.calcReceipt.ctaText}
         />
       )}
     </div>

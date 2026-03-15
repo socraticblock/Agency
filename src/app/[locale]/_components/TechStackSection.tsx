@@ -4,19 +4,6 @@ import { motion } from "framer-motion";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.08 },
-  },
-};
-
-const rowVariants = {
-  hidden: { opacity: 0, y: 12 },
-  visible: { opacity: 1, y: 0 },
-};
-
 export function TechStackSection({ locale }: { locale: Locale }) {
   const t = getMessages(locale);
   const { tagline, label, items } = t.pointOneStack;
@@ -31,18 +18,15 @@ export function TechStackSection({ locale }: { locale: Locale }) {
           {tagline}
         </h2>
       </div>
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-40px" }}
-        className="mt-8 flex flex-col gap-4 sm:mx-auto"
-      >
+      <div className="mt-8 flex flex-col gap-4 sm:mx-auto">
         {items.map(
           (item: (typeof items)[number], i: number) => (
           <motion.div
             key={i}
-            variants={rowVariants}
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.5, delay: i * 0.08 }}
             whileHover={{
               scale: 1.01,
               x: 4,
@@ -67,7 +51,7 @@ export function TechStackSection({ locale }: { locale: Locale }) {
             </div>
           </motion.div>
         ))}
-      </motion.div>
+      </div>
     </section>
   );
 }

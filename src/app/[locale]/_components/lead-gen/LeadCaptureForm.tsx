@@ -4,12 +4,13 @@ import { useActionState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { captureLeadAction } from "@/app/actions/lead";
 import { useRouter } from "next/navigation";
+import { getMessages, type Locale } from "@/lib/i18n";
 
 interface LeadCaptureFormProps {
   toolName: string;
   painPoint: string;
   ctaText: string;
-  locale: string;
+  locale: Locale;
 }
 
 export function LeadCaptureForm({
@@ -20,6 +21,7 @@ export function LeadCaptureForm({
 }: LeadCaptureFormProps) {
   const [state, formAction, isPending] = useActionState(captureLeadAction, null);
   const router = useRouter();
+  const t = getMessages(locale);
 
   useEffect(() => {
     if (state?.success) {
@@ -37,10 +39,10 @@ export function LeadCaptureForm({
         className="mt-8 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-6 text-center"
       >
         <p className="text-lg font-semibold text-emerald-200">
-          Success! We've received your details.
+          {t.leadCapture.successTitle}
         </p>
         <p className="mt-2 text-sm text-slate-400">
-          Redirecting you to schedule a call...
+          {t.leadCapture.successSub}
         </p>
       </motion.div>
     );
@@ -60,26 +62,26 @@ export function LeadCaptureForm({
 
         <div>
           <label htmlFor="email" className="sr-only">
-            Email Address
+            {t.leadCapture.emailPlaceholder}
           </label>
           <input
             id="email"
             name="email"
             type="email"
-            placeholder="Your email address"
+            placeholder={t.leadCapture.emailPlaceholder}
             className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-slate-100 placeholder-slate-500 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
           />
         </div>
 
         <div>
           <label htmlFor="phone" className="sr-only">
-            Phone Number (Optional)
+            {t.leadCapture.phonePlaceholder}
           </label>
           <input
             id="phone"
             name="phone"
             type="tel"
-            placeholder="Phone number (optional)"
+            placeholder={t.leadCapture.phonePlaceholder}
             className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-slate-100 placeholder-slate-500 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
           />
         </div>
@@ -93,7 +95,7 @@ export function LeadCaptureForm({
           disabled={isPending}
           className="w-full rounded-xl bg-emerald-500/20 px-6 py-3 font-medium text-emerald-200 transition hover:bg-emerald-500/30 disabled:opacity-50"
         >
-          {isPending ? "Submitting..." : "Get Started"}
+          {isPending ? t.leadCapture.submittingLabel : t.leadCapture.submitLabel}
         </button>
       </form>
     </motion.div>

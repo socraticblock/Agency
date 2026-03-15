@@ -23,51 +23,97 @@ export function PackageGrid({ locale }: { locale: Locale }) {
     window.location.href = `/${locale}/book-strategy`;
   };
 
+  const websites = SOVEREIGN_PACKAGES.filter((p) => p.category === "website");
+  const services = SOVEREIGN_PACKAGES.filter((p) => p.category === "service");
+
   return (
-    <section className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
+    <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
       <div className="mx-auto max-w-3xl text-center">
         <p className="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-400">
-          {t.packages?.sectionLabel ?? "Choose your growth"}
+          {t.packages?.sectionLabel ?? "Choose your path"}
         </p>
         <p className="mt-3 text-base text-white/70 sm:text-lg">
           {t.packages?.sectionSubheading ??
-            "Pick the option that matches where you are now. Every tier gets you off the algorithm and into a business you own."}
+            "Select the foundation that best fits your current stage of growth. We're here to help you build a business you truly own."}
         </p>
       </div>
 
-      <div className="mt-10 grid gap-6 md:grid-cols-3">
-        {SOVEREIGN_PACKAGES.map((pkg) => (
-          <motion.article
-            key={pkg.id}
-            layoutId={pkg.id}
-            onClick={() => setSelected(pkg)}
-            className="cursor-pointer rounded-2xl glass-card p-6 text-left transition-all hover:border-emerald-400/40 hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(16,185,129,0.15)] group"
-          >
-            <h3 className="text-sm font-semibold uppercase tracking-[0.25em] text-emerald-300">
-              {pkg.name}
-            </h3>
-            <p className="mt-4 text-2xl font-bold text-white">
-              {pkg.initFee}
-            </p>
-            <p className="mt-1 text-xs text-slate-400">{pkg.mrr}</p>
-            <button className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 hover:text-white">
-              See what's included →
-            </button>
-          </motion.article>
-        ))}
+      <div className="mt-16">
+        <h3 className="mb-8 text-center text-sm font-semibold uppercase tracking-[0.3em] text-white">
+          Core Digital Infrastructure
+        </h3>
+        <div className="grid gap-6 md:grid-cols-3">
+          {websites.map((pkg) => (
+            <motion.article
+              key={pkg.id}
+              layoutId={pkg.id}
+              onClick={() => setSelected(pkg)}
+              className={`relative cursor-pointer rounded-2xl glass-card p-6 text-left transition-all hover:-translate-y-1 group ${
+                pkg.isPopular
+                  ? "border-emerald-500/40 shadow-[0_0_30px_rgba(16,185,129,0.15)] md:scale-105 z-10"
+                  : "hover:border-emerald-400/40 hover:shadow-[0_20px_60px_rgba(16,185,129,0.15)]"
+              }`}
+            >
+              {pkg.isPopular && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-emerald-500 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-black shadow-lg z-20">
+                  Most Popular
+                </div>
+              )}
+              <h3 className="text-sm font-semibold uppercase tracking-[0.25em] text-emerald-300">
+                {pkg.name}
+              </h3>
+              <p className="mt-4 text-2xl font-bold text-white">
+                {pkg.initFee}
+              </p>
+              <p className="mt-1 text-xs text-slate-400">{pkg.mrr}</p>
+              <button className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 hover:text-white">
+                See what's included →
+              </button>
+            </motion.article>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-20">
+        <h3 className="mb-8 text-center text-sm font-semibold uppercase tracking-[0.3em] text-white">
+          Standalone Services
+        </h3>
+        <div className="grid gap-6 md:grid-cols-3">
+          {services.map((pkg) => (
+            <motion.article
+              key={pkg.id}
+              layoutId={pkg.id}
+              onClick={() => setSelected(pkg)}
+              className="relative cursor-pointer rounded-2xl border border-white/5 bg-white/[0.02] p-6 text-left transition-all hover:-translate-y-1 hover:border-emerald-500/20 hover:bg-white/[0.04]"
+            >
+              <h3 className="text-sm font-semibold uppercase tracking-[0.25em] text-emerald-300/80">
+                {pkg.name}
+              </h3>
+              <p className="mt-4 text-2xl font-bold text-white">
+                {pkg.initFee}
+              </p>
+              <p className="mt-1 text-xs text-slate-400">{pkg.mrr}</p>
+              <button className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 hover:text-white">
+                Learn more →
+              </button>
+            </motion.article>
+          ))}
+        </div>
       </div>
 
       <AnimatePresence>
         {selected && (
           <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-xl"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-xl cursor-pointer"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            onClick={() => setSelected(null)}
           >
             <motion.div
               layoutId={selected.id}
-              className="relative w-full max-w-xl rounded-3xl glass-card p-10"
+              className="relative w-full max-w-xl rounded-3xl bg-[#0a0a0a] border border-white/10 p-10 shadow-2xl cursor-default"
+              onClick={(e) => e.stopPropagation()}
             >
               <button
                 type="button"
@@ -105,13 +151,13 @@ export function PackageGrid({ locale }: { locale: Locale }) {
                   whileTap={{ scale: 0.98 }}
                   whileHover={{ y: -1 }}
                   onClick={() =>
-                    selected.id === "empire"
+                    selected.id === "scale"
                       ? handleEmpireContact()
                       : handleDeploy(selected.id)
                   }
                   className="rounded-full bg-emerald-500 px-7 py-3 text-xs font-semibold uppercase tracking-[0.25em] text-black shadow-[0_0_35px_rgba(16,185,129,0.7)] transition hover:bg-emerald-400"
                 >
-                  {selected.id === "empire"
+                  {selected.id === "scale"
                     ? "Let's talk about your project"
                     : "Get started"}
                 </motion.button>

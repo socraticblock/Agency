@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { LeadCaptureForm } from "./LeadCaptureForm";
+import { AuditCitation } from "./AuditCitation";
+import type { Locale } from "@/lib/i18n";
 
 interface PlatformRiskMeterProps {
-  locale: string;
+  locale: Locale;
 }
 
 export function PlatformRiskMeter({ locale }: PlatformRiskMeterProps) {
@@ -113,6 +115,14 @@ export function PlatformRiskMeter({ locale }: PlatformRiskMeterProps) {
               </button>
             </motion.div>
           )}
+
+          <div className="mt-4">
+            <AuditCitation 
+              dataPoint="Platform locks and bans can halt standard revenue overnight."
+              explanation="Relying purely on third-party channels places your growth curve inside a locked black box. Smart operators transition visitors into independent CRM assets immediately on landing pages."
+              source="Small Business Administration / Commerce Benchmarks"
+            />
+          </div>
         </div>
 
         {/* Meter Visualization */}

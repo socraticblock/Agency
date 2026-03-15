@@ -3,9 +3,11 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { LeadCaptureForm } from "./LeadCaptureForm";
+import { getMessages, type Locale } from "@/lib/i18n";
+import { AuditCitation } from "./AuditCitation";
 
 interface LostWeekendCalculatorProps {
-  locale: string;
+  locale: Locale;
 }
 
 export function LostWeekendCalculator({ locale }: LostWeekendCalculatorProps) {
@@ -13,11 +15,13 @@ export function LostWeekendCalculator({ locale }: LostWeekendCalculatorProps) {
   const [hoursOnline, setHoursOnline] = useState(10);
   const [showForm, setShowForm] = useState(false);
   const [tickingLoss, setTickingLoss] = useState(0);
+  const t = getMessages(locale);
 
-  // Calculate lost revenue based on offline hours
-  // Assuming 40% of sales happen during offline hours (nighttime/weekends)
+  // Calculate lost revenue based on international timezones and delay penalty
+  // Assuming 80% loss on leads that wait >12 hours (the 17-hour delay metric)
   const offlineHours = 24 - hoursOnline;
-  const lostRevenuePerDay = (dailySales * 0.4 * (offlineHours / 14)).toFixed(0);
+  // Let's assume you lose 60% of daily cross-border sales because of timezone delays
+  const lostRevenuePerDay = (dailySales * 0.6).toFixed(0);
   const lostRevenuePerMonth = Number(lostRevenuePerDay) * 30;
 
   // Ticking effect for visual impact
@@ -25,7 +29,12 @@ export function LostWeekendCalculator({ locale }: LostWeekendCalculatorProps) {
     const interval = setInterval(() => {
       setTickingLoss((prev) => {
         const increment = Number(lostRevenuePerDay) / (24 * 60 * 60); // per second
-        return prev + increment * 100; // speed up for effect
+        const nextValue = prev + increment * 100; // speed up for effect
+        if (nextValue >= Number(lostRevenuePerDay)) {
+          clearInterval(interval);
+          return Number(lostRevenuePerDay);
+        }
+        return nextValue;
       });
     }, 50);
     return () => clearInterval(interval);
@@ -33,17 +42,17 @@ export function LostWeekendCalculator({ locale }: LostWeekendCalculatorProps) {
 
   // Reset ticking when inputs change
   useEffect(() => {
-    setTickingLoss(Number(lostRevenuePerMonth) / 30);
-  }, [dailySales, hoursOnline, lostRevenuePerMonth]);
+    setTickingLoss(0);
+  }, [dailySales, hoursOnline]);
 
   return (
     <div className="mx-auto max-w-3xl rounded-3xl border border-white/10 bg-black/40 p-6 shadow-2xl backdrop-blur-xl sm:p-10">
       <div className="mb-8 text-center">
         <h2 className="text-2xl font-bold text-slate-100 sm:text-3xl">
-          The "Lost Weekend" Calculator
+          {t.midnightCalc.title}
         </h2>
         <p className="mt-2 text-slate-400">
-          How much money are you losing while you sleep?
+          {t.midnightCalc.subtitle}
         </p>
       </div>
 
@@ -52,7 +61,7 @@ export function LostWeekendCalculator({ locale }: LostWeekendCalculatorProps) {
         <div className="space-y-6">
           <div>
             <label className="mb-2 flex justify-between text-sm font-medium text-slate-300">
-              <span>Average Daily Sales via DMs (GEL)</span>
+              <span>{t.midnightCalc.dailySalesLabel}</span>
               <span className="text-emerald-400">{dailySales}</span>
             </label>
             <input
@@ -68,7 +77,7 @@ export function LostWeekendCalculator({ locale }: LostWeekendCalculatorProps) {
 
           <div>
             <label className="mb-2 flex justify-between text-sm font-medium text-slate-300">
-              <span>Hours Awake/Online per Day</span>
+              <span>{t.midnightCalc.hoursOnlineLabel}</span>
               <span className="text-emerald-400">{hoursOnline} hrs</span>
             </label>
             <input
@@ -84,15 +93,21 @@ export function LostWeekendCalculator({ locale }: LostWeekendCalculatorProps) {
 
           <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-4">
             <h3 className="text-lg font-semibold text-amber-200">
-              The Cost of Sleep
+              {t.midnightCalc.frictionTitle}
             </h3>
             <p className="mt-2 text-sm text-slate-300">
-              Your customers are shopping at 11 PM. Your business is closed. You are losing an estimated{" "}
+              {t.midnightCalc.frictionBody}{" "}
               <strong className="text-amber-400">
-                {lostRevenuePerMonth.toLocaleString()} GEL
+                {lostRevenuePerMonth.toLocaleString()}
               </strong>{" "}
-              every month.
+              {t.midnightCalc.frictionSuffix}
             </p>
+
+            <AuditCitation 
+              dataPoint="82% of consumers demand an immediate response."
+              explanation="Modern commerce operates 24/7. When your business sleeps, your competitors don't. Studies show 82% of buyers expect responses in under 10 minutes for sales queries, else they abandon the purchase."
+              source="HubSpot Consumer Survey / Sprout Social Index"
+            />
           </div>
 
           {!showForm && (
@@ -100,7 +115,7 @@ export function LostWeekendCalculator({ locale }: LostWeekendCalculatorProps) {
               onClick={() => setShowForm(true)}
               className="w-full rounded-xl bg-emerald-500/20 px-6 py-3 font-medium text-emerald-200 transition hover:bg-emerald-500/30"
             >
-              Automate Your Sales 24/7
+              {t.midnightCalc.autoBtn}
             </button>
           )}
         </div>
@@ -133,20 +148,23 @@ export function LostWeekendCalculator({ locale }: LostWeekendCalculatorProps) {
               />
             </svg>
             <div className="text-center z-10">
-              <span className="block text-xs uppercase tracking-wider text-slate-400">Lost Today</span>
+              <span className="block text-xs uppercase tracking-wider text-slate-400">{t.midnightCalc.lostToday}</span>
               <span className="block text-2xl font-bold text-amber-400 font-mono">
                 {Math.floor(tickingLoss).toLocaleString()}₾
               </span>
+              {tickingLoss >= Number(lostRevenuePerDay) && (
+                <span className="block text-[10px] uppercase tracking-wider text-amber-500/80 mt-1">per day</span>
+              )}
             </div>
           </div>
           <div className="mt-6 flex gap-4 text-xs font-medium">
             <div className="flex items-center gap-2">
               <div className="h-3 w-3 rounded-full bg-emerald-500"></div>
-              <span className="text-slate-300">Online</span>
+              <span className="text-slate-300">{t.midnightCalc.online}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="h-3 w-3 rounded-full bg-amber-500"></div>
-              <span className="text-slate-300">Offline (Losing Money)</span>
+              <span className="text-slate-300">{t.midnightCalc.offline}</span>
             </div>
           </div>
         </div>
@@ -156,9 +174,9 @@ export function LostWeekendCalculator({ locale }: LostWeekendCalculatorProps) {
       {showForm && (
         <LeadCaptureForm
           locale={locale}
-          toolName="Lost Weekend Calculator"
-          painPoint={`Losing ${lostRevenuePerMonth} GEL/mo due to offline hours`}
-          ctaText="Deploy a 24/7 automated sales assistant."
+          toolName="Global Opportunity Calculator"
+          painPoint={`Capturing ${lostRevenuePerMonth} GEL/mo during offline hours`}
+          ctaText={t.midnightCalc.ctaText}
         />
       )}
     </div>

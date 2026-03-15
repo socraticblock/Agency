@@ -1,14 +1,10 @@
-import type { SovereignPackageId } from "../packages";
+import { SOVEREIGN_PACKAGES, type SovereignPackageId } from "../packages";
 
 export function getCheckoutUrl(grade: SovereignPackageId): string | null {
-  const envKey =
-    grade === "bridge"
-      ? "NEXT_PUBLIC_STRIPE_BRIDGE_CHECKOUT_URL"
-      : grade === "network"
-        ? "NEXT_PUBLIC_STRIPE_NETWORK_CHECKOUT_URL"
-        : "NEXT_PUBLIC_STRIPE_EMPIRE_CHECKOUT_URL";
+  const pkg = SOVEREIGN_PACKAGES.find((p) => p.id === grade);
+  if (!pkg) return null;
 
-  const url = process.env[envKey];
+  const url = process.env[pkg.stripePriceEnvKey];
   return url ?? null;
 }
 

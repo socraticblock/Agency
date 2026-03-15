@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, animate } from "framer-motion";
+import Link from "next/link";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 
@@ -170,6 +171,20 @@ export function InefficiencyCalculator({ locale }: Props) {
               {t.sovereign?.calcFormulaLabel}
             </p>
           </div>
+        </motion.div>
+      </div>
+
+      <div className="mt-10 flex justify-center">
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <Link
+            href={`/${locale}/apply`}
+            className="inline-block rounded-full bg-emerald-500/20 px-8 py-3 text-sm font-semibold text-emerald-200 shadow-[0_0_20px_rgba(16,185,129,0.2)] transition hover:bg-emerald-500/30"
+          >
+            {t.sovereign?.calcCta}
+          </Link>
         </motion.div>
       </div>
     </section>

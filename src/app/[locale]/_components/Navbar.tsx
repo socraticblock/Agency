@@ -61,6 +61,12 @@ export function Navbar({ locale }: { locale: Locale }) {
               </motion.button>
             ))}
           </div>
+          <Link
+            href={`/${locale}/apply`}
+            className="hidden rounded-full bg-emerald-500/20 px-4 py-1.5 text-sm font-medium text-emerald-200 transition hover:bg-emerald-500/30 sm:block"
+          >
+            {t.nav.cta}
+          </Link>
         </div>
       </nav>
     </header>

@@ -3,9 +3,11 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { LeadCaptureForm } from "./LeadCaptureForm";
+import { AuditCitation } from "./AuditCitation";
+import type { Locale } from "@/lib/i18n";
 
 interface FrictionRaceSimulatorProps {
-  locale: string;
+  locale: Locale;
 }
 
 export function FrictionRaceSimulator({ locale }: FrictionRaceSimulatorProps) {
@@ -130,6 +132,16 @@ export function FrictionRaceSimulator({ locale }: FrictionRaceSimulatorProps) {
               )}
             </AnimatePresence>
           </div>
+        </div>
+      </div>
+
+      <div className="mt-6 flex justify-center">
+        <div className="w-full max-w-md bg-white/[0.03] border border-white/5 rounded-2xl p-4">
+          <AuditCitation 
+            dataPoint="A 0.1s improvement increases conversions by 8.4%."
+            explanation="Generic Link-in-bio templates carry heavy tracking scripts that delay node rendering. A mere 0.1s delay can reduce checkouts by 8.4%. We build on statically optimized Next.js Edge CDNs for absolute sub-second delivery."
+            source="Google / Deloitte 'Milliseconds Make Millions' Study"
+          />
         </div>
       </div>
 

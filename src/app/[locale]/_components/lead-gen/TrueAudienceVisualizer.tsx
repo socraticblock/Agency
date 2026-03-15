@@ -3,9 +3,11 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { LeadCaptureForm } from "./LeadCaptureForm";
+import { AuditCitation } from "./AuditCitation";
+import type { Locale } from "@/lib/i18n";
 
 interface TrueAudienceVisualizerProps {
-  locale: string;
+  locale: Locale;
 }
 
 export function TrueAudienceVisualizer({ locale }: TrueAudienceVisualizerProps) {
@@ -81,13 +83,19 @@ export function TrueAudienceVisualizer({ locale }: TrueAudienceVisualizerProps) 
             <p className="mt-2 text-sm text-slate-300">
               You worked hard for{" "}
               <strong className="text-white">{followers.toLocaleString()}</strong>{" "}
-              followers. Instagram only lets you talk to{" "}
+              followers. Platforms like <strong className="text-white">Instagram, TikTok, or X</strong> only let you talk to{" "}
               <strong className="text-red-400">
                 {reachedAudience.toLocaleString()}
               </strong>{" "}
               of them.
             </p>
           </div>
+
+          <AuditCitation 
+            dataPoint="Organic reach has plummeted to roughly 2-5%."
+            explanation="When you build on borrowed land (Instagram, TikTok, X), the landlord controls the gates. The algorithm restricts access to your followers, treating your base as a monetization engine instead of a network."
+            source="Hootsuite Social Trends / Rival IQ Benchmark Reports"
+          />
 
           {!showForm && (
             <button

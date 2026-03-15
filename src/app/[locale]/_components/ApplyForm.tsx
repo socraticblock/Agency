@@ -12,8 +12,8 @@ export function ApplyForm({ locale }: { locale: Locale }) {
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [businessName, setBusinessName] = useState("");
-  const [bottleneck, setBottleneck] = useState("");
-  const [targetRevenue, setTargetRevenue] = useState("");
+  const [taxStatus, setTaxStatus] = useState("");
+  const [bankChoice, setBankChoice] = useState("");
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
@@ -29,8 +29,8 @@ export function ApplyForm({ locale }: { locale: Locale }) {
         "kvali_lead",
         JSON.stringify({
           businessName,
-          bottleneck,
-          targetRevenue,
+          taxStatus,
+          bankChoice,
           websiteUrl,
           locale,
         })
@@ -60,6 +60,20 @@ export function ApplyForm({ locale }: { locale: Locale }) {
       <h1 className="text-2xl font-semibold text-slate-100 sm:text-3xl">
         {t.apply.title}
       </h1>
+
+      <div className="mt-8 flex items-center gap-2">
+        {[1, 2, 3, 4].map((i) => (
+          <div
+            key={i}
+            className={`h-1.5 flex-1 rounded-full transition-colors duration-300 ${
+              i <= step ? "bg-emerald-500" : "bg-white/10"
+            }`}
+          />
+        ))}
+      </div>
+      <p className="mt-2 text-xs text-slate-500 uppercase tracking-widest">
+        Step {step} of 4
+      </p>
 
       <AnimatePresence mode="wait">
         {!submitted ? (
@@ -98,11 +112,11 @@ export function ApplyForm({ locale }: { locale: Locale }) {
                 >
                   {t.apply.step2Label}
                 </label>
-                <textarea
-                  id="bottleneck"
-                  value={bottleneck}
-                  onChange={(e) => setBottleneck(e.target.value)}
-                  rows={3}
+                <input
+                  id="taxStatus"
+                  type="text"
+                  value={taxStatus}
+                  onChange={(e) => setTaxStatus(e.target.value)}
                   placeholder={t.apply.placeholder2}
                   className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-slate-100 placeholder-slate-500 backdrop-blur-xl focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
                 />
@@ -111,17 +125,16 @@ export function ApplyForm({ locale }: { locale: Locale }) {
             {step === 3 && (
               <div>
                 <label
-                  htmlFor="targetRevenue"
+                  htmlFor="bankChoice"
                   className="block text-sm font-medium text-slate-300"
                 >
                   {t.apply.step3Label}
                 </label>
                 <input
-                  id="targetRevenue"
+                  id="bankChoice"
                   type="text"
-                  inputMode="numeric"
-                  value={targetRevenue}
-                  onChange={(e) => setTargetRevenue(e.target.value)}
+                  value={bankChoice}
+                  onChange={(e) => setBankChoice(e.target.value)}
                   placeholder={t.apply.placeholder3}
                   className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-slate-100 placeholder-slate-500 backdrop-blur-xl focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
                 />

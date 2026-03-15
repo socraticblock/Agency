@@ -81,11 +81,7 @@ export function KineticHero({ locale }: { locale: Locale }) {
         }}
       />
       <StatusBadge locale={locale} />
-      <div className="mt-4">
-        <span className="inline-flex items-center rounded-full border border-emerald-400/40 bg-emerald-500/10 px-4 py-1 text-[10px] font-semibold tracking-[0.3em] text-emerald-300 font-mono shadow-[0_0_30px_rgba(16,185,129,0.45)]">
-          {t.sovereign?.tagline}
-        </span>
-      </div>
+
       <motion.div
         initial="hidden"
         animate="visible"
@@ -96,7 +92,7 @@ export function KineticHero({ locale }: { locale: Locale }) {
             transition: { staggerChildren: 0.08, delayChildren: 0.2 },
           },
         }}
-        className="max-w-4xl text-balance font-space text-5xl font-bold leading-[1.1] tracking-tight bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-white/60 sm:text-6xl md:text-7xl pb-4"
+        className="max-w-4xl text-balance font-space text-5xl font-bold leading-[1.1] tracking-tight text-white sm:text-6xl md:text-7xl pb-4"
         style={{ x: offsetX, y: offsetY }}
       >
         {words.map((word: string, index: number) => (
