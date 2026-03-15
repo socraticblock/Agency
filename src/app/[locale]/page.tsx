@@ -7,6 +7,8 @@ import { SovereignTriptych } from "./_components/SovereignTriptych";
 import { PackageGrid } from "./_components/PackageGrid";
 import { SovereignFaq } from "./_components/SovereignFaq";
 import { ScrollReveal } from "./_components/ScrollReveal";
+import { TrustMetrics } from "./_components/TrustMetrics";
+import { RoadmapTimeline } from "./_components/RoadmapTimeline";
 import type { Locale } from "@/lib/i18n";
 
 export default async function Home({
@@ -26,7 +28,13 @@ export default async function Home({
           <SovereignTriptych locale={lang} />
         </ScrollReveal>
         <ScrollReveal>
+          <RoadmapTimeline />
+        </ScrollReveal>
+        <ScrollReveal>
           <LeadGenHub locale={lang} />
+        </ScrollReveal>
+        <ScrollReveal className="pb-20">
+          <TrustMetrics />
         </ScrollReveal>
         <ScrollReveal>
           <PackageGrid locale={lang} />
