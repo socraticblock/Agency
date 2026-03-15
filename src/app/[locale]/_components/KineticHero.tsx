@@ -12,6 +12,7 @@ import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 import { StatusBadge } from "./StatusBadge";
 import { MagneticButton } from "./MagneticButton";
+import { NanoBananaBackground } from "./NanoBananaBackground";
 
 export function KineticHero({ locale }: { locale: Locale }) {
   const t = getMessages(locale);
@@ -68,14 +69,13 @@ export function KineticHero({ locale }: { locale: Locale }) {
     >
       {/* Deep blue ambient glow behind hero */}
       <div className="pointer-events-none absolute inset-0 -z-20" style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(30,64,175,0.15) 0%, rgba(6,12,34,0.5) 50%, #050505 100%)' }} />
-      <div className="pointer-events-none absolute inset-0 -z-20 bg-gradient-to-b from-black via-transparent to-black" />
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 blur-3xl"
-        style={{
-          backgroundImage: glowBackground,
-        }}
-      />
+      <div className="pointer-events-none absolute inset-0 -z-20 bg-gradient-to-b from-[#050505] via-transparent to-[#050505]" />
+      
+      {/* Heavy bottom fade edge to blend transparent canvas down */}
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#050505] to-transparent z-10" />
+      
+      {/* Interactive Nano Banana WebGL Canvas */}
+      <NanoBananaBackground />
 
       {/* Scroll-driven parallax container */}
       <motion.div
@@ -94,8 +94,8 @@ export function KineticHero({ locale }: { locale: Locale }) {
               transition: { staggerChildren: 0.08, delayChildren: 0.2 },
             },
           }}
-          className="max-w-4xl text-balance font-space text-5xl font-bold leading-[1.1] tracking-tight sm:text-6xl md:text-7xl pb-4"
-          style={{ x: offsetX, y: offsetY, backgroundImage: 'linear-gradient(180deg, rgba(148,163,253,0.9) 0%, rgba(255,255,255,1) 40%, rgba(255,255,255,1) 60%, rgba(148,163,253,0.7) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}
+          className="max-w-4xl text-balance font-space text-5xl font-bold leading-[1.1] tracking-tight sm:text-6xl md:text-7xl pb-4 text-white"
+          style={{ x: offsetX, y: offsetY }}
         >
           {words.map((word: string, index: number) => (
             <motion.span

@@ -55,7 +55,7 @@ export function TrustMetrics() {
         <MetricBar label="Checkout Conversion Rate" smValue={25} webValue={75} />
       </div>
       <div className="mt-8">
-        <AuditCitation 
+        <AuditCitation
           dataPoint="84% of consumers believe a business with a website is more credible."
           explanation="Creating a dedicated digital destination builds instant legitimacy. Consumers look for the security, structure, and professional detail that only a custom workspace can offer compared to a social profile feed."
           source="Verisign Consumer Surveys"
