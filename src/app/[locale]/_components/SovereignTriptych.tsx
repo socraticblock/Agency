@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import type { Locale } from "@/lib/i18n";
 import { getMessages } from "@/lib/i18n";
 import { Lock, CreditCard, MessageSquare, CheckCircle2 } from "lucide-react";
+import { KineticText } from "./KineticText";
 
 type StageKey = "bridge" | "intercept" | "vault";
 
@@ -66,15 +67,12 @@ export function SovereignTriptych({ locale }: { locale: Locale }) {
         >
           {t.sovereign.triptychLabel}
         </motion.p>
-        <motion.p
-          initial={{ opacity: 0, y: 8 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.1 }}
-          className="mt-3 text-2xl font-space font-bold text-white sm:text-4xl"
-        >
-          Your presence, fully owned.
-        </motion.p>
+        <KineticText
+          text="Your presence, fully owned."
+          splitBy="word"
+          delay={0.1}
+          className="mt-3 justify-center text-2xl font-space font-bold text-white sm:text-4xl"
+        />
         <motion.p
           initial={{ opacity: 0, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}

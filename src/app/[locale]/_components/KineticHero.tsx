@@ -5,11 +5,13 @@ import {
   motion,
   useMotionTemplate,
   useMotionValue,
+  useScroll,
   useTransform,
 } from "framer-motion";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 import { StatusBadge } from "./StatusBadge";
+import { MagneticButton } from "./MagneticButton";
 
 export function KineticHero({ locale }: { locale: Locale }) {
   const t = getMessages(locale);
@@ -21,14 +23,19 @@ export function KineticHero({ locale }: { locale: Locale }) {
   const offsetX = useTransform(mouseX, [-0.5, 0.5], [-10, 10]);
   const offsetY = useTransform(mouseY, [-0.5, 0.5], [-8, 8]);
 
-  // Emerald glow background following cursor
-  const glowX = useMotionValue(50);
-  const glowY = useMotionValue(35);
-  const glowBackground = useMotionTemplate`radial-gradient(circle at ${glowX}% ${glowY}%, rgba(16,185,129,0.35), transparent 60%)`;
+  // Subtle blue glow anchored to top-left corner that moves slightly
+  const glowX = useMotionValue(15);
+  const glowY = useMotionValue(15);
+  const glowBackground = useMotionTemplate`radial-gradient(circle at ${glowX}% ${glowY}%, rgba(59,130,246,0.25), transparent 45%)`;
 
-  // Magnetic CTA
-  const ctaX = useMotionValue(0);
-  const ctaY = useMotionValue(0);
+  // Scroll-driven parallax: fade + push back as user scrolls past hero
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const scrollOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const scrollScale = useTransform(scrollYProgress, [0, 0.8], [1, 0.92]);
+  const scrollY2 = useTransform(scrollYProgress, [0, 0.8], [0, 60]);
 
   const handleSectionMove = (e: React.MouseEvent<HTMLElement>) => {
     if (!sectionRef.current) return;
@@ -38,30 +45,16 @@ export function KineticHero({ locale }: { locale: Locale }) {
     mouseX.set(relX);
     mouseY.set(relY);
 
-    // position glow in percentage space
-    glowX.set((e.clientX - rect.left) / rect.width * 100);
-    glowY.set((e.clientY - rect.top) / rect.height * 100);
+    // position glow in top-left space with slight offset sway
+    glowX.set(15 + relX * 12);
+    glowY.set(15 + relY * 12);
   };
 
   const handleSectionLeave = () => {
     mouseX.set(0);
     mouseY.set(0);
-    glowX.set(50);
-    glowY.set(35);
-  };
-
-  const handleCtaMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const relX = (e.clientX - rect.left) / rect.width - 0.5;
-    const relY = (e.clientY - rect.top) / rect.height - 0.5;
-    const strength = 10;
-    if (typeof ctaX.set === "function") ctaX.set(relX * strength);
-    if (typeof ctaY.set === "function") ctaY.set(relY * strength);
-  };
-
-  const handleCtaLeave = () => {
-    if (typeof ctaX.set === "function") ctaX.set(0);
-    if (typeof ctaY.set === "function") ctaY.set(0);
+    glowX.set(15);
+    glowY.set(15);
   };
 
   const words: string[] = t.hero.headline.split(" ");
@@ -71,8 +64,11 @@ export function KineticHero({ locale }: { locale: Locale }) {
       ref={sectionRef}
       onMouseMove={handleSectionMove}
       onMouseLeave={handleSectionLeave}
-      className="relative flex min-h-[70vh] flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-black via-[#020617] to-black px-4 py-20 text-center"
+      className="relative flex min-h-[70vh] flex-col items-center justify-center overflow-hidden px-4 py-20 text-center"
     >
+      {/* Deep blue ambient glow behind hero */}
+      <div className="pointer-events-none absolute inset-0 -z-20" style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(30,64,175,0.15) 0%, rgba(6,12,34,0.5) 50%, #050505 100%)' }} />
+      <div className="pointer-events-none absolute inset-0 -z-20 bg-gradient-to-b from-black via-transparent to-black" />
       <motion.div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 blur-3xl"
@@ -80,79 +76,85 @@ export function KineticHero({ locale }: { locale: Locale }) {
           backgroundImage: glowBackground,
         }}
       />
-      <StatusBadge locale={locale} />
 
+      {/* Scroll-driven parallax container */}
       <motion.div
-        initial="hidden"
-        animate="visible"
-        variants={{
-          hidden: { opacity: 0 },
-          visible: {
-            opacity: 1,
-            transition: { staggerChildren: 0.08, delayChildren: 0.2 },
-          },
-        }}
-        className="max-w-4xl text-balance font-space text-5xl font-bold leading-[1.1] tracking-tight text-white sm:text-6xl md:text-7xl pb-4"
-        style={{ x: offsetX, y: offsetY }}
+        style={{ opacity: scrollOpacity, scale: scrollScale, y: scrollY2 }}
+        className="flex flex-col items-center"
       >
-        {words.map((word: string, index: number) => (
-          <motion.span
-            key={`${word}-${index}`}
-            className="inline-block mr-2"
-            variants={{
-              hidden: {
-                opacity: 0,
-                y: 10,
-                filter: "blur(4px)",
-              },
-              visible: {
-                opacity: 1,
-                y: 0,
-                filter: "blur(0px)",
-                transition: { duration: 0.5, ease: "easeOut" },
-              },
-            }}
-          >
-            {word}
-          </motion.span>
-        ))}
-      </motion.div>
-      <motion.p
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.5 }}
-        className="mt-6 max-w-2xl text-lg text-white/70 sm:text-xl"
-      >
-        {t.hero.subhead}
-      </motion.p>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.55, duration: 0.5 }}
-        className="mt-10 flex flex-wrap items-center justify-center gap-4"
-      >
-        <motion.a
+        <StatusBadge locale={locale} />
+
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: { staggerChildren: 0.08, delayChildren: 0.2 },
+            },
+          }}
+          className="max-w-4xl text-balance font-space text-5xl font-bold leading-[1.1] tracking-tight sm:text-6xl md:text-7xl pb-4"
+          style={{ x: offsetX, y: offsetY, backgroundImage: 'linear-gradient(180deg, rgba(148,163,253,0.9) 0%, rgba(255,255,255,1) 40%, rgba(255,255,255,1) 60%, rgba(148,163,253,0.7) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}
+        >
+          {words.map((word: string, index: number) => (
+            <motion.span
+              key={`${word}-${index}`}
+              className="inline-block mr-2"
+              variants={{
+                hidden: {
+                  opacity: 0,
+                  y: 10,
+                  filter: "blur(4px)",
+                },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  filter: "blur(0px)",
+                  transition: { duration: 0.5, ease: "easeOut" },
+                },
+              }}
+            >
+              {word}
+            </motion.span>
+          ))}
+        </motion.div>
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.5 }}
+          className="mt-6 max-w-2xl text-lg text-white/70 sm:text-xl"
+        >
+          {t.hero.subhead}
+        </motion.p>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.55, duration: 0.5 }}
+          className="mt-10 flex flex-wrap items-center justify-center gap-4"
+        >
+        <MagneticButton
+          as="a"
           href="#reality-check"
-          onMouseMove={handleCtaMove}
-          onMouseLeave={handleCtaLeave}
-          style={{ x: ctaX, y: ctaY }}
-          whileTap={{ scale: 0.96 }}
-          whileHover={{ y: -2, scale: 1.02 }}
-          className="group relative overflow-hidden rounded-full border border-emerald-400/30 bg-emerald-500/10 px-8 py-3.5 text-sm font-semibold text-emerald-100 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2),0_0_40px_rgba(16,185,129,0.15)] transition-all hover:bg-emerald-500/20 hover:border-emerald-400/60 hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2),0_0_60px_rgba(16,185,129,0.3)]"
+          magneticStrength={20}
+          textStrength={10}
+          className="group relative overflow-hidden rounded-full border border-emerald-400/30 bg-emerald-500/10 px-8 py-3.5 text-sm font-semibold text-emerald-100 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2),0_0_40px_rgba(16,185,129,0.15)] transition-colors hover:bg-emerald-500/20 hover:border-emerald-400/60 hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2),0_0_60px_rgba(16,185,129,0.3)]"
         >
           <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.4),_transparent_60%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-          <span className="relative z-10">{t.hero.cta}</span>
-        </motion.a>
-        <motion.a
+          <span className="relative z-10 block">{t.hero.cta}</span>
+        </MagneticButton>
+        <MagneticButton
+          as="a"
           href="https://wa.me/995555555555?text=I%20saw%20the%20Kvali%20site%20and%20want%20help%20escaping%20the%20social%20media%20trap."
           target="_blank"
           rel="noopener noreferrer"
-          whileTap={{ scale: 0.96 }}
-          whileHover={{ y: -2, scale: 1.02, backgroundColor: "rgba(255,255,255,0.05)" }}
-          className="rounded-full border border-white/10 bg-white/5 px-8 py-3.5 text-sm font-medium text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] transition-all"
+          magneticStrength={10}
+          textStrength={4}
+          className="rounded-full border border-white/10 bg-white/5 px-8 py-3.5 text-sm font-medium text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] transition-colors hover:bg-white/10"
         >
-          {t.hero.ctaSecondary}
-        </motion.a>
+          <span className="block">{t.hero.ctaSecondary}</span>
+        </MagneticButton>
+        </motion.div>
       </motion.div>
     </section>
   );

@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { captureLeadAction } from "@/app/actions/lead";
 import { useRouter } from "next/navigation";
 import { getMessages, type Locale } from "@/lib/i18n";
+import { MagneticButton } from "../MagneticButton";
 
 interface LeadCaptureFormProps {
   toolName: string;
@@ -90,13 +91,15 @@ export function LeadCaptureForm({
           <p className="text-sm text-red-400">{state.error}</p>
         )}
 
-        <button
+        <MagneticButton
           type="submit"
           disabled={isPending}
-          className="w-full rounded-xl bg-emerald-500/20 px-6 py-3 font-medium text-emerald-200 transition hover:bg-emerald-500/30 disabled:opacity-50"
+          magneticStrength={10}
+          textStrength={4}
+          className="w-full rounded-xl bg-emerald-500/20 px-6 py-3 font-medium text-emerald-200 transition-colors hover:bg-emerald-500/30 disabled:opacity-50"
         >
-          {isPending ? t.leadCapture.submittingLabel : t.leadCapture.submitLabel}
-        </button>
+          <span className="block w-full">{isPending ? t.leadCapture.submittingLabel : t.leadCapture.submitLabel}</span>
+        </MagneticButton>
       </form>
     </motion.div>
   );

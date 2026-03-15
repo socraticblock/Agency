@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus } from "lucide-react";
 import { getMessages, type Locale } from "@/lib/i18n";
+import { KineticText } from "./KineticText";
 
 function ExpandIcon({ isOpen }: { isOpen: boolean }) {
   return (
@@ -51,15 +52,12 @@ export function SovereignFaq({ locale }: { locale: Locale }) {
         >
           {t.faq.label}
         </motion.p>
-        <motion.p
-          initial={{ opacity: 0, y: 8 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-20px" }}
-          transition={{ duration: 0.4, delay: 0.06 }}
-          className="mt-2 text-2xl font-space font-semibold text-white sm:text-3xl"
-        >
-          {t.faq.heading}
-        </motion.p>
+        <KineticText
+          text={t.faq.heading}
+          splitBy="word"
+          delay={0.1}
+          className="mt-2 text-2xl font-space font-semibold text-white sm:text-3xl justify-center"
+        />
       </div>
 
       <div className="flex w-full flex-col gap-3">

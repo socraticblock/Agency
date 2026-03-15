@@ -6,6 +6,7 @@ import type { Locale } from "@/lib/i18n";
 import { getMessages } from "@/lib/i18n";
 import { SOVEREIGN_PACKAGES, type SovereignPackageId } from "@/lib/packages";
 import { getCheckoutUrl } from "@/lib/payments/checkout";
+import { KineticText } from "./KineticText";
 
 type SelectedPackage = (typeof SOVEREIGN_PACKAGES)[number] | null;
 
@@ -39,9 +40,12 @@ export function PackageGrid({ locale }: { locale: Locale }) {
       </div>
 
       <div className="mt-16">
-        <h3 className="mb-8 text-center text-sm font-semibold uppercase tracking-[0.3em] text-white">
-          Core Digital Infrastructure
-        </h3>
+        <KineticText
+          text="Core Digital Infrastructure"
+          splitBy="word"
+          delay={0.1}
+          className="mb-8 w-full justify-center text-center text-sm font-semibold uppercase tracking-[0.3em] text-white"
+        />
         <div className="grid gap-6 md:grid-cols-3">
           {websites.map((pkg) => (
             <motion.article
@@ -75,9 +79,12 @@ export function PackageGrid({ locale }: { locale: Locale }) {
       </div>
 
       <div className="mt-20">
-        <h3 className="mb-8 text-center text-sm font-semibold uppercase tracking-[0.3em] text-white">
-          Standalone Services
-        </h3>
+        <KineticText
+          text="Standalone Services"
+          splitBy="word"
+          delay={0.1}
+          className="mb-8 w-full justify-center text-center text-sm font-semibold uppercase tracking-[0.3em] text-white"
+        />
         <div className="grid gap-6 md:grid-cols-3">
           {services.map((pkg) => (
             <motion.article

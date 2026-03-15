@@ -8,6 +8,7 @@ import { FrictionRaceSimulator } from "./FrictionRaceSimulator";
 import { TimeDebtReceipt } from "./TimeDebtReceipt";
 import { PlatformRiskMeter } from "./PlatformRiskMeter";
 import type { Locale } from "@/lib/i18n";
+import { KineticText } from "../KineticText";
 
 interface LeadGenHubProps {
   locale: Locale;
@@ -57,9 +58,12 @@ export function LeadGenHub({ locale }: LeadGenHubProps) {
         <p className="text-sm font-semibold uppercase tracking-[0.25em] text-emerald-400">
           Interactive Audit
         </p>
-        <h2 className="mt-4 text-3xl font-bold text-slate-100 sm:text-4xl">
-          Identify Your Hidden Bottlenecks
-        </h2>
+        <KineticText
+          text="Identify Your Hidden Bottlenecks"
+          splitBy="word"
+          delay={0.1}
+          className="mt-4 justify-center text-3xl font-bold text-slate-100 sm:text-4xl"
+        />
         <p className="mt-4 text-lg text-slate-400">
           Select a tool below to see exactly where your social-media-dependent business is losing money, time, and reach.
         </p>

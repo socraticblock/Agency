@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
+import { MagneticButton } from "./MagneticButton";
 
 const locales: { code: Locale; label: string }[] = [
   { code: "ka", label: "ქართ" },
@@ -61,12 +62,15 @@ export function Navbar({ locale }: { locale: Locale }) {
               </motion.button>
             ))}
           </div>
-          <Link
+          <MagneticButton
+            as={Link}
             href={`/${locale}/apply`}
-            className="hidden rounded-full bg-emerald-500/20 px-4 py-1.5 text-sm font-medium text-emerald-200 transition hover:bg-emerald-500/30 sm:block"
+            magneticStrength={10}
+            textStrength={5}
+            className="hidden rounded-full bg-emerald-500/20 px-4 py-1.5 text-sm font-medium text-emerald-200 transition-colors hover:bg-emerald-500/30 sm:block"
           >
             {t.nav.cta}
-          </Link>
+          </MagneticButton>
         </div>
       </nav>
     </header>

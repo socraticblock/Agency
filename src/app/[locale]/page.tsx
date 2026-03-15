@@ -6,6 +6,7 @@ import { LeadGenHub } from "./_components/lead-gen/LeadGenHub";
 import { SovereignTriptych } from "./_components/SovereignTriptych";
 import { PackageGrid } from "./_components/PackageGrid";
 import { SovereignFaq } from "./_components/SovereignFaq";
+import { ScrollReveal } from "./_components/ScrollReveal";
 import type { Locale } from "@/lib/i18n";
 
 export default async function Home({
@@ -21,11 +22,21 @@ export default async function Home({
       <Navbar locale={lang} />
       <main>
         <KineticHero locale={lang} />
-        <SovereignTriptych locale={lang} />
-        <LeadGenHub locale={lang} />
-        <PackageGrid locale={lang} />
-        <SovereignFaq locale={lang} />
-        <TechStackSection locale={lang} />
+        <ScrollReveal>
+          <SovereignTriptych locale={lang} />
+        </ScrollReveal>
+        <ScrollReveal>
+          <LeadGenHub locale={lang} />
+        </ScrollReveal>
+        <ScrollReveal>
+          <PackageGrid locale={lang} />
+        </ScrollReveal>
+        <ScrollReveal>
+          <SovereignFaq locale={lang} />
+        </ScrollReveal>
+        <ScrollReveal>
+          <TechStackSection locale={lang} />
+        </ScrollReveal>
         <GlobalFooter locale={lang} />
       </main>
     </>

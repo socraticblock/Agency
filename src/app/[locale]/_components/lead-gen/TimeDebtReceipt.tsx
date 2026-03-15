@@ -27,7 +27,7 @@ export function TimeDebtReceipt({ locale }: TimeDebtReceiptProps) {
   };
 
   return (
-    <div className="mx-auto max-w-3xl rounded-3xl border border-white/10 bg-black/40 p-6 shadow-2xl backdrop-blur-xl sm:p-10">
+    <div className="clay-card clay-card-hover mx-auto max-w-3xl p-6 shadow-2xl sm:p-10">
       <div className="mb-8 text-center">
         <h2 className="text-2xl font-bold text-slate-100 sm:text-3xl">
           {t.calcReceipt.title}
