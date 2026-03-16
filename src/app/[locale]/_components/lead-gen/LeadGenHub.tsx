@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, animate } from "framer-motion";
 import dynamic from "next/dynamic";
 import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -52,7 +52,28 @@ const tools = [
 
 export function LeadGenHub({ locale }: LeadGenHubProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollTimeout = useRef<any>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  const triggerViewportCorrection = () => {
+    clearTimeout(scrollTimeout.current);
+    scrollTimeout.current = setTimeout(() => {
+      const topBar = document.getElementById("audit-top-tracker");
+      if (topBar) {
+        // Calculate absolute position
+        const rect = topBar.getBoundingClientRect();
+        const absoluteTop = rect.top + window.scrollY;
+        
+        // Physics-driven velvet scroll
+        animate(window.scrollY, absoluteTop - 4, {
+          type: "spring",
+          stiffness: 65,
+          damping: 15,
+          onUpdate: (latest) => window.scrollTo(0, latest)
+        });
+      }
+    }, 400); // Wait for horizontal slider to land!
+  };
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
@@ -66,15 +87,19 @@ export function LeadGenHub({ locale }: LeadGenHubProps) {
         left: targetScroll,
         behavior: "smooth",
       });
+
+      triggerViewportCorrection();
     }
   };
 
   const handleScroll = (e: any) => {
     const { scrollLeft, clientWidth } = e.target;
+    // Debounce rounding issues
     const index = Math.round(scrollLeft / clientWidth);
     if (index !== activeIndex) {
       setActiveIndex(index);
     }
+    triggerViewportCorrection();
   };
 
   return (
@@ -95,30 +120,34 @@ export function LeadGenHub({ locale }: LeadGenHubProps) {
       </div>
 
       {/* Top Banner Progress Stepper Line with node tracking dots */}
-      <div className="max-w-xs mx-auto mb-8 flex items-center justify-between relative px-1">
-        {/* Back Track Line */}
-        <div className="absolute top-1/2 left-0 w-full h-0.5 bg-white/10 -translate-y-1/2 -z-1" />
-        {/* Active Progress line overlay */}
-        <div 
-           className="absolute top-1/2 left-0 h-0.5 bg-emerald-400 -translate-y-1/2 transition-all duration-300" 
-           style={{ width: `${(activeIndex / (tools.length - 1)) * 100}%` }} 
-        />
-        {/* Active tracking nodes list */}
+      <div id="audit-top-tracker" className="scroll-mt-4 max-w-3xl mx-auto mb-8 flex items-center px-4 md:px-10">
         {tools.map((_, idx) => (
-          <button 
-            key={idx} 
-            onClick={() => {
-              if (scrollRef.current) {
-                scrollRef.current.scrollTo({
-                  left: idx * scrollRef.current.clientWidth,
-                  behavior: "smooth",
-                });
-              }
-            }}
-            className={`h-2.5 w-2.5 rounded-full border-2 transition-all duration-300 z-10 cursor-pointer ${
+          <div key={idx} className="flex flex-1 items-center last:flex-none">
+            {/* The Dot Node */}
+            <button 
+              onClick={() => {
+                if (scrollRef.current) {
+                  scrollRef.current.scrollTo({
+                    left: idx * scrollRef.current.clientWidth,
+                    behavior: "smooth",
+                  });
+
+                  triggerViewportCorrection();
+                }
+              }}
+              className={`flex-none h-2.5 w-2.5 rounded-full border-2 transition-all duration-300 z-10 cursor-pointer ${
               idx <= activeIndex ? "border-emerald-400 bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.5)]" : "border-slate-700 bg-slate-900"
             }`} 
           />
+          {/* The Line Segment */}
+          {idx < tools.length - 1 && (
+            <div 
+              className={`flex-1 h-[2px] transition-all duration-300 ${
+                idx < activeIndex ? "bg-emerald-400" : "bg-white/10"
+              }`} 
+            />
+          )}
+          </div>
         ))}
       </div>
 
@@ -147,24 +176,62 @@ export function LeadGenHub({ locale }: LeadGenHubProps) {
         <div 
           ref={scrollRef}
           onScroll={handleScroll}
-          className="flex flex-nowrap gap-0 overflow-x-auto pb-16 snap-x snap-mandatory scrollbar-hide select-none"
+          className="flex flex-nowrap gap-0 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide select-none"
         >
-        {tools.map((tool) => {
+        {tools.map((tool, idx) => {
           const ToolComponent = tool.component;
           return (
-            <div
+            <motion.div
               key={tool.id}
-              className="min-w-full snap-center px-4 md:px-6 transition-transform"
+              initial={false}
+              animate={{
+                scale: activeIndex === idx ? 1 : 0.40,
+                opacity: activeIndex === idx ? 1 : 0.4,
+                filter: activeIndex === idx ? "blur(0px)" : "blur(1px)",
+              }}
+              transition={{ duration: 1.5, ease: "easeOut" }}
+              className="min-w-full snap-center [scroll-snap-stop:always] px-4 md:px-6 transition-all origin-center"
             >
               <div className="text-center mb-4">
                 <h3 className="text-xl font-bold text-emerald-400 font-space">{tool.name}</h3>
                 <p className="text-xs text-slate-400 mt-0.5">{tool.description}</p>
               </div>
               <ToolComponent locale={locale} />
-            </div>
+
+              {/* Bottom Banner Progress Stepper Line for Mobile viewports */}
+              <div className="max-w-3xl mx-auto mt-4 mb-4 flex items-center px-4 md:px-10">
+                {tools.map((_, idx) => (
+                  <div key={idx} className="flex flex-1 items-center last:flex-none">
+                    <button 
+                      onClick={() => {
+                        if (scrollRef.current) {
+                          scrollRef.current.scrollTo({
+                            left: idx * scrollRef.current.clientWidth,
+                            behavior: "smooth",
+                          });
+
+                          triggerViewportCorrection();
+                        }
+                      }}
+                      className={`flex-none h-2 w-2 rounded-full border-2 transition-all duration-300 z-10 cursor-pointer ${
+                        idx <= activeIndex ? "border-emerald-400 bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.5)]" : "border-slate-700 bg-slate-900"
+                      }`} 
+                    />
+                    {idx < tools.length - 1 && (
+                      <div 
+                        className={`flex-1 h-[2px] transition-all duration-300 ${
+                          idx < activeIndex ? "bg-emerald-400" : "bg-white/10"
+                        }`} 
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </motion.div>
           );
         })}
       </div>
+
       </div>
     </section>
   );
