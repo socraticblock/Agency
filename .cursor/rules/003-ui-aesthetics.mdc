@@ -15,8 +15,10 @@ Adhere to bleeding-edge browser APIs and modern design pillars:
 ## 2. Liquid Glass & Soft Depth
 - Implement "Liquid Glass" using multi-layered refraction, ultra-subtle SVG noise overlays, color-tinted dynamic shadows, and embossed inner-shadows.
 - Use advanced Tailwind v4 CSS variables to create localized glow and specular highlights.
+- **The Clay-Card Metric:** Utilize `.clay-card` and `.clay-card-hover` layout classes to achieve soft inner refraction borders (`border-emerald-500/30`), relying less on raw transparent layer stacks node framing.
 
 ## 3. Native Engine Motion & Anti-Grid
 - **View Transitions:** Use the native View Transitions API for seamless, app-like routing.
 - **Scroll-Driven Animations:** Use CSS `animation-timeline: scroll()` and `view()` instead of JS-heavy scroll listeners.
 - **Anti-Grid / Organic Layouts:** Introduce visual tension via asymmetrical layouts, structural whitespace, and CSS container queries (`@container`). Break the 12-column conformity.
+- **Carousel Component UX overlays:** All Horizontal snap-scroller templates (`overflow-x-auto`) must include floating absolute overlays supporting Clickable Navigate Arrow triggers (`ChevronLeft`, `ChevronRight`) and static Pagination Dots so desktop & mobile affordances stand 100% crystal clear.

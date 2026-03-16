@@ -94,6 +94,34 @@ export function LeadGenHub({ locale }: LeadGenHubProps) {
         </p>
       </div>
 
+      {/* Top Banner Progress Stepper Line with node tracking dots */}
+      <div className="max-w-xs mx-auto mb-8 flex items-center justify-between relative px-1">
+        {/* Back Track Line */}
+        <div className="absolute top-1/2 left-0 w-full h-0.5 bg-white/10 -translate-y-1/2 -z-1" />
+        {/* Active Progress line overlay */}
+        <div 
+           className="absolute top-1/2 left-0 h-0.5 bg-emerald-400 -translate-y-1/2 transition-all duration-300" 
+           style={{ width: `${(activeIndex / (tools.length - 1)) * 100}%` }} 
+        />
+        {/* Active tracking nodes list */}
+        {tools.map((_, idx) => (
+          <button 
+            key={idx} 
+            onClick={() => {
+              if (scrollRef.current) {
+                scrollRef.current.scrollTo({
+                  left: idx * scrollRef.current.clientWidth,
+                  behavior: "smooth",
+                });
+              }
+            }}
+            className={`h-2.5 w-2.5 rounded-full border-2 transition-all duration-300 z-10 cursor-pointer ${
+              idx <= activeIndex ? "border-emerald-400 bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.5)]" : "border-slate-700 bg-slate-900"
+            }`} 
+          />
+        ))}
+      </div>
+
       {/* Main Container Wrapper with Absolute Arrows */}
       <div className="relative group/slider">
         {/* Navigation Arrows (Absolute overlay) */}
@@ -136,24 +164,6 @@ export function LeadGenHub({ locale }: LeadGenHubProps) {
             </div>
           );
         })}
-      </div>
-
-      {/* Pagination Dots at bottom center */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 bg-slate-900/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/5 z-10">
-        {tools.map((_, idx) => (
-          <button
-            key={idx}
-            onClick={() => {
-              if (scrollRef.current) {
-                scrollRef.current.scrollTo({
-                  left: idx * scrollRef.current.clientWidth,
-                  behavior: "smooth",
-                });
-              }
-            }}
-            className={`h-1.5 rounded-full transition-all cursor-pointer ${activeIndex === idx ? "bg-emerald-400 w-4" : "bg-white/20 w-1.5 hover:bg-white/40"}`}
-          />
-        ))}
       </div>
       </div>
     </section>
