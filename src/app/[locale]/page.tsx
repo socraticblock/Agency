@@ -10,6 +10,10 @@ import { ScrollReveal } from "./_components/ScrollReveal";
 import { TrustMetrics } from "./_components/TrustMetrics";
 import { RoadmapTimeline } from "./_components/RoadmapTimeline";
 import type { Locale } from "@/lib/i18n";
+import { ViewPackagesCTA } from "./_components/ViewPackagesCTA";
+import { ScrollingBanner } from "./_components/ScrollingBanner";
+
+import { getMessages } from "@/lib/i18n";
 
 export default async function Home({
   params,
@@ -18,14 +22,17 @@ export default async function Home({
 }) {
   const { locale } = await params;
   const lang = (locale === "en" ? "en" : "ka") as Locale; // safe: default "ka" for empty/undefined
+  const t = getMessages(lang);
 
   return (
     <>
       <Navbar locale={lang} />
       <main>
         <KineticHero locale={lang} />
+        <ViewPackagesCTA />
+        <ScrollingBanner />
         <ScrollReveal>
-          <SovereignTriptych locale={lang} />
+          <SovereignTriptych dict={t.sovereign} />
         </ScrollReveal>
         <ScrollReveal>
           <RoadmapTimeline />

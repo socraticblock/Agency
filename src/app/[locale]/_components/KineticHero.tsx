@@ -143,17 +143,6 @@ export function KineticHero({ locale }: { locale: Locale }) {
             <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.4),_transparent_60%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
             <span className="relative z-10 block">{t.hero.cta}</span>
           </MagneticButton>
-          <MagneticButton
-            as="a"
-            href="https://wa.me/995555555555?text=I%20saw%20the%20Kvali%20site%20and%20want%20help%20escaping%20the%20social%20media%20trap."
-            target="_blank"
-            rel="noopener noreferrer"
-            magneticStrength={10}
-            textStrength={4}
-            className="rounded-full border border-white/10 bg-white/5 px-8 py-3.5 text-sm font-medium text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] transition-colors hover:bg-white/10"
-          >
-            <span className="block">{t.hero.ctaSecondary}</span>
-          </MagneticButton>
         </motion.div>
       </motion.div>
     </section>

@@ -2,15 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import type { Locale } from "@/lib/i18n";
-import { getMessages } from "@/lib/i18n";
+// removed static i18n imports to decouple client bundle weights
 import { Lock, CreditCard, MessageSquare, CheckCircle2 } from "lucide-react";
 import { KineticText } from "./KineticText";
 
 type StageKey = "bridge" | "intercept" | "vault";
 
-export function SovereignTriptych({ locale }: { locale: Locale }) {
-  const t = getMessages(locale);
+export function SovereignTriptych({ dict }: { dict: any }) {
+  const t = { sovereign: dict }; // wrap to maintain t.sovereign.* paths securely
+
   const [activeTab, setActiveTab] = useState<StageKey>("bridge");
   const [activeTabMobile, setActiveTabMobile] = useState<StageKey | null>(null);
   const [conversationIndex, setConversationIndex] = useState(0);

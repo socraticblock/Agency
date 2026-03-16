@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { TrueAudienceVisualizer } from "./TrueAudienceVisualizer";
-import { LostWeekendCalculator } from "./LostWeekendCalculator";
-import { FrictionRaceSimulator } from "./FrictionRaceSimulator";
-import { TimeDebtReceipt } from "./TimeDebtReceipt";
-import { PlatformRiskMeter } from "./PlatformRiskMeter";
+import dynamic from "next/dynamic";
+
+const TrueAudienceVisualizer = dynamic(() => import("./TrueAudienceVisualizer").then(mod => mod.TrueAudienceVisualizer), { ssr: false, loading: () => <div className="h-64 bg-slate-900/40 rounded-3xl animate-pulse border border-white/5 flex items-center justify-center text-xs text-slate-500">Loading Analyser...</div> });
+const LostWeekendCalculator = dynamic(() => import("./LostWeekendCalculator").then(mod => mod.LostWeekendCalculator), { ssr: false, loading: () => <div className="h-64 bg-slate-900/40 rounded-3xl animate-pulse border border-white/5 flex items-center justify-center text-xs text-slate-500">Loading Calculator...</div> });
+const FrictionRaceSimulator = dynamic(() => import("./FrictionRaceSimulator").then(mod => mod.FrictionRaceSimulator), { ssr: false, loading: () => <div className="h-64 bg-slate-900/40 rounded-3xl animate-pulse border border-white/5 flex items-center justify-center text-xs text-slate-500">Loading Simulator...</div> });
+const TimeDebtReceipt = dynamic(() => import("./TimeDebtReceipt").then(mod => mod.TimeDebtReceipt), { ssr: false, loading: () => <div className="h-64 bg-slate-900/40 rounded-3xl animate-pulse border border-white/5 flex items-center justify-center text-xs text-slate-500">Loading Statement...</div> });
+const PlatformRiskMeter = dynamic(() => import("./PlatformRiskMeter").then(mod => mod.PlatformRiskMeter), { ssr: false, loading: () => <div className="h-64 bg-slate-900/40 rounded-3xl animate-pulse border border-white/5 flex items-center justify-center text-xs text-slate-500">Loading Meter...</div> });
 import type { Locale } from "@/lib/i18n";
 import { KineticText } from "../KineticText";
 
