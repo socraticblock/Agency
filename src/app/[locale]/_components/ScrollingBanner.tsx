@@ -13,18 +13,20 @@ const items = [
 ];
 
 export function ScrollingBanner() {
-  // Duplicate the items to make the infinite loop seamless
-  const duplicatedItems = [...items, ...items, ...items, ...items];
+  // Single set of items for finite back-and-forth drift
+  const duplicatedItems = [...items];
 
   return (
     <div className="w-full overflow-hidden border-y border-emerald-400/10 bg-black/30 backdrop-blur-sm py-4 select-none">
       <motion.div
         className="flex items-center gap-12 whitespace-nowrap px-4"
-        animate={{ x: [0, "-25%"] }}
+        initial={{ x: "60%" }}
+        animate={{ x: "-40%" }}
         transition={{
           repeat: Infinity,
-          ease: "linear",
-          duration: 35,
+          repeatType: "reverse",
+          ease: "easeInOut",
+          duration: 20,
         }}
       >
         {duplicatedItems.map((item, index) => {
