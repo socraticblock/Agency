@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { LeadCaptureForm } from "./LeadCaptureForm";
 import { AuditCitation } from "./AuditCitation";
-import type { Locale } from "@/lib/i18n";
+import { getMessages, type Locale } from "@/lib/i18n";
 
 interface PlatformRiskMeterProps {
   locale: Locale;
@@ -17,12 +17,15 @@ export function PlatformRiskMeter({ locale }: PlatformRiskMeterProps) {
     2: null,
   });
   const [showForm, setShowForm] = useState(false);
+  const t = getMessages(locale);
 
-  const questions = [
-    "Do you have a list of your customers' emails?",
-    "Would your business survive if your Instagram was locked tomorrow?",
-    "Do you own your own website domain?",
-  ];
+  const questions: string[] =
+    t.leadTools?.risk?.questions ??
+    [
+      "Do you have a list of your customers' emails?",
+      "Would your business survive if your Instagram was locked tomorrow?",
+      "Do you own your own website domain?",
+    ];
 
   const handleAnswer = (index: number, answer: boolean) => {
     setAnswers((prev) => ({ ...prev, [index]: answer }));
@@ -50,13 +53,13 @@ export function PlatformRiskMeter({ locale }: PlatformRiskMeterProps) {
   };
 
   return (
-    <div className="clay-card clay-card-hover mx-auto max-w-3xl p-6 shadow-2xl sm:p-10 border-emerald-500/40 shadow-[inset_0_1px_0_0_rgba(16,185,129,0.2),0_0_30px_rgba(16,185,129,0.15)]">
+    <div className="clay-card clay-card-hover mx-auto max-w-3xl border-emerald-500/40 p-6 shadow-2xl shadow-[inset_0_1px_0_0_rgba(16,185,129,0.2),0_0_30px_rgba(16,185,129,0.15)] sm:p-10">
       <div className="mb-8 text-center">
         <h2 className="text-2xl font-bold text-slate-100 sm:text-3xl">
-          The "Platform Risk" Stress Test
+          {t.leadTools?.risk?.title ?? 'The "Platform Risk" Stress Test'}
         </h2>
         <p className="mt-2 text-slate-400">
-          Are you building your business on rented land?
+          {t.leadTools?.risk?.subtitle}
         </p>
       </div>
 
@@ -72,7 +75,9 @@ export function PlatformRiskMeter({ locale }: PlatformRiskMeterProps) {
                   : "border-indigo-500/30 bg-indigo-500/10"
               }`}
             >
-              <p className="mb-3 text-sm font-medium text-slate-200">{q}</p>
+              <p className="mb-3 text-sm font-medium text-slate-200">
+                {q}
+              </p>
               <div className="flex gap-3">
                 <button
                   onClick={() => handleAnswer(index, true)}
@@ -82,7 +87,7 @@ export function PlatformRiskMeter({ locale }: PlatformRiskMeterProps) {
                       : "bg-white/5 text-slate-400 hover:bg-white/10"
                   }`}
                 >
-                  Yes
+                  {t.leadTools?.risk?.yes ?? "Yes"}
                 </button>
                 <button
                   onClick={() => handleAnswer(index, false)}
@@ -92,7 +97,7 @@ export function PlatformRiskMeter({ locale }: PlatformRiskMeterProps) {
                       : "bg-white/5 text-slate-400 hover:bg-white/10"
                   }`}
                 >
-                  No
+                  {t.leadTools?.risk?.no ?? "No"}
                 </button>
               </div>
             </div>
@@ -105,22 +110,22 @@ export function PlatformRiskMeter({ locale }: PlatformRiskMeterProps) {
               className="rounded-xl border border-red-500/30 bg-red-500/10 p-4"
             >
               <p className="text-sm font-medium text-red-200">
-                You are one false report away from losing your entire income stream.
+                {t.leadTools?.risk?.promptBody}
               </p>
               <button
                 onClick={() => setShowForm(true)}
                 className="mt-4 w-full rounded-xl bg-emerald-500/20 px-6 py-3 font-medium text-emerald-200 transition hover:bg-emerald-500/30"
               >
-                Build a Digital Fortress
+                {t.leadTools?.risk?.promptCta}
               </button>
             </motion.div>
           )}
 
           <div className="mt-4">
             <AuditCitation 
-              dataPoint="Platform locks and bans can halt standard revenue overnight."
-              explanation="Relying purely on third-party channels places your growth curve inside a locked black box. Smart operators transition visitors into independent CRM assets immediately on landing pages."
-              source="Small Business Administration / Commerce Benchmarks"
+              dataPoint={t.leadTools?.risk?.citationPoint}
+              explanation={t.leadTools?.risk?.citationExplanation}
+              source={t.leadTools?.risk?.citationSource}
             />
           </div>
         </div>
@@ -128,7 +133,7 @@ export function PlatformRiskMeter({ locale }: PlatformRiskMeterProps) {
         {/* Meter Visualization */}
         <div className="flex flex-col items-center justify-center rounded-2xl bg-black/60 p-6 border border-white/5">
           <h3 className="mb-6 text-lg font-semibold text-slate-300">
-            Ownership Score
+            {t.leadTools?.risk?.ownershipScoreLabel ?? "Ownership Score"}
           </h3>
           
           <div className="relative flex h-48 w-48 items-end justify-center overflow-hidden">
@@ -160,11 +165,11 @@ export function PlatformRiskMeter({ locale }: PlatformRiskMeterProps) {
           >
             {isComplete
               ? yesCount === 3
-                ? "Safe"
+                ? t.leadTools?.risk?.scoreSafe ?? "Safe"
                 : yesCount === 2
-                ? "Vulnerable"
-                : "Critical Risk"
-              : "Testing..."}
+                ? t.leadTools?.risk?.scoreMedium ?? "Vulnerable"
+                : t.leadTools?.risk?.scoreLow ?? "Critical Risk"
+              : t.leadTools?.risk?.scorePending ?? "Testing..."}
           </motion.div>
         </div>
       </div>
@@ -174,8 +179,8 @@ export function PlatformRiskMeter({ locale }: PlatformRiskMeterProps) {
         <LeadCaptureForm
           locale={locale}
           toolName="Platform Risk Meter"
-          painPoint={`High Platform Risk: ${3 - yesCount} vulnerabilities`}
-          ctaText="Build your digital fortress. Own your platform."
+          painPoint={`${t.leadTools?.risk?.leadPainPointPrefix} ${3 - yesCount} ${t.leadTools?.risk?.leadPainPointSuffix}`}
+          ctaText={t.leadTools?.risk?.leadCta}
         />
       )}
     </div>

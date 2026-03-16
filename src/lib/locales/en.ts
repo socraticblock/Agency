@@ -4,6 +4,110 @@ export const en = {
     contact: "Let's Talk",
     cta: "Apply Now",
   },
+  leadHub: {
+    label: "Interactive tools",
+    title: "Explore your digital foundation",
+    body: "Choose a tool to better understand how your current setup is working today — and where a dedicated, always-on storefront could gently unlock your next stage of growth.",
+    tools: {
+      audience: {
+        name: "True Audience",
+        description: "See your real reach",
+      },
+      weekend: {
+        name: "Global Opportunity",
+        description: "Visualize sales across time zones",
+      },
+      friction: {
+        name: "Link-in-Bio Journey",
+        description: "Compare tap-by-tap buying paths",
+      },
+      time: {
+        name: "Time & Focus",
+        description: "See where your hours are going",
+      },
+      risk: {
+        name: "Platform Resilience",
+        description: "Understand how stable your setup is",
+      },
+    },
+  },
+  leadTools: {
+    audience: {
+      title: "Your audience, visualised",
+      subtitle:
+        "See how much of your community you're actually reaching today.",
+      totalFollowersLabel: "Total followers",
+      engagementRateLabel: "Engagement rate",
+      insightTitle: "The current picture",
+      insightBodyPrefix: "You've built up",
+      insightBodyMiddle: "followers. On most platforms, a typical post reaches around",
+      insightBodySuffix: "of them at any given time.",
+      cta: "Create a space where more of your audience can comfortably take the next step.",
+      citationPoint: "Organic reach often sits between 2–5%.",
+      citationExplanation:
+        "Social platforms are fantastic for discovery, but they decide how much of your audience sees each post. A dedicated site gives you a stable home your audience can always find.",
+      citationSource: "Hootsuite Social Trends / Rival IQ Benchmark Reports",
+      leadPainPointPrefix: "Current reach:",
+      leadPainPointSuffix: "out of",
+      leadCta: "Let's build a place where your audience can engage fully.",
+    },
+    friction: {
+      title: "The Link-in-Bio Journey",
+      subtitle:
+        "Compare the path from \"I’m interested\" to \"I’ve booked\" on different setups.",
+      startAgain: "Run again",
+      racing: "Simulating...",
+      start: "Start journey",
+      standardRouteTitle: "Typical social path",
+      premiumRouteTitle: "Dedicated storefront",
+      standardSteps: [
+        { label: "Tap bio link", dropoff: "0% drop-off" },
+        { label: "Wait for link-in-bio to load", dropoff: "20% leave here" },
+        { label: "Look for the right button", dropoff: "45% have left" },
+        { label: "Load a slow or clunky site", dropoff: "65% have left" },
+        { label: "Maybe reach checkout", dropoff: "80% total drop-off" },
+      ],
+      premiumStepLabel: "Open, decide, and checkout in one place",
+      premiumStepDropoff: "Minimal drop-off",
+      citationPoint: "Even small delays can noticeably affect conversions.",
+      citationExplanation:
+        "Extra steps, slow pages, and unclear flows quietly discourage buyers. When everything lives on one fast, focused site, more people comfortably complete the journey.",
+      citationSource: "Google / Deloitte \"Milliseconds Make Millions\" study",
+      buttonCta: "Make it easy to say yes.",
+      leadPainPoint: "Complex journey from \"link in bio\" to checkout",
+      leadCta: "Design a clear, friendly, high-speed storefront.",
+    },
+    risk: {
+      title: "Platform Resilience Check-In",
+      subtitle:
+        "A quick reflection on how independent your digital setup feels today.",
+      questions: [
+        "Do you keep a direct list of customers you can email or message?",
+        "Would your business still run smoothly if one social account was unavailable?",
+        "Do you have a website domain that you fully control?",
+      ],
+      yes: "Yes",
+      no: "Not yet",
+      promptTitle: "What this tells us",
+      promptBody:
+        "Relying purely on third-party platforms can make your business feel more fragile than it really is. Building a simple, owned foundation helps you stay calm if anything changes.",
+      promptCta:
+        "Explore what a stable, owned foundation could look like for your brand.",
+      citationPoint:
+        "Platform changes can temporarily affect visibility and sales.",
+      citationExplanation:
+        "When your entire business lives inside a single platform, account issues or algorithm changes can cause real stress. A small layer of owned infrastructure gives you breathing room.",
+      citationSource: "Small Business Administration / commerce benchmarks",
+      ownershipScoreLabel: "Ownership score",
+      scoreSafe: "Steady",
+      scoreMedium: "Room to strengthen",
+      scoreLow: "High platform dependence",
+      scorePending: "Answer the questions to see your score.",
+      leadPainPointPrefix: "Platform dependence:",
+      leadPainPointSuffix: "areas to gradually strengthen",
+      leadCta: "Design a calmer, more independent digital setup.",
+    },
+  },
   hero: {
     statusBadge: "A permanent, professional home for your brand.",
     headline: "Graduate from DMs to a business that runs itself.",

@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { LeadCaptureForm } from "./LeadCaptureForm";
 import { AuditCitation } from "./AuditCitation";
-import type { Locale } from "@/lib/i18n";
+import { getMessages, type Locale } from "@/lib/i18n";
 
 interface TrueAudienceVisualizerProps {
   locale: Locale;
@@ -14,12 +14,13 @@ export function TrueAudienceVisualizer({ locale }: TrueAudienceVisualizerProps) 
   const [followers, setFollowers] = useState(10000);
   const [engagementRate, setEngagementRate] = useState(5);
   const [showForm, setShowForm] = useState(false);
+  const t = getMessages(locale);
 
   // Calculate reached audience
   const reachedAudience = Math.floor(followers * (engagementRate / 100));
 
-  // Generate dots for visualization (max 1000 dots to keep DOM light)
-  const maxDots = 400; // 20x20 grid
+  // Generate dots for visualization (kept intentionally light for smooth animation)
+  const maxDots = 200; // 10x20 grid
   const dotsToDisplay = Math.min(followers, maxDots);
   const activeDots = Math.max(1, Math.floor(dotsToDisplay * (engagementRate / 100)));
 
@@ -31,13 +32,13 @@ export function TrueAudienceVisualizer({ locale }: TrueAudienceVisualizerProps) 
   }, [activeDots, maxDots]);
 
   return (
-    <div className="clay-card clay-card-hover mx-auto max-w-3xl p-6 shadow-2xl sm:p-10 border-emerald-500/40 shadow-[inset_0_1px_0_0_rgba(16,185,129,0.2),0_0_30px_rgba(16,185,129,0.15)]">
+    <div className="clay-card clay-card-hover mx-auto max-w-3xl border-emerald-500/40 p-6 shadow-2xl shadow-[inset_0_1px_0_0_rgba(16,185,129,0.2),0_0_30px_rgba(16,185,129,0.15)] sm:p-10">
       <div className="mb-8 text-center">
         <h2 className="text-2xl font-bold text-slate-100 sm:text-3xl">
-          The "True Audience" Visualizer
+          {t.leadTools?.audience?.title ?? 'Your audience, visualised'}
         </h2>
         <p className="mt-2 text-slate-400">
-          See how the algorithm filters your reach.
+          {t.leadTools?.audience?.subtitle}
         </p>
       </div>
 
@@ -46,7 +47,7 @@ export function TrueAudienceVisualizer({ locale }: TrueAudienceVisualizerProps) 
         <div className="space-y-6">
           <div>
             <label className="mb-2 flex justify-between text-sm font-medium text-slate-300">
-              <span>Total Followers</span>
+              <span>{t.leadTools?.audience?.totalFollowersLabel}</span>
               <span className="text-emerald-400">{followers.toLocaleString()}</span>
             </label>
             <input
@@ -62,7 +63,7 @@ export function TrueAudienceVisualizer({ locale }: TrueAudienceVisualizerProps) 
 
           <div>
             <label className="mb-2 flex justify-between text-sm font-medium text-slate-300">
-              <span>Engagement Rate</span>
+              <span>{t.leadTools?.audience?.engagementRateLabel}</span>
               <span className="text-emerald-400">{engagementRate}%</span>
             </label>
             <input
@@ -78,23 +79,23 @@ export function TrueAudienceVisualizer({ locale }: TrueAudienceVisualizerProps) 
 
           <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-4">
             <h3 className="text-lg font-semibold text-red-200">
-              The Reality Check
+              {t.leadTools?.audience?.insightTitle}
             </h3>
             <p className="mt-2 text-sm text-slate-300">
-              You worked hard for{" "}
+              {t.leadTools?.audience?.insightBodyPrefix}{" "}
               <strong className="text-white">{followers.toLocaleString()}</strong>{" "}
-              followers. Platforms like <strong className="text-white">Instagram, TikTok, or X</strong> only let you talk to{" "}
+              {t.leadTools?.audience?.insightBodyMiddle}{" "}
               <strong className="text-red-400">
                 {reachedAudience.toLocaleString()}
               </strong>{" "}
-              of them.
+              {t.leadTools?.audience?.insightBodySuffix}
             </p>
           </div>
 
           <AuditCitation 
-            dataPoint="Organic reach has plummeted to roughly 2-5%."
-            explanation="When you build on borrowed land (Instagram, TikTok, X), the landlord controls the gates. The algorithm restricts access to your followers, treating your base as a monetization engine instead of a network."
-            source="Hootsuite Social Trends / Rival IQ Benchmark Reports"
+            dataPoint={t.leadTools?.audience?.citationPoint}
+            explanation={t.leadTools?.audience?.citationExplanation}
+            source={t.leadTools?.audience?.citationSource}
           />
 
           {!showForm && (
@@ -102,7 +103,7 @@ export function TrueAudienceVisualizer({ locale }: TrueAudienceVisualizerProps) 
               onClick={() => setShowForm(true)}
               className="w-full rounded-xl bg-emerald-500/20 px-6 py-3 font-medium text-emerald-200 transition hover:bg-emerald-500/30"
             >
-              Build Your Owned List
+              {t.leadTools?.audience?.cta}
             </button>
           )}
         </div>
@@ -119,7 +120,7 @@ export function TrueAudienceVisualizer({ locale }: TrueAudienceVisualizerProps) 
                   scale: dot.isActive ? 1 : 0.8,
                   opacity: dot.isActive ? 1 : 0.3,
                 }}
-                transition={{ duration: 0.5, delay: dot.id * 0.001 }}
+                transition={{ duration: 0.4 }}
                 className="h-1.5 w-1.5 rounded-full sm:h-2 sm:w-2"
               />
             ))}
@@ -132,8 +133,8 @@ export function TrueAudienceVisualizer({ locale }: TrueAudienceVisualizerProps) 
         <LeadCaptureForm
           locale={locale}
           toolName="True Audience Visualizer"
-          painPoint={`Low Reach: ${reachedAudience} out of ${followers}`}
-          ctaText="Let's build a platform where you reach 100% of your audience."
+          painPoint={`${t.leadTools?.audience?.leadPainPointPrefix} ${reachedAudience} ${t.leadTools?.audience?.leadPainPointSuffix} ${followers}`}
+          ctaText={t.leadTools?.audience?.leadCta}
         />
       )}
     </div>

@@ -358,15 +358,10 @@ export function SovereignTriptych({ dict }: { dict: any }) {
                   ? "clay-card border-emerald-500/40 shadow-[inset_0_1px_0_0_rgba(16,185,129,0.2),0_0_24px_rgba(16,185,129,0.12)]"
                   : "border-white/5 hover:border-white/10 bg-transparent"
                   }`}
-                whileHover={{ x: isActive ? 0 : 4 }}
                 layout
               >
                 {isActive && (
-                  <motion.div
-                    layoutId="active-glow"
-                    className="absolute inset-0 pointer-events-none rounded-2xl bg-[radial-gradient(circle_at_top_left,_rgba(16,185,129,0.1),_transparent_70%)]"
-                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                  />
+                  <div className="absolute inset-0 pointer-events-none rounded-2xl bg-[radial-gradient(circle_at_top_left,_rgba(16,185,129,0.1),_transparent_70%)]" />
                 )}
                 <div className="flex items-start gap-4">
                   <div className={`p-2 rounded-xl border ${isActive ? "border-emerald-400/40 bg-emerald-500/10 text-emerald-300" : "border-white/10 bg-white/5 text-slate-400"}`}>
@@ -397,7 +392,7 @@ export function SovereignTriptych({ dict }: { dict: any }) {
               transition={{ duration: 0.35, ease: "easeOut" }}
               className="clay-card static md:sticky md:top-24 rounded-3xl border border-emerald-500/40 p-8 shadow-[inset_0_1px_0_0_rgba(16,185,129,0.2),0_0_30px_rgba(16,185,129,0.15)] flex flex-col justify-between overflow-hidden group min-h-[400px]"
             >
-              <div className="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(circle_at_center,_rgba(16,185,129,0.4),_transparent_60%)] group-hover:opacity-30 transition-opacity" />
+              <div className="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(circle_at_center,_rgba(16,185,129,0.4),_transparent_60%)]" />
 
               <div className="relative z-10 flex-1">
                 <p className="text-sm leading-relaxed text-slate-200">
@@ -406,18 +401,15 @@ export function SovereignTriptych({ dict }: { dict: any }) {
 
                 <div className="mt-8 space-y-3">
                   {activeStage.features.map((item: string, idx: number) => (
-                    <motion.div
+                    <div
                       key={idx}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.1 + idx * 0.08 }}
                       className="flex items-center gap-2"
                     >
                       <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
                       <span className="text-xs font-mono text-slate-300">
                         {item}
                       </span>
-                    </motion.div>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -426,36 +418,36 @@ export function SovereignTriptych({ dict }: { dict: any }) {
               <div className="relative mt-5 h-60 w-full overflow-hidden rounded-xl border border-white/5 bg-white/[0.02]">
                 <div className="absolute inset-0 flex items-center justify-center p-2">
                   {activeTab === "design" && (
-                    <motion.div className="flex flex-col items-center gap-2">
+                    <div className="flex flex-col items-center gap-2">
                       <div className="text-3xl font-black font-space text-emerald-300">100/100</div>
                       <div className="text-[10px] font-mono uppercase tracking-widest text-slate-400">Custom UI Framework</div>
-                      <motion.div className="h-1 bg-emerald-400 rounded-full" animate={{ width: [0, 180] }} transition={{ duration: 0.8, ease: "easeOut" }} />
-                    </motion.div>
+                      <div className="h-1 w-44 rounded-full bg-emerald-400" />
+                    </div>
                   )}
                   {activeTab === "speed" && (
-                    <motion.div className="flex flex-col items-center gap-2">
+                    <div className="flex flex-col items-center gap-2">
                       <div className="px-5 py-3 rounded-2xl border border-white/10 bg-[#0a0a0a] flex items-center gap-4">
                         <div className="h-4 w-4 rounded-full bg-emerald-400 animate-pulse" />
                         <span className="text-sm font-bold text-white">Next.js Edge Speed</span>
                       </div>
                       <div className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 mt-2">✅ 100/100 Core Web Vitals</div>
-                    </motion.div>
+                    </div>
                   )}
                   {activeTab === "bridge" && (
-                    <motion.div className="flex flex-col items-center gap-2">
+                    <div className="flex flex-col items-center gap-2">
                       <div className="text-3xl font-black font-space text-emerald-300">100/100</div>
                       <div className="text-[10px] font-mono uppercase tracking-widest text-slate-400">Next.js Edge Speed</div>
-                      <motion.div className="h-1 bg-emerald-400 rounded-full" animate={{ width: [0, 180] }} transition={{ duration: 0.8, ease: "easeOut" }} />
-                    </motion.div>
+                      <div className="h-1 w-44 rounded-full bg-emerald-400" />
+                    </div>
                   )}
                   {activeTab === "intercept" && (
-                    <motion.div className="flex flex-col items-center gap-2">
+                    <div className="flex flex-col items-center gap-2">
                       <div className="px-5 py-3 rounded-2xl border border-white/10 bg-[#0a0a0a] flex items-center gap-4">
                         <div className="h-4 w-4 rounded-full bg-emerald-400 animate-pulse" />
                         <span className="text-sm font-bold text-white">Pay with TBC</span>
                       </div>
                       <div className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 mt-2">✅ Success Message</div>
-                    </motion.div>
+                    </div>
                   )}
                   {activeTab === "conversion" && (
                     <div className="w-full relative min-h-[220px] flex items-center justify-center">

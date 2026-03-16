@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { LeadCaptureForm } from "./LeadCaptureForm";
 import { AuditCitation } from "./AuditCitation";
-import type { Locale } from "@/lib/i18n";
+import { getMessages, type Locale } from "@/lib/i18n";
 
 interface FrictionRaceSimulatorProps {
   locale: Locale;
@@ -14,6 +14,7 @@ export function FrictionRaceSimulator({ locale }: FrictionRaceSimulatorProps) {
   const [isRacing, setIsRacing] = useState(false);
   const [raceStep, setRaceStep] = useState(0);
   const [showForm, setShowForm] = useState(false);
+  const t = getMessages(locale);
 
   useEffect(() => {
     if (isRacing && raceStep < 5) {
@@ -31,22 +32,24 @@ export function FrictionRaceSimulator({ locale }: FrictionRaceSimulatorProps) {
     setIsRacing(true);
   };
 
-  const standardSteps = [
-    { label: "Click Bio Link", dropoff: "0%" },
-    { label: "Load Linktree...", dropoff: "20%" },
-    { label: "Find Store Link", dropoff: "45%" },
-    { label: "Load Clunky Site...", dropoff: "65%" },
-    { label: "Checkout (Maybe)", dropoff: "80% Drop-off" },
-  ];
+  const standardSteps =
+    t.leadTools?.friction?.standardSteps ??
+    [
+      { label: "Tap bio link", dropoff: "0% drop-off" },
+      { label: "Wait for link-in-bio to load", dropoff: "20% leave here" },
+      { label: "Look for the right button", dropoff: "45% have left" },
+      { label: "Load a slow or clunky site", dropoff: "65% have left" },
+      { label: "Maybe reach checkout", dropoff: "80% total drop-off" },
+    ];
 
   return (
-    <div className="clay-card clay-card-hover mx-auto max-w-4xl p-6 shadow-2xl sm:p-10 border-emerald-500/40 shadow-[inset_0_1px_0_0_rgba(16,185,129,0.2),0_0_30px_rgba(16,185,129,0.15)]">
+    <div className="clay-card clay-card-hover mx-auto max-w-4xl border-emerald-500/40 p-6 shadow-2xl shadow-[inset_0_1px_0_0_rgba(16,185,129,0.2),0_0_30px_rgba(16,185,129,0.15)] sm:p-10">
       <div className="mb-8 text-center">
         <h2 className="text-2xl font-bold text-slate-100 sm:text-3xl">
-          The "Link-in-Bio" Race
+          {t.leadTools?.friction?.title ?? 'The "Link-in-Bio" Race'}
         </h2>
         <p className="mt-2 text-slate-400">
-          Every extra tap costs you 20% of your conversions.
+          {t.leadTools?.friction?.subtitle}
         </p>
       </div>
 
@@ -56,7 +59,11 @@ export function FrictionRaceSimulator({ locale }: FrictionRaceSimulatorProps) {
           disabled={isRacing}
           className="rounded-xl bg-indigo-500/20 px-8 py-3 font-medium text-indigo-200 transition hover:bg-indigo-500/30 disabled:opacity-50"
         >
-          {raceStep === 5 ? "Race Again" : isRacing ? "Racing..." : "Start Race"}
+          {raceStep === 5
+            ? t.leadTools?.friction?.startAgain ?? "Run again"
+            : isRacing
+              ? t.leadTools?.friction?.racing ?? "Simulating..."
+              : t.leadTools?.friction?.start ?? "Start journey"}
         </button>
       </div>
 
@@ -64,7 +71,7 @@ export function FrictionRaceSimulator({ locale }: FrictionRaceSimulatorProps) {
         {/* Standard Route */}
         <div className="rounded-2xl border border-red-500/20 bg-red-500/5 p-6">
           <h3 className="mb-4 text-center text-lg font-semibold text-red-300">
-            Standard Setup
+            {t.leadTools?.friction?.standardRouteTitle ?? "Standard Setup"}
           </h3>
           <div className="relative h-64 overflow-hidden rounded-xl border border-white/10 bg-black/50 p-4">
             <AnimatePresence mode="popLayout">
@@ -101,7 +108,7 @@ export function FrictionRaceSimulator({ locale }: FrictionRaceSimulatorProps) {
         {/* Kvali Route */}
         <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-6">
           <h3 className="mb-4 text-center text-lg font-semibold text-emerald-300">
-            Premium Storefront
+            {t.leadTools?.friction?.premiumRouteTitle ?? "Premium Storefront"}
           </h3>
           <div className="relative h-64 overflow-hidden rounded-xl border border-white/10 bg-black/50 p-4">
             <AnimatePresence mode="popLayout">
@@ -114,10 +121,12 @@ export function FrictionRaceSimulator({ locale }: FrictionRaceSimulatorProps) {
                 >
                   <div className="mb-4 text-4xl">⚡</div>
                   <p className="text-lg font-medium text-slate-200">
-                    Instant Load & Checkout
+                    {t.leadTools?.friction?.premiumStepLabel ??
+                      "Instant load & checkout"}
                   </p>
                   <p className="mt-2 font-mono text-xl font-bold text-emerald-400">
-                    0% Drop-off
+                    {t.leadTools?.friction?.premiumStepDropoff ??
+                      "Minimal drop-off"}
                   </p>
                 </motion.div>
               )}
@@ -138,9 +147,9 @@ export function FrictionRaceSimulator({ locale }: FrictionRaceSimulatorProps) {
       <div className="mt-6 flex justify-center">
         <div className="w-full max-w-md">
           <AuditCitation 
-            dataPoint="A 0.1s improvement increases conversions by 8.4%."
-            explanation="Generic Link-in-bio templates carry heavy tracking scripts that delay node rendering. A mere 0.1s delay can reduce checkouts by 8.4%. We build on statically optimized Next.js Edge CDNs for absolute sub-second delivery."
-            source="Google / Deloitte 'Milliseconds Make Millions' Study"
+            dataPoint={t.leadTools?.friction?.citationPoint}
+            explanation={t.leadTools?.friction?.citationExplanation}
+            source={t.leadTools?.friction?.citationSource}
           />
         </div>
       </div>
@@ -155,7 +164,8 @@ export function FrictionRaceSimulator({ locale }: FrictionRaceSimulatorProps) {
             onClick={() => setShowForm(true)}
             className="rounded-xl bg-emerald-500/20 px-8 py-4 text-lg font-medium text-emerald-200 transition hover:bg-emerald-500/30"
           >
-            Stop making it hard to buy. Upgrade now.
+            {t.leadTools?.friction?.buttonCta ??
+              "Make it easy to say yes."}
           </button>
         </motion.div>
       )}
@@ -165,8 +175,8 @@ export function FrictionRaceSimulator({ locale }: FrictionRaceSimulatorProps) {
         <LeadCaptureForm
           locale={locale}
           toolName="Friction Race Simulator"
-          painPoint="High drop-off rate from Linktree/clunky site"
-          ctaText="Upgrade to a high-speed, frictionless storefront."
+          painPoint={t.leadTools?.friction?.leadPainPoint}
+          ctaText={t.leadTools?.friction?.leadCta}
         />
       )}
     </div>
