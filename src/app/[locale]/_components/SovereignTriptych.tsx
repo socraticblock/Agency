@@ -3,8 +3,26 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 // removed static i18n imports to decouple client bundle weights
-import { Lock, CreditCard, MessageSquare, CheckCircle2 } from "lucide-react";
+import { Lock, CreditCard, MessageSquare, CheckCircle2, Layout, Zap, Target } from "lucide-react";
 import { KineticText } from "./KineticText";
+
+const pillars = [
+  {
+    icon: Layout,
+    title: "High-End Design",
+    description: "Websites that look as good as your content. Custom aesthetics that match your personal brand perfectly.",
+  },
+  {
+    icon: Zap,
+    title: "Lightning Fast",
+    description: "Optimized for speed. Don't lose potential clients to slow loading times. Core Web Vitals are our priority.",
+  },
+  {
+    icon: Target,
+    title: "Conversion Focused",
+    description: "Every pixel is designed to drive action. Whether it's newsletter signups, bookings, or product sales.",
+  },
+];
 
 type StageKey = "bridge" | "intercept" | "vault";
 
@@ -90,6 +108,30 @@ export function SovereignTriptych({ dict }: { dict: any }) {
         >
           {t.sovereign.triptychSubheading}
         </motion.p>
+      </div>
+
+      <div className="grid gap-6 md:grid-cols-3 mb-16 max-w-5xl mx-auto px-2">
+        {pillars.map((pillar, idx) => {
+          const Icon = pillar.icon;
+          return (
+            <div
+              key={idx}
+              className="clay-card clay-card-hover rounded-2xl border border-emerald-500/30 p-6 shadow-[inset_0_1px_0_0_rgba(16,185,129,0.2),0_0_30px_rgba(0,0,0,0.3)] transition-all duration-300"
+            >
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-400/20 bg-emerald-500/5 text-emerald-300">
+                <Icon className="h-5 w-5" />
+              </div>
+              
+              <h3 className="font-space text-lg font-bold text-white mb-2">
+                {pillar.title}
+              </h3>
+              
+              <p className="text-sm leading-relaxed text-slate-400">
+                {pillar.description}
+              </p>
+            </div>
+          );
+        })}
       </div>
 
       <div className="grid gap-10 md:grid-cols-12 items-start">
