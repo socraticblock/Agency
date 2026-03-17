@@ -14,6 +14,11 @@ export function middleware(request: NextRequest) {
     const pathname = request.nextUrl.pathname;
     const origin = request.nextUrl.origin;
 
+    // Bypass API routes from being rewritten/redirected
+    if (pathname.startsWith("/api/")) {
+      return NextResponse.next();
+    }
+
     // Root: redirect to default locale
     if (pathname === "/" || pathname === "") {
       const url = new URL(origin);
