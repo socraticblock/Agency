@@ -124,12 +124,19 @@ What does your operation do, and where is it currently hosted on the internet?`;
     const history = getLocalHistory(chatId);
     const chat = model.startChat({ history });
 
-    const result = await chat.sendMessage(text);
-    const response = await result.response;
-    const responseText = response.text();
+    try {
+      const result = await chat.sendMessage(text);
+      const response = await result.response;
+      const responseText = response.text();
 
-    await sendTelegramMessage(chatId, responseText);
-    saveLocalHistory(chatId, text, responseText);
+      await sendTelegramMessage(chatId, responseText);
+      saveLocalHistory(chatId, text, responseText);
+    } catch (err: any) {
+      console.error("Gemini Execution Error:", err);
+      // Report the error back to Telegram so we can debug exactly what failed
+      await sendTelegramMessage(chatId, `⚠️ Strategist error: ${err.message || 'Unknown errors occurred'}`);
+      throw err; // propagates outwards to return ok:false
+    }
 
     return NextResponse.json({ ok: true });
   } catch (error) {
