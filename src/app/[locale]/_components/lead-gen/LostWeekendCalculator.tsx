@@ -149,9 +149,24 @@ export function LostWeekendCalculator({ locale }: LostWeekendCalculatorProps) {
             </svg>
             <div className="text-center z-10">
               <span className="block text-xs uppercase tracking-wider text-slate-400">{t.midnightCalc.lostToday}</span>
-              <span className="block text-2xl font-bold text-amber-400 font-mono">
+              <motion.span 
+                className="block text-2xl font-bold text-amber-400 font-mono"
+                animate={{
+                  scale: [1, 1.02, 1],
+                  textShadow: [
+                    "0 0 0px #ff0000",
+                    "0 0 10px #ff0000",
+                    "0 0 0px #ff0000"
+                  ]
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              >
                 {Math.floor(tickingLoss).toLocaleString()}₾
-              </span>
+              </motion.span>
               {tickingLoss >= Number(lostRevenuePerDay) && (
                 <span className="block text-[10px] uppercase tracking-wider text-amber-500/80 mt-1">per day</span>
               )}

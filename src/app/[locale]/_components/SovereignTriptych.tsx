@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useTransform, animate } from "framer-motion";
 // removed static i18n imports to decouple client bundle weights
 import { Lock, CreditCard, MessageSquare, CheckCircle2, Layout, Zap, Target } from "lucide-react";
 import { KineticText } from "./KineticText";
@@ -25,6 +25,76 @@ const pillars = [
 ];
 
 type StageKey = "design" | "speed" | "conversion" | "bridge" | "intercept" | "vault";
+
+interface AnimatedLighthouseScoreProps {
+  value: number;
+  duration?: number;
+  small?: boolean;
+}
+
+function AnimatedLighthouseScore({ value, duration = 0.8, small = false }: AnimatedLighthouseScoreProps) {
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (v) => Math.round(v));
+  const [displayValue, setDisplayValue] = useState(0);
+
+  useEffect(() => {
+    const controls = animate(count, value, {
+      duration,
+      ease: "circOut",
+    });
+    
+    const unsubscribe = rounded.on("change", (v) => setDisplayValue(v));
+    return () => {
+      controls.stop();
+      unsubscribe();
+    };
+  }, [count, value, duration, rounded]);
+
+  const size = small ? "w-20 h-20" : "w-28 h-28";
+  const strokeWidth = small ? "4" : "6";
+  const radius = small ? "32" : "45";
+  const textSize = small ? "text-xl" : "text-3xl";
+  const viewbox = small ? "0 0 80 80" : "0 0 112 112";
+  const center = small ? "40" : "56";
+
+  return (
+    <div className={`relative flex items-center justify-center ${size}`}>
+      {/* Background Circle */}
+      <svg className="absolute w-full h-full -rotate-90" viewBox={viewbox}>
+        <circle
+          cx={center}
+          cy={center}
+          r={radius}
+          className="stroke-emerald-400/10"
+          strokeWidth={strokeWidth}
+          fill="transparent"
+        />
+        {/* Animated Circle */}
+        <motion.circle
+          cx={center}
+          cy={center}
+          r={radius}
+          className="stroke-emerald-400"
+          strokeWidth={strokeWidth}
+          fill="transparent"
+          strokeLinecap="round"
+          initial={{ pathLength: 0 }}
+          animate={{ pathLength: value / 100 }}
+          transition={{ duration, ease: "circOut" }}
+        />
+      </svg>
+      {/* Score Text */}
+      <div className="flex flex-col items-center justify-center z-10">
+        <div className={`${textSize} font-black font-space text-emerald-300`}>
+          {displayValue}
+        </div>
+        {!small && (
+          <span className="text-[8px] font-mono text-slate-400 uppercase tracking-widest mt-0.5">PERFORMANCE</span>
+        )}
+      </div>
+    </div>
+  );
+}
 
 export function SovereignTriptych({ dict }: { dict: any }) {
   const t = { sovereign: dict }; // wrap to maintain t.sovereign.* paths securely
@@ -71,11 +141,11 @@ export function SovereignTriptych({ dict }: { dict: any }) {
       icon: Zap,
       title: "Lightning Fast",
       hook: "Optimized Core Web Vitals",
-      body: "Don't lose customers to slow loading screens. We optimize speeds utilizing server-side rendering so that your pages load instantly.",
+      body: "Sub-second Edge delivery: Because your customers' attention is your most expensive resource. If your site takes over 1 second to load, you lose up to 40% of incoming social traffic.",
       features: [
         "100/100 Page Speed Index",
-        "Edge Cache Speeds",
-        "Low Bounce Metrics"
+        "Sub-second Edge-Cache Latency",
+        "Optimized Bounce Mitigation"
       ],
     },
     {
@@ -161,9 +231,9 @@ export function SovereignTriptych({ dict }: { dict: any }) {
                     setActiveTabMobile(isActive ? null : stage.key);
                     setActiveTab(stage.key); // keep desktop state synced just in case
                   }}
-                  className={`relative w-full text-left p-4 rounded-xl border transition-all cursor-pointer ${isActive
-                    ? "border-emerald-500/30 bg-white/[0.03]"
-                    : "border-white/5 bg-transparent"
+                  className={`relative w-full text-left p-4 rounded-xl transition-all cursor-pointer glass-card ${isActive
+                    ? "shadow-[0_0_25px_rgba(16,185,129,0.12)] z-10"
+                    : "opacity-70 hover:opacity-100 glass-card-hover"
                     }`}
                   layout
                 >
@@ -221,10 +291,11 @@ export function SovereignTriptych({ dict }: { dict: any }) {
                             </div>
                           )}
                           {stage.key === "speed" && (
-                            <div className="flex flex-col items-center gap-1 scale-90">
-                              <div className="px-3 py-2 rounded-xl border border-white/10 bg-black flex items-center gap-2">
-                                <div className="h-3 w-3 rounded-full bg-emerald-400 animate-pulse" />
-                                <span className="text-xs font-bold text-white">Next.js Edge Speed</span>
+                            <div className="flex flex-col items-center gap-2 scale-90">
+                              <AnimatedLighthouseScore value={100} duration={0.8} small />
+                              <div className="px-3 py-1.5 rounded-xl border border-white/10 bg-black flex items-center gap-2">
+                                <div className="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                                <span className="text-[10px] font-bold text-white">Next.js Edge Speed</span>
                               </div>
                             </div>
                           )}
@@ -354,9 +425,9 @@ export function SovereignTriptych({ dict }: { dict: any }) {
               <motion.button
                 key={stage.key}
                 onClick={() => setActiveTab(stage.key)}
-                className={`relative w-full text-left p-5 rounded-2xl border transition-all cursor-pointer ${isActive
-                  ? "clay-card border-emerald-500/40 shadow-[inset_0_1px_0_0_rgba(16,185,129,0.2),0_0_24px_rgba(16,185,129,0.12)]"
-                  : "border-white/5 hover:border-white/10 bg-transparent"
+                className={`relative w-full text-left p-5 rounded-2xl transition-all cursor-pointer glass-card ${isActive
+                  ? "shadow-[0_0_30px_rgba(16,185,129,0.12)] z-10"
+                  : "opacity-60 hover:opacity-100 glass-card-hover"
                   }`}
                 layout
               >
@@ -390,7 +461,7 @@ export function SovereignTriptych({ dict }: { dict: any }) {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.35, ease: "easeOut" }}
-              className="clay-card static md:sticky md:top-24 rounded-3xl border border-emerald-500/40 p-8 shadow-[inset_0_1px_0_0_rgba(16,185,129,0.2),0_0_30px_rgba(16,185,129,0.15)] flex flex-col justify-between overflow-hidden group min-h-[400px]"
+              className="glass-card static md:sticky md:top-24 rounded-3xl p-8 shadow-[0_0_40px_rgba(16,185,129,0.08)] flex flex-col justify-between overflow-hidden group min-h-[400px]"
             >
               <div className="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(circle_at_center,_rgba(16,185,129,0.4),_transparent_60%)]" />
 
@@ -415,7 +486,7 @@ export function SovereignTriptych({ dict }: { dict: any }) {
               </div>
 
               {/* Dynamic Visual Indicator at Bottom */}
-              <div className="relative mt-5 h-60 w-full overflow-hidden rounded-xl border border-white/5 bg-white/[0.02]">
+              <div className="relative mt-5 h-60 w-full overflow-hidden rounded-xl glass-card">
                 <div className="absolute inset-0 flex items-center justify-center p-2">
                   {activeTab === "design" && (
                     <div className="flex flex-col items-center gap-2">
@@ -425,19 +496,51 @@ export function SovereignTriptych({ dict }: { dict: any }) {
                     </div>
                   )}
                   {activeTab === "speed" && (
-                    <div className="flex flex-col items-center gap-2">
+                    <div className="flex flex-col items-center gap-4">
+                      <AnimatedLighthouseScore value={100} duration={0.8} />
                       <div className="px-5 py-3 rounded-2xl border border-white/10 bg-[#0a0a0a] flex items-center gap-4">
                         <div className="h-4 w-4 rounded-full bg-emerald-400 animate-pulse" />
                         <span className="text-sm font-bold text-white">Next.js Edge Speed</span>
                       </div>
-                      <div className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 mt-2">✅ 100/100 Core Web Vitals</div>
+                      <div className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 mt-2">✅ Core Web Vitals Passed</div>
                     </div>
                   )}
                   {activeTab === "bridge" && (
-                    <div className="flex flex-col items-center gap-2">
-                      <div className="text-3xl font-black font-space text-emerald-300">100/100</div>
-                      <div className="text-[10px] font-mono uppercase tracking-widest text-slate-400">Next.js Edge Speed</div>
-                      <div className="h-1 w-44 rounded-full bg-emerald-400" />
+                    <div className="w-full h-full flex items-center justify-center p-2">
+                      <div className="relative w-full max-w-[340px] flex justify-between items-center">
+                        <div className="flex flex-col gap-4 z-10">
+                          {["Instagram", "TikTok", "Facebook"].map((item, i) => (
+                            <motion.div
+                              key={item}
+                              className="px-3 py-1.5 rounded-xl border border-white/5 bg-white/5 flex items-center gap-2 text-[10px] font-bold text-slate-300"
+                            >
+                              <div className="h-1.5 w-1.5 rounded-full bg-blue-400" />
+                              {item}
+                            </motion.div>
+                          ))}
+                        </div>
+                        <div className="absolute inset-0">
+                          <svg className="w-full h-full" viewBox="0 0 340 180">
+                            {[40, 75, 110].map((y, i) => (
+                              <motion.path
+                                key={i}
+                                d={`M 110 ${y} Q 170 ${y} 210 90`}
+                                fill="transparent"
+                                className="stroke-emerald-400/20"
+                                strokeWidth="1.5"
+                                strokeDasharray="4 4"
+                              />
+                            ))}
+                          </svg>
+                        </div>
+                        <motion.div
+                          className="glass-card flex flex-col items-center justify-center p-3 rounded-2xl border border-emerald-400/20 w-[110px] h-[110px] z-10"
+                        >
+                          <Lock className="h-6 w-6 text-emerald-400 mb-1" />
+                          <div className="text-[10px] font-bold text-white">Your Platform</div>
+                          <div className="text-[8px] font-mono text-emerald-300 mt-1 uppercase">100% Owned</div>
+                        </motion.div>
+                      </div>
                     </div>
                   )}
                   {activeTab === "intercept" && (

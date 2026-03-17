@@ -31,7 +31,7 @@ export const SOVEREIGN_PACKAGES: SovereignPackage[] = [
   },
   {
     id: "growth",
-    name: "The Digital Storefront",
+    name: "Digital Storefront",
     category: "website",
     initFee: "₾3,500",
     mrr: "₾299/mo maintenance",
@@ -48,12 +48,12 @@ export const SOVEREIGN_PACKAGES: SovereignPackage[] = [
   },
   {
     id: "scale",
-    name: "The Autonomous Business",
+    name: "Autonomous Business",
     category: "website",
     initFee: "₾7,500+",
     mrr: "₾499/mo maintenance",
     bullets: [
-      "Everything included in The Digital Storefront.",
+      "Everything included in Digital Storefront.",
       "A custom-trained AI Sales Assistant embedded directly into your business flow to intercept 3 AM inquiries.",
       "Full WhatsApp & Telegram bot integration capable of holding tri-lingual sales conversations 24/7.",
       "A tailored Booking, Reservation, or CRM synchronization engine for clinics, salons, and consultants.",

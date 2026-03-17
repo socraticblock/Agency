@@ -67,9 +67,25 @@ export function KineticHero({ locale }: { locale: Locale }) {
       onMouseLeave={handleSectionLeave}
       className="relative flex min-h-[70vh] flex-col items-center justify-center overflow-hidden px-4 py-20 text-center"
     >
-      {/* Deep blue ambient glow behind hero */}
-      <div className="pointer-events-none absolute inset-0 -z-20" style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(30,64,175,0.15) 0%, rgba(6,12,34,0.5) 50%, #050505 100%)' }} />
-      <div className="pointer-events-none absolute inset-0 -z-20 bg-gradient-to-b from-background via-transparent to-background" />
+      {/* Mesh Gradient Layer (Deep Emerald to Slate) to create Spatial Depth */}
+      <div className="pointer-events-none absolute inset-0 -z-20 overflow-hidden">
+        <div 
+          className="absolute -top-1/4 -left-1/4 w-[800px] h-[800px] bg-emerald-900/30 rounded-full blur-[140px] animate-pulse" 
+          style={{ animationDuration: '8s' }} 
+        />
+        <div 
+          className="absolute -bottom-1/4 -right-1/4 w-[800px] h-[800px] bg-slate-800/40 rounded-full blur-[160px] animate-pulse delay-1000" 
+          style={{ animationDuration: '12s' }} 
+        />
+      </div>
+
+      {/* Noise Overlay absolute inset at opacity 0.03 */}
+      <div 
+        className="pointer-events-none absolute inset-0 z-0 opacity-[0.03] mix-blend-overlay" 
+        style={{ 
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")` 
+        }} 
+      />
 
       {/* Heavy bottom fade edge to blend transparent canvas down */}
       <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-background to-transparent z-10" />

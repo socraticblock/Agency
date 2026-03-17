@@ -123,12 +123,12 @@ export const en = {
     
     // Stage 1: Absolute Ownership (The Bridge)
     bridgeTitle: "Absolute Ownership",
-    bridgeBody: "Stop building your house on someone else's land. We give you a permanent address on the internet that loads in under 1 second. No algorithms deciding if your customers see your posts. When a client clicks your link, they encounter a highly polished, distraction-free environment solely focused on your brand.",
+    bridgeBody: "Transition from a 'Profile' to a 'Platform.' We migrate your brand equity from rented land to a permanent, owned digital asset. Stop building your business on third-party channels that can limit access to your audience overnight. We provide total autonomy, absolute control, and data independence.",
     bridgeHook: "Graduating from DMs to a Dedicated Workspace.",
     bridgeFeatures: [
-      "Zero Loading Delays (Next.js Edge)",
-      "Distraction-Free UX (100% Brand Focus)",
-      "Bypass the Algorithms (Direct Traffic)"
+      "Data and Customer Independence",
+      "Immunity from Algorithm Shifts",
+      "Total Digital Autonomy"
     ],
 
     // Stage 2: Frictionless Commerce (The Intercept)
@@ -276,7 +276,7 @@ export const en = {
     ],
   },
   pointOneStack: {
-    tagline: "The foundation of your growth.",
+    tagline: "The technology behind your website.",
     label: "How we build it",
     items: [
       { name: "Next.js 16 & React 19", headline: "Instant and seamless.", sublabel: "The same technology used by Netflix and Notion.", body: "We build experiences so fast and smooth that your customers enjoy every moment of interacting with your brand." },
