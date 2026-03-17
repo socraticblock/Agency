@@ -2,6 +2,7 @@ import "./globals.css";
 import { inter, notoGeorgian, spaceGrotesk } from "@/fonts";
 import { LenisProvider } from "@/components/providers/LenisProvider";
 import { CustomCursor } from "@/components/ui/CustomCursor";
+import FloatingStrategist from "@/components/ui/FloatingStrategist";
 
 export default function RootLayout({
   children,
@@ -16,6 +17,7 @@ export default function RootLayout({
           <div className="relative z-10">
             <LenisProvider>{children}</LenisProvider>
             <CustomCursor />
+            <FloatingStrategist />
           </div>
         </div>
       </body>
