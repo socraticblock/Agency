@@ -30,30 +30,32 @@ Interaction Protocol:
 
 const HISTORY_FILE = path.join(process.cwd(), "telegram_history.json");
 
-function getLocalHistory(chatId: number) {
-  if (!fs.existsSync(HISTORY_FILE)) return [];
+interface ChatState {
+  step: number;
+  answers: string[];
+}
+
+function getLocalState(chatId: number): ChatState {
+  if (!fs.existsSync(HISTORY_FILE)) return { step: 0, answers: [] };
   try {
     const data = fs.readFileSync(HISTORY_FILE, "utf-8");
     const historyJson = JSON.parse(data);
-    return historyJson[chatId] || [];
+    return historyJson[chatId] || { step: 0, answers: [] };
   } catch (e) {
-    return [];
+    return { step: 0, answers: [] };
   }
 }
 
-function saveLocalHistory(chatId: number, userText: string, modelText: string) {
-  let data: Record<number, any[]> = {};
+function saveLocalState(chatId: number, state: ChatState) {
+  let data: Record<number, ChatState> = {};
   try {
     if (fs.existsSync(HISTORY_FILE)) {
       data = JSON.parse(fs.readFileSync(HISTORY_FILE, "utf-8"));
     }
-    if (!data[chatId]) data[chatId] = [];
-    data[chatId].push({ role: "user", parts: [{ text: userText }] });
-    data[chatId].push({ role: "model", parts: [{ text: modelText }] });
-    // Keep all messages for memory
+    data[chatId] = state;
     fs.writeFileSync(HISTORY_FILE, JSON.stringify(data, null, 2));
   } catch (e) {
-    console.error("Failed to save history", e);
+    console.error("Failed to save state", e);
   }
 }
 
@@ -84,6 +86,17 @@ export async function POST(request: Request) {
     const chatId = message.chat.id;
     const text = message.text || "";
 
+    const QUESTIONS = [
+      "What is your name?",
+      "What platforms do you currently use for your business? (Instagram, Facebook, YouTube, TikTok, etc.)",
+      "Do you currently have your own website, or is your business hosted entirely on these platforms?",
+      "How are your orders or payments currently processed? (Manual DMs, bank transfers, or automated?)",
+      "On a scale of 1-10, how much of your daily energy is consumed by manual admin or repetitive questions?",
+      "Which path is your priority right now?\n\n- Authority: Looking elite to build trust and charge more.\n\n- Sales: Capturing every lead and automating the checkout.\n\n- Freedom: Removing yourself from the manual workflow so the business runs while you sleep.",
+      "Are there any thoughts you'd like to share considering your own website?",
+      "Can I share this summary with our Lead Architect? And do you prefer to continue via WhatsApp, Telegram, or Email?"
+    ];
+
     // Command Handler
     if (text === "/start") {
       try {
@@ -94,11 +107,7 @@ export async function POST(request: Request) {
         }
       } catch (e) {}
 
-      const welcome = `🚀 Welcome to the Kvali Strategist Network.
-
-I am here to analyze your digital position and coordinate where your conversion streams suffer from the "Midnight Bleed."
-
-What does your operation do, and where is it currently hosted on the internet?`;
+      const welcome = `🚀 Welcome to the Kvali Strategist Network.\n\nLet's get started. ${QUESTIONS[0]}`;
       await sendTelegramMessage(chatId, welcome);
       return NextResponse.json({ ok: true });
     }
@@ -109,36 +118,63 @@ What does your operation do, and where is it currently hosted on the internet?`;
       return NextResponse.json({ ok: false });
     }
 
-    // AI Handshake
     const ai = new GoogleGenerativeAI(apiKey);
     const model = ai.getGenerativeModel({
       model: "gemini-2.5-flash",
-      systemInstruction: SYSTEM_INSTRUCTION,
-      generationConfig: {
-        maxOutputTokens: 1000, 
-        temperature: 0.7,
-      },
+      systemInstruction: "You are an elite sales consultant. Always validate the user brief and agreeable first without general chat buffers. DO NOT USE BOLDING (**).",
     });
 
-    // Load conversation history and start chat session
-    const history = getLocalHistory(chatId);
-    const chat = model.startChat({ history });
+    let state = getLocalState(chatId);
 
     try {
-      const result = await chat.sendMessage(text);
-      const response = await result.response;
-      const responseText = response.text();
+      if (state.step < QUESTIONS.length) {
+        state.answers.push(text);
+        state.step += 1;
+        saveLocalState(chatId, state);
 
-      await sendTelegramMessage(chatId, responseText);
-      saveLocalHistory(chatId, text, responseText);
+        if (state.step < QUESTIONS.length) {
+          // Normal Validation + Append Next Q
+          const prompt = `Validate this response to the question "${QUESTIONS[state.step - 1]}": "${text}". 
+Generate exactly ONE agreeable, consultative sentence respecting their focus. No bolding (**). No AI fluff. 
+Then append EXACTLY this next question on a new line: "${QUESTIONS[state.step]}"`;
+
+          const result = await model.generateContent(prompt);
+          const responseText = result.response.text();
+
+          await sendTelegramMessage(chatId, responseText);
+        } else {
+          // Post-Sequence Logic (All questions answered)
+          const summaryPrompt = `Based on these user interview data layers:
+- Name: ${state.answers[0]}
+- Platforms: ${state.answers[1]}
+- Own Website: ${state.answers[2]}
+- Ops Friction: ${state.answers[3]}
+- Task Friction (1-10): ${state.answers[4]}
+- Top Path Priority: ${state.answers[5]}
+- Add-on Thoughts: ${state.answers[6]}
+- Preferred Contact: ${state.answers[7]}
+
+Acknowledge the handover for ${state.answers[7]}. Provide a concise 2-sentence summary recommending the best tier out of: Foundation (1,500₾), Storefront (3,500₾), or Autonomous (7,500₾). 
+NO bolding (**). NO AI fluff. Do not lecture, pitch smoothly. If WhatsApp chosen generate short contact note placeholder.`;
+
+          const result = await model.generateContent(summaryPrompt);
+          const responseText = result.response.text();
+
+          // Standardized Payload string for logging
+          const payload = `[${state.answers[0]}] | Priority: [${state.answers[5].split('\n')[0]}] | Pain: [${state.answers[4]}/10] | Platforms: [${state.answers[1]}] | Contact: [${state.answers[7]}]`;
+          console.log("LEAD PAYLOAD:", payload);
+
+          const finalMessage = `${responseText}\n\nThe Architect will review your data and respond within 24 hours.`;
+          await sendTelegramMessage(chatId, finalMessage);
+        }
+      }
+
+      return NextResponse.json({ ok: true });
     } catch (err: any) {
-      console.error("Gemini Execution Error:", err);
-      // Report the error back to Telegram so we can debug exactly what failed
-      await sendTelegramMessage(chatId, `⚠️ Strategist error: ${err.message || 'Unknown errors occurred'}`);
-      throw err; // propagates outwards to return ok:false
+      console.error("Gemini Error during sequence:", err);
+      await sendTelegramMessage(chatId, `⚠️ Strategist error: ${err.message}`);
+      return NextResponse.json({ ok: false });
     }
-
-    return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("Telegram Webhook Error:", error);
     return NextResponse.json({ ok: false });
