@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { getMessages } from "@/lib/i18n";
@@ -7,6 +8,11 @@ import type { Locale } from "@/lib/i18n";
 
 export function GlobalFooter({ locale }: { locale: Locale }) {
   const t = getMessages(locale);
+  const [deployedDate, setDeployedDate] = useState("");
+
+  useEffect(() => {
+    setDeployedDate(new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }));
+  }, []);
   const ctaX = useMotionValue(0);
   const ctaY = useMotionValue(0);
   const springX = useSpring(ctaX, { stiffness: 300, damping: 26 });
@@ -61,6 +67,26 @@ export function GlobalFooter({ locale }: { locale: Locale }) {
           </p>
         )}
       </motion.div>
+      {/* Performance Widget */}
+      <div className="absolute bottom-6 left-0 right-0 border-t border-white/5 pt-4 px-4 w-full">
+        <div className="grid grid-cols-3 max-w-4xl mx-auto text-[10px] font-mono text-slate-500/80">
+          <div className="flex items-center justify-center gap-1.5 border-r border-white/5">
+            <span className="h-1 w-1 rounded-full bg-emerald-400 animate-pulse" />
+            <span>Network: Vercel Edge (Tbilisi)</span>
+          </div>
+          <div className="flex items-center justify-center border-r border-white/5">
+            <span>Stack: Next.js 19 / Tailwind 4</span>
+          </div>
+          <div className="flex items-center justify-center gap-1">
+            <a href="https://t.me/socraticblock" target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:text-emerald-300 transition-colors uppercase tracking-wider">
+              t.me/socraticblock
+            </a>
+          </div>
+        </div>
+        <p className="mt-2 text-center text-[7px] font-mono text-slate-500/30 uppercase tracking-widest gap-1 flex items-center justify-center">
+          Infrastructure Status: <span className="text-emerald-500/50">Active</span> <span className="text-slate-500/20">|</span> Last Deployment: <span className="text-slate-500/60">{deployedDate}</span>
+        </p>
+      </div>
     </footer>
   );
 }
