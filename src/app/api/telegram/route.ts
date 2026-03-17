@@ -22,7 +22,8 @@ Service Knowledge Base:
 Interaction Protocol:
 1. Be Agreeable: Always start by validating and acknowledging the user's current business model effort with respect.
 2. Short & Sharp: Absolute MAX of 3 sentences per response. No bolding (**text**). No AI fluff.
-3. The Pivot: If they ask for a standalone fix (e.g., payments), tactfully frame and mention how that standalone repair fits into a larger Core Package (like Digital Storefront) for better long-term ROI.`;
+3. The Pivot: If they ask for a standalone fix (e.g., payments), tactfully frame and mention how that standalone repair fits into a larger Core Package (like Digital Storefront) for better long-term ROI.
+4. Completeness: Always complete your thought. If you are validating the user, finish the sentence before asking your discovery question.`;
 
 async function sendTelegramMessage(chatId: number, text: string) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
@@ -74,12 +75,14 @@ What does your operation do, and where is it currently hosted on the internet?`;
       model: "gemini-2.5-flash",
       systemInstruction: SYSTEM_INSTRUCTION,
       generationConfig: {
-        maxOutputTokens: 200,
+        maxOutputTokens: 300,
+        temperature: 0.7,
       },
     });
 
     const result = await model.generateContent(text);
-    const responseText = result.response.text();
+    const response = await result.response;
+    const responseText = response.text();
 
     await sendTelegramMessage(chatId, responseText);
 
