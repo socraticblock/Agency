@@ -77,7 +77,7 @@ export default function Configurator() {
     setDiscoveryStep,
     isEditing,
     setIsEditing,
-    resetConfig // Assuming this new function exists in useConfigurator
+    clearConfiguration,
   } = useConfigurator();
 
   // New handlers based on the provided snippet
@@ -236,7 +236,7 @@ export default function Configurator() {
         <ConfigModal
           isModalOpen={isModalOpen} // Changed from 'isOpen' to 'isModalOpen' to match existing prop
           setIsModalOpen={() => setIsModalOpen(false)} // Changed from 'onClose' to 'setIsModalOpen'
-          onReset={resetConfig}
+          onReset={clearConfiguration}
           activeFoundation={activeFoundation} // Added back based on original ConfigModal props
           selectedModules={selectedModules} // Added back
           formatPrice={formatPrice} // Added back
