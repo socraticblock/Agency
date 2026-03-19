@@ -19,3 +19,8 @@ alwaysApply: false
 ## 3. WebGPU & VRAM Management
 - When scaling beyond 10k entities, offload matrix calculations to WebGPU Compute Shaders (WGSL).
 - Every Geometry, Material, and Texture MUST be explicitly disposed of in a `useEffect` cleanup.
+
+## 4. Frame Budgeting & Throttling
+- **Sensory Awareness:** Use `IntersectionObserver` to freeze or throttle canvas tic loop timers to strictly `0` cycles when the element scrolled off-viewport to preserve hardware context buffers.
+- **Battery Optimization:** Limit heavy animation ticking to max `60fps` buffers on dynamic mobile viewports to prevent triggering small-core thermal throttling.
+

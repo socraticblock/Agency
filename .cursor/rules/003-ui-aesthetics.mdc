@@ -22,3 +22,8 @@ Adhere to bleeding-edge browser APIs and modern design pillars:
 - **Scroll-Driven Animations:** Use CSS `animation-timeline: scroll()` and `view()` instead of JS-heavy scroll listeners.
 - **Anti-Grid / Organic Layouts:** Introduce visual tension via asymmetrical layouts, structural whitespace, and CSS container queries (`@container`). Break the 12-column conformity.
 - **Carousel Component UX overlays:** All Horizontal snap-scroller templates (`overflow-x-auto`) must include floating absolute overlays supporting Clickable Navigate Arrow triggers (`ChevronLeft`, `ChevronRight`) and static Pagination Dots so desktop & mobile affordances stand 100% crystal clear.
+
+## 4. Translation Resilience (i18n)
+- **Bounding Dimensions:** Flexible components must use scalable grid anchors and `max-content` widths rather than static sizing (`w-64`, `w-[400px]`) that breaks structure under translation-based text node expansions.
+- **Scaling Buffers:** Ensure text overlays preserve aesthetic framing and do not clip outer border bounds on heavy character buffers.
+

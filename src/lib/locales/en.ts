@@ -111,19 +111,19 @@ export const en = {
   hero: {
     statusBadge: "A permanent, professional home for your brand.",
     headline: "Graduate from DMs to a business that runs itself.",
-    subhead:
-      "You've built an amazing audience. Now, give them a beautiful, lightning-fast place to buy from you—day or night, without you having to answer every message manually.",
-    cta: "See what we can build for you",
+    h2: "You’ve built an amazing audience. Now, let’s build the digital headquarters you deserve.",
+    subhead: "Most founders are the bottleneck of their own growth. We architect the systems that handle your operations, so you can scale a platform that runs without you.",
+    cta: "Build Your Headquarters →",
     ctaSecondary: "Chat on WhatsApp",
   },
   sovereign: {
     tagline: "Build your owned space.",
     triptychLabel: "THE KVALI FRAMEWORK",
     triptychSubheading: "Social media is incredible for getting discovered. A dedicated digital foundation is where anonymous traffic becomes a sustainable business.",
-    
+
     // Stage 1: Absolute Ownership (The Bridge)
     bridgeTitle: "Absolute Ownership",
-    bridgeBody: "Transition from a 'Profile' to a 'Platform.' We migrate your brand equity from rented land to a permanent, owned digital asset. Stop building your business on third-party channels that can limit access to your audience overnight. We provide total autonomy, absolute control, and data independence.",
+    bridgeBody: "Transition from a 'Profile' to a 'Platform.' We migrate your brand equity from rented land to a permanent, owned digital asset. Most creators are building their business on third-party channels that can limit access to their audience overnight. You are here to build a permanent, owned asset.",
     bridgeHook: "Graduating from DMs to a Dedicated Workspace.",
     bridgeFeatures: [
       "Data and Customer Independence",
@@ -133,17 +133,18 @@ export const en = {
 
     // Stage 2: Frictionless Commerce (The Intercept)
     interceptTitle: "Frictionless Commerce",
-    interceptBody: "Remove the delay between 'I want this' and 'I bought this'. Instead of forcing buyers to copy and paste IBAN numbers in your DMs, we give them a 2-click, secure checkout experience using TBC or Bank of Georgia. Speaks Georgian, English, and Russian. Zero friction.",
-    interceptHook: "Graduating from manual bank transfers to automated local checkouts.",
+    interceptBody: "Remove the delay between 'I want this' and 'I bought this'. While most are still forcing buyers to copy and paste IBAN numbers in DMs, you can choose to deploy a 2-click, secure checkout experience using TBC or Bank of Georgia. Speaks Georgian, English, and Russian. Zero friction.",
+    interceptHook: "While most are still stuck in manual bank transfers and banking bureaucracy, you can choose to deploy a professional checkout. Through our partnership with specialized lawyers, we can even assist in the legal activation of your TBC or BoG merchant status.",
     interceptFeatures: [
       "Native TBC/BoG Payment Gateways",
       "Instant Tri-Lingual Checkout UI",
-      "Automated Booking & confirmation"
+      "Automated Booking & confirmation",
+      "Optional Legal-Assisted Merchant Onboarding"
     ],
 
     // Stage 3: Scale Without Burnout (The Vault)
     vaultTitle: "Scale Without Burnout",
-    vaultBody: "You only have 24 hours in a day. We build a personalized, polite AI Agent trained exclusively on your prices, answering styles, and inventory. Connected straight to your WhatsApp, it fields repetitive questions so you can focus on building your craft.",
+    vaultBody: "Most founders are capped by their 24-hour day. You can choose to deploy a personalized, polite AI Agent trained exclusively on your brand to handle the repetitive work while you focus on the vision.",
     vaultHook: "Graduating from being the bottleneck to being the strategist.",
     vaultFeatures: [
       "Personalized 24/7 AI Sales Assistant",
@@ -429,7 +430,7 @@ export const en = {
       {
         title: '"I already have a website from Wix / Squarespace"',
         reality: "Template builders are a great starting point, but they often limit your control over speed, SEO, and the checkout experience as you grow.",
-        solution: "We build a bespoke, high-performance home for your brand that is tailored exactly to your customers' needs, without the constraints of a template.",
+        solution: "We build a custom, high-performance home for your brand that is tailored exactly to your customers' needs, without the constraints of a template.",
       },
       {
         title: '"Chatbots feel fake and annoying"',

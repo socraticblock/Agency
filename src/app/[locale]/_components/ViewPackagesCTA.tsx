@@ -1,16 +1,23 @@
 "use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 
 export function ViewPackagesCTA() {
+  const pathname = usePathname();
+  const locale = pathname?.startsWith("/en") ? "en" : "ka";
 
   return (
     <div className="flex flex-col items-center justify-center text-center gap-5 max-w-4xl w-full px-6 py-8 mx-auto">
       <div className="flex items-center gap-3 shrink-0">
-        <button className="bg-white text-black font-space font-bold px-6 py-2.5 rounded-sm flex items-center gap-2 text-xs sm:text-sm tracking-wider hover:bg-slate-100 transition-all shadow-lg group">
-          VIEW PACKAGES
+        <Link
+          href={`/${locale}/architect`}
+          className="bg-white text-black font-space font-bold px-6 py-2.5 rounded-sm flex items-center gap-2 text-xs sm:text-sm tracking-wider hover:bg-emerald-400 transition-all shadow-lg group"
+        >
+          BUILD YOUR INFRASTRUCTURE
           <ArrowRight className="h-4 w-4 stroke-[2.5] transition-transform group-hover:translate-x-1" />
-        </button>
+        </Link>
       </div>
 
       <div className="max-w-md">

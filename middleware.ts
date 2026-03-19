@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const LOCALES = ["ka", "en"] as const;
-const DEFAULT_LOCALE = "ka";
+const LOCALES = ["en"] as const;
+const DEFAULT_LOCALE = "en";
 
 function getLocale(pathname: string): string | null {
   const segment = pathname.split("/")[1];
@@ -17,6 +17,13 @@ export function middleware(request: NextRequest) {
     // Bypass API routes from being rewritten/redirected
     if (pathname.startsWith("/api/")) {
       return NextResponse.next();
+    }
+
+    // Redirect legacy /ka routes to /en
+    if (pathname.startsWith("/ka")) {
+      const url = new URL(request.url);
+      url.pathname = pathname.replace("/ka", "/en");
+      return NextResponse.redirect(url, 308);
     }
 
     // Root: redirect to default locale

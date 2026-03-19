@@ -135,11 +135,21 @@ export function KineticHero({ locale }: { locale: Locale }) {
             </motion.span>
           ))}
         </motion.div>
+        
+        <motion.h2
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className="mt-2 max-w-xl text-lg font-bold text-emerald-400 font-space leading-tight sm:text-xl"
+        >
+          {t.hero.h2}
+        </motion.h2>
+
         <motion.p
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.5 }}
-          className="mt-6 max-w-2xl text-lg text-white/70 sm:text-xl"
+          className="mt-4 max-w-2xl text-base text-white/90 sm:text-lg"
         >
           {t.hero.subhead}
         </motion.p>
@@ -151,13 +161,15 @@ export function KineticHero({ locale }: { locale: Locale }) {
         >
           <MagneticButton
             as="a"
-            href="#reality-check"
-            magneticStrength={20}
-            textStrength={10}
-            className="group relative overflow-hidden rounded-full border border-emerald-400/30 bg-emerald-500/10 px-8 py-3.5 text-sm font-semibold text-emerald-100 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2),0_0_40px_rgba(16,185,129,0.15)] transition-colors hover:bg-emerald-500/20 hover:border-emerald-400/60 hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2),0_0_60px_rgba(16,185,129,0.3)]"
+            href={`/${locale}/architect`}
+            magneticStrength={24}
+            textStrength={12}
+            className="group relative overflow-hidden rounded-full border border-emerald-400/40 bg-emerald-500/10 backdrop-blur-xl text-emerald-50 px-10 py-4.5 text-base font-black shadow-[0_0_60px_rgba(16,185,129,0.25)] transition-all duration-300 hover:scale-[1.03] hover:bg-emerald-500/20 hover:border-emerald-400/60 flex items-center justify-center"
           >
             <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.4),_transparent_60%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-            <span className="relative z-10 block">{t.hero.cta}</span>
+            <span className="relative z-10 block flex items-center gap-1.5 text-white font-black">
+              {t.hero.cta}
+            </span>
           </MagneticButton>
         </motion.div>
       </motion.div>

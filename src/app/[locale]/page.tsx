@@ -4,7 +4,6 @@ import { TechStackSection } from "./_components/TechStackSection";
 import { GlobalFooter } from "./_components/GlobalFooter";
 import { LeadGenHub } from "./_components/lead-gen/LeadGenHub";
 import { SovereignTriptych } from "./_components/SovereignTriptych";
-import { PackageGrid } from "./_components/PackageGrid";
 import { SovereignFaq } from "./_components/SovereignFaq";
 import { ScrollReveal } from "./_components/ScrollReveal";
 import { TrustMetrics } from "./_components/TrustMetrics";
@@ -21,7 +20,7 @@ export default async function Home({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const lang = (locale === "en" ? "en" : "ka") as Locale; // safe: default "ka" for empty/undefined
+  const lang = (locale === "en" ? "en" : "ka") as Locale;
   const t = getMessages(lang);
 
   return (
@@ -29,7 +28,6 @@ export default async function Home({
       <Navbar locale={lang} />
       <main>
         <KineticHero locale={lang} />
-        <ViewPackagesCTA />
         <ScrollingBanner />
         <ScrollReveal>
           <SovereignTriptych dict={t.sovereign} />
@@ -43,9 +41,7 @@ export default async function Home({
         <ScrollReveal className="pb-20">
           <TrustMetrics />
         </ScrollReveal>
-        <ScrollReveal>
-          <PackageGrid locale={lang} />
-        </ScrollReveal>
+
         <ScrollReveal>
           <SovereignFaq locale={lang} />
         </ScrollReveal>
@@ -57,3 +53,4 @@ export default async function Home({
     </>
   );
 }
+

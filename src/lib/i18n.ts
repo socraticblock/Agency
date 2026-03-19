@@ -3,8 +3,8 @@ import { en } from "./locales/en";
 
 export type Locale = "ka" | "en";
 
-export const locales: Locale[] = ["ka", "en"];
-export const defaultLocale: Locale = "ka";
+export const locales: Locale[] = ["en"];
+export const defaultLocale: Locale = "en";
 
 // We use 'any' here as a bridge to ensure the build passes even 
 // if ka and en are temporarily out of sync during development.

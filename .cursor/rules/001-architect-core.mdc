@@ -22,3 +22,8 @@ Before executing a code change, you must:
 - **Modern State:** Use React 19's `use`, `useOptimistic`, and `useActionState`. DO NOT use `useEffect` for data fetching.
 - **Client Isolation:** Heavy physics, WebGL, and high-frequency DOM manipulation must be strictly `"use client"`.
 - **SSR Hydration Safety:** Do not nest Framer Motion `<motion.div>` dynamic `initial` animations loaded inside nested layouts directly beneath parent component animations like `<ScrollReveal>`, to eliminate SSR Hydration Divergence Exceptions (Digest triggers).
+
+## 4. Deterministic Server Actions
+- **Response Shape:** All Server Actions must conform to a predictable structure: `{ success: boolean; data?: T; error?: { message: string; code: string } }`.
+- **Inference Stability:** Ensure React 19 standard hooks like `useActionState` receive consistent type structures so client handlers don't crash from dynamic object payloads during state transitions.
+

@@ -15,3 +15,8 @@ When a major architectural decision, non-trivial fix, or new convention is succe
    - **Context:** [Brief setup]
    - **Decision:** [The technical choice made]
    - **Impact:** [How it affects the system/performance/tokens]
+
+## 2. The Archive Phase (Overload Mitigation)
+- **Bloat Threshold:** When `docs/MEMORY.md` triggers an index rate exceeding **20 Detailed Observation blocks**, it triggers offloads to avoid reading excessive tokens into the main loop buffer.
+- **Offload Procedure:** Migrate historical entries into `docs/memory/[id_spread].md` markdown archives. Retain only the singular bullet points on the main file to act strictly for high-fidelity lookup pointers.
+
