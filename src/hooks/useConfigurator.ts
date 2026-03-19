@@ -11,7 +11,7 @@ const configSchema = z.object({
   foundation: z.string().nullable().optional(),
   selectedModules: z.array(z.string()).optional(),
   shieldTier: z.number().min(0).max(3).optional(),
-  answers: z.record(z.any()).optional(),
+  answers: z.record(z.string(), z.any()).optional(),
   discoveryStep: z.number().optional(),
 });
 

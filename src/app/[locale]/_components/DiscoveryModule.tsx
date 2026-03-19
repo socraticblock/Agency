@@ -176,12 +176,12 @@ export default function DiscoveryModule({ foundation, selectedModules, shieldTie
   const QUESTIONS = getQuestions();
 
   const handleSelect = (qId: number, value: any) => {
-    setAnswers(prev => ({ ...prev, [qId]: value }));
+    setAnswers((prev: any) => ({ ...prev, [qId]: value }));
     const optionsWithSingleSelect = ["cards", "tabs", "toggle", "tags"];
     if (optionsWithSingleSelect.includes(QUESTIONS[step].type)) {
       if (step < QUESTIONS.length - 1) {
           setTimeout(() => {
-              setStep(prev => prev + 1);
+              setStep((prev: any) => prev + 1);
               const nextEl = document.getElementById(`question-${step + 2}`);
               if (nextEl) nextEl.scrollIntoView({ behavior: "smooth", block: "center" });
           }, 400);
@@ -206,7 +206,6 @@ export default function DiscoveryModule({ foundation, selectedModules, shieldTie
   return (
     <div className="flex-1 w-full max-w-xl mx-auto py-10 pb-[60vh]">
       <AnimatePresence mode="wait">
-        {!showEmail ? (
           <m.div className="space-y-40">
             {QUESTIONS.map((q, idx) => {
               const isActive = step === idx;
@@ -232,7 +231,7 @@ export default function DiscoveryModule({ foundation, selectedModules, shieldTie
                   <div className="w-full mt-4 flex justify-center">
                     {q.type === "cards" && (
                       <div className="grid grid-cols-3 gap-2 w-full">
-                        {q.options?.map((opt) => (
+                        {q.options?.map((opt: any) => (
                           <button
                             key={opt.value}
                             onClick={() => handleSelect(q.id, opt.value)}
@@ -256,7 +255,7 @@ export default function DiscoveryModule({ foundation, selectedModules, shieldTie
                         <div className="flex items-center gap-2 bg-white/5 p-1.5 rounded-xl border border-white/10">
                           <input
                             type="color"
-                            onChange={(e) => setAnswers(prev => ({ ...prev, [q.id]: e.target.value }))}
+                            onChange={(e) => setAnswers((prev: any) => ({ ...prev, [q.id]: e.target.value }))}
                             value={answers[q.id] || "#10b981"}
                             className="h-8 w-8 cursor-pointer rounded-md bg-transparent border-0"
                           />
@@ -276,7 +275,7 @@ export default function DiscoveryModule({ foundation, selectedModules, shieldTie
                               onChange={(e) => {
                                 const current = [...(answers[q.id] || ["#10b981", "#10b981", "#10b981"])];
                                 current[i] = e.target.value;
-                                setAnswers(prev => ({ ...prev, [q.id]: current }));
+                                setAnswers((prev: any) => ({ ...prev, [q.id]: current }));
                               }}
                               className="h-12 w-12 cursor-pointer rounded-full bg-transparent border-2 border-white/20 hover:border-emerald-400 transition-all"
                             />
@@ -292,7 +291,7 @@ export default function DiscoveryModule({ foundation, selectedModules, shieldTie
                           type="text"
                           placeholder={q.placeholder}
                           value={answers[q.id] || ""}
-                          onChange={(e) => setAnswers(prev => ({ ...prev, [q.id]: e.target.value }))}
+                          onChange={(e) => setAnswers((prev: any) => ({ ...prev, [q.id]: e.target.value }))}
                           onKeyDown={(e) => {
                             if (e.key === "Enter" && answers[q.id]) {
                               if (idx === QUESTIONS.length - 1) {
@@ -322,7 +321,7 @@ export default function DiscoveryModule({ foundation, selectedModules, shieldTie
                         <textarea
                           placeholder={q.placeholder}
                           value={answers[q.id] || ""}
-                          onChange={(e) => setAnswers(prev => ({ ...prev, [q.id]: e.target.value }))}
+                          onChange={(e) => setAnswers((prev: any) => ({ ...prev, [q.id]: e.target.value }))}
                           onKeyDown={(e) => {
                             if (e.key === "Enter" && !e.shiftKey && answers[q.id]) {
                               e.preventDefault();
@@ -350,7 +349,7 @@ export default function DiscoveryModule({ foundation, selectedModules, shieldTie
 
                     {q.type === "tabs" && (
                       <div className="flex gap-1.5 bg-white/5 p-1 rounded-xl border border-white/5">
-                        {q.options?.map((opt) => (
+                        {q.options?.map((opt: any) => (
                           <button
                             key={opt}
                             onClick={() => handleSelect(q.id, opt)}
@@ -366,7 +365,7 @@ export default function DiscoveryModule({ foundation, selectedModules, shieldTie
 
                     {q.type === "toggle" && (
                       <div className="flex flex-col gap-1.5 w-full">
-                        {q.options?.map((opt) => (
+                        {q.options?.map((opt: any) => (
                           <button
                             key={opt}
                             onClick={() => handleSelect(q.id, opt)}
@@ -384,7 +383,7 @@ export default function DiscoveryModule({ foundation, selectedModules, shieldTie
 
                     {q.type === "tags" && (
                       <div className="flex flex-wrap gap-1.5 justify-center">
-                        {q.options?.map((opt) => (
+                        {q.options?.map((opt: any) => (
                           <button
                             key={opt}
                             onClick={() => handleSelect(q.id, opt)}
@@ -414,48 +413,6 @@ export default function DiscoveryModule({ foundation, selectedModules, shieldTie
               </m.button>
             )}
           </m.div>
-        ) : (
-          <m.div
-            key="email-sub"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="w-full max-w-sm text-center space-y-4 flex flex-col items-center glass-card p-5 rounded-2xl border border-emerald-400/20"
-          >
-            {!isSuccess ? (
-              <>
-                <div className="h-10 w-10 rounded-full bg-emerald-400 flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.3)]">
-                  <Check className="h-5 w-5 text-black stroke-[3]" />
-                </div>
-                <h3 className="text-xl font-space font-black text-white">BLUEPRINT READY</h3>
-                <p className="text-[11px] text-slate-400 max-w-xs">Provide a coordinated workspace email address to dispatch analytical breakdown payload Nodes.</p>
-                <div className="w-full space-y-1.5">
-                  <input
-                    type="email"
-                    placeholder="CEO@yourbrand.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-1.5 text-white text-center text-xs focus:outline-none focus:border-emerald-400"
-                  />
-                  <button
-                    onClick={handlesEmailSubmit}
-                    disabled={isSubmitting || !email}
-                    className="w-full bg-emerald-400 text-black font-space font-black text-xs py-2 rounded-xl uppercase hover:bg-emerald-300 transition-all cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {isSubmitting ? "Unlocking Details..." : "Unlock Blueprint →"}
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="h-10 w-10 rounded-full bg-emerald-400 flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.3)]">
-                  <Check className="h-5 w-5 text-black stroke-[3]" />
-                </div>
-                <h3 className="text-xl font-space font-black text-white">BLUEPRINT SENT</h3>
-                <p className="text-[11px] text-slate-400 max-w-xs">Check your inbox. Your coordinated workspace breakdown has been dispatched.</p>
-              </>
-            )}
-          </m.div>
-        )}
       </AnimatePresence>
     </div>
   );

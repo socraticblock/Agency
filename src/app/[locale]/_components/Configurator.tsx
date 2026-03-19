@@ -80,18 +80,7 @@ export default function Configurator() {
     clearConfiguration,
   } = useConfigurator();
 
-  // New handlers based on the provided snippet
-  const handleFoundationSelect = (id: string) => {
-    setFoundation(id);
-  };
 
-  const handleModuleToggle = (id: string) => {
-    toggleModule(id);
-  };
-
-  const handleShieldSelect = (tier: string) => {
-    setShieldTier(tier);
-  };
 
   if (!hydrated) {
     return (
@@ -225,18 +214,16 @@ export default function Configurator() {
 
         {/* Modal / Drawer Overlay */}
         <ConfigDrawer
-          isOpen={drawerItem !== null}
-          item={drawerItem}
-          onClose={() => setDrawerItem(null)}
-          setFoundation={setFoundation} // Added back based on original ConfigDrawer props
-          toggleModule={toggleModule} // Added back
-          selectedModules={selectedModules} // Added back
+          drawerItem={drawerItem}
+          setDrawerItem={setDrawerItem}
+          setFoundation={setFoundation}
+          toggleModule={toggleModule}
+          selectedModules={selectedModules}
         />
 
         <ConfigModal
           isModalOpen={isModalOpen} // Changed from 'isOpen' to 'isModalOpen' to match existing prop
           setIsModalOpen={() => setIsModalOpen(false)} // Changed from 'onClose' to 'setIsModalOpen'
-          onReset={clearConfiguration}
           activeFoundation={activeFoundation} // Added back based on original ConfigModal props
           selectedModules={selectedModules} // Added back
           formatPrice={formatPrice} // Added back
