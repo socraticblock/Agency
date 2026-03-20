@@ -37,6 +37,7 @@ export interface Foundation extends ServiceItem {
   concept: string;
   strategy: string;
   scope: string[];
+  recommendedModules?: string[];
 }
 
 export interface Module extends ServiceItem {
@@ -66,7 +67,8 @@ export const FOUNDATIONS: Foundation[] = [
       { title: 'Lead Capture Logic', desc: 'A smart, secure system that catches every lead and delivers them to your hands instantly.' }
     ],
     bestFor: ["Influencers with 1 Specific Offer", "Webinar & Event Hosts", "Real Estate 'Hero' Listings", "Digital Product Launchers"],
-    roiNote: "Designed to maximize your ad-spend ROI."
+    roiNote: "Designed to maximize your ad-spend ROI.",
+    recommendedModules: ['exit-pop', 'ga4-analytics', 'pro-copy', 'ab-testing']
   },
   {
     id: 'cms',
@@ -88,7 +90,8 @@ export const FOUNDATIONS: Foundation[] = [
       { title: 'Dynamic Blog Framework', desc: 'Automatically categorizes thought leadership for SEO dominance.' }
     ],
     bestFor: ["B2B Consultants & Coaches", "Creative & Marketing Agencies", "High-Ticket Service Providers", "Professional Personal Brands"],
-    roiNote: "Built for owner-independence and authority."
+    roiNote: "Built for owner-independence and authority.",
+    recommendedModules: ['calendar-sync', 'hubspot-sync', 'social-sync', 'local-seo']
   },
   {
     id: 'ecomm',
@@ -110,7 +113,8 @@ export const FOUNDATIONS: Foundation[] = [
       { title: 'Administrative Sales Dashboard', desc: 'Comprehensive backend view of revenue, orders, and shipping.' }
     ],
     bestFor: ["Niche Boutique Owners", "Merch & Apparel Creators", "Digital Asset Sellers", "Artisanal Exporters (Wine/Jewelry)"],
-    roiNote: "Automates overheads to scale sales flawlessly."
+    roiNote: "Automates overheads to scale sales flawlessly.",
+    recommendedModules: ['pay-gateway', 'fiscal-sync', 'photography', 'sms-hub']
   },
   {
     id: 'saas',
@@ -132,7 +136,8 @@ export const FOUNDATIONS: Foundation[] = [
       { title: 'Scalable Foundation', desc: 'Technical foundation built for thousands of concurrent users without slowing down.' }
     ],
     bestFor: ["Private Membership Communities", "EdTech & Online Academies", "Niche SaaS Founders", "Booking & Management Tools"],
-    roiNote: "Creates scalable MRR digital business asset flaws setups."
+    roiNote: "Creates scalable MRR digital business asset flaws setups.",
+    recommendedModules: ['recurring-bill', 'course-tracking', 'api-opt', 'tech-doc']
   },
   {
     id: 'upgrade',
@@ -170,7 +175,8 @@ export const FOUNDATIONS: Foundation[] = [
         reality: 'Legacy themes are often bloated with "Dead CSS" and unoptimized JS anchors bloating paint workloads.',
         cost: 'For every 0.1s delay stat loses 8.4% conversion revenue. Losing standard 10,000 GEL setups "burns" 800 GEL monthly workloads sets.'
       }
-    ]
+    ],
+    recommendedModules: ['compliance-audit', 'seo-audit', 'micro-animations']
   }
 ];
 

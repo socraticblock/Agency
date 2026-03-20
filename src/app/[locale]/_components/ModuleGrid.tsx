@@ -14,6 +14,7 @@ interface ModuleGridProps {
   setDrawerItem: (item: any) => void;
   hasGita: boolean;
   goToStep: (s: 1 | 2 | 3) => void;
+  activeFoundation?: any;
 }
 
 export default function ModuleGrid({
@@ -23,10 +24,14 @@ export default function ModuleGrid({
   formatPrice,
   setDrawerItem,
   hasGita,
-  goToStep
+  goToStep,
+  activeFoundation
 }: ModuleGridProps) {
   const [expandedModuleId, setExpandedModuleId] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+
+  const recommendedModuleIDs = activeFoundation?.recommendedModules || [];
+  const recommendedModules = MODULES.filter(m => recommendedModuleIDs.includes(m.id));
 
   return (
     <div className="flex flex-col gap-4">
@@ -51,10 +56,44 @@ export default function ModuleGrid({
         </div>
       </div>
 
+      {/* Foundation Synergy Curated Section */}
+      {recommendedModules.length > 0 && selectedCategory === "All" && (
+        <div className="flex flex-col gap-2 p-2 bg-amber-500/[0.03] border border-amber-500/15 rounded-xl">
+          <div className="flex items-center gap-1.5 px-0.5">
+            <div className="h-1.5 w-1.5 bg-amber-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
+            <span className="text-[9px] font-black font-space text-amber-500 uppercase tracking-wider">
+              [ FOUNDATION SYNERGY: CURATED FOR YOUR BUILD ]
+            </span>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            {recommendedModules.map((m) => {
+              const isSelected = selectedModules.includes(m.id);
+              const isExpanded = expandedModuleId === m.id;
+
+              return (
+                <ModuleItem
+                  key={`rec-${m.id}`}
+                  m={m}
+                  isSelected={isSelected}
+                  isExpanded={isExpanded}
+                  setExpanded={() => setExpandedModuleId(isExpanded ? null : m.id)}
+                  toggleModule={toggleModule}
+                  formatPrice={formatPrice}
+                  setDrawerItem={setDrawerItem}
+                  selectedModules={selectedModules}
+                  isRecommended={true}
+                />
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2 w-full">
           {MODULES
             .filter(m => m.id !== 'bank-rep')
+            .filter(m => !recommendedModuleIDs.includes(m.id) || selectedCategory !== "All") // Deduplicate in "All" view
             .filter(m => selectedCategory === "All" || m.category === selectedCategory)
             .map((m) => {
             const isSelected = selectedModules.includes(m.id);

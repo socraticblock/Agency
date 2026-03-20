@@ -131,6 +131,7 @@ export default function Configurator() {
                     setDrawerItem={setDrawerItem}
                     hasGita={hasGita}
                     goToStep={goToStep}
+                    activeFoundation={activeFoundation}
                   />
                 )}
 
