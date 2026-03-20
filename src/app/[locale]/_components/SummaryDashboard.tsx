@@ -161,11 +161,16 @@ export default function SummaryDashboard({
                    {answers[2] && (
                        <div className="flex items-center justify-between">
                            <span className="text-xs text-slate-400">Palette:</span>
-                           <div className="flex gap-1.5">
-                               {answers[2].map((c: string, i: number) => (
-                                   <div key={i} className="h-5 w-5 rounded-full border border-white/20 shadow-sm" style={{ backgroundColor: c }} />
-                               ))}
-                           </div>
+                            <div className="flex -space-x-1 h-5 rounded-lg overflow-hidden border border-white/10 shadow-[0_0_15px_rgba(16,185,129,0.15)]">
+                                {answers[2].map((c: string, i: number) => (
+                                    <div 
+                                        key={i} 
+                                        className="h-full w-5 first:rounded-l-md last:rounded-r-md" 
+                                        style={{ backgroundColor: c }} 
+                                        title={c}
+                                    />
+                                ))}
+                            </div>
                        </div>
                    )}
                    {answers[4] && (
@@ -228,7 +233,7 @@ export default function SummaryDashboard({
                    onClick={handleConfirm} 
                    className="px-6 py-2.5 bg-emerald-400 text-black font-space font-black text-sm uppercase rounded-xl shadow-[0_10px_25px_rgba(16,185,129,0.2)] hover:bg-emerald-300 hover:scale-[1.02] transition-all flex items-center gap-1.5 group cursor-pointer"
                 >
-                    Confirm & Submit Blueprint 
+                     Submit for Architectural Review
                     <ArrowRight className="h-4 w-4 stroke-[3] group-hover:translate-x-1 transition-transform" />
                 </button>
             </m.div>
@@ -275,7 +280,7 @@ export default function SummaryDashboard({
                 <div className="space-y-1.5">
                     <span className="text-sm font-black font-space text-white uppercase tracking-tight">BLUEPRINT RECEIVED</span>
                     <p className="text-[11px] text-slate-400 font-medium leading-relaxed">
-                        We are currently auditing your <span className="text-emerald-300 font-bold">{activeFoundation?.name || "Goals"}</span> against our <span className="text-emerald-300 font-bold">{answers[1] || "Selected"}</span> framework. Your deployment strategy will land in your inbox within 24 hours.
+                        A Human Lead Architect is manual auditing your <span className="text-emerald-300 font-bold">{activeFoundation?.name || "Goals"}</span> against our framework systems. Your full deployment strategy will land in your inbox within 24 hours for direct evaluation reviews.
                     </p>
                 </div>
                 <button 

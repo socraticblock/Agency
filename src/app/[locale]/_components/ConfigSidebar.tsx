@@ -58,7 +58,8 @@ export default memo(function ConfigSidebar({
             {activeFoundation && (
               <div>
                 <span className="text-[9px] font-black font-space text-slate-500 uppercase tracking-widest">Selected Foundation</span>
-                <div className="text-xs font-bold text-white mt-0.5">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-white mt-1">
+                  <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)] animate-pulse" />
                    {activeFoundation.name}
                 </div>
               </div>
@@ -71,7 +72,8 @@ export default memo(function ConfigSidebar({
                   {selectedModules.map(id => {
                     const mod = MODULES.find(m => m.id === id);
                     return mod ? (
-                      <span key={id} className="bg-emerald-500/5 border border-emerald-500/10 text-[9px] font-space font-black text-emerald-300 px-1.5 py-0.5 rounded-md shadow-[0_0_10px_rgba(16,185,129,0.03)]">
+                      <span key={id} className="flex items-center gap-1 bg-emerald-500/5 border border-emerald-500/10 text-[9px] font-space font-black text-emerald-300 px-1.5 py-0.5 rounded-md shadow-[0_0_10px_rgba(16,185,129,0.03)]">
+                        <div className="h-1 w-1 rounded-full bg-emerald-400" />
                         {mod.name}
                       </span>
                     ) : null;
@@ -88,7 +90,7 @@ export default memo(function ConfigSidebar({
             <motion.span
               key={oneTimeTotal}
               variants={countUpVariants} initial="hidden" animate="visible"
-              className="text-lg font-black font-space text-emerald-400"
+              className="text-lg font-black font-mono text-emerald-400 tracking-tight"
             >
               {formatPrice(oneTimeTotal)}
             </motion.span>
@@ -99,7 +101,7 @@ export default memo(function ConfigSidebar({
             <motion.span
               key={monthlyTotal}
               variants={countUpVariants} initial="hidden" animate="visible"
-              className="text-sm font-black font-space text-emerald-300"
+              className="text-sm font-black font-mono text-emerald-300 tracking-tight"
             >
               {formatPrice(monthlyTotal)}
               {monthlyTotal > 0 && "/mo"}

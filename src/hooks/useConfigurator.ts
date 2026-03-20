@@ -84,10 +84,26 @@ export function useConfigurator() {
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  // Conditional step navigation
+  const canGoToStep = useCallback((s: number) => {
+    if (s === 1) return true;
+    if (s === 2) return !!foundation;
+    if (s === 3) return !!foundation;
+    if (s === 4) return !!foundation;
+    if (s === 5) return !!foundation && Object.keys(answers).length > 0;
+    return false;
+  }, [foundation, selectedModules, answers]);
+
   // Hydrate from localStorage on mount
   useEffect(() => {
     setHydrated(true);
   }, []);
+
+  useEffect(() => {
+    if (hydrated && !canGoToStep(step)) {
+      setStep(1);
+    }
+  }, [hydrated, step, canGoToStep, setStep]);
 
   // Persist state to localStorage
   useEffect(() => {
@@ -134,13 +150,7 @@ export function useConfigurator() {
     setMobileIndex(index);
   };
 
-  // Conditional step navigation
-  const canGoToStep = useCallback((s: number) => {
-    if (s <= step) return true; // Always allow going back
-    if (s === 1) return true;
-    if (s >= 2 && s <= 5) return !!foundation;
-    return false;
-  }, [foundation, step]);
+
 
   const goToStep = useCallback((s: 1 | 2 | 3 | 4 | 5) => {
     if (canGoToStep(s)) setStep(s);

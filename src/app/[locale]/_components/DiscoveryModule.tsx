@@ -135,7 +135,7 @@ export default function DiscoveryModule({ foundation, selectedModules, shieldTie
         { value: "twitter", label: "Twitter / X", icon: Globe }
       ]},
       { id: 9, title: "The Lead Magnet", description: "What is the 'Bribe' we are using to get their email address?", type: "input", placeholder: "e.g. Weekly newsletter, private PDF, community link" },
-      { id: 10, title: "The Face of the Brand", description: "Is this a Personal Brand or a Corporate Brand?", type: "tabs", options: ["Personal Brand (Me)", "Corporate Brand (Company)"] },
+      { id: 10, title: "The DM Killer: Automation Logic", description: "What is the #1 question that haunts your DMs? (We will build the AI to kill this headache forever).", type: "textarea", placeholder: "Describe the DM headache..." },
       { id: 11, title: "The Content Pillars", description: "What are the 3 main topics you want to be known for as an authority?", type: "textarea", placeholder: "1. Topic A\n2. Topic B\n3. Topic C" },
       { id: 12, title: "The Ultimate Destination", description: "Where is the 'End Game' for your followers?", type: "tags", options: ["Private Group", "Paid Course", "High-Ticket Service", "Value content"] },
       { id: 13, title: "The Authority Number", description: "What is your total combined follower/subscriber count across all platforms?", type: "input", placeholder: "e.g. 50,000" }
@@ -207,6 +207,10 @@ export default function DiscoveryModule({ foundation, selectedModules, shieldTie
     <div className="flex-1 w-full max-w-xl mx-auto py-10 pb-[60vh]">
       <AnimatePresence mode="wait">
           <m.div className="space-y-40">
+            <div className="text-center pb-10 pt-5">
+              <h1 className="text-3xl font-black font-space text-white tracking-tight">Discovery Briefing</h1>
+              <p className="text-emerald-400 font-bold font-space text-xs tracking-widest uppercase mt-1">Define Your North Star</p>
+            </div>
             {QUESTIONS.map((q, idx) => {
               const isActive = step === idx;
               return (
@@ -336,6 +340,9 @@ export default function DiscoveryModule({ foundation, selectedModules, shieldTie
                           }}
                           className="w-full text-center bg-transparent border-b-2 border-white/10 focus:border-emerald-400 text-xl font-bold text-white py-2 focus:outline-none focus:ring-0 placeholder:text-white/10 resize-none h-24"
                         />
+                        {q.id === 5 && answers[q.id] && answers[q.id].trim().split(/\s+/).length > 20 && (
+                          <p className="text-[10px] text-amber-300 font-bold bg-amber-500/5 px-2 py-0.5 rounded border border-amber-500/10">Try to keep it under 20 words for maximum impact.</p>
+                        )}
                         {answers[q.id] && (
                           <button
                             onClick={idx === QUESTIONS.length - 1 ? handlesSubmit : () => { setStep(idx + 1); const nextEl = document.getElementById(`question-${idx + 2}`); if (nextEl) nextEl.scrollIntoView({ behavior: "smooth", block: "center" }); }}
@@ -409,7 +416,7 @@ export default function DiscoveryModule({ foundation, selectedModules, shieldTie
                 disabled={isAnalyzing}
                 className="w-full py-2.5 rounded-xl bg-emerald-400 text-black font-space font-black text-xs uppercase shadow-lg flex items-center justify-center gap-2 hover:bg-emerald-300 transition-all cursor-pointer"
               >
-                {isAnalyzing ? "Generating..." : "Generate My Blueprint"}
+                {isAnalyzing ? "Reviewing..." : "Submit for Architectural Review"}
               </m.button>
             )}
           </m.div>

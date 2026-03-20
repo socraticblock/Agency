@@ -25,13 +25,7 @@ export default function ModuleGrid({
   goToStep
 }: ModuleGridProps) {
   return (
-    <m.div
-      key="step2"
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
-      className="flex flex-col gap-4"
-    >
+    <div className="flex flex-col gap-4">
       <div>
         <h3 className="text-xl font-black font-space tracking-tight text-white">2. Build Your Engine</h3>
         <p className="text-xs text-slate-500 font-medium mt-0.5">Categorized transparency containing continuous absolute specifications flawlessly.</p>
@@ -78,6 +72,6 @@ export default function ModuleGrid({
           Secure Setup <ArrowRight className="h-3 w-3" />
         </button>
       </div>
-    </m.div>
+    </div>
   );
 }

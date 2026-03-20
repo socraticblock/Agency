@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { m, AnimatePresence, LazyMotion } from "framer-motion";
 
 const loadFeatures = () => import("framer-motion").then(res => res.domMax);
@@ -80,7 +80,11 @@ export default function Configurator() {
     clearConfiguration,
   } = useConfigurator();
 
-
+  useEffect(() => {
+    if (scrollRef && 'current' in scrollRef && scrollRef.current) {
+      scrollRef.current.scrollTo(0, 0);
+    }
+  }, [step, scrollRef]);
 
   if (!hydrated) {
     return (
@@ -104,15 +108,6 @@ export default function Configurator() {
           <StepNav step={step} goToStep={goToStep} canGoToStep={canGoToStep} stepLabels={stepLabels} />
 
           <div ref={scrollRef} className="flex-1 overflow-y-auto px-1 pb-10 scrollbar-none">
-            <AnimatePresence mode="wait">
-              <m.div
-                key={step}
-                initial={{ opacity: 0, x: 10, y: 10 }}
-                animate={{ opacity: 1, x: 0, y: 0 }}
-                exit={{ opacity: 0, x: -10, y: -10 }}
-                transition={{ duration: 0.2, ease: "easeOut" }}
-                className="w-full h-full"
-              >
                 {step === 1 && (
                   <FoundationGrid
                     foundation={foundation}
@@ -173,29 +168,10 @@ export default function Configurator() {
                     setIsEditing={setIsEditing}
                   />
                 )}
-              </m.div>
-            </AnimatePresence>
           </div>
 
           {/* Persistent Footer Navigation */}
-          {step <= 3 && (
-            <div className="mt-auto pt-4 border-t border-zinc-900 flex justify-end items-center sticky bottom-0 bg-black/80 backdrop-blur-md z-20">
-              <m.button
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                onClick={() => goToStep((step + 1) as any)}
-                disabled={step === 1 ? !foundation : step === 2 ? selectedModules.length === 0 : false}
-                className={`flex items-center gap-1.5 font-bold px-6 py-2.5 rounded-xl text-xs font-space uppercase transition-all duration-300 ${
-                  (step === 1 ? foundation : step === 2 ? selectedModules.length > 0 : true)
-                    ? "bg-emerald-400 text-black hover:bg-emerald-300 shadow-[0_10px_25px_rgba(16,185,129,0.2)] hover:scale-[1.02] cursor-pointer"
-                    : "bg-zinc-900 border border-zinc-800 text-zinc-500 cursor-not-allowed"
-                }`}
-              >
-                {step === 1 ? "Configure Modules" : step === 2 ? "Review Shield" : "Start Discovery"} 
-                <ArrowRight className="h-3.5 w-3.5 stroke-[3]" />
-              </m.button>
-            </div>
-          )}
+
         </div>
 
         <ConfigSidebar
