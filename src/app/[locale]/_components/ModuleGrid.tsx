@@ -1,6 +1,7 @@
 "use client";
 
 import { m } from "framer-motion";
+import { useState } from "react";
 import { ArrowLeft, ArrowRight, Building } from "lucide-react";
 import { MODULES } from "@/constants/pricing";
 import ModuleItem from "../architect/_components/ModuleItem";
@@ -24,34 +25,56 @@ export default function ModuleGrid({
   hasGita,
   goToStep
 }: ModuleGridProps) {
+  const [expandedModuleId, setExpandedModuleId] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+
   return (
     <div className="flex flex-col gap-4">
       <div>
         <h3 className="text-xl font-black font-space tracking-tight text-white">2. Build Your Engine</h3>
         <p className="text-xs text-slate-500 font-medium mt-0.5">Categorized transparency containing continuous absolute specifications flawlessly.</p>
+        
+        <div className="flex flex-wrap gap-1.5 mt-2.5">
+          {["All", ...categories].map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-3 py-1 rounded-full text-[10px] font-black font-space uppercase transition-all tracking-wider md:hover:scale-105 active:scale-95 cursor-pointer ${
+                selectedCategory === cat 
+                  ? "bg-emerald-400 text-slate-950 shadow-[0_3px_12px_rgba(16,185,129,0.25)]" 
+                  : "bg-zinc-900 border border-zinc-800/80 text-slate-400 hover:bg-zinc-800 hover:text-white"
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="flex flex-col gap-4">
-        {categories.map((cat) => (
-          <div key={cat} className="flex flex-col gap-1.5">
-            <h4 className="text-xs font-black tracking-widest text-slate-500 font-space uppercase">{cat}</h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {MODULES.filter(m => m.category === cat).map((m) => {
-                const isSelected = selectedModules.includes(m.id);
-                return (
-                  <ModuleItem
-                    key={m.id}
-                    m={m}
-                    isSelected={isSelected}
-                    toggleModule={toggleModule}
-                    formatPrice={formatPrice}
-                    setDrawerItem={setDrawerItem}
-                  />
-                );
-              })}
-            </div>
-          </div>
-        ))}
+        <div className="flex flex-col gap-2 w-full">
+          {MODULES
+            .filter(m => m.id !== 'bank-rep')
+            .filter(m => selectedCategory === "All" || m.category === selectedCategory)
+            .map((m) => {
+            const isSelected = selectedModules.includes(m.id);
+            const isExpanded = expandedModuleId === m.id;
+
+            return (
+              <ModuleItem
+                key={m.id}
+                m={m}
+                isSelected={isSelected}
+                isExpanded={isExpanded}
+                setExpanded={() => setExpandedModuleId(isExpanded ? null : m.id)}
+                toggleModule={toggleModule}
+                formatPrice={formatPrice}
+                setDrawerItem={setDrawerItem}
+                selectedModules={selectedModules}
+              />
+            );
+          })}
+        </div>
       </div>
 
       {hasGita && (

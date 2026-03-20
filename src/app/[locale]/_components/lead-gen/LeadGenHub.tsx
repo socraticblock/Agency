@@ -268,6 +268,30 @@ export function LeadGenHub({ locale }: LeadGenHubProps) {
               </div>
               <ToolComponent locale={locale} />
 
+              {(activeIndex > 0 || activeIndex < tools.length - 1) && (
+                <div className="flex justify-center gap-4 mt-8">
+                  {activeIndex > 0 && (
+                    <button
+                      onClick={() => scroll("left")}
+                      className="group flex items-center gap-2 rounded-xl border border-white/10 bg-slate-900/60 font-space font-bold text-xs uppercase text-slate-300 px-5 py-3 hover:bg-white/5 active:scale-95 transition-all cursor-pointer z-10"
+                    >
+                      <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+                      Previous Audit Module
+                    </button>
+                  )}
+
+                  {activeIndex < tools.length - 1 && (
+                    <button
+                      onClick={() => scroll("right")}
+                      className="group flex items-center gap-2 rounded-xl bg-emerald-400 font-space font-black text-xs uppercase text-slate-950 px-6 py-3 shadow-[0_4px_20px_rgba(16,185,129,0.25)] hover:bg-emerald-300 active:scale-95 transition-all cursor-pointer z-10"
+                    >
+                      Next Audit Module
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </button>
+                  )}
+                </div>
+              )}
+
               {/* Bottom Banner Progress Stepper Line for Mobile viewports */}
               <div className="max-w-3xl mx-auto mt-4 mb-4 flex items-center px-4 md:px-10">
                 {tools.map((_, idx) => (

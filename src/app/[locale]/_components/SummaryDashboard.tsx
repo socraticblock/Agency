@@ -6,21 +6,63 @@ import { m, AnimatePresence } from "framer-motion";
 import { Edit2, Layout, Shield, Zap, Award, Target, Heart, Check, Globe, LayoutDashboard, ArrowRight } from "lucide-react";
 import { ServiceItem, MODULES, FOUNDATIONS } from "@/constants/pricing";
 import { useState } from "react";
+import { STANDARD_QUESTIONS, UPGRADE_QUESTIONS, FOUNDATION_SPECIFIC_MAP, MODULE_QUESTIONS_MAP } from "./DiscoveryModule";
 
-const QUESTION_TITLES: Record<number, string> = {
-    1: "Design Style",
-    2: "Signature Color",
-    3: "Inspiration Gallery",
-    4: "Typography Choice",
-    5: "One-Sentence Pitch",
-    6: "The North Star",
-    7: "Emotional Hook",
-    8: "The Hero Offer / Anchor Platform",
-    9: "The Pain Point / Lead Magnet",
-    10: "The Transformation / Face of Brand",
-    11: "The Social Proof / Content Pillars",
-    12: "Visual Trust / Destination",
-    13: "Urgency / Authority Count"
+const QUESTION_TITLES: Record<string, string> = {
+    design_style: "Design Style",
+    color_palette: "Signature Color",
+    inspiration: "Inspiration Gallery",
+    typography: "Typography Choice",
+    pitch: "One-Sentence Pitch",
+    north_star: "The North Star",
+    emotional_hook: "Emotional Hook",
+
+    upgrade_platform: "Current Platform",
+    upgrade_concern: "Critical Concern",
+    upgrade_url: "Domain Status",
+
+    hero_offer: "The Hero Offer",
+    pain_point: "The Pain Point",
+    transformation: "The Transformation",
+    social_proof: "The Social Proof",
+    visual_trust: "Visual Trust",
+    urgency: "Urgency",
+
+    anchor_platform: "Anchor Platform",
+    lead_magnet: "The Lead Magnet",
+    dm_killer: "The DM Killer",
+    content_pillars: "Content Pillars",
+    ultimate_destination: "Ultimate Destination",
+    authority_count: "Authority Count",
+
+    fulfillment_logic: "Fulfillment Logic",
+    catalog_size: "Catalog Size",
+    market_reach: "Market Reach",
+    upsell: "High-Ticket Upsell",
+    cart_rescue: "Cart Rescue",
+    unboxing_vibe: "Unboxing Vibe",
+
+    core_function: "Core Function",
+    revenue_model: "Revenue Model",
+    user_hierarchy: "User Hierarchy",
+    two_minute_win: "2-Minute Win",
+    device_priority: "Device Priority",
+    data_bridge: "Data Bridge",
+
+    pay_gateway_node: "Primary Settlement",
+    fiscal_sync_type: "Revenue Classification",
+    gita_grant_tax: "Tax Optimization",
+    multilingual_nodes: "Geographic Expansion",
+    multi_filter_priority: "Search Priority",
+    calendar_sync_type: "Booking Architecture",
+    listing_portal_inventory: "Inventory Control",
+    course_tracking_gating: "Learning Retention",
+    recurring_bill_strategy: "Retention Strategy",
+    chatbot_support_filter: "The Support Filter",
+    ai_kb_source: "The Knowledge Source",
+    rpa_auto_bottleneck: "Operational Bottleneck",
+    hubspot_sync_routing: "Pipeline Routing",
+    pro_copy_frequency: "Brand Frequency"
 };
 
 export default function SummaryDashboard({ 
@@ -33,6 +75,15 @@ export default function SummaryDashboard({
 }: any) {
   const activeFoundation = FOUNDATIONS.find(f => f.id === foundation);
   const activeModules = (selectedModules || []).map((id: string) => MODULES.find(m => m.id === id)).filter(Boolean);
+
+  const IS_UPGRADE = foundation === 'upgrade';
+  const validKeys = [
+    ...STANDARD_QUESTIONS.map(q => q.id),
+    ...(IS_UPGRADE ? UPGRADE_QUESTIONS.map(q => q.id) : [
+        ...(FOUNDATION_SPECIFIC_MAP[foundation as string] || []).map((q: any) => q.id),
+        ...(selectedModules || []).flatMap((m: string) => (MODULE_QUESTIONS_MAP[m] || []).map((q: any) => q.id))
+    ])
+  ];
 
   const [stages, setStage] = useState<'review' | 'analyzing' | 'capture' | 'success'>('review');
   const [progress, setProgress] = useState(0);
@@ -152,33 +203,33 @@ export default function SummaryDashboard({
                    <button onClick={() => handleEdit(4, 0)} className="text-[10px] text-slate-500 hover:text-emerald-400 flex items-center gap-0.5 font-bold transition-all"><Edit2 className="h-2.5 w-2.5" /> [Edit]</button>
                </div>
                <div className="space-y-3 z-10 flex-1 flex flex-col justify-center">
-                   {answers[1] && (
-                       <div className="text-xs text-slate-400 flex justify-between items-center">
-                           <span>Style:</span> 
-                           <span className="text-white font-black font-space uppercase bg-emerald-400/10 px-1.5 py-0.5 rounded text-[10px] text-emerald-300">{answers[1]}</span>
-                       </div>
-                   )}
-                   {answers[2] && (
-                       <div className="flex items-center justify-between">
-                           <span className="text-xs text-slate-400">Palette:</span>
-                            <div className="flex -space-x-1 h-5 rounded-lg overflow-hidden border border-white/10 shadow-[0_0_15px_rgba(16,185,129,0.15)]">
-                                {answers[2].map((c: string, i: number) => (
-                                    <div 
-                                        key={i} 
-                                        className="h-full w-5 first:rounded-l-md last:rounded-r-md" 
-                                        style={{ backgroundColor: c }} 
-                                        title={c}
-                                    />
-                                ))}
-                            </div>
-                       </div>
-                   )}
-                   {answers[4] && (
-                       <div className="text-xs text-slate-400 flex justify-between items-center">
-                           <span>Font Anchor:</span> 
-                           <span className="text-white font-bold">{answers[4]}</span>
-                       </div>
-                   )}
+                    {answers["design_style"] && (
+                        <div className="text-xs text-slate-400 flex justify-between items-center">
+                            <span>Style:</span> 
+                            <span className="text-white font-black font-space uppercase bg-emerald-400/10 px-1.5 py-0.5 rounded text-[10px] text-emerald-300">{answers["design_style"]}</span>
+                        </div>
+                    )}
+                    {answers["color_palette"] && (
+                        <div className="flex items-center justify-between">
+                            <span className="text-xs text-slate-400">Palette:</span>
+                             <div className="flex -space-x-1 h-5 rounded-lg overflow-hidden border border-white/10 shadow-[0_0_15px_rgba(16,185,129,0.15)]">
+                                 {answers["color_palette"].map((c: string, i: number) => (
+                                     <div 
+                                         key={i} 
+                                         className="h-full w-5 first:rounded-l-md last:rounded-r-md" 
+                                         style={{ backgroundColor: c }} 
+                                         title={c}
+                                     />
+                                 ))}
+                             </div>
+                        </div>
+                    )}
+                    {answers["typography"] && (
+                        <div className="text-xs text-slate-400 flex justify-between items-center">
+                            <span>Font Anchor:</span> 
+                            <span className="text-white font-bold">{answers["typography"]}</span>
+                        </div>
+                    )}
                </div>
            </div>
 
@@ -190,15 +241,15 @@ export default function SummaryDashboard({
                    <button onClick={() => handleEdit(4, 4)} className="text-[10px] text-slate-500 hover:text-emerald-400 flex items-center gap-0.5 font-bold transition-all"><Edit2 className="h-2.5 w-2.5" /> [Edit]</button>
                </div>
                <div className="space-y-3 z-10 flex-1 flex flex-col justify-center">
-                   {answers[5] && (
-                        <p className="text-xs text-slate-300 italic font-medium leading-relaxed bg-white/5 p-2 rounded-xl border border-white/5">
-                            "{answers[5]}"
-                        </p>
-                   )}
-                   <div className="flex flex-wrap gap-1">
-                       {answers[6] && <span className="text-[9px] bg-emerald-500/5 border border-emerald-500/10 text-emerald-300 px-1.5 py-0.5 rounded-md font-black font-space">🎯 {answers[6]}</span>}
-                       {answers[7] && <span className="text-[9px] bg-emerald-500/5 border border-emerald-500/10 text-emerald-300 px-1.5 py-0.5 rounded-md font-black font-space">Hook: {answers[7]}</span>}
-                   </div>
+                    {answers["pitch"] && (
+                         <p className="text-xs text-slate-300 italic font-medium leading-relaxed bg-white/5 p-2 rounded-xl border border-white/5">
+                             "{answers["pitch"]}"
+                         </p>
+                    )}
+                    <div className="flex flex-wrap gap-1">
+                        {answers["north_star"] && <span className="text-[9px] bg-emerald-500/5 border border-emerald-500/10 text-emerald-300 px-1.5 py-0.5 rounded-md font-black font-space">🎯 {answers["north_star"]}</span>}
+                        {answers["emotional_hook"] && <span className="text-[9px] bg-emerald-500/5 border border-emerald-500/10 text-emerald-300 px-1.5 py-0.5 rounded-md font-black font-space">Hook: {answers["emotional_hook"]}</span>}
+                    </div>
                </div>
            </div>
         </div>
@@ -210,19 +261,19 @@ export default function SummaryDashboard({
                    <button onClick={() => handleEdit(4, 7)} className="text-[10px] text-slate-500 hover:text-emerald-400 flex items-center gap-0.5 font-bold transition-all"><Edit2 className="h-2.5 w-2.5" /> [Edit]</button>
                </div>
                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                   {[8, 9, 10, 11, 12, 13].map((id) => {
-                       if (!answers[id]) return null;
-                       return (
-                           <div key={id} className="text-xs space-y-1 bg-white/[0.02] p-3 rounded-xl border border-white/5 flex flex-col">
-                               <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider font-space">
-                                   {QUESTION_TITLES[id] || `Question ${id}`}
-                               </span>
-                               <p className="text-white font-medium leading-relaxed">
-                                   {Array.isArray(answers[id]) ? answers[id].join(", ") : answers[id]}
-                               </p>
-                           </div>
-                       );
-                   })}
+                    {Object.keys(answers).filter(key => validKeys.includes(key) && !['design_style', 'color_palette', 'typography', 'pitch', 'north_star', 'emotional_hook', 'inspiration'].includes(key)).map((key) => {
+                        if (!answers[key]) return null;
+                        return (
+                            <div key={key} className="text-xs space-y-1 bg-white/[0.02] p-3 rounded-xl border border-white/5 flex flex-col">
+                                <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider font-space">
+                                    {QUESTION_TITLES[key] || `Specification: ${key}`}
+                                </span>
+                                <p className="text-white font-medium leading-relaxed">
+                                    {Array.isArray(answers[key]) ? answers[key].join(", ") : answers[key]}
+                                </p>
+                            </div>
+                        );
+                    })}
                </div>
         </div>
 

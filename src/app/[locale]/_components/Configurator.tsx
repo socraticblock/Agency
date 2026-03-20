@@ -148,6 +148,7 @@ export default function Configurator() {
                   <DiscoveryModule
                     foundation={foundation}
                     selectedModules={selectedModules}
+                    setSelectedModules={setSelectedModules}
                     shieldTier={shieldTier}
                     goToStep={goToStep}
                     answers={answers}

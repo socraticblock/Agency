@@ -4,21 +4,9 @@ import { useState } from "react";
 import { m, AnimatePresence } from "framer-motion";
 import { Heart, Shield, Layout, Zap, Award, Target, Check, Globe, Users, ShoppingBag, Database, Smartphone, Link2, TrendingUp, Tv, FileText } from "lucide-react";
 
-export default function DiscoveryModule({ foundation, selectedModules, shieldTier, goToStep, answers, setAnswers, discoveryStep, setDiscoveryStep }: any) {
-  const step = discoveryStep;
-  const setStep = setDiscoveryStep;
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [showEmail, setShowEmail] = useState(false);
-  const [email, setEmail] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-
-  const IS_UPGRADE = foundation === 'upgrade';
-
-  const STANDARD_QUESTIONS = [
+export const STANDARD_QUESTIONS = [
     {
-      id: 1,
-      label: "Question 01",
+      id: "design_style",
       title: "The Design Style",
       description: "Select your aesthetic direction.",
       type: "cards",
@@ -31,39 +19,34 @@ export default function DiscoveryModule({ foundation, selectedModules, shieldTie
       ]
     },
     {
-      id: 2,
-      label: "Question 02",
+      id: "color_palette",
       title: "The 3-Color Signature",
       description: "Pick 3 colors you want to see working together on your platform.",
       type: "color-palette"
     },
     {
-      id: 3,
-      label: "Question 03",
+      id: "inspiration",
       title: "The Inspiration Gallery",
       description: "Link all the websites you love browsing or admire visually.",
       type: "textarea",
       placeholder: "https://site1.com\nhttps://site2.com"
     },
     {
-      id: 4,
-      label: "Question 04",
+      id: "typography",
       title: "Typography Choice",
       description: "What kind of font suits your brand personality?",
       type: "tabs",
       options: ["Sharp & Modern", "Classic & Timeless", "Unique & Script"]
     },
     {
-      id: 5,
-      label: "Question 05",
+      id: "pitch",
       title: "The One-Sentence Pitch",
       description: "In one sentence, what is the primary purpose of this website?",
       type: "textarea",
       placeholder: "Example: To sell premium coffee subscriptions..."
     },
     {
-      id: 6,
-      label: "Question 06",
+      id: "north_star",
       title: "The North Star",
       description: "What is the single most important action for a visitor?",
       type: "cards",
@@ -77,19 +60,17 @@ export default function DiscoveryModule({ foundation, selectedModules, shieldTie
       ]
     },
     {
-      id: 7,
-      label: "Question 07",
+      id: "emotional_hook",
       title: "The Emotional Hook",
       description: "How should someone feel the moment they land on your page?",
       type: "tags",
       options: ["Inspired", "Safe", "Impressed", "Powerful", "Relaxed", "Challenged"]
     }
-  ];
+];
 
-  const UPGRADE_QUESTIONS = [
+export const UPGRADE_QUESTIONS = [
     {
-      id: 1,
-      label: "Question 01",
+      id: "upgrade_platform",
       title: "The Current Engine",
       description: "What platform is your current site running on?",
       type: "cards",
@@ -100,94 +81,156 @@ export default function DiscoveryModule({ foundation, selectedModules, shieldTie
       ]
     },
     {
-      id: 2,
-      label: "Question 02",
+      id: "upgrade_concern",
       title: "The Critical Concern",
       description: "What's the #1 issue dragging your performance down?",
       type: "tags",
       options: ["Page Speed (Lighthouse)", "Security / Bot Attacks", "Legal Compliance", "Clunky Editing UX"]
     },
     {
-      id: 3,
-      label: "Question 03",
+      id: "upgrade_url",
       title: "Domain Status",
       description: "Drop your current site URL below for evaluation access.",
       type: "input",
       placeholder: "https://yourbrand.com"
     }
-  ];
+];
 
-  const FOUNDATION_SPECIFIC_MAP: Record<string, any[]> = {
+export const FOUNDATION_SPECIFIC_MAP: Record<string, any[]> = {
     landing: [
-      { id: 8, title: "The Hero Offer", description: "What is the primary prize they get for clicking the button?", type: "textarea", placeholder: "e.g., A free guide, 30% discount, a discovery call" },
-      { id: 9, title: "The Pain Point", description: "What is the #1 frustration your customer is feeling right now that this page solves?", type: "textarea" },
-      { id: 10, title: "The Transformation", description: "Describe the 'Before' vs. 'After'—how does their life change after using your product/service?", type: "textarea" },
-      { id: 11, title: "The Social Proof", description: "What is your most impressive result? (e.g., 500+ clients served, $1M+ generated)", type: "input", placeholder: "Example: 500+ items or Five-Star feedback" },
-      { id: 12, title: "The Visual Trust", description: "Do you have logos of media outlets or big brands you’ve worked with?", type: "tabs", options: ["I have logos ready", "Not yet"] },
-      { id: 13, title: "The Urgency", description: "Why should they buy today instead of tomorrow?", type: "textarea", placeholder: "Limited offer vs Permanent solution" }
+      { id: "hero_offer", title: "The Hero Offer", description: "What is the primary prize they get for clicking the button?", type: "textarea", placeholder: "e.g., A free guide, 30% discount, a discovery call" },
+      { id: "pain_point", title: "The Pain Point", description: "What is the #1 frustration your customer is feeling right now that this page solves?", type: "textarea" },
+      { id: "transformation", title: "The Transformation", description: "Describe the 'Before' vs. 'After'—how does their life change after using your product/service?", type: "textarea" },
+      { id: "social_proof", title: "The Social Proof", description: "What is your most impressive result?", type: "input", placeholder: "Example: 500+ items or Five-Star feedback" },
+      { id: "visual_trust", title: "The Visual Trust", description: "Do you have logos of media outlets or big brands you’ve worked with?", type: "tabs", options: ["I have logos ready", "Not yet"] },
+      { id: "urgency", title: "The Urgency", description: "Why should they buy today instead of tomorrow?", type: "textarea", placeholder: "Limited offer vs Permanent solution" }
     ],
     cms: [
-      { id: 8, title: "The Anchor Platform", description: "Which social platform is the 'heart' of your brand right now?", type: "cards", options: [
+      { id: "anchor_platform", title: "The Anchor Platform", description: "Which social platform is the 'heart' of your brand right now?", type: "cards", options: [
         { value: "instagram", label: "Instagram", icon: Smartphone },
         { value: "youtube", label: "YouTube", icon: Tv },
         { value: "tiktok", label: "TikTok", icon: Zap },
         { value: "linkedin", label: "LinkedIn", icon: Link2 },
         { value: "twitter", label: "Twitter / X", icon: Globe }
       ]},
-      { id: 9, title: "The Lead Magnet", description: "What is the 'Bribe' we are using to get their email address?", type: "input", placeholder: "e.g. Weekly newsletter, private PDF, community link" },
-      { id: 10, title: "The DM Killer: Automation Logic", description: "What is the #1 question that haunts your DMs? (We will build the AI to kill this headache forever).", type: "textarea", placeholder: "Describe the DM headache..." },
-      { id: 11, title: "The Content Pillars", description: "What are the 3 main topics you want to be known for as an authority?", type: "textarea", placeholder: "1. Topic A\n2. Topic B\n3. Topic C" },
-      { id: 12, title: "The Ultimate Destination", description: "Where is the 'End Game' for your followers?", type: "tags", options: ["Private Group", "Paid Course", "High-Ticket Service", "Value content"] },
-      { id: 13, title: "The Authority Number", description: "What is your total combined follower/subscriber count across all platforms?", type: "input", placeholder: "e.g. 50,000" }
+      { id: "lead_magnet", title: "The Lead Magnet", description: "What is the 'Bribe' we are using to get their email address?", type: "input", placeholder: "e.g. Weekly newsletter, private PDF, community link" },
+      { id: "dm_killer", title: "The DM Killer: Automation Logic", description: "What is the #1 question that haunts your DMs?", type: "textarea", placeholder: "Describe the DM headache..." },
+      { id: "content_pillars", title: "The Content Pillars", description: "What are the 3 main topics you want to be known for as an authority?", type: "textarea", placeholder: "1. Topic A\n2. Topic B\n3. Topic C" },
+      { id: "ultimate_destination", title: "The Ultimate Destination", description: "Where is the 'End Game' for your followers?", type: "tags", options: ["Private Group", "Paid Course", "High-Ticket Service", "Value content"] },
+      { id: "authority_count", title: "The Authority Number", description: "What is your joint follower count across all platforms?", type: "input", placeholder: "e.g. 50,000" }
     ],
     ecomm: [
-      { id: 8, title: "The Fulfillment Logic", description: "How are orders handled?", type: "cards", options: [
+      { id: "fulfillment_logic", title: "The Fulfillment Logic", description: "How are orders handled?", type: "cards", options: [
         { value: "physical", label: "Physical Shipping", icon: ShoppingBag },
         { value: "digital", label: "Digital Download", icon: Zap },
         { value: "service", label: "Service Booking", icon: Award }
       ]},
-      { id: 9, title: "The Catalog Size", description: "What is the scale of your current launch catalog?", type: "tabs", options: ["Hero Products (1-5)", "Medium Catalog (6-49)", "Massive Catalog (50+)"] },
-      { id: 10, title: "The Market Reach", description: "Are we selling locally or expanding to a global audience?", type: "tabs", options: ["Locally (TBC/BoG)", "Globally (Stripe/PayPal)"] },
-      { id: 11, title: "The High-Ticket Upsell", description: "What is the one thing people usually buy after they purchase your main product?", type: "input" },
-      { id: 12, title: "The Cart Rescue", description: "Do you want to offer a one-time discount code to bring back abandoned carts?", type: "tabs", options: ["Yes, automate discount", "No"] },
-      { id: 13, title: "The Unboxing Vibe", description: "What should the 'Thank You' email feel like?", type: "tabs", options: ["Professional & Formal", "Friendly & High-Energy"] }
+      { id: "catalog_size", title: "The Catalog Size", description: "What is the scale of your current launch catalog?", type: "tabs", options: ["Hero Products (1-5)", "Medium Catalog (6-49)", "Massive Catalog (50+)"] },
+      { id: "market_reach", title: "The Market Reach", description: "Are we selling locally or expanding to a global audience?", type: "tabs", options: ["Locally (TBC/BoG)", "Globally (Stripe/PayPal)"] },
+      { id: "upsell", title: "The High-Ticket Upsell", description: "What is the one thing people usually buy after they purchase your main product?", type: "input" },
+      { id: "cart_rescue", title: "The Cart Rescue", description: "Do you want to offer a one-time discount code to bring back abandoned carts?", type: "tabs", options: ["Yes, automate discount", "No"] },
+      { id: "unboxing_vibe", title: "The Unboxing Vibe", description: "What should the 'Thank You' email feel like?", type: "tabs", options: ["Professional & Formal", "Friendly & High-Energy"] }
     ],
     saas: [
-      { id: 8, title: "The Magic Button", description: "What is the core technical function of your software tool?", type: "textarea", placeholder: "Example: It calculates ROI; It manages a database..." },
-      { id: 9, title: "The Revenue Model", description: "Is this a free value-add tool for your brand, or a paid subscription (SaaS)?", type: "tabs", options: ["Free Value-Add Tool", "Paid Subscription (SaaS)"] },
-      { id: 10, title: "User Hierarchy", description: "Will there be different login levels?", type: "tags", options: ["Single Tier", "Admin vs Member", "Client vs Freelancer"] },
-      { id: 11, title: "The 2-Minute Win", description: "What is the one thing a user should achieve within 2 minutes of logging in?", type: "input" },
-      { id: 12, title: "Device Priority", description: "Will your users be using this primarily on Mobile or Desktop?", type: "tabs", options: ["Mobile phones on the go", "Desktop at their desk", "Unified setup"] },
-      { id: 13, title: "The Data Bridge", description: "Does this app need to 'talk' to other tools like Google Sheets or Slack?", type: "textarea", placeholder: "Describe any integrations needed (Zapier, CRMs...)" }
+      { id: "core_function", title: "The Magic Button", description: "What is the core technical function of your software tool?", type: "textarea", placeholder: "Example: It calculates ROI; It manages a database..." },
+      { id: "revenue_model", title: "The Revenue Model", description: "Is this a paid subscription (SaaS)?", type: "tabs", options: ["Free Value-Add Tool", "Paid Subscription (SaaS)"] },
+      { id: "user_hierarchy", title: "User Hierarchy", description: "Will there be different login levels?", type: "tags", options: ["Single Tier", "Admin vs Member", "Client vs Freelancer"] },
+      { id: "two_minute_win", title: "The 2-Minute Win", description: "What is the one thing a user should achieve within 2 minutes?", type: "input" },
+      { id: "device_priority", title: "Device Priority", description: "Will your users be using this primarily on Mobile or Desktop?", type: "tabs", options: ["Mobile phones on the go", "Desktop at their desk", "Unified setup"] },
+      { id: "data_bridge", title: "The Data Bridge", description: "Does this app need to 'talk' to other tools like Google Sheets or Slack?", type: "textarea", placeholder: "Describe any integrations needed (Zapier, CRMs...)" }
     ]
   };
+
+export const MODULE_QUESTIONS_MAP: Record<string, any[]> = {
+    'pay-gateway': [
+      { id: "pay_gateway_node", title: "Primary Settlement", description: "Which banking node handles your daily operations?", type: "tabs", options: ["TBC Bank", "Bank of Georgia", "International Gateway"] }
+    ],
+    'fiscal-sync': [
+      { id: "fiscal_sync_type", title: "Revenue Classification", description: "Does your model require physical delivery notes (RS.ge Waybills) or instant digital tax invoicing?", type: "tabs", options: ["Physical Waybills", "Digital Tax Invoices"] }
+    ],
+    'gita-grant': [
+      { id: "gita_grant_tax", title: "Tax Optimization", description: "Is your LLC currently registered as an 'International Company' or 'Virtual Zone' to maximize GITA benefits?", type: "tabs", options: ["International Company", "Virtual Zone", "Not Registered Yet"] }
+    ],
+    'multilingual': [
+      { id: "multilingual_nodes", title: "Geographic Expansion", description: "Which specific language nodes are mandatory for your launch? (e.g., GE/EN/RU)", type: "input", placeholder: "e.g., GE, EN, RU" }
+    ],
+    'multi-filter': [
+      { id: "multi_filter_priority", title: "The Search Priority", description: "What are the top 3 attributes your clients prioritize? (e.g., Price, Neighborhood, Availability)", type: "input", placeholder: "e.g., Price, Neighborhood, Location" }
+    ],
+    'calendar-sync': [
+      { id: "calendar_sync_type", title: "Booking Architecture", description: "Are we scheduling 1-on-1 private consultations or high-capacity group sessions?", type: "tabs", options: ["1-on-1 Consultations", "Group Sessions"] }
+    ],
+    'listing-portal': [
+      { id: "listing_portal_inventory", title: "Inventory Control", description: "Is this a closed ecosystem (staff only) or a multi-vendor marketplace (open for external sellers)?", type: "tabs", options: ["Closed Ecosystem", "Multi-Vendor Marketplace"] }
+    ],
+    'course-tracking': [
+      { id: "course_tracking_gating", title: "Learning Retention", description: "Is the curriculum strictly video-based, or do we require interactive gating (Quizzes/Certifications)?", type: "tabs", options: ["Video-Based Only", "Interactive Gating (Quizzes)"] }
+    ],
+    'recurring-bill': [
+      { id: "recurring_bill_strategy", title: "Retention Strategy", description: "Do you require a 'Free Trial' lead magnet or a multi-tiered subscription model?", type: "tabs", options: ["Free Trial Magnet", "Multi-Tiered Model"] }
+    ],
+    'rule-chatbot': [
+      { id: "chatbot_support_filter", title: "The Support Filter", description: "What is the most repetitive question your staff answers manually every single day?", type: "textarea", placeholder: "Describe the repetitive FAQ..." }
+    ],
+    'ai-kb': [
+      { id: "ai_kb_source", title: "The Knowledge Source", description: "Is the AI pulling logic from official PDFs, company policies, or your personal video transcripts?", type: "tags", options: ["Official PDFs", "Company Policies", "Video Transcripts", "Custom Docs"] }
+    ],
+    'rpa-auto': [
+      { id: "rpa_auto_bottleneck", title: "Operational Bottleneck", description: "What single manual task consumes more than 5 hours of your team's week?", type: "textarea", placeholder: "Describe the time-consuming task..." }
+    ],
+    'hubspot-sync': [
+      { id: "hubspot_sync_routing", title: "Pipeline Routing", description: "At which specific deal stage should a new lead land inside your CRM?", type: "input", placeholder: "e.g., Lead In, Contacted, Qualified" }
+    ],
+    'pro-copy': [
+      { id: "pro_copy_frequency", title: "Brand Frequency", description: "What tone of voice should the 'Architect' use to speak to your clients?", type: "tabs", options: ["Professional / Elite", "Bold / Direct", "Warm / Approachable"] }
+    ]
+  };
+
+export default function DiscoveryModule({ foundation, selectedModules, shieldTier, goToStep, answers, setAnswers, discoveryStep, setDiscoveryStep }: any) {
+  const step = discoveryStep;
+  const setStep = setDiscoveryStep;
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [showEmail, setShowEmail] = useState(false);
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const IS_UPGRADE = foundation === 'upgrade';
+
+
 
   const getQuestions = () => {
     if (IS_UPGRADE) return UPGRADE_QUESTIONS;
     const spec = FOUNDATION_SPECIFIC_MAP[foundation as string] || [];
-    const specWithIds = spec.map((q, i) => ({
+    const dynamicModuleQs: any[] = [];
+    
+    (selectedModules || []).forEach((modId: string) => {
+        if (MODULE_QUESTIONS_MAP[modId]) {
+            dynamicModuleQs.push(...MODULE_QUESTIONS_MAP[modId]);
+        }
+    });
+
+    const combined = [...STANDARD_QUESTIONS, ...spec, ...dynamicModuleQs];
+    return combined.map((q, i) => ({
       ...q,
-      id: STANDARD_QUESTIONS.length + 1 + i,
-      label: `Question ${(STANDARD_QUESTIONS.length + 1 + i).toString().padStart(2, '0')}`
+      label: `Question ${(i + 1).toString().padStart(2, '0')}`
     }));
-    return [...STANDARD_QUESTIONS, ...specWithIds];
   };
 
   const QUESTIONS = getQuestions();
 
-  const handleSelect = (qId: number, value: any) => {
+  const handleSelect = (qId: string, value: any) => {
     setAnswers((prev: any) => ({ ...prev, [qId]: value }));
+
+
+
     const optionsWithSingleSelect = ["cards", "tabs", "toggle", "tags"];
     if (optionsWithSingleSelect.includes(QUESTIONS[step].type)) {
       if (step < QUESTIONS.length - 1) {
           setTimeout(() => {
               setStep((prev: any) => prev + 1);
-              const nextEl = document.getElementById(`question-${step + 2}`);
+              const nextEl = document.getElementById(`question-${QUESTIONS[step + 1]?.id}`);
               if (nextEl) nextEl.scrollIntoView({ behavior: "smooth", block: "center" });
-          }, 400);
-      } else {
-          setTimeout(() => {
-              handlesSubmit();
           }, 400);
       }
     }
@@ -205,6 +248,8 @@ export default function DiscoveryModule({ foundation, selectedModules, shieldTie
 
   return (
     <div className="flex-1 w-full max-w-xl mx-auto py-10 pb-[60vh]">
+
+
       <AnimatePresence mode="wait">
           <m.div className="space-y-40">
             <div className="text-center pb-10 pt-5">
@@ -285,7 +330,7 @@ export default function DiscoveryModule({ foundation, selectedModules, shieldTie
                             />
                           ))}
                         </div>
-                        <button onClick={() => { setStep(idx + 1); const nextEl = document.getElementById(`question-${idx + 2}`); if (nextEl) nextEl.scrollIntoView({ behavior: "smooth", block: "center" }); }} className="px-3 py-1.5 bg-emerald-400 rounded-lg text-black font-space font-black text-[10px] uppercase cursor-pointer hover:bg-emerald-300">Next</button>
+                        <button onClick={() => { setStep(idx + 1); const nextEl = document.getElementById(`question-${QUESTIONS[idx + 1]?.id}`); if (nextEl) nextEl.scrollIntoView({ behavior: "smooth", block: "center" }); }} className="px-3 py-1.5 bg-emerald-400 rounded-lg text-black font-space font-black text-[10px] uppercase cursor-pointer hover:bg-emerald-300">Next</button>
                       </div>
                     )}
 
@@ -302,7 +347,7 @@ export default function DiscoveryModule({ foundation, selectedModules, shieldTie
                                 handlesSubmit();
                               } else {
                                 setStep(idx + 1);
-                                const nextEl = document.getElementById(`question-${idx + 2}`);
+                                const nextEl = document.getElementById(`question-${QUESTIONS[idx + 1]?.id}`);
                                 if (nextEl) nextEl.scrollIntoView({ behavior: "smooth", block: "center" });
                               }
                             }
@@ -311,7 +356,7 @@ export default function DiscoveryModule({ foundation, selectedModules, shieldTie
                         />
                         {answers[q.id] && (
                           <button
-                            onClick={idx === QUESTIONS.length - 1 ? handlesSubmit : () => { setStep(idx + 1); const nextEl = document.getElementById(`question-${idx + 2}`); if (nextEl) nextEl.scrollIntoView({ behavior: "smooth", block: "center" }); }}
+                            onClick={idx === QUESTIONS.length - 1 ? handlesSubmit : () => { setStep(idx + 1); const nextEl = document.getElementById(`question-${QUESTIONS[idx + 1]?.id}`); if (nextEl) nextEl.scrollIntoView({ behavior: "smooth", block: "center" }); }}
                             className="mt-2 px-3 py-1.5 bg-emerald-400 rounded-lg text-black font-space font-black text-[10px] uppercase cursor-pointer flex items-center gap-1 hover:bg-emerald-300 transition-all"
                           >
                             {idx === QUESTIONS.length - 1 ? "Generate My Blueprint" : "Next →"}
@@ -333,7 +378,7 @@ export default function DiscoveryModule({ foundation, selectedModules, shieldTie
                                 handlesSubmit();
                               } else {
                                 setStep(idx + 1);
-                                const nextEl = document.getElementById(`question-${idx + 2}`);
+                                const nextEl = document.getElementById(`question-${QUESTIONS[idx + 1]?.id}`);
                                 if (nextEl) nextEl.scrollIntoView({ behavior: "smooth", block: "center" });
                               }
                             }
@@ -345,7 +390,7 @@ export default function DiscoveryModule({ foundation, selectedModules, shieldTie
                         )}
                         {answers[q.id] && (
                           <button
-                            onClick={idx === QUESTIONS.length - 1 ? handlesSubmit : () => { setStep(idx + 1); const nextEl = document.getElementById(`question-${idx + 2}`); if (nextEl) nextEl.scrollIntoView({ behavior: "smooth", block: "center" }); }}
+                            onClick={idx === QUESTIONS.length - 1 ? handlesSubmit : () => { setStep(idx + 1); const nextEl = document.getElementById(`question-${QUESTIONS[idx + 1]?.id}`); if (nextEl) nextEl.scrollIntoView({ behavior: "smooth", block: "center" }); }}
                             className="mt-2 px-3 py-1.5 bg-emerald-400 rounded-lg text-black font-space font-black text-[10px] uppercase cursor-pointer flex items-center gap-1 hover:bg-emerald-300 transition-all"
                           >
                             {idx === QUESTIONS.length - 1 ? "Generate My Blueprint" : "Next →"}
@@ -402,6 +447,18 @@ export default function DiscoveryModule({ foundation, selectedModules, shieldTie
                           </button>
                         ))}
                       </div>
+                    )}
+                    {idx === QUESTIONS.length - 1 && answers[q.id] && (
+                      <m.button
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        onClick={handlesSubmit}
+                        disabled={isAnalyzing}
+                        className="mt-6 px-5 py-2.5 bg-emerald-400 hover:bg-emerald-300 text-black font-space font-black text-xs uppercase rounded-xl flex items-center justify-center gap-1.5 shadow-[0_10px_25px_rgba(16,185,129,0.3)] cursor-pointer transition-all mx-auto z-50 relative"
+                      >
+                        {isAnalyzing ? "Generating..." : "Generate Infrastructure Blueprint"}
+                        <Zap className="h-3.5 w-3.5 fill-current" />
+                      </m.button>
                     )}
                   </div>
                 </m.div>

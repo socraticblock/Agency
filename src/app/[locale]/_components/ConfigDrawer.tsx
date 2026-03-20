@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, Info, Lightbulb, Sparkles } from "lucide-react";
+import { Check, Info, Lightbulb, Sparkles, Shield, Trash2 } from "lucide-react";
 import { ServiceItem } from "@/constants/pricing";
 
 interface ConfigDrawerProps {
@@ -42,6 +42,13 @@ export default function ConfigDrawer({
             </button>
 
             <div className="w-12 h-1 bg-zinc-800 rounded-full mx-auto mb-1 flex-shrink-0" />
+
+            <div className="flex items-center gap-1.5 bg-zinc-900 border border-zinc-800 rounded-lg p-1.5 px-2.5 self-start mb-1">
+              <div className={`h-1.5 w-1.5 rounded-full ${selectedModules.includes(drawerItem.id) ? 'bg-emerald-400 animate-pulse shadow-[0_0_10px_#10b981]' : 'bg-zinc-500'}`} />
+              <span className={`text-[9px] font-black font-space uppercase tracking-wider ${selectedModules.includes(drawerItem.id) ? 'text-emerald-400' : 'text-zinc-400'}`}>
+                 [ STATUS: {selectedModules.includes(drawerItem.id) ? 'ACTIVE IN ARCHITECTURE' : 'READY FOR DEPLOYMENT'} ]
+              </span>
+            </div>
             
             <div className="flex flex-col">
               <span className="text-xs font-black font-space text-emerald-400 uppercase tracking-wider">{drawerItem.category || "Foundation"}</span>
@@ -140,29 +147,40 @@ export default function ConfigDrawer({
               </div>
             )}
 
-            <div className="flex flex-col gap-2 mt-2">
-              <button
+            <div className="flex flex-col gap-2 mt-4 pt-3 border-t border-zinc-800/80">
+              <motion.button
+                initial={{ scale: 0.98 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => { 
                   if (drawerItem.category === "Base" || !drawerItem.category) {
                     setFoundation(drawerItem.id); 
                   } else {
                     toggleModule(drawerItem.id);
                   }
-                  setDrawerItem(null); 
+                  setTimeout(() => setDrawerItem(null), 250); 
                 }}
-                className="w-full bg-emerald-400 text-black font-black font-space py-3 rounded-xl text-sm shadow-xl"
+                className={`w-full font-black font-space py-3.5 rounded-xl text-xs uppercase flex items-center justify-center gap-2 shadow-xl transition-all cursor-pointer ${
+                  selectedModules.includes(drawerItem.id) 
+                    ? "bg-red-500/10 border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white" 
+                    : "bg-emerald-500/10 border-2 border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-slate-950"
+                }`}
               >
+                {selectedModules.includes(drawerItem.id) ? <Trash2 className="h-3.5 w-3.5" /> : <Shield className="h-3.5 w-3.5" />}
                 {drawerItem.category === "Base" || !drawerItem.category
-                  ? `Confirm ${drawerItem.name}` 
+                  ? "Deploy Workspace" 
                   : selectedModules.includes(drawerItem.id) 
-                    ? "Remove Module" 
-                    : "Add Module"}
-              </button>
+                    ? "Decommission Node" 
+                    : "Deploy Node"}
+              </motion.button>
+              
               <button
                 onClick={() => setDrawerItem(null)}
-                className="w-full py-3 text-center text-xs font-bold tracking-widest uppercase border border-white/5 bg-zinc-900/30 hover:bg-emerald-500/10 text-zinc-400 hover:text-emerald-500 transition-all rounded-xl"
+                className={`w-full py-3.5 text-center text-xs font-black font-space tracking-widest uppercase border border-white/5 bg-zinc-900/40 hover:bg-white/5 text-zinc-500 hover:text-zinc-300 transition-all rounded-xl cursor-pointer ${
+                  selectedModules.includes(drawerItem.id) ? 'border-red-500/30 text-red-500/60 hover:bg-red-500/10 hover:text-red-400' : ''
+                }`}
               >
-                ← Back to Selection
+                {selectedModules.includes(drawerItem.id) ? "Back to Grid" : "Skip for now"}
               </button>
             </div>
           </motion.div>

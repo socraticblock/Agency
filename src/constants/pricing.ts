@@ -181,19 +181,20 @@ export const MODULES: Module[] = [
   {
     id: 'bank-rep',
     category: 'Georgian Advantage',
-    name: 'Bank Integration Representative',
-    priceGEL: 1500,
-    whatItIs: 'Full legal representation to TBC or BOG via Power of Attorney (POA).',
+    name: 'Bank Onboarding & Legal Rep (POA)',
+    priceGEL: 1000,
+    whatItIs: 'We handle the Bureaucracy. Includes POA drafting, notary coordination, and KYC clearance for foreign/remote founders.',
     howItHelps: 'We handle the bureaucracy, certified translations, and KYC meetings so your tax ID links to your gateway without you visiting a branch.',
     lawyerRole: 'Drafts the POA, verifies notary translations, and ensures banking KYC compliance.'
   },
   {
     id: 'pay-gateway',
     category: 'Georgian Advantage',
-    name: 'Payment Gateway Setup',
+    name: 'Merchant API & Gateway Integration',
     priceGEL: 800,
-    whatItIs: 'Technical API engineering to bridge your site with TBC, BOG, or Liberty Bank.',
-    howItHelps: 'Allows you to accept GEL/USD/EUR directly into your local account with 0.1s transaction latency.'
+    whatItIs: 'We handle the Code. Connecting your Merchant ID to your site with custom HMAC security and Bank-Audit compliance. (For businesses who already have a bank-approved Merchant ID but need the technical bridge).',
+    howItHelps: 'Allows you to accept GEL/USD/EUR directly into your local account with 0.1s transaction latency.',
+    lawyerRole: 'Oversees merchant processing compliance, verifying corporate data structure aligns with local anti-money-laundering (AML) banking settlements.'
   },
   {
     id: 'gita-grant',
@@ -388,65 +389,7 @@ export const MODULES: Module[] = [
     howItHelps: 'Builds predictable Monthly Recurring Revenue (MRR). Automatically bills clients every month.'
   },
 
-  // ==========================================
-  // 4. SECURITY, SPEED & OPTIMIZATION
-  // ==========================================
-  {
-    id: 'speed-turbo',
-    category: 'Security & Speed',
-    name: 'Enterprise Speed Turbo',
-    priceGEL: 700,
-    whatItIs: 'Image-edge caching and server-side rendering (SSR) optimization.',
-    howItHelps: 'Hits a 90+ PageSpeed score. 0.1s speed increase = 8.4% revenue boost in 2026.'
-  },
-  {
-    id: 'cdn-config',
-    category: 'Security & Speed',
-    name: 'CDN Configuration',
-    priceGEL: 500,
-    whatItIs: 'Global distribution of your site data across international servers.',
-    howItHelps: 'Ensures your site is fast for fans in London/NYC as it is in Tbilisi.'
-  },
-  {
-    id: 'malware-shield',
-    category: 'Security & Speed',
-    name: 'Malware Shield',
-    priceGEL: 1350,
-    whatItIs: 'System hardening and real-time brute-force protection.',
-    howItHelps: 'Reputation insurance. Stops hackers from turning your site into a "red flag" on Google.'
-  },
-  {
-    id: 'offsite-backup',
-    category: 'Security & Speed',
-    name: 'Off-Site Backups',
-    priceGEL: 300,
-    whatItIs: 'Automated secondary cloud storage on AWS or S3.',
-    howItHelps: 'Zero data loss. If the main server fails, we restore your business in minutes from a hidden vault.'
-  },
-  {
-    id: 'uptime-monitor',
-    category: 'Security & Speed',
-    name: 'Uptime Monitoring',
-    priceGEL: 400,
-    whatItIs: '24/7 pings and alert systems.',
-    howItHelps: 'If your site goes down, we know instantly—often fixing it before you even wake up.'
-  },
-  {
-    id: 'sec-patching',
-    category: 'Security & Speed',
-    name: 'Security Patching',
-    priceGEL: 500,
-    whatItIs: 'Proactive updates for system core and dependencies.',
-    howItHelps: 'Keeps the "doors" locked. 96% of hacks happen through outdated software.'
-  },
-  {
-    id: 'db-cleanup',
-    category: 'Security & Speed',
-    name: 'Database Cleanup',
-    priceGEL: 400,
-    whatItIs: 'Removing "digital junk" from your data tables.',
-    howItHelps: 'Keeps the "brain" fast. Improves retrieval times for orders and customer searches.'
-  },
+
 
   // ==========================================
   // 5. ADVANCED AUTOMATION & AI
@@ -624,7 +567,8 @@ export const SHIELD_TIERS = [
     risk: 'High', 
     perks: [
       { title: 'SSL Oversight', desc: 'Prevents "Not Secure" browser lockouts.' },
-      { title: 'Blacklist Monitoring', desc: 'Stops your site/emails going to spam.' }
+      { title: 'Blacklist Monitoring', desc: 'Stops your site/emails going to spam.' },
+      { title: 'AWS Backup Node', desc: 'Basic off-site recovery points saving cycles.' }
     ], 
     description: 'The bare minimum to exist safely on the web.' 
   },
@@ -636,10 +580,11 @@ export const SHIELD_TIERS = [
     risk: 'Medium', 
     isRecommended: true,
     perks: [
-      { title: 'CWV Speed Reports', desc: 'Monthly proof your site is 100/100 fast.' },
+      { title: 'CDN Configuration', desc: 'Global image edge caching frame routing.' },
       { title: 'Kinetic Uptime Pings', desc: 'Global pings every 60s to check fixes.' },
       { title: 'Time-Machine Backups', desc: 'Daily database restores if anything breaks.' },
-      { title: 'Security Patching', desc: 'Critical software lock downs against bots.' }
+      { title: 'Security Patching', desc: 'Critical software lock downs against bots.' },
+      { title: 'Database Cleanup', desc: 'Remove clean index junk tables bloating speed.' }
     ], 
     description: 'Protects 100/100 speeds from natural performance decay.' 
   },
@@ -651,7 +596,8 @@ export const SHIELD_TIERS = [
     risk: 'Low', 
     perks: [
       { title: 'Includes Micro Shield+', desc: 'All Tier 2 advantages included.' },
-      { title: '2 Adjustments / mo', desc: 'Minor UI/Copy tweaks without hourly rates.' },
+      { title: 'Malware Shield Pro', desc: 'Real-time brute force armor hardening defenses.' },
+      { title: 'Enterprise Speed Turbo', desc: 'Hits 90+ Pagespeeds server-side rendering.' },
       { title: 'Priority Support Queue', desc: 'Guaranteed support queue placement.' },
       { title: 'Conversion Audits', desc: 'Bi-weekly suggests to increase sales.' }
     ], 

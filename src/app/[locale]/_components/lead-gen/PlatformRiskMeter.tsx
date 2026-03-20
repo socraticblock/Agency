@@ -163,10 +163,10 @@ export function PlatformRiskMeter({ locale }: PlatformRiskMeterProps) {
             className="mt-8 text-center text-xl font-bold"
             animate={{ color: getRiskColor() }}
           >
-            {isComplete
-              ? yesCount === 3
+            {answeredCount > 0
+              ? yesCount / answeredCount > 0.66
                 ? t.leadTools?.risk?.scoreSafe ?? "Safe"
-                : yesCount === 2
+                : yesCount / answeredCount >= 0.33
                 ? t.leadTools?.risk?.scoreMedium ?? "Vulnerable"
                 : t.leadTools?.risk?.scoreLow ?? "Critical Risk"
               : t.leadTools?.risk?.scorePending ?? "Testing..."}
