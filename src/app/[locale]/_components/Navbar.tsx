@@ -1,15 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { motion } from "framer-motion";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 import { MagneticButton } from "./MagneticButton";
 
 export function Navbar({ locale }: { locale: Locale }) {
-  const pathname = usePathname();
-  const router = useRouter();
   const t = getMessages(locale);
 
   return (

@@ -1,43 +1,60 @@
 "use client";
 
-import { useEffect, useState, useActionState } from "react";
+import { useEffect, useState, useActionState, startTransition } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 import { bookStrategyAction } from "@/app/actions/lead";
+import {
+  isBookStrategyError,
+  isBookStrategySuccess,
+} from "@/lib/formActionState";
+import {
+  KVALI_LEAD_KEY,
+  parseLeadSession,
+  type LeadSessionPayload,
+} from "@/lib/leadSession";
 
 export function BookStrategyView({ locale }: { locale: Locale }) {
   const t = getMessages(locale);
-  const [leadData, setLeadData] = useState<any>(null);
+  const [leadSession, setLeadSession] = useState<LeadSessionPayload | null>(
+    null,
+  );
+  const [emailInput, setEmailInput] = useState("");
+  const [whatsappInput, setWhatsappInput] = useState("");
   const [state, formAction, isPending] = useActionState(bookStrategyAction, null);
 
   useEffect(() => {
     try {
-      const stored = sessionStorage.getItem("kvali_lead");
-      if (stored) {
-        setLeadData(JSON.parse(stored));
-      }
-    } catch {}
+      const parsed = parseLeadSession(sessionStorage.getItem(KVALI_LEAD_KEY));
+      startTransition(() => {
+        setLeadSession(parsed);
+        if (parsed?.source === "lead-tool") {
+          if (parsed.email) setEmailInput(parsed.email);
+          if (parsed.phone) setWhatsappInput(parsed.phone);
+        }
+      });
+    } catch {
+      startTransition(() => setLeadSession(null));
+    }
   }, []);
 
-  if (state?.success) {
+  if (isBookStrategySuccess(state)) {
     return (
-      <div className="mx-auto max-w-3xl text-white text-center py-20">
+      <div className="mx-auto max-w-3xl py-20 text-center text-white">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-10"
         >
-          <h2 className="text-3xl font-bold text-emerald-300 mb-4">
+          <h2 className="mb-4 text-3xl font-bold text-emerald-300">
             {t.bookStrategy.successMsg}
           </h2>
-          <p className="text-slate-300">
-            {t.bookStrategy.nextStepsMsg}
-          </p>
+          <p className="text-slate-300">{t.bookStrategy.nextStepsMsg}</p>
           <Link
             href={`/${locale}`}
-            className="mt-8 inline-block rounded-full bg-white/10 px-6 py-2 text-sm font-medium hover:bg-white/20 transition"
+            className="mt-8 inline-block rounded-full bg-white/10 px-6 py-2 text-sm font-medium transition hover:bg-white/20"
           >
             {t.bookStrategy.back}
           </Link>
@@ -45,6 +62,9 @@ export function BookStrategyView({ locale }: { locale: Locale }) {
       </div>
     );
   }
+
+  const isTool = leadSession?.source === "lead-tool";
+  const isApply = leadSession?.source === "apply";
 
   return (
     <div className="mx-auto max-w-3xl text-white">
@@ -68,7 +88,11 @@ export function BookStrategyView({ locale }: { locale: Locale }) {
         className="mt-10 grid gap-6 rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl md:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]"
       >
         <form action={formAction} className="space-y-4">
-          <input type="hidden" name="leadData" value={leadData ? JSON.stringify(leadData) : ""} />
+          <input
+            type="hidden"
+            name="leadData"
+            value={leadSession ? JSON.stringify(leadSession) : ""}
+          />
           <div>
             <label className="block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
               {t.bookStrategy.nameLabel}
@@ -77,7 +101,7 @@ export function BookStrategyView({ locale }: { locale: Locale }) {
               type="text"
               name="name"
               required
-              className="mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-emerald-500"
+              className="mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30"
               placeholder={t.bookStrategy.namePlaceholder}
             />
           </div>
@@ -88,7 +112,9 @@ export function BookStrategyView({ locale }: { locale: Locale }) {
             <input
               type="email"
               name="email"
-              className="mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-emerald-500"
+              value={emailInput}
+              onChange={(e) => setEmailInput(e.target.value)}
+              className="mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30"
               placeholder={t.bookStrategy.emailPlaceholder}
             />
           </div>
@@ -99,7 +125,9 @@ export function BookStrategyView({ locale }: { locale: Locale }) {
             <input
               type="tel"
               name="whatsapp"
-              className="mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-emerald-500"
+              value={whatsappInput}
+              onChange={(e) => setWhatsappInput(e.target.value)}
+              className="mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30"
               placeholder={t.bookStrategy.whatsappPlaceholder}
             />
           </div>
@@ -110,11 +138,11 @@ export function BookStrategyView({ locale }: { locale: Locale }) {
             <input
               type="text"
               name="time"
-              className="mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-emerald-500"
+              className="mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30"
               placeholder={t.bookStrategy.timePlaceholder}
             />
           </div>
-          {state?.error && (
+          {isBookStrategyError(state) && (
             <p className="text-sm text-red-400">{state.error}</p>
           )}
           <button
@@ -126,23 +154,65 @@ export function BookStrategyView({ locale }: { locale: Locale }) {
           </button>
         </form>
         <div className="space-y-6 text-sm text-slate-300">
-          {leadData && (
-            <div className="rounded-xl border border-white/10 bg-black/40 p-4">
-              <h3 className="mb-2 text-xs font-semibold uppercase tracking-widest text-emerald-400">{t.bookStrategy.diagnosticTitle}</h3>
+          {isTool && leadSession && (
+            <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4">
+              <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-emerald-400">
+                {t.bookStrategy.toolInsightTitle}
+              </h3>
               <ul className="space-y-2 text-xs text-slate-300">
-                <li><span className="text-slate-500">{t.bookStrategy.businessLabel}</span> {leadData.businessName || "N/A"}</li>
-                <li><span className="text-slate-500">{t.bookStrategy.taxStatusLabel}</span> {leadData.taxStatus || "N/A"}</li>
-                <li><span className="text-slate-500">{t.bookStrategy.bankChoiceLabel}</span> {leadData.bankChoice || "N/A"}</li>
-                <li><span className="text-slate-500">{t.bookStrategy.websiteLabel}</span> {leadData.websiteUrl || "N/A"}</li>
+                <li>
+                  <span className="text-slate-500">{t.bookStrategy.toolLabel}</span>{" "}
+                  {leadSession.toolName}
+                </li>
+                <li>
+                  <span className="text-slate-500">
+                    {t.bookStrategy.painPointLabel}
+                  </span>{" "}
+                  {leadSession.painPoint}
+                </li>
+                {(leadSession.email || leadSession.phone) && (
+                  <li className="border-t border-white/10 pt-2 text-slate-400">
+                    <span className="text-slate-500">
+                      {t.bookStrategy.contactFromToolLabel}
+                    </span>
+                    <br />
+                    {leadSession.email && <span>{leadSession.email}</span>}
+                    {leadSession.email && leadSession.phone && " · "}
+                    {leadSession.phone && <span>{leadSession.phone}</span>}
+                  </li>
+                )}
+              </ul>
+            </div>
+          )}
+          {isApply && leadSession && (
+            <div className="rounded-xl border border-white/10 bg-black/40 p-4">
+              <h3 className="mb-2 text-xs font-semibold uppercase tracking-widest text-emerald-400">
+                {t.bookStrategy.diagnosticTitle}
+              </h3>
+              <ul className="space-y-2 text-xs text-slate-300">
+                <li>
+                  <span className="text-slate-500">{t.bookStrategy.businessLabel}</span>{" "}
+                  {leadSession.businessName || "N/A"}
+                </li>
+                <li>
+                  <span className="text-slate-500">{t.bookStrategy.taxStatusLabel}</span>{" "}
+                  {leadSession.taxStatus || "N/A"}
+                </li>
+                <li>
+                  <span className="text-slate-500">{t.bookStrategy.bankChoiceLabel}</span>{" "}
+                  {leadSession.bankChoice || "N/A"}
+                </li>
+                <li>
+                  <span className="text-slate-500">{t.bookStrategy.websiteLabel}</span>{" "}
+                  {leadSession.websiteUrl || "N/A"}
+                </li>
               </ul>
             </div>
           )}
           <p className="font-mono text-xs text-emerald-300">
             {t.bookStrategy.scarcityMsg}
           </p>
-          <p>
-            {t.bookStrategy.nextStepsMsg}
-          </p>
+          <p>{t.bookStrategy.nextStepsMsg}</p>
         </div>
       </motion.div>
     </div>

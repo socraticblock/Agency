@@ -1,10 +1,15 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { captureLeadAction } from "@/app/actions/lead";
 import { useRouter } from "next/navigation";
 import { getMessages, type Locale } from "@/lib/i18n";
+import {
+  isLeadCaptureError,
+  isLeadCaptureSuccess,
+} from "@/lib/formActionState";
+import { KVALI_LEAD_KEY } from "@/lib/leadSession";
 import { MagneticButton } from "../MagneticButton";
 
 interface LeadCaptureFormProps {
@@ -23,16 +28,43 @@ export function LeadCaptureForm({
   const [state, formAction, isPending] = useActionState(captureLeadAction, null);
   const router = useRouter();
   const t = getMessages(locale);
+  const redirectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (state?.success) {
-      setTimeout(() => {
-        router.push(`/${locale}/book-strategy`);
-      }, 1500);
-    }
-  }, [state, router, locale]);
+    if (!isLeadCaptureSuccess(state)) return;
 
-  if (state?.success) {
+    try {
+      sessionStorage.setItem(
+        KVALI_LEAD_KEY,
+        JSON.stringify({
+          source: "lead-tool",
+          toolName,
+          painPoint,
+          locale,
+          email: state.email,
+          phone: state.phone,
+          capturedAt: new Date().toISOString(),
+        }),
+      );
+    } catch {
+      // storage may be unavailable (private mode)
+    }
+
+    redirectTimer.current = setTimeout(() => {
+      router.push(`/${locale}/book-strategy`);
+    }, 2200);
+
+    return () => {
+      if (redirectTimer.current) clearTimeout(redirectTimer.current);
+    };
+  }, [state, router, locale, toolName, painPoint]);
+
+  const goToBooking = () => {
+    if (redirectTimer.current) clearTimeout(redirectTimer.current);
+    router.push(`/${locale}/book-strategy`);
+  };
+
+  if (isLeadCaptureSuccess(state)) {
     return (
       <motion.div
         initial={{ opacity: 0, y: 10 }}
@@ -45,6 +77,15 @@ export function LeadCaptureForm({
         <p className="mt-2 text-sm text-slate-400">
           {t.leadCapture.successSub}
         </p>
+        <MagneticButton
+          type="button"
+          onClick={goToBooking}
+          magneticStrength={8}
+          textStrength={3}
+          className="mt-6 w-full rounded-xl bg-emerald-500/30 px-6 py-3 font-medium text-emerald-100 transition-colors hover:bg-emerald-500/40"
+        >
+          <span className="block w-full">{t.leadCapture.continueBtn}</span>
+        </MagneticButton>
       </motion.div>
     );
   }
@@ -87,7 +128,7 @@ export function LeadCaptureForm({
           />
         </div>
 
-        {state?.error && (
+        {isLeadCaptureError(state) && (
           <p className="text-sm text-red-400">{state.error}</p>
         )}
 

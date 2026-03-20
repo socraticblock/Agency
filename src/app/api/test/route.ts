@@ -26,6 +26,10 @@ Interaction Protocol:
 4. Completeness: Always complete your thought. If you are validating the user, finish the sentence before asking your discovery question.`;
 
 export async function GET() {
+  if (process.env.NODE_ENV === "production") {
+    return new NextResponse(null, { status: 404 });
+  }
+
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) return NextResponse.json({ error: "No API key" });
 
@@ -50,7 +54,8 @@ export async function GET() {
       finishReason: candidate ? candidate.finishReason : "unknown",
       usageMetadata: response.usageMetadata,
     });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ error: message });
   }
 }

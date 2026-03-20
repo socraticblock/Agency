@@ -344,7 +344,8 @@ export const ka = {
   },
   leadCapture: {
     successTitle: "ჩვენ მივიღეთ თქვენი დეტალები.",
-    successSub: "გადამისამართდებით ზარის დასაჯავშნად...",
+    successSub: "გადაგიყვანთ ზარის დასაჯავშნად — ან გადადით ქვემოთ, როცა მზად ხართ.",
+    continueBtn: "გაგრძელება ახლა",
     emailPlaceholder: "თქვენი ელ. ფოსტა",
     phonePlaceholder: "ტელეფონის ნომერი (არასავალდებულო)",
     submitLabel: "დაწყება",
@@ -515,6 +516,10 @@ export const ka = {
   },
   bookStrategy: {
     title: "დაჯავშნეთ იმპლემენტაციის სლოტი. Q3 სიმძლავრე: მხოლოდ 2 პარტნიორი.",
+    toolInsightTitle: "ინსტრუმენტიდან",
+    toolLabel: "ინსტრუმენტი",
+    painPointLabel: "ფოკუსი",
+    contactFromToolLabel: "კონტაქტი, რომელიც მიგვაწოდეთ",
     back: "უკან",
     nameLabel: "სახელი",
     namePlaceholder: "თქვენი სრული სახელი",

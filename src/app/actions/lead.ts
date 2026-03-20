@@ -2,10 +2,20 @@
 
 import { supabaseServer } from "@/lib/supabase/server";
 
+export type LeadCaptureState =
+  | { success: true; email?: string; phone?: string }
+  | { error: string }
+  | null;
+
+export type BookStrategyFormState =
+  | { success: true }
+  | { error: string }
+  | null;
+
 export async function captureLeadAction(
-  prevState: any,
+  _prevState: LeadCaptureState,
   formData: FormData
-) {
+): Promise<LeadCaptureState> {
   const email = formData.get("email") as string;
   const phone = formData.get("phone") as string;
   const painPoint = formData.get("painPoint") as string;
@@ -33,7 +43,13 @@ export async function captureLeadAction(
       console.log("Mock lead capture:", { email, phone, painPoint, toolName });
     }
 
-    return { success: true };
+    const emailTrim = typeof email === "string" ? email.trim() : "";
+    const phoneTrim = typeof phone === "string" ? phone.trim() : "";
+    return {
+      success: true,
+      ...(emailTrim ? { email: emailTrim } : {}),
+      ...(phoneTrim ? { phone: phoneTrim } : {}),
+    };
   } catch (error) {
     console.error("Lead capture error:", error);
     return { error: "An unexpected error occurred." };
@@ -41,9 +57,9 @@ export async function captureLeadAction(
 }
 
 export async function bookStrategyAction(
-  prevState: any,
+  _prevState: BookStrategyFormState,
   formData: FormData
-) {
+): Promise<BookStrategyFormState> {
   const name = formData.get("name") as string;
   const email = formData.get("email") as string;
   const whatsapp = formData.get("whatsapp") as string;
@@ -67,6 +83,7 @@ export async function bookStrategyAction(
 
       if (error) {
         console.error("Supabase insert error:", error);
+        return { error: "Failed to save booking." };
       }
     } else {
       console.log("Mock strategy call booking:", { name, email, whatsapp, time, leadData });

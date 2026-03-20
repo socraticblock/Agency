@@ -9,7 +9,6 @@ import { ScrollReveal } from "./_components/ScrollReveal";
 import { TrustMetrics } from "./_components/TrustMetrics";
 import { RoadmapTimeline } from "./_components/RoadmapTimeline";
 import type { Locale } from "@/lib/i18n";
-import { ViewPackagesCTA } from "./_components/ViewPackagesCTA";
 import { ScrollingBanner } from "./_components/ScrollingBanner";
 
 import { getMessages } from "@/lib/i18n";

@@ -28,6 +28,7 @@ export function ApplyForm({ locale }: { locale: Locale }) {
       sessionStorage.setItem(
         "kvali_lead",
         JSON.stringify({
+          source: "apply",
           businessName,
           taxStatus,
           bankChoice,

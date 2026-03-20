@@ -386,7 +386,8 @@ export const en = {
   },
   leadCapture: {
     successTitle: "We've received your details.",
-    successSub: "Redirecting you to schedule a call...",
+    successSub: "Taking you to schedule a call — or continue below when you're ready.",
+    continueBtn: "Continue now",
     emailPlaceholder: "Your email address",
     phonePlaceholder: "Phone number (optional)",
     submitLabel: "Get Started",
@@ -548,6 +549,10 @@ export const en = {
   },
   bookStrategy: {
     title: "Let's find a time to connect. We take on a select number of projects to ensure exceptional quality.",
+    toolInsightTitle: "From your tool",
+    toolLabel: "Tool",
+    painPointLabel: "Focus",
+    contactFromToolLabel: "Contact you shared",
     back: "Back",
     nameLabel: "Name",
     namePlaceholder: "Your full name",
