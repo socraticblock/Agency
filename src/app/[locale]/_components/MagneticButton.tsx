@@ -4,6 +4,9 @@ import { useRef, ReactNode } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Link from "next/link";
 
+const MotionLink = motion(Link);
+
+
 interface MagneticButtonProps {
   children: ReactNode;
   href?: string;
@@ -57,7 +60,6 @@ export function MagneticButton({
   };
 
   const isLink = href !== undefined;
-  const Wrapper = motion.create(isLink ? (Component === "a" ? "a" : Link) : "button");
 
   const commonProps = {
     ref: buttonRef,
@@ -70,20 +72,22 @@ export function MagneticButton({
   };
 
   if (isLink) {
+    const ComponentToUse = Component === "a" ? motion.a : MotionLink;
     return (
-      <Wrapper href={href} {...commonProps}>
+      // @ts-expect-error - framer-motion props mismatch
+      <ComponentToUse href={href} {...commonProps}>
         <motion.div style={{ x: textX, y: textY }} className="relative z-10 w-full h-full flex items-center justify-center">
           {children}
         </motion.div>
-      </Wrapper>
+      </ComponentToUse>
     );
   }
 
   return (
-    <Wrapper onClick={onClick} {...commonProps}>
+    <motion.button onClick={onClick} {...commonProps}>
       <motion.div style={{ x: textX, y: textY }} className="relative z-10 w-full h-full flex items-center justify-center">
         {children}
       </motion.div>
-    </Wrapper>
+    </motion.button>
   );
 }

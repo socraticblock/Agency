@@ -1,0 +1,294 @@
+﻿
+> my-agency@0.1.0 lint
+> eslint
+
+
+C:\dev\Personal\my-agency\src\app\[locale]\_components\ConfigDrawer.tsx
+  107:25  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+C:\dev\Personal\my-agency\src\app\[locale]\_components\ConfigSidebar.tsx
+   44:3   warning  'savingsUSD' is defined but never used      @typescript-eslint/no-unused-vars
+   46:3   warning  'setIsModalOpen' is defined but never used  @typescript-eslint/no-unused-vars
+  104:74  error    Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+  110:41  error    Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+
+C:\dev\Personal\my-agency\src\app\[locale]\_components\Configurator.tsx
+   3:10  warning  'useState' is defined but never used                 @typescript-eslint/no-unused-vars
+   3:20  warning  'useRef' is defined but never used                   @typescript-eslint/no-unused-vars
+   4:13  warning  'AnimatePresence' is defined but never used          @typescript-eslint/no-unused-vars
+  41:5   warning  'setStep' is assigned a value but never used         @typescript-eslint/no-unused-vars
+  54:5   warning  'setMobileIndex' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  56:5   warning  'setHydrated' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  68:5   warning  'exchangeRate' is assigned a value but never used    @typescript-eslint/no-unused-vars
+
+C:\dev\Personal\my-agency\src\app\[locale]\_components\FoundationGrid.tsx
+   5:10  warning  'Check' is defined but never used         @typescript-eslint/no-unused-vars
+   5:17  warning  'Info' is defined but never used          @typescript-eslint/no-unused-vars
+   5:35  warning  'Sparkles' is defined but never used      @typescript-eslint/no-unused-vars
+   5:45  warning  'Lightbulb' is defined but never used     @typescript-eslint/no-unused-vars
+  17:25  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\dev\Personal\my-agency\src\app\[locale]\_components\GlobalFooter.tsx
+   4:8  warning  'Link' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @typescript-eslint/no-unused-vars
+  14:5  warning  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\dev\Personal\my-agency\src\app\[locale]\_components\GlobalFooter.tsx:14:5
+  12 |
+  13 |   useEffect(() => {
+> 14 |     setDeployedDate(new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }));
+     |     ^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  15 |   }, []);
+  16 |   const ctaX = useMotionValue(0);
+  17 |   const ctaY = useMotionValue(0);  react-hooks/set-state-in-effect
+
+C:\dev\Personal\my-agency\src\app\[locale]\_components\KineticHero.tsx
+  6:3  warning  'useMotionTemplate' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\dev\Personal\my-agency\src\app\[locale]\_components\MagneticButton.tsx
+  18:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  31:68  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\dev\Personal\my-agency\src\app\[locale]\_components\PackageGrid.tsx
+    7:35  warning  'SovereignPackageId' is defined but never used                   @typescript-eslint/no-unused-vars
+    8:10  warning  'getCheckoutUrl' is defined but never used                       @typescript-eslint/no-unused-vars
+   12:10  warning  'LegalRoadmap' is defined but never used                         @typescript-eslint/no-unused-vars
+   20:10  warning  'isRoadmapOpen' is assigned a value but never used               @typescript-eslint/no-unused-vars
+   24:30  error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+   32:37  error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+   86:25  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  119:27  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+C:\dev\Personal\my-agency\src\app\[locale]\_components\ShieldGrid.tsx
+   4:16   warning  'Download' is defined but never used                             @typescript-eslint/no-unused-vars
+  20:3    warning  'setIsModalOpen' is defined but never used                       @typescript-eslint/no-unused-vars
+  35:11   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  35:86   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  35:157  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  35:166  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  83:42   error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+
+C:\dev\Personal\my-agency\src\app\[locale]\_components\SovereignTriptych.tsx
+   3:20  warning  'useEffect' is defined but never used       @typescript-eslint/no-unused-vars
+   4:35  warning  'useMotionValue' is defined but never used  @typescript-eslint/no-unused-vars
+   4:51  warning  'useTransform' is defined but never used    @typescript-eslint/no-unused-vars
+   4:65  warning  'animate' is defined but never used         @typescript-eslint/no-unused-vars
+   9:6   warning  'StageKey' is defined but never used        @typescript-eslint/no-unused-vars
+  20:53  error    Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+
+C:\dev\Personal\my-agency\src\app\[locale]\_components\SovereignVisualizers.tsx
+  222:47  error    Unexpected any. Specify a different type          @typescript-eslint/no-explicit-any
+  258:47  error    Unexpected any. Specify a different type          @typescript-eslint/no-explicit-any
+  332:20  warning  'setIsPaused' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\dev\Personal\my-agency\src\app\[locale]\_components\StepNav.tsx
+  4:10  warning  'motion' is defined but never used           @typescript-eslint/no-unused-vars
+  4:18  warning  'AnimatePresence' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\dev\Personal\my-agency\src\app\[locale]\_components\TrustSection.tsx
+  4:10  warning  'motion' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\dev\Personal\my-agency\src\app\[locale]\_components\lead-gen\AuditCitation.tsx
+   3:10  warning  'useState' is defined but never used                             @typescript-eslint/no-unused-vars
+   4:10  warning  'motion' is defined but never used                               @typescript-eslint/no-unused-vars
+   4:18  warning  'AnimatePresence' is defined but never used                      @typescript-eslint/no-unused-vars
+  26:11  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  26:23  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+C:\dev\Personal\my-agency\src\app\[locale]\_components\lead-gen\FrictionRaceSimulator.tsx
+  26:7  warning  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\dev\Personal\my-agency\src\app\[locale]\_components\lead-gen\FrictionRaceSimulator.tsx:26:7
+  24 |       return () => clearTimeout(timer);
+  25 |     } else if (raceStep === 5) {
+> 26 |       setIsRacing(false);
+     |       ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  27 |     }
+  28 |   }, [isRacing, raceStep]);
+  29 |  react-hooks/set-state-in-effect
+
+C:\dev\Personal\my-agency\src\app\[locale]\_components\lead-gen\LostWeekendCalculator.tsx
+  45:5  warning  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\dev\Personal\my-agency\src\app\[locale]\_components\lead-gen\LostWeekendCalculator.tsx:45:5
+  43 |   // Reset ticking when inputs change
+  44 |   useEffect(() => {
+> 45 |     setTickingLoss(0);
+     |     ^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  46 |   }, [dailySales, hoursOnline]);
+  47 |
+  48 |   return (  react-hooks/set-state-in-effect
+
+C:\dev\Personal\my-agency\src\app\[locale]\_components\lead-gen\TimeDebtReceipt.tsx
+  3:20  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\dev\Personal\my-agency\src\app\[locale]\architect\_components\FoundationCard.tsx
+   13:26  error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+   29:9   warning  'mouseXSpring' is assigned a value but never used                @typescript-eslint/no-unused-vars
+   30:9   warning  'mouseYSpring' is assigned a value but never used                @typescript-eslint/no-unused-vars
+  173:35  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  177:35  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  181:35  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  185:35  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+C:\dev\Personal\my-agency\src\app\[locale]\architect\_components\ModuleItem.tsx
+   30:110  warning  'setDrawerItem' is defined but never used                        @typescript-eslint/no-unused-vars
+   30:147  warning  'isRecommended' is assigned a value but never used               @typescript-eslint/no-unused-vars
+  151:26   error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  249:137  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+C:\dev\Personal\my-agency\src\app\[locale]\architect\_components\SummarySidebar.tsx
+   4:17  warning  'Download' is defined but never used                             @typescript-eslint/no-unused-vars
+  31:3   warning  'setIsModalOpen' is defined but never used                       @typescript-eslint/no-unused-vars
+  96:19  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  96:30  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+C:\dev\Personal\my-agency\src\app\[locale]\stop-renting\_components\StopRentingContent.tsx
+  223:181  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  223:210  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+C:\dev\Personal\my-agency\src\app\onboarding\[id]\OnboardingPortal.tsx
+  51:38  error    Compilation Skipped: Existing memoization could not be preserved
+
+React Compiler has skipped optimizing this component because the existing manual memoization could not be preserved. The inferred dependencies did not match the manually specified dependencies, which could cause the value to change more or less frequently than expected. The inferred dependency was `router`, but the source dependencies were [sessionId, formData]. Inferred different dependency than source.
+
+C:\dev\Personal\my-agency\src\app\onboarding\[id]\OnboardingPortal.tsx:51:38
+  49 |   const prevStep = () => setStep((s) => Math.max(0, s - 1));
+  50 |
+> 51 |   const handleComplete = useCallback(async () => {
+     |                                      ^^^^^^^^^^^^^
+> 52 |     setIsCompleting(true);
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 53 |     await saveOnboarding(sessionId, formData, STEPS.length - 1);
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 54 |     router.push("/success");
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 55 |   }, [sessionId, formData]);
+     | ^^^^ Could not preserve existing manual memoization
+  56 |
+  57 |   return (
+  58 |     <div className="min-h-screen bg-[#050505] p-4 font-sans text-white selection:bg-emerald-500/30 sm:p-8">  react-hooks/preserve-manual-memoization
+  55:6   warning  React Hook useCallback has a missing dependency: 'router'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            react-hooks/exhaustive-deps
+
+C:\dev\Personal\my-agency\src\components\modals\LegalRoadmap.tsx
+  19:5   warning  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\dev\Personal\my-agency\src\components\modals\LegalRoadmap.tsx:19:5
+  17 |
+  18 |   useEffect(() => {
+> 19 |     setMounted(true);
+     |     ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  20 |   }, []);
+  21 |
+  22 |   if (!mounted) return null;  react-hooks/set-state-in-effect
+  48:38  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               react/no-unescaped-entities
+
+C:\dev\Personal\my-agency\src\components\sections\StandalonePayments.tsx
+   5:10  warning  'createPortal' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
+   6:10  warning  'Lock' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           @typescript-eslint/no-unused-vars
+   7:10  warning  'LegalRoadmap' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
+   9:54  warning  'onShowRoadmap' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  @typescript-eslint/no-unused-vars
+  11:10  warning  'mounted' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               @typescript-eslint/no-unused-vars
+  14:5   warning  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\dev\Personal\my-agency\src\components\sections\StandalonePayments.tsx:14:5
+  12 |
+  13 |   useEffect(() => {
+> 14 |     setMounted(true);
+     |     ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  15 |   }, []);
+  16 |
+  17 |   const steps = [  react-hooks/set-state-in-effect
+  17:9   warning  'steps' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 @typescript-eslint/no-unused-vars
+  88:19  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            react/no-unescaped-entities
+
+C:\dev\Personal\my-agency\src\components\ui\CustomCursor.tsx
+  22:5  warning  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\dev\Personal\my-agency\src\components\ui\CustomCursor.tsx:22:5
+  20 |   useEffect(() => {
+  21 |     const mq = window.matchMedia("(hover: none)");
+> 22 |     setHasHover(!mq.matches);
+     |     ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  23 |   }, []);
+  24 |
+  25 |   useEffect(() => {  react-hooks/set-state-in-effect
+
+C:\dev\Personal\my-agency\src\hooks\useConfigurator.ts
+  128:5    warning  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\dev\Personal\my-agency\src\hooks\useConfigurator.ts:128:5
+  126 |   // Hydrate from localStorage on mount
+  127 |   useEffect(() => {
+> 128 |     setHydrated(true);
+      |     ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  129 |   }, []);
+  130 |
+  131 |   useEffect(() => {                   react-hooks/set-state-in-effect
+  133:7    warning  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\dev\Personal\my-agency\src\hooks\useConfigurator.ts:133:7
+  131 |   useEffect(() => {
+  132 |     if (hydrated && !canGoToStep(step)) {
+> 133 |       setStep(1);
+      |       ^^^^^^^ Avoid calling setState() directly within an effect
+  134 |     }
+  135 |   }, [hydrated, step, canGoToStep, setStep]);
+  136 |  react-hooks/set-state-in-effect
+  215:127  warning  React Hook useMemo has a missing dependency: 'westernAgencyTotalUSD'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        react-hooks/exhaustive-deps
+
+C:\dev\Personal\my-agency\src\lib\discovery\discoveryDefinitions.ts
+  117:54  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\dev\Personal\my-agency\src\lib\i18n.ts
+  11:39  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+Ô£û 92 problems (36 errors, 56 warnings)
+

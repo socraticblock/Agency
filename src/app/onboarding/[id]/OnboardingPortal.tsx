@@ -52,7 +52,7 @@ export default function OnboardingPortal({ sessionId }: Props) {
     setIsCompleting(true);
     await saveOnboarding(sessionId, formData, STEPS.length - 1);
     router.push("/success");
-  }, [sessionId, formData]);
+  }, [sessionId, formData, router]);
 
   return (
     <div className="min-h-screen bg-[#050505] p-4 font-sans text-white selection:bg-emerald-500/30 sm:p-8">
