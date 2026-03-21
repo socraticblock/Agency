@@ -30,6 +30,7 @@ export interface ServiceItem {
   howItHelps?: string;
   lawyerRole?: string;
   strategicBacking?: StrategicBackingItem[];
+  recommendation?: string;
 }
 
 export interface Foundation extends ServiceItem {
@@ -38,6 +39,7 @@ export interface Foundation extends ServiceItem {
   strategy: string;
   scope: string[];
   recommendedModules?: string[];
+  inheritedValue?: { id: string, name: string, priceGEL: number };
 }
 
 export interface Module extends ServiceItem {
@@ -53,22 +55,17 @@ export const FOUNDATIONS: Foundation[] = [
     category: 'Base',
     priceGEL: 2699,
     description: 'One perfect page designed to do one thing: turn a visitor into a customer. We remove the fluff and leave only the results.',
-    scope: [
-      '1 Perfectly Crafted Page (Zero fluff, all results)', 
-      'Smart Lead Capture (Leads delivered to you instantly)', 
-      'Conversion-First Layout (Designed to make people click)'
-    ],
     concept: 'One perfect page designed to do one thing: turn a visitor into a customer. We remove the fluff and leave only the results.',
     strategy: "Focus is the new currency. By removing navigation menus and distractions, we eliminate the 'Paradox of Choice,' leading your visitor on a single, straight path to your 'Buy' button.",
     howItWorks: 'Removes navigation friction to prevent users from wandering, focusing 100% of the energy on a single call-to-action.',
-    proFeatures: [
-      { title: 'Strategically Engineered', desc: 'Built for results, not just looks. Every element is placed to move people closer to a "Yes".' },
-      { title: 'Conversion-Centered Layout', desc: 'A visual path that guides your visitors directly to your "Buy" or "Book" button without distractions.' },
-      { title: 'Lead Capture Logic', desc: 'A smart, secure system that catches every lead and delivers them to your hands instantly.' }
+    scope: [
+      'Structure | 1 Perfectly Crafted Sales Node (Zero fluff, 100% focused on one absolute target offer)', 
+      'Capture | Smart Lead Capture Vault (Catches every inquiry instantly so they don\'t go back to Google)', 
+      'Design | Conversion-First Wireframe (Designed psychologically to guide visitors to the absolute "Yes" button)'
     ],
     bestFor: ["Influencers with 1 Specific Offer", "Webinar & Event Hosts", "Real Estate 'Hero' Listings", "Digital Product Launchers"],
     roiNote: "Designed to maximize your ad-spend ROI.",
-    recommendedModules: ['exit-pop', 'ga4-analytics', 'pro-copy', 'ab-testing']
+    recommendedModules: ['exit-pop', 'ga4-analytics', 'pro-copy', 'ab-testing', 'heatmap', 'cro-audit', 'rule-chatbot', 'ugc-video', 'micro-animations', 'extra-page']
   },
   {
     id: 'cms',
@@ -77,67 +74,59 @@ export const FOUNDATIONS: Foundation[] = [
     priceGEL: 6750,
     description: "Your professional headquarters. This moves you from a 'one-man show' to a 'global brand' with a system you can actually control.",
     scope: [
-      '4 Professional Foundational Pages (Home, About, Contact, Blog)', 
-      'Visual Brand Dashboard (Total control over your content)', 
-      'Media Asset Vault (High-speed home for your photos/videos)'
+      'Nodes | 4 Foundational Brand Nodes (Professional Home, About, Contact, Blog)', 
+      'CMS | Visual Content Dashboard (A private drag-and-drop editor to update text and photos in seconds—without ever needing to pay a developer)',
+      'Blog | Automated Authority Engine (A blog system that automatically categorizes your thought leadership for absolute Google SEO dominance)',
+      'Leads | Centralized Lead Vault (A secure database that stores every inquiry so you never lose a potential customer)',
+      'Assets | High-Speed Media Vault (An optimized cloud home for your brand’s high-res photography and videos)',
+      'Training | VIP System Onboarding (Includes 1-on-1 strategic training and a custom documentation vault for owner-independence)'
     ],
     concept: "Your professional headquarters. This moves you from a 'one-man show' to a 'global brand' with a system you can actually control.",
-    strategy: "This is about Authority. We use a 'Headless' architecture to separate your design from your content. This means you can update your brand story in seconds via your dashboard without ever needing a developer.",
+    strategy: "\"The Command Center moves you from 'renting' a site to 'owning' an asset. We separate your visual design from your business data. This means you can update your brand story yourself in real-time, while the underlying code stays lightning-fast, secure, and ready to scale. You get total control—and you stop paying hourly developer fees just to swap a photo or update text.\"",
     howItWorks: 'You get a simplified social media-style editor to change photos and text without touching code.',
-    proFeatures: [
-      { title: 'Visual CMA Interface', desc: 'Intuitive "drag-and-drop" updates to your brand story.' },
-      { title: 'Media Asset Library', desc: 'A centralized, optimized vault for high-res brand photography and videos.' },
-      { title: 'Dynamic Blog Framework', desc: 'Automatically categorizes thought leadership for SEO dominance.' }
-    ],
+
     bestFor: ["B2B Consultants & Coaches", "Creative & Marketing Agencies", "High-Ticket Service Providers", "Professional Personal Brands"],
     roiNote: "Built for owner-independence and authority.",
-    recommendedModules: ['calendar-sync', 'hubspot-sync', 'social-sync', 'local-seo']
+    recommendedModules: ['calendar-sync', 'hubspot-sync', 'social-sync', 'local-seo', 'multilingual', 'seo-audit', 'deposit-logic', 'micro-animations', 'extra-page', 'map-marker', 'doc-template']
   },
   {
     id: 'ecomm',
     name: '24/7 E-commerce Storefront',
     category: 'Base',
     priceGEL: 12150,
-    description: "An automated sales machine that handles the hard work—payments, stock, and shipping—so you can focus on creating.",
-    scope: [
-      'Full Transactional Core (Shop, Product, Checkout)', 
-      'Inventory Control Center (Real-time stock tracking)', 
-      'Admin Sales Dashboard (Your business cockpit)'
-    ],
-    concept: "An automated sales machine that handles the hard work—payments, stock, and shipping—so you can focus on creating.",
+    inheritedValue: { id: 'cms', name: "Digital Command Center Core", priceGEL: 6750 },
+    description: "An automated sales machine featuring Native RS.ge Fiscalization Sync to handle the hard work—payments, stock, and shipping—so you can focus on creating.",
+    concept: "An automated sales machine featuring Native RS.ge Fiscalization Sync to handle the hard work—payments, stock, and shipping—so you can focus on creating.",
     strategy: "Friction is the enemy of sales. We build a high-speed 'Checkout Tunnel' designed to keep the psychological momentum going until the payment is confirmed, while handling stock and shipping in the background.",
     howItWorks: 'Handles money, shipping, and stock tracking so the entrepreneur can focus on creating.',
-    proFeatures: [
-      { title: 'Automated Inventory Sync', desc: 'Real-time updates to stock levels with "Sold Out" alerts.' },
-      { title: 'Secure Checkout Tunnel', desc: 'High-security protocol handling global cards and 2026 data standards.' },
-      { title: 'Administrative Sales Dashboard', desc: 'Comprehensive backend view of revenue, orders, and shipping.' }
+    scope: [
+      'Commerce | Full Transactional Core (The Shop, Product nodes, and high-speed Checkout Tunnel)', 
+      'Inventory | Automated Control Center (Real-time stock tracking with "Sold Out" safeguards)', 
+      'FinTech | Merchant API (TBC/BOG/Stripe) integration for seamless transaction processing',
+      'Admin | Visual Sales Cockpit (A backend dashboard to view revenue, handle orders, and print shipping in seconds)'
     ],
     bestFor: ["Niche Boutique Owners", "Merch & Apparel Creators", "Digital Asset Sellers", "Artisanal Exporters (Wine/Jewelry)"],
     roiNote: "Automates overheads to scale sales flawlessly.",
-    recommendedModules: ['pay-gateway', 'fiscal-sync', 'photography', 'sms-hub']
+    recommendedModules: ['pay-gateway', 'fiscal-sync', 'micro-animations', 'sms-hub', 'multi-filter', 'recurring-bill', 'compliance-audit', 'rpa-auto', 'extra-page', 'map-marker', 'doc-template']
   },
   {
     id: 'saas',
     name: 'Custom Web Application',
     category: 'Base',
     priceGEL: 40500,
+    inheritedValue: { id: 'cms', name: "Digital Command Center Core", priceGEL: 6750 },
     description: "A dedicated software tool built to solve a specific problem for your community at infinite scale. This is a sellable asset, not just a site.",
-    scope: [
-      'Core SaaS Logic Architecture (The brain of your tool)', 
-      'Private User Accounts (Secure doors for every member)', 
-      'Scale-Ready Database (Built for 10 or 10,000 users)'
-    ],
     concept: "A dedicated software tool built to solve a specific problem for your community at infinite scale. This is a sellable asset, not just a site.",
     strategy: "This is a sellable business asset, not just a site. By using 'Multi-Tenancy' logic, we ensure every user has a secure, private experience within your system, making it a scalable platform for your community.",
     howItWorks: 'Uses custom logic (like fitness calculators or booking systems) to solve niche problems for your community.',
-    proFeatures: [
-      { title: 'Role-Based Access (RBAC)', desc: 'Custom permission levels (Free User, VIP Member, Admin).' },
-      { title: 'Custom API Integration', desc: 'Connecting your logic to Google Maps, OpenAI, or logistics trackers.' },
-      { title: 'Scalable Foundation', desc: 'Technical foundation built for thousands of concurrent users without slowing down.' }
+    scope: [
+      'Brain | Core SaaS Logic Architecture (The logic workflows allowing users to calculate or manage tools)', 
+      'Access | Secure RBAC Accounts (Different access gates for Free Users, VIPs, and System Admins)', 
+      'Scale | Infinite-Scale Database Node (A database frame built to support concurrent users without slowing down)'
     ],
     bestFor: ["Private Membership Communities", "EdTech & Online Academies", "Niche SaaS Founders", "Booking & Management Tools"],
     roiNote: "Creates scalable MRR digital business asset flaws setups.",
-    recommendedModules: ['recurring-bill', 'course-tracking', 'api-opt', 'tech-doc']
+    recommendedModules: ['micro-animations', 'recurring-bill', 'course-tracking', 'api-opt', 'tech-doc', 'ai-sprint', 'ai-kb', 'auto-cert', 'listing-portal', 'sla-support', 'staff-aug']
   },
   {
     id: 'upgrade',
@@ -176,7 +165,7 @@ export const FOUNDATIONS: Foundation[] = [
         cost: 'For every 0.1s delay stat loses 8.4% conversion revenue. Losing standard 10,000 GEL setups "burns" 800 GEL monthly workloads sets.'
       }
     ],
-    recommendedModules: ['compliance-audit', 'seo-audit', 'micro-animations']
+    recommendedModules: ['compliance-audit', 'seo-audit', 'micro-animations', 'ga4-analytics', 'heatmap', 'cro-audit', 'api-opt', 'adj-credits']
   }
 ];
 
@@ -248,16 +237,16 @@ export const MODULES: Module[] = [
     category: 'Marketing',
     name: 'Advanced GA4 Analytics',
     priceGEL: 1200,
-    whatItIs: 'Custom event tracking architecture (scroll depth, CTA clicks, video watch-time).',
-    howItHelps: 'Shows exactly where you are losing money in your funnel so you can make data-driven marketing decisions.'
+    whatItIs: "A smart tracking system that records exactly how people use your site. We don't just count visitors; we measure how far they scroll, which buttons they actually click, and how much of your videos they truly watch.",
+    howItHelps: "It stops the guessing game. You will see exactly where people get confused or leave your site, giving you the 'why' behind your sales. This allows you to stop wasting money on ads that don't work and focus on what actually turns visitors into customers."
   },
   {
     id: 'heatmap',
     category: 'Marketing',
     name: 'Heatmap & Recording',
     priceGEL: 500,
-    whatItIs: 'Setup of Hotjar or Microsoft Clarity behavioral analysis tools.',
-    howItHelps: 'Allows you to watch recordings of users interacting with your site to identify "dead zones" where they get stuck.'
+    whatItIs: "A visual map of your website. We install a tool that shows you exactly where people are clicking, how far they scroll, and what parts of your page they are completely ignoring.",
+    howItHelps: "It’s like looking over your customers' shoulders. You can watch real screen recordings of their visits to see exactly where they get confused or frustrated. This lets us fix the 'dead zones' and make the path to buying from you as smooth as possible."
   },
   {
     id: 'seo-audit',
@@ -288,8 +277,8 @@ export const MODULES: Module[] = [
     category: 'Marketing',
     name: 'A/B Testing Framework',
     priceGEL: 1200,
-    whatItIs: 'Infrastructure to test two versions of a headline or button simultaneously.',
-    howItHelps: 'Lets the data decide what works. Increases conversion rates by scientifically proving which design generates more clicks.'
+    whatItIs: "A live experiment for your website. We show two different versions of a section—like a headline, an image, or a button—to different visitors at the same time. Then, we track which version gets more clicks or sales.",
+    howItHelps: "It takes the guessing out of your business. Instead of wondering which message or design works better, you let your actual customers tell you with their actions. This ensures your site is always improving and making you as much money as possible."
   },
   {
     id: 'social-sync',
@@ -305,16 +294,17 @@ export const MODULES: Module[] = [
     category: 'Marketing',
     name: 'CRO Behavioral Audit',
     priceGEL: 1500,
-    whatItIs: 'A manual expert audit to identify user "friction" points.',
-    howItHelps: 'Translates data into strategy. We tell you exactly what colors, words, and layouts to change to double your sales.'
+    recommendation: 'RECOMMENDED WITH GA4 & HEATMAPS',
+    whatItIs: "An expert manual review of your website's performance. I personally analyze the data collected by your GA4 and Heatmap modules to find the 'hidden friction'—the exact moments where potential customers get confused and leave.",
+    howItHelps: "Data is just numbers unless you have an architect to read it. I translate your recordings and charts into a clear 'battle plan' of which words, colors, and layouts need to change to double your sales. It’s the final step to ensuring your marketing budget isn't being wasted."
   },
   {
     id: 'exit-pop',
     category: 'Marketing',
     name: 'Lead Capture Exit Pop-ups',
     priceGEL: 400,
-    whatItIs: 'Intelligent triggers that detect when a user is about to close the tab.',
-    howItHelps: 'Recovers up to 15% of lost traffic by offering a lead magnet or discount in the final second.'
+    whatItIs: "A friendly 'final check' for your visitors. It’s a smart window that only appears when someone is clearly about to leave your site—like moving their mouse toward the 'close' button. It’s a graceful way to offer a parting gift, like a discount or a helpful guide, before they go.",
+    howItHelps: "It rescues potential customers who are about to vanish. Instead of losing them forever, you give them one last reason to stay in touch. It’s a low-pressure way to turn a 'goodbye' into a new lead, often recovering up to 15% of the visitors you were about to lose.\n\n[ ℹ️ SOURCE: ] Verified recovery benchmarks from Conversion Sciences & OptinMonster case studies."
   },
 
   // ==========================================
@@ -406,8 +396,8 @@ export const MODULES: Module[] = [
     name: 'Rule-Based Chatbot',
     priceGEL: 2700,
     timeSaved: 10,
-    whatItIs: 'Pre-scripted FAQ and lead capture automation.',
-    howItHelps: 'Answers basic questions instantly 24/7, freeing you from "Is this available?" DMs.'
+    whatItIs: "A smart, guided assistant for your website. Instead of making your customers type out long questions, we provide clear 'Quick-Reply' buttons that answer their top needs—like pricing, services, or booking—instantly and accurately.",
+    howItHelps: "It’s like having a 24/7 receptionist that never makes a mistake. It saves you 10+ hours a month by handling basic requests automatically, only alerting you when a high-value lead is ready to talk. Because it uses a guided button system, it’s 100% reliable, works perfectly on mobile, and has zero monthly API costs."
   },
   {
     id: 'ai-sprint',
@@ -457,6 +447,14 @@ export const MODULES: Module[] = [
   // 6. CREATIVE & CONTENT ADD-ONS
   // ==========================================
   {
+    id: 'extra-page',
+    category: 'Creative',
+    name: 'Additional Static Page',
+    priceGEL: 450,
+    whatItIs: "A single, fixed-content expansion (e.g., Privacy Policy, Team Bio). This is a static node and does not include a CMS Dashboard or Blog functionality. For self-managed, dynamic growth, see the Digital Command Center foundation.",
+    howItHelps: "It lets your website grow as your business does. Instead of a cluttered site, you can give each important detail its own professional home. This keeps your brand organized and allows you to scale your online presence without needing a full rebuild later.\n\n⚠️ ARCHITECT'S NOTE:\n\"This is a fixed-content expansion. It is designed for information that stays consistent. If you need a dynamic, self-managed Blog Engine or a Content Dashboard, we recommend the Digital Command Center foundation.\""
+  },
+  {
     id: 'brand-identity',
     category: 'Creative',
     name: 'Brand Identity Pack',
@@ -469,24 +467,8 @@ export const MODULES: Module[] = [
     category: 'Creative',
     name: 'Professional Copywriting',
     priceGEL: 300,
-    whatItIs: 'High-conversion writing per page.',
-    howItHelps: 'Turning visitors into buyers. We write the words that trigger the psychological urge to click "Buy".'
-  },
-  {
-    id: 'photography',
-    category: 'Creative',
-    name: 'Product Photography',
-    priceGEL: 300,
-    whatItIs: 'Studio or on-site professional shoots.',
-    howItHelps: 'Premium visuals justify premium prices. High-res imagery is the #1 factor in E-commerce trust.'
-  },
-  {
-    id: 'ugc-video',
-    category: 'Creative',
-    name: 'UGC Video Production',
-    priceGEL: 250,
-    whatItIs: 'Influencer-style "User Generated" video ads.',
-    howItHelps: 'High social proof. Real people using your products generate 4x more engagement than corporate ads.'
+    whatItIs: "High-performance sales messaging engineered using the AIDA framework (Attention, Interest, Desire, Action). We architect a narrative that hooks your visitors' attention, builds genuine interest in your service, creates a deep desire for the solution, and triggers a clear call to action.",
+    howItHelps: "Design grabs attention, but words make the sale. Professional messaging transforms your website from a passive brochure into a persuasive 24/7 salesperson. By speaking directly to your customer's needs through a proven psychological funnel, we significantly increase your conversion rates and ensure your brand's value is felt."
   },
   {
     id: 'doc-template',
@@ -501,8 +483,8 @@ export const MODULES: Module[] = [
     category: 'Creative',
     name: 'Micro-Animations',
     priceGEL: 800,
-    whatItIs: 'Custom JS/CSS interactions and fluid hovers.',
-    howItHelps: 'The "0.1% Elite" feel. Small details that signal to high-ticket clients that they are in a premium space.'
+    whatItIs: "Advanced motion design and kinetic interactions. We use elite libraries like Framer Motion to engineer subtle, 'Apple-level' responses—magnetic buttons, smooth scroll-reveals, and fluid transitions that make your website feel alive, responsive, and premium.",
+    howItHelps: "The '0.1% Luxury' signal. High-ticket clients value attention to detail. These micro-interactions build subconscious trust and signal that your business operates at the highest professional level. It keeps users engaged longer and transforms a standard browsing session into a world-class digital experience."
   },
 
   // ==========================================

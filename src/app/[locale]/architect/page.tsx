@@ -1,6 +1,7 @@
 import type { Locale } from "@/lib/i18n";
 import { Navbar } from "../_components/Navbar";
 import Configurator from "../_components/Configurator";
+import { NanoBananaBackground } from "../_components/NanoBananaBackground";
 
 export const runtime = 'edge';
 
@@ -20,8 +21,11 @@ export default async function ArchitectPage({
   return (
     <>
       <Navbar locale={lang} />
-      <main className="min-h-screen bg-zinc-950">
-        <div className="max-w-7xl mx-auto px-4 pt-6 pb-4">
+      <main className="min-h-screen bg-background relative overflow-hidden">
+        {/* Continuous mesh grid backgound overlay */}
+        <NanoBananaBackground />
+
+        <div className="max-w-7xl mx-auto px-4 pt-6 pb-4 relative z-10">
           <div className="flex flex-col gap-1 mb-6">
             <span className="text-xs font-black font-space text-emerald-400 uppercase tracking-widest">Kvali Architect Studio</span>
             <h1 className="text-2xl md:text-3xl font-black font-space text-white tracking-tight">
@@ -32,7 +36,10 @@ export default async function ArchitectPage({
             </p>
           </div>
         </div>
-        <Configurator />
+        
+        <div className="relative z-10">
+          <Configurator />
+        </div>
       </main>
     </>
   );

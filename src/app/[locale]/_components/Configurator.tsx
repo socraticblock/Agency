@@ -78,6 +78,8 @@ export default function Configurator() {
     isEditing,
     setIsEditing,
     clearConfiguration,
+    moduleQuantities,
+    updateQuantity,
   } = useConfigurator();
 
   useEffect(() => {
@@ -99,7 +101,8 @@ export default function Configurator() {
 
   return (
     <LazyMotion features={loadFeatures}>
-      <div className="flex min-h-screen bg-black relative">
+      <div className="flex flex-col lg:flex-row relative gap-5 px-3 max-w-[1400px] mx-auto">
+
         <div className="absolute inset-x-0 bottom-0 top-[20%] bg-gradient-to-t from-emerald-500/5 to-transparent pointer-events-none" />
 
         {/* Main Flow Side */}
@@ -132,7 +135,10 @@ export default function Configurator() {
                     hasGita={hasGita}
                     goToStep={goToStep}
                     activeFoundation={activeFoundation}
+                    moduleQuantities={moduleQuantities}
+                    updateQuantity={updateQuantity}
                   />
+
                 )}
 
                 {step === 3 && (
@@ -176,9 +182,12 @@ export default function Configurator() {
 
         </div>
 
-        <ConfigSidebar
+
+
+                <ConfigSidebar
           activeFoundation={activeFoundation}
           selectedModules={selectedModules}
+          moduleQuantities={moduleQuantities}
           oneTimeTotal={oneTimeTotal}
           monthlyTotal={monthlyTotal}
           isUSD={isUSD}
@@ -188,6 +197,7 @@ export default function Configurator() {
           setIsModalOpen={() => setIsModalOpen(true)}
           totalHoursSaved={totalHoursSaved}
           shieldTier={shieldTier}
+          resetAll={clearConfiguration}
         />
 
         {/* Modal / Drawer Overlay */}
@@ -197,6 +207,7 @@ export default function Configurator() {
           setFoundation={setFoundation}
           toggleModule={toggleModule}
           selectedModules={selectedModules}
+          activeFoundationId={foundation}
         />
 
         <ConfigModal

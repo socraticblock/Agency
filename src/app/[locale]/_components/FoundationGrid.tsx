@@ -1,7 +1,8 @@
 "use client";
 
-import { m } from "framer-motion";
-import { Check, Info, ArrowRight, Sparkles, Lightbulb } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { m, AnimatePresence } from "framer-motion";
+import { Check, Info, ArrowRight, Sparkles, Lightbulb, RefreshCw, ChevronDown } from "lucide-react";
 import { FOUNDATIONS, ServiceItem } from "@/constants/pricing";
 import FoundationCard from "../architect/_components/FoundationCard";
 
@@ -28,6 +29,24 @@ export default function FoundationGrid({
   setDrawerItem,
   goToStep
 }: FoundationGridProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
+
   return (
     <m.div
       key="step1"
@@ -44,187 +63,165 @@ export default function FoundationGrid({
         <p className="text-xs text-slate-500 font-medium mt-0.5">Define your core architecture starting path nodes correctly.</p>
       </div>
 
-      {/* The Kvali Engineering Standard Banner */}
-      <m.div 
-        initial={{ opacity: 0, y: 3 }} animate={{ opacity: 1, y: 0 }}
-        className="p-3 bg-zinc-900/40 rounded-xl border border-zinc-800/40 flex flex-col sm:flex-row justify-between items-center gap-2 backdrop-blur-md"
-      >
-        <div>
-          <span className="text-xs font-black font-space text-emerald-400 uppercase tracking-wider flex items-center gap-1">
-            <Sparkles className="h-3.5 w-3.5" /> THE KVALI ENGINEERING STANDARD
-          </span>
-          <p className="text-[11px] text-slate-500 font-medium">Headache-Free implementation built into every base.</p>
-        </div>
-        <div className="flex gap-1.5">
-          <div className="group relative">
-            <div className="cursor-help bg-emerald-500/5 hover:bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/10 text-[10px] font-bold text-emerald-300 flex items-center gap-1 transition-all">PM</div>
-            <div className="absolute bottom-full right-0 mb-1 hidden group-hover:block w-48 p-2 bg-black border border-zinc-800 rounded-xl text-[11px] text-slate-400 shadow-xl z-20 leading-relaxed">
-              <span className="text-white font-bold">Project Management:</span> We manage the team, the tech, and the timelines so you stay in your creative zone.
-            </div>
-          </div>
-          <div className="group relative">
-            <div className="cursor-help bg-emerald-500/5 hover:bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/10 text-[10px] font-bold text-emerald-300 flex items-center gap-1 transition-all">QA</div>
-            <div className="absolute bottom-full right-0 mb-1 hidden group-hover:block w-48 p-2 bg-black border border-zinc-800 rounded-xl text-[11px] text-slate-400 shadow-xl z-20 leading-relaxed">
-              <span className="text-white font-bold">Quality Assurance:</span> We test every pixel for bulletproof security and perfect displays on all devices.
-            </div>
-          </div>
-        </div>
-      </m.div>
-
-      {/* Desktop View */}
-      <div className="hidden md:grid grid-cols-2 gap-4">
-        {FOUNDATIONS.map((f) => (
-          <FoundationCard
-            key={f.id}
-            f={f}
-            isSelected={foundation === f.id}
-            onClick={() => setFoundation(f.id)}
-            formatPrice={formatPrice}
-          />
-        ))}
-      </div>
-
-      {/* Mobile Snap Carousel */}
-      <div className="md:hidden flex flex-col gap-3">
-        <div
-          ref={scrollRef}
-          onScroll={handleScroll}
-          className="flex overflow-x-auto snap-x snap-mandatory gap-4 scrollbar-none pb-2"
-        >
-          {FOUNDATIONS.map((f) => {
-            const isSelected = foundation === f.id;
-            return (
-              <div key={f.id} className="snap-center shrink-0 w-[85vw]">
-                <m.div
-                  onClick={() => setFoundation(f.id)}
-                  role="button"
-                  className={`relative cursor-pointer text-left p-4 rounded-xl border flex flex-col justify-between w-full h-[140px] transition-all ${isSelected
-                      ? "border-emerald-500 bg-emerald-500/[0.04]"
-                      : "border-zinc-800/60 bg-zinc-900/30"
-                    }`}
-                >
-                  <div className="flex flex-col text-left">
-                    <h4 className="text-base font-black text-white mt-0.5">{f.name}</h4>
-                    
-                    {f.bestFor && (
-                      <div className="flex flex-wrap gap-1 mt-1">
-                        {f.bestFor.slice(0, 2).map((bad, i) => (
-                          <span key={i} className="text-[9px] font-bold bg-emerald-500/10 text-emerald-300 px-1.5 py-0.5 rounded-full border border-emerald-500/10">
-                            {bad}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex justify-between items-center w-full pt-1.5 border-t border-zinc-900/40">
-                    <button
-                      onClick={(e) => { e.stopPropagation(); setDrawerItem(f); }}
-                      className="text-emerald-400 text-xs font-bold underline"
-                    >
-                      Review Technical Strategy
-                    </button>
-                    <span className="text-sm font-black font-space text-emerald-300">
-                      {formatPrice(f.priceGEL)}
-                    </span>
-                  </div>
-                </m.div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Pagination Dots */}
-        <div className="flex justify-center gap-1.5">
-          {FOUNDATIONS.map((_, i) => (
-            <m.div
-              key={i}
-              animate={{ scale: i === mobileIndex ? 1.4 : 1, opacity: i === mobileIndex ? 1 : 0.4 }}
-              className={`h-1.5 w-1.5 rounded-full bg-emerald-400`}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Progressive Disclosure Based on Selections */}
-        {activeFoundation && (
+      <AnimatePresence mode="wait">
+        {activeFoundation ? (
+          /* 🏆 ISOLATED SELECTED VIEW */
           <m.div
-            initial={{ opacity: 0, height: 0, marginTop: 0 }}
-            animate={{ opacity: 1, height: "auto", marginTop: 8 }}
-            exit={{ opacity: 0, height: 0, marginTop: 0 }}
-            transition={{ duration: 0.25 }}
+            key="isolated"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
             className="flex flex-col gap-3"
           >
-            {/* Exact Scope of Work */}
-            {activeFoundation.scope && (
-              <div className="p-3 bg-zinc-900/20 rounded-xl border border-zinc-800/40 flex flex-col gap-1.5">
-                <div className="flex items-center gap-1">
-                   <span className="text-xs font-black font-space text-emerald-400 uppercase flex items-center gap-1">
-                     WHAT YOU GET IN THIS BASE
-                   </span>
-                   <div className="group relative">
-                     <Info className="h-3 w-3 text-emerald-400/60 cursor-help" />
-                     <div className="absolute bottom-full left-0 mb-1 hidden group-hover:block w-52 p-2 bg-black border border-zinc-800 rounded-xl text-xs text-slate-400 shadow-2xl z-30 leading-relaxed">
-                       This is your high-performance starting kit. It’s the engine of your project before you add custom business modules in the next steps.
-                     </div>
-                   </div>
-                </div>
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-1">
-                  {activeFoundation.scope.map((item, id) => (
-                    <li key={id} className="text-sm text-slate-300 flex items-center gap-1.5">
-                      <Check className="h-3.5 w-3.5 text-emerald-500 flex-shrink-0" /> {item}
-                    </li>
-                  ))}
-                </ul>
+            <m.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+              className="relative z-20 flex flex-col sm:flex-row justify-between items-start sm:items-center bg-zinc-900/40 p-2 rounded-xl border border-zinc-800/40 backdrop-blur-md gap-2"
+            >
+              <div className="flex items-center gap-2 pl-2 shrink-0">
+                <div className="h-2 w-2 bg-emerald-400 rounded-full animate-pulse" />
+                <span className="text-xs font-bold text-slate-400">Foundation</span>
               </div>
-            )}
 
-            {/* Strategists Note */}
-            <div className="p-3 bg-zinc-900/40 rounded-xl border border-zinc-800/50 flex gap-2 items-start backdrop-blur-md">
-              <Lightbulb className="h-4 w-4 text-emerald-400 mt-0.5 flex-shrink-0" />
-              <div>
-                <span className="text-xs font-black font-space text-emerald-400 uppercase flex items-center gap-1">
-                  Strategists Note: How it Works
-                </span>
-                <p className="text-sm text-slate-400 mt-0.5 leading-relaxed font-medium">
-                  {activeFoundation.strategy}
-                </p>
+              <div ref={dropdownRef} className="relative w-full sm:w-auto">
+                <button
+                  type="button"
+                  onClick={(e) => { e.stopPropagation(); setIsOpen(!isOpen); }}
+                  className="flex w-full sm:w-auto items-center justify-center gap-1.5 bg-zinc-800/20 hover:bg-zinc-800/40 transition-all border border-zinc-800/50 px-2.5 py-1.5 rounded-xl text-sm font-black text-slate-200 cursor-pointer backdrop-blur-md"
+                >
+                  <span className="text-emerald-400">{activeFoundation?.name || "Select"}</span>
+                  <ChevronDown className={`h-4 w-4 text-slate-500 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
+                </button>
+
+                <AnimatePresence>
+                  {isOpen && (
+                    <>
+                      <div className="fixed inset-0 z-10" onClick={() => setIsOpen(false)} />
+                      <m.div
+                        initial={{ opacity: 0, y: 5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 5 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute left-0 mt-1.5 bg-zinc-950/95 border border-zinc-800 rounded-xl overflow-hidden shadow-2xl z-20 w-full sm:w-64 py-1 backdrop-blur-xl"
+                      >
+                        {FOUNDATIONS.map(f => (
+                          <button
+                            key={f.id}
+                            type="button"
+                            onClick={() => { setFoundation(f.id); setIsOpen(false); }}
+                            className={`w-full text-center px-3 py-2 text-xs font-bold hover:bg-white/5 transition-colors flex items-center justify-center gap-1.5 ${f.id === foundation ? "text-emerald-400 bg-emerald-500/5" : "text-slate-300"}`}
+                          >
+                            <span>{f.name}</span>
+                            {f.id === foundation && <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />}
+                          </button>
+                        ))}
+                      </m.div>
+                    </>
+                  )}
+                </AnimatePresence>
               </div>
+
+              <button
+                onClick={() => setFoundation("")}
+                className="hidden sm:flex text-[10px] font-black font-space text-slate-500 hover:text-slate-400 transition-all items-center gap-1 bg-zinc-800/10 hover:bg-zinc-800/30 px-2 py-1.5 rounded-lg border border-zinc-800/40"
+              >
+                <RefreshCw className="h-3 w-3" /> Reset Grid
+              </button>
+            </m.div>
+
+            <FoundationCard
+              f={activeFoundation}
+              isSelected={true}
+              onClick={() => { }}
+              formatPrice={formatPrice}
+              setDrawerItem={setDrawerItem}
+            />
+          </m.div>
+        ) : (
+          /* 🎲 CHOICE GRID VIEW */
+          <m.div
+            key="grid"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            transition={{ duration: 0.3 }}
+            className="flex flex-col gap-4"
+          >
+            {/* Desktop View */}
+            <div className="hidden md:grid grid-cols-2 gap-4 items-start">
+              {FOUNDATIONS.map((f) => (
+                <FoundationCard
+                  key={f.id}
+                  f={f}
+                  isSelected={false}
+                  onClick={() => setFoundation(f.id)}
+                  formatPrice={formatPrice}
+                  setDrawerItem={setDrawerItem}
+                />
+              ))}
             </div>
 
-            {/* Pro-Feature Grid */}
-            {activeFoundation.proFeatures && (
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                {activeFoundation.proFeatures.map((feat, i) => (
-                  <div key={i} className="p-2.5 border border-zinc-800/60 bg-zinc-900/10 rounded-xl flex flex-col gap-0.5">
-                    <span className="text-sm font-bold text-white flex items-center gap-1">
-                      <Sparkles className="h-3 w-3 text-emerald-500" /> {feat.title}
-                    </span>
-                    <span className="text-xs text-slate-500 leading-relaxed font-medium">{feat.desc}</span>
+            {/* Mobile Snap Carousel */}
+            <div className="md:hidden flex flex-col gap-3">
+              <div
+                ref={scrollRef}
+                onScroll={handleScroll}
+
+              >
+                {FOUNDATIONS.map((f) => (
+                  <div key={f.id} className="snap-center shrink-0 w-[85vw]">
+                    <m.div
+                      onClick={() => setFoundation(f.id)}
+                      role="button"
+                      className="relative cursor-pointer text-left p-4 rounded-xl border border-zinc-800/60 bg-zinc-900/30 flex flex-col justify-between w-full h-[140px] transition-all"
+                    >
+                      <div className="flex flex-col text-left">
+                        <h4 className="text-base font-black text-white mt-0.5">{f.name}</h4>
+                        {f.bestFor && (
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {f.bestFor.slice(0, 2).map((bad, i) => (
+                              <span key={i} className="text-[9px] font-bold bg-emerald-500/10 text-emerald-300 px-1.5 py-0.5 rounded-full border border-emerald-500/10">
+                                {bad}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex justify-between items-center w-full pt-1.5 border-t border-zinc-900/40">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); setDrawerItem(f); }}
+                          className="text-emerald-400 text-xs font-bold underline"
+                        >
+                          Review Technical Strategy
+                        </button>
+                        <span className="text-sm font-black font-space text-emerald-300">
+                          {formatPrice(f.priceGEL)}
+                        </span>
+                      </div>
+                    </m.div>
                   </div>
                 ))}
               </div>
-            )}
 
-            {/* Best For Badges */}
-            {activeFoundation.bestFor && (
-              <div className="flex flex-wrap gap-1.5 mt-1 border-t border-zinc-900/80 pt-2">
-                <span className="text-xs font-bold text-slate-600 self-center">Best For:</span>
-                {activeFoundation.bestFor.map((bad, i) => (
-                  <span key={i} className="text-xs font-bold font-space bg-emerald-500/10 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-500/20">
-                    {bad}
-                  </span>
+              {/* Pagination Dots */}
+              <div className="flex justify-center gap-1.5">
+                {FOUNDATIONS.map((_, i) => (
+                  <m.div
+                    key={i}
+                    animate={{ scale: i === mobileIndex ? 1.4 : 1, opacity: i === mobileIndex ? 1 : 0.4 }}
+                    className="h-1.5 w-1.5 rounded-full bg-emerald-400"
+                  />
                 ))}
               </div>
-            )}
+            </div>
           </m.div>
         )}
+      </AnimatePresence>
 
       <button
         onClick={() => goToStep(2)}
         disabled={!foundation}
-        className={`mt-1 ml-auto flex items-center gap-1.5 font-bold px-4 py-1.5 rounded-lg text-xs font-space transition-all duration-300 ${foundation ? "bg-white text-black hover:bg-emerald-400" : "bg-zinc-800 text-slate-600 cursor-not-allowed"
-          }`}
+        className={`mt-1 ml-auto flex items-center gap-1.5 font-bold px-4 py-1.5 rounded-lg text-xs font-space transition-all duration-300 ${foundation ? "bg-white text-black hover:bg-emerald-400" : "bg-zinc-800 text-slate-600 cursor-not-allowed"}`}
       >
         Configure Modules <ArrowRight className="h-3 w-3" />
       </button>

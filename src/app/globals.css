@@ -25,10 +25,31 @@ body {
 }
 
 @layer base {
-  body {
+  html, body {
     background-color: #060c22;
     color: #ffffff;
     cursor: crosshair;
+    overflow-x: hidden;
+  }
+
+  /* Custom Sleek Scrollbars */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 999px;
+    transition: background 0.3s ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #10b981;
   }
 
   .noise-overlay {
@@ -106,12 +127,12 @@ body {
     box-shadow: 0 25px 55px rgba(0, 255, 150, 0.08);
   }
 
-  .scrollbar-hide {
+  .scrollbar-hide, .scrollbar-none {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
 
-  .scrollbar-hide::-webkit-scrollbar {
+  .scrollbar-hide::-webkit-scrollbar, .scrollbar-none::-webkit-scrollbar {
     display: none;
   }
 }

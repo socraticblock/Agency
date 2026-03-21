@@ -10,6 +10,7 @@ const configSchema = z.object({
   step: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)]).optional(),
   foundation: z.string().nullable().optional(),
   selectedModules: z.array(z.string()).optional(),
+  moduleQuantities: z.record(z.string(), z.number()).optional(),
   shieldTier: z.number().min(0).max(3).optional(),
   answers: z.record(z.string(), z.any()).optional(),
   discoveryStep: z.number().optional(),
@@ -49,8 +50,20 @@ export function useConfigurator() {
     } catch {}
     return [];
   });
+  const [moduleQuantities, setModuleQuantities] = useState<Record<string, number>>(() => {
+    if (typeof window === "undefined") return {};
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const validated = configSchema.safeParse(JSON.parse(saved));
+        if (validated.success && validated.data.moduleQuantities) return validated.data.moduleQuantities;
+      }
+    } catch {}
+    return {};
+  });
+
   const [shieldTier, setShieldTier] = useState<number>(() => {
-    if (typeof window === "undefined") return 1;
+    if (typeof window === "undefined") return 0;
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
@@ -58,8 +71,9 @@ export function useConfigurator() {
         if (validated.success && validated.data.shieldTier !== undefined) return validated.data.shieldTier;
       }
     } catch {}
-    return 1;
+    return 0;
   });
+
   const [answers, setAnswers] = useState<Record<string, any>>(() => {
     if (typeof window === "undefined") return {};
     try {
@@ -112,13 +126,14 @@ export function useConfigurator() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         foundation,
         selectedModules,
+        moduleQuantities,
         shieldTier,
         step,
         answers,
         discoveryStep
       }));
     } catch {}
-  }, [foundation, selectedModules, shieldTier, step, hydrated, answers, discoveryStep]);
+  }, [foundation, selectedModules, moduleQuantities, shieldTier, step, hydrated, answers, discoveryStep]);
 
   const clearConfiguration = () => {
     try {
@@ -126,7 +141,7 @@ export function useConfigurator() {
     } catch {}
     setFoundation(null);
     setSelectedModules([]);
-    setShieldTier(1);
+    setShieldTier(0);
     setAnswers({});
     setDiscoveryStep(0);
     setStep(1);
@@ -165,8 +180,9 @@ export function useConfigurator() {
 
   const modulesPrice = useMemo(() => selectedModules.reduce((acc, id) => {
     const mod = MODULES.find(m => m.id === id);
-    return acc + (mod?.priceGEL || 0);
-  }, 0), [selectedModules]);
+    const qty = moduleQuantities[id] ?? 1;
+    return acc + (mod?.priceGEL || 0) * qty;
+  }, 0), [selectedModules, moduleQuantities]);
 
   const shieldPrice = useMemo(() => SHIELD_TIERS.find(s => s.id === shieldTier)?.priceGEL || 0, [shieldTier]);
 
@@ -189,9 +205,24 @@ export function useConfigurator() {
   };
 
   const toggleModule = useCallback((id: string) => {
-    setSelectedModules(prev =>
-      prev.includes(id) ? prev.filter(m => m !== id) : [...prev, id]
-    );
+    setSelectedModules(prev => {
+      const isRemoving = prev.includes(id);
+      if (isRemoving) {
+        setModuleQuantities(q => {
+          const newQ = { ...q };
+          // Do not delete to preserve "0" counter tracking on manual downgrades
+          return newQ;
+        });
+        return prev.filter(m => m !== id);
+      } else {
+        setModuleQuantities(q => ({ ...q, [id]: (q[id] !== undefined && q[id] > 0) ? q[id] : 1 })); // preserve count or initialize at 1
+        return [...prev, id];
+      }
+    });
+  }, []);
+
+  const updateQuantity = useCallback((id: string, qty: number) => {
+    setModuleQuantities(prev => ({ ...prev, [id]: Math.max(0, qty) }));
   }, []);
 
   const categories = useMemo(() => Array.from(new Set(MODULES.map(m => m.category))), []);
@@ -244,6 +275,8 @@ export function useConfigurator() {
     discoveryStep,
     setDiscoveryStep,
     isEditing,
-    setIsEditing
+    setIsEditing,
+    moduleQuantities,
+    updateQuantity
   };
 }

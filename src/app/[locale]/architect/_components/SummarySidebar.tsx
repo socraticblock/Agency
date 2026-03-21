@@ -109,7 +109,7 @@ export default function SummarySidebar({
       {/* Strategic USP Bullet layout */}
       <div className="flex flex-col gap-1">
         {[
-          "✅ 100% IP Transfer: Legal ownership under Georgian Law.",
+          "✅ Total Legal Ownership: Legal ownership under Georgian Law.",
           "✅ Source Code Ownership: Zero vendor lock-in Full GitHub transfer.",
           "✅ 90-Day Tech Warranty: Every build guaranteed for 3 months."
         ].map((text, idx) => (

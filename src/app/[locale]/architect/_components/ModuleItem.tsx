@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Info } from "lucide-react";
+import { Info, Sparkles, Lightbulb } from "lucide-react";
 import { ServiceItem, MODULES } from "@/constants/pricing";
 
 import { memo, useState } from "react";
@@ -16,15 +16,18 @@ interface ModuleItemProps {
   setDrawerItem: (item: ServiceItem) => void;
   selectedModules?: string[];
   isRecommended?: boolean;
+  quantity?: number;
+  updateQuantity?: (id: string, qty: number) => void;
+  activeFoundation?: string | null;
 }
 
 const CARD_STYLES = {
   base: "p-3 rounded-xl border backdrop-blur-md flex justify-between items-center transition-all duration-300",
   selected: "border-emerald-500/30 bg-emerald-500/[0.02]",
-  idle: "border-zinc-800/50 bg-zinc-900/20 hover:border-zinc-700"
+  idle: "border-zinc-800/50 bg-zinc-900/80 hover:border-zinc-700"
 };
 
-export default memo(function ModuleItem({ m, isSelected, isExpanded, setExpanded, toggleModule, formatPrice, setDrawerItem, selectedModules = [], isRecommended = false }: ModuleItemProps) {
+export default memo(function ModuleItem({ m, isSelected, isExpanded, setExpanded, toggleModule, formatPrice, setDrawerItem, selectedModules = [], isRecommended = false, quantity = 1, updateQuantity, activeFoundation }: ModuleItemProps) {
   const [kycChoice, setKycChoice] = useState<'yes' | 'no' | 'self' | 'none'>('none');
 
   const bankRepModule = MODULES.find(mod => mod.id === 'bank-rep');
@@ -39,17 +42,13 @@ export default memo(function ModuleItem({ m, isSelected, isExpanded, setExpanded
   return (
     <div
       onClick={() => setExpanded()}
-      className={`${CARD_STYLES.base} ${isSelected ? 'border-green-400 bg-green-500/[0.02] shadow-[0_0_15px_rgba(34,197,94,0.05)]' : isExpanded ? CARD_STYLES.selected : isRecommended ? 'border-amber-500/30 bg-amber-500/[0.01] hover:border-amber-500/50 shadow-[0_4px_20px_rgba(245,158,11,0.03)]' : CARD_STYLES.idle} cursor-pointer flex-col !items-stretch !justify-start gap-1 ${isHeavyNode ? 'shadow-[0_15px_40px_rgba(0,0,0,0.45)] z-10' : 'z-0'}`}
+      className={`${CARD_STYLES.base} ${isSelected ? 'border-green-400 bg-green-500/[0.02] shadow-[0_0_15px_rgba(34,197,94,0.05)]' : isExpanded ? CARD_STYLES.selected : CARD_STYLES.idle} cursor-pointer flex-col !items-stretch !justify-start gap-1 ${isHeavyNode ? 'shadow-[0_15px_40px_rgba(0,0,0,0.45)] z-10' : 'z-0'}`}
     >
       {/* Row 1: Header */}
       <div className="flex justify-between items-center w-full">
         <div className="flex items-center gap-1.5 max-w-[70%]">
-          <span className="text-sm font-black text-white">{m.name}</span>
-          {isRecommended && (
-            <span className="px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/30 text-[8px] font-black font-space text-amber-500 uppercase tracking-wider flex items-center gap-0.5 whitespace-nowrap">
-              ★ Architect's Choice
-            </span>
-          )}
+          <span className="text-base font-black text-slate-200" style={{ WebkitTextStroke: "0.3px rgba(0,0,0,0.8)", textShadow: "0px 1px 2px rgba(0,0,0,0.9)" }}>{m.name}</span>
+          {/* Removed Architect's Choice */}
           {m.tooltip && (
             <div className="group relative" onClick={(e) => e.stopPropagation()}>
               <Info className="h-3 w-3 text-slate-500 cursor-help hover:text-emerald-400 transition-colors" />
@@ -62,7 +61,10 @@ export default memo(function ModuleItem({ m, isSelected, isExpanded, setExpanded
         </div>
 
         <div className="flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
-          <span className="text-base font-black font-space text-emerald-400">{formatPrice(displayedPrice)}</span>
+          <span className="text-lg font-black font-space text-emerald-400" style={{ WebkitTextStroke: "0.2px rgba(0,0,0,0.4)", textShadow: "0px 1px 2px rgba(0,0,0,0.9)" }}>
+            {formatPrice(displayedPrice * Math.max(1, quantity))}
+            {m.id === 'pro-copy' && <span className="text-xs text-zinc-500 font-bold"> / pg</span>}
+          </span>
           <button
             onClick={() => {
               if (m.id === 'pay-gateway' && isSelected && selectedModules.includes('bank-rep')) {
@@ -107,15 +109,21 @@ export default memo(function ModuleItem({ m, isSelected, isExpanded, setExpanded
                   </div>
                 )}
 
+                {m.recommendation && (
+                  <div className="flex items-center gap-1.5 bg-emerald-950/40 text-emerald-400 px-2.5 py-1 rounded-lg text-[10px] font-black font-space border border-emerald-500/20 shadow-[0_0_12px_rgba(16,185,129,0.1)] w-fit mb-1.5 uppercase tracking-wide">
+                    <Sparkles className="h-3.5 w-3.5" /> {m.recommendation}
+                  </div>
+                )}
+
                 <div className="flex flex-col gap-0.5">
                   <span className="text-zinc-500 uppercase">What It Is:</span>
-                  <p className="text-slate-300 font-sans text-xs leading-normal">{m.description || m.whatItIs || "Standard engine node deployment configuration."}</p>
+                  <p className="text-slate-300 font-sans text-sm leading-normal whitespace-pre-line">{m.description || m.whatItIs || "Standard engine node deployment configuration."}</p>
                 </div>
 
                 {m.howItHelps && (
                   <div className="flex flex-col gap-0.5 pt-1 border-t border-zinc-900/60">
                     <span className="text-zinc-500 uppercase">How It Helps / ROI:</span>
-                    <p className="text-slate-400 font-sans text-xs leading-normal">{m.howItHelps}</p>
+                    <p className="text-slate-400 font-sans text-sm leading-normal whitespace-pre-line">{m.howItHelps}</p>
                   </div>
                 )}
 
@@ -158,7 +166,7 @@ export default memo(function ModuleItem({ m, isSelected, isExpanded, setExpanded
                 {m.strategy && (
                   <div className="flex flex-col gap-0.5 pt-1 border-t border-zinc-900/60">
                     <span className="text-zinc-500 uppercase">Strategy:</span>
-                    <p className="text-slate-400 font-sans text-xs">{m.strategy}</p>
+                    <p className="text-slate-400 font-sans text-sm">{m.strategy}</p>
                   </div>
                 )}
 
@@ -167,7 +175,7 @@ export default memo(function ModuleItem({ m, isSelected, isExpanded, setExpanded
                     <span className="text-zinc-500 uppercase">Strategic_Backing:</span>
                     {m.strategicBacking.map((item, id) => (
                       <div key={id} className="p-1 bg-black/20 border border-zinc-800/40 rounded flex flex-col gap-0.5">
-                        <p className="text-[10px] font-bold text-white font-sans">{item.title}</p>
+                        <p className="text-[10px] font-bold text-slate-200 font-sans">{item.title}</p>
                         <p className="text-[9px] text-slate-400">Cost Focus: <span className="text-emerald-400">{item.cost}</span></p>
                       </div>
                     ))}
@@ -193,12 +201,60 @@ export default memo(function ModuleItem({ m, isSelected, isExpanded, setExpanded
                     <span className="text-zinc-500 uppercase">Addon_Gates:</span>
                     {m.proFeatures.map((feat, i) => (
                       <div key={i} className="text-[9px]">
-                        <span className="text-white font-extrabold font-sans">[{feat.title}]</span> <span className="text-slate-500 font-sans">{feat.desc}</span>
+                        <span className="text-slate-200 font-extrabold font-sans">[{feat.title}]</span> <span className="text-slate-500 font-sans">{feat.desc}</span>
                       </div>
                     ))}
                   </div>
                 )}
               </div>
+
+
+
+              {/* Quantity Selector Conditionals */}
+              {m.id === 'extra-page' && (
+                <div className="flex flex-col gap-1.5 bg-zinc-950/40 p-2 border border-zinc-900/60 rounded-lg mt-1 mb-1 shadow-inner">
+                  <div className="flex justify-between items-center">
+                    <span className="text-[10px] uppercase text-zinc-400 font-mono tracking-wider flex items-center gap-1">
+                      <div className="h-1 w-1 bg-amber-400 rounded-full animate-pulse" /> Count (Extra Nodes):
+                    </span>
+                    <div className="flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
+                      <button 
+                        onClick={() => {
+                          const newQty = Math.max(0, quantity - 1);
+                          updateQuantity?.(m.id, newQty);
+                          if (newQty === 0 && isSelected) {
+                            toggleModule(m.id);
+                          }
+                        }}
+                        className="px-2 py-1 rounded bg-zinc-800 border border-zinc-700 hover:border-zinc-500 hover:text-slate-200 text-slate-400 font-black cursor-pointer transition-all text-sm"
+                      >-</button>
+                      <span className="text-sm font-black text-emerald-400 font-space min-w-[12px] text-center">{quantity}</span>
+                      <button 
+                        onClick={() => {
+                          const maxQty = activeFoundation === 'landing' ? 3 : 999;
+                          if (quantity < maxQty) {
+                            updateQuantity?.(m.id, quantity + 1);
+                          }
+                        }}
+                        disabled={activeFoundation === 'landing' && quantity >= 3}
+                        className={`px-2 py-1 rounded bg-zinc-800 border border-zinc-700 font-black transition-all text-sm ${activeFoundation === 'landing' && quantity >= 3 ? 'opacity-40 cursor-not-allowed border-zinc-800 text-zinc-600' : 'hover:border-zinc-500 hover:text-slate-200 text-slate-400 cursor-pointer'}`}
+                      >+</button>
+                    </div>
+                  </div>
+
+                  {activeFoundation === 'landing' && quantity >= 3 && (
+                    <div className="p-2 bg-gradient-to-r from-amber-500/10 to-transparent border border-amber-500/20 rounded-lg flex gap-1.5 shadow-[0_0_15px_rgba(245,158,11,0.05)]">
+                      <Lightbulb className="h-3.5 w-3.5 text-amber-400 flex-shrink-0 mt-0.5" />
+                      <div className="flex flex-col text-left">
+                        <span className="text-[9px] font-black text-amber-500 uppercase tracking-wide flex items-center gap-1">Architect's Insight</span>
+                        <p className="text-[9px] font-medium text-slate-400 leading-normal">
+                          You’ve reached the structural limit for a Landing Page. For more nodes, we recommend the Digital Command Center. It includes a Visual Dashboard and SEO Blog Engine for nearly the same price, giving you total control over your growth.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Command Buttons */}
               <div className="flex items-center gap-1 mt-1 pt-1.5 border-t border-zinc-900/60">

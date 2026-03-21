@@ -15,6 +15,8 @@ interface ModuleGridProps {
   hasGita: boolean;
   goToStep: (s: 1 | 2 | 3) => void;
   activeFoundation?: any;
+  moduleQuantities: Record<string, number>;
+  updateQuantity: (id: string, qty: number) => void;
 }
 
 export default function ModuleGrid({
@@ -25,96 +27,51 @@ export default function ModuleGrid({
   setDrawerItem,
   hasGita,
   goToStep,
-  activeFoundation
+  activeFoundation,
+  moduleQuantities,
+  updateQuantity
 }: ModuleGridProps) {
   const [expandedModuleId, setExpandedModuleId] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
   const recommendedModuleIDs = activeFoundation?.recommendedModules || [];
-  const recommendedModules = MODULES.filter(m => recommendedModuleIDs.includes(m.id));
+  const recommendedModules = MODULES.filter(mod => recommendedModuleIDs.includes(mod.id));
 
   return (
     <div className="flex flex-col gap-4">
       <div>
         <h3 className="text-xl font-black font-space tracking-tight text-white">2. Build Your Engine</h3>
-        <p className="text-xs text-slate-500 font-medium mt-0.5">Categorized transparency containing continuous absolute specifications flawlessly.</p>
-        
-        <div className="flex flex-wrap gap-1.5 mt-2.5">
-          {["All", ...categories].map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1 rounded-full text-[10px] font-black font-space uppercase transition-all tracking-wider md:hover:scale-105 active:scale-95 cursor-pointer ${
-                selectedCategory === cat 
-                  ? "bg-emerald-400 text-slate-950 shadow-[0_3px_12px_rgba(16,185,129,0.25)]" 
-                  : "bg-zinc-900 border border-zinc-800/80 text-slate-400 hover:bg-zinc-800 hover:text-white"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
+        <p className="text-xs text-slate-500 font-medium mt-0.5">Continuous absolute specifications curated flawlessly for your build.</p>
       </div>
 
       {/* Foundation Synergy Curated Section */}
-      {recommendedModules.length > 0 && selectedCategory === "All" && (
-        <div className="flex flex-col gap-2 p-2 bg-amber-500/[0.03] border border-amber-500/15 rounded-xl">
-          <div className="flex items-center gap-1.5 px-0.5">
-            <div className="h-1.5 w-1.5 bg-amber-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
-            <span className="text-[9px] font-black font-space text-amber-500 uppercase tracking-wider">
-              [ FOUNDATION SYNERGY: CURATED FOR YOUR BUILD ]
-            </span>
-          </div>
-          <div className="flex flex-col gap-1.5">
-            {recommendedModules.map((m) => {
-              const isSelected = selectedModules.includes(m.id);
-              const isExpanded = expandedModuleId === m.id;
-
-              return (
-                <ModuleItem
-                  key={`rec-${m.id}`}
-                  m={m}
-                  isSelected={isSelected}
-                  isExpanded={isExpanded}
-                  setExpanded={() => setExpandedModuleId(isExpanded ? null : m.id)}
-                  toggleModule={toggleModule}
-                  formatPrice={formatPrice}
-                  setDrawerItem={setDrawerItem}
-                  selectedModules={selectedModules}
-                  isRecommended={true}
-                />
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-2 w-full">
-          {MODULES
-            .filter(m => m.id !== 'bank-rep')
-            .filter(m => !recommendedModuleIDs.includes(m.id) || selectedCategory !== "All") // Deduplicate in "All" view
-            .filter(m => selectedCategory === "All" || m.category === selectedCategory)
-            .map((m) => {
-            const isSelected = selectedModules.includes(m.id);
-            const isExpanded = expandedModuleId === m.id;
+      {recommendedModules.length > 0 && (
+        <div className="flex flex-col gap-1.5">
+          {recommendedModules.map((mod) => {
+            const isSelected = selectedModules.includes(mod.id);
+            const isExpanded = expandedModuleId === mod.id;
 
             return (
               <ModuleItem
-                key={m.id}
-                m={m}
+                key={`rec-${mod.id}`}
+                m={mod}
                 isSelected={isSelected}
                 isExpanded={isExpanded}
-                setExpanded={() => setExpandedModuleId(isExpanded ? null : m.id)}
+                setExpanded={() => setExpandedModuleId(isExpanded ? null : mod.id)}
                 toggleModule={toggleModule}
                 formatPrice={formatPrice}
                 setDrawerItem={setDrawerItem}
                 selectedModules={selectedModules}
+                quantity={moduleQuantities[mod.id] ?? 1}
+                updateQuantity={updateQuantity}
+                activeFoundation={activeFoundation?.id}
               />
             );
           })}
         </div>
-      </div>
+      )}
+
+      {/* Full Module List Removable for Bespoke Targeting */}
 
       {hasGita && (
         <m.div
