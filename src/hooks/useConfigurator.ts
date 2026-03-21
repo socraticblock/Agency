@@ -2,6 +2,10 @@
 
 import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { ServiceItem, FOUNDATIONS, MODULES, SHIELD_TIERS } from "@/constants/pricing";
+import {
+  buildDiscoveryQuestions,
+  isDiscoveryComplete,
+} from "@/lib/discovery/buildDiscoveryQuestions";
 import { z } from "zod";
 
 const STORAGE_KEY = "kvali_architect_config";
@@ -12,7 +16,7 @@ const configSchema = z.object({
   selectedModules: z.array(z.string()).optional(),
   moduleQuantities: z.record(z.string(), z.number()).optional(),
   shieldTier: z.number().min(0).max(3).optional(),
-  answers: z.record(z.string(), z.any()).optional(),
+  answers: z.record(z.string(), z.unknown()).optional(),
   discoveryStep: z.number().optional(),
 });
 
@@ -74,7 +78,7 @@ export function useConfigurator() {
     return 0;
   });
 
-  const [answers, setAnswers] = useState<Record<string, any>>(() => {
+  const [answers, setAnswers] = useState<Record<string, unknown>>(() => {
     if (typeof window === "undefined") return {};
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -99,14 +103,25 @@ export function useConfigurator() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Conditional step navigation
-  const canGoToStep = useCallback((s: number) => {
-    if (s === 1) return true;
-    if (s === 2) return !!foundation;
-    if (s === 3) return !!foundation;
-    if (s === 4) return !!foundation;
-    if (s === 5) return !!foundation && Object.keys(answers).length > 0;
-    return false;
-  }, [foundation, selectedModules, answers]);
+  const canGoToStep = useCallback(
+    (s: number) => {
+      if (s === 1) return true;
+      if (s === 2) return !!foundation;
+      if (s === 3) return !!foundation;
+      if (s === 4) return !!foundation;
+      if (s === 5) {
+        if (!foundation) return false;
+        const qs = buildDiscoveryQuestions({
+          foundation,
+          selectedModules,
+          isUpgrade: foundation === "upgrade",
+        });
+        return isDiscoveryComplete(answers, qs);
+      }
+      return false;
+    },
+    [foundation, selectedModules, answers]
+  );
 
   // Hydrate from localStorage on mount
   useEffect(() => {
@@ -141,10 +156,16 @@ export function useConfigurator() {
     } catch {}
     setFoundation(null);
     setSelectedModules([]);
+    setModuleQuantities({});
     setShieldTier(0);
     setAnswers({});
     setDiscoveryStep(0);
     setStep(1);
+    setIsUSD(false);
+    setIsEditing(false);
+    setDrawerItem(null);
+    setIsModalOpen(false);
+    setMobileIndex(0);
   };
 
   useEffect(() => {
@@ -208,12 +229,12 @@ export function useConfigurator() {
     setSelectedModules(prev => {
       const isRemoving = prev.includes(id);
       if (isRemoving) {
-        setModuleQuantities(q => {
-          const newQ = { ...q };
-          // Do not delete to preserve "0" counter tracking on manual downgrades
-          return newQ;
+        setModuleQuantities((q) => {
+          const next = { ...q };
+          delete next[id];
+          return next;
         });
-        return prev.filter(m => m !== id);
+        return prev.filter((m) => m !== id);
       } else {
         setModuleQuantities(q => ({ ...q, [id]: (q[id] !== undefined && q[id] > 0) ? q[id] : 1 })); // preserve count or initialize at 1
         return [...prev, id];
@@ -224,8 +245,6 @@ export function useConfigurator() {
   const updateQuantity = useCallback((id: string, qty: number) => {
     setModuleQuantities(prev => ({ ...prev, [id]: Math.max(0, qty) }));
   }, []);
-
-  const categories = useMemo(() => Array.from(new Set(MODULES.map(m => m.category))), []);
 
   const totalHoursSaved = useMemo(() => {
     return selectedModules.reduce((acc, id) => {
@@ -264,7 +283,6 @@ export function useConfigurator() {
     hasGita,
     formatPrice,
     toggleModule,
-    categories,
     exchangeRate,
     foundationPrice,
     modulesPrice,

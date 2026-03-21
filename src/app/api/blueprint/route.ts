@@ -1,106 +1,177 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
+import { DISCOVERY_QUESTION_LABELS } from "@/lib/discovery/discoveryQuestionLabels";
+
+const MAX_BODY_CHARS = 256_000;
+const MAX_CELL_CHARS = 4_000;
+const MAX_EMAIL_LEN = 320;
 
 function escapeHtml(s: string): string {
-    return s
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 function sanitizeSubjectLine(s: string): string {
-    return s.replace(/[\r\n]+/g, ' ').slice(0, 200);
+  return s.replace(/[\r\n]+/g, " ").slice(0, 200);
 }
 
 function stringifyAnswer(value: unknown): string {
-    if (value === undefined || value === null) return "";
-    if (typeof value === "string") return value;
-    if (Array.isArray(value)) return value.map((x) => String(x)).join(", ");
-    return String(value);
+  if (value === undefined || value === null) return "";
+  if (typeof value === "string") return value;
+  if (Array.isArray(value)) return value.map((x) => String(x)).join(", ");
+  return String(value);
 }
 
-const QUESTION_TITLES: Record<string, string> = {
-    "1": "Design Style",
-    "2": "Signature Color",
-    "3": "Inspiration Gallery",
-    "4": "Typography Choice",
-    "5": "One-Sentence Pitch",
-    "6": "The North Star",
-    "7": "Emotional Hook",
-    "8": "Sub-Brief 01",
-    "9": "Sub-Brief 02",
-    "10": "Sub-Brief 03",
-    "11": "Sub-Brief 04",
-    "12": "Sub-Brief 05",
-    "13": "Sub-Brief 06"
-};
+function truncateCell(s: string, max = MAX_CELL_CHARS): string {
+  if (s.length <= max) return s;
+  return `${s.slice(0, max)}…`;
+}
+
+function pickHookText(answersRecord: Record<string, unknown>): string {
+  const priority = ["pitch", "emotional_hook", "north_star", "hero_offer", "pain_point"];
+  for (const k of priority) {
+    const s = stringifyAnswer(answersRecord[k]).trim();
+    if (s) return truncateCell(s, 180);
+  }
+  for (const v of Object.values(answersRecord)) {
+    const s = stringifyAnswer(v).trim();
+    if (s) return truncateCell(s, 180);
+  }
+  return "";
+}
+
+function pickPitchForTable(answersRecord: Record<string, unknown>): string {
+  const fromPitch = stringifyAnswer(answersRecord["pitch"]).trim();
+  if (fromPitch) return fromPitch;
+  const fromHook = pickHookText(answersRecord);
+  if (fromHook) return fromHook;
+  return "N/A";
+}
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(req: Request) {
+  try {
+    const contentType = req.headers.get("content-type") || "";
+    if (!contentType.includes("application/json")) {
+      return NextResponse.json({ error: "Expected application/json" }, { status: 415 });
+    }
+
+    const text = await req.text();
+    if (text.length > MAX_BODY_CHARS) {
+      return NextResponse.json({ error: "Payload too large" }, { status: 413 });
+    }
+
+    let body: Record<string, unknown>;
     try {
-        const body = await req.json();
-        const { email, answers, foundation, selectedModules } = body;
+      body = JSON.parse(text) as Record<string, unknown>;
+    } catch {
+      return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+    }
 
-        const RESEND_API_KEY = process.env.RESEND_API_KEY;
-        const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@youragency.com";
+    const {
+      email,
+      answers,
+      foundation,
+      selectedModules,
+      moduleQuantities,
+      shieldTier,
+      oneTimeTotal,
+      monthlyTotal,
+    } = body;
 
-        console.log("Blueprint Data Received locally:", { email, foundation });
+    const RESEND_API_KEY = process.env.RESEND_API_KEY;
+    const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@youragency.com";
 
-        if (!RESEND_API_KEY) {
-            console.error("Missing RESEND_API_KEY inside environment variables.");
-            // Return success anyway in dev to simulate sequence correctly to user
-            return NextResponse.json({ success: true, debug: 'Logged locally, fix env API keys' });
-        }
+    const emailStr =
+      typeof email === "string" ? email.trim().slice(0, MAX_EMAIL_LEN) : "";
+    if (emailStr && !EMAIL_RE.test(emailStr)) {
+      return NextResponse.json({ error: "Invalid email format" }, { status: 400 });
+    }
 
-        const hookRaw = answers?.["10"] ?? answers?.["5"];
-        const hook =
-            typeof hookRaw === "string"
-                ? hookRaw
-                : Array.isArray(hookRaw)
-                  ? hookRaw.join(", ")
-                  : hookRaw != null
-                    ? String(hookRaw)
-                    : "";
-        const foundationStr =
-            typeof foundation === "string" ? foundation : foundation != null ? String(foundation) : "";
-        const emailStr = typeof email === "string" ? email : email != null ? String(email) : "";
-        const subjectBase = foundationStr.trim()
-            ? foundationStr.toUpperCase()
-            : "GENERAL";
-        const subject = sanitizeSubjectLine(
-            hook
-                ? `🚀 [NEW LEAD] - ${subjectBase} - ${hook}`
-                : `🚀 [NEW BLUEPRINT] - ${subjectBase} - Urgent Review Required`
+    console.log("Blueprint Data Received locally:", { email: emailStr, foundation });
+
+    if (!RESEND_API_KEY) {
+      console.error("Missing RESEND_API_KEY inside environment variables.");
+      return NextResponse.json({ success: true, debug: "Logged locally, fix env API keys" });
+    }
+
+    const answersRecord =
+      answers && typeof answers === "object" && !Array.isArray(answers)
+        ? (answers as Record<string, unknown>)
+        : {};
+
+    const hook = pickHookText(answersRecord);
+    const foundationStr =
+      typeof foundation === "string"
+        ? foundation
+        : foundation != null
+          ? String(foundation)
+          : "";
+    const subjectBase = foundationStr.trim() ? foundationStr.toUpperCase() : "GENERAL";
+    const subject = sanitizeSubjectLine(
+      hook
+        ? `🚀 [NEW LEAD] - ${subjectBase} - ${hook}`
+        : `🚀 [NEW BLUEPRINT] - ${subjectBase} - Urgent Review Required`
+    );
+
+    const pitchRaw = pickPitchForTable(answersRecord);
+    const pitchCell = escapeHtml(truncateCell(pitchRaw));
+    const emailCell = escapeHtml(emailStr || "N/A");
+    const foundationCell = escapeHtml(foundationStr || "N/A");
+    const modulesStr = Array.isArray(selectedModules)
+      ? selectedModules.map((m: unknown) => escapeHtml(String(m))).join(", ")
+      : "None";
+
+    const quantitiesStr =
+      moduleQuantities && typeof moduleQuantities === "object" && !Array.isArray(moduleQuantities)
+        ? escapeHtml(truncateCell(JSON.stringify(moduleQuantities), 2000))
+        : "—";
+
+    const shieldStr =
+      typeof shieldTier === "number" && Number.isFinite(shieldTier)
+        ? escapeHtml(String(shieldTier))
+        : "—";
+    const oneTimeStr =
+      typeof oneTimeTotal === "number" && Number.isFinite(oneTimeTotal)
+        ? escapeHtml(String(oneTimeTotal))
+        : "—";
+    const monthlyStr =
+      typeof monthlyTotal === "number" && Number.isFinite(monthlyTotal)
+        ? escapeHtml(String(monthlyTotal))
+        : "—";
+
+    const answerRows = Object.keys(answersRecord)
+      .map((id) => {
+        const title = escapeHtml(
+          DISCOVERY_QUESTION_LABELS[id] || `Question ${id}`
         );
+        const raw = answersRecord[id];
+        const val = truncateCell(stringifyAnswer(raw));
+        return `
+                                        <tr>
+                                            <td style="font-weight: bold; color: #64748b; width: 40%; border-bottom: 1px solid #f8fafc; font-size: 11px; text-transform: uppercase;">${title}</td>
+                                            <td style="border-bottom: 1px solid #f8fafc; color: #334155;">${escapeHtml(val)}</td>
+                                        </tr>
+                                    `;
+      })
+      .join("");
 
-        const answersRecord =
-            answers && typeof answers === "object" && !Array.isArray(answers)
-                ? (answers as Record<string, unknown>)
-                : {};
-
-        const pitchRaw =
-            stringifyAnswer(answersRecord["5"]) ||
-            stringifyAnswer(answersRecord["10"]) ||
-            "N/A";
-        const pitchCell = escapeHtml(pitchRaw);
-        const emailCell = escapeHtml(emailStr || "N/A");
-        const foundationCell = escapeHtml(foundationStr || "N/A");
-        const modulesStr = Array.isArray(selectedModules)
-            ? selectedModules.map((m: unknown) => escapeHtml(String(m))).join(", ")
-            : "None";
-
-        const res = await fetch('https://api.resend.com/emails', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${RESEND_API_KEY}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                from: 'Architect <blueprint@resend.dev>',
-                to: [ADMIN_EMAIL],
-                ...(emailStr.includes("@") ? { reply_to: emailStr.slice(0, 320) } : {}),
-                subject,
-                html: `
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: "Architect <blueprint@resend.dev>",
+        to: [ADMIN_EMAIL],
+        ...(emailStr.includes("@") ? { reply_to: emailStr.slice(0, 320) } : {}),
+        subject,
+        html: `
                     <div style="font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
                         <div style="background: #09090b; color: white; padding: 20px; text-align: center;">
                             <h2 style="margin: 0; font-family: monospace; letter-spacing: 2px;">ARCHITECTURE BRIEF</h2>
@@ -124,43 +195,43 @@ export async function POST(req: Request) {
                                     <td style="font-weight: bold; color: #64748b; border-bottom: 1px solid #f1f5f9;">Modules</td>
                                     <td style="border-bottom: 1px solid #f1f5f9;">${modulesStr || "None"}</td>
                                 </tr>
+                                <tr>
+                                    <td style="font-weight: bold; color: #64748b; border-bottom: 1px solid #f1f5f9;">Module quantities</td>
+                                    <td style="border-bottom: 1px solid #f1f5f9; font-size: 12px;">${quantitiesStr}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold; color: #64748b; border-bottom: 1px solid #f1f5f9;">Shield tier id</td>
+                                    <td style="border-bottom: 1px solid #f1f5f9;">${shieldStr}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold; color: #64748b; border-bottom: 1px solid #f1f5f9;">One-time total (GEL)</td>
+                                    <td style="border-bottom: 1px solid #f1f5f9;">${oneTimeStr}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold; color: #64748b; border-bottom: 1px solid #f1f5f9;">Monthly total (GEL)</td>
+                                    <td style="border-bottom: 1px solid #f1f5f9;">${monthlyStr}</td>
+                                </tr>
                             </table>
 
                             <h4 style="margin: 20px 0 10px 0; color: #0f172a; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">Discovery Specification Answers</h4>
                             <table border="0" cellpadding="8" cellspacing="0" style="width: 100%; border-collapse: collapse; font-size: 13px;">
-                                ${Object.keys(answersRecord).map((id) => {
-                                    const title = escapeHtml(QUESTION_TITLES[id] || `Question ${id}`);
-                                    const raw = answersRecord[id];
-                                    const val =
-                                        Array.isArray(raw)
-                                            ? raw.map((x) => String(x)).join(", ")
-                                            : raw != null
-                                              ? String(raw)
-                                              : "";
-                                    return `
-                                        <tr>
-                                            <td style="font-weight: bold; color: #64748b; width: 40%; border-bottom: 1px solid #f8fafc; font-size: 11px; text-transform: uppercase;">${title}</td>
-                                            <td style="border-bottom: 1px solid #f8fafc; color: #334155;">${escapeHtml(val)}</td>
-                                        </tr>
-                                    `;
-                                }).join('')}
+                                ${answerRows}
                             </table>
                         </div>
                     </div>
-                `
-            })
-        });
+                `,
+      }),
+    });
 
-        if (!res.ok) {
-            const errText = await res.text();
-            console.error("Resend API error:", res.status, errText);
-            return NextResponse.json({ error: "Failed to send notification" }, { status: 502 });
-        }
-
-        return NextResponse.json({ success: true });
-
-    } catch (error) {
-         console.error("API ROUTE ERROR:", error);
-         return NextResponse.json({ error: 'Failed payload setup' }, { status: 500 });
+    if (!res.ok) {
+      const errText = await res.text();
+      console.error("Resend API error:", res.status, errText);
+      return NextResponse.json({ error: "Failed to send notification" }, { status: 502 });
     }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("API ROUTE ERROR:", error);
+    return NextResponse.json({ error: "Failed payload setup" }, { status: 500 });
+  }
 }

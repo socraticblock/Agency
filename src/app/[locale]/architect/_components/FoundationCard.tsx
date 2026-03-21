@@ -3,10 +3,10 @@
 import { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion";
 import { Check, Info, Sparkles, Lightbulb } from "lucide-react";
-import { ServiceItem, FOUNDATIONS } from "@/constants/pricing";
+import { FOUNDATIONS, type Foundation } from "@/constants/pricing";
 
 interface FoundationCardProps {
-  f: ServiceItem;
+  f: Foundation;
   isSelected: boolean;
   onClick: () => void;
   formatPrice: (p: number) => string;

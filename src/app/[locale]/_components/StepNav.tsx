@@ -23,8 +23,11 @@ export default memo(function StepNav({ step, goToStep, canGoToStep, stepLabels }
         return (
           <div key={s.num} className="flex items-center flex-1">
             <button
+              type="button"
               onClick={() => goToStep(stepNum)}
               disabled={!isClickable}
+              aria-current={isActive ? "step" : undefined}
+              aria-disabled={!isClickable || undefined}
               className={`flex items-center gap-2 transition-all duration-300 ${
                 !isClickable ? "opacity-30 cursor-not-allowed" : "cursor-pointer"
               }`}

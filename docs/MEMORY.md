@@ -5,6 +5,7 @@
 - [003] Lead architecture/security audit documented in `docs/AUDIT_REPORT.md` with critical fixes applied in API routes and `bookStrategyAction`.
 - [004] UX/funnel cohesion: shared `FunnelShell` + navbar on apply/book-strategy, lead-tool session payload for book-strategy sidebar + prefills, security headers and `.env.example`.
 - [005] Smaller codebase: removed unused components, deduped `LeadGenHub` loaders/steppers, shared `formActionState` type guards, trimmed `Navbar` imports.
+- [006] Architect configurator hardening: shared discovery definitions/labels, step-5 completion gate, blueprint API validation + semantic pitch keys, summary submit UX and analyzing timers, full reset + module quantity cleanup, curated module copy, StepNav a11y.
 
 # Detailed Observations
 
@@ -32,3 +33,8 @@
 - **Context:** Repo carried orphaned marketing components and repeated patterns (five identical `dynamic()` blocks, duplicated stepper markup, verbose action-state checks).
 - **Decision:** Deleted unused `InefficiencyCalculator`, `FootprintGrid`, both `CitationBadge` variants, and `LanguageToggle`; refactored `LeadGenHub` to data-driven `dynamic` loaders + shared `AuditStepper`; added `src/lib/formActionState.ts` guards for lead/booking actions; dropped dead `Navbar` router/pathname imports; removed empty `src/components/layout` folder.
 - **Impact:** Less maintenance surface and clearer bundle boundaries for the hub; type guards keep action state handling consistent without repeating `"success" in state` chains.
+
+## [006]
+- **Context:** Architect funnel had mismatched discovery answer keys vs email route, weak step-5 gating, silent blueprint submit failures, timer leaks on unmount, incomplete `clearConfiguration`, and curated module step UX drift.
+- **Decision:** Centralized question data in `src/lib/discovery/` (`discoveryDefinitions`, `DISCOVERY_QUESTION_LABELS`, `buildDiscoveryQuestions` + `isDiscoveryComplete`); aligned `useConfigurator` step 5, Resend payload (semantic pitch/hook, labels, body size cap, email validation, pricing rows), `SummaryDashboard` loader/submit/analyzing effect, `ModuleGrid` copy; tightened foundation typings on `FoundationCard`/`FoundationGrid`.
+- **Impact:** Ops emails match UI discovery data; users see errors on failed blueprint POST; no interval leaks; reset clears quantities and UI chrome; StepNav exposes step state to assistive tech; single source of truth reduces drift when adding questions.

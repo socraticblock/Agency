@@ -5,7 +5,6 @@ import { m, AnimatePresence, LazyMotion } from "framer-motion";
 
 const loadFeatures = () => import("framer-motion").then(res => res.domMax);
 import { useConfigurator } from "@/hooks/useConfigurator";
-import { ServiceItem, MODULES, FOUNDATIONS } from "@/constants/pricing";
 import ConfigSidebar from "./ConfigSidebar";
 import ConfigDrawer from "./ConfigDrawer";
 import ConfigModal from "./ConfigModal";
@@ -43,7 +42,6 @@ export default function Configurator() {
     foundation,
     setFoundation,
     selectedModules,
-    setSelectedModules,
     shieldTier,
     setShieldTier,
     isUSD,
@@ -67,7 +65,6 @@ export default function Configurator() {
     hasGita,
     formatPrice,
     toggleModule,
-    categories, // This might not be used with the new layout
     exchangeRate,
     foundationPrice,
     totalHoursSaved,
@@ -127,7 +124,6 @@ export default function Configurator() {
 
                 {step === 2 && (
                   <ModuleGrid
-                    categories={categories}
                     selectedModules={selectedModules}
                     toggleModule={toggleModule}
                     formatPrice={formatPrice}
@@ -138,7 +134,6 @@ export default function Configurator() {
                     moduleQuantities={moduleQuantities}
                     updateQuantity={updateQuantity}
                   />
-
                 )}
 
                 {step === 3 && (
@@ -155,8 +150,6 @@ export default function Configurator() {
                   <DiscoveryModule
                     foundation={foundation}
                     selectedModules={selectedModules}
-                    setSelectedModules={setSelectedModules}
-                    shieldTier={shieldTier}
                     goToStep={goToStep}
                     answers={answers}
                     setAnswers={setAnswers}
@@ -174,6 +167,9 @@ export default function Configurator() {
                     goToStep={goToStep}
                     setDiscoveryStep={setDiscoveryStep}
                     setIsEditing={setIsEditing}
+                    moduleQuantities={moduleQuantities}
+                    oneTimeTotal={oneTimeTotal}
+                    monthlyTotal={monthlyTotal}
                   />
                 )}
           </div>

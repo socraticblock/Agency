@@ -3,13 +3,13 @@
 import { useState, useEffect, useRef } from "react";
 import { m, AnimatePresence } from "framer-motion";
 import { Check, Info, ArrowRight, Sparkles, Lightbulb, RefreshCw, ChevronDown } from "lucide-react";
-import { FOUNDATIONS, ServiceItem } from "@/constants/pricing";
+import { FOUNDATIONS, type Foundation } from "@/constants/pricing";
 import FoundationCard from "../architect/_components/FoundationCard";
 
 interface FoundationGridProps {
   foundation: string | null;
   setFoundation: (id: string) => void;
-  activeFoundation: ServiceItem | null | undefined;
+  activeFoundation: Foundation | null | undefined;
   formatPrice: (price: number) => string;
   scrollRef: React.RefObject<HTMLDivElement | null>;
   handleScroll: (e: React.UIEvent<HTMLDivElement>) => void;
