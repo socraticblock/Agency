@@ -251,26 +251,26 @@ export const MODULES: Module[] = [
   {
     id: 'seo-audit',
     category: 'Marketing',
-    name: 'One-Time SEO Audit',
+    name: 'Legacy SEO Migration & Audit',
     priceGEL: 800,
-    whatItIs: 'A deep-crawl technical audit of your site’s indexing health.',
-    howItHelps: 'Finds and fixes "hidden" errors that prevent Google from showing your site in search results.'
+    whatItIs: `A deep-cycle technical audit and data-preservation map of your current digital footprint. We analyze every existing URL, keyword ranking, and backlink your business currently owns to ensure your transition to the Kvali infrastructure is mathematically flawless.`,
+    howItHelps: `It provides SEO Insurance. Moving to a new site without a migration map is the #1 way businesses lose 50–80% of their Google traffic overnight. We build a '301-Redirect Bridge' that tells Google exactly where your old pages went, preserving your authority and ensuring your ranking growth continues from day one without a reset.`
   },
   {
     id: 'local-seo',
     category: 'Marketing',
-    name: 'Local SEO Pack',
+    name: 'Local SEO Pack & Map Dominance',
     priceGEL: 1500,
-    whatItIs: 'Optimization for Georgian search intent and Google Map Pack dominance.',
-    howItHelps: 'Ensures your business is the #1 choice when a local client searches for your service in Tbilisi/Batumi.'
+    whatItIs: `Strategic optimization engineered to dominate geographic search results (e.g., 'Best service in Tbilisi'). We inject 'Local Schema' markup into your code and optimize your Google Business Profile to ensure you appear in the coveted 'Map Pack' for high-intent local queries.`,
+    howItHelps: `It captures customers exactly when they are ready to buy. Most local searches happen on mobile with immediate intent; by outranking your neighbors in the map pack, you drive direct physical traffic and phone inquiries. This is the single most effective way to dominate your specific territory and capture local market share.`
   },
   {
     id: 'multilingual',
     category: 'Marketing',
-    name: 'Multilingual Engine',
+    name: 'Global Market Expansion (Multilingual)',
     priceGEL: 800,
-    whatItIs: 'Technical Hreflang setup per additional language layer (GE/EN/RU).',
-    howItHelps: 'Unlocks international markets. Studies show localized content gets 3x more conversions than generic translations.'
+    whatItIs: `A professional-grade technical 'Hreflang' architecture that supports native sub-directories for different languages (GEO/EN/RU). We don't use 'auto-translate' widgets; we build a clean, multi-route system that allows Google to index each language version of your site separately.`,
+    howItHelps: `It triples your potential audience. In a globalized hub like Georgia, offering your service only in one language leaves 60% of the money on the table. By giving EN and RU speakers a native experience, you lower 'bounce rates' and massively increase international lead conversion while ranking on foreign-language search engines.`
   },
   {
     id: 'ab-testing',
@@ -286,8 +286,8 @@ export const MODULES: Module[] = [
     name: 'Social Media Auto-Posting',
     priceGEL: 800,
     timeSaved: 8,
-    whatItIs: 'Automated sync between your site blog and Instagram/LinkedIn/Facebook.',
-    howItHelps: 'Saves hours of manual work. Posting once on your site pushes the content everywhere instantly.'
+    whatItIs: `An automated server-side 'webhook' bridge that connects your DCC Blog directly to your professional social channels (LinkedIn, IG, FB). When you publish an update to your site, it is automatically formatted and distributed across your social ecosystem instantly.`,
+    howItHelps: `It buys you back dozens of hours of manual labor per month. It ensures your brand stays active and authoritative 24/7 without you ever having to remember to 'post' something. Consistency is the only way to build digital authority, and this module automates that consistency forever.`
   },
   {
     id: 'cro-audit',
@@ -324,16 +324,16 @@ export const MODULES: Module[] = [
     name: 'Real-Time Calendar Sync',
     priceGEL: 1200,
     timeSaved: 10,
-    whatItIs: '2-way bridge between your site and Google/Outlook calendars.',
-    howItHelps: 'Eliminates double-booking. Clients see your real-time availability and book/pay in one fluid motion.'
+    whatItIs: `A seamless, 2-way API bridge between your website and your professional calendar (Google or Outlook). We build a live availability interface that allows clients to book meetings with you based on your actual, real-time schedule.`,
+    howItHelps: `It eliminates the 'Email Tag' friction that kills sales. When a lead is hot, they can book you in 3 clicks instead of waiting 4 hours for a reply. It ensures zero double-bookings and professional scheduling 'buffer zones,' transforming your site into an elite personal assistant that manages your time for you.`
   },
   {
     id: 'deposit-logic',
     category: 'Business Engines',
     name: 'Deposit Payment Logic',
     priceGEL: 1500,
-    whatItIs: 'Technical checkout flow for partial upfront payments.',
-    howItHelps: 'Guarantees your income. Ensures clients have "skin in the game" before you start work or hold a slot.'
+    whatItIs: `A secure financial transaction layer that integrates directly with Georgian merchant gateways (TBC/BOG). We build a checkout logic that requires a specific deposit or full payment before a booking or service is confirmed.`,
+    howItHelps: `It stops 'No-Shows' and filters out time-wasters. By requiring 'skin in the game' (a 100 ₾ or 500 ₾ commitment), you ensure every lead on your calendar is a serious, paying customer. This stabilizes your cash flow and protects your most valuable asset: your time.`
   },
   {
     id: 'multi-filter',
@@ -348,8 +348,8 @@ export const MODULES: Module[] = [
     category: 'Business Engines',
     name: 'Custom Map Integration',
     priceGEL: 1200,
-    whatItIs: 'Custom Google Maps API with neighborhood/luxury markers.',
-    howItHelps: 'Visualizes your reach. Essential for real estate or local agencies to show property locations.'
+    whatItIs: `A high-end, branded geographic visualization tool. We use elite mapping engines (MapBox or Google Cloud) to create an interactive experience with custom markers, service zones, and brand-aligned UI instead of a basic generic map.`,
+    howItHelps: `It signals extreme technical polish and premium scale. Ideal for businesses with multiple locations or specific geographic service boundaries, it builds immediate trust through visual transparency. It shows the client that you aren't just 'there'—you are the local authority.`
   },
   {
     id: 'listing-portal',
@@ -422,8 +422,8 @@ export const MODULES: Module[] = [
     category: 'AI & Automation',
     name: 'HubSpot/CRM Integration',
     priceGEL: 2500,
-    whatItIs: 'Connecting your sales forms directly to your sales pipeline.',
-    howItHelps: 'Ensures no lead is ever forgotten. Every signup is automatically categorized for your follow-up.'
+    whatItIs: `A sophisticated bi-directional data pipeline. We connect your website’s lead forms directly to your sales software (HubSpot, Salesforce, Pipedrive), ensuring every visitor inquiry is automatically categorized and injected into your sales funnel.`,
+    howItHelps: `It ensures Zero Lead Leakage. Every inquiry is captured, tracked, and ready for follow-up within seconds. It allows your sales team to see exactly what a customer looked at before they called, giving you the 'insider info' needed to close high-ticket deals with precision.`
   },
   {
     id: 'api-opt',
@@ -451,8 +451,8 @@ export const MODULES: Module[] = [
     category: 'Creative',
     name: 'Additional Static Page',
     priceGEL: 450,
-    whatItIs: "A single, fixed-content expansion (e.g., Privacy Policy, Team Bio). This is a static node and does not include a CMS Dashboard or Blog functionality. For self-managed, dynamic growth, see the Digital Command Center foundation.",
-    howItHelps: "It lets your website grow as your business does. Instead of a cluttered site, you can give each important detail its own professional home. This keeps your brand organized and allows you to scale your online presence without needing a full rebuild later.\n\n⚠️ ARCHITECT'S NOTE:\n\"This is a fixed-content expansion. It is designed for information that stays consistent. If you need a dynamic, self-managed Blog Engine or a Content Dashboard, we recommend the Digital Command Center foundation.\""
+    whatItIs: `A single, high-performance static node built into your core infrastructure. These are fixed content expansions designed for information that stays consistent, such as a deep-dive Service page, a Privacy Policy, or a Team Bio.`,
+    howItHelps: `It allows your digital real estate to grow alongside your business. Instead of a cluttered 'catch-all' site, you can give every specific offer or service its own dedicated, professionally architected space. This keeps your brand organized and allows you to scale your online presence without a full rebuild.`
   },
   {
     id: 'brand-identity',
@@ -475,8 +475,8 @@ export const MODULES: Module[] = [
     category: 'Creative',
     name: 'Document Templates',
     priceGEL: 400,
-    whatItIs: 'Custom branded invoices, contracts, and decks.',
-    howItHelps: 'Every touchpoint looks elite. Even your "boring" invoices will reinforce your brand quality.'
+    whatItIs: `Custom code-generated PDF templates for your business. We engineer your digital infrastructure to automatically produce pixel-perfect, brand-aligned invoices, contracts, or proposals using your client’s data.`,
+    howItHelps: `It creates a 'Luxury Loop.' Professionalism doesn't end when the website closes. By sending beautifully branded documents that match your 0.1% website, you reinforce your authority at the most critical moment: the closing of the deal. Every touchpoint is a reminder of why they hired an elite studio.`
   },
   {
     id: 'micro-animations',
