@@ -20,6 +20,8 @@ export type DiscoveryQuestionDef = {
   type: string;
   placeholder?: string;
   options?: unknown;
+  allowCustom?: boolean;
+  count?: number;
 };
 
 export const STANDARD_QUESTIONS = [
@@ -29,11 +31,11 @@ export const STANDARD_QUESTIONS = [
     description: "Select your aesthetic direction.",
     type: "cards",
     options: [
-      { value: "minimal", label: "Clean & Minimal", icon: Layout },
-      { value: "luxury", label: "Dark & Luxurious", icon: Shield },
-      { value: "energetic", label: "Bold & Energetic", icon: Zap },
-      { value: "futuristic", label: "Futuristic & Tech", icon: Target },
-      { value: "editorial", label: "Editorial & Professional", icon: Award },
+      { value: "minimal", label: "Clean & Minimal", icon: Layout, desc: "Typography-driven layouts without distraction." },
+      { value: "luxury", label: "Dark & Luxurious", icon: Shield, desc: "Deep contrast, polished gradients, and premium space." },
+      { value: "energetic", label: "Bold & Energetic", icon: Zap, desc: "Vibrant, motion-heavy interfaces that pop off screen." },
+      { value: "futuristic", label: "Futuristic & Tech", icon: Target, desc: "Grid lines, absolute precision, and cyber accents." },
+      { value: "editorial", label: "Editorial", icon: Award, desc: "Magazine-like layouts focusing on elite photography." },
     ],
   },
   {
@@ -55,11 +57,12 @@ export const STANDARD_QUESTIONS = [
     description: "What kind of font suits your brand personality?",
     type: "tabs",
     options: ["Sharp & Modern", "Classic & Timeless", "Unique & Script"],
+    allowCustom: true,
   },
   {
     id: "pitch",
     title: "The One-Sentence Pitch",
-    description: "In one sentence, what is the primary purpose of this website?",
+    description: "In one sentence, what is the primary purpose of your website?",
     type: "textarea",
     placeholder: "Example: To sell premium coffee subscriptions...",
   },
@@ -69,12 +72,12 @@ export const STANDARD_QUESTIONS = [
     description: "What is the single most important action for a visitor?",
     type: "cards",
     options: [
-      { value: "products", label: "Sell Products", icon: Target },
-      { value: "calls", label: "Book a Call", icon: Award },
-      { value: "audience", label: "Grow My Audience", icon: Heart },
-      { value: "authority", label: "Build Authority", icon: Shield },
-      { value: "support", label: "Automate Support", icon: Zap },
-      { value: "app", label: "Deliver a Tool", icon: Layout },
+      { value: "products", label: "Sell Products", icon: Target, desc: "High-speed cart conversions focusing on e-commerce." },
+      { value: "calls", label: "Book a Call", icon: Award, desc: "Qualify high-ticket leads directly onto your calendar." },
+      { value: "audience", label: "Grow My Audience", icon: Heart, desc: "Capture emails and expand your digital community footprint." },
+      { value: "authority", label: "Build Authority", icon: Shield, desc: "A prestigious digital headquarters that elevates your trust." },
+      { value: "support", label: "Automate Support", icon: Zap, desc: "Self-service client portals that drastically reduce tickets." },
+      { value: "app", label: "Deliver a Tool", icon: Layout, desc: "SaaS execution handling complex data or logic tools." },
     ],
   },
   {
@@ -83,6 +86,7 @@ export const STANDARD_QUESTIONS = [
     description: "How should someone feel the moment they land on your page?",
     type: "tags",
     options: ["Inspired", "Safe", "Impressed", "Powerful", "Relaxed", "Challenged"],
+    allowCustom: true,
   },
 ];
 
@@ -93,9 +97,9 @@ export const UPGRADE_QUESTIONS = [
     description: "What platform is your current site running on?",
     type: "cards",
     options: [
-      { value: "wordpress", label: "WordPress", icon: Layout },
-      { value: "wix", label: "Wix / Squarespace", icon: Shield },
-      { value: "custom", label: "Custom / HTML", icon: Zap },
+      { value: "wordpress", label: "WordPress", icon: Layout, desc: "The legacy open-source engine." },
+      { value: "wix", label: "Wix / Squarespace", icon: Shield, desc: "Closed-ecosystem DIY builders." },
+      { value: "custom", label: "Custom / HTML", icon: Zap, desc: "Hard-coded tech stack." },
     ],
   },
   {
@@ -164,19 +168,20 @@ export const FOUNDATION_SPECIFIC_MAP: Record<string, any[]> = {
       description: "Which social platform is the 'heart' of your brand right now?",
       type: "cards",
       options: [
-        { value: "instagram", label: "Instagram", icon: Smartphone },
-        { value: "youtube", label: "YouTube", icon: Tv },
-        { value: "tiktok", label: "TikTok", icon: Zap },
-        { value: "linkedin", label: "LinkedIn", icon: Link2 },
-        { value: "twitter", label: "Twitter / X", icon: Globe },
+        { value: "instagram", label: "Instagram", icon: Smartphone, desc: "Visual storytelling and DMs." },
+        { value: "youtube", label: "YouTube", icon: Tv, desc: "Long-form search-based video." },
+        { value: "tiktok", label: "TikTok", icon: Zap, desc: "High velocity short-form." },
+        { value: "linkedin", label: "LinkedIn", icon: Link2, desc: "B2B networking and professional lean gen." },
+        { value: "twitter", label: "Twitter / X", icon: Globe, desc: "Real-time thought leadership." },
       ],
     },
     {
       id: "lead_magnet",
       title: "The Lead Magnet",
       description: "What is the 'Bribe' we are using to get their email address?",
-      type: "input",
-      placeholder: "e.g. Weekly newsletter, private PDF, community link",
+      type: "tags",
+      options: ["Checklist", "Mini-Course", "PDF Guide", "Resource Vault", "Discount Code", "Free Consultation"],
+      allowCustom: true,
     },
     {
       id: "dm_killer",
@@ -189,15 +194,16 @@ export const FOUNDATION_SPECIFIC_MAP: Record<string, any[]> = {
       id: "content_pillars",
       title: "The Content Pillars",
       description: "What are the 3 main topics you want to be known for as an authority?",
-      type: "textarea",
-      placeholder: "1. Topic A\n2. Topic B\n3. Topic C",
+      type: "multi-input",
+      count: 3,
     },
     {
       id: "ultimate_destination",
       title: "The Ultimate Destination",
       description: "Where is the 'End Game' for your followers?",
       type: "tags",
-      options: ["Private Group", "Paid Course", "High-Ticket Service", "Value content"],
+      options: ["Private Group", "Paid Course", "High-Ticket Service", "Value Content", "Physical Product", "Software (SaaS)", "Newsletter", "Event / Retreat"],
+      allowCustom: true,
     },
     {
       id: "authority_count",
@@ -214,9 +220,9 @@ export const FOUNDATION_SPECIFIC_MAP: Record<string, any[]> = {
       description: "How are orders handled?",
       type: "cards",
       options: [
-        { value: "physical", label: "Physical Shipping", icon: ShoppingBag },
-        { value: "digital", label: "Digital Download", icon: Zap },
-        { value: "service", label: "Service Booking", icon: Award },
+        { value: "physical", label: "Physical Shipping", icon: ShoppingBag, desc: "Logistics and shipping." },
+        { value: "digital", label: "Digital Download", icon: Zap, desc: "Automated digital delivery." },
+        { value: "service", label: "Service Booking", icon: Award, desc: "Calendar consultation scheduling." },
       ],
     },
     {

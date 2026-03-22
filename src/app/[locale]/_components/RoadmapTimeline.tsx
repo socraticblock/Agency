@@ -93,7 +93,7 @@ export function RoadmapTimeline() {
         <div className="absolute left-[13px] sm:left-[17px] top-4 bottom-4 w-0.5 bg-slate-800/80 rounded-full" />
         <motion.div 
           className="absolute left-[13px] sm:left-[17px] top-4 bottom-4 w-0.5 bg-gradient-to-b from-emerald-400 to-emerald-500 rounded-full origin-top shadow-[0_0_15px_rgba(16,185,129,0.5)]" 
-          style={{ scaleY }}
+          style={{ scaleY, willChange: "transform" }}
         />
 
         <motion.div
@@ -102,7 +102,7 @@ export function RoadmapTimeline() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-10%" }}
-          className="flex flex-col gap-10"
+          className="relative flex flex-col gap-10"
         >
           {phases.map((phase, i) => (
             <motion.div

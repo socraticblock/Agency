@@ -13,11 +13,11 @@ export const DISCOVERY_QUESTION_LABELS: Record<string, string> = {
   upgrade_url: "Domain Status",
 
   hero_offer: "The Hero Offer",
-  pain_point: "The Pain Point",
+  pain_point: "The Critical Pain Point",
   transformation: "The Transformation",
-  social_proof: "The Social Proof",
-  visual_trust: "Visual Trust",
-  urgency: "Urgency",
+  social_proof: "Impressive Social Proof",
+  visual_trust: "Visual Trust Assets",
+  urgency: "The Buying Urgency",
 
   anchor_platform: "Anchor Platform",
   lead_magnet: "The Lead Magnet",

@@ -8,6 +8,9 @@
 - [006] Architect configurator hardening: shared discovery definitions/labels, step-5 completion gate, blueprint API validation + semantic pitch keys, summary submit UX and analyzing timers, full reset + module quantity cleanup, curated module copy, StepNav a11y.
 - [007] Full-stack audit in `docs/COMPREHENSIVE_AUDIT_2026-03-22.md`: build/lint/audit + SEO (missing `/api/og`, `/ka` alternates), deps CVEs, blueprint Resend-missing success, a11y gaps; `MagneticButton` `@ts-expect-error` removed for green `next build`.
 - [008] Top-tier polish: dynamic `/api/og`, `sitemap.ts`/`robots.ts`, SEO alternates + Twitter images + JSON-LD image; blueprint 503 without Resend; onboarding payload limits; Zod on lead actions; `MotionConfig` + Lenis skip + CSS reduced-motion; `lang="en"`; HSTS prod; Next `16.2.1` + clean `npm audit`.
+- [009] Blueprint persistence: shared `blueprintStore` lib; architect submit uses `POST/PATCH /api/architect-blueprint` (plain JSON) instead of Server Actions to avoid Next Flight `charCodeAt` failures on large payloads; Redis + dev `Map` unchanged; thin `saveBlueprint` actions remain optional.
+- [010] Architect audit handover: VIP modal (name + company) before analyze; loading phrases use lead; WhatsApp prefill + `995591039019`; handover email-only for PDF; `PATCH` still sends full `lead`.
+- [011] Discovery → step 5: `isAnswerValidForDiscoveryQuestion` aligns Continue/keyboard with `isDiscoveryComplete` (fixes color_palette drift); `goToStep` returns boolean; Generate Blueprint gated on full completion + user-visible errors if navigation blocked.
 
 # Detailed Observations
 
@@ -50,3 +53,18 @@
 - **Context:** User asked to bring the marketing site to a “top tier” bar after the comprehensive audit.
 - **Decision:** Shipped OG image route (`next/og` edge), App Router `sitemap`/`robots`, corrected SEO alternates and Twitter card image, fail-closed blueprint when Resend is missing, bounded onboarding JSON bodies, Zod validation on lead/booking actions, Framer `MotionConfig reducedMotion="user"` + Lenis bypass + global CSS for reduced motion, root `lang="en"`, production HSTS header, upgraded Next/eslint-config to 16.2.1 and cleared npm audit.
 - **Impact:** Better social previews and crawler signals, honest error UX for misconfigured email, less abuse surface on onboarding payloads, stricter lead data hygiene, improved a11y for motion sensitivity, current security patches on the framework.
+
+## [009]
+- **Context:** Submitting the architect audit called `saveBlueprint` while `REDIS_URL` was unset or invalid; `new Redis("")` or a bad URL could make ioredis throw `Cannot read properties of undefined (reading 'charCodeAt')` (often on the first `SET`, not in the constructor), surfaced in `SummaryDashboard` as a cryptic submit error.
+- **Decision:** Lazy-create Redis only when `REDIS_URL` is non-empty; try/catch on constructor; try/catch on every `SET`/`GET`, disconnect on failure; in `development` flip to an in-module `Map` after Redis errors (or when URL missing); production returns explicit misconfiguration/reachability errors; normalize payload with `JSON.parse(JSON.stringify)` inside the action.
+- **Impact:** Local dev survives missing or broken Redis without opaque parser errors; production gets actionable messages; avoids spinning a broken Redis client on every request after one failure.
+
+## [010]
+- **Context:** User wanted a professional lead-gen handover: identify the prospect before the terminal animation, personalize loader copy, pre-filled WhatsApp, and drop duplicate name/company fields on the final card.
+- **Decision:** `SummaryDashboard` opens a VIP modal on “Submit for Architectural Review”; “Secure my blueprint” validates then runs the existing POST flow; `loadingPhrases` depend on `lead.name` / `lead.company` (with truncation); WhatsApp uses the intake number aligned with `FoundationGrid` and a fixed message template with ID; handover form is email-only while `handleLeadSubmit` still PATCHes `{ name, company, email }` from state.
+- **Impact:** Clearer funnel positioning without API changes; Escape / backdrop / X close the modal; build remains green.
+
+## [011]
+- **Context:** Users on the last discovery question saw “Processing…” then stayed on step 4 because `goToStep(5)` no-oped when `canGoToStep(5)` required `isDiscoveryComplete` while the UI only checked `hasAnswer` for the current question (e.g. incomplete 3-color palette allowed).
+- **Decision:** Exported `isAnswerValidForDiscoveryQuestion` matching completion rules; DiscoveryModule uses it for Continue/Enter; last-step primary action requires full `isDiscoveryComplete`; `handlesSubmit` pre-checks + reads `goToStep` boolean with amber error copy; `goToStep` returns `boolean` from `useConfigurator`.
+- **Impact:** Step 5 opens when and only when discovery data satisfies the same rules as the configurator gate; fewer silent failures.

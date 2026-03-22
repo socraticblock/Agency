@@ -14,11 +14,26 @@ function hasAnswer(val: unknown): boolean {
   return true;
 }
 
+function truncateDisplay(s: string, max: number): string {
+  const t = s.trim();
+  if (!t) return "";
+  return t.length <= max ? t : `${t.slice(0, max)}…`;
+}
+
+/** Matches FoundationGrid / primary intake line */
+const WHATSAPP_INTAKE = "995591039019";
+
+import { Smartphone, Mail, Building, User, X } from "lucide-react";
+import type {
+  MergeLeadResult,
+  PersistBlueprintResult,
+} from "@/lib/blueprint/blueprintStore";
+
 export type SummaryDashboardProps = {
   foundation: string | null;
   selectedModules: string[];
   answers: Record<string, unknown>;
-  goToStep: (s: 1 | 2 | 3 | 4 | 5) => void;
+  goToStep: (s: 1 | 2 | 3 | 4 | 5) => boolean;
   setDiscoveryStep: (n: number) => void;
   setIsEditing: (v: boolean) => void;
   moduleQuantities: Record<string, number>;
@@ -55,12 +70,17 @@ export default function SummaryDashboard({
     [foundation, selectedModules, IS_UPGRADE]
   );
 
-  const [stages, setStage] = useState<"review" | "analyzing" | "capture" | "success">("review");
+  const [stages, setStage] = useState<"review" | "analyzing" | "handover">("review");
   const [progress, setProgress] = useState(0);
   const [loadingIndex, setLoadingIndex] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [email, setEmail] = useState("");
+  const [blueprintId, setBlueprintId] = useState<string | null>(null);
+  const [vipModalOpen, setVipModalOpen] = useState(false);
+  const [vipError, setVipError] = useState<string | null>(null);
+
+  /** Name + company captured in VIP modal before analyze; email on handover */
+  const [lead, setLead] = useState({ name: "", company: "", email: "" });
 
   const handleEdit = (stepNum: 1 | 2 | 3 | 4 | 5, questionIndex?: number) => {
     goToStep(stepNum);
@@ -76,15 +96,18 @@ export default function SummaryDashboard({
     : (["#10b981"] as string[]);
   const dominantColor = colors[0] || "#10b981";
 
-  const loadingPhrases = useMemo(
-    () => [
+  const loadingPhrases = useMemo(() => {
+    const companyShort = truncateDisplay(lead.company, 40) || "your company";
+    const nameShort = truncateDisplay(lead.name, 36) || "you";
+    return [
+      `Securing nodes for ${companyShort}...`,
+      `Linking blueprint to ${nameShort}...`,
       `Analyzing ${activeFoundation?.name || "Foundation"} infrastructure nodes...`,
-      `Calculating server edge distribution for local nodes...`,
       `Validating ${dominantColor} palette against conversion psychology...`,
-      `Finalizing 0.1% Business Strategy Brief...`,
-    ],
-    [activeFoundation?.name, dominantColor]
-  );
+      `Calculating server edge distribution for local nodes...`,
+      `Finalizing your architecture brief...`,
+    ];
+  }, [activeFoundation?.name, dominantColor, lead.company, lead.name]);
 
   useEffect(() => {
     if (stages !== "analyzing") return;
@@ -102,12 +125,11 @@ export default function SummaryDashboard({
         if (prev >= 100) {
           clearInterval(progressInterval);
           clearInterval(textInterval);
-          setTimeout(() => setStage("capture"), 400);
           return 100;
         }
         return prev + 2;
       });
-    }, 40);
+    }, 30);
 
     return () => {
       clearInterval(textInterval);
@@ -115,46 +137,96 @@ export default function SummaryDashboard({
     };
   }, [stages, loadingPhrases]);
 
-  const handleConfirm = () => {
-    setStage("analyzing");
+  useEffect(() => {
+    if (!vipModalOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setVipModalOpen(false);
+        setVipError(null);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [vipModalOpen]);
+
+  const openVipCheckIn = () => {
+    setSubmitError(null);
+    setVipError(null);
+    setVipModalOpen(true);
   };
 
-  const handleLeadSubmit = async () => {
-    if (!email) return;
-    setIsSubmitting(true);
+  const secureBlueprintAndAnalyze = async () => {
+    const name = lead.name.trim();
+    const company = lead.company.trim();
+    if (!name || !company) {
+      setVipError("Please enter your full name and company name.");
+      return;
+    }
+    setVipError(null);
+    setVipModalOpen(false);
+    setStage("analyzing");
     setSubmitError(null);
+
     try {
-      const res = await fetch("/api/blueprint", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          answers,
+      const payload = JSON.parse(
+        JSON.stringify({
           foundation,
           selectedModules,
           moduleQuantities,
           shieldTier,
-          oneTimeTotal,
-          monthlyTotal,
-        }),
+          totalOneTime: oneTimeTotal,
+          totalMonthly: monthlyTotal,
+          answers,
+        })
+      );
+
+      const httpRes = await fetch("/api/architect-blueprint", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
-      let message = "Something went wrong. Please try again.";
-      try {
-        const data = (await res.json()) as { error?: string };
-        if (data?.error) message = data.error;
-      } catch {
-        /* ignore */
+
+      const res = (await httpRes.json()) as PersistBlueprintResult;
+
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      if (res.success && res.blueprintId) {
+        setBlueprintId(res.blueprintId);
+        setStage("handover");
+      } else {
+        throw new Error(
+          res.success === false
+            ? res.error
+            : `System overload. Failed to secure architecture node. (${httpRes.status})`
+        );
       }
-      if (!res.ok) {
-        setSubmitError(message);
-        return;
-      }
-      setStage("success");
-    } catch (e) {
-      console.error("Blueprint dispatch error:", e);
-      setSubmitError("Network error. Check your connection and try again.");
-    } finally {
-      setIsSubmitting(false);
+    } catch (error: unknown) {
+      console.error("BLUEPRINT SECURE FAILURE:", error);
+      const message =
+        error instanceof Error ? error.message : "Connection Failed - Try Again";
+      setSubmitError(message);
+      setStage("review");
+    }
+  };
+
+  const handleLeadSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!blueprintId) return;
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    const httpRes = await fetch("/api/architect-blueprint", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ blueprintId, lead }),
+    });
+    const res = (await httpRes.json()) as MergeLeadResult;
+    setIsSubmitting(false);
+
+    if (res.success) {
+      alert("✅ Dossier securely dispatched building pipelines.");
+    } else {
+      setSubmitError(res.error || "Dispatch failed.");
     }
   };
 
@@ -162,269 +234,315 @@ export default function SummaryDashboard({
 
   return (
     <div className="w-full max-w-5xl mx-auto py-10 flex flex-col gap-8">
-      <div className="text-center">
-        <h1 className="text-3xl font-space font-black text-white flex items-center justify-center gap-2">
-          <LayoutDashboard className="h-7 w-7 text-emerald-400" />
-          THE ARCHITECT&apos;S AUDIT
-        </h1>
-        <p className="text-xs text-slate-400 max-w-sm mx-auto mt-1">
-          Review your digital infrastructure blueprints before deployment indexation.
-        </p>
-      </div>
+      <AnimatePresence mode="wait">
+        {stages === "review" && (
+          <m.div
+            key="audit-grid"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0, scale: 0.95, y: -20 }}
+            transition={{ duration: 0.4 }}
+            className="flex flex-col gap-8 w-full"
+          >
+            <div className="text-center">
+              <h1 className="text-3xl font-space font-black text-white flex items-center justify-center gap-2">
+                <LayoutDashboard className="h-7 w-7 text-emerald-400" />
+                THE ARCHITECT&apos;S AUDIT
+              </h1>
+              <p className="text-xs text-slate-400 max-w-sm mx-auto mt-1">
+                Review your digital infrastructure blueprints before deployment indexation.
+              </p>
+            </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div className="glass-card border border-white/5 bg-white/[0.02] backdrop-blur-xl p-5 rounded-2xl flex flex-col gap-3 relative overflow-hidden group">
-          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent opacity-50" />
-          <div className="flex justify-between items-center border-b border-white/5 pb-2 z-10">
-            <span className="text-xs font-black font-space text-slate-400 uppercase tracking-wider flex items-center gap-1">
-              01. Infrastructure
-            </span>
-            <button
-              type="button"
-              onClick={() => handleEdit(1)}
-              className="text-[10px] text-slate-500 hover:text-emerald-400 flex items-center gap-0.5 font-bold transition-all"
-            >
-              <Edit2 className="h-2.5 w-2.5" /> [Edit]
-            </button>
-          </div>
-          <div className="space-y-2.5 z-10 flex-1 flex flex-col justify-center">
-            {activeFoundation && (
-              <div className="flex items-center gap-2 text-sm font-bold text-white bg-white/5 p-2 rounded-xl border border-white/5">
-                <Layout className="h-4 w-4 text-emerald-400" />
-                {activeFoundation.name}
-              </div>
-            )}
-            {activeModules.length > 0 && (
-              <div className="flex flex-wrap gap-1">
-                {activeModules.map((m) => (
-                  <span
-                    key={m.id}
-                    className="text-[9px] bg-emerald-500/5 border border-emerald-500/10 px-2 py-1 rounded-md text-emerald-300 font-black font-space"
-                  >
-                    {m.name}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {/* Box 1 */}
+              <div className="glass-card border border-white/5 bg-white/[0.02] backdrop-blur-xl p-5 rounded-2xl flex flex-col gap-3 relative overflow-hidden group">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent opacity-50" />
+                <div className="flex justify-between items-center border-b border-white/5 pb-2 z-10">
+                  <span className="text-xs font-black font-space text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                    01. Infrastructure
                   </span>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="glass-card border border-white/5 bg-white/[0.02] backdrop-blur-xl p-5 rounded-2xl flex flex-col gap-3 relative overflow-hidden group">
-          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent opacity-50" />
-          <div className="flex justify-between items-center border-b border-white/5 pb-2 z-10">
-            <span className="text-xs font-black font-space text-slate-400 uppercase tracking-wider flex items-center gap-1">
-              02. Visual Identity
-            </span>
-            <button
-              type="button"
-              onClick={() => handleEdit(4, 0)}
-              className="text-[10px] text-slate-500 hover:text-emerald-400 flex items-center gap-0.5 font-bold transition-all"
-            >
-              <Edit2 className="h-2.5 w-2.5" /> [Edit]
-            </button>
-          </div>
-          <div className="space-y-3 z-10 flex-1 flex flex-col justify-center">
-            {hasAnswer(answers["design_style"]) && (
-              <div className="text-xs text-slate-400 flex justify-between items-center">
-                <span>Style:</span>
-                <span className="text-white font-black font-space uppercase bg-emerald-400/10 px-1.5 py-0.5 rounded text-[10px] text-emerald-300">
-                  {String(answers["design_style"])}
-                </span>
-              </div>
-            )}
-            {Array.isArray(colorPalette) && colorPalette.length > 0 && (
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">Palette:</span>
-                <div className="flex -space-x-1 h-5 rounded-lg overflow-hidden border border-white/10 shadow-[0_0_15px_rgba(16,185,129,0.15)]">
-                  {(colorPalette as string[]).map((c: string, i: number) => (
-                    <div
-                      key={i}
-                      className="h-full w-5 first:rounded-l-md last:rounded-r-md"
-                      style={{ backgroundColor: c }}
-                      title={c}
-                    />
-                  ))}
+                  <button
+                    type="button"
+                    onClick={() => handleEdit(1)}
+                    className="text-[10px] text-slate-500 hover:text-emerald-400 flex items-center gap-0.5 font-bold transition-all"
+                  >
+                    <Edit2 className="h-2.5 w-2.5" /> [Edit]
+                  </button>
+                </div>
+                <div className="space-y-2.5 z-10 flex-1 flex flex-col justify-center">
+                  {activeFoundation && (
+                    <div className="flex items-center gap-2 text-sm font-bold text-white bg-white/5 p-2 rounded-xl border border-white/5">
+                      <Layout className="h-4 w-4 text-emerald-400" />
+                      {activeFoundation.name}
+                    </div>
+                  )}
+                  {activeModules.length > 0 && (
+                    <div className="flex flex-wrap gap-1">
+                      {activeModules.map((m) => (
+                        <span
+                          key={m.id}
+                          className="text-[9px] bg-emerald-500/5 border border-emerald-500/10 px-2 py-1 rounded-md text-emerald-300 font-black font-space"
+                        >
+                          {m.name}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
-            )}
-            {hasAnswer(answers["typography"]) && (
-              <div className="text-xs text-slate-400 flex justify-between items-center">
-                <span>Font Anchor:</span>
-                <span className="text-white font-bold">{String(answers["typography"])}</span>
-              </div>
-            )}
-          </div>
-        </div>
 
-        <div className="glass-card border border-white/5 bg-white/[0.02] backdrop-blur-xl p-5 rounded-2xl flex flex-col gap-3 relative overflow-hidden group">
-          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent opacity-50" />
-          <div className="flex justify-between items-center border-b border-white/5 pb-2 z-10">
-            <span className="text-xs font-black font-space text-slate-400 uppercase tracking-wider flex items-center gap-1">
-              03. Brand Strategy
-            </span>
-            <button
-              type="button"
-              onClick={() => handleEdit(4, 4)}
-              className="text-[10px] text-slate-500 hover:text-emerald-400 flex items-center gap-0.5 font-bold transition-all"
-            >
-              <Edit2 className="h-2.5 w-2.5" /> [Edit]
-            </button>
-          </div>
-          <div className="space-y-3 z-10 flex-1 flex flex-col justify-center">
-            {hasAnswer(answers["pitch"]) && (
-              <p className="text-xs text-slate-300 italic font-medium leading-relaxed bg-white/5 p-2 rounded-xl border border-white/5">
-                &quot;{String(answers["pitch"])}&quot;
-              </p>
-            )}
-            <div className="flex flex-wrap gap-1">
-              {hasAnswer(answers["north_star"]) && (
-                <span className="text-[9px] bg-emerald-500/5 border border-emerald-500/10 text-emerald-300 px-1.5 py-0.5 rounded-md font-black font-space">
-                  🎯 {String(answers["north_star"])}
-                </span>
-              )}
-              {hasAnswer(answers["emotional_hook"]) && (
-                <span className="text-[9px] bg-emerald-500/5 border border-emerald-500/10 text-emerald-300 px-1.5 py-0.5 rounded-md font-black font-space">
-                  Hook: {String(answers["emotional_hook"])}
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="glass-card border border-white/5 bg-white/[0.02] p-5 rounded-2xl space-y-3 w-full">
-        <div className="flex justify-between items-center border-b border-white/5 pb-2">
-          <span className="text-xs font-black font-space text-slate-400 uppercase tracking-wider">
-            04. Deep-Dive Strategy Specifications
-          </span>
-          <button
-            type="button"
-            onClick={() => handleEdit(4, 7)}
-            className="text-[10px] text-slate-500 hover:text-emerald-400 flex items-center gap-0.5 font-bold transition-all"
-          >
-            <Edit2 className="h-2.5 w-2.5" /> [Edit]
-          </button>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {Object.keys(answers)
-            .filter(
-              (key) =>
-                validKeys.includes(key) &&
-                ![
-                  "design_style",
-                  "color_palette",
-                  "typography",
-                  "pitch",
-                  "north_star",
-                  "emotional_hook",
-                  "inspiration",
-                ].includes(key)
-            )
-            .map((key) => {
-              if (!answers[key]) return null;
-              const val = answers[key];
-              return (
-                <div
-                  key={key}
-                  className="text-xs space-y-1 bg-white/[0.02] p-3 rounded-xl border border-white/5 flex flex-col"
-                >
-                  <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider font-space">
-                    {DISCOVERY_QUESTION_LABELS[key] || `Specification: ${key}`}
+              {/* Box 2 */}
+              <div className="glass-card border border-white/5 bg-white/[0.02] backdrop-blur-xl p-5 rounded-2xl flex flex-col gap-3 relative overflow-hidden group">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent opacity-50" />
+                <div className="flex justify-between items-center border-b border-white/5 pb-2 z-10">
+                  <span className="text-xs font-black font-space text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                    02. Visual Identity
                   </span>
-                  <p className="text-white font-medium leading-relaxed">
-                    {Array.isArray(val) ? val.join(", ") : String(val)}
+                  <button
+                    type="button"
+                    onClick={() => handleEdit(4, 0)}
+                    className="text-[10px] text-slate-500 hover:text-emerald-400 flex items-center gap-0.5 font-bold transition-all"
+                  >
+                    <Edit2 className="h-2.5 w-2.5" /> [Edit]
+                  </button>
+                </div>
+                <div className="space-y-3 z-10 flex-1 flex flex-col justify-center">
+                  {hasAnswer(answers["design_style"]) && (
+                    <div className="text-xs text-slate-400 flex justify-between items-center">
+                      <span>Style:</span>
+                      <span className="text-white font-black font-space uppercase bg-emerald-400/10 px-1.5 py-0.5 rounded text-[10px] text-emerald-300">
+                        {String(answers["design_style"])}
+                      </span>
+                    </div>
+                  )}
+                  {Array.isArray(colorPalette) && colorPalette.length > 0 && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-slate-400">Palette:</span>
+                      <div className="flex -space-x-1 h-5 rounded-lg overflow-hidden border border-white/10 shadow-[0_0_15px_rgba(16,185,129,0.15)]">
+                        {(colorPalette as string[]).map((c: string, i: number) => (
+                          <div
+                            key={i}
+                            className="h-full w-5 first:rounded-l-md last:rounded-r-md"
+                            style={{ backgroundColor: c }}
+                            title={c}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {hasAnswer(answers["typography"]) && (
+                    <div className="text-xs text-slate-400 flex justify-between items-center">
+                      <span>Font Anchor:</span>
+                      <span className="text-white font-bold">{String(answers["typography"])}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Box 3 */}
+              <div className="glass-card border border-white/5 bg-white/[0.02] backdrop-blur-xl p-5 rounded-2xl flex flex-col gap-3 relative overflow-hidden group">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent opacity-50" />
+                <div className="flex justify-between items-center border-b border-white/5 pb-2 z-10">
+                  <span className="text-xs font-black font-space text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                    03. Brand Strategy
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => handleEdit(4, 4)}
+                    className="text-[10px] text-slate-500 hover:text-emerald-400 flex items-center gap-0.5 font-bold transition-all"
+                  >
+                    <Edit2 className="h-2.5 w-2.5" /> [Edit]
+                  </button>
+                </div>
+                <div className="space-y-3 z-10 flex-1 flex flex-col justify-center">
+                  {hasAnswer(answers["pitch"]) && (
+                    <p className="text-xs text-slate-300 italic font-medium leading-relaxed bg-white/5 p-2 rounded-xl border border-white/5">
+                      &quot;{String(answers["pitch"])}&quot;
+                    </p>
+                  )}
+                  <div className="flex flex-wrap gap-1">
+                    {hasAnswer(answers["north_star"]) && (
+                      <span className="text-[9px] bg-emerald-500/5 border border-emerald-500/10 text-emerald-300 px-1.5 py-0.5 rounded-md font-black font-space">
+                        🎯 {String(answers["north_star"])}
+                      </span>
+                    )}
+                    {hasAnswer(answers["emotional_hook"]) && (
+                      <span className="text-[9px] bg-emerald-500/5 border border-emerald-500/10 text-emerald-300 px-1.5 py-0.5 rounded-md font-black font-space">
+                        Hook: {String(answers["emotional_hook"])}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="glass-card border border-white/5 bg-white/[0.02] p-5 rounded-2xl space-y-3 w-full">
+              <div className="flex justify-between items-center border-b border-white/5 pb-2">
+                <span className="text-xs font-black font-space text-slate-400 uppercase tracking-wider">
+                  04. Deep-Dive Strategy Specifications
+                </span>
+                <button
+                  type="button"
+                  onClick={() => handleEdit(4, 7)}
+                  className="text-[10px] text-slate-500 hover:text-emerald-400 flex items-center gap-0.5 font-bold transition-all"
+                >
+                  <Edit2 className="h-2.5 w-2.5" /> [Edit]
+                </button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {Object.keys(answers)
+                  .filter(
+                    (key) =>
+                      validKeys.includes(key) &&
+                      ![
+                        "design_style",
+                        "color_palette",
+                        "typography",
+                        "pitch",
+                        "north_star",
+                        "emotional_hook",
+                      ].includes(key)
+                  )
+                  .map((key) => {
+                    const val = answers[key];
+                    if (val === undefined || val === null) return null;
+
+                    let displayVal = String(val);
+                    if (Array.isArray(val)) {
+                      displayVal = val.filter((v) => typeof v === "string" && v.trim() !== "").join(", ");
+                    } else if (typeof val === "boolean") {
+                      displayVal = val ? "Yes" : "No";
+                    }
+
+                    if (!displayVal.trim()) return null;
+
+                    return (
+                      <div
+                        key={key}
+                        className="text-xs space-y-1 bg-white/[0.02] p-3 rounded-xl border border-white/5 flex flex-col"
+                      >
+                        <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider font-space">
+                          {DISCOVERY_QUESTION_LABELS[key] || `Specification: ${key}`}
+                        </span>
+                        <p className="text-white font-medium leading-relaxed break-words">
+                          {displayVal}
+                        </p>
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+
+            <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center gap-2 mt-4">
+              <button
+                type="button"
+                onClick={openVipCheckIn}
+                className="px-6 py-2.5 bg-emerald-400 text-black font-space font-black text-sm uppercase rounded-xl shadow-[0_10px_25px_rgba(16,185,129,0.2)] hover:bg-emerald-300 hover:scale-[1.02] transition-all flex items-center gap-1.5 group cursor-pointer"
+              >
+                Submit for Architectural Review
+                <ArrowRight className="h-4 w-4 stroke-[3] group-hover:translate-x-1 transition-transform" />
+              </button>
+              {submitError && (
+                <p className="text-[10px] text-red-400 font-bold font-space bg-red-400/10 px-2 py-0.5 rounded border border-red-400/20">
+                  {submitError}
+                </p>
+              )}
+            </m.div>
+          </m.div>
+        )}
+
+        {stages === "handover" && (
+          <m.div
+            key="handover-ui"
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 1.05 }}
+            transition={{ duration: 0.5, type: "spring", bounce: 0.1 }}
+            className="flex flex-col items-center gap-6 w-full max-w-xl mx-auto py-10"
+          >
+            <div className="text-center space-y-1">
+              <div className="h-10 w-10 rounded-full bg-emerald-400 flex items-center justify-center shadow-[0_0_30px_rgba(16,185,129,0.4)] mx-auto mb-2">
+                <Check className="h-5 w-5 text-black stroke-[3]" />
+              </div>
+              <h2 className="text-lg font-black font-space text-white uppercase tracking-widest drop-shadow-[0_0_10px_rgba(16,185,129,0.2)]">
+                BLUEPRINT #{blueprintId} SECURED
+              </h2>
+              <p className="text-[11px] text-slate-400 font-medium">
+                Your high-density architecture frame is compiled in the deployment matrix.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 w-full">
+              {/* Box 1: Whatsapp */}
+              <div className="glass-card border border-emerald-500/20 bg-emerald-500/[0.03] p-6 rounded-2xl flex flex-col gap-3 relative overflow-hidden group">
+                <div className="absolute inset-x-0 bottom-0 top-[20%] bg-gradient-to-t from-emerald-500/10 to-transparent pointer-events-none" />
+                <div>
+                  <span className="text-[9px] font-black font-space text-emerald-400 uppercase tracking-wider">
+                    🏛️ DIRECT HANDOVER
+                  </span>
+                  <p className="text-sm font-bold text-white mt-0.5">Instant WhatsApp Broadcast</p>
+                  <p className="text-[11px] text-slate-400 mt-1">
+                    Claim your seat in the direct intake loop with our Lead Builder right now.
                   </p>
                 </div>
-              );
-            })}
-        </div>
-      </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const msg = `Hi Kvali! This is ${lead.name.trim()} from ${lead.company.trim()}. I just finished my audit (ID: ${blueprintId}). Let's talk about my project!`;
+                    window.open(
+                      `https://wa.me/${WHATSAPP_INTAKE}?text=${encodeURIComponent(msg)}`,
+                      "_blank"
+                    );
+                  }}
+                  className="w-full mt-2 py-3 bg-emerald-400 text-black font-space font-black text-xs uppercase rounded-xl flex items-center justify-center gap-2 hover:bg-emerald-300 transition-all shadow-[0_5px_15px_rgba(16,185,129,0.3)] hover:scale-[1.02] active:scale-95 group"
+                >
+                  <Smartphone className="h-3.5 w-3.5" />
+                  Open WhatsApp
+                </button>
+              </div>
 
-      {stages === "review" && (
-        <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-center mt-4">
-          <button
-            type="button"
-            onClick={handleConfirm}
-            className="px-6 py-2.5 bg-emerald-400 text-black font-space font-black text-sm uppercase rounded-xl shadow-[0_10px_25px_rgba(16,185,129,0.2)] hover:bg-emerald-300 hover:scale-[1.02] transition-all flex items-center gap-1.5 group cursor-pointer"
-          >
-            Submit for Architectural Review
-            <ArrowRight className="h-4 w-4 stroke-[3] group-hover:translate-x-1 transition-transform" />
-          </button>
-        </m.div>
-      )}
+              {/* Email only — name & company were captured at VIP check-in */}
+              <div className="glass-card border border-white/5 bg-white/[0.02] p-6 rounded-2xl flex flex-col gap-4 relative overflow-hidden">
+                <div>
+                  <span className="text-[9px] font-black font-space text-slate-400 uppercase tracking-wider">
+                    📄 FULL PDF REPORT
+                  </span>
+                  <p className="text-sm font-bold text-white mt-0.5">Request your dossier by email</p>
+                  <p className="text-[11px] text-slate-400 mt-1">
+                    We&apos;ll send the complete architecture PDF to the address below.
+                  </p>
+                </div>
 
-      {stages === "capture" && (
-        <m.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="glass-card p-6 rounded-2xl border border-emerald-400/20 max-w-md mx-auto w-full text-center space-y-5 flex flex-col items-center bg-zinc-950/80 shadow-2xl backdrop-blur-xl"
-        >
-          <div className="space-y-1.5">
-            <span className="text-sm font-black font-space text-white uppercase tracking-widest drop-shadow-[0_0_10px_rgba(16,185,129,0.3)] flex items-center gap-1.5 justify-center">
-              ARCHITECTURE BRIEF FINALIZED
-            </span>
-            <p className="text-[11px] text-slate-400 font-medium leading-relaxed max-w-md">
-              Our Lead Architect has generated your 0.1% deployment strategy. Enter your professional email to lock
-              in your configuration and receive your pricing audit.
-            </p>
-          </div>
-          <div className="w-full space-y-3">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="CEO@yourbrand.com"
-              className="w-full bg-transparent border-0 border-b border-emerald-400/30 px-3 py-2 text-sm text-center focus:outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400/10 text-white font-medium placeholder:text-zinc-700 transition-all shadow-[0_4px_10px_rgba(16,185,129,0.02)]"
-            />
-            {submitError && (
-              <p className="text-[11px] text-red-400 font-medium" role="alert">
-                {submitError}
-              </p>
-            )}
-            <button
-              type="button"
-              onClick={handleLeadSubmit}
-              disabled={isSubmitting || !email}
-              className="w-full py-2.5 rounded-xl bg-emerald-400 text-black font-space font-black text-xs uppercase hover:bg-emerald-300 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer shadow-[0_4px_15px_rgba(16,185,129,0.2)]"
-            >
-              {isSubmitting ? "Finalizing details..." : "SUBMIT FOR REVIEW"}
-            </button>
-          </div>
-        </m.div>
-      )}
+                <form onSubmit={handleLeadSubmit} className="space-y-3">
+                  <div className="relative w-full">
+                    <Mail className="absolute left-3 top-3.5 h-3.5 w-3.5 text-slate-500" />
+                    <input
+                      type="email"
+                      required
+                      placeholder="Professional email for PDF delivery"
+                      value={lead.email}
+                      onChange={(e) => setLead({ ...lead, email: e.target.value })}
+                      className="w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-3 py-3 text-xs text-white focus:outline-none focus:border-emerald-400"
+                    />
+                  </div>
 
-      {stages === "success" && (
-        <m.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="glass-card p-6 rounded-2xl border border-emerald-400/20 max-w-md mx-auto w-full text-center space-y-4 flex flex-col items-center bg-zinc-950/80 shadow-2xl backdrop-blur-xl"
-        >
-          <div className="h-10 w-10 rounded-full bg-emerald-400 flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.3)]">
-            <Check className="h-5 w-5 text-black stroke-[3]" />
-          </div>
-          <div className="space-y-1.5">
-            <span className="text-sm font-black font-space text-white uppercase tracking-tight">BLUEPRINT RECEIVED</span>
-            <p className="text-[11px] text-slate-400 font-medium leading-relaxed">
-              A Human Lead Architect is manual auditing your{" "}
-              <span className="text-emerald-300 font-bold">{activeFoundation?.name || "Goals"}</span> against our
-              framework systems. Your full deployment strategy will land in your inbox within 24 hours for direct
-              evaluation reviews.
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={() => {
-              const base = "Hey! I just submitted my ";
-              const fName = activeFoundation?.name || "Foundation";
-              const msg = encodeURIComponent(`${base}${fName} blueprint. Let's discuss the deployment.`);
-              window.open(`https://wa.me/995555123456?text=${msg}`, "_blank");
-            }}
-            className="w-full max-w-xs py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-white font-space font-black text-xs uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-1"
-          >
-            Talk to an Architect Now
-          </button>
-        </m.div>
-      )}
+                  {submitError && (
+                    <p className="text-[10px] text-red-400 font-bold">{submitError}</p>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full py-2.5 bg-white/5 border border-white/10 rounded-xl text-white font-space font-black text-xs uppercase hover:bg-white/10 transition-all flex items-center justify-center gap-1.5"
+                  >
+                    {isSubmitting ? "Sending…" : "Request PDF dossier"}
+                  </button>
+                </form>
+              </div>
+            </div>
+          </m.div>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {stages === "analyzing" && (
@@ -440,7 +558,7 @@ export default function SummaryDashboard({
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="text-center h-8"
+                className="text-center min-h-[4.5rem] flex flex-col items-center justify-start px-1"
               >
                 <span className="text-[9px] font-black font-space text-emerald-400 uppercase tracking-widest bg-emerald-400/10 px-2 py-0.5 rounded-full border border-emerald-400/20">
                   ARCHITECT AI ACTIVE
@@ -461,6 +579,98 @@ export default function SummaryDashboard({
                 {progress}% CALCULATED
               </span>
             </div>
+          </m.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {vipModalOpen && (
+          <m.div
+            key="vip-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
+            onClick={() => {
+              setVipModalOpen(false);
+              setVipError(null);
+            }}
+          >
+            <m.div
+              initial={{ opacity: 0, scale: 0.96, y: 14 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 14 }}
+              transition={{ type: "spring", damping: 26, stiffness: 320 }}
+              className="w-full max-w-md glass-card border border-emerald-500/20 bg-zinc-950/90 backdrop-blur-xl p-8 rounded-[1.75rem] shadow-2xl relative"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                type="button"
+                aria-label="Close"
+                onClick={() => {
+                  setVipModalOpen(false);
+                  setVipError(null);
+                }}
+                className="absolute top-4 right-4 text-slate-500 hover:text-white transition-colors p-1 rounded-lg"
+              >
+                <X className="h-4 w-4" />
+              </button>
+              <span className="text-[9px] font-black font-space text-emerald-400 uppercase tracking-[0.2em]">
+                VIP check-in
+              </span>
+              <h3 className="text-xl font-black font-space text-white mt-2 tracking-tight">
+                Who are we building for?
+              </h3>
+              <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                Your blueprint is almost locked. Tell us who you are so we can personalize your handover.
+              </p>
+              <div className="mt-6 space-y-4">
+                <div className="relative">
+                  <User className="absolute left-3 top-3 h-3.5 w-3.5 text-slate-500" />
+                  <input
+                    type="text"
+                    autoComplete="name"
+                    placeholder="Full name"
+                    value={lead.name}
+                    onChange={(e) => setLead({ ...lead, name: e.target.value })}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-3 py-3 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-emerald-400"
+                  />
+                </div>
+                <div className="relative">
+                  <Building className="absolute left-3 top-3 h-3.5 w-3.5 text-slate-500" />
+                  <input
+                    type="text"
+                    autoComplete="organization"
+                    placeholder="Company name"
+                    value={lead.company}
+                    onChange={(e) => setLead({ ...lead, company: e.target.value })}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-3 py-3 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-emerald-400"
+                  />
+                </div>
+              </div>
+              {vipError && (
+                <p className="mt-3 text-[11px] text-red-400 font-bold font-space">{vipError}</p>
+              )}
+              <div className="mt-8 flex flex-col gap-2">
+                <button
+                  type="button"
+                  onClick={() => void secureBlueprintAndAnalyze()}
+                  className="w-full py-3.5 bg-emerald-400 text-black font-space font-black text-xs uppercase rounded-xl shadow-[0_10px_30px_rgba(16,185,129,0.25)] hover:bg-emerald-300 transition-all"
+                >
+                  Secure my blueprint
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setVipModalOpen(false);
+                    setVipError(null);
+                  }}
+                  className="w-full py-2 text-[10px] font-space font-bold text-slate-500 uppercase tracking-wider hover:text-slate-300 transition-colors"
+                >
+                  Back to audit
+                </button>
+              </div>
+            </m.div>
           </m.div>
         )}
       </AnimatePresence>

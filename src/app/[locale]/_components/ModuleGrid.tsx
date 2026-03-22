@@ -39,9 +39,19 @@ export default function ModuleGrid({
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <h3 className="text-xl font-black font-space tracking-tight text-white">
+        <h3 className="text-xl font-black font-space tracking-tight text-white mb-4">
           2. Build Your Engine
         </h3>
+
+        <div className="mb-5 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl shadow-[inset_0_1px_0_0_rgba(16,185,129,0.1)]">
+          <p className="text-sm font-black text-emerald-400 font-space mb-1.5 flex items-center gap-2">
+            <span className="text-lg">📈</span> Scale at Your Own Pace
+          </p>
+          <p className="text-sm text-slate-300 font-medium leading-relaxed">
+            Your selected foundation is a fully functional, high-performance asset on its own. You don’t need these modules to launch. We’ve designed our architecture to be modular—meaning you can start with the core today and &apos;plug in&apos; these advanced growth tools whenever your business is ready for the next level.
+          </p>
+        </div>
+
         <p className="text-xs text-slate-500 font-medium mt-0.5">
           Modules shown here are curated for your selected foundation. For add-ons beyond this list, tell us during
           discovery or reach out after you submit—we map bespoke scope in the audit.
@@ -87,20 +97,24 @@ export default function ModuleGrid({
         </m.div>
       )}
 
-      <div className="flex justify-between mt-2">
+      <div className="flex justify-between mt-4 pt-4 border-t border-white/5">
         <button
           type="button"
           onClick={() => goToStep(1)}
-          className="flex items-center gap-1.5 text-slate-400 hover:text-white font-bold px-4 py-1.5 rounded-lg text-xs font-space transition-colors"
+          className="flex items-center gap-1.5 text-slate-400 hover:text-white font-bold px-4 py-2 rounded-lg text-xs font-space transition-colors"
         >
           <ArrowLeft className="h-3 w-3" /> Back
         </button>
         <button
           type="button"
           onClick={() => goToStep(3)}
-          className="flex items-center gap-1.5 bg-white text-black font-bold px-4 py-1.5 rounded-lg text-xs font-space hover:bg-emerald-400 transition-colors border-0 shadow-md"
+          className={`flex items-center gap-1.5 font-bold px-5 py-2.5 rounded-lg text-xs font-space transition-all shadow-md border-0 ${
+            selectedModules.length > 0
+              ? "bg-emerald-500 text-black hover:bg-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+              : "bg-zinc-800 text-slate-200 hover:bg-zinc-700 border border-zinc-700 hover:text-white"
+          }`}
         >
-          Secure Setup <ArrowRight className="h-3 w-3" />
+          {selectedModules.length > 0 ? "Confirm & Continue" : "Continue Without Modules"} <ArrowRight className="h-3 w-3" />
         </button>
       </div>
     </div>

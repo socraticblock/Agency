@@ -63,7 +63,7 @@ export function KineticHero({ locale }: { locale: Locale }) {
       <NanoBananaBackground />
 
       <motion.div
-        style={{ opacity: scrollOpacity, scale: scrollScale, y: scrollY2 }}
+        style={{ opacity: scrollOpacity, scale: scrollScale, y: scrollY2, willChange: "transform, opacity" }}
         className="flex flex-col items-center"
       >
         <motion.div

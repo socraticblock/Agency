@@ -7,15 +7,15 @@ import { memo } from "react";
 
 const countUpVariants = {
   hidden: { opacity: 0, y: -5 },
-  visible: { 
-    opacity: 1, 
-    y: 0, 
+  visible: {
+    opacity: 1,
+    y: 0,
     scale: [1, 1.05, 1],
-    transition: { 
+    transition: {
       opacity: { duration: 0.15 },
       y: { type: "spring", stiffness: 400, damping: 25 },
       scale: { duration: 0.4, ease: "linear" }
-    } 
+    }
   }
 };
 
@@ -50,7 +50,7 @@ export default memo(function ConfigSidebar({
   shieldTier = 0,
   resetAll
 }: ConfigSidebarProps) {
-  
+
   const handleResetAll = () => {
     if (typeof window !== "undefined") {
       const isConfirmed = window.confirm(
@@ -59,7 +59,7 @@ export default memo(function ConfigSidebar({
       if (isConfirmed && resetAll) resetAll();
     }
   };
-  
+
   const groupedModules = selectedModules.reduce((acc: Record<string, typeof MODULES>, id) => {
     const mod = MODULES.find(m => m.id === id);
     if (mod) {
@@ -70,8 +70,8 @@ export default memo(function ConfigSidebar({
   }, {});
 
   return (
-    <div className="w-full lg:w-1/3 flex flex-col lg:max-h-[calc(100vh-120px)] lg:overflow-y-auto sticky lg:top-4 gap-3 pr-2 scrollbar-none">
-      <div className="clay-card border border-white/5 bg-zinc-900/80 backdrop-blur-xl rounded-2xl p-4 flex flex-col shadow-xl">
+    <div className="w-full lg:w-1/3 flex flex-col lg:max-h-[calc(100vh-120px)] lg:overflow-y-auto sticky lg:top-4 lg:mt-[52px] gap-3 pr-2 scrollbar-none">
+      <div className="glass-card border border-white/5 bg-zinc-900/80 backdrop-blur-xl rounded-2xl p-4 flex flex-col shadow-xl">
         <div className="flex justify-between items-center border-b border-zinc-800/50 pb-2 mb-2">
           <h4 className="text-sm font-black font-space tracking-tight text-slate-200 uppercase flex items-center gap-1" style={{ WebkitTextStroke: "0.3px rgba(0,0,0,0.8)", textShadow: "0px 1px 3px rgba(0,0,0,0.9)" }}>
             Live Total Updates
@@ -92,7 +92,7 @@ export default memo(function ConfigSidebar({
                 <span className="text-xs font-black font-space text-zinc-500 uppercase tracking-widest">Selected Foundation</span>
                 <div className="flex items-center gap-1.5 text-sm font-bold text-slate-200 mt-1">
                   <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)] animate-pulse" />
-                   {activeFoundation.name}
+                  {activeFoundation.name}
                 </div>
               </div>
             )}
@@ -110,10 +110,10 @@ export default memo(function ConfigSidebar({
                         {mods.map((mod: any) => (
                           <span key={mod.id} className="flex items-center gap-1 bg-emerald-500/5 border border-emerald-500/10 text-xs font-space font-black text-emerald-300 px-1.5 py-0.5 rounded-md shadow-[0_0_10px_rgba(16,185,129,0.03)]">
                             <div className="h-1 w-1 rounded-full bg-emerald-400" />
-                             {mod.name}
-                             {moduleQuantities[mod.id] > 1 && (
-                               <span className="text-emerald-400 font-extrabold ml-1">x{moduleQuantities[mod.id]}</span>
-                             )}
+                            {mod.name}
+                            {moduleQuantities[mod.id] > 1 && (
+                              <span className="text-emerald-400 font-extrabold ml-1">x{moduleQuantities[mod.id]}</span>
+                            )}
                           </span>
                         ))}
                       </div>
@@ -190,7 +190,7 @@ export default memo(function ConfigSidebar({
 
 
 
-                <div className="border-t border-zinc-800/50 pt-2 flex items-center gap-1 mt-1">
+        <div className="border-t border-zinc-800/50 pt-2 flex items-center gap-1 mt-1">
           {[
             { title: "🏛️ 5% Tax", desc: "We operate under a 5% Tax Status in Georgia, passing 65% in overhead savings." },
             { title: "🛡️ No Hostage", desc: "We push all code to your private GitHub. You own the deed in full." },
@@ -228,7 +228,7 @@ export default memo(function ConfigSidebar({
           <p className="text-[11px] text-slate-400 font-medium mt-0.5">Headache-Free implementation built into every base:</p>
         </div>
         <div className="flex flex-col gap-1.5 pl-2.5 border-l border-emerald-500/20">
-          
+
           <div className="border-t border-zinc-800/40 pt-1.5 mt-0.5 flex flex-col gap-1">
             {[
               "Total Legal Ownership: You legally own every pixel and line of code under Georgian Law.",

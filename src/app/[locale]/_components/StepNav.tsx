@@ -6,7 +6,7 @@ import { memo } from "react";
 
 interface StepNavProps {
   step: 1 | 2 | 3 | 4 | 5;
-  goToStep: (s: 1 | 2 | 3 | 4 | 5) => void;
+  goToStep: (s: 1 | 2 | 3 | 4 | 5) => boolean;
   canGoToStep: (s: number) => boolean;
   stepLabels: { num: string; label: string }[];
 }

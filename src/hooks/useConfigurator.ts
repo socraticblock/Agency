@@ -137,6 +137,13 @@ export function useConfigurator() {
     }
   }, [hydrated, step, canGoToStep, setStep]);
 
+  // Reset Discovery when Foundation changes
+  useEffect(() => {
+    if (!hydrated) return;
+    setAnswers({});
+    setDiscoveryStep(0);
+  }, [foundation, hydrated]);
+
   // Persist state to localStorage
   useEffect(() => {
     if (!hydrated) return;
@@ -191,8 +198,10 @@ export function useConfigurator() {
 
 
 
-  const goToStep = useCallback((s: 1 | 2 | 3 | 4 | 5) => {
-    if (canGoToStep(s)) setStep(s);
+  const goToStep = useCallback((s: 1 | 2 | 3 | 4 | 5): boolean => {
+    if (!canGoToStep(s)) return false;
+    setStep(s);
+    return true;
   }, [canGoToStep]);
 
   const exchangeRate = 2.7;
