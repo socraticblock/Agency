@@ -1,6 +1,33 @@
 "use server";
 
+import { z } from "zod";
 import { supabaseServer } from "@/lib/supabase/server";
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const captureLeadSchema = z.object({
+  email: z.string().max(320),
+  phone: z.string().max(48),
+  painPoint: z.string().max(5000),
+  toolName: z.string().max(128),
+});
+
+const bookStrategySchema = z.object({
+  name: z.string().max(200),
+  email: z.string().max(320),
+  whatsapp: z.string().max(40),
+  time: z.string().max(500),
+  leadData: z.string().max(100_000),
+});
+
+function field(formData: FormData, key: string): string {
+  const v = formData.get(key);
+  return typeof v === "string" ? v : "";
+}
+
+function zodFormError(error: z.ZodError): string {
+  return error.issues[0]?.message ?? "Invalid input.";
+}
 
 export type LeadCaptureState =
   | { success: true; email?: string; phone?: string }
@@ -16,22 +43,34 @@ export async function captureLeadAction(
   _prevState: LeadCaptureState,
   formData: FormData
 ): Promise<LeadCaptureState> {
-  const email = formData.get("email") as string;
-  const phone = formData.get("phone") as string;
-  const painPoint = formData.get("painPoint") as string;
-  const toolName = formData.get("toolName") as string;
+  const parsed = captureLeadSchema.safeParse({
+    email: field(formData, "email").trim(),
+    phone: field(formData, "phone").trim(),
+    painPoint: field(formData, "painPoint").trim(),
+    toolName: field(formData, "toolName").trim(),
+  });
+
+  if (!parsed.success) {
+    return { error: zodFormError(parsed.error) };
+  }
+
+  const { email, phone, painPoint, toolName } = parsed.data;
 
   if (!email && !phone) {
     return { error: "Please provide either an email or phone number." };
   }
 
+  if (email && !EMAIL_RE.test(email)) {
+    return { error: "Please enter a valid email address." };
+  }
+
   try {
     if (supabaseServer) {
       const { error } = await supabaseServer.from("leads").insert({
-        email,
-        phone,
-        pain_point: painPoint,
-        tool_name: toolName,
+        email: email || null,
+        phone: phone || null,
+        pain_point: painPoint || null,
+        tool_name: toolName || null,
         created_at: new Date().toISOString(),
       });
 
@@ -43,12 +82,10 @@ export async function captureLeadAction(
       console.log("Mock lead capture:", { email, phone, painPoint, toolName });
     }
 
-    const emailTrim = typeof email === "string" ? email.trim() : "";
-    const phoneTrim = typeof phone === "string" ? phone.trim() : "";
     return {
       success: true,
-      ...(emailTrim ? { email: emailTrim } : {}),
-      ...(phoneTrim ? { phone: phoneTrim } : {}),
+      ...(email ? { email } : {}),
+      ...(phone ? { phone } : {}),
     };
   } catch (error) {
     console.error("Lead capture error:", error);
@@ -60,24 +97,40 @@ export async function bookStrategyAction(
   _prevState: BookStrategyFormState,
   formData: FormData
 ): Promise<BookStrategyFormState> {
-  const name = formData.get("name") as string;
-  const email = formData.get("email") as string;
-  const whatsapp = formData.get("whatsapp") as string;
-  const time = formData.get("time") as string;
-  const leadData = formData.get("leadData") as string;
+  const parsed = bookStrategySchema.safeParse({
+    name: field(formData, "name").trim(),
+    email: field(formData, "email").trim(),
+    whatsapp: field(formData, "whatsapp").trim(),
+    time: field(formData, "time").trim(),
+    leadData: field(formData, "leadData"),
+  });
 
-  if (!name || (!email && !whatsapp)) {
-    return { error: "Please provide a name and either an email or WhatsApp number." };
+  if (!parsed.success) {
+    return { error: zodFormError(parsed.error) };
+  }
+
+  const { name, email, whatsapp, time, leadData } = parsed.data;
+
+  if (!name) {
+    return { error: "Please provide your name." };
+  }
+
+  if (!email && !whatsapp) {
+    return { error: "Please provide either an email or WhatsApp number." };
+  }
+
+  if (email && !EMAIL_RE.test(email)) {
+    return { error: "Please enter a valid email address." };
   }
 
   try {
     if (supabaseServer) {
       const { error } = await supabaseServer.from("strategy_calls").insert({
         name,
-        email,
-        whatsapp,
-        preferred_time: time,
-        lead_data: leadData,
+        email: email || null,
+        whatsapp: whatsapp || null,
+        preferred_time: time || null,
+        lead_data: leadData || null,
         created_at: new Date().toISOString(),
       });
 

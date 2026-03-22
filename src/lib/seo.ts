@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-
-type Locale = "ka" | "en";
+import { defaultLocale, type Locale } from "@/lib/i18n";
 
 interface LocalBusinessOptions {
   name: string;
@@ -45,11 +44,14 @@ export function createLocalBusinessSeo(options: LocalBusinessOptions): SeoResult
   } = options;
 
   const baseUrl = getBaseUrl().replace(/\/$/, "");
-  const localizedPath = `/${locale}${path.startsWith("/") ? path : `/${path}`}`;
+  /** Public URLs only use routed locales (`/en` today; `/ka` redirects). */
+  const pathLocale = locale === "ka" ? defaultLocale : locale;
+  const localizedPath = `/${pathLocale}${path.startsWith("/") ? path : `/${path}`}`;
   const url = `${baseUrl}${localizedPath}`;
 
   const title = name;
   const localeTag = getLocaleTag(locale);
+  const ogImageUrl = `${baseUrl}/api/og?locale=${encodeURIComponent(pathLocale)}&title=${encodeURIComponent(name)}`;
 
   const metadata: Metadata = {
     title,
@@ -58,8 +60,8 @@ export function createLocalBusinessSeo(options: LocalBusinessOptions): SeoResult
     alternates: {
       canonical: url,
       languages: {
-        "ka-GE": `${baseUrl}/ka`,
-        "en-US": `${baseUrl}/en`,
+        "x-default": `${baseUrl}/${defaultLocale}`,
+        "en-US": `${baseUrl}/${defaultLocale}`,
       },
     },
     openGraph: {
@@ -71,9 +73,7 @@ export function createLocalBusinessSeo(options: LocalBusinessOptions): SeoResult
       type: "website",
       images: [
         {
-          url: `${baseUrl}/api/og?locale=${locale}&title=${encodeURIComponent(
-            name,
-          )}`,
+          url: ogImageUrl,
           width: 1200,
           height: 630,
           alt: name,
@@ -84,6 +84,7 @@ export function createLocalBusinessSeo(options: LocalBusinessOptions): SeoResult
       card: "summary_large_image",
       title,
       description,
+      images: [ogImageUrl],
     },
   };
 
@@ -102,7 +103,7 @@ export function createLocalBusinessSeo(options: LocalBusinessOptions): SeoResult
       addressCountry,
     },
     areaServed: "Tbilisi, Georgia",
-    image: `${baseUrl}/og/kvali-default.png`,
+    image: ogImageUrl,
     priceRange: "$$",
   };
 

@@ -74,7 +74,6 @@ export function MagneticButton({
   if (isLink) {
     const ComponentToUse = Component === "a" ? motion.a : MotionLink;
     return (
-      // @ts-expect-error - framer-motion props mismatch
       <ComponentToUse href={href} {...commonProps}>
         <motion.div style={{ x: textX, y: textY }} className="relative z-10 w-full h-full flex items-center justify-center">
           {children}

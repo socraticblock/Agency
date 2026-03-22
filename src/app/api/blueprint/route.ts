@@ -96,7 +96,10 @@ export async function POST(req: Request) {
 
     if (!RESEND_API_KEY) {
       console.error("Missing RESEND_API_KEY inside environment variables.");
-      return NextResponse.json({ success: true, debug: "Logged locally, fix env API keys" });
+      return NextResponse.json(
+        { error: "Email dispatch is not configured. Try again later or contact us directly." },
+        { status: 503 }
+      );
     }
 
     const answersRecord =

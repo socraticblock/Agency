@@ -8,7 +8,8 @@ const SITE_DESCRIPTION =
   "Escape the social media trap. We build a permanent, high-speed digital home for your brand that sells 24/7.";
 
 function normalizeLocale(locale: string | undefined): Locale {
-  return locale === "en" ? "en" : "ka";
+  if (locale && (locale === "en" || locale === "ka")) return locale;
+  return "en";
 }
 
 export async function generateMetadata({
