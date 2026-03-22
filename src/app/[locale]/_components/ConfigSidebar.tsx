@@ -133,21 +133,27 @@ export default memo(function ConfigSidebar({
               variants={countUpVariants} initial="hidden" animate="visible"
               className="text-xl font-black font-mono text-emerald-400 tracking-tight"
             >
-              {formatPrice(oneTimeTotal)}
+              {activeFoundation?.isBespoke ? (
+                <span className="text-sm font-black font-space animate-pulse text-amber-400">Project-Based</span>
+              ) : (
+                formatPrice(oneTimeTotal)
+              )}
             </motion.span>
           </div>
 
-          <div className="flex justify-between items-center">
-            <span className="text-base text-slate-400 font-medium font-space">Monthly Recurring:</span>
-            <motion.span
-              key={monthlyTotal}
-              variants={countUpVariants} initial="hidden" animate="visible"
-              className="text-base font-black font-mono text-emerald-300 tracking-tight"
-            >
-              {formatPrice(monthlyTotal)}
-              {monthlyTotal > 0 && "/mo"}
-            </motion.span>
-          </div>
+          {!activeFoundation?.isBespoke && (
+            <div className="flex justify-between items-center">
+              <span className="text-base text-slate-400 font-medium font-space">Monthly Recurring:</span>
+              <motion.span
+                key={monthlyTotal}
+                variants={countUpVariants} initial="hidden" animate="visible"
+                className="text-base font-black font-mono text-emerald-300 tracking-tight"
+              >
+                {formatPrice(monthlyTotal)}
+                {monthlyTotal > 0 && "/mo"}
+              </motion.span>
+            </div>
+          )}
         </div>
 
         <div className="border-t border-zinc-800/50 pt-1.5 flex flex-col gap-1">
@@ -201,7 +207,7 @@ export default memo(function ConfigSidebar({
           ))}
         </div>
 
-        {(activeFoundation || (selectedModules && selectedModules.length > 0)) && (
+        {((activeFoundation && !activeFoundation.isBespoke) || (selectedModules && selectedModules.length > 0)) && (
           <button
             onClick={handleResetAll}
             className="w-full mt-3 py-2 bg-red-950/30 hover:bg-red-950/50 border border-red-500/10 hover:border-red-500/30 rounded-xl text-[11px] font-black font-space text-red-400 hover:text-red-300 transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer relative z-50"

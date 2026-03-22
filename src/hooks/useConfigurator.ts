@@ -106,6 +106,9 @@ export function useConfigurator() {
   const canGoToStep = useCallback(
     (s: number) => {
       if (s === 1) return true;
+      const isBespoke = FOUNDATIONS.find(f => f.id === foundation)?.isBespoke;
+      if (isBespoke) return false;
+
       if (s === 2) return !!foundation;
       if (s === 3) return !!foundation;
       if (s === 4) return !!foundation;

@@ -31,6 +31,8 @@ export interface ServiceItem {
   lawyerRole?: string;
   strategicBacking?: StrategicBackingItem[];
   recommendation?: string;
+  customPriceLabel?: string;
+  isBespoke?: boolean;
 }
 
 export interface Foundation extends ServiceItem {
@@ -59,8 +61,8 @@ export const FOUNDATIONS: Foundation[] = [
     strategy: "Focus is the new currency. By removing navigation menus and distractions, we eliminate the 'Paradox of Choice,' leading your visitor on a single, straight path to your 'Buy' button.",
     howItWorks: 'Removes navigation friction to prevent users from wandering, focusing 100% of the energy on a single call-to-action.',
     scope: [
-      'Structure | 1 Perfectly Crafted Sales Node (Zero fluff, 100% focused on one absolute target offer)', 
-      'Capture | Smart Lead Capture Vault (Catches every inquiry instantly so they don\'t go back to Google)', 
+      'Structure | 1 Perfectly Crafted Sales Node (Zero fluff, 100% focused on one absolute target offer)',
+      'Capture | Smart Lead Capture Vault (Catches every inquiry instantly so they don\'t go back to Google)',
       'Design | Conversion-First Wireframe (Designed psychologically to guide visitors to the absolute "Yes" button)'
     ],
     bestFor: ["Influencers with 1 Specific Offer", "Webinar & Event Hosts", "Real Estate 'Hero' Listings", "Digital Product Launchers"],
@@ -74,7 +76,7 @@ export const FOUNDATIONS: Foundation[] = [
     priceGEL: 6750,
     description: "Your professional headquarters. This moves you from a 'one-man show' to a 'global brand' with a system you can actually control.",
     scope: [
-      'Nodes | 4 Foundational Brand Nodes (Professional Home, About, Contact, Blog)', 
+      'Nodes | 4 Foundational Brand Nodes (Professional Home, About, Contact, Blog)',
       'CMS | Visual Content Dashboard (A private drag-and-drop editor to update text and photos in seconds—without ever needing to pay a developer)',
       'Blog | Automated Authority Engine (A blog system that automatically categorizes your thought leadership for absolute Google SEO dominance)',
       'Leads | Centralized Lead Vault (A secure database that stores every inquiry so you never lose a potential customer)',
@@ -95,54 +97,57 @@ export const FOUNDATIONS: Foundation[] = [
     category: 'Base',
     priceGEL: 12150,
     inheritedValue: { id: 'cms', name: "Digital Command Center Core", priceGEL: 6750 },
-    description: "An automated sales machine featuring Native RS.ge Fiscalization Sync to handle the hard work—payments, stock, and shipping—so you can focus on creating.",
-    concept: "An automated sales machine featuring Native RS.ge Fiscalization Sync to handle the hard work—payments, stock, and shipping—so you can focus on creating.",
-    strategy: "Friction is the enemy of sales. We build a high-speed 'Checkout Tunnel' designed to keep the psychological momentum going until the payment is confirmed, while handling stock and shipping in the background.",
+    description: "A turn-key sales machine built for high-volume growth.",
+    concept: "We build you a digital store that handles the heavy lifting while you sleep. From taking payments via TBC or BOG to automatically telling the tax office (RS.ge) about the sale, we’ve handled the technical 'boring' stuff. You just focus on the products; we've built the engine to move them.",
+    strategy: "A storefront is a high-value financial target. To keep your 'Checkout Tunnel' bulletproof against bots and ensure 100% uptime during sales peaks, we recommend securing this foundation with our [Tier Name] Shield. It’s the insurance policy for your revenue engine.",
     howItWorks: 'Handles money, shipping, and stock tracking so the entrepreneur can focus on creating.',
     scope: [
-      'Commerce | Full Transactional Core (The Shop, Product nodes, and high-speed Checkout Tunnel)', 
-      'Inventory | Automated Control Center (Real-time stock tracking with "Sold Out" safeguards)', 
-      'FinTech | Merchant API (TBC/BOG/Stripe) integration for seamless transaction processing',
-      'Admin | Visual Sales Cockpit (A backend dashboard to view revenue, handle orders, and print shipping in seconds)'
+      "The \"Buy\" Engine | Architecting a high-speed 'Checkout Tunnel' designed to keep psychological momentum going until payment is confirmed.",
+      "Direct Bank Integration | Hooking into TBC, BOG, or Stripe. (Note: Bank approvals take 7-14 days; we guide you through setup)",
+      "The Tax Man (RS.ge) | Automated electronic receipts sent to the Revenue Service instantly with every sale",
+      "Last Mile Logistics | Setting up local delivery zones or global shipping label logic tailored to your zones",
+      "Business Cockpit | Private dashboard for revenue, orders, and document printing in seconds"
     ],
-    bestFor: ["Niche Boutique Owners", "Merch & Apparel Creators", "Digital Asset Sellers", "Artisanal Exporters (Wine/Jewelry)"],
+    bestFor: ["Boutique Owners wanting a premium home", "Wine & Jewelry Makers (Global/Local)", "Artisans looking to automate back-office flow"],
     roiNote: "Automates overheads to scale sales flawlessly.",
-    recommendedModules: ['pay-gateway', 'fiscal-sync', 'micro-animations', 'sms-hub', 'multi-filter', 'recurring-bill', 'compliance-audit', 'rpa-auto', 'extra-page', 'map-marker', 'doc-template']
+    recommendedModules: ['micro-animations', 'sms-hub', 'multi-filter', 'recurring-bill', 'compliance-audit', 'rpa-auto', 'extra-page', 'map-marker', 'doc-template']
   },
   {
     id: 'saas',
-    name: 'Custom Web Application',
+    name: "Customized Software Architecture",
     category: 'Base',
-    priceGEL: 40500,
-    inheritedValue: { id: 'cms', name: "Digital Command Center Core", priceGEL: 6750 },
-    description: "A dedicated software tool built to solve a specific problem for your community at infinite scale. This is a sellable asset, not just a site.",
-    concept: "A dedicated software tool built to solve a specific problem for your community at infinite scale. This is a sellable asset, not just a site.",
-    strategy: "This is a sellable business asset, not just a site. By using 'Multi-Tenancy' logic, we ensure every user has a secure, private experience within your system, making it a scalable platform for your community.",
-    howItWorks: 'Uses custom logic (like fitness calculators or booking systems) to solve niche problems for your community.',
+    priceGEL: 0,
+    customPriceLabel: "Custom Quote Required",
+    isBespoke: true,
+    description: "Engineered for unique logic and infinite scale.",
+    concept: "Sometimes a standard website or shop isn't enough to solve the problem. If you are building a private portal for your members, an AI-powered knowledge base, or a complex tool that needs to handle specific business logic, you need a customized build. We don't use 'one-size-fits-all' templates; we architect a proprietary digital asset from the ground up.",
+    strategy: "In customized software, the most expensive mistake is building the wrong thing. We skip the 'one-size-fits-all' checkboxes to focus on a high-touch partnership. We build the logic first, then the code—ensuring your investment results in a powerful, proprietary asset, not just another subscription.",
+    howItWorks: 'Strategic engineering with 1-1 consulting tailored strictly around bespoke scope.',
     scope: [
-      'Brain | Core SaaS Logic Architecture (The logic workflows allowing users to calculate or manage tools)', 
-      'Access | Secure RBAC Accounts (Different access gates for Free Users, VIPs, and System Admins)', 
-      'Scale | Infinite-Scale Database Node (A database frame built to support concurrent users without slowing down)'
+      "Direct Architect Access | Start with a 1-on-1 deep-cycle discovery to map out exactly how your business logic needs to function.",
+      "Custom Technical Roadmap | Visual blueprints of user flows, logic routes, and security layers architected before a line of code is written.",
+      "Zero-Cap Scalability | Designed with Future-Proof infrastructure designed to grow with your audience as you scale.",
+      "Total Legal Ownership | You own every pixel of code and byte of your database under Georgian Law - it is a sellable business asset."
     ],
-    bestFor: ["Private Membership Communities", "EdTech & Online Academies", "Niche SaaS Founders", "Booking & Management Tools"],
-    roiNote: "Creates scalable MRR digital business asset flaws setups.",
-    recommendedModules: ['micro-animations', 'recurring-bill', 'course-tracking', 'api-opt', 'tech-doc', 'ai-sprint', 'ai-kb', 'auto-cert', 'listing-portal', 'sla-support', 'staff-aug']
+    bestFor: ["Private Gated Membership Networks", "AI Knowledge Bases & Micro-SaaS tools", "Data intensive custom logic dashboards", "Owner networks needing high security frameworks"],
+    roiNote: "Eliminates tech debt to scale proprietary logic effectively."
   },
   {
     id: 'upgrade',
-    name: 'The Existing Site Infrastructure Upgrade',
+    name: 'Legacy Infrastructure Upgrade',
     category: 'Base',
-    priceGEL: 1200, 
+    priceGEL: 0,
+    customPriceLabel: "Project-Based Pricing",
+    isBespoke: true,
     description: 'Keep the "House" (your design), but replace the "Plumbing and Electricity" (the code). We make your current site safe, fast, and legal.',
-    concept: 'Keep the "House" (your design), but replace the "Plumbing and Electricity" (the code). We make your current site safe, fast, and legal.',
-    strategy: 'Why your current site is a liability: 96% of hacks target old code, and non-compliance with 2024 data laws can lead to 20,000 GEL fines. We don\'t just "update"—we protect.',
+    concept: 'If your site was built before 2025, it’s a business liability. We don\'t guess, and we don\'t "patch" old problems. We perform a deep-cycle technical audit to find the "rot" in your current code and provide a fixed-price roadmap to make your site fast, safe, and 2026-compliant.',
+    strategy: 'Old code is a liability. 96% of successful hacks target outdated infrastructure, and a site that takes 3+ seconds to load is losing 40% of its potential sales. We treat your digital presence like real estate—we renovate the core systems to ensure your asset is protected and profitable.',
     scope: [
-      'Technical & Security Audit (We find every hidden weakness)', 
-      '2026 Performance Injection (Making your site feel "New" again)', 
-      'Legal Compliance Roadmap (Ensuring you meet the latest data laws)'
+      "Doctor's Diagnosis | A deep-cycle forensics report uncovering exactly where your old code is leaking data or revenue.",
+      "Surgery Roadmap | A transparent, itemized menu of fixes so you see the ROI before we touch a single line of code."
     ],
     howItWorks: 'The Reality Check: Most websites built before 2025 are "Digital Liabilities." They are slow, vulnerable to 2026 bot attacks, and legally non-compliant with the latest data laws. We don\'t just "tinker"—we perform a surgical replacement. You keep your design, but we swap the "Brain" for our high-performance Sentinel engine, instantly turning a risk into a fortress.',
-    bestFor: ["Frustrated WordPress/Wix Owners", "Businesses with 'Slow' Sites", "Brands Needing GITA/Legal Compliance", "Legacy Sites Built Before 2025"],
+    bestFor: ["Frustrated WordPress/Wix owners tired of slow dashboards", "Established Businesses with sites built before 2025", "Brands that like their current look but hate their current performance", "Companies needing to meet new GITA or Legal compliance standards"],
     lawyerRole: 'Professional legal audit in cooperation with a licensed attorney performing compliance audits on existing data handling, legally certifying protection against Georgian Fine anchors.',
     roiNote: "Eliminates legal risk and fixes revenue leakage.",
     strategicBacking: [
@@ -165,7 +170,7 @@ export const FOUNDATIONS: Foundation[] = [
         cost: 'For every 0.1s delay stat loses 8.4% conversion revenue. Losing standard 10,000 GEL setups "burns" 800 GEL monthly workloads sets.'
       }
     ],
-    recommendedModules: ['compliance-audit', 'seo-audit', 'micro-animations', 'ga4-analytics', 'heatmap', 'cro-audit', 'api-opt', 'adj-credits']
+    recommendedModules: ['compliance-audit', 'seo-audit', 'cro-audit', 'api-opt', 'ga4-analytics', 'heatmap']
   }
 ];
 
@@ -315,8 +320,8 @@ export const MODULES: Module[] = [
     category: 'Business Engines',
     name: 'Direct SMS Hub',
     priceGEL: 650,
-    whatItIs: 'Integration with Silknet or Magti API for automated SMS notifications.',
-    howItHelps: '98% open rate. Send order confirmations or login codes directly to your clients’ phones.'
+    whatItIs: "A direct-to-phone alert system. Instead of relying on emails that end up in 'Spam,' we connect your store to a professional SMS gateway that sends automated text messages to your customers for order updates.",
+    howItHelps: "It builds massive trust. In Georgia, everyone checks their SMS immediately. By sending a text that says 'Your order is on the way!' or 'We've received your payment,' you make the customer feel safe and taken care of. It virtually eliminates the 'Where is my order?' phone calls, saving your team hours of support time every week."
   },
   {
     id: 'calendar-sync',
@@ -340,16 +345,16 @@ export const MODULES: Module[] = [
     category: 'Business Engines',
     name: 'Multi-Criteria Filtering',
     priceGEL: 4500,
-    whatItIs: 'Search logic for high-volume catalogs (Real Estate, Listings).',
-    howItHelps: 'Allows users to find what they want instantly among thousands of items. Critical for a premium user experience.'
+    whatItIs: "A heavy-duty 'Smart Search' engine for your products. It allows customers to filter through your inventory by price, size, color, brand, and technical specs all at once—without ever having to wait for a page to reload.",
+    howItHelps: "It kills 'Search Frustration.' If a customer has to click through 10 pages to find a 'Blue XL Shirt,' they will leave. This is the 0.1% architecture used by giants like Amazon and Farfetch. It makes your entire catalog easy to browse in seconds, which directly increases your sales and keeps people on your site longer."
   },
   {
     id: 'map-marker',
     category: 'Business Engines',
     name: 'Custom Map Integration',
     priceGEL: 1200,
-    whatItIs: `A high-end, branded geographic visualization tool. We use elite mapping engines (MapBox or Google Cloud) to create an interactive experience with custom markers, service zones, and brand-aligned UI instead of a basic generic map.`,
-    howItHelps: `It signals extreme technical polish and premium scale. Ideal for businesses with multiple locations or specific geographic service boundaries, it builds immediate trust through visual transparency. It shows the client that you aren't just 'there'—you are the local authority.`
+    whatItIs: "A high-end, branded map experience. We go beyond a simple 'contact' page and build an interactive map using elite tools (like MapBox) that shows your physical locations, pick-up points, or delivery zones in your brand's specific colors and style.",
+    howItHelps: "It makes your brand look local and established. For businesses with physical stores or specific delivery areas in Tbilisi or Batumi, this visual transparency builds immediate trust. It shows your customers exactly where you are and makes the 'pick-up' option feel like a premium, organized experience."
   },
   {
     id: 'listing-portal',
@@ -381,8 +386,8 @@ export const MODULES: Module[] = [
     category: 'Business Engines',
     name: 'Subscription Billing',
     priceGEL: 2500,
-    whatItIs: 'Infrastructure for recurring membership payments.',
-    howItHelps: 'Builds predictable Monthly Recurring Revenue (MRR). Automatically bills clients every month.'
+    whatItIs: "The 'Monthly Revenue' engine. We build the logic that allows you to sell products on a recurring basis—think 'Wine of the Month' clubs, beauty boxes, or membership access—where the customer is billed automatically every month.",
+    howItHelps: "It creates predictable cash flow. Instead of hunting for new customers every single day, you build a loyal base that pays you on autopilot. This is the fastest way to increase the total value of your business, as recurring revenue is much more stable than one-time sales."
   },
 
 
@@ -439,8 +444,8 @@ export const MODULES: Module[] = [
     name: 'RPA Automation',
     priceGEL: 3000,
     timeSaved: 10,
-    whatItIs: 'Automating manual, repetitive invoicing or data entry.',
-    howItHelps: 'Saves 40+ hours a month. Replaces human data entry with 100% accurate software robots.'
+    whatItIs: "A 'Digital Assistant' for your entire business ecosystem. We write custom code that makes your website talk to your other tools—automatically updating stock levels across social media platforms and syncing every day's profit data directly into your accounting software.",
+    howItHelps: "It lets you scale without hiring an admin team. While the foundation handles the legal receipts, this module handles the business of growing. It eliminates manual data entry, prevents 'double-selling' on different platforms, and ensures your books are always 100% accurate without you ever touching a spreadsheet."
   },
 
   // ==========================================
@@ -451,8 +456,8 @@ export const MODULES: Module[] = [
     category: 'Creative',
     name: 'Additional Static Page',
     priceGEL: 450,
-    whatItIs: `A single, high-performance static node built into your core infrastructure. These are fixed content expansions designed for information that stays consistent, such as a deep-dive Service page, a Privacy Policy, or a Team Bio.`,
-    howItHelps: `It allows your digital real estate to grow alongside your business. Instead of a cluttered 'catch-all' site, you can give every specific offer or service its own dedicated, professionally architected space. This keeps your brand organized and allows you to scale your online presence without a full rebuild.`
+    whatItIs: `A single, high-performance static node built into your core infrastructure.`,
+    howItHelps: `Best for 'Our Story' or 'Return Policy' pages. Allows your digital real estate to grow alongside your business without cluttering the main navigation.`
   },
   {
     id: 'brand-identity',
@@ -475,16 +480,16 @@ export const MODULES: Module[] = [
     category: 'Creative',
     name: 'Document Templates',
     priceGEL: 400,
-    whatItIs: `Custom code-generated PDF templates for your business. We engineer your digital infrastructure to automatically produce pixel-perfect, brand-aligned invoices, contracts, or proposals using your client’s data.`,
-    howItHelps: `It creates a 'Luxury Loop.' Professionalism doesn't end when the website closes. By sending beautifully branded documents that match your 0.1% website, you reinforce your authority at the most critical moment: the closing of the deal. Every touchpoint is a reminder of why they hired an elite studio.`
+    whatItIs: "A custom, code-driven document generation engine. We architect and design high-fidelity PDF templates for your business—including professional invoices, detailed packing slips, and branded shipping manifests—that are automatically generated for every order the moment it is placed.",
+    howItHelps: "It creates a 'Luxury Post-Purchase Loop.' Your brand’s premium identity shouldn't end at the 'Buy' button; it should follow the product into the customer’s hands. This module eliminates manual paperwork while building elite trust through beautiful documentation design anchors. When a customer opens a package and finds a pixel-perfect, branded invoice, it subconsciously justifies your premium pricing and turns a simple transaction into a world-class brand experience."
   },
   {
     id: 'micro-animations',
     category: 'Creative',
     name: 'Micro-Animations',
     priceGEL: 800,
-    whatItIs: "Advanced motion design and kinetic interactions. We use elite libraries like Framer Motion to engineer subtle, 'Apple-level' responses—magnetic buttons, smooth scroll-reveals, and fluid transitions that make your website feel alive, responsive, and premium.",
-    howItHelps: "The '0.1% Luxury' signal. High-ticket clients value attention to detail. These micro-interactions build subconscious trust and signal that your business operates at the highest professional level. It keeps users engaged longer and transforms a standard browsing session into a world-class digital experience."
+    whatItIs: `High-end motion and magnetic triggers that make standard interactions on product triggers feel satisfying and premium.`,
+    howItHelps: `Standardized '0.1% Luxury' indicators. Simple kinetic prompts keep users engaged longer and increase clicking satisfying micro-interactions.`
   },
 
   // ==========================================
@@ -527,8 +532,8 @@ export const MODULES: Module[] = [
     category: 'Operational',
     name: 'Compliance Audit',
     priceGEL: 1200,
-    whatItIs: 'GDPR and Georgian Personal Data Protection Law audit.',
-    howItHelps: 'Legal immunity. Prevents government fines up to 20,000 GEL by ensuring your data handling is 100% legal.',
+    whatItIs: "A legal and digital 'Shield' check. We perform a deep-dive review of your site’s Terms and Conditions, Privacy Policies, and Refund Logic to ensure they meet both Georgian E-commerce laws and international security standards.",
+    howItHelps: "It protects you from 'Legal Nightmares.' In the world of online sales, a single mistake in your refund policy or a data security flaw can lead to massive fines or bank penalties. This audit gives you 'Sleep-at-night' insurance, making sure your business is legally airtight and your customers feel safe entering their card details.",
     lawyerRole: 'Professional legal audit of your data storage and cookie policies.'
   },
   {
@@ -547,25 +552,25 @@ export interface ShieldPerk {
 }
 
 export const SHIELD_TIERS = [
-  { 
-    id: 0, 
-    name: 'Reputation Scout', 
-    priceGEL: 0, 
-    level: 'Basic', 
-    risk: 'High', 
+  {
+    id: 0,
+    name: 'Reputation Scout',
+    priceGEL: 0,
+    level: 'Basic',
+    risk: 'High',
     perks: [
       { title: 'SSL Oversight', desc: 'Prevents "Not Secure" browser lockouts.' },
       { title: 'Blacklist Monitoring', desc: 'Stops your site/emails going to spam.' },
       { title: 'AWS Backup Node', desc: 'Basic off-site recovery points saving cycles.' }
-    ], 
-    description: 'The bare minimum to exist safely on the web.' 
+    ],
+    description: 'The bare minimum to exist safely on the web.'
   },
-  { 
-    id: 1, 
-    name: 'Micro Shield', 
-    priceGEL: 200, 
-    level: 'Proactive', 
-    risk: 'Medium', 
+  {
+    id: 1,
+    name: 'Micro Shield',
+    priceGEL: 200,
+    level: 'Proactive',
+    risk: 'Medium',
     isRecommended: true,
     perks: [
       { title: 'CDN Configuration', desc: 'Global image edge caching frame routing.' },
@@ -573,37 +578,37 @@ export const SHIELD_TIERS = [
       { title: 'Time-Machine Backups', desc: 'Daily database restores if anything breaks.' },
       { title: 'Security Patching', desc: 'Critical software lock downs against bots.' },
       { title: 'Database Cleanup', desc: 'Remove clean index junk tables bloating speed.' }
-    ], 
-    description: 'Protects 100/100 speeds from natural performance decay.' 
+    ],
+    description: 'Protects 100/100 speeds from natural performance decay.'
   },
-  { 
-    id: 2, 
-    name: 'Active Shield', 
-    priceGEL: 650, 
-    level: 'Guardian', 
-    risk: 'Low', 
+  {
+    id: 2,
+    name: 'Active Shield',
+    priceGEL: 650,
+    level: 'Guardian',
+    risk: 'Low',
     perks: [
       { title: 'Includes Micro Shield+', desc: 'All Tier 2 advantages included.' },
       { title: 'Malware Shield Pro', desc: 'Real-time brute force armor hardening defenses.' },
       { title: 'Enterprise Speed Turbo', desc: 'Hits 90+ Pagespeeds server-side rendering.' },
       { title: 'Priority Support Queue', desc: 'Guaranteed support queue placement.' },
       { title: 'Conversion Audits', desc: 'Bi-weekly suggests to increase sales.' }
-    ], 
-    description: 'A developer on-call to optimize your layout as your audience grows.' 
+    ],
+    description: 'A developer on-call to optimize your layout as your audience grows.'
   },
-  { 
-    id: 3, 
-    name: 'Enterprise Shield', 
-    priceGEL: 3250, 
-    level: 'Immune', 
-    risk: 'None', 
+  {
+    id: 3,
+    name: 'Enterprise Shield',
+    priceGEL: 3250,
+    level: 'Immune',
+    risk: 'None',
     perks: [
       { title: 'Includes Active Shield+', desc: 'All Tier 3 advantages included.' },
       { title: '4-Hour SLA Guarantee', desc: 'Critical failure response inside 4 hours.' },
       { title: 'AI-Sentinel Triage', desc: 'Website auto-resolves soft load errors.' },
       { title: 'Algorithm Immunity', desc: 'Bypasses broken Instagram or bank APIs.' },
       { title: '1% Threshold Tracker', desc: 'Trigger alerts preserving tax status limits.' }
-    ], 
-    description: 'Defenders of revenue against bank outages, algorithm shifts, and tax penalties.' 
+    ],
+    description: 'Defenders of revenue against bank outages, algorithm shifts, and tax penalties.'
   }
 ];

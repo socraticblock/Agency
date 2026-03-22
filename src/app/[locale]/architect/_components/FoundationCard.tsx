@@ -76,6 +76,11 @@ export default function FoundationCard({ f, isSelected, onClick, formatPrice, se
       )}
 
       <div className="flex flex-col z-10">
+        {f.id === 'upgrade' && (
+          <span className="text-[9px] w-fit font-black font-space text-red-950 bg-red-400 px-1.5 py-0.5 rounded shadow-[0_0_10px_rgba(239,68,68,0.3)] animate-pulse uppercase tracking-wider mb-1">
+            [ 🚨 ACTIVE TECHNICAL RESCUE ]
+          </span>
+        )}
         <h4 className="text-lg font-black text-slate-200 mt-0.5" style={{ WebkitTextStroke: "0.3px rgba(0,0,0,0.8)", textShadow: "0px 2px 4px rgba(0,0,0,0.9)" }}>{f.name}</h4>
         <p className="text-base text-slate-400 mt-1 leading-relaxed font-medium" style={{ textShadow: "0px 1px 3px rgba(0,0,0,0.9)" }}>{f.concept}</p>
       </div>
@@ -87,9 +92,15 @@ export default function FoundationCard({ f, isSelected, onClick, formatPrice, se
               [ OWNER INDEPENDENCE ACTIVATED ]
             </span>
           )}
-          <span className="text-base font-black font-space text-emerald-300" style={{ WebkitTextStroke: "0.2px rgba(0,0,0,0.4)", textShadow: "0px 1px 2px rgba(0,0,0,0.9)" }}>
-            {formatPrice(f.priceGEL)}
-          </span>
+          {!isSelected && (
+            f.customPriceLabel ? (
+              <span className="text-sm font-black font-space text-amber-400" style={{ textShadow: "0px 1px 2px rgba(0,0,0,0.8)" }}>{f.customPriceLabel}</span>
+            ) : (
+              <span className="text-base font-black font-space text-emerald-300" style={{ WebkitTextStroke: "0.2px rgba(0,0,0,0.4)", textShadow: "0px 1px 2px rgba(0,0,0,0.9)" }}>
+                {formatPrice(f.priceGEL)}
+              </span>
+            )
+          )}
         </div>
       </div>
 
@@ -178,11 +189,11 @@ export default function FoundationCard({ f, isSelected, onClick, formatPrice, se
                       </span>
                     ) : f.id === 'ecomm' ? (
                       <span className="text-[10px] font-black font-space text-emerald-400 uppercase tracking-wider flex items-center justify-center gap-1">
-                        STRATEGIST'S NOTE: FRICTIONLESS CHECKOUT
+                        STRATEGIST'S NOTE: THE SHIELD PROTOCOL
                       </span>
                     ) : f.id === 'saas' ? (
                       <span className="text-[10px] font-black font-space text-emerald-400 uppercase tracking-wider flex items-center justify-center gap-1">
-                        STRATEGIST'S NOTE: APPLIED SCALING
+                        STRATEGIST'S NOTE: THE BLUEPRINT PRINCIPLE
                       </span>
                     ) : (
                       <span className="text-[10px] font-black font-space text-emerald-400 uppercase tracking-wider flex items-center justify-center gap-1">

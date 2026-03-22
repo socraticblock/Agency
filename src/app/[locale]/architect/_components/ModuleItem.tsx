@@ -27,8 +27,27 @@ const CARD_STYLES = {
   idle: "border-zinc-800/50 bg-zinc-900/80 hover:border-zinc-700"
 };
 
+const ANIMATION_OVERRIDES: Record<string, { whatItIs: string, howItHelps: string }> = {
+  landing: {
+    whatItIs: "Targeted kinetic prompts and high-performance button triggers. We engineer 'flicker-free' hover states and magnetic lead-magnet animations that subconsciously draw the visitor’s eye toward your primary Call to Action (CTA).",
+    howItHelps: "It kills 'Banner Blindness.' By adding subtle, high-end motion to your 'Buy' or 'Sign Up' buttons, we increase the probability of a click by up to 30%. These animations act as a silent salesperson, guiding the user’s gaze through your sales narrative and ensuring they don't miss the most important part: the conversion."
+  },
+  cms: {
+    whatItIs: "Seamless layout transitions and 'Elite-Tier' UI responses. We use advanced physics-based libraries to create fluid scroll-reveals and magnetic cursor interactions that make your brand identity feel expensive, stable, and world-class.",
+    howItHelps: "The '0.1% Authority' Signal. High-ticket clients decide whether they trust you in the first 3 seconds. By making your site respond with 'Apple-level' fluidity, you signal that your business is meticulous and modern. It increases 'Dwell Time' and justifies premium pricing by making your digital infrastructure feel like a high-end physical office."
+  },
+  ecomm: {
+    whatItIs: "Tactile product interactions and 'Satisfying' feedback loops. We engineer smooth product image morphs, instant 'Add to Cart' visual confirmations, and elegant cart-drawer reveals that provide the same sensory satisfaction as a physical luxury shopping trip.",
+    howItHelps: "It reduces 'Buyer’s Friction.' Friction is what makes people abandon carts. By making the shopping experience feel lightweight and responsive, we remove the technical lag that kills impulse buys. It makes browsing your catalog a joy rather than a chore, directly increasing your 'Average Order Value' (AOV)."
+  }
+};
+
 export default memo(function ModuleItem({ m, isSelected, isExpanded, setExpanded, toggleModule, formatPrice, setDrawerItem, selectedModules = [], isRecommended = false, quantity = 1, updateQuantity, activeFoundation }: ModuleItemProps) {
   const [kycChoice, setKycChoice] = useState<'yes' | 'no' | 'self' | 'none'>('none');
+
+  const activeOverride = m.id === 'micro-animations' && activeFoundation && ANIMATION_OVERRIDES[activeFoundation];
+  const whatItIsText = activeOverride ? activeOverride.whatItIs : (m.description || m.whatItIs || "Standard engine node deployment configuration.");
+  const howItHelpsText = activeOverride ? activeOverride.howItHelps : m.howItHelps;
 
   const bankRepModule = MODULES.find(mod => mod.id === 'bank-rep');
   const bankRepPrice = bankRepModule?.priceGEL || 0;
@@ -47,7 +66,7 @@ export default memo(function ModuleItem({ m, isSelected, isExpanded, setExpanded
       {/* Row 1: Header */}
       <div className="flex justify-between items-center w-full">
         <div className="flex items-center gap-1.5 max-w-[70%]">
-          <span className="text-base font-black text-slate-200" style={{ WebkitTextStroke: "0.3px rgba(0,0,0,0.8)", textShadow: "0px 1px 2px rgba(0,0,0,0.9)" }}>{m.name}</span>
+          <span className="text-base font-black text-slate-200" style={{ WebkitTextStroke: "0.3px rgba(0,0,0,0.8)", textShadow: "0px 2px 4px rgba(0,0,0,0.9)" }}>{m.name}</span>
           {/* Removed Architect's Choice */}
           {m.tooltip && (
             <div className="group relative" onClick={(e) => e.stopPropagation()}>
@@ -117,13 +136,13 @@ export default memo(function ModuleItem({ m, isSelected, isExpanded, setExpanded
 
                 <div className="flex flex-col gap-0.5">
                   <span className="text-zinc-500 uppercase">What It Is:</span>
-                  <p className="text-slate-300 font-sans text-sm leading-normal whitespace-pre-line">{m.description || m.whatItIs || "Standard engine node deployment configuration."}</p>
+                  <p className="text-slate-300 font-sans text-sm leading-normal whitespace-pre-line">{whatItIsText}</p>
                 </div>
 
-                {m.howItHelps && (
+                {howItHelpsText && (
                   <div className="flex flex-col gap-0.5 pt-1 border-t border-zinc-900/60">
                     <span className="text-zinc-500 uppercase">How It Helps / ROI:</span>
-                    <p className="text-slate-400 font-sans text-sm leading-normal whitespace-pre-line">{m.howItHelps}</p>
+                    <p className="text-slate-400 font-sans text-sm leading-normal whitespace-pre-line">{howItHelpsText}</p>
                   </div>
                 )}
 
