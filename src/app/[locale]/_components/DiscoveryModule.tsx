@@ -24,6 +24,8 @@ export default function DiscoveryModule({
   setAnswers,
   discoveryStep: step,
   setDiscoveryStep: setStep,
+  isEditing,
+  setIsEditing,
 }: {
   foundation: string | null;
   selectedModules: string[];
@@ -32,6 +34,8 @@ export default function DiscoveryModule({
   setAnswers: React.Dispatch<React.SetStateAction<Record<string, unknown>>>;
   discoveryStep: number;
   setDiscoveryStep: React.Dispatch<React.SetStateAction<number>>;
+  isEditing: boolean;
+  setIsEditing: (v: boolean) => void;
 }) {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [finishError, setFinishError] = useState<string | null>(null);
@@ -122,6 +126,7 @@ export default function DiscoveryModule({
     setIsAnalyzing(true);
     setTimeout(() => {
       setIsAnalyzing(false);
+      setIsEditing(false); // Safety: Natural completion resets editing mode
       const moved = goToStep(5);
       if (!moved) {
         setFinishError(
@@ -402,17 +407,31 @@ export default function DiscoveryModule({
           </button>
 
           <div className="flex flex-col items-end gap-2">
-            <button
-              onClick={safeStep === QUESTIONS.length - 1 ? handlesSubmit : handleNext}
-              disabled={!canPrimaryAction || isAnalyzing}
-              className={`group relative flex items-center gap-3 px-8 py-3.5 rounded-full font-space font-bold uppercase tracking-widest text-xs transition-all duration-300 ${canPrimaryAction && !isAnalyzing
-                  ? "bg-emerald-500 text-black shadow-[0_10px_30px_-10px_rgba(16,185,129,0.3)] hover:shadow-[0_15px_40px_-5px_rgba(16,185,129,0.4)] hover:bg-emerald-400 active:scale-95"
-                  : "bg-zinc-800 text-zinc-500 cursor-not-allowed opacity-50"
-                }`}
-            >
-              {isAnalyzing ? "Processing..." : safeStep === QUESTIONS.length - 1 ? "Generate Blueprint" : "Continue"}
-              {!isAnalyzing && <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />}
-            </button>
+            <div className="flex items-center gap-3">
+              {isEditing && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsEditing(false);
+                    goToStep(5);
+                  }}
+                  className="px-6 py-3.5 rounded-full font-space font-bold uppercase tracking-widest text-xs border border-white/10 hover:border-emerald-500/40 text-slate-400 hover:text-white transition-all duration-300 cursor-pointer"
+                >
+                  SAVE AND RETURN TO SUMMARY
+                </button>
+              )}
+              <button
+                onClick={safeStep === QUESTIONS.length - 1 ? handlesSubmit : handleNext}
+                disabled={!canPrimaryAction || isAnalyzing}
+                className={`group relative flex items-center gap-3 px-8 py-3.5 rounded-full font-space font-bold uppercase tracking-widest text-xs transition-all duration-300 ${canPrimaryAction && !isAnalyzing
+                    ? "bg-emerald-500 text-black shadow-[0_10px_30px_-10px_rgba(16,185,129,0.3)] hover:shadow-[0_15px_40px_-5px_rgba(16,185,129,0.4)] hover:bg-emerald-400 active:scale-95"
+                    : "bg-zinc-800 text-zinc-500 cursor-not-allowed opacity-50"
+                  }`}
+              >
+                {isAnalyzing ? "Processing..." : safeStep === QUESTIONS.length - 1 ? "Generate Blueprint" : "Continue"}
+                {!isAnalyzing && <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />}
+              </button>
+            </div>
             {finishError && (
               <p className="text-[10px] text-amber-400 font-bold font-space text-right max-w-xs leading-snug">
                 {finishError}

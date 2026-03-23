@@ -155,6 +155,8 @@ export default function Configurator() {
                     setAnswers={setAnswers}
                     discoveryStep={discoveryStep}
                     setDiscoveryStep={setDiscoveryStep}
+                    isEditing={isEditing}
+                    setIsEditing={setIsEditing}
                   />
                 )}
 
@@ -180,21 +182,23 @@ export default function Configurator() {
 
 
 
-                <ConfigSidebar
-          activeFoundation={activeFoundation}
-          selectedModules={selectedModules}
-          moduleQuantities={moduleQuantities}
-          oneTimeTotal={oneTimeTotal}
-          monthlyTotal={monthlyTotal}
-          isUSD={isUSD}
-          setIsUSD={setIsUSD}
-          formatPrice={formatPrice}
-          savingsUSD={savingsUSD}
-          setIsModalOpen={() => setIsModalOpen(true)}
-          totalHoursSaved={totalHoursSaved}
-          shieldTier={shieldTier}
-          resetAll={clearConfiguration}
-        />
+                {step < 5 && (
+                  <ConfigSidebar
+                    activeFoundation={activeFoundation}
+                    selectedModules={selectedModules}
+                    moduleQuantities={moduleQuantities}
+                    oneTimeTotal={oneTimeTotal}
+                    monthlyTotal={monthlyTotal}
+                    isUSD={isUSD}
+                    setIsUSD={setIsUSD}
+                    formatPrice={formatPrice}
+                    savingsUSD={savingsUSD}
+                    setIsModalOpen={() => setIsModalOpen(true)}
+                    totalHoursSaved={totalHoursSaved}
+                    shieldTier={shieldTier}
+                    resetAll={clearConfiguration}
+                  />
+                )}
 
         {/* Modal / Drawer Overlay */}
         <ConfigDrawer
@@ -215,21 +219,7 @@ export default function Configurator() {
           foundationPrice={foundationPrice} // Added back
         />
 
-        {/* Sticky Return to Summary button */}
-        {isEditing && step < 5 && (
-          <m.button
-            initial={{ opacity: 0, y: 50, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 50, scale: 0.9 }}
-            onClick={() => {
-              goToStep(5);
-              setIsEditing(false);
-            }}
-            className="fixed bottom-6 right-6 bg-emerald-400 text-black font-space font-black text-xs uppercase px-5 py-3 rounded-full flex items-center gap-1.5 shadow-[0_10px_30px_rgba(16,185,129,0.4)] hover:scale-105 active:scale-95 transition-all z-50 cursor-pointer"
-          >
-            Return to Summary <ArrowRight className="h-3.5 w-3.5" />
-          </m.button>
-        )}
+
       </div>
     </LazyMotion>
   );

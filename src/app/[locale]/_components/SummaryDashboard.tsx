@@ -1,8 +1,8 @@
 "use client";
 
 import { m, AnimatePresence } from "framer-motion";
-import { Edit2, Layout, Check, LayoutDashboard, ArrowRight } from "lucide-react";
-import { MODULES, FOUNDATIONS, type ServiceItem } from "@/constants/pricing";
+import { Edit2, Layout, Check, LayoutDashboard, ArrowRight, CheckCircle2, Shield, Scale, TrendingUp, Zap, Cpu, Palette, Settings } from "lucide-react";
+import { MODULES, FOUNDATIONS, SHIELD_TIERS, type ServiceItem } from "@/constants/pricing";
 import { useState, useEffect, useMemo } from "react";
 import { buildDiscoveryQuestions } from "@/lib/discovery/buildDiscoveryQuestions";
 import { DISCOVERY_QUESTION_LABELS } from "@/lib/discovery/discoveryQuestionLabels";
@@ -53,10 +53,34 @@ export default function SummaryDashboard({
   monthlyTotal,
 }: SummaryDashboardProps) {
   const config = useConfigurator();
+  const [isWhatsAppClicked, setIsWhatsAppClicked] = useState(false);
   const activeFoundation = FOUNDATIONS.find((f) => f.id === foundation);
   const activeModules = (selectedModules || [])
     .map((id: string) => MODULES.find((m) => m.id === id))
     .filter(Boolean) as ServiceItem[];
+
+  const foundationSubHeaders: Record<string, string> = {
+    landing: "1 Sales Node | Conversion Architecture",
+    cms: "4 Core Nodes | Visual Content Dashboard",
+    ecomm: "4 Nodes Core | E-Commerce Tunnel",
+    saas: "Bespoke Logic Frame | Infinite Scale",
+    upgrade: "Technical Diagnosis | Legacy Refactor"
+  };
+
+  const categoryIcons: Record<string, any> = {
+    "Georgian Advantage": Scale,
+    "Marketing": TrendingUp,
+    "Business Engines": Zap,
+    "AI & Automation": Cpu,
+    "Creative": Palette,
+    "Operational": Settings
+  };
+
+  const getCleanScope = (item: string) => {
+    if (!item) return "";
+    if (item.includes('|')) return item.split('|')[1].trim();
+    return item;
+  };
 
   const IS_UPGRADE = foundation === "upgrade";
   const validKeys = useMemo(
@@ -223,7 +247,7 @@ export default function SummaryDashboard({
   const colorPalette = answers["color_palette"];
 
   return (
-    <div className="w-full max-w-5xl mx-auto py-10 flex flex-col gap-8">
+    <div className="w-full max-w-[1440px] px-8 mx-auto py-10 flex flex-col gap-8">
       <AnimatePresence mode="wait">
         {stages === "review" && (
           <m.div
@@ -243,27 +267,28 @@ export default function SummaryDashboard({
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Box 1 */}
-              <div className="glass-card border border-white/5 bg-white/[0.02] backdrop-blur-xl p-5 rounded-2xl flex flex-col gap-3 relative overflow-hidden group">
+              <div className="glass-card border border-white/5 bg-white/[0.02] backdrop-blur-xl p-8 rounded-2xl flex flex-col gap-4 relative overflow-hidden group h-full">
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent opacity-50" />
                 <div className="flex justify-between items-center border-b border-white/5 pb-2 z-10">
                   <span className="text-xs font-black font-space text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                    01. Infrastructure
+                    01. Infrastructure Summary
                   </span>
-                  <button
-                    type="button"
-                    onClick={() => handleEdit(1)}
-                    className="text-[10px] text-slate-500 hover:text-emerald-400 flex items-center gap-0.5 font-bold transition-all"
-                  >
-                    <Edit2 className="h-2.5 w-2.5" /> [Edit]
-                  </button>
                 </div>
                 <div className="space-y-2.5 z-10 flex-1 flex flex-col justify-center">
                   {activeFoundation && (
-                    <div className="flex items-center gap-2 text-sm font-bold text-white bg-white/5 p-2 rounded-xl border border-white/5">
-                      <Layout className="h-4 w-4 text-emerald-400" />
-                      {activeFoundation.name}
+                    <div className="flex items-center gap-2 bg-white/5 p-2 rounded-xl border border-white/5">
+                      <div className="flex items-center gap-2 text-sm font-bold text-white">
+                        <Layout className="h-4 w-4 text-emerald-400" />
+                        {activeFoundation.name}
+                      </div>
+                      {shieldTier !== undefined && shieldTier !== null && (
+                        <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-300 bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)] shadow-[0_0_30px_-15px_rgba(16,185,129,0.2)]">
+                          <Shield className="h-3 w-3" />
+                          {SHIELD_TIERS.find((s) => s.id === shieldTier)?.name || "Standard Operations"}
+                        </div>
+                      )}
                     </div>
                   )}
                   {activeModules.length > 0 && (
@@ -271,7 +296,7 @@ export default function SummaryDashboard({
                       {activeModules.map((m) => (
                         <span
                           key={m.id}
-                          className="text-[9px] bg-emerald-500/5 border border-emerald-500/10 px-2 py-1 rounded-md text-emerald-300 font-black font-space"
+                          className="text-xs bg-emerald-500/5 border border-emerald-500/10 px-2 py-1 rounded-md text-emerald-300 font-black font-space"
                         >
                           {m.name}
                         </span>
@@ -282,7 +307,7 @@ export default function SummaryDashboard({
               </div>
 
               {/* Box 2 */}
-              <div className="glass-card border border-white/5 bg-white/[0.02] backdrop-blur-xl p-5 rounded-2xl flex flex-col gap-3 relative overflow-hidden group">
+              <div className="glass-card border border-white/5 bg-white/[0.02] backdrop-blur-xl p-8 rounded-2xl flex flex-col gap-4 relative overflow-hidden group h-full">
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent opacity-50" />
                 <div className="flex justify-between items-center border-b border-white/5 pb-2 z-10">
                   <span className="text-xs font-black font-space text-slate-400 uppercase tracking-wider flex items-center gap-1">
@@ -291,46 +316,51 @@ export default function SummaryDashboard({
                   <button
                     type="button"
                     onClick={() => handleEdit(4, 0)}
-                    className="text-[10px] text-slate-500 hover:text-emerald-400 flex items-center gap-0.5 font-bold transition-all"
+                    className="text-xs text-slate-500 hover:text-emerald-400 flex items-center gap-0.5 font-bold transition-all"
                   >
                     <Edit2 className="h-2.5 w-2.5" /> [Edit]
                   </button>
                 </div>
-                <div className="space-y-3 z-10 flex-1 flex flex-col justify-center">
+                <div className="flex-1 flex flex-col justify-center z-10 w-full">
+                  <div className="grid grid-cols-3 gap-3 pt-4 text-center">
                   {hasAnswer(answers["design_style"]) && (
-                    <div className="text-xs text-slate-400 flex justify-between items-center">
-                      <span>Style:</span>
-                      <span className="text-white font-black font-space uppercase bg-emerald-400/10 px-1.5 py-0.5 rounded text-[10px] text-emerald-300">
-                        {String(answers["design_style"])}
-                      </span>
+                    <div className="flex flex-col items-center bg-white/[0.02] p-3 rounded-xl border border-white/5 h-20 relative group">
+                      <span className="text-xs text-slate-500 font-bold font-space uppercase tracking-wider">STYLE</span>
+                      <div className="flex-1 flex items-center justify-center w-full">
+                        <span className="text-sm font-black text-emerald-300 font-space uppercase leading-none">
+                          {String(answers["design_style"])}
+                        </span>
+                      </div>
                     </div>
                   )}
-                  {Array.isArray(colorPalette) && colorPalette.length > 0 && (
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-slate-400">Palette:</span>
-                      <div className="flex -space-x-1 h-5 rounded-lg overflow-hidden border border-white/10 shadow-[0_0_15px_rgba(16,185,129,0.15)]">
-                        {(colorPalette as string[]).map((c: string, i: number) => (
-                          <div
-                            key={i}
-                            className="h-full w-5 first:rounded-l-md last:rounded-r-md"
-                            style={{ backgroundColor: c }}
-                            title={c}
-                          />
-                        ))}
+                  {answers["color_palette"] && (
+                    <div className="flex flex-col items-center bg-white/[0.02] p-3 rounded-xl border border-white/5 h-20 relative group">
+                      <span className="text-xs text-slate-500 font-bold font-space uppercase tracking-wider">PALETTE</span>
+                      <div className="flex-1 flex items-center justify-center w-full">
+                        <div className="flex items-center -space-x-1 h-4">
+                          {Array.isArray(answers["color_palette"]) && (answers["color_palette"] as string[]).map((c: string, i: number) => (
+                            <div key={i} className="h-3.5 w-3.5 rounded-full border border-white/10" style={{ backgroundColor: c }} />
+                          ))}
+                        </div>
                       </div>
                     </div>
                   )}
                   {hasAnswer(answers["typography"]) && (
-                    <div className="text-xs text-slate-400 flex justify-between items-center">
-                      <span>Font Anchor:</span>
-                      <span className="text-white font-bold">{String(answers["typography"])}</span>
+                    <div className="flex flex-col items-center bg-white/[0.02] p-3 rounded-xl border border-white/5 h-20 relative group">
+                      <span className="text-xs text-slate-500 font-bold font-space uppercase tracking-wider">FONT ANCHOR</span>
+                      <div className="flex-1 flex items-center justify-center w-full">
+                        <span className="text-xs font-black text-white font-space truncate max-w-full leading-none">
+                          {String(answers["typography"])}
+                        </span>
+                      </div>
                     </div>
                   )}
+                  </div>
                 </div>
               </div>
 
               {/* Box 3 */}
-              <div className="glass-card border border-white/5 bg-white/[0.02] backdrop-blur-xl p-5 rounded-2xl flex flex-col gap-3 relative overflow-hidden group">
+              <div className="glass-card border border-white/5 bg-white/[0.02] backdrop-blur-xl p-8 rounded-2xl flex flex-col gap-4 relative overflow-hidden group h-full">
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent opacity-50" />
                 <div className="flex justify-between items-center border-b border-white/5 pb-2 z-10">
                   <span className="text-xs font-black font-space text-slate-400 uppercase tracking-wider flex items-center gap-1">
@@ -339,29 +369,39 @@ export default function SummaryDashboard({
                   <button
                     type="button"
                     onClick={() => handleEdit(4, 4)}
-                    className="text-[10px] text-slate-500 hover:text-emerald-400 flex items-center gap-0.5 font-bold transition-all"
+                    className="text-xs text-slate-500 hover:text-emerald-400 flex items-center gap-0.5 font-bold transition-all"
                   >
                     <Edit2 className="h-2.5 w-2.5" /> [Edit]
                   </button>
                 </div>
-                <div className="space-y-3 z-10 flex-1 flex flex-col justify-center">
+                <div className="space-y-2.5 z-10 flex-1 flex flex-col justify-center">
                   {hasAnswer(answers["pitch"]) && (
-                    <p className="text-xs text-slate-300 italic font-medium leading-relaxed bg-white/5 p-2 rounded-xl border border-white/5">
-                      &quot;{String(answers["pitch"])}&quot;
-                    </p>
+                    <div className="bg-white/[0.03] p-2.5 rounded-xl border border-emerald-500/10 shadow-[0_4px_20px_-10px_rgba(16,185,129,0.2)]">
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <div className="h-1 w-1 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
+                        <p className="text-xs text-emerald-400 font-black uppercase tracking-wider font-space">STRATEGIC DIRECTIVE: PITCH</p>
+                      </div>
+                      <p className="text-xs text-white font-medium italic leading-relaxed pl-2.5 border-l border-emerald-500/20">&quot;{String(answers["pitch"])}&quot;</p>
+                    </div>
                   )}
-                  <div className="flex flex-wrap gap-1">
-                    {hasAnswer(answers["north_star"]) && (
-                      <span className="text-[9px] bg-emerald-500/5 border border-emerald-500/10 text-emerald-300 px-1.5 py-0.5 rounded-md font-black font-space">
-                        🎯 {String(answers["north_star"])}
-                      </span>
-                    )}
-                    {hasAnswer(answers["emotional_hook"]) && (
-                      <span className="text-[9px] bg-emerald-500/5 border border-emerald-500/10 text-emerald-300 px-1.5 py-0.5 rounded-md font-black font-space">
-                        Hook: {String(answers["emotional_hook"])}
-                      </span>
-                    )}
-                  </div>
+                  {hasAnswer(answers["north_star"]) && (
+                    <div className="bg-white/[0.03] p-2.5 rounded-xl border border-emerald-500/10 shadow-[0_4px_20px_-10px_rgba(16,185,129,0.2)]">
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <div className="h-1 w-1 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
+                        <p className="text-xs text-emerald-400 font-black uppercase tracking-wider font-space">STRATEGIC DIRECTIVE: TARGET MARKET</p>
+                      </div>
+                      <p className="text-xs text-emerald-300 font-bold pl-2.5 border-l border-emerald-500/20">{String(answers["north_star"])}</p>
+                    </div>
+                  )}
+                  {hasAnswer(answers["emotional_hook"]) && (
+                    <div className="bg-white/[0.03] p-2.5 rounded-xl border border-emerald-500/10 shadow-[0_4px_20px_-10px_rgba(16,185,129,0.2)]">
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <div className="h-1 w-1 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
+                        <p className="text-xs text-emerald-400 font-black uppercase tracking-wider font-space">STRATEGIC DIRECTIVE: EMOTIONAL HOOK</p>
+                      </div>
+                      <p className="text-xs text-white font-bold pl-2.5 border-l border-emerald-500/20">{String(answers["emotional_hook"])}</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -371,13 +411,6 @@ export default function SummaryDashboard({
                 <span className="text-xs font-black font-space text-slate-400 uppercase tracking-wider">
                   04. Deep-Dive Strategy Specifications
                 </span>
-                <button
-                  type="button"
-                  onClick={() => handleEdit(4, 7)}
-                  className="text-[10px] text-slate-500 hover:text-emerald-400 flex items-center gap-0.5 font-bold transition-all"
-                >
-                  <Edit2 className="h-2.5 w-2.5" /> [Edit]
-                </button>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {Object.keys(answers)
@@ -394,6 +427,7 @@ export default function SummaryDashboard({
                       ].includes(key)
                   )
                   .map((key) => {
+                    const qIndex = validKeys.indexOf(key);
                     const val = answers[key];
                     if (val === undefined || val === null) return null;
 
@@ -409,8 +443,15 @@ export default function SummaryDashboard({
                     return (
                       <div
                         key={key}
-                        className="text-xs space-y-1 bg-white/[0.02] p-3 rounded-xl border border-white/5 flex flex-col"
+                        className="text-xs space-y-1 bg-white/[0.02] p-3 rounded-xl border border-white/5 flex flex-col relative group"
                       >
+                        <button
+                          type="button"
+                          onClick={() => handleEdit(4, qIndex)}
+                          className="absolute top-2 right-2 text-slate-500 hover:text-emerald-400 opacity-0 group-hover:opacity-100 flex items-center gap-0.5 font-bold text-[9px] transition-all"
+                        >
+                          <Edit2 className="h-2.5 w-2.5" /> [Edit]
+                        </button>
                         <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider font-space">
                           {DISCOVERY_QUESTION_LABELS[key] || `Specification: ${key}`}
                         </span>
@@ -423,21 +464,117 @@ export default function SummaryDashboard({
               </div>
             </div>
 
-            <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center gap-2 mt-4">
-              <button
-                type="button"
-                onClick={openVipCheckIn}
-                className="px-6 py-2.5 bg-emerald-400 text-black font-space font-black text-sm uppercase rounded-xl shadow-[0_10px_25px_rgba(16,185,129,0.2)] hover:bg-emerald-300 hover:scale-[1.02] transition-all flex items-center gap-1.5 group cursor-pointer"
-              >
-                Submit for Architectural Review
-                <ArrowRight className="h-4 w-4 stroke-[3] group-hover:translate-x-1 transition-transform" />
-              </button>
-              {submitError && (
-                <p className="text-[10px] text-red-400 font-bold font-space bg-red-400/10 px-2 py-0.5 rounded border border-red-400/20">
-                  {submitError}
-                </p>
-              )}
-            </m.div>
+            <div className="w-full bg-black/60 backdrop-blur-2xl border border-white/5 p-6 rounded-2xl grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 items-center min-h-[140px]">
+              {/* Column 1: Dynamic Manifest */}
+              <div className="flex flex-col gap-1.5 md:border-r border-white/5 md:pr-4 h-full justify-center items-center text-center">
+                <div className="flex items-center gap-1.5 justify-center">
+                  <Layout className="h-4 w-4 text-emerald-400" />
+                  <span className="text-xs font-black font-space text-white uppercase tracking-wider">
+                    {activeFoundation?.name || "Foundation"}
+                  </span>
+                </div>
+
+                <ul className="space-y-1.5 mt-1 flex flex-col items-center w-full">
+                  {activeFoundation?.scope?.map((item, idx) => (
+                    <li key={idx} className="flex justify-center w-full">
+                      <div className="flex items-start gap-1.5 text-left max-w-[380px] w-full">
+                        <Check className="h-3.5 w-3.5 text-emerald-400 mt-0.5 flex-shrink-0" />
+                        <span className="text-xs text-slate-300 leading-relaxed break-words">{getCleanScope(item)}</span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+
+                {activeFoundation?.id === 'ecomm' && (
+                  <div className="flex gap-1.5 items-center justify-center mt-2.5">
+                    <span className="text-[8px] font-bold text-slate-500 border border-white/5 bg-white/5 px-1 py-0.5 rounded leading-none">TBC/BOG INTEGRATED</span>
+                    <span className="text-[8px] font-bold text-slate-500 border border-white/5 bg-white/5 px-1 py-0.5 rounded leading-none">RS.GE COMPLIANT</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Column 2: Extensional Upgrades */}
+              <div className="flex flex-col gap-1.5 md:border-r border-white/5 md:pr-4 h-full justify-center items-center text-center">
+                <div className="flex items-center gap-1.5 justify-center">
+                  <Shield className="h-4 w-4 text-emerald-400" />
+                  <span className="text-xs font-black font-space text-white uppercase tracking-wider">
+                    MODULAR EXTENSION NODES
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-1 mt-1 justify-center">
+                  {activeModules.map((m) => {
+                    const mItem = m as any;
+                    const IconComponent = mItem.category && categoryIcons[mItem.category] ? categoryIcons[mItem.category] : Shield;
+                    return (
+                      <span key={m.id} className="flex items-center gap-1 text-xs bg-emerald-500/5 border border-emerald-500/10 px-1.5 py-0.5 rounded text-emerald-300 font-bold">
+                        <IconComponent className="h-3 w-3 flex-shrink-0" />
+                        <span>{m.name}</span>
+                      </span>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Column 3: Secure Checkout & CTA */}
+              <div className="flex flex-col items-center justify-center h-full gap-3 text-center">
+                <div>
+                  <div className="bg-emerald-500/5 text-emerald-400 border border-emerald-400/20 px-3 py-1 rounded-full text-xs font-black shadow-[0_0_15px_rgba(16,185,129,0.1)] flex items-center justify-center gap-1.5 animate-pulse mx-auto mb-1">
+                    <div className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                    <span>READY FOR INDEXATION</span>
+                  </div>
+                  <p className="text-xl font-black font-mono text-emerald-400">
+                    {oneTimeTotal.toLocaleString()} ₾ One-Time
+                  </p>
+                  {monthlyTotal > 0 && (
+                    <p className="text-xs font-bold font-mono text-emerald-300">
+                      +{monthlyTotal.toLocaleString()} ₾/mo Recurring
+                    </p>
+                  )}
+                </div>
+
+                <div className="flex flex-col gap-1 text-xs font-space font-black uppercase text-center w-full">
+                  <div className="flex justify-center w-full">
+                    <div className="flex items-start gap-1.5 text-left max-w-[380px] w-full text-emerald-400">
+                      <Check className="h-3.5 w-3.5 flex-shrink-0 mt-0.5" />
+                      <span className="leading-tight">FULL-CYCLE QUALITY ASSURANCE & SYSTEM FORENSICS</span>
+                    </div>
+                  </div>
+                  <div className="flex justify-center w-full">
+                    <div className="flex items-start gap-1.5 text-left max-w-[380px] w-full text-emerald-400">
+                      <Check className="h-3.5 w-3.5 flex-shrink-0 mt-0.5" />
+                      <span className="leading-tight">ELITE PROJECT STEWARDSHIP</span>
+                    </div>
+                  </div>
+                  <div className="flex justify-center w-full">
+                    <div className="flex items-start gap-1.5 text-left max-w-[380px] w-full text-slate-400">
+                      <Check className="h-3.5 w-3.5 flex-shrink-0 mt-0.5 text-emerald-400" />
+                      <span className="leading-tight">100% SOURCE CODE & IP TRANSFER</span>
+                    </div>
+                  </div>
+                  <div className="flex justify-center w-full">
+                    <div className="flex items-start gap-1.5 text-left max-w-[380px] w-full text-slate-400">
+                      <Check className="h-3.5 w-3.5 flex-shrink-0 mt-0.5 text-emerald-400" />
+                      <span className="leading-tight">90-DAY ENGINEERING WARRANTY</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="w-full flex flex-col items-center gap-1 mt-1">
+                  <button
+                    type="button"
+                    onClick={openVipCheckIn}
+                    className="w-full md:w-auto px-5 py-2 bg-emerald-400 text-black font-space font-black text-xs uppercase rounded-xl shadow-[0_5px_15px_rgba(16,185,129,0.3)] hover:bg-emerald-300 transition-all flex items-center justify-center gap-1.5 group cursor-pointer"
+                  >
+                    Submit Review <ArrowRight className="h-3.5 w-3.5 stroke-[3] group-hover:translate-x-1 transition-transform" />
+                  </button>
+                  {submitError && (
+                    <p className="text-xs text-red-400 font-bold font-space bg-red-400/10 px-1.5 py-0.5 rounded border border-red-400/20">
+                      {submitError}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
           </m.div>
         )}
 
@@ -465,50 +602,86 @@ export default function SummaryDashboard({
             <div className="grid grid-cols-1 gap-4 w-full">
               {/* Box 1: Whatsapp */}
               <div className="glass-card border border-emerald-500/20 bg-emerald-500/[0.03] p-6 rounded-2xl flex flex-col gap-3 relative overflow-hidden group">
-                <div className="absolute inset-x-0 bottom-0 top-[20%] bg-gradient-to-t from-emerald-500/10 to-transparent pointer-events-none" />
-                <div>
-                  <span className="text-[9px] font-black font-space text-emerald-400 uppercase tracking-wider">
-                    🏛️ DIRECT HANDOVER
-                  </span>
-                  <p className="text-sm font-bold text-white mt-0.5">Instant WhatsApp Broadcast</p>
-                  <p className="text-[11px] text-slate-400 mt-1">
-                    Claim your seat in the direct intake loop with our Lead Builder right now.
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    // Trigger background email notification with full payload
-                    fetch("/api/blueprint", {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({
-                        email: "",
-                        answers,
-                        foundation,
-                        selectedModules,
-                        moduleQuantities,
-                        shieldTier,
-                        oneTimeTotal,
-                        monthlyTotal,
-                        blueprintId,
-                        leadName: lead.name.trim(),
-                        leadCompany: lead.company.trim(),
-                        source: "whatsapp intake",
-                      }),
-                    }).catch((err) => console.error("WhatsApp dispatch fail:", err));
+                <AnimatePresence mode="wait">
+                  {!isWhatsAppClicked ? (
+                    <m.div
+                      key="prompt"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="flex flex-col gap-3"
+                    >
+                      <div className="absolute inset-x-0 bottom-0 top-[20%] bg-gradient-to-t from-emerald-500/10 to-transparent pointer-events-none" />
+                      <div>
+                        <span className="text-[9px] font-black font-space text-emerald-400 uppercase tracking-wider">
+                          🏛️ DIRECT HANDOVER
+                        </span>
+                        <p className="text-sm font-bold text-white mt-0.5">Instant WhatsApp Broadcast</p>
+                        <p className="text-[11px] text-slate-400 mt-1">
+                          Claim your seat in the direct intake loop with our Lead Builder right now.
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const msg = `Hi Kvali! This is ${lead.name.trim()} from ${lead.company.trim()}. I just finished my audit (ID: ${blueprintId}). Let's talk about my project!`;
+                          window.open(
+                            `https://wa.me/${WHATSAPP_INTAKE}?text=${encodeURIComponent(msg)}`,
+                            "_blank"
+                          );
+                          setIsWhatsAppClicked(true);
 
-                    const msg = `Hi Kvali! This is ${lead.name.trim()} from ${lead.company.trim()}. I just finished my audit (ID: ${blueprintId}). Let's talk about my project!`;
-                    window.open(
-                      `https://wa.me/${WHATSAPP_INTAKE}?text=${encodeURIComponent(msg)}`,
-                      "_blank"
-                    );
-                  }}
-                  className="w-full mt-2 py-3 bg-emerald-400 text-black font-space font-black text-xs uppercase rounded-xl flex items-center justify-center gap-2 hover:bg-emerald-300 transition-all shadow-[0_5px_15px_rgba(16,185,129,0.3)] hover:scale-[1.02] active:scale-95 group"
-                >
-                  <Smartphone className="h-3.5 w-3.5" />
-                  Open WhatsApp
-                </button>
+                          // Trigger background email notification with full payload
+                          fetch("/api/blueprint", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                              email: "",
+                              answers,
+                              foundation,
+                              selectedModules,
+                              moduleQuantities,
+                              shieldTier,
+                              oneTimeTotal,
+                              monthlyTotal,
+                              blueprintId,
+                              leadName: lead.name.trim(),
+                              leadCompany: lead.company.trim(),
+                              source: "whatsapp intake",
+                            }),
+                          }).catch((err) => console.error("WhatsApp dispatch fail:", err));
+                        }}
+                        className="w-full mt-2 py-3 bg-emerald-400 text-black font-space font-black text-xs uppercase rounded-xl flex items-center justify-center gap-2 hover:bg-emerald-300 transition-all shadow-[0_5px_15px_rgba(16,185,129,0.3)] hover:scale-[1.02] active:scale-95 group index-trigger"
+                      >
+                        <Smartphone className="h-3.5 w-3.5" />
+                        Open WhatsApp
+                      </button>
+                    </m.div>
+                  ) : (
+                    <m.div
+                      key="success"
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      className="p-8 border border-emerald-500/30 bg-emerald-500/5 rounded-2xl text-center shadow-[0_0_50px_-12px_rgba(16,185,129,0.15)] index-success"
+                    >
+                      <CheckCircle2 className="w-16 h-16 text-emerald-500 mx-auto mb-6 drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]" />
+                      <h3 className="text-2xl font-bold text-white mb-3 tracking-tight font-space">BROADCAST DISPATCHED</h3>
+                      <p className="text-slate-400 text-sm mb-8 max-w-[280px] mx-auto">
+                        Your configuration has been indexed and sent to the vault. I am waiting for you on WhatsApp.
+                      </p>
+                      <button
+                        onClick={() => {
+                          setIsWhatsAppClicked(false);
+                          setStage("review");
+                        }}
+                        className="text-xs text-emerald-500/60 hover:text-emerald-400 uppercase tracking-[0.2em] transition-colors font-space font-bold cursor-pointer"
+                      >
+                        Modify Configuration
+                      </button>
+                    </m.div>
+                  )}
+                </AnimatePresence>
               </div>
 
               {/* Email only — name & company were captured at VIP check-in */}
@@ -537,7 +710,7 @@ export default function SummaryDashboard({
                   </div>
 
                   {submitError && (
-                    <p className="text-[10px] text-red-400 font-bold">{submitError}</p>
+                    <p className="text-xs text-red-400 font-bold">{submitError}</p>
                   )}
 
                   <button
@@ -585,7 +758,7 @@ export default function SummaryDashboard({
                 />
               </div>
 
-              <span className="text-[10px] font-black text-slate-500 font-space tracking-tight">
+              <span className="text-xs font-black text-slate-500 font-space tracking-tight">
                 {progress}% CALCULATED
               </span>
             </div>
