@@ -1,5 +1,27 @@
 import { NextResponse } from "next/server";
 import { DISCOVERY_QUESTION_LABELS } from "@/lib/discovery/discoveryQuestionLabels";
+import {
+  STANDARD_QUESTIONS,
+  UPGRADE_QUESTIONS,
+  FOUNDATION_SPECIFIC_MAP,
+  MODULE_QUESTIONS_MAP,
+} from "@/lib/discovery/discoveryDefinitions";
+
+const allQuestions = [
+  ...STANDARD_QUESTIONS,
+  ...UPGRADE_QUESTIONS,
+  ...Object.values(FOUNDATION_SPECIFIC_MAP).flat(),
+  ...Object.values(MODULE_QUESTIONS_MAP).flat(),
+];
+
+const QUESTION_TITLES: Record<string, string> = {
+  ...DISCOVERY_QUESTION_LABELS,
+};
+allQuestions.forEach((q: any) => {
+  if (q && q.id && q.title) {
+    QUESTION_TITLES[q.id] = q.title;
+  }
+});
 
 const MAX_BODY_CHARS = 256_000;
 const MAX_CELL_CHARS = 4_000;
@@ -86,6 +108,7 @@ export async function POST(req: Request) {
       blueprintId: blueprintIdRaw,
       leadName: leadNameRaw,
       leadCompany: leadCompanyRaw,
+      source,
     } = body;
 
     const blueprintIdStr =
@@ -134,10 +157,12 @@ export async function POST(req: Request) {
           : "";
     const subjectBase = foundationStr.trim() ? foundationStr.toUpperCase() : "GENERAL";
     const idPrefix = blueprintIdStr ? `${blueprintIdStr} — ` : "";
+    const sourceStr = typeof source === "string" ? source.toUpperCase() : "";
+    const sourceTag = sourceStr ? `[${sourceStr}] ` : "";
     const subject = sanitizeSubjectLine(
       hook
-        ? `🚀 ${idPrefix}[NEW LEAD] - ${subjectBase} - ${hook}`
-        : `🚀 ${idPrefix}[NEW BLUEPRINT] - ${subjectBase} - Urgent Review Required`
+        ? `🚀 ${idPrefix}${sourceTag}[NEW LEAD] - ${subjectBase} - ${hook}`
+        : `🚀 ${idPrefix}${sourceTag}[NEW BLUEPRINT] - ${subjectBase} - Urgent Review Required`
     );
 
     const pitchRaw = pickPitchForTable(answersRecord);
@@ -153,7 +178,9 @@ export async function POST(req: Request) {
 
     const quantitiesStr =
       moduleQuantities && typeof moduleQuantities === "object" && !Array.isArray(moduleQuantities)
-        ? escapeHtml(truncateCell(JSON.stringify(moduleQuantities), 2000))
+        ? Object.entries(moduleQuantities)
+            .map(([id, qty]) => `${escapeHtml(String(id))}: ${escapeHtml(String(qty))}`)
+            .join(", ")
         : "—";
 
     const shieldStr =
@@ -169,13 +196,11 @@ export async function POST(req: Request) {
         ? escapeHtml(String(monthlyTotal))
         : "—";
 
-    const answerRows = Object.keys(answersRecord)
-      .map((id) => {
-        const title = escapeHtml(
-          DISCOVERY_QUESTION_LABELS[id] || `Question ${id}`
-        );
-        const raw = answersRecord[id];
-        const val = truncateCell(stringifyAnswer(raw));
+    const answerRows = Object.entries(answersRecord || {})
+      .map(([id, rawVal]) => {
+        const title = escapeHtml(QUESTION_TITLES[id] || `Question ${id}`);
+        const val = truncateCell(stringifyAnswer(rawVal));
+        if (!val.trim()) return "";
         return `
                                         <tr>
                                             <td style="font-weight: bold; color: #64748b; width: 40%; border-bottom: 1px solid #f8fafc; font-size: 11px; text-transform: uppercase;">${title}</td>
@@ -192,7 +217,7 @@ export async function POST(req: Request) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "Architect <blueprint@resend.dev>",
+        from: "Architect <onboarding@resend.dev>",
         to: [ADMIN_EMAIL],
         ...(emailStr.includes("@") ? { reply_to: emailStr.slice(0, 320) } : {}),
         subject,

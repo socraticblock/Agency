@@ -6,6 +6,7 @@ import { MODULES, FOUNDATIONS, type ServiceItem } from "@/constants/pricing";
 import { useState, useEffect, useMemo } from "react";
 import { buildDiscoveryQuestions } from "@/lib/discovery/buildDiscoveryQuestions";
 import { DISCOVERY_QUESTION_LABELS } from "@/lib/discovery/discoveryQuestionLabels";
+import { useConfigurator } from "@/hooks/useConfigurator";
 
 function hasAnswer(val: unknown): boolean {
   if (val === undefined || val === null) return false;
@@ -51,6 +52,7 @@ export default function SummaryDashboard({
   oneTimeTotal,
   monthlyTotal,
 }: SummaryDashboardProps) {
+  const config = useConfigurator();
   const activeFoundation = FOUNDATIONS.find((f) => f.id === foundation);
   const activeModules = (selectedModules || [])
     .map((id: string) => MODULES.find((m) => m.id === id))
@@ -166,6 +168,7 @@ export default function SummaryDashboard({
 
     try {
       const id = getOrCreateBlueprintId();
+
       await new Promise((resolve) => setTimeout(resolve, 1500));
       setBlueprintId(id);
       setStage("handover");
@@ -475,6 +478,26 @@ export default function SummaryDashboard({
                 <button
                   type="button"
                   onClick={() => {
+                    // Trigger background email notification with full payload
+                    fetch("/api/blueprint", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        email: "",
+                        answers,
+                        foundation,
+                        selectedModules,
+                        moduleQuantities,
+                        shieldTier,
+                        oneTimeTotal,
+                        monthlyTotal,
+                        blueprintId,
+                        leadName: lead.name.trim(),
+                        leadCompany: lead.company.trim(),
+                        source: "whatsapp intake",
+                      }),
+                    }).catch((err) => console.error("WhatsApp dispatch fail:", err));
+
                     const msg = `Hi Kvali! This is ${lead.name.trim()} from ${lead.company.trim()}. I just finished my audit (ID: ${blueprintId}). Let's talk about my project!`;
                     window.open(
                       `https://wa.me/${WHATSAPP_INTAKE}?text=${encodeURIComponent(msg)}`,
