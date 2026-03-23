@@ -4,6 +4,8 @@ import { DISCOVERY_QUESTION_LABELS } from "@/lib/discovery/discoveryQuestionLabe
 const MAX_BODY_CHARS = 256_000;
 const MAX_CELL_CHARS = 4_000;
 const MAX_EMAIL_LEN = 320;
+const MAX_BLUEPRINT_ID_LEN = 32;
+const MAX_LEAD_NAME_LEN = 120;
 
 function escapeHtml(s: string): string {
   return s
@@ -81,7 +83,23 @@ export async function POST(req: Request) {
       shieldTier,
       oneTimeTotal,
       monthlyTotal,
+      blueprintId: blueprintIdRaw,
+      leadName: leadNameRaw,
+      leadCompany: leadCompanyRaw,
     } = body;
+
+    const blueprintIdStr =
+      typeof blueprintIdRaw === "string"
+        ? blueprintIdRaw.trim().slice(0, MAX_BLUEPRINT_ID_LEN)
+        : "";
+    const leadNameStr =
+      typeof leadNameRaw === "string"
+        ? leadNameRaw.trim().slice(0, MAX_LEAD_NAME_LEN)
+        : "";
+    const leadCompanyStr =
+      typeof leadCompanyRaw === "string"
+        ? leadCompanyRaw.trim().slice(0, MAX_LEAD_NAME_LEN)
+        : "";
 
     const RESEND_API_KEY = process.env.RESEND_API_KEY;
     const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@youragency.com";
@@ -115,14 +133,18 @@ export async function POST(req: Request) {
           ? String(foundation)
           : "";
     const subjectBase = foundationStr.trim() ? foundationStr.toUpperCase() : "GENERAL";
+    const idPrefix = blueprintIdStr ? `${blueprintIdStr} — ` : "";
     const subject = sanitizeSubjectLine(
       hook
-        ? `🚀 [NEW LEAD] - ${subjectBase} - ${hook}`
-        : `🚀 [NEW BLUEPRINT] - ${subjectBase} - Urgent Review Required`
+        ? `🚀 ${idPrefix}[NEW LEAD] - ${subjectBase} - ${hook}`
+        : `🚀 ${idPrefix}[NEW BLUEPRINT] - ${subjectBase} - Urgent Review Required`
     );
 
     const pitchRaw = pickPitchForTable(answersRecord);
     const pitchCell = escapeHtml(truncateCell(pitchRaw));
+    const blueprintCell = escapeHtml(blueprintIdStr || "—");
+    const leadNameCell = escapeHtml(leadNameStr || "—");
+    const leadCompanyCell = escapeHtml(leadCompanyStr || "—");
     const emailCell = escapeHtml(emailStr || "N/A");
     const foundationCell = escapeHtml(foundationStr || "N/A");
     const modulesStr = Array.isArray(selectedModules)
@@ -185,6 +207,18 @@ export async function POST(req: Request) {
                                 <tr style="background: #ffebee; color: #d50000; font-weight: bold; border-bottom: 2px solid #ffcdd2;">
                                     <td style="padding: 12px;">PRIMARY HOOK / PITCH</td>
                                     <td style="padding: 12px;">${pitchCell}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold; color: #64748b; border-bottom: 1px solid #f1f5f9;">Blueprint ID</td>
+                                    <td style="border-bottom: 1px solid #f1f5f9; font-family: monospace; font-weight: bold;">${blueprintCell}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold; color: #64748b; border-bottom: 1px solid #f1f5f9;">Contact name</td>
+                                    <td style="border-bottom: 1px solid #f1f5f9;">${leadNameCell}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold; color: #64748b; border-bottom: 1px solid #f1f5f9;">Company</td>
+                                    <td style="border-bottom: 1px solid #f1f5f9;">${leadCompanyCell}</td>
                                 </tr>
                                 <tr>
                                     <td style="font-weight: bold; color: #64748b; border-bottom: 1px solid #f1f5f9;">Lead Email</td>

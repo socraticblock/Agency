@@ -24,10 +24,7 @@ function truncateDisplay(s: string, max: number): string {
 const WHATSAPP_INTAKE = "995591039019";
 
 import { Smartphone, Mail, Building, User, X } from "lucide-react";
-import type {
-  MergeLeadResult,
-  PersistBlueprintResult,
-} from "@/lib/blueprint/blueprintStore";
+import { getOrCreateBlueprintId } from "@/lib/blueprint/clientBlueprintId";
 
 export type SummaryDashboardProps = {
   foundation: string | null;
@@ -168,40 +165,12 @@ export default function SummaryDashboard({
     setSubmitError(null);
 
     try {
-      const payload = JSON.parse(
-        JSON.stringify({
-          foundation,
-          selectedModules,
-          moduleQuantities,
-          shieldTier,
-          totalOneTime: oneTimeTotal,
-          totalMonthly: monthlyTotal,
-          answers,
-        })
-      );
-
-      const httpRes = await fetch("/api/architect-blueprint", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const res = (await httpRes.json()) as PersistBlueprintResult;
-
+      const id = getOrCreateBlueprintId();
       await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      if (res.success && res.blueprintId) {
-        setBlueprintId(res.blueprintId);
-        setStage("handover");
-      } else {
-        throw new Error(
-          res.success === false
-            ? res.error
-            : `System overload. Failed to secure architecture node. (${httpRes.status})`
-        );
-      }
+      setBlueprintId(id);
+      setStage("handover");
     } catch (error: unknown) {
-      console.error("BLUEPRINT SECURE FAILURE:", error);
+      console.error("BLUEPRINT HANDOVER FAILURE:", error);
       const message =
         error instanceof Error ? error.message : "Connection Failed - Try Again";
       setSubmitError(message);
@@ -215,18 +184,36 @@ export default function SummaryDashboard({
     setIsSubmitting(true);
     setSubmitError(null);
 
-    const httpRes = await fetch("/api/architect-blueprint", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ blueprintId, lead }),
-    });
-    const res = (await httpRes.json()) as MergeLeadResult;
-    setIsSubmitting(false);
+    try {
+      const httpRes = await fetch("/api/blueprint", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: lead.email.trim(),
+          answers,
+          foundation,
+          selectedModules,
+          moduleQuantities,
+          shieldTier,
+          oneTimeTotal,
+          monthlyTotal,
+          blueprintId,
+          leadName: lead.name.trim(),
+          leadCompany: lead.company.trim(),
+        }),
+      });
+      const json = (await httpRes.json()) as { success?: boolean; error?: string };
 
-    if (res.success) {
-      alert("✅ Dossier securely dispatched building pipelines.");
-    } else {
-      setSubmitError(res.error || "Dispatch failed.");
+      if (!httpRes.ok || !json.success) {
+        throw new Error(json.error || `Request failed (${httpRes.status})`);
+      }
+      alert("✅ PDF dossier request sent — we’ll email you at the address you provided.");
+    } catch (err: unknown) {
+      setSubmitError(
+        err instanceof Error ? err.message : "Could not send email. Try again or use WhatsApp."
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 

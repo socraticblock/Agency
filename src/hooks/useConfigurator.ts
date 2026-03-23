@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { ServiceItem, FOUNDATIONS, MODULES, SHIELD_TIERS } from "@/constants/pricing";
+import { clearBlueprintSessionId } from "@/lib/blueprint/clientBlueprintId";
 import {
   buildDiscoveryQuestions,
   isDiscoveryComplete,
@@ -164,6 +165,7 @@ export function useConfigurator() {
     try {
       localStorage.removeItem(STORAGE_KEY);
     } catch {}
+    clearBlueprintSessionId();
     setFoundation(null);
     setSelectedModules([]);
     setModuleQuantities({});

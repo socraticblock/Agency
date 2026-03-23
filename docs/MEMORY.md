@@ -11,6 +11,8 @@
 - [009] Blueprint persistence: shared `blueprintStore` lib; architect submit uses `POST/PATCH /api/architect-blueprint` (plain JSON) instead of Server Actions to avoid Next Flight `charCodeAt` failures on large payloads; Redis + dev `Map` unchanged; thin `saveBlueprint` actions remain optional.
 - [010] Architect audit handover: VIP modal (name + company) before analyze; loading phrases use lead; WhatsApp prefill + `995591039019`; handover email-only for PDF; `PATCH` still sends full `lead`.
 - [011] Discovery → step 5: `isAnswerValidForDiscoveryQuestion` aligns Continue/keyboard with `isDiscoveryComplete` (fixes color_palette drift); `goToStep` returns boolean; Generate Blueprint gated on full completion + user-visible errors if navigation blocked.
+- [012] Dead-code trim: removed `@upstash/redis`, `nanoid`; deleted unused `StepNavigation`, `SummarySidebar`, `lib/agents/*`, `lib/services/sovereignModel`; dropped empty `agents`/`services` dirs.
+- [013] Architect blueprint: no Redis/server blob; `KV-` id from `sessionStorage` via `clientBlueprintId`; handover + WhatsApp use client id; PDF request uses `POST /api/blueprint` with `blueprintId` + contact + full audit; removed `blueprintStore`, `/api/architect-blueprint`, `saveBlueprint`, `ioredis`.
 
 # Detailed Observations
 
@@ -68,3 +70,13 @@
 - **Context:** Users on the last discovery question saw “Processing…” then stayed on step 4 because `goToStep(5)` no-oped when `canGoToStep(5)` required `isDiscoveryComplete` while the UI only checked `hasAnswer` for the current question (e.g. incomplete 3-color palette allowed).
 - **Decision:** Exported `isAnswerValidForDiscoveryQuestion` matching completion rules; DiscoveryModule uses it for Continue/Enter; last-step primary action requires full `isDiscoveryComplete`; `handlesSubmit` pre-checks + reads `goToStep` boolean with amber error copy; `goToStep` returns `boolean` from `useConfigurator`.
 - **Impact:** Step 5 opens when and only when discovery data satisfies the same rules as the configurator gate; fewer silent failures.
+
+## [012]
+- **Context:** User asked to execute codebase shrink/cleanup: unused deps and orphan modules identified in review.
+- **Decision:** Removed npm packages `@upstash/redis` and `nanoid` (no `src` imports); deleted `architect/_components/StepNavigation.tsx` and `SummarySidebar.tsx` (superseded by `StepNav` / `Configurator` flow); removed unused `src/lib/agents/sovereignAudit.ts`, `sovereignConciergePrompt.ts`, and `src/lib/services/sovereignModel.ts`; removed empty `lib/agents` and `lib/services` directories.
+- **Impact:** Fewer dependencies (442 audited, 0 vulns at trim time), less dead surface area; `next build` green. R3F/NanoBanana background left unchanged as a separate optional follow-up.
+
+## [013]
+- **Context:** User wanted no server-side blueprint storage; email/WhatsApp + client as truth; stable blueprint id per browser tab for manual CRM; remove Redis entirely.
+- **Decision:** Added `src/lib/blueprint/clientBlueprintId.ts` (`getOrCreateBlueprintId`, `clearBlueprintSessionId`, `sessionStorage` key `kvali_architect_blueprint_id`); `SummaryDashboard` no longer POSTs to `/api/architect-blueprint`—finalize runs analyzer then sets id from client helper; `PATCH` replaced by `POST /api/blueprint` including `blueprintId`, `leadName`, `leadCompany` plus existing audit fields; email template adds Blueprint ID / name / company rows and subject prefix; deleted `blueprintStore.ts`, `/api/architect-blueprint`, `saveBlueprint` actions; `useConfigurator` `clearConfiguration` clears session blueprint id; removed `ioredis` from `package.json`.
+- **Impact:** No Redis or in-memory blueprint map on server; `npm` smaller; operator must use Resend email for full dossier; same tab re-finalize reuses id until session cleared or full reset.
