@@ -333,7 +333,7 @@ export default function SummaryDashboard({
                       </div>
                     </div>
                   )}
-                  {answers["color_palette"] && (
+                  {!!answers["color_palette"] && (
                     <div className="flex flex-col items-center bg-white/[0.02] p-3 rounded-xl border border-white/5 h-20 relative group">
                       <span className="text-xs text-slate-500 font-bold font-space uppercase tracking-wider">PALETTE</span>
                       <div className="flex-1 flex items-center justify-center w-full">
