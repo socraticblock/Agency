@@ -12,7 +12,7 @@ export function Navbar({ locale }: { locale: Locale }) {
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0f172a]/80 backdrop-blur-md">
       <nav className="relative z-50 mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link href={`/${locale}`} className="text-lg font-bold text-white">
-          Kvali
+          Genezisi
         </Link>
         <div className="flex items-center gap-6">
           <Link href={`/${locale}/architect`} className="text-sm font-bold text-emerald-400 hover:text-emerald-300 transition-colors">

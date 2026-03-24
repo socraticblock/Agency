@@ -2,7 +2,7 @@
  * Client-only blueprint id: one stable `KV-XXXXXX` per browser tab session
  * (sessionStorage). No server blob — email/WhatsApp carry the human-visible id.
  */
-export const BLUEPRINT_SESSION_STORAGE_KEY = "kvali_architect_blueprint_id";
+export const BLUEPRINT_SESSION_STORAGE_KEY = "genezisi_architect_blueprint_id";
 
 function generateBlueprintId(): string {
   const chars = "1234567890ABCDEFGHJKLMNPQRSTUVWXYZ";
@@ -10,7 +10,7 @@ function generateBlueprintId(): string {
   for (let i = 0; i < 6; i++) {
     raw += chars[Math.floor(Math.random() * chars.length)];
   }
-  return `KV-${raw}`;
+  return `GN-${raw}`;
 }
 
 /** Reuse id for this tab until session ends or `clearBlueprintSessionId` (e.g. full reset). */
@@ -18,7 +18,7 @@ export function getOrCreateBlueprintId(): string {
   if (typeof window === "undefined") return generateBlueprintId();
   try {
     const existing = sessionStorage.getItem(BLUEPRINT_SESSION_STORAGE_KEY);
-    if (existing && /^KV-[0-9A-Z]{6}$/.test(existing)) {
+    if (existing && /^GN-[0-9A-Z]{6}$/.test(existing)) {
       return existing;
     }
     const id = generateBlueprintId();

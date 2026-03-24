@@ -66,7 +66,7 @@ export default function ConfigModal({
             <button 
               onClick={() => {
                 const activeMods = selectedModules.map(id => MODULES.find(m => m.id === id)?.name || id).join('\n  • ');
-                const text = `======================================\nKVALI ARCHITECT STUDIO: BLUEPRINT\n======================================\nFoundation: ${activeFoundation?.name || "None"}\nBase Cost: ${formatPrice(foundationPrice)}\n\nSelected Modules:\n  • ${activeMods || "None"}\n\nWarranties Included:\n- 90-Day Tech Warranty\n- 100% IP & Code Transfer absolute setups\n======================================`;
+                const text = `======================================\nGENEZISI ARCHITECT STUDIO: BLUEPRINT\n======================================\nFoundation: ${activeFoundation?.name || "None"}\nBase Cost: ${formatPrice(foundationPrice)}\n\nSelected Modules:\n  • ${activeMods || "None"}\n\nWarranties Included:\n- 90-Day Tech Warranty\n- 100% IP & Code Transfer absolute setups\n======================================`;
                 const blob = new Blob([text], { type: 'text/plain' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');

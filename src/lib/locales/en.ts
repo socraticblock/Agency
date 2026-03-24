@@ -118,7 +118,7 @@ export const en = {
   },
   sovereign: {
     tagline: "Build your owned space.",
-    triptychLabel: "THE KVALI FRAMEWORK",
+    triptychLabel: "THE GENEZISI FRAMEWORK",
     triptychSubheading: "Social media is incredible for getting discovered. A dedicated digital foundation is where anonymous traffic becomes a sustainable business.",
 
     // Stage 1: Absolute Ownership (The Bridge)
