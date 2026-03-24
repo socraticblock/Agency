@@ -109,6 +109,8 @@ export async function POST(req: Request) {
       leadName: leadNameRaw,
       leadCompany: leadCompanyRaw,
       source,
+      preference,
+      skipAdmin,
     } = body;
 
     const blueprintIdStr =
@@ -124,6 +126,8 @@ export async function POST(req: Request) {
         ? leadCompanyRaw.trim().slice(0, MAX_LEAD_NAME_LEN)
         : "";
 
+    const preferenceStr = typeof preference === "string" ? preference.trim() : "whatsapp";
+
     const RESEND_API_KEY = process.env.RESEND_API_KEY;
     const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@youragency.com";
 
@@ -135,10 +139,7 @@ export async function POST(req: Request) {
 
     console.log("Blueprint Data Received locally:", { email: emailStr, foundation });
 
-    // Genezisi 1.1: Intelligent Intake Skip Switch
-    if (!emailStr) {
-      return NextResponse.json({ success: true, message: "WhatsApp Intake Recorded" });
-    }
+    // Skip Switch removed to ensure Admin notifications fire regardless of empty email condition layout setup accurately concise benchmarks.
 
     if (!RESEND_API_KEY) {
       console.error("Missing RESEND_API_KEY inside environment variables.");
@@ -180,8 +181,8 @@ export async function POST(req: Request) {
     const quantitiesStr =
       moduleQuantities && typeof moduleQuantities === "object" && !Array.isArray(moduleQuantities)
         ? Object.entries(moduleQuantities)
-            .map(([id, qty]) => `${escapeHtml(String(id))}: ${escapeHtml(String(qty))}`)
-            .join(", ")
+          .map(([id, qty]) => `${escapeHtml(String(id))}: ${escapeHtml(String(qty))}`)
+          .join(", ")
         : "—";
 
     const shieldStr =
@@ -219,8 +220,8 @@ export async function POST(req: Request) {
       },
       body: JSON.stringify({
         from: "Architect | Genezisi <architect@genezisi.com>",
-        to: [emailStr || ADMIN_EMAIL],
-        bcc: ["architect@genezisi.com", "socraticblock@gmail.com"],
+        to: skipAdmin === true ? [emailStr] : [emailStr || ADMIN_EMAIL],
+        bcc: skipAdmin === true ? [] : ["architect@genezisi.com", "socraticblock@gmail.com"],
         ...(emailStr.includes("@") ? { reply_to: emailStr.slice(0, 320) } : {}),
         subject,
         html: `
@@ -234,11 +235,16 @@ export async function POST(req: Request) {
     <div style="display: table; width: 100%; border-spacing: 0; border-collapse: separate;">
         <!-- Cluster 1: BRAND STRATEGY -->
         <div style="background-color: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 16px; margin-bottom: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+            <!-- Directorial Alert Prepend -->
+            <div style="background-color: #ef4444; color: #ffffff; font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; padding: 4px 8px; border-radius: 6px; display: inline-block; margin-bottom: 12px;">
+                🚨 PRIMARY COMMUNICATION: ${preferenceStr.toUpperCase()}
+            </div>
             <div style="color: #10b981; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">01 // BRAND STRATEGY</div>
             <p style="color: #ffffff; font-size: 14px; font-weight: 600; font-style: italic; margin: 0 0 8px 0; border-left: 2px solid #10b981; padding-left: 8px;">&quot;${pitchCell}&quot;</p>
             <div style="font-size: 12px; color: #a1a1aa;">
                 <strong>Company:</strong> ${leadCompanyCell}<br/>
-                <strong>Email:</strong> ${emailCell}
+                <strong>Email:</strong> ${emailCell}<br/>
+                <strong>Preference:</strong> ${preferenceStr.toUpperCase()}
             </div>
         </div>
 

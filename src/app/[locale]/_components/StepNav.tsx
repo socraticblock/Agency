@@ -18,7 +18,7 @@ export default memo(function StepNav({ step, goToStep, canGoToStep, stepLabels }
         const stepNum = (i + 1) as 1 | 2 | 3 | 4 | 5;
         const isActive = step === stepNum;
         const isCompleted = step > stepNum;
-        const isClickable = canGoToStep(stepNum);
+        const isClickable = canGoToStep(stepNum) && step !== 5;
 
         return (
           <div key={s.num} className="flex items-center flex-1">

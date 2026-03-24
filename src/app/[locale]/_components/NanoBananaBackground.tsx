@@ -37,9 +37,9 @@ function NetworkGridModel() {
           color="#10b981" 
           wireframe 
           transparent 
-          opacity={0.12} 
+          opacity={0.2} 
           emissive="#10b981"
-          emissiveIntensity={0.4}
+          emissiveIntensity={1.2}
         />
       </mesh>
       <points>
@@ -58,7 +58,7 @@ function NetworkGridModel() {
 
 export function NanoBananaBackground() {
   return (
-    <div className="pointer-events-none absolute inset-0 z-0 w-full h-full opacity-30">
+    <div className="pointer-events-none absolute inset-0 z-0 w-full h-full opacity-70">
       <Canvas dpr={[1, 1.5]} camera={{ position: [0, 0, 8], fov: 55 }}>
         <fog attach="fog" args={['#030717', 4, 12]} />
         <ambientLight intensity={0.5} />

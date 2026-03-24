@@ -102,6 +102,7 @@ export function useConfigurator() {
   const [hydrated, setHydrated] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
+  const prevFoundationRef = useRef<string | null>(foundation || null);
 
   // Conditional step navigation
   const canGoToStep = useCallback(
@@ -141,9 +142,14 @@ export function useConfigurator() {
   // Reset Discovery when Foundation changes
   useEffect(() => {
     if (!hydrated) return;
-    setAnswers({});
-    setDiscoveryStep(0);
-  }, [foundation, hydrated]);
+    if (foundation !== prevFoundationRef.current) {
+      setSelectedModules([]);
+      setModuleQuantities({});
+      setAnswers({});
+      setDiscoveryStep(0);
+      prevFoundationRef.current = foundation || null;
+    }
+  }, [foundation, hydrated, setSelectedModules]);
 
   // Persist state to localStorage
   useEffect(() => {

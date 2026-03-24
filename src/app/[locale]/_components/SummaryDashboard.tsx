@@ -103,8 +103,25 @@ export default function SummaryDashboard({
   const [vipError, setVipError] = useState<string | null>(null);
 
   /** Name + company captured in VIP modal before analyze; email on handover */
-  const [lead, setLead] = useState({ name: "", company: "", email: "" });
+  const [lead, setLead] = useState<{ name: string; company: string; email: string; preference: string }>(() => {
+    if (typeof window === "undefined") return { name: "", company: "", email: "", preference: "whatsapp" };
+    try {
+      const saved = localStorage.getItem("genezisi_lead_node");
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return { name: "", company: "", email: "", preference: "whatsapp" };
+  });
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("genezisi_lead_node", JSON.stringify(lead));
+    }
+  }, [lead]);
+
   const [emailRequested, setEmailRequested] = useState(false);
+  const [isEmailSent, setIsEmailSent] = useState(false);
+  const [priority, setPriority] = useState<'whatsapp' | 'email' | null>(null);
+  const [isSuccessDispatched, setIsSuccessDispatched] = useState(false);
 
   const handleEdit = (stepNum: 1 | 2 | 3 | 4 | 5, questionIndex?: number) => {
     goToStep(stepNum);
@@ -176,7 +193,11 @@ export default function SummaryDashboard({
   const openVipCheckIn = () => {
     setSubmitError(null);
     setVipError(null);
-    setVipModalOpen(true);
+    if (lead.name.trim() && lead.company.trim()) {
+      void secureBlueprintAndAnalyze();
+    } else {
+      setVipModalOpen(true);
+    }
   };
 
   const secureBlueprintAndAnalyze = async () => {
@@ -228,6 +249,8 @@ export default function SummaryDashboard({
           blueprintId,
           leadName: lead.name.trim(),
           leadCompany: lead.company.trim(),
+          preference: priority || lead.preference,
+          skipAdmin: isSuccessDispatched,
         }),
       });
       const json = (await httpRes.json()) as { success?: boolean; error?: string };
@@ -235,7 +258,11 @@ export default function SummaryDashboard({
       if (!httpRes.ok || !json.success) {
         throw new Error(json.error || `Request failed (${httpRes.status})`);
       }
-      alert("✅ PDF dossier request sent — we’ll email you at the address you provided.");
+      if (isSuccessDispatched) {
+        setIsEmailSent(true);
+      } else {
+        setIsSuccessDispatched(true);
+      }
     } catch (err: unknown) {
       setSubmitError(
         err instanceof Error ? err.message : "Could not send email. Try again or use WhatsApp."
@@ -285,9 +312,13 @@ export default function SummaryDashboard({
                         {activeFoundation.name}
                       </div>
                       {shieldTier !== undefined && shieldTier !== null && (
-                        <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-300 bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)] shadow-[0_0_30px_-15px_rgba(16,185,129,0.2)]">
+                        <div 
+                          onClick={() => handleEdit(3)}
+                          className="flex items-center gap-1.5 text-xs font-bold text-emerald-300 bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)] shadow-[0_0_30px_-15px_rgba(16,185,129,0.2)] cursor-pointer hover:bg-emerald-500/20 transition-all hover:scale-105 group/shield"
+                        >
                           <Shield className="h-3 w-3" />
-                          {SHIELD_TIERS.find((s) => s.id === shieldTier)?.name || "Standard Operations"}
+                          <span>{SHIELD_TIERS.find((s) => s.id === shieldTier)?.name || "Standard Operations"}</span>
+                          <Edit2 className="h-2.5 w-2.5 opacity-0 group-hover/shield:opacity-100 transition-opacity ml-0.5" />
                         </div>
                       )}
                     </div>
@@ -297,9 +328,11 @@ export default function SummaryDashboard({
                       {activeModules.map((m) => (
                         <span
                           key={m.id}
-                          className="text-xs bg-emerald-500/5 border border-emerald-500/10 px-2 py-1 rounded-md text-emerald-300 font-black font-space"
+                          onClick={() => handleEdit(2)}
+                          className="text-xs bg-emerald-500/5 border border-emerald-500/10 px-2 py-1 rounded-md text-emerald-300 font-black font-space cursor-pointer hover:bg-emerald-500/15 transition-all hover:scale-105 flex items-center gap-1 group/module"
                         >
                           {m.name}
+                          <Edit2 className="h-2 w-2 opacity-0 group-hover/module:opacity-100 transition-opacity" />
                         </span>
                       ))}
                     </div>
@@ -598,161 +631,183 @@ export default function SummaryDashboard({
               <p className="text-[11px] text-slate-400 font-medium">
                 Your high-density architecture frame is compiled in the deployment matrix.
               </p>
+              <div className="flex flex-col items-center gap-1.5 mt-2">
+                <div className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider bg-emerald-400/10 px-3 py-0.5 rounded-full border border-emerald-400/20 inline-block">
+                  Client: {lead.name} | {lead.company}
+                </div>
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-4 w-full">
-              {/* Box 1: Whatsapp */}
-              <div className="glass-card border border-emerald-500/20 bg-emerald-500/[0.03] p-6 rounded-2xl flex flex-col gap-3 relative overflow-hidden group">
-                <AnimatePresence mode="wait">
-                  {!isWhatsAppClicked ? (
-                    <m.div
-                      key="prompt"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      className="flex flex-col gap-3"
-                    >
-                      <div className="absolute inset-x-0 bottom-0 top-[20%] bg-gradient-to-t from-emerald-500/10 to-transparent pointer-events-none" />
-                      <div>
-                        <span className="text-[9px] font-black font-space text-emerald-400 uppercase tracking-wider">
-                          🏛️ DIRECT HANDOVER
-                        </span>
-                        <p className="text-sm font-bold text-white mt-0.5">Instant WhatsApp Broadcast</p>
-                        <p className="text-[11px] text-slate-400 mt-1">
-                          Claim your seat in the direct intake loop with our Lead Builder right now.
-                        </p>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => {
-                        const nameStr = lead.name.trim() || "Candidate";
-                        const companyStr = lead.company.trim() || "my project";
-                        const msg = emailRequested && lead.email.trim()
-                          ? `Hey Genezisi, I'm ${nameStr} from ${companyStr}. I just secured my blueprint and requested the dossier via email. Let's discuss the logic here.`
-                          : `Hey Genezisi, I'm ${nameStr} from ${companyStr}. I just finished my configuration. Let's skip the paperwork and discuss the North Star here.`;
-                          window.open(
-                            `https://wa.me/${WHATSAPP_INTAKE}?text=${encodeURIComponent(msg)}`,
-                            "_blank"
-                          );
-                          setIsWhatsAppClicked(true);
+            {isSuccessDispatched ? (
+              <m.div 
+                key="success" 
+                initial={{ opacity: 0, scale: 0.95 }} 
+                animate={{ opacity: 1, scale: 1 }} 
+                exit={{ opacity: 0, scale: 0.95 }} 
+                className="p-8 border border-emerald-500/30 bg-emerald-500/5 rounded-2xl text-center shadow-[0_0_50px_-12px_rgba(16,185,129,0.15)] w-full max-w-md mx-auto"
+              >
+                <CheckCircle2 className="w-16 h-16 text-emerald-500 mx-auto mb-6 drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]" />
+                <h3 className="text-2xl font-bold text-white mb-3 tracking-tight font-space">BROADCAST DISPATCHED</h3>
+                <p className="text-slate-400 text-sm mb-6 max-w-[280px] mx-auto">
+                  {priority === 'whatsapp' 
+                    ? 'Your configuration has been indexed and sent to the vault. I am waiting for you on WhatsApp.' 
+                    : 'Your configuration has been indexed. A formal Discovery Dossier has been securely dispatched to your email. The Architect will follow up shortly.'}
+                </p>
 
-                          // Trigger background email notification with full payload
-                          fetch("/api/blueprint", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                              email: "",
-                              answers,
-                              foundation,
-                              selectedModules,
-                              moduleQuantities,
-                              shieldTier,
-                              oneTimeTotal,
-                              monthlyTotal,
-                              blueprintId,
-                              leadName: lead.name.trim(),
-                              leadCompany: lead.company.trim(),
-                              source: "whatsapp intake",
-                            }),
-                          }).catch((err) => console.error("WhatsApp dispatch fail:", err));
-                        }}
-                        className="w-full mt-2 py-3 bg-emerald-400 text-black font-space font-black text-xs uppercase rounded-xl flex items-center justify-center gap-2 hover:bg-emerald-300 transition-all shadow-[0_5px_15px_rgba(16,185,129,0.3)] hover:scale-[1.02] active:scale-95 group index-trigger"
-                      >
-                        <Smartphone className="h-3.5 w-3.5" />
-                        Open WhatsApp
-                      </button>
-                    </m.div>
-                  ) : (
-                    <m.div
-                      key="success"
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
-                      className="p-8 border border-emerald-500/30 bg-emerald-500/5 rounded-2xl text-center shadow-[0_0_50px_-12px_rgba(16,185,129,0.15)] index-success"
-                    >
-                      <CheckCircle2 className="w-16 h-16 text-emerald-500 mx-auto mb-6 drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]" />
-                      <h3 className="text-2xl font-bold text-white mb-3 tracking-tight font-space">BROADCAST DISPATCHED</h3>
-                      <p className="text-slate-400 text-sm mb-8 max-w-[280px] mx-auto">
-                        Your configuration has been indexed and sent to the vault. I am waiting for you on WhatsApp.
-                      </p>
-                      <button
-                        onClick={() => {
-                          setIsWhatsAppClicked(false);
-                          setStage("review");
-                        }}
-                        className="text-xs text-emerald-500/60 hover:text-emerald-400 uppercase tracking-[0.2em] transition-colors font-space font-bold cursor-pointer"
-                      >
-                        Modify Configuration
-                      </button>
-                    </m.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* Email only — name & company were captured at VIP check-in */}
-              <div className="glass-card border border-white/5 bg-white/[0.02] p-6 rounded-2xl flex flex-col gap-4 relative overflow-hidden">
-                <div className="flex items-center justify-between pb-2 border-b border-white/5">
-                  <div>
-                    <span className="text-[9px] font-black font-space text-slate-400 uppercase tracking-wider">
-                      📄 FULL PDF REPORT
-                    </span>
-                    <p className="text-sm font-bold text-white mt-0.5">Discovery Dossier</p>
+                {priority === 'whatsapp' && (
+                  <div className="mb-6 border-t border-white/5 pt-4 w-full text-left max-w-[280px] mx-auto">
+                    <AnimatePresence mode="wait">
+                      {!isEmailSent ? (
+                        <m.div key="form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-2">
+                          <label className="text-[9px] uppercase font-black text-slate-400 font-space tracking-wider">
+                            Would you also like a formal copy sent to your email?
+                          </label>
+                          <form onSubmit={handleLeadSubmit} className="flex gap-2">
+                            <input 
+                              type="email" 
+                              required 
+                              placeholder="Dispatch address" 
+                              value={lead.email} 
+                              onChange={(e) => setLead({ ...lead, email: e.target.value })} 
+                              className="flex-1 bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-emerald-400" 
+                            />
+                            <button 
+                              type="submit" 
+                              disabled={isSubmitting} 
+                              className="px-3 py-1.5 bg-emerald-400 text-black font-space font-black text-xs uppercase rounded-lg hover:bg-emerald-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              {isSubmitting ? "..." : "Send"}
+                            </button>
+                          </form>
+                        </m.div>
+                      ) : (
+                        <m.div key="text" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center text-[10px] text-emerald-400 font-bold bg-emerald-500/5 p-2 rounded-lg border border-emerald-500/20">
+                          A copy of your audit summary has been sent to your email.
+                        </m.div>
+                      )}
+                    </AnimatePresence>
                   </div>
-                  <label className="flex items-center gap-2 cursor-pointer group">
-                    <span className="text-[10px] text-slate-400 group-hover:text-emerald-400 transition-colors font-bold">
-                      Would you like a formal Discovery Dossier dispatched to your email?
-                    </span>
-                    <input
-                      type="checkbox"
-                      checked={emailRequested}
-                      onChange={(e) => setEmailRequested(e.target.checked)}
-                      className="accent-emerald-400 h-3.5 w-3.5 rounded border-white/10 bg-white/5"
-                    />
-                  </label>
+                )}
+                <div className="flex flex-col gap-3.5 max-w-[220px] mx-auto mt-4 pt-4 border-t border-white/5">
+                {priority === 'email' && (
+                  <button 
+                    type="button"
+                    onClick={() => { 
+                      setIsSuccessDispatched(false); 
+                      setPriority('whatsapp'); 
+                    }} 
+                    className="flex items-center justify-center gap-1.5 text-[11px] text-emerald-400 font-bold uppercase tracking-wider hover:text-emerald-300 transition-colors cursor-pointer hover:underline underline-offset-4 mx-auto"
+                  >
+                    <Smartphone className="h-3.5 w-3.5 stroke-[2.5]" /> Switch to WhatsApp
+                  </button>
+                )}
+                  <button 
+                    type="button"
+                    onClick={() => { setIsSuccessDispatched(false); setIsEmailSent(false); setStage("review"); }} 
+                    className="text-[10px] text-slate-500 hover:text-slate-400 uppercase tracking-widest transition-colors font-space font-bold cursor-pointer"
+                  >
+                    Modify Configuration
+                  </button>
                 </div>
-
-                <AnimatePresence>
-                  {emailRequested && (
-                    <m.div
-                      initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                      animate={{ opacity: 1, height: "auto", marginTop: 4 }}
-                      exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
-                      className="overflow-hidden space-y-3"
+              </m.div>
+            ) : (
+              <>
+                {priority === null ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+                    <button 
+                      type="button"
+                      onClick={() => { setPriority('whatsapp'); setLead(prev => ({ ...prev, preference: 'whatsapp' })); }} 
+                      className="glass-card p-6 border border-emerald-500/20 hover:border-emerald-400 bg-emerald-500/[0.02] text-center rounded-2xl transition-all cursor-pointer group"
                     >
-                      <p className="text-[11px] text-slate-400">
-                        We&apos;ll send the complete architecture PDF to the address below.
-                      </p>
-                      <form onSubmit={handleLeadSubmit} className="space-y-3">
-                        <div className="relative w-full">
-                          <Mail className="absolute left-3 top-3.5 h-3.5 w-3.5 text-slate-500" />
-                          <input
-                            type="email"
-                            required
-                            placeholder="Professional email for PDF delivery"
-                            value={lead.email}
-                            onChange={(e) => setLead({ ...lead, email: e.target.value })}
-                            className="w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-3 py-3 text-xs text-white focus:outline-none focus:border-emerald-400"
-                          />
+                      <Smartphone className="h-6 w-6 text-emerald-400 mx-auto mb-2 group-hover:scale-110 transition-transform" />
+                      <h3 className="text-sm font-bold text-white font-space">Prioritize WhatsApp Chat</h3>
+                      <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">Direct intake to an Architect node.</p>
+                    </button>
+
+                    <button 
+                      type="button"
+                      onClick={() => { setPriority('email'); setLead(prev => ({ ...prev, preference: 'email' })); }} 
+                      className="glass-card p-6 border border-white/5 hover:border-white/10 bg-white/[0.02] text-center rounded-2xl transition-all cursor-pointer group"
+                    >
+                      <Mail className="h-6 w-6 text-slate-400 mx-auto mb-2 group-hover:scale-110 transition-transform" />
+                      <h3 className="text-sm font-bold text-white font-space">Prioritize Email Communication</h3>
+                      <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">Request formal Discovery Dossiers.</p>
+                    </button>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 gap-4 w-full">
+                    {priority === 'whatsapp' && (
+                      <div className="glass-card border border-emerald-500/20 bg-emerald-500/[0.03] p-6 rounded-2xl flex flex-col gap-3 relative overflow-hidden group">
+                        <AnimatePresence mode="wait">
+                          <m.div key="prompt" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex flex-col gap-3">
+                            <div className="absolute inset-x-0 bottom-0 top-[20%] bg-gradient-to-t from-emerald-500/10 to-transparent pointer-events-none" />
+                            <div>
+                              <span className="text-[9px] font-black font-space text-emerald-400 uppercase tracking-wider">🏛️ DIRECT HANDOVER</span>
+                              <p className="text-sm font-bold text-white mt-0.5">Instant WhatsApp Broadcast</p>
+                              <p className="text-[11px] text-slate-400 mt-1">Claim your seat in the direct intake loop with our Lead Builder right now.</p>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const nameStr = lead.name.trim() || "Candidate";
+                                const companyStr = lead.company.trim() || "my project";
+                                const msg = emailRequested && lead.email.trim()
+                                  ? `Hey Genezisi, I'm ${nameStr} from ${companyStr}. I just secured my blueprint and requested the dossier via email. Let's discuss the logic here.`
+                                  : `Hey Genezisi, I'm ${nameStr} from ${companyStr}. I just finished my configuration. Let's skip the paperwork and discuss the North Star here.`;
+                                window.open(`https://wa.me/${WHATSAPP_INTAKE}?text=${encodeURIComponent(msg)}`, "_blank");
+                                setIsSuccessDispatched(true); // Auto route to grand success view layout securely setup index triggers setup concisely accurately
+                                fetch("/api/blueprint", {
+                                  method: "POST",
+                                  headers: { "Content-Type": "application/json" },
+                                  body: JSON.stringify({
+                                    email: "", answers, foundation, selectedModules, moduleQuantities, shieldTier, oneTimeTotal, monthlyTotal, blueprintId,
+                                    leadName: lead.name.trim(), leadCompany: lead.company.trim(), source: "whatsapp intake", preference: "whatsapp"
+                                  }),
+                                }).catch((err) => console.error("WhatsApp dispatch fail:", err));
+                              }}
+                              className="w-full mt-2 py-3 bg-emerald-400 text-black font-space font-black text-xs uppercase rounded-xl flex items-center justify-center gap-2 hover:bg-emerald-300 transition-all shadow-[0_5px_15px_rgba(16,185,129,0.3)] hover:scale-[1.02] active:scale-95 group index-trigger"
+                            >
+                              <Smartphone className="h-3.5 w-3.5" /> Open WhatsApp
+                            </button>
+                          </m.div>
+                        </AnimatePresence>
+                      </div>
+                    )}
+
+                    {(priority === 'email' || (priority === 'whatsapp' && emailRequested)) && (
+                      <div className="glass-card border border-white/5 bg-white/[0.02] p-6 rounded-2xl flex flex-col gap-4 relative overflow-hidden">
+                        <div className="flex items-center justify-between pb-2 border-b border-white/5">
+                          <div>
+                            <span className="text-[9px] font-black font-space text-slate-400 uppercase tracking-wider">📄 FULL PDF REPORT</span>
+                            <p className="text-sm font-bold text-white mt-0.5">{priority === 'email' ? "Where should the Architect send your Dossier?" : "Discovery Dossier"}</p>
+                          </div>
+                          {priority === 'whatsapp' && (
+                            <label className="flex items-center gap-2 cursor-pointer group">
+                              <span className="text-[10px] text-slate-400 group-hover:text-emerald-400 transition-colors font-bold">Would you also like a copy sent to your records?</span>
+                              <input type="checkbox" checked={emailRequested} onChange={(e) => setEmailRequested(e.target.checked)} className="accent-emerald-400 h-3.5 w-3.5 rounded border-white/10 bg-white/5" />
+                            </label>
+                          )}
                         </div>
 
-                        {submitError && (
-                          <p className="text-xs text-red-400 font-bold">{submitError}</p>
-                        )}
-
-                        <button
-                          type="submit"
-                          disabled={isSubmitting}
-                          className="w-full py-2.5 bg-white/5 border border-white/10 rounded-xl text-white font-space font-black text-xs uppercase hover:bg-white/10 transition-all flex items-center justify-center gap-1.5"
-                        >
-                          {isSubmitting ? "Sending…" : "Request PDF dossier"}
-                        </button>
-                      </form>
-                    </m.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </div>
+                        <div className="space-y-3">
+                          <p className="text-[11px] text-slate-400">We&apos;ll send the complete architecture PDF to the address below.</p>
+                          <form onSubmit={handleLeadSubmit} className="space-y-3">
+                            <div className="relative w-full">
+                              <Mail className="absolute left-3 top-3.5 h-3.5 w-3.5 text-slate-500" />
+                              <input type="email" required placeholder="Professional email for PDF delivery" value={lead.email} onChange={(e) => setLead({ ...lead, email: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-3 py-3 text-xs text-white focus:outline-none focus:border-emerald-400" />
+                            </div>
+                            {submitError && <p className="text-xs text-red-400 font-bold">{submitError}</p>}
+                            <button type="submit" disabled={isSubmitting} className="w-full py-2.5 bg-white/5 border border-white/10 rounded-xl text-white font-space font-black text-xs uppercase hover:bg-white/10 transition-all flex items-center justify-center gap-1.5">
+                              {isSubmitting ? "Sending…" : "Request PDF dossier"}
+                            </button>
+                          </form>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </>
+            )}
           </m.div>
         )}
       </AnimatePresence>
@@ -860,6 +915,7 @@ export default function SummaryDashboard({
                     className="w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-3 py-3 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-emerald-400"
                   />
                 </div>
+
               </div>
               {vipError && (
                 <p className="mt-3 text-[11px] text-red-400 font-bold font-space">{vipError}</p>
