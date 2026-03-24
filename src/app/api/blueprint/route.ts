@@ -135,6 +135,11 @@ export async function POST(req: Request) {
 
     console.log("Blueprint Data Received locally:", { email: emailStr, foundation });
 
+    // Genezisi 1.1: Intelligent Intake Skip Switch
+    if (!emailStr) {
+      return NextResponse.json({ success: true, message: "WhatsApp Intake Recorded" });
+    }
+
     if (!RESEND_API_KEY) {
       console.error("Missing RESEND_API_KEY inside environment variables.");
       return NextResponse.json(
@@ -159,11 +164,7 @@ export async function POST(req: Request) {
     const idPrefix = blueprintIdStr ? `${blueprintIdStr} — ` : "";
     const sourceStr = typeof source === "string" ? source.toUpperCase() : "";
     const sourceTag = sourceStr ? `[${sourceStr}] ` : "";
-    const subject = sanitizeSubjectLine(
-      hook
-        ? `🚀 ${idPrefix}${sourceTag}[NEW LEAD] - ${subjectBase} - ${hook}`
-        : `🚀 ${idPrefix}${sourceTag}[NEW BLUEPRINT] - ${subjectBase} - Urgent Review Required`
-    );
+    const subject = sanitizeSubjectLine(`Your Genezisi Discovery Dossier: ${leadCompanyStr || "Project Grid"}`);
 
     const pitchRaw = pickPitchForTable(answersRecord);
     const pitchCell = escapeHtml(truncateCell(pitchRaw));
@@ -217,71 +218,60 @@ export async function POST(req: Request) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "Architect <onboarding@resend.dev>",
-        to: [ADMIN_EMAIL],
+        from: "Architect | Genezisi <architect@genezisi.com>",
+        to: [emailStr || ADMIN_EMAIL],
+        bcc: ["architect@genezisi.com", "socraticblock@gmail.com"],
         ...(emailStr.includes("@") ? { reply_to: emailStr.slice(0, 320) } : {}),
         subject,
         html: `
-                    <div style="font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                        <div style="background: #09090b; color: white; padding: 20px; text-align: center;">
-                            <h2 style="margin: 0; font-family: monospace; letter-spacing: 2px;">ARCHITECTURE BRIEF</h2>
-                            <p style="margin: 4px 0 0 0; font-size: 12px; color: #a1a1aa;">Lead dispatch indexation</p>
-                        </div>
-                        <div style="padding: 20px;">
-                            <table border="0" cellpadding="8" cellspacing="0" style="width: 100%; border-collapse: collapse; font-size: 14px;">
-                                <tr style="background: #ffebee; color: #d50000; font-weight: bold; border-bottom: 2px solid #ffcdd2;">
-                                    <td style="padding: 12px;">PRIMARY HOOK / PITCH</td>
-                                    <td style="padding: 12px;">${pitchCell}</td>
-                                </tr>
-                                <tr>
-                                    <td style="font-weight: bold; color: #64748b; border-bottom: 1px solid #f1f5f9;">Blueprint ID</td>
-                                    <td style="border-bottom: 1px solid #f1f5f9; font-family: monospace; font-weight: bold;">${blueprintCell}</td>
-                                </tr>
-                                <tr>
-                                    <td style="font-weight: bold; color: #64748b; border-bottom: 1px solid #f1f5f9;">Contact name</td>
-                                    <td style="border-bottom: 1px solid #f1f5f9;">${leadNameCell}</td>
-                                </tr>
-                                <tr>
-                                    <td style="font-weight: bold; color: #64748b; border-bottom: 1px solid #f1f5f9;">Company</td>
-                                    <td style="border-bottom: 1px solid #f1f5f9;">${leadCompanyCell}</td>
-                                </tr>
-                                <tr>
-                                    <td style="font-weight: bold; color: #64748b; border-bottom: 1px solid #f1f5f9;">Lead Email</td>
-                                    <td style="border-bottom: 1px solid #f1f5f9; font-weight: bold;">${emailCell}</td>
-                                </tr>
-                                <tr>
-                                    <td style="font-weight: bold; color: #64748b; border-bottom: 1px solid #f1f5f9;">Foundation</td>
-                                    <td style="border-bottom: 1px solid #f1f5f9; text-transform: uppercase; font-weight: bold;">${foundationCell}</td>
-                                </tr>
-                                <tr>
-                                    <td style="font-weight: bold; color: #64748b; border-bottom: 1px solid #f1f5f9;">Modules</td>
-                                    <td style="border-bottom: 1px solid #f1f5f9;">${modulesStr || "None"}</td>
-                                </tr>
-                                <tr>
-                                    <td style="font-weight: bold; color: #64748b; border-bottom: 1px solid #f1f5f9;">Module quantities</td>
-                                    <td style="border-bottom: 1px solid #f1f5f9; font-size: 12px;">${quantitiesStr}</td>
-                                </tr>
-                                <tr>
-                                    <td style="font-weight: bold; color: #64748b; border-bottom: 1px solid #f1f5f9;">Shield tier id</td>
-                                    <td style="border-bottom: 1px solid #f1f5f9;">${shieldStr}</td>
-                                </tr>
-                                <tr>
-                                    <td style="font-weight: bold; color: #64748b; border-bottom: 1px solid #f1f5f9;">One-time total (GEL)</td>
-                                    <td style="border-bottom: 1px solid #f1f5f9;">${oneTimeStr}</td>
-                                </tr>
-                                <tr>
-                                    <td style="font-weight: bold; color: #64748b; border-bottom: 1px solid #f1f5f9;">Monthly total (GEL)</td>
-                                    <td style="border-bottom: 1px solid #f1f5f9;">${monthlyStr}</td>
-                                </tr>
-                            </table>
+<div style="font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: auto; background-color: #09090b; color: #fafafa; border: 1px solid #27272a; border-radius: 16px; overflow: hidden; padding: 24px;">
+    <!-- Executive Greeting -->
+    <div style="margin-bottom: 32px; border-bottom: 1px solid #27272a; padding-bottom: 16px;">
+        <h1 style="color: #ffffff; font-size: 20px; font-weight: 800; letter-spacing: -0.025em; margin: 0;">CONFIGURATION SECURED</h1>
+        <p style="color: #a1a1aa; font-size: 13px; margin: 4px 0 0 0;">Thank you for your configuration, ${leadNameCell || "Candidate"}. I am currently performing a technical audit of your digital infrastructure nodes for indexation.</p>
+    </div>
 
-                            <h4 style="margin: 20px 0 10px 0; color: #0f172a; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">Discovery Specification Answers</h4>
-                            <table border="0" cellpadding="8" cellspacing="0" style="width: 100%; border-collapse: collapse; font-size: 13px;">
-                                ${answerRows}
-                            </table>
-                        </div>
-                    </div>
-                `,
+    <div style="display: table; width: 100%; border-spacing: 0; border-collapse: separate;">
+        <!-- Cluster 1: BRAND STRATEGY -->
+        <div style="background-color: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 16px; margin-bottom: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+            <div style="color: #10b981; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">01 // BRAND STRATEGY</div>
+            <p style="color: #ffffff; font-size: 14px; font-weight: 600; font-style: italic; margin: 0 0 8px 0; border-left: 2px solid #10b981; padding-left: 8px;">&quot;${pitchCell}&quot;</p>
+            <div style="font-size: 12px; color: #a1a1aa;">
+                <strong>Company:</strong> ${leadCompanyCell}<br/>
+                <strong>Email:</strong> ${emailCell}
+            </div>
+        </div>
+
+        <!-- Cluster 2: TECHNICAL SPEC -->
+        <div style="background-color: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+            <div style="color: #10b981; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">02 // TECHNICAL SPECIFICATIONS</div>
+            <table border="0" cellpadding="4" cellspacing="0" style="width: 100%; font-size: 12px; color: #fafafa;">
+                <tr><td style="color: #a1a1aa; width: 40%;">Blueprint ID</td><td style="font-family: monospace; font-weight: bold; color: #10b981;">${blueprintCell}</td></tr>
+                <tr><td style="color: #a1a1aa;">Foundation</td><td style="text-transform: uppercase; font-weight: bold;">${foundationCell}</td></tr>
+                <tr><td style="color: #a1a1aa;">Shield Tier</td><td>${shieldStr}</td></tr>
+            </table>
+        </div>
+
+        <!-- Cluster 3: LOGIC NODES & FORECAST -->
+        <div style="background-color: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+            <div style="color: #10b981; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">03 // LOGIC NODES & FORECAST</div>
+            <div style="font-size: 12px; color: #e4e4e7; margin-bottom: 12px;"><strong>Modules:</strong> ${modulesStr || "Standard Frame"}</div>
+            <div style="background-color: #09090b; border: 1px solid #27272a; border-radius: 8px; padding: 12px; font-family: monospace;">
+                <div style="color: #10b981; font-size: 16px; font-weight: bold;">${oneTimeStr} ₾ <span style="font-size: 10px; color: #a1a1aa;">ONE-TIME</span></div>
+                <div style="color: #34d399; font-size: 14px; font-weight: bold; margin-top: 4px;">+ ${monthlyStr} ₾/mo <span style="font-size: 10px; color: #a1a1aa;">RECURRING</span></div>
+            </div>
+        </div>
+
+        <!-- Cluster 4: DISCOVERY ANSWERS -->
+        <div style="background-color: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 16px;">
+            <div style="color: #a1a1aa; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">EXTENDED AUDIT DETAILS</div>
+            <table border="0" cellpadding="6" cellspacing="0" style="width: 100%; border-collapse: collapse; font-size: 12px; color: #e4e4e7;">
+                ${answerRows}
+            </table>
+        </div>
+    </div>
+</div>
+        `,
       }),
     });
 

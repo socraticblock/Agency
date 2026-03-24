@@ -104,6 +104,7 @@ export default function SummaryDashboard({
 
   /** Name + company captured in VIP modal before analyze; email on handover */
   const [lead, setLead] = useState({ name: "", company: "", email: "" });
+  const [emailRequested, setEmailRequested] = useState(false);
 
   const handleEdit = (stepNum: 1 | 2 | 3 | 4 | 5, questionIndex?: number) => {
     goToStep(stepNum);
@@ -624,7 +625,11 @@ export default function SummaryDashboard({
                       <button
                         type="button"
                         onClick={() => {
-                          const msg = `Hi Kvali! This is ${lead.name.trim()} from ${lead.company.trim()}. I just finished my audit (ID: ${blueprintId}). Let's talk about my project!`;
+                        const nameStr = lead.name.trim() || "Candidate";
+                        const companyStr = lead.company.trim() || "my project";
+                        const msg = emailRequested && lead.email.trim()
+                          ? `Hey Genezisi, I'm ${nameStr} from ${companyStr}. I just secured my blueprint and requested the dossier via email. Let's discuss the logic here.`
+                          : `Hey Genezisi, I'm ${nameStr} from ${companyStr}. I just finished my configuration. Let's skip the paperwork and discuss the North Star here.`;
                           window.open(
                             `https://wa.me/${WHATSAPP_INTAKE}?text=${encodeURIComponent(msg)}`,
                             "_blank"
@@ -686,41 +691,66 @@ export default function SummaryDashboard({
 
               {/* Email only — name & company were captured at VIP check-in */}
               <div className="glass-card border border-white/5 bg-white/[0.02] p-6 rounded-2xl flex flex-col gap-4 relative overflow-hidden">
-                <div>
-                  <span className="text-[9px] font-black font-space text-slate-400 uppercase tracking-wider">
-                    📄 FULL PDF REPORT
-                  </span>
-                  <p className="text-sm font-bold text-white mt-0.5">Request your dossier by email</p>
-                  <p className="text-[11px] text-slate-400 mt-1">
-                    We&apos;ll send the complete architecture PDF to the address below.
-                  </p>
+                <div className="flex items-center justify-between pb-2 border-b border-white/5">
+                  <div>
+                    <span className="text-[9px] font-black font-space text-slate-400 uppercase tracking-wider">
+                      📄 FULL PDF REPORT
+                    </span>
+                    <p className="text-sm font-bold text-white mt-0.5">Discovery Dossier</p>
+                  </div>
+                  <label className="flex items-center gap-2 cursor-pointer group">
+                    <span className="text-[10px] text-slate-400 group-hover:text-emerald-400 transition-colors font-bold">
+                      Would you like a formal Discovery Dossier dispatched to your email?
+                    </span>
+                    <input
+                      type="checkbox"
+                      checked={emailRequested}
+                      onChange={(e) => setEmailRequested(e.target.checked)}
+                      className="accent-emerald-400 h-3.5 w-3.5 rounded border-white/10 bg-white/5"
+                    />
+                  </label>
                 </div>
 
-                <form onSubmit={handleLeadSubmit} className="space-y-3">
-                  <div className="relative w-full">
-                    <Mail className="absolute left-3 top-3.5 h-3.5 w-3.5 text-slate-500" />
-                    <input
-                      type="email"
-                      required
-                      placeholder="Professional email for PDF delivery"
-                      value={lead.email}
-                      onChange={(e) => setLead({ ...lead, email: e.target.value })}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-3 py-3 text-xs text-white focus:outline-none focus:border-emerald-400"
-                    />
-                  </div>
+                <AnimatePresence>
+                  {emailRequested && (
+                    <m.div
+                      initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                      animate={{ opacity: 1, height: "auto", marginTop: 4 }}
+                      exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                      transition={{ duration: 0.3, ease: "easeInOut" }}
+                      className="overflow-hidden space-y-3"
+                    >
+                      <p className="text-[11px] text-slate-400">
+                        We&apos;ll send the complete architecture PDF to the address below.
+                      </p>
+                      <form onSubmit={handleLeadSubmit} className="space-y-3">
+                        <div className="relative w-full">
+                          <Mail className="absolute left-3 top-3.5 h-3.5 w-3.5 text-slate-500" />
+                          <input
+                            type="email"
+                            required
+                            placeholder="Professional email for PDF delivery"
+                            value={lead.email}
+                            onChange={(e) => setLead({ ...lead, email: e.target.value })}
+                            className="w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-3 py-3 text-xs text-white focus:outline-none focus:border-emerald-400"
+                          />
+                        </div>
 
-                  {submitError && (
-                    <p className="text-xs text-red-400 font-bold">{submitError}</p>
+                        {submitError && (
+                          <p className="text-xs text-red-400 font-bold">{submitError}</p>
+                        )}
+
+                        <button
+                          type="submit"
+                          disabled={isSubmitting}
+                          className="w-full py-2.5 bg-white/5 border border-white/10 rounded-xl text-white font-space font-black text-xs uppercase hover:bg-white/10 transition-all flex items-center justify-center gap-1.5"
+                        >
+                          {isSubmitting ? "Sending…" : "Request PDF dossier"}
+                        </button>
+                      </form>
+                    </m.div>
                   )}
-
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full py-2.5 bg-white/5 border border-white/10 rounded-xl text-white font-space font-black text-xs uppercase hover:bg-white/10 transition-all flex items-center justify-center gap-1.5"
-                  >
-                    {isSubmitting ? "Sending…" : "Request PDF dossier"}
-                  </button>
-                </form>
+                </AnimatePresence>
               </div>
             </div>
           </m.div>
