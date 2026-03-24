@@ -16,13 +16,9 @@ export function ScrollReveal({ children, className = "" }: ScrollRevealProps) {
     offset: ["start end", "end start"],
   });
 
-  // Entry: dim + small + pushed down → full + normal
-  // Exit:  full + normal → dim + small + pushed up
-  const opacity = useTransform(
-    scrollYProgress,
-    [0, 0.2, 0.8, 1],
-    [0.15, 1, 1, 0.15]
-  );
+  // Entry/exit: scale + translate only. Avoid scroll-linked opacity: before Framer’s
+  // scroll measurements (or on very slow dev/LAN hydration), a low opacity floor
+  // left sections looking “ghosted” while content was otherwise ready.
   const scale = useTransform(
     scrollYProgress,
     [0, 0.2, 0.8, 1],
@@ -37,7 +33,7 @@ export function ScrollReveal({ children, className = "" }: ScrollRevealProps) {
   return (
     <motion.div
       ref={ref}
-      style={{ opacity, scale, y, willChange: "transform, opacity" }}
+      style={{ scale, y, willChange: "transform" }}
       className={className}
     >
       {children}

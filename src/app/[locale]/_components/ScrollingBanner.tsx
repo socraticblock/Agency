@@ -1,6 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { Twitter, Users, Instagram, Youtube, Briefcase, Camera, GraduationCap, ShoppingBag } from "lucide-react";
 
 const items = [
@@ -20,15 +17,7 @@ export function ScrollingBanner() {
 
   return (
     <div className="w-full border-y border-teal-500/10 bg-slate-950/20 py-5 select-none z-20 relative overflow-hidden">
-      <motion.div 
-        className="w-max flex items-center whitespace-nowrap"
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{
-          repeat: Infinity,
-          ease: "linear",
-          duration: 35,
-        }}
-      >
+      <div className="scrolling-banner-track flex items-center whitespace-nowrap">
         {duplicatedItems.map((item, index) => {
           const Icon = item.icon;
           return (
@@ -44,7 +33,7 @@ export function ScrollingBanner() {
             </div>
           );
         })}
-      </motion.div>
+      </div>
     </div>
   );
 }

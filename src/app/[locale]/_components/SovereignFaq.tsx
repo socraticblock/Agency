@@ -44,7 +44,7 @@ export function SovereignFaq({ locale }: { locale: Locale }) {
     <section className="relative mx-auto max-w-4xl px-4 pb-24 pt-10 sm:px-6">
       <div className="mb-10 text-center">
         <motion.p
-          initial={{ opacity: 0, y: 8 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-20px" }}
           transition={{ duration: 0.4 }}
@@ -67,7 +67,7 @@ export function SovereignFaq({ locale }: { locale: Locale }) {
           return (
             <motion.article
               key={id}
-              initial={{ opacity: 0, y: 24 }}
+              initial={false}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.15 }}
               transition={{

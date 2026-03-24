@@ -67,7 +67,7 @@ export function KineticHero({ locale }: { locale: Locale }) {
         className="flex flex-col items-center"
       >
         <motion.div
-          initial="hidden"
+          initial={false}
           animate="visible"
           variants={{
             hidden: { opacity: 0 },

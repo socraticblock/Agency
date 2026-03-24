@@ -89,7 +89,7 @@ export function SovereignTriptych({ dict }: { dict: any }) {
     <section id="footprint" className="mx-auto max-w-6xl px-4 pb-24 pt-10 sm:px-6">
       <div className="mx-auto max-w-3xl text-center mb-16">
         <motion.p
-          initial={{ opacity: 0, y: 8 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-400"
@@ -103,7 +103,7 @@ export function SovereignTriptych({ dict }: { dict: any }) {
           className="mt-3 justify-center text-2xl font-space font-bold text-white sm:text-4xl"
         />
         <motion.p
-          initial={{ opacity: 0, y: 8 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}

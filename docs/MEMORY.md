@@ -13,6 +13,7 @@
 - [011] Discovery → step 5: `isAnswerValidForDiscoveryQuestion` aligns Continue/keyboard with `isDiscoveryComplete` (fixes color_palette drift); `goToStep` returns boolean; Generate Blueprint gated on full completion + user-visible errors if navigation blocked.
 - [012] Dead-code trim: removed `@upstash/redis`, `nanoid`; deleted unused `StepNavigation`, `SummarySidebar`, `lib/agents/*`, `lib/services/sovereignModel`; dropped empty `agents`/`services` dirs.
 - [013] Architect blueprint: no Redis/server blob; `KV-` id from `sessionStorage` via `clientBlueprintId`; handover + WhatsApp use client id; PDF request uses `POST /api/blueprint` with `blueprintId` + contact + full audit; removed `blueprintStore`, `/api/architect-blueprint`, `saveBlueprint`, `ioredis`.
+- [014] Slow dev/LAN hydration: hero + scroll sections used Framer `initial` opacity 0 and `ScrollReveal` opacity floor 0.15; fixed with `initial={false}` on critical motion + scroll-only scale/y (no opacity dimming).
 
 # Detailed Observations
 
@@ -80,3 +81,8 @@
 - **Context:** User wanted no server-side blueprint storage; email/WhatsApp + client as truth; stable blueprint id per browser tab for manual CRM; remove Redis entirely.
 - **Decision:** Added `src/lib/blueprint/clientBlueprintId.ts` (`getOrCreateBlueprintId`, `clearBlueprintSessionId`, `sessionStorage` key `kvali_architect_blueprint_id`); `SummaryDashboard` no longer POSTs to `/api/architect-blueprint`—finalize runs analyzer then sets id from client helper; `PATCH` replaced by `POST /api/blueprint` including `blueprintId`, `leadName`, `leadCompany` plus existing audit fields; email template adds Blueprint ID / name / company rows and subject prefix; deleted `blueprintStore.ts`, `/api/architect-blueprint`, `saveBlueprint` actions; `useConfigurator` `clearConfiguration` clears session blueprint id; removed `ioredis` from `package.json`.
 - **Impact:** No Redis or in-memory blueprint map on server; `npm` smaller; operator must use Resend email for full dossier; same tab re-finalize reuses id until session cleared or full reset.
+
+## [014]
+- **Context:** Mobile testing against `next dev` over LAN showed missing hero headline and ghosted accordions while localhost and Vercel looked fine.
+- **Decision:** Hero headline variant container uses `initial={false}`; `ScrollReveal` drops scroll-linked opacity (keeps scale/y); `KineticText`, `SovereignFaq`, and `SovereignTriptych` `whileInView` blocks use `initial={false}` so content is not stuck at opacity 0 before motion runs.
+- **Impact:** Above-the-fold and in-section text stay readable when dev bundles hydrate slowly; slight reduction in fade-in staging on first paint; production behavior remains acceptable.

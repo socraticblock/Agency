@@ -19,10 +19,10 @@ function NetworkGridModel() {
       for (let i = 0; i < position.count; i++) {
         const x = position.getX(i);
         const y = position.getY(i);
-        
-        const z = Math.sin(x * 0.4 + time * 0.5) * 0.4 + 
-                  Math.cos(y * 0.4 + time * 0.6) * 0.4;
-                  
+
+        const z = Math.sin(x * 0.4 + time * 0.5) * 0.4 +
+          Math.cos(y * 0.4 + time * 0.6) * 0.4;
+
         position.setZ(i, z);
       }
       position.needsUpdate = true;
@@ -33,21 +33,21 @@ function NetworkGridModel() {
     <group rotation={[-Math.PI / 3.5, 0, Math.PI / 12]} position={[0, -1, -1]}>
       <mesh ref={meshRef}>
         <planeGeometry ref={geomRef} args={[24, 24, 20, 20]} />
-        <meshStandardMaterial 
-          color="#10b981" 
-          wireframe 
-          transparent 
-          opacity={0.2} 
+        <meshStandardMaterial
+          color="#10b981"
+          wireframe
+          transparent
+          opacity={0.2}
           emissive="#10b981"
           emissiveIntensity={1.2}
         />
       </mesh>
       <points>
         <planeGeometry args={[24, 24, 20, 20]} />
-        <pointsMaterial 
-          color="#10b981" 
-          size={0.04} 
-          transparent 
+        <pointsMaterial
+          color="#10b981"
+          size={0.04}
+          transparent
           opacity={0.5}
           sizeAttenuation
         />

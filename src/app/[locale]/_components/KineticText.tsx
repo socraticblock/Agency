@@ -51,7 +51,7 @@ export function KineticText({
   return (
     <motion.div
       variants={container}
-      initial="hidden"
+      initial={false}
       whileInView="visible"
       viewport={{ once: true, margin: "-10%" }}
       style={{
