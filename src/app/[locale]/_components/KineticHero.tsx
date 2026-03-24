@@ -82,7 +82,7 @@ export function KineticHero({ locale }: { locale: Locale }) {
             </motion.span>
           ))}
         </motion.div>
-        
+
         <motion.h2 className="mt-2 max-w-xl text-base font-bold text-emerald-400 font-space leading-tight sm:text-lg text-center opacity-95">
           {t.hero.h2}
         </motion.h2>
