@@ -155,12 +155,12 @@ export default function DiscoveryModule({
   return (
     <div className="flex-1 w-full max-w-4xl mx-auto py-8 lg:py-16">
 
-      <div className="glass-card relative rounded-[2rem] p-8 md:p-14 shadow-2xl overflow-hidden border border-emerald-500/10 bg-zinc-950/80 backdrop-blur-2xl min-h-[500px] flex flex-col">
+      <div className="glass-card relative rounded-[2rem] p-5 md:p-14 shadow-2xl overflow-hidden border border-emerald-500/10 bg-zinc-950/80 backdrop-blur-2xl min-h-[400px] md:min-h-[500px] flex flex-col">
         {/* Glow Effects */}
         <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-500/5 blur-[100px] pointer-events-none" />
 
         {/* Segmented Progress Bar */}
-        <div className="absolute top-0 left-0 w-full px-8 md:px-14 pt-6 flex gap-1.5 z-20">
+        <div className="absolute top-0 left-0 w-full px-5 md:px-14 pt-6 flex gap-1.5 z-20">
           {QUESTIONS.map((_, i) => (
             <div key={i} className={`h-1 flex-1 rounded-full transition-all duration-500 ${i < safeStep ? "bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"
                 : i === safeStep ? "bg-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.8)]"
@@ -192,7 +192,7 @@ export default function DiscoveryModule({
               )}
             </div>
 
-            <div className="mt-10 flex-grow flex flex-col justify-center">
+            <div className="mt-6 md:mt-10 flex-grow flex flex-col justify-center">
 
               {/* === CARDS === */}
               {q.type === "cards" && (
@@ -204,7 +204,7 @@ export default function DiscoveryModule({
                       <button
                         key={opt.value}
                         onClick={() => handleSelect(q.id, opt.value)}
-                        className={`group relative text-left p-6 md:p-8 rounded-2xl transition-all duration-300 overflow-hidden ${isSelected
+                        className={`group relative text-left p-5 md:p-8 rounded-2xl transition-all duration-300 overflow-hidden ${isSelected
                             ? "bg-emerald-500/10 border-2 border-emerald-500 shadow-[inset_0_0_30px_rgba(16,185,129,0.1)]"
                             : "bg-zinc-900/40 hover:bg-zinc-800/80 border border-white/10 hover:border-emerald-500/40"
                           }`}
@@ -396,7 +396,7 @@ export default function DiscoveryModule({
         </AnimatePresence>
 
         {/* Footer Navigation */}
-        <div className="z-20 mt-12 flex flex-col gap-4 border-t border-white/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
+        <div className="z-20 mt-8 md:mt-12 flex flex-col gap-4 border-t border-white/10 pt-6 md:pt-8 sm:flex-row sm:items-center sm:justify-between">
           <button
             type="button"
             onClick={handlePrev}

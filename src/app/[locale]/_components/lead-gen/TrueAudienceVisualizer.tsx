@@ -32,8 +32,8 @@ export function TrueAudienceVisualizer({ locale }: TrueAudienceVisualizerProps) 
   }, [activeDots, maxDots]);
 
   return (
-    <div className="clay-card clay-card-hover mx-auto max-w-3xl border-emerald-500/40 p-6 shadow-2xl shadow-[inset_0_1px_0_0_rgba(16,185,129,0.2),0_0_30px_rgba(16,185,129,0.15)] sm:p-10">
-      <div className="mb-8 text-center">
+    <div className="clay-card clay-card-hover mx-auto max-w-3xl border-emerald-500/40 p-5 md:p-10 shadow-2xl shadow-[inset_0_1px_0_0_rgba(16,185,129,0.2),0_0_30px_rgba(16,185,129,0.15)] md:p-10">
+      <div className="mb-6 md:mb-8 text-center">
         <h2 className="text-2xl font-bold text-slate-100 sm:text-3xl">
           {t.leadTools?.audience?.title ?? 'Your audience, visualised'}
         </h2>
@@ -42,7 +42,7 @@ export function TrueAudienceVisualizer({ locale }: TrueAudienceVisualizerProps) 
         </p>
       </div>
 
-      <div className="grid gap-8 md:grid-cols-2">
+      <div className="grid gap-5 md:gap-8 md:grid-cols-2">
         {/* Controls */}
         <div className="space-y-6">
           <div>

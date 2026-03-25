@@ -3,7 +3,7 @@
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
-interface KvaliSliderProps {
+interface GenezisiSliderProps {
   label: string;
   value: number;
   min: number;
@@ -14,7 +14,7 @@ interface KvaliSliderProps {
   formatValue?: (val: number) => string;
 }
 
-export function KvaliSlider({
+export function GenezisiSlider({
   label,
   value,
   min,
@@ -23,7 +23,7 @@ export function KvaliSlider({
   onChange,
   suffix = "",
   formatValue,
-}: KvaliSliderProps) {
+}: GenezisiSliderProps) {
   const [isTapping, setIsTapping] = useState(false);
   const percentage = ((value - min) / (max - min)) * 100;
 

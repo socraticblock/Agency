@@ -1,4 +1,4 @@
-export const kvaliTheme = {
+export const genezisiTheme = {
   colors: {
     background: "#050505",
     accent: "#00FF41",

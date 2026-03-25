@@ -1,4 +1,4 @@
-export const KVALI_LEAD_KEY = "kvali_lead" as const;
+export const GENEZISI_LEAD_KEY = "genezisi_lead" as const;
 
 export type ApplyLeadSession = {
   source: "apply";

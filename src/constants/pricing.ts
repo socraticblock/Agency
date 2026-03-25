@@ -258,7 +258,7 @@ export const MODULES: Module[] = [
     category: 'Marketing',
     name: 'Legacy SEO Migration & Audit',
     priceGEL: 800,
-    whatItIs: `A deep-cycle technical audit and data-preservation map of your current digital footprint. We analyze every existing URL, keyword ranking, and backlink your business currently owns to ensure your transition to the Kvali infrastructure is mathematically flawless.`,
+    whatItIs: `A deep-cycle technical audit and data-preservation map of your current digital footprint. We analyze every existing URL, keyword ranking, and backlink your business currently owns to ensure your transition to the Genezisi infrastructure is mathematically flawless.`,
     howItHelps: `It provides SEO Insurance. Moving to a new site without a migration map is the #1 way businesses lose 50–80% of their Google traffic overnight. We build a '301-Redirect Bridge' that tells Google exactly where your old pages went, preserving your authority and ensuring your ranking growth continues from day one without a reset.`
   },
   {

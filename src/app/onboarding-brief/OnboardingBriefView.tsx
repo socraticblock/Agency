@@ -91,7 +91,7 @@ export default function OnboardingBriefView() {
               queue.
             </p>
             <p className="mt-4 text-sm font-semibold text-emerald-400">
-              — The Kvali Team
+              — The Genezisi Team
             </p>
           </section>
         </div>

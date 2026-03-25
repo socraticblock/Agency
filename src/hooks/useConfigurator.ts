@@ -9,7 +9,7 @@ import {
 } from "@/lib/discovery/buildDiscoveryQuestions";
 import { z } from "zod";
 
-const STORAGE_KEY = "kvali_architect_config";
+const STORAGE_KEY = "genezisi_architect_config";
 
 const configSchema = z.object({
   step: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)]).optional(),

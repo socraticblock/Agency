@@ -11,7 +11,7 @@ import {
   isBookStrategySuccess,
 } from "@/lib/formActionState";
 import {
-  KVALI_LEAD_KEY,
+  GENEZISI_LEAD_KEY,
   parseLeadSession,
   type LeadSessionPayload,
 } from "@/lib/leadSession";
@@ -27,7 +27,7 @@ export function BookStrategyView({ locale }: { locale: Locale }) {
 
   useEffect(() => {
     try {
-      const parsed = parseLeadSession(sessionStorage.getItem(KVALI_LEAD_KEY));
+      const parsed = parseLeadSession(sessionStorage.getItem(GENEZISI_LEAD_KEY));
       startTransition(() => {
         setLeadSession(parsed);
         if (parsed?.source === "lead-tool") {

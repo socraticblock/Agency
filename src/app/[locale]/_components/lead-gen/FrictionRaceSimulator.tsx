@@ -43,8 +43,8 @@ export function FrictionRaceSimulator({ locale }: FrictionRaceSimulatorProps) {
     ];
 
   return (
-    <div className="clay-card clay-card-hover mx-auto max-w-4xl border-emerald-500/40 p-6 shadow-2xl shadow-[inset_0_1px_0_0_rgba(16,185,129,0.2),0_0_30px_rgba(16,185,129,0.15)] sm:p-10">
-      <div className="mb-8 text-center">
+    <div className="clay-card clay-card-hover mx-auto max-w-4xl border-emerald-500/40 p-5 md:p-10 shadow-2xl shadow-[inset_0_1px_0_0_rgba(16,185,129,0.2),0_0_30px_rgba(16,185,129,0.15)] md:p-10">
+      <div className="mb-6 md:mb-8 text-center">
         <h2 className="text-2xl font-bold text-slate-100 sm:text-3xl">
           {t.leadTools?.friction?.title ?? 'The "Link-in-Bio" Race'}
         </h2>
@@ -53,7 +53,7 @@ export function FrictionRaceSimulator({ locale }: FrictionRaceSimulatorProps) {
         </p>
       </div>
 
-      <div className="mb-8 flex justify-center">
+      <div className="mb-6 md:mb-8 flex justify-center">
         <button
           onClick={(e) => {
             e.stopPropagation();
@@ -70,14 +70,14 @@ export function FrictionRaceSimulator({ locale }: FrictionRaceSimulatorProps) {
         </button>
       </div>
 
-      <div className="grid gap-8 md:grid-cols-2">
+      <div className="grid gap-5 md:gap-8 md:grid-cols-2">
         {/* Standard Route */}
         <div className="rounded-2xl border border-red-500/20 bg-red-500/5 p-6 backdrop-blur-sm">
           <h3 className="mb-4 text-center text-xs font-black font-space uppercase tracking-wider text-red-300 flex items-center justify-center gap-1.5">
             <div className="h-1.5 w-1.5 rounded-full bg-red-400 animate-pulse" />
             {t.leadTools?.friction?.standardRouteTitle ?? "Standard Setup"}
           </h3>
-          <div className="relative h-64 overflow-hidden rounded-xl border border-white/5 bg-black/40 p-4 flex items-center justify-center">
+          <div className="relative h-48 md:h-64 overflow-hidden rounded-xl border border-white/5 bg-black/40 p-4 flex items-center justify-center">
             <AnimatePresence mode="popLayout">
               {raceStep > 0 && (
                 <motion.div
@@ -112,17 +112,17 @@ export function FrictionRaceSimulator({ locale }: FrictionRaceSimulatorProps) {
           </div>
         </div>
 
-        {/* Kvali Route */}
+        {/* Genezisi Route */}
         <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-6 backdrop-blur-sm">
           <h3 className="mb-4 text-center text-xs font-black font-space uppercase tracking-wider text-emerald-300 flex items-center justify-center gap-1.5">
             <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
             {t.leadTools?.friction?.premiumRouteTitle ?? "Premium Storefront"}
           </h3>
-          <div className="relative h-64 overflow-hidden rounded-xl border border-white/5 bg-black/40 p-4 flex items-center justify-center">
+          <div className="relative h-48 md:h-64 overflow-hidden rounded-xl border border-white/5 bg-black/40 p-4 flex items-center justify-center">
             <AnimatePresence mode="popLayout">
               {raceStep > 0 && (
                 <motion.div
-                  key="kvali-done"
+                  key="genezisi-done"
                   initial={{ opacity: 0, scale: 0.9, filter: "blur(4px)" }}
                   animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
                   transition={{ type: "spring", stiffness: 300, damping: 25 }}

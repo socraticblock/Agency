@@ -251,7 +251,7 @@ export const en = {
     subheading: "Let's look at what a dedicated infrastructure could add to your current success.",
     sliderLabel: "Current monthly revenue (thousands GEL)",
     potentialLoss: "Potential additional revenue per year",
-    kvaliRecovered: "What we aim to help you capture",
+    genezisiRecovered: "What we aim to help you capture",
     valueTagline: "A great website isn't an expense. It's your best employee.",
     speedTip: "A fast, beautiful site respects your customers' time and builds instant trust.",
   },
@@ -314,7 +314,7 @@ export const en = {
         "See what happens when you remove friction from your customers' buying journey.",
       monthlyLabel: "Monthly Revenue (GEL)",
       potentialLoss: "Potential Annual Growth",
-      kvaliRecovered: "What We Aim to Capture",
+      genezisiRecovered: "What We Aim to Capture",
       disclaimer:
         "Based on conversion research from Google, Deloitte, and Forrester.",
     },

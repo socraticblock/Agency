@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-const APPLY_TITLE = "Apply for a Digital Audit | Kvali Digital";
+const APPLY_TITLE = "Apply for a Digital Audit | Genezisi Digital";
 const APPLY_DESCRIPTION =
   "Join an elite group of Georgian businesses utilizing high-performance revenue infrastructure.";
 

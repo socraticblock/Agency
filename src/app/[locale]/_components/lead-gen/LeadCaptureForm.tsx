@@ -9,7 +9,7 @@ import {
   isLeadCaptureError,
   isLeadCaptureSuccess,
 } from "@/lib/formActionState";
-import { KVALI_LEAD_KEY } from "@/lib/leadSession";
+import { GENEZISI_LEAD_KEY } from "@/lib/leadSession";
 import { MagneticButton } from "../MagneticButton";
 
 interface LeadCaptureFormProps {
@@ -35,7 +35,7 @@ export function LeadCaptureForm({
 
     try {
       sessionStorage.setItem(
-        KVALI_LEAD_KEY,
+        GENEZISI_LEAD_KEY,
         JSON.stringify({
           source: "lead-tool",
           toolName,

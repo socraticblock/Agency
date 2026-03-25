@@ -220,11 +220,11 @@ export default memo(function ConfigSidebar({
 
       </div>
 
-      {/* The Kvali Engineering Standard Banner */}
+      {/* The Genezisi Engineering Standard Banner */}
       <div className="p-3 bg-zinc-900/40 rounded-xl border border-zinc-800/40 flex flex-col gap-2 backdrop-blur-md mb-2 mt-2">
         <div>
           <span className="text-xs font-black font-space text-emerald-400 uppercase tracking-wider flex items-center gap-1" style={{ WebkitTextStroke: "0.3px rgba(0,0,0,0.8)", textShadow: "0px 1px 3px rgba(0,0,0,0.9)" }}>
-            <Sparkles className="h-3.5 w-3.5" /> THE KVALI ENGINEERING STANDARD
+            <Sparkles className="h-3.5 w-3.5" /> THE GENEZISI ENGINEERING STANDARD
           </span>
           <p className="text-[11px] text-slate-400 font-medium mt-0.5">Headache-Free implementation built into every base:</p>
         </div>

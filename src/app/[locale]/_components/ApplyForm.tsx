@@ -26,7 +26,7 @@ export function ApplyForm({ locale }: { locale: Locale }) {
     // Submit the form data
     try {
       sessionStorage.setItem(
-        "kvali_lead",
+        "genezisi_lead",
         JSON.stringify({
           source: "apply",
           businessName,

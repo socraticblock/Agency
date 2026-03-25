@@ -78,7 +78,7 @@ export function SovereignTriptych({ dict }: { dict: any }) {
       hook: t.sovereign.vaultHook,
       body: t.sovereign.vaultBody,
       features: t.sovereign.vaultFeatures,
-      source: "*Note: AI Agent deployment requires an external API subscription (e.g., OpenAI) and may incur third-party messaging fees (WhatsApp Business API). Kvali handles the architectural training and integration; usage-based costs are billed directly by the providers.",
+      source: "*Note: AI Agent deployment requires an external API subscription (e.g., OpenAI) and may incur third-party messaging fees (WhatsApp Business API). Genezisi handles the architectural training and integration; usage-based costs are billed directly by the providers.",
       Component: VaultVisual,
     },
   ];
@@ -300,10 +300,15 @@ export function SovereignTriptych({ dict }: { dict: any }) {
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
+              layout
               initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
+              animate={{ opacity: 1, x: 0, height: "auto" }}
               exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.35, ease: "easeOut" }}
+              transition={{ 
+                duration: 0.35, 
+                ease: "easeOut",
+                height: { duration: 0.3 }
+              }}
               className="glass-card static md:sticky md:top-24 rounded-3xl p-8 shadow-[0_0_40px_rgba(16,185,129,0.08)] backdrop-blur-md border border-white/10 flex flex-col justify-between overflow-hidden group min-h-[400px]"
             >
               <div className="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(circle_at_center,_rgba(16,185,129,0.4),_transparent_60%)]" />
@@ -334,10 +339,8 @@ export function SovereignTriptych({ dict }: { dict: any }) {
               </div>
 
               {/* Dynamic Visual Indicator at Bottom */}
-              <div className="relative mt-5 h-60 w-full overflow-hidden rounded-xl glass-card">
-                <div className="absolute inset-0 flex items-center justify-center p-2">
-                  <activeStage.Component />
-                </div>
+              <div className="relative mt-5 min-h-[240px] w-full glass-card flex items-center justify-center p-4">
+                <activeStage.Component />
               </div>
             </motion.div>
           </AnimatePresence>

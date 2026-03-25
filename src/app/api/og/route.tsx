@@ -7,17 +7,17 @@ const H = 630;
 
 function siteHostname(): string {
   const raw = process.env.NEXT_PUBLIC_SITE_URL;
-  if (!raw) return "kvali.digital";
+  if (!raw) return "genezisi.digital";
   try {
-    return new URL(raw).hostname.replace(/^www\./, "") || "kvali.digital";
+    return new URL(raw).hostname.replace(/^www\./, "") || "genezisi.digital";
   } catch {
-    return "kvali.digital";
+    return "genezisi.digital";
   }
 }
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const rawTitle = searchParams.get("title")?.trim() || "Kvali Digital";
+  const rawTitle = searchParams.get("title")?.trim() || "Genezisi Digital";
   const title = rawTitle.slice(0, 72);
   const tagline =
     "Permanent digital infrastructure — not rented social reach.";
@@ -59,7 +59,7 @@ export async function GET(request: Request) {
               boxShadow: "0 0 24px rgba(16,185,129,0.9)",
             }}
           />
-          KVALI DIGITAL
+          GENEZISI DIGITAL
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           <div
