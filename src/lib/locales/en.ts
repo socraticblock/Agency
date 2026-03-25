@@ -131,6 +131,7 @@ export const en = {
       "Total Digital Autonomy"
     ],
 
+    interceptTitle: "Frictionless Commerce",
     interceptBody: "Remove the delay between 'I want this' and 'I bought this'. You can choose to deploy a 2-click, secure checkout experience using TBC or Bank of Georgia.",
     interceptHook: "While most are still stuck in manual bank transfers and banking bureaucracy, you can choose to deploy a professional checkout.",
     interceptFeatures: [
