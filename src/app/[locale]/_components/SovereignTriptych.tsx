@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useMotionValue, useTransform, animate } from "framer-motion";
 // removed static i18n imports to decouple client bundle weights
 import { Lock, CreditCard, MessageSquare, CheckCircle2, Layout, Zap, Target } from "lucide-react";
@@ -84,11 +84,43 @@ export function SovereignTriptych({ dict }: { dict: any }) {
   ];
 
   const activeStage = FEATURES.find((s) => s.key === activeTab)!;
+  const mobileRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
+  const handleMobileClick = (key: string) => {
+    setActiveTabMobile(activeTabMobile === key ? null : key);
+    setActiveTab(key);
+  };
+
+  useEffect(() => {
+    if (activeTabMobile) {
+      const element = mobileRefs.current[activeTabMobile];
+      if (element) {
+        // Global Focus Lock: Consistent 300ms delay to allow expansion
+        const scrollDelay = 220;
+
+        setTimeout(() => {
+          const navbarHeight = 120; // Increased buffer (Lead Frontend Engineer directive)
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth",
+          });
+        }, scrollDelay);
+      }
+    }
+  }, [activeTabMobile]);
 
   return (
-    <section
+    <motion.section
       id="footprint"
-      className="scroll-anchor-target mx-auto max-w-6xl px-4 pb-24 pt-10 sm:px-6"
+      initial={false}
+      animate={{ 
+        paddingBottom: activeTabMobile === "vault" ? "30vh" : "6rem" // 6rem matches pb-24
+      }}
+      transition={{ duration: 0.4, ease: "easeInOut" }}
+      className="scroll-anchor-target mx-auto max-w-6xl px-4 pt-10 sm:px-6 relative"
     >
       <div className="mx-auto max-w-3xl text-center mb-16">
         <motion.p
@@ -125,13 +157,14 @@ export function SovereignTriptych({ dict }: { dict: any }) {
             const isActive = activeTabMobile === stage.key;
 
             return (
-              <div key={stage.key} className="p-0.5">
+              <div
+                key={stage.key}
+                className="p-0.5 scroll-mt-32"
+                ref={(el) => { mobileRefs.current[stage.key] = el; }}
+              >
                 <motion.button
                   type="button"
-                  onClick={() => {
-                    setActiveTabMobile(isActive ? null : stage.key);
-                    setActiveTab(stage.key); // keep desktop state synced just in case
-                  }}
+                  onClick={() => handleMobileClick(stage.key)}
                   className={`relative w-full touch-manipulation cursor-pointer rounded-xl p-4 text-left transition-all glass-card ${isActive
                     ? "shadow-[0_0_25px_rgba(16,185,129,0.12)] z-10"
                     : "opacity-70 hover:opacity-100 glass-card-hover"
@@ -143,7 +176,7 @@ export function SovereignTriptych({ dict }: { dict: any }) {
                         <Icon className="h-4 w-4" />
                       </div>
                       <div>
-                        <h3 className={`font-space text-sm font-bold transition-colors ${isActive ? "text-emerald-300" : "text-white"}`}>
+                        <h3 className={`font-space text-sm font-bold pt-2 transition-colors ${isActive ? "text-emerald-300" : "text-white"}`}>
                           {stage.title}
                         </h3>
                         <AnimatePresence>
@@ -310,7 +343,13 @@ export function SovereignTriptych({ dict }: { dict: any }) {
           </AnimatePresence>
         </div>
       </div>
-    </section>
+
+      {/* Luxury Bridge: Chapter Break to Roadmap */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none overflow-hidden select-none">
+        <div className="h-full w-full bg-gradient-to-b from-transparent via-emerald-500/[0.02] to-emerald-500/5 opacity-50" />
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-px bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent" />
+      </div>
+    </motion.section>
   );
 }
 

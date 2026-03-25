@@ -79,7 +79,7 @@ export function TimeDebtReceipt({ locale }: TimeDebtReceiptProps) {
             {t.calcReceipt.calculateBtn}
           </button>
 
-          <AuditCitation 
+          <AuditCitation
             dataPoint="Context switching costs 23 minutes of focus per interruption."
             explanation="Every time you pause deep work to answer a basic 'how much is this?' DM, you pay a massive Time Debt. Research shows it takes the human brain an average of 23 minutes to fully recover focus after a single context switch."
             source="UC Irvine 'The Cost of Interrupted Work' Study"

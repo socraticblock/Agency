@@ -149,7 +149,7 @@ export function LostWeekendCalculator({ locale }: LostWeekendCalculatorProps) {
             </svg>
             <div className="text-center z-10">
               <span className="block text-xs uppercase tracking-wider text-slate-400">{t.midnightCalc.lostToday}</span>
-              <motion.span 
+              <motion.span
                 className="block text-2xl font-bold text-amber-400 font-mono"
                 animate={{
                   scale: [1, 1.02, 1],

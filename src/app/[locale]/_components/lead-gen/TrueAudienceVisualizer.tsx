@@ -92,7 +92,7 @@ export function TrueAudienceVisualizer({ locale }: TrueAudienceVisualizerProps) 
             </p>
           </div>
 
-          <AuditCitation 
+          <AuditCitation
             dataPoint={t.leadTools?.audience?.citationPoint}
             explanation={t.leadTools?.audience?.citationExplanation}
             source={t.leadTools?.audience?.citationSource}
