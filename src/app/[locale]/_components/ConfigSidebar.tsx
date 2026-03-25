@@ -77,8 +77,9 @@ export default memo(function ConfigSidebar({
             Live Total Updates
           </h4>
           <button
+            type="button"
             onClick={() => setIsUSD(!isUSD)}
-            className="px-2 py-0.5 rounded-md border border-zinc-700 bg-zinc-800 flex items-center gap-1 text-xs font-bold text-slate-400 hover:text-slate-200 transition-colors"
+            className="flex min-h-10 min-w-[4.5rem] items-center justify-center gap-1 rounded-md border border-zinc-700 bg-zinc-800 px-3 text-xs font-bold text-slate-400 transition-colors hover:text-slate-200"
           >
             <Globe className="h-2.5 w-2.5" /> {isUSD ? "USD" : "GEL"}
           </button>

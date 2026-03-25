@@ -116,7 +116,7 @@ export default function OnboardingPortal({ sessionId }: Props) {
                   onChange={(e) =>
                     setFormData((d) => ({ ...d, brandColor: e.target.value }))
                   }
-                  className="w-full border-b border-white/10 bg-transparent py-4 font-mono outline-none focus:border-emerald-500"
+                  className="touch-form-control w-full border-b border-white/10 bg-transparent py-4 font-mono text-base outline-none focus:border-emerald-500"
                 />
               </div>
             )}
@@ -130,7 +130,7 @@ export default function OnboardingPortal({ sessionId }: Props) {
                   onChange={(e) =>
                     setFormData((d) => ({ ...d, instagram: e.target.value }))
                   }
-                  className="w-full border-b border-white/10 bg-transparent py-4 font-mono outline-none focus:border-emerald-500"
+                  className="touch-form-control w-full border-b border-white/10 bg-transparent py-4 font-mono text-base outline-none focus:border-emerald-500"
                 />
                 <input
                   type="text"
@@ -139,7 +139,7 @@ export default function OnboardingPortal({ sessionId }: Props) {
                   onChange={(e) =>
                     setFormData((d) => ({ ...d, pixelId: e.target.value }))
                   }
-                  className="w-full border-b border-white/10 bg-transparent py-4 font-mono outline-none focus:border-emerald-500"
+                  className="touch-form-control w-full border-b border-white/10 bg-transparent py-4 font-mono text-base outline-none focus:border-emerald-500"
                 />
                 <p className="text-[10px] uppercase text-zinc-600">
                   Note: Our architect will request collaborative access via Meta
@@ -158,7 +158,7 @@ export default function OnboardingPortal({ sessionId }: Props) {
                   onChange={(e) =>
                     setFormData((d) => ({ ...d, voice: e.target.value }))
                   }
-                  className="w-full rounded-lg border border-white/10 bg-zinc-900 p-4 font-mono text-sm outline-none focus:border-emerald-500"
+                  className="touch-form-control w-full rounded-lg border border-white/10 bg-zinc-900 p-4 font-mono text-base outline-none focus:border-emerald-500"
                 >
                   <option value="">Select...</option>
                   <option value="luxury">Luxury & Minimalist</option>
@@ -172,7 +172,7 @@ export default function OnboardingPortal({ sessionId }: Props) {
                   onChange={(e) =>
                     setFormData((d) => ({ ...d, brandWords: e.target.value }))
                   }
-                  className="h-32 w-full resize-none border-b border-white/10 bg-transparent py-4 font-mono outline-none focus:border-emerald-500"
+                  className="h-32 w-full resize-none border-b border-white/10 bg-transparent py-4 font-mono text-base outline-none focus:border-emerald-500"
                 />
               </div>
             )}

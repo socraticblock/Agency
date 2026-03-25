@@ -14,6 +14,9 @@
 - [012] Dead-code trim: removed `@upstash/redis`, `nanoid`; deleted unused `StepNavigation`, `SummarySidebar`, `lib/agents/*`, `lib/services/sovereignModel`; dropped empty `agents`/`services` dirs.
 - [013] Architect blueprint: no Redis/server blob; `KV-` id from `sessionStorage` via `clientBlueprintId`; handover + WhatsApp use client id; PDF request uses `POST /api/blueprint` with `blueprintId` + contact + full audit; removed `blueprintStore`, `/api/architect-blueprint`, `saveBlueprint`, `ioredis`.
 - [014] Slow dev/LAN hydration: hero + scroll sections used Framer `initial` opacity 0 and `ScrollReveal` opacity floor 0.15; fixed with `initial={false}` on critical motion + scroll-only scale/y (no opacity dimming).
+- [015] Mobile-friendly pass: viewport export + safe areas; Navbar slide-out menu (lg+ desktop links); anchor `scroll-margin-top`; `touch-form-control` / 16px inputs; hero parallax off for coarse pointer + reduced motion; Architect/LeadGen touch targets and horizontal scroll polish.
+- [016] Real-device touch fixes: LeadGenHub removed window scroll spring + blur/scale carousel; lazy-mount tool chunks ±1 slide; `MagneticButton` plain link/button on coarse/`hover:none`; Navbar menu z-index + `touch-manipulation`; Roadmap `useTransform` + `initial={false}` / viewport amount; Sovereign mobile accordion `type="button"`.
+- [017] Framer `useScroll` targets: `ScrollReveal` root is always `relative`; `StickyCardStack` uses a `relative` wrapper ref for scroll tracking (sticky card no longer the ref target).
 
 # Detailed Observations
 
@@ -86,3 +89,18 @@
 - **Context:** Mobile testing against `next dev` over LAN showed missing hero headline and ghosted accordions while localhost and Vercel looked fine.
 - **Decision:** Hero headline variant container uses `initial={false}`; `ScrollReveal` drops scroll-linked opacity (keeps scale/y); `KineticText`, `SovereignFaq`, and `SovereignTriptych` `whileInView` blocks use `initial={false}` so content is not stuck at opacity 0 before motion runs.
 - **Impact:** Above-the-fold and in-section text stay readable when dev bundles hydrate slowly; slight reduction in fade-in staging on first paint; production behavior remains acceptable.
+
+## [015]
+- **Context:** Site was desktop-first; expected growth in phone traffic required layout, navigation, touch, and iOS form behavior without a full redesign.
+- **Decision:** Root `viewport` + `themeColor`; removed root `overflow-hidden` (sticky-safe); body `overflow-x: clip` + horizontal safe-area padding; `.scroll-anchor-target` for `#footprint` / `#contact` / lead hub; `Navbar` hamburger + drawer under `lg`, CTA visible on mobile; shared `.touch-form-control` (16px min height) on lead/apply/book-strategy/Summary VIP/ConfigModal/Discovery custom fields/onboarding inputs; `KineticHero` disables mouse parallax for `(pointer: coarse)` or `prefers-reduced-motion`, scales down blur orbs on small viewports; `StepNav` horizontal scroll + larger step hit targets; `LeadGenHub`/`Configurator`/`GlobalFooter` safe-area and touch-pan-x / overscroll tweaks.
+- **Impact:** Better tap targets, fewer iOS input-zoom quirks, hash navigation clears sticky header, architect flow usable on narrow screens; slightly taller header on notched devices via safe-area padding.
+
+## [016]
+- **Context:** Desktop narrow viewport worked while real phones (multiple browsers) saw dead menu, stuck scroll at interactive tools, roadmap/tools not appearing—pointer/touch + main-thread cost, not CSS breakpoints alone.
+- **Decision:** `LeadGenHub` drops Framer `animate(window.scrollY)` viewport correction, removes per-slide `filter: blur` + scale animation and `touch-pan-x`; throttles `onScroll` with `requestAnimationFrame`; mounts heavy `dynamic()` tool components only for `activeIndex±1`. `MagneticButton` uses plain `<Link>`/`<button>` when `(pointer: coarse)` or `(hover: none)` to avoid motion transform stack on touch. `Navbar` raises mobile cluster/menu `z-index` and adds `touch-manipulation`. `RoadmapTimeline` uses `useTransform` instead of `useSpring` on scroll progress; phase list `initial={false}` + looser `whileInView` viewport. `SovereignTriptych` mobile accordion `type="button"` + `touch-manipulation`.
+- **Impact:** Fewer scroll fights and GPU stalls on phones; menu and accordions receive reliable taps; roadmap and tools hydrate without waiting on expensive off-screen effects; desktop mouse keeps magnetic polish.
+
+## [017]
+- **Context:** Browser console warned that scroll offset requires a non-static positioned container for Framer `useScroll` targets.
+- **Decision:** `ScrollReveal` always applies `relative` on its `motion.div` ref; `StickyCardStack` `StickyCard` attaches `useScroll` `target` to an outer `div.relative` and keeps transforms on the inner `motion.article` (sticky).
+- **Impact:** Clears Framer layout measurement warning for those components; THREE `Clock` deprecation (if present) remains upstream in Three/R3F until dependency updates.

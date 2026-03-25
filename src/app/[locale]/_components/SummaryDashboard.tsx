@@ -669,12 +669,12 @@ export default function SummaryDashboard({
                               placeholder="Dispatch address" 
                               value={lead.email} 
                               onChange={(e) => setLead({ ...lead, email: e.target.value })} 
-                              className="flex-1 bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-emerald-400" 
+                              className="touch-form-control min-w-0 flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-base text-white placeholder:text-slate-600 focus:border-emerald-400 focus:outline-none" 
                             />
                             <button 
                               type="submit" 
                               disabled={isSubmitting} 
-                              className="px-3 py-1.5 bg-emerald-400 text-black font-space font-black text-xs uppercase rounded-lg hover:bg-emerald-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                              className="min-h-11 shrink-0 rounded-lg bg-emerald-400 px-4 py-2 font-space text-xs font-black uppercase text-black hover:bg-emerald-300 disabled:cursor-not-allowed disabled:opacity-50"
                             >
                               {isSubmitting ? "..." : "Send"}
                             </button>
@@ -793,11 +793,11 @@ export default function SummaryDashboard({
                           <p className="text-[11px] text-slate-400">We&apos;ll send the complete architecture PDF to the address below.</p>
                           <form onSubmit={handleLeadSubmit} className="space-y-3">
                             <div className="relative w-full">
-                              <Mail className="absolute left-3 top-3.5 h-3.5 w-3.5 text-slate-500" />
-                              <input type="email" required placeholder="Professional email for PDF delivery" value={lead.email} onChange={(e) => setLead({ ...lead, email: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-3 py-3 text-xs text-white focus:outline-none focus:border-emerald-400" />
+                              <Mail className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-500" />
+                              <input type="email" required placeholder="Professional email for PDF delivery" value={lead.email} onChange={(e) => setLead({ ...lead, email: e.target.value })} className="touch-form-control w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-9 pr-3 text-base text-white focus:border-emerald-400 focus:outline-none" />
                             </div>
                             {submitError && <p className="text-xs text-red-400 font-bold">{submitError}</p>}
-                            <button type="submit" disabled={isSubmitting} className="w-full py-2.5 bg-white/5 border border-white/10 rounded-xl text-white font-space font-black text-xs uppercase hover:bg-white/10 transition-all flex items-center justify-center gap-1.5">
+                            <button type="submit" disabled={isSubmitting} className="flex min-h-12 w-full items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/5 py-3 font-space text-xs font-black uppercase text-white transition-all hover:bg-white/10">
                               {isSubmitting ? "Sending…" : "Request PDF dossier"}
                             </button>
                           </form>
@@ -879,9 +879,9 @@ export default function SummaryDashboard({
                   setVipModalOpen(false);
                   setVipError(null);
                 }}
-                className="absolute top-4 right-4 text-slate-500 hover:text-white transition-colors p-1 rounded-lg"
+                className="absolute right-3 top-3 inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg text-slate-500 transition-colors hover:text-white sm:right-4 sm:top-4"
               >
-                <X className="h-4 w-4" />
+                <X className="h-5 w-5" />
               </button>
               <span className="text-[9px] font-black font-space text-emerald-400 uppercase tracking-[0.2em]">
                 VIP check-in
@@ -894,25 +894,25 @@ export default function SummaryDashboard({
               </p>
               <div className="mt-6 space-y-4">
                 <div className="relative">
-                  <User className="absolute left-3 top-3 h-3.5 w-3.5 text-slate-500" />
+                  <User className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-500" />
                   <input
                     type="text"
                     autoComplete="name"
                     placeholder="Full name"
                     value={lead.name}
                     onChange={(e) => setLead({ ...lead, name: e.target.value })}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-3 py-3 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-emerald-400"
+                    className="touch-form-control w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-9 pr-3 text-base text-white placeholder:text-slate-600 focus:border-emerald-400 focus:outline-none"
                   />
                 </div>
                 <div className="relative">
-                  <Building className="absolute left-3 top-3 h-3.5 w-3.5 text-slate-500" />
+                  <Building className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-500" />
                   <input
                     type="text"
                     autoComplete="organization"
                     placeholder="Company name"
                     value={lead.company}
                     onChange={(e) => setLead({ ...lead, company: e.target.value })}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-3 py-3 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-emerald-400"
+                    className="touch-form-control w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-9 pr-3 text-base text-white placeholder:text-slate-600 focus:border-emerald-400 focus:outline-none"
                   />
                 </div>
 

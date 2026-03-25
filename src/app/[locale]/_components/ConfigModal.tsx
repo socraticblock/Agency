@@ -25,7 +25,7 @@ export default function ConfigModal({
     <AnimatePresence>
       {isModalOpen && (
         <motion.div
-          className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-md"
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         >
           <motion.div
@@ -62,7 +62,11 @@ export default function ConfigModal({
               </span>
             </div>
 
-            <input type="email" placeholder="ceo@yourbrand.com" className="bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-xs focus:outline-none focus:border-emerald-400 text-white mt-1" />
+            <input
+              type="email"
+              placeholder="ceo@yourbrand.com"
+              className="touch-form-control mt-1 rounded-lg border border-zinc-800 bg-zinc-900 p-3 text-base text-white focus:border-emerald-400 focus:outline-none"
+            />
             <button 
               onClick={() => {
                 const activeMods = selectedModules.map(id => MODULES.find(m => m.id === id)?.name || id).join('\n  • ');
@@ -75,11 +79,17 @@ export default function ConfigModal({
                 a.click();
                 URL.revokeObjectURL(url);
               }} 
-              className="w-full bg-emerald-400 text-black font-black font-space py-2 rounded-xl text-xs hover:bg-emerald-300 transition-colors"
+              className="min-h-12 w-full rounded-xl bg-emerald-400 py-3 font-space text-sm font-black text-black transition-colors hover:bg-emerald-300"
             >
               Download Blueprint (.txt)
             </button>
-            <button onClick={() => setIsModalOpen(false)} className="text-[10px] text-slate-500 hover:text-white transition-colors mt-1">Close</button>
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(false)}
+              className="mt-2 min-h-11 text-sm text-slate-500 transition-colors hover:text-white"
+            >
+              Close
+            </button>
           </motion.div>
         </motion.div>
       )}

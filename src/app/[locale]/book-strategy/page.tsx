@@ -12,7 +12,7 @@ export default async function BookStrategyPage({
 
   return (
     <FunnelShell locale={lang}>
-      <main className="min-h-screen bg-[#050505] px-4 py-16 sm:px-6">
+      <main className="min-h-screen bg-[#050505] px-4 py-16 pb-[max(4rem,env(safe-area-inset-bottom))] sm:px-6">
         <BookStrategyView locale={lang} />
       </main>
     </FunnelShell>

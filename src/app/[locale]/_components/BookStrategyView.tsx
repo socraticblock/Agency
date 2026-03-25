@@ -101,7 +101,7 @@ export function BookStrategyView({ locale }: { locale: Locale }) {
               type="text"
               name="name"
               required
-              className="mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30"
+              className="touch-form-control mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-base text-white outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30"
               placeholder={t.bookStrategy.namePlaceholder}
             />
           </div>
@@ -114,7 +114,7 @@ export function BookStrategyView({ locale }: { locale: Locale }) {
               name="email"
               value={emailInput}
               onChange={(e) => setEmailInput(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30"
+              className="touch-form-control mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-base text-white outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30"
               placeholder={t.bookStrategy.emailPlaceholder}
             />
           </div>
@@ -127,7 +127,7 @@ export function BookStrategyView({ locale }: { locale: Locale }) {
               name="whatsapp"
               value={whatsappInput}
               onChange={(e) => setWhatsappInput(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30"
+              className="touch-form-control mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-base text-white outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30"
               placeholder={t.bookStrategy.whatsappPlaceholder}
             />
           </div>
@@ -138,7 +138,7 @@ export function BookStrategyView({ locale }: { locale: Locale }) {
             <input
               type="text"
               name="time"
-              className="mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30"
+              className="touch-form-control mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-base text-white outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30"
               placeholder={t.bookStrategy.timePlaceholder}
             />
           </div>
@@ -148,7 +148,7 @@ export function BookStrategyView({ locale }: { locale: Locale }) {
           <button
             type="submit"
             disabled={isPending}
-            className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-emerald-500 px-8 py-3 text-xs font-bold uppercase tracking-[0.2em] text-white transition hover:bg-emerald-400 disabled:opacity-50"
+            className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-full bg-emerald-500 px-8 py-3 text-sm font-bold uppercase tracking-[0.2em] text-white transition hover:bg-emerald-400 disabled:opacity-50 sm:text-xs"
           >
             {isPending ? t.bookStrategy.submittingBtn : t.bookStrategy.submitBtn}
           </button>

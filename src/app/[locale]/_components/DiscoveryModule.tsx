@@ -242,7 +242,7 @@ export default function DiscoveryModule({
                         <button
                           key={opt}
                           onClick={() => handleSelect(q.id, opt)}
-                          className={`px-5 py-2.5 flex items-center gap-2 rounded-xl text-xs md:text-sm font-bold font-space transition-all duration-300 ${isSelected
+                          className={`flex min-h-11 items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-bold font-space transition-all duration-300 md:px-5 md:text-sm ${isSelected
                               ? "bg-emerald-400 text-black shadow-md shadow-emerald-500/20"
                               : "text-slate-400 hover:text-white hover:bg-white/5"
                             }`}
@@ -260,7 +260,7 @@ export default function DiscoveryModule({
                       placeholder="Or type custom..."
                       value={!(q.options as string[])?.includes(answers[q.id] as string) ? (answers[q.id] as string || "") : ""}
                       onChange={(e) => handleSelect(q.id, e.target.value)}
-                      className="w-full bg-transparent border-b border-white/20 focus:border-emerald-400 text-sm font-medium text-white py-2 focus:ring-0 placeholder:text-slate-600 transition-colors"
+                      className="touch-form-control w-full border-b border-white/20 bg-transparent py-2 text-base font-medium text-white placeholder:text-slate-600 transition-colors focus:border-emerald-400 focus:ring-0"
                     />
                   )}
                 </div>
@@ -277,7 +277,7 @@ export default function DiscoveryModule({
                     onChange={(e) =>
                       setAnswers((prev) => ({ ...prev, [q.id]: e.target.value }))
                     }
-                    className="w-full bg-transparent border-0 border-b-2 border-white/10 focus:border-emerald-400 text-3xl font-black text-white py-4 focus:ring-0 placeholder:text-slate-600 transition-colors"
+                    className="w-full border-0 border-b-2 border-white/10 bg-transparent py-4 text-2xl font-black text-white placeholder:text-slate-600 transition-colors focus:border-emerald-400 focus:ring-0 sm:text-3xl"
                   />
                 </div>
               )}
@@ -292,7 +292,7 @@ export default function DiscoveryModule({
                     onChange={(e) =>
                       setAnswers((prev) => ({ ...prev, [q.id]: e.target.value }))
                     }
-                    className="w-full bg-zinc-900/30 border border-white/10 focus:border-emerald-400 rounded-2xl text-xl font-medium text-white p-6 focus:ring-0 placeholder:text-slate-600 transition-colors resize-none h-40"
+                    className="h-40 w-full resize-none rounded-2xl border border-white/10 bg-zinc-900/30 p-4 text-base font-medium text-white placeholder:text-slate-600 transition-colors focus:border-emerald-400 focus:ring-0 sm:p-6 sm:text-xl"
                   />
                 </div>
               )}
@@ -320,7 +320,7 @@ export default function DiscoveryModule({
                       placeholder="Or type custom entry..."
                       value={!(q.options as string[])?.includes(answers[q.id] as string) ? (answers[q.id] as string || "") : ""}
                       onChange={(e) => handleSelect(q.id, e.target.value)}
-                      className="max-w-xs bg-transparent border-b border-white/20 focus:border-emerald-400 text-sm font-medium text-white py-2 focus:ring-0 placeholder:text-slate-600 transition-colors"
+                      className="touch-form-control max-w-xs border-b border-white/20 bg-transparent py-2 text-base font-medium text-white placeholder:text-slate-600 transition-colors focus:border-emerald-400 focus:ring-0"
                     />
                   )}
                 </div>
@@ -343,7 +343,7 @@ export default function DiscoveryModule({
                         current[i] = e.target.value;
                         setAnswers((prev) => ({ ...prev, [q.id]: current }));
                       }}
-                      className="w-full max-w-2xl bg-transparent border-0 border-b-2 border-white/10 focus:border-emerald-400 text-2xl font-black text-white py-2 focus:ring-0 placeholder:text-slate-700 transition-colors"
+                      className="w-full max-w-2xl border-0 border-b-2 border-white/10 bg-transparent py-2 text-xl font-black text-white placeholder:text-slate-700 transition-colors focus:border-emerald-400 focus:ring-0 sm:text-2xl"
                     />
                   ))}
                 </div>
@@ -370,7 +370,7 @@ export default function DiscoveryModule({
 
               {/* === COLOR PALETTE === */}
               {q.type === "color-palette" && (
-                <div className="flex items-center mx-auto md:mx-0 gap-6 bg-zinc-900/50 p-6 rounded-3xl border border-white/10 w-fit">
+                <div className="mx-auto flex w-full max-w-full flex-wrap items-center justify-center gap-4 rounded-3xl border border-white/10 bg-zinc-900/50 p-4 sm:w-fit sm:max-w-none sm:justify-start sm:gap-6 sm:p-6 md:mx-0">
                   {[0, 1, 2].map((i) => (
                     <input
                       key={i}
@@ -385,7 +385,7 @@ export default function DiscoveryModule({
                         current[i] = e.target.value;
                         setAnswers((prev) => ({ ...prev, [q.id]: current }));
                       }}
-                      className="h-16 w-16 cursor-pointer rounded-full bg-transparent border-4 border-white/10 hover:border-emerald-400 transition-all shadow-xl"
+                      className="h-14 w-14 cursor-pointer rounded-full border-4 border-white/10 bg-transparent shadow-xl transition-all hover:border-emerald-400 sm:h-16 sm:w-16"
                     />
                   ))}
                 </div>
@@ -396,18 +396,19 @@ export default function DiscoveryModule({
         </AnimatePresence>
 
         {/* Footer Navigation */}
-        <div className="mt-12 pt-8 border-t border-white/10 flex items-center justify-between z-20">
+        <div className="z-20 mt-12 flex flex-col gap-4 border-t border-white/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
           <button
+            type="button"
             onClick={handlePrev}
             disabled={safeStep === 0}
-            className={`group flex items-center gap-2 font-space text-[11px] uppercase tracking-widest transition-colors ${safeStep === 0 ? "opacity-0 pointer-events-none" : "text-slate-500 hover:text-white"}`}
+            className={`group flex min-h-11 items-center gap-2 font-space text-[11px] uppercase tracking-widest transition-colors ${safeStep === 0 ? "pointer-events-none opacity-0" : "text-slate-500 hover:text-white"}`}
           >
             <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" />
             Previous
           </button>
 
-          <div className="flex flex-col items-end gap-2">
-            <div className="flex items-center gap-3">
+          <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:items-end">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
               {isEditing && (
                 <button
                   type="button"
@@ -415,15 +416,16 @@ export default function DiscoveryModule({
                     setIsEditing(false);
                     goToStep(5);
                   }}
-                  className="px-6 py-3.5 rounded-full font-space font-bold uppercase tracking-widest text-xs border border-white/10 hover:border-emerald-500/40 text-slate-400 hover:text-white transition-all duration-300 cursor-pointer"
+                  className="min-h-11 cursor-pointer rounded-full border border-white/10 px-5 py-3 font-space text-xs font-bold uppercase tracking-widest text-slate-400 transition-all duration-300 hover:border-emerald-500/40 hover:text-white sm:px-6 sm:py-3.5"
                 >
                   SAVE AND RETURN TO SUMMARY
                 </button>
               )}
               <button
+                type="button"
                 onClick={safeStep === QUESTIONS.length - 1 ? handlesSubmit : handleNext}
                 disabled={!canPrimaryAction || isAnalyzing}
-                className={`group relative flex items-center gap-3 px-8 py-3.5 rounded-full font-space font-bold uppercase tracking-widest text-xs transition-all duration-300 ${canPrimaryAction && !isAnalyzing
+                className={`group relative flex min-h-12 w-full items-center justify-center gap-3 rounded-full px-6 py-3.5 font-space text-xs font-bold uppercase tracking-widest transition-all duration-300 sm:w-auto sm:px-8 ${canPrimaryAction && !isAnalyzing
                     ? "bg-emerald-500 text-black shadow-[0_10px_30px_-10px_rgba(16,185,129,0.3)] hover:shadow-[0_15px_40px_-5px_rgba(16,185,129,0.4)] hover:bg-emerald-400 active:scale-95"
                     : "bg-zinc-800 text-zinc-500 cursor-not-allowed opacity-50"
                   }`}

@@ -98,7 +98,7 @@ export default function Configurator() {
 
   return (
     <LazyMotion features={loadFeatures}>
-      <div className="flex flex-col lg:flex-row relative gap-5 px-3 max-w-[1400px] mx-auto">
+      <div className="relative mx-auto flex max-w-[1400px] flex-col gap-5 px-3 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:px-4 lg:flex-row">
 
         <div className="absolute inset-x-0 bottom-0 top-[20%] bg-gradient-to-t from-emerald-500/5 to-transparent pointer-events-none" />
 
@@ -107,7 +107,10 @@ export default function Configurator() {
           {/* Progress Bar */}
           <StepNav step={step} goToStep={goToStep} canGoToStep={canGoToStep} stepLabels={stepLabels} />
 
-          <div ref={scrollRef} className="flex-1 overflow-y-auto px-1 pb-10 scrollbar-none">
+          <div
+            ref={scrollRef}
+            className="flex-1 overflow-y-auto px-1 pb-12 scrollbar-none sm:pb-10 [-webkit-overflow-scrolling:touch]"
+          >
                 {step === 1 && (
                   <FoundationGrid
                     foundation={foundation}

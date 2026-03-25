@@ -25,13 +25,13 @@ export default async function ArchitectPage({
         {/* Continuous mesh grid backgound overlay */}
         <NanoBananaBackground />
 
-        <div className="max-w-7xl mx-auto px-4 pt-6 pb-4 relative z-10">
-          <div className="flex flex-col gap-1 mb-6">
-            <span className="text-xs font-black font-space text-emerald-400 uppercase tracking-widest">Kvali Architect Studio</span>
-            <h1 className="text-2xl md:text-3xl font-black font-space text-white tracking-tight">
+        <div className="relative z-10 mx-auto max-w-7xl px-4 pb-4 pt-6 sm:px-6">
+          <div className="mb-6 flex flex-col gap-1">
+            <span className="text-xs font-black font-space uppercase tracking-widest text-emerald-400">Kvali Architect Studio</span>
+            <h1 className="font-space text-2xl font-black tracking-tight text-white md:text-3xl">
               Build Your Digital Infrastructure
             </h1>
-            <p className="text-sm text-slate-400 max-w-xl">
+            <p className="max-w-xl text-base text-slate-400 sm:text-sm">
               Design your asset from the ground up. Choose a foundation, customize with precision modules, and secure it with our Sentinel shield.
             </p>
           </div>

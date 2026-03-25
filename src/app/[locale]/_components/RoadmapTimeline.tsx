@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
 const phases = [
@@ -62,7 +62,8 @@ export function RoadmapTimeline() {
     offset: ["start center", "end center"]
   });
 
-  const scaleY = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
+  /* Direct mapping avoids spring RAF work that can jank real touch devices. */
+  const scaleY = useTransform(scrollYProgress, (v) => v);
 
   return (
     <section className="relative py-24 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto overflow-hidden">
@@ -76,7 +77,7 @@ export function RoadmapTimeline() {
 
       <motion.div 
         className="text-center max-w-3xl mx-auto mb-16"
-        initial={{ opacity: 0, y: -10 }}
+        initial={false}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
@@ -99,9 +100,9 @@ export function RoadmapTimeline() {
         <motion.div
           ref={containerRef}
           variants={containerVariants}
-          initial="hidden"
+          initial={false}
           whileInView="visible"
-          viewport={{ once: true, margin: "-10%" }}
+          viewport={{ once: true, margin: "0px 0px -12% 0px", amount: 0.08 }}
           className="relative flex flex-col gap-10"
         >
           {phases.map((phase, i) => (

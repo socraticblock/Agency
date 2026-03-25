@@ -33,7 +33,10 @@ export function GlobalFooter({ locale }: { locale: Locale }) {
   };
 
   return (
-    <footer id="contact" className="relative flex min-h-[60vh] flex-col items-center justify-center bg-[#050505] px-4 py-20 text-center">
+    <footer
+      id="contact"
+      className="scroll-anchor-target relative flex min-h-[60vh] flex-col items-center justify-center bg-[#050505] px-4 py-20 pb-[max(5rem,env(safe-area-inset-bottom))] text-center"
+    >
       <p className="text-3xl font-semibold text-slate-100 sm:text-4xl md:text-5xl">
         {t.footer.headline}
       </p>

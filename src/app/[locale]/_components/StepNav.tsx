@@ -1,7 +1,6 @@
 "use client";
 
 import { Check } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { memo } from "react";
 
 interface StepNavProps {
@@ -13,7 +12,7 @@ interface StepNavProps {
 
 export default memo(function StepNav({ step, goToStep, canGoToStep, stepLabels }: StepNavProps) {
   return (
-    <div className="flex items-center w-full max-w-md mx-auto sm:mx-0">
+    <div className="mx-auto flex w-full max-w-md items-center overflow-x-auto overflow-y-visible pb-1 scrollbar-none sm:mx-0 sm:overflow-visible sm:pb-0">
       {stepLabels.map((s, i) => {
         const stepNum = (i + 1) as 1 | 2 | 3 | 4 | 5;
         const isActive = step === stepNum;
@@ -21,18 +20,18 @@ export default memo(function StepNav({ step, goToStep, canGoToStep, stepLabels }
         const isClickable = canGoToStep(stepNum) && step !== 5;
 
         return (
-          <div key={s.num} className="flex items-center flex-1">
+          <div key={s.num} className="flex min-w-[4.25rem] flex-1 flex-shrink-0 items-center sm:min-w-0">
             <button
               type="button"
               onClick={() => goToStep(stepNum)}
               disabled={!isClickable}
               aria-current={isActive ? "step" : undefined}
               aria-disabled={!isClickable || undefined}
-              className={`flex items-center gap-2 transition-all duration-300 ${
-                !isClickable ? "opacity-30 cursor-not-allowed" : "cursor-pointer"
+              className={`flex min-h-11 min-w-11 items-center gap-2 rounded-lg py-1 pr-1 transition-all duration-300 sm:min-h-0 sm:min-w-0 sm:rounded-none sm:py-0 sm:pr-0 ${
+                !isClickable ? "cursor-not-allowed opacity-30" : "cursor-pointer"
               }`}
             >
-              <div className={`h-8 w-8 rounded-full flex items-center justify-center text-xs font-black font-space border-2 transition-all duration-300 ${
+              <div className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border-2 font-space text-xs font-black transition-all duration-300 sm:h-8 sm:w-8 ${
                 isActive
                   ? "bg-emerald-500 border-emerald-500 text-black scale-110"
                   : isCompleted
@@ -41,7 +40,7 @@ export default memo(function StepNav({ step, goToStep, canGoToStep, stepLabels }
               }`}>
                 {isCompleted ? <Check className="h-3.5 w-3.5" /> : s.num}
               </div>
-              <span className={`text-xs font-bold font-space hidden sm:block ${
+              <span className={`hidden text-xs font-bold font-space sm:block ${
                 isActive ? "text-white" : "text-zinc-500"
               }`}>{s.label}</span>
             </button>

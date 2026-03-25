@@ -1,9 +1,8 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   motion,
-  useMotionTemplate,
   useMotionValue,
   useScroll,
   useTransform,
@@ -16,6 +15,20 @@ import { NanoBananaBackground } from "./NanoBananaBackground";
 export function KineticHero({ locale }: { locale: Locale }) {
   const t = getMessages(locale);
   const sectionRef = useRef<HTMLElement>(null);
+  const [parallaxOff, setParallaxOff] = useState(true);
+
+  useEffect(() => {
+    const coarse = window.matchMedia("(pointer: coarse)");
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setParallaxOff(coarse.matches || reduce.matches);
+    sync();
+    coarse.addEventListener("change", sync);
+    reduce.addEventListener("change", sync);
+    return () => {
+      coarse.removeEventListener("change", sync);
+      reduce.removeEventListener("change", sync);
+    };
+  }, []);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -54,8 +67,8 @@ export function KineticHero({ locale }: { locale: Locale }) {
       className="relative flex min-h-[70vh] flex-col items-center justify-center overflow-hidden px-4 py-20 text-center"
     >
       <div className="pointer-events-none absolute inset-0 -z-20 overflow-hidden">
-        <div className="absolute -top-1/4 -left-1/4 w-[800px] h-[800px] bg-emerald-900/30 rounded-full blur-[140px] animate-pulse" />
-        <div className="absolute -bottom-1/4 -right-1/4 w-[800px] h-[800px] bg-slate-800/40 rounded-full blur-[160px] animate-pulse delay-1000" />
+        <div className="absolute -top-1/4 -left-1/4 h-[min(100vw,28rem)] w-[min(100vw,28rem)] rounded-full bg-emerald-900/30 blur-[100px] animate-pulse sm:h-[min(100vw,40rem)] sm:w-[min(100vw,40rem)] sm:blur-[120px] md:h-[800px] md:w-[800px] md:blur-[140px]" />
+        <div className="absolute -bottom-1/4 -right-1/4 h-[min(100vw,28rem)] w-[min(100vw,28rem)] rounded-full bg-slate-800/40 blur-[110px] animate-pulse delay-1000 sm:h-[min(100vw,40rem)] sm:w-[min(100vw,40rem)] sm:blur-[130px] md:h-[800px] md:w-[800px] md:blur-[160px]" />
       </div>
 
       <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-background to-transparent z-10" />
@@ -73,8 +86,8 @@ export function KineticHero({ locale }: { locale: Locale }) {
             hidden: { opacity: 0 },
             visible: { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.2 } },
           }}
-          className="max-w-4xl text-balance font-space text-5xl font-bold leading-[1.1] tracking-tight sm:text-6xl md:text-7xl pb-4 text-white"
-          style={{ x: offsetX, y: offsetY }}
+          className="max-w-4xl text-balance pb-4 font-space text-4xl font-bold leading-[1.1] tracking-tight text-white sm:text-6xl md:text-7xl"
+          style={parallaxOff ? undefined : { x: offsetX, y: offsetY }}
         >
           {words.map((word: string, index: number) => (
             <motion.span key={index} className="inline-block mr-2">
@@ -93,7 +106,7 @@ export function KineticHero({ locale }: { locale: Locale }) {
             href={`/${locale}/architect`}
             magneticStrength={24}
             textStrength={12}
-            className="group relative overflow-hidden rounded-full bg-emerald-500/10 border border-emerald-400/40 backdrop-blur-sm text-white px-10 py-4 text-sm font-black shadow-xl transition-all duration-300 hover:scale-[1.03] hover:bg-emerald-500/20 flex items-center justify-center"
+            className="group relative flex min-h-12 items-center justify-center overflow-hidden rounded-full border border-emerald-400/40 bg-emerald-500/10 px-8 py-3 text-sm font-black text-white shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-[1.03] hover:bg-emerald-500/20 sm:px-10 sm:py-4"
           >
             <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.4),_transparent_60%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
             <span className="relative z-10 block flex items-center gap-1.5 text-white font-black">

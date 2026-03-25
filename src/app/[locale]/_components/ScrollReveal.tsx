@@ -34,7 +34,7 @@ export function ScrollReveal({ children, className = "" }: ScrollRevealProps) {
     <motion.div
       ref={ref}
       style={{ scale, y, willChange: "transform" }}
-      className={className}
+      className={["relative", className].filter(Boolean).join(" ")}
     >
       {children}
     </motion.div>

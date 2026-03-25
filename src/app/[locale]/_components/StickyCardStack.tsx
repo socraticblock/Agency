@@ -88,9 +88,9 @@ function StickyCard({
   tooltipTerm: string | null;
   tooltipTip: string | null;
 }) {
-  const ref = useRef<HTMLDivElement | null>(null);
+  const scrollTargetRef = useRef<HTMLDivElement | null>(null);
   const { scrollYProgress } = useScroll({
-    target: ref,
+    target: scrollTargetRef,
     offset: ["start end", "start center"],
   });
 
@@ -102,26 +102,27 @@ function StickyCard({
   const showBenefit = Boolean(tooltipTerm && tooltipTip);
 
   return (
-    <motion.article
-      ref={ref}
-      style={{ scale, y, opacity, willChange: "transform, opacity" }}
-      className={`group sticky isolate z-10 ${topClass} mx-auto max-w-3xl rounded-3xl border border-white/10 bg-white/5 p-8 text-left shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08),0_20px_60px_rgba(0,0,0,0.6)] backdrop-blur-2xl`}
-    >
-      <div className="text-sm font-medium uppercase tracking-[0.18em] text-emerald-300">
-        {index + 1 < 10 ? `0${index + 1}` : index + 1}
-      </div>
-      <h3 className="mt-4 text-2xl font-semibold text-slate-50 sm:text-3xl">
-        {title}
-      </h3>
-      <p className="mt-4 text-slate-400 text-base leading-relaxed md:text-lg group-hover:text-slate-200">
-        {body}
-      </p>
-      {showBenefit && (
-        <p className="mt-2 text-emerald-400/80 text-[clamp(0.75rem,2vw,0.875rem)]">
-          {tooltipTerm}: {tooltipTip}
+    <div ref={scrollTargetRef} className="relative mx-auto max-w-3xl">
+      <motion.article
+        style={{ scale, y, opacity, willChange: "transform, opacity" }}
+        className={`group sticky isolate z-10 ${topClass} rounded-3xl border border-white/10 bg-white/5 p-8 text-left shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08),0_20px_60px_rgba(0,0,0,0.6)] backdrop-blur-2xl`}
+      >
+        <div className="text-sm font-medium uppercase tracking-[0.18em] text-emerald-300">
+          {index + 1 < 10 ? `0${index + 1}` : index + 1}
+        </div>
+        <h3 className="mt-4 text-2xl font-semibold text-slate-50 sm:text-3xl">
+          {title}
+        </h3>
+        <p className="mt-4 text-slate-400 text-base leading-relaxed md:text-lg group-hover:text-slate-200">
+          {body}
         </p>
-      )}
-    </motion.article>
+        {showBenefit && (
+          <p className="mt-2 text-emerald-400/80 text-[clamp(0.75rem,2vw,0.875rem)]">
+            {tooltipTerm}: {tooltipTip}
+          </p>
+        )}
+      </motion.article>
+    </div>
   );
 }
 

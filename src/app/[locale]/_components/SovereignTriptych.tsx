@@ -86,7 +86,10 @@ export function SovereignTriptych({ dict }: { dict: any }) {
   const activeStage = FEATURES.find((s) => s.key === activeTab)!;
 
   return (
-    <section id="footprint" className="mx-auto max-w-6xl px-4 pb-24 pt-10 sm:px-6">
+    <section
+      id="footprint"
+      className="scroll-anchor-target mx-auto max-w-6xl px-4 pb-24 pt-10 sm:px-6"
+    >
       <div className="mx-auto max-w-3xl text-center mb-16">
         <motion.p
           initial={false}
@@ -124,11 +127,12 @@ export function SovereignTriptych({ dict }: { dict: any }) {
             return (
               <div key={stage.key} className="p-0.5">
                 <motion.button
+                  type="button"
                   onClick={() => {
                     setActiveTabMobile(isActive ? null : stage.key);
                     setActiveTab(stage.key); // keep desktop state synced just in case
                   }}
-                  className={`relative w-full text-left p-4 rounded-xl transition-all cursor-pointer glass-card ${isActive
+                  className={`relative w-full touch-manipulation cursor-pointer rounded-xl p-4 text-left transition-all glass-card ${isActive
                     ? "shadow-[0_0_25px_rgba(16,185,129,0.12)] z-10"
                     : "opacity-70 hover:opacity-100 glass-card-hover"
                     }`}

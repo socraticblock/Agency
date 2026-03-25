@@ -101,7 +101,7 @@ export function ApplyForm({ locale }: { locale: Locale }) {
                   value={businessName}
                   onChange={(e) => setBusinessName(e.target.value)}
                   placeholder={t.apply.placeholder1}
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-slate-100 placeholder-slate-500 backdrop-blur-xl focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
+                  className="touch-form-control mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-base text-slate-100 placeholder-slate-500 backdrop-blur-xl focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
                 />
               </div>
             )}
@@ -119,7 +119,7 @@ export function ApplyForm({ locale }: { locale: Locale }) {
                   value={taxStatus}
                   onChange={(e) => setTaxStatus(e.target.value)}
                   placeholder={t.apply.placeholder2}
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-slate-100 placeholder-slate-500 backdrop-blur-xl focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
+                  className="touch-form-control mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-base text-slate-100 placeholder-slate-500 backdrop-blur-xl focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
                 />
               </div>
             )}
@@ -137,7 +137,7 @@ export function ApplyForm({ locale }: { locale: Locale }) {
                   value={bankChoice}
                   onChange={(e) => setBankChoice(e.target.value)}
                   placeholder={t.apply.placeholder3}
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-slate-100 placeholder-slate-500 backdrop-blur-xl focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
+                  className="touch-form-control mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-base text-slate-100 placeholder-slate-500 backdrop-blur-xl focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
                 />
               </div>
             )}
@@ -155,7 +155,7 @@ export function ApplyForm({ locale }: { locale: Locale }) {
                   value={websiteUrl}
                   onChange={(e) => setWebsiteUrl(e.target.value)}
                   placeholder={t.apply.placeholder4}
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-slate-100 placeholder-slate-500 backdrop-blur-xl focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
+                  className="touch-form-control mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-base text-slate-100 placeholder-slate-500 backdrop-blur-xl focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
                 />
               </div>
             )}
@@ -167,7 +167,7 @@ export function ApplyForm({ locale }: { locale: Locale }) {
                   onClick={goBack}
                   whileTap={{ scale: 0.98 }}
                   whileHover={{ y: -2 }}
-                  className="text-sm text-slate-400 transition hover:text-slate-200"
+                  className="min-h-11 px-2 text-sm text-slate-400 transition hover:text-slate-200"
                 >
                   ← {t.apply.back}
                 </motion.button>
@@ -176,7 +176,7 @@ export function ApplyForm({ locale }: { locale: Locale }) {
                 type="submit"
                 whileTap={{ scale: 0.98 }}
                 whileHover={{ y: -2 }}
-                className="rounded-xl bg-emerald-500/20 px-6 py-3 font-medium text-emerald-200 transition hover:bg-emerald-500/30"
+                className="min-h-11 rounded-xl bg-emerald-500/20 px-6 py-3 text-base font-medium text-emerald-200 transition hover:bg-emerald-500/30"
               >
                 {step < 4 ? t.apply.next : t.apply.submit}
               </motion.button>
