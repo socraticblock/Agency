@@ -6,139 +6,149 @@ import { Menu, X } from "lucide-react";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 import { MagneticButton } from "./MagneticButton";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function Navbar({ locale }: { locale: Locale }) {
   const t = getMessages(locale);
   const [open, setOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
 
+  // Lock scroll
   useEffect(() => {
     if (!open) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    const focusable = panelRef.current?.querySelector<HTMLElement>(
-      "a[href], button:not([disabled])",
-    );
-    focusable?.focus();
     return () => {
       document.body.style.overflow = prev;
     };
   }, [open]);
 
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
-
   const close = () => setOpen(false);
 
-  const navLinks = (
-    <>
-      <Link
-        href={`/${locale}/architect`}
-        onClick={close}
-        className="flex min-h-11 items-center rounded-lg px-3 text-sm font-bold text-emerald-400 transition-colors hover:bg-white/5 hover:text-emerald-300 lg:min-h-0 lg:px-0 lg:text-sm"
-      >
-        Start Building
-      </Link>
-      <a
-        href="#footprint"
-        onClick={close}
-        className="flex min-h-11 items-center rounded-lg px-3 text-sm text-white/90 transition-colors hover:bg-white/5 hover:text-white lg:min-h-0 lg:px-0"
-      >
-        {t.nav.footprint}
-      </a>
-      <a
-        href="#contact"
-        onClick={close}
-        className="flex min-h-11 items-center rounded-lg px-3 text-sm text-white/90 transition-colors hover:bg-white/5 hover:text-white lg:min-h-0 lg:px-0"
-      >
-        {t.nav.contact}
-      </a>
-    </>
-  );
+  const navLinks = [
+    { href: `/${locale}/architect`, label: "Start Building", highlight: true },
+    { href: `/${locale}#footprint`, label: t.nav.footprint },
+    { href: `/${locale}#contact`, label: t.nav.contact },
+  ];
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0f172a]/80 backdrop-blur-md pt-[env(safe-area-inset-top,0px)]">
-      <nav
-        className="relative z-50 mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6"
-        aria-label="Main"
+    <>
+      <header 
+        className={`sticky top-0 z-[100] border-b border-white/5 bg-slate-950/80 backdrop-blur-xl pt-[env(safe-area-inset-top,0px)] transition-opacity duration-300 ${open ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
       >
-        <Link
-          href={`/${locale}`}
-          className="text-lg font-bold text-white"
-          onClick={close}
-        >
-          Genezisi
-        </Link>
-
-        <div className="hidden items-center gap-6 lg:flex">{navLinks}</div>
-
-        <div className="hidden items-center gap-4 lg:flex">
-          <MagneticButton
-            as={Link}
-            href={`/${locale}/apply`}
-            magneticStrength={10}
-            textStrength={5}
-            className="rounded-full bg-emerald-500/20 px-4 py-2 text-sm font-medium text-emerald-200 transition-colors hover:bg-emerald-500/30"
-          >
-            {t.nav.cta}
-          </MagneticButton>
-        </div>
-
-        <div className="relative z-[60] flex items-center gap-2 lg:hidden">
-          <MagneticButton
-            as={Link}
-            href={`/${locale}/apply`}
-            magneticStrength={6}
-            textStrength={3}
-            className="rounded-full bg-emerald-500/20 px-3 py-2 text-xs font-semibold text-emerald-200 transition-colors hover:bg-emerald-500/30"
-          >
-            {t.nav.cta}
-          </MagneticButton>
-          <button
-            type="button"
-            aria-expanded={open}
-            aria-controls="mobile-nav-panel"
-            aria-label={open ? "Close menu" : "Open menu"}
-            onClick={() => setOpen((v) => !v)}
-            className="relative z-[60] inline-flex min-h-11 min-w-11 touch-manipulation items-center justify-center rounded-lg text-white transition-colors hover:bg-white/10"
-          >
-            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
-        </div>
-      </nav>
-
-      {open && (
-        <>
-          <button
-            type="button"
-            aria-hidden
-            tabIndex={-1}
-            className="fixed inset-0 z-[55] touch-manipulation bg-black/60 backdrop-blur-sm lg:hidden"
+        <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
+          <Link
+            href={`/${locale}`}
+            className="group flex items-center gap-2 text-xl font-black tracking-tighter text-white"
             onClick={close}
-          />
-          <div
-            ref={panelRef}
-            id="mobile-nav-panel"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Site menu"
-            className="fixed inset-y-0 right-0 z-[60] flex w-[min(100vw,20rem)] flex-col border-l border-white/10 bg-[#0f172a]/98 py-4 pl-4 pr-[max(1rem,env(safe-area-inset-right))] pt-[max(1rem,calc(env(safe-area-inset-top)+0.5rem))] shadow-2xl backdrop-blur-xl lg:hidden"
           >
-            <div className="flex flex-col gap-1 border-b border-white/10 pb-4">
-              {navLinks}
-            </div>
-            <p className="mt-auto pb-[max(1rem,env(safe-area-inset-bottom))] pt-6 text-xs text-slate-500">
-              Genezisi Digital
-            </p>
+            <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent group-hover:from-emerald-300 group-hover:to-cyan-300 transition-all">
+              GENEZISI
+            </span>
+          </Link>
+
+          <div className="hidden items-center gap-8 lg:flex">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`text-sm font-bold transition-colors ${
+                  link.highlight ? "text-emerald-400" : "text-white/70 hover:text-white"
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
+            <div className="ml-4 h-4 w-px bg-white/10" />
+            <MagneticButton
+              as={Link}
+              href={`/${locale}/apply`}
+              className="rounded-full bg-emerald-500/10 border border-emerald-500/20 px-5 py-2 text-xs font-black uppercase tracking-widest text-emerald-400 transition-all hover:bg-emerald-500 hover:text-slate-950"
+            >
+              {t.nav.cta}
+            </MagneticButton>
           </div>
-        </>
-      )}
-    </header>
+
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            className="relative flex h-11 w-11 items-center justify-center rounded-full bg-white/5 text-white lg:hidden border border-white/10"
+            aria-label="Open menu"
+          >
+            <Menu size={22} className="stroke-[2.5]" />
+          </button>
+        </nav>
+      </header>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[150] flex flex-col bg-slate-950 pt-[env(safe-area-inset-top,0px)] lg:hidden"
+          >
+            {/* Overlay Header with its own Logo & Close Trigger */}
+            <div className="flex h-16 items-center justify-between px-6 border-b border-white/5">
+              <span className="text-xl font-black tracking-tighter text-white/20">GENEZISI</span>
+              <button
+                onClick={close}
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white border border-white/20"
+                aria-label="Close menu"
+              >
+                <X size={22} className="stroke-[2.5]" />
+              </button>
+            </div>
+
+            {/* Links area - Generous padding-top (32) to clear the header area completely */}
+            <div className="flex-1 overflow-y-auto px-10 pt-24 pb-20">
+              <div className="flex flex-col gap-10">
+                {navLinks.map((link, i) => (
+                  <motion.div
+                    key={link.href}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 + i * 0.1 }}
+                  >
+                    <Link
+                      href={link.href}
+                      onClick={close}
+                      className={`block text-5xl font-black tracking-tight transition-all active:scale-95 ${
+                        link.highlight ? "text-emerald-400 shadow-emerald-500/10" : "text-white/80"
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.div>
+                ))}
+
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                  className="mt-12"
+                >
+                  <Link
+                    href={`/${locale}/apply`}
+                    onClick={close}
+                    className="inline-flex w-full items-center justify-center rounded-2xl bg-emerald-500 py-6 text-xl font-black uppercase tracking-[0.1em] text-slate-950 shadow-[0_15px_45px_rgba(16,185,129,0.3)] active:scale-95 transition-transform"
+                  >
+                    {t.nav.cta}
+                  </Link>
+                </motion.div>
+              </div>
+            </div>
+
+            <div className="p-10 text-center opacity-40">
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">
+                © {new Date().getFullYear()} Genezisi Digital
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
+
+
