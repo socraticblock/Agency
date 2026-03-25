@@ -232,7 +232,7 @@ export function SovereignTriptych({ dict }: { dict: any }) {
                       </div>
 
                       {/* inline visual mockups just for this stage on mobile */}
-                      <div className="relative h-40 w-full overflow-hidden rounded-lg border border-white/5 bg-white/[0.02] mt-4 flex items-center justify-center scale-90">
+                      <div className="relative h-48 w-full mt-4 flex items-center justify-center pb-4">
                         <stage.Component />
                       </div>
                     </motion.div>
