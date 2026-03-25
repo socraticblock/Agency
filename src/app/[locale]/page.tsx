@@ -34,9 +34,7 @@ export default async function Home({
         <ScrollReveal>
           <RoadmapTimeline />
         </ScrollReveal>
-        <ScrollReveal>
-          <LeadGenHub locale={lang} />
-        </ScrollReveal>
+        <LeadGenHub locale={lang} />
         <ScrollReveal className="pb-20">
           <TrustMetrics />
         </ScrollReveal>

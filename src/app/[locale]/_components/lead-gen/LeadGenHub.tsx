@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type UIEvent } from "react";
 import dynamic from "next/dynamic";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { getMessages, type Locale } from "@/lib/i18n";
 import { KineticText } from "../KineticText";
@@ -84,13 +85,25 @@ export function LeadGenHub({ locale }: LeadGenHubProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const scrollRaf = useRef<number | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
   /** Only mount heavy tool chunks for slides the user has opened (saves mobile CPU/RAM). */
   const [mounted, setMounted] = useState(() => new Set<number>([0]));
 
   const t = getMessages(locale);
   const total = tools.length;
 
+  // Mobile Detection & Hydration Guard
   useEffect(() => {
+    setHasMounted(true);
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  useEffect(() => {
+    if (!hasMounted) return;
     setMounted((prev) => {
       const next = new Set(prev);
       for (let d = -1; d <= 1; d++) {
@@ -99,16 +112,17 @@ export function LeadGenHub({ locale }: LeadGenHubProps) {
       }
       return next;
     });
-  }, [activeIndex, total]);
+  }, [activeIndex, total, hasMounted]);
 
   const scrollToIndex = useCallback((idx: number) => {
+    setActiveIndex(idx);
     const el = scrollRef.current;
-    if (!el) return;
+    if (!el || isMobile) return;
     el.scrollTo({
       left: idx * el.clientWidth,
       behavior: "smooth",
     });
-  }, []);
+  }, [isMobile]);
 
   const scroll = useCallback(
     (direction: "left" | "right") => {
@@ -125,6 +139,7 @@ export function LeadGenHub({ locale }: LeadGenHubProps) {
   );
 
   const handleScroll = useCallback((e: UIEvent<HTMLDivElement>) => {
+    if (isMobile) return;
     const el = e.currentTarget;
     if (scrollRaf.current != null) return;
     scrollRaf.current = window.requestAnimationFrame(() => {
@@ -134,8 +149,117 @@ export function LeadGenHub({ locale }: LeadGenHubProps) {
       const index = Math.round(scrollLeft / clientWidth);
       setActiveIndex((prev) => (index !== prev ? index : prev));
     });
-  }, []);
+  }, [isMobile]);
 
+  // Prevent SSR/Hydration mismatch "Black Holes"
+  if (!hasMounted) {
+    return (
+      <section className="mx-auto max-w-6xl px-4 py-24 min-h-[600px] flex items-center justify-center">
+        <div className="text-slate-500 font-space text-xs tracking-widest animate-pulse uppercase">
+          Initializing Audit Infrastructure...
+        </div>
+      </section>
+    );
+  }
+
+  // --- MOBILE DASHBOARD VIEW ---
+  if (isMobile) {
+    return (
+      <div className="fixed inset-0 z-[100] flex flex-col bg-zinc-950 text-white overflow-hidden">
+        {/* Dashboard Header with Segmented Control */}
+        <div className="px-5 pt-12 pb-6 border-b border-white/5 bg-zinc-950/80 backdrop-blur-xl shrink-0">
+          <div className="flex items-center justify-between mb-6">
+             <div>
+                <span className="text-[10px] font-black tracking-[0.2em] text-emerald-500 uppercase font-space">
+                   Live Audit
+                </span>
+                <h1 className="text-xl font-bold font-space">Sovereign Dashboard</h1>
+             </div>
+             <button 
+                onClick={() => setIsMobile(false)}
+                className="h-10 w-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400"
+             >
+                ✕
+             </button>
+          </div>
+
+          {/* Segmented Control */}
+          <div className="relative flex p-1 bg-white/5 border border-white/10 rounded-2xl">
+              {TOOL_IDS.map((id, i) => {
+                 const toolName = (t.leadHub?.tools as any)?.[id]?.name ?? id;
+                 const isActive = activeIndex === i;
+                 return (
+                   <button
+                     key={id}
+                     onClick={() => scrollToIndex(i)}
+                     className={`relative z-10 flex-1 py-2.5 text-[10px] font-black uppercase tracking-wider transition-colors duration-300 font-space ${
+                       isActive ? "text-black" : "text-slate-400"
+                     }`}
+                   >
+                     {toolName.split(' ')[0]}
+                     {isActive && (
+                       <motion.div 
+                         layoutId="active-pill"
+                         className="absolute inset-0 z-[-1] bg-emerald-400 rounded-xl shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+                         transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                       />
+                     )}
+                   </button>
+                 );
+              })}
+          </div>
+        </div>
+
+        {/* Action Content Area */}
+        <div className="flex-grow relative overflow-hidden bg-zinc-950">
+          <AnimatePresence mode="wait">
+             <motion.div
+               key={activeIndex}
+               initial={{ opacity: 0, scale: 0.98, filter: "blur(10px)" }}
+               animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+               exit={{ opacity: 0, scale: 1.02, filter: "blur(10px)" }}
+               transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+               className="h-full w-full"
+             >
+               {mounted.has(activeIndex) ? (
+                 <div className="h-full flex flex-col">
+                    {(() => {
+                        const Tool = tools[activeIndex].component;
+                        return <Tool locale={locale} isDashboard={true} />;
+                    })()}
+                 </div>
+               ) : (
+                 <div className="flex h-full items-center justify-center text-slate-500 font-space text-[10px] tracking-widest animate-pulse">
+                   INITIALIZING MODULE...
+                 </div>
+               )}
+             </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Global Progress Bar Footer */}
+        <div className="px-6 py-8 border-t border-white/5 bg-zinc-950 shrink-0">
+             <div className="flex justify-between items-center mb-2">
+                <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest font-space">
+                   Infrastructure Analysis
+                </span>
+                <span className="text-[9px] font-black text-emerald-400 font-space">
+                   {activeIndex + 1} / {total}
+                </span>
+             </div>
+             <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                <motion.div 
+                  className="h-full bg-emerald-500" 
+                  initial={false}
+                  animate={{ width: `${((activeIndex + 1) / total) * 100}%` }}
+                />
+             </div>
+        </div>
+      </div>
+    );
+  }
+
+  // --- DESKTOP VIEW (Original Carousel) ---
   return (
     <section
       id="interactive-audit"
@@ -222,13 +346,15 @@ export function LeadGenHub({ locale }: LeadGenHubProps) {
                     </p>
                   )}
                 </div>
-                {mounted.has(idx) ? (
-                  <ToolComponent locale={locale} />
-                ) : (
-                  <div className="flex h-48 items-center justify-center rounded-2xl border border-white/5 bg-slate-900/30 text-xs text-slate-500">
-                    Swipe here to load this module
-                  </div>
-                )}
+                <div className="min-h-[600px] flex flex-col">
+                  {mounted.has(idx) ? (
+                    <ToolComponent locale={locale} isDashboard={false} />
+                  ) : (
+                    <div className="flex h-48 items-center justify-center rounded-2xl border border-white/5 bg-slate-900/30 text-xs text-slate-500">
+                      Swipe here to load this module
+                    </div>
+                  )}
+                </div>
 
                 {(activeIndex > 0 || activeIndex < total - 1) && (
                   <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row sm:gap-4">

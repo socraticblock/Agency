@@ -36,7 +36,7 @@ export function GenezisiSlider({
   }, [percentage, animatedPercentage]);
 
   return (
-    <div className="group relative flex flex-col gap-3">
+    <div className="group relative flex flex-col gap-3 touch-action-none" style={{ touchAction: 'none' }}>
       {/* Label and Value - Flex-col on mobile, between on destkop */}
       <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
         <label className="text-xs font-black uppercase tracking-widest text-slate-500 font-space">
