@@ -131,15 +131,12 @@ export const en = {
       "Total Digital Autonomy"
     ],
 
-    // Stage 2: Frictionless Commerce (The Intercept)
-    interceptTitle: "Frictionless Commerce",
-    interceptBody: "Remove the delay between 'I want this' and 'I bought this'. While most are still forcing buyers to copy and paste IBAN numbers in DMs, you can choose to deploy a 2-click, secure checkout experience using TBC or Bank of Georgia. Speaks Georgian, English, and Russian. Zero friction.",
-    interceptHook: "While most are still stuck in manual bank transfers and banking bureaucracy, you can choose to deploy a professional checkout. Through our partnership with specialized lawyers, we can even assist in the legal activation of your TBC or BoG merchant status.",
+    interceptBody: "Remove the delay between 'I want this' and 'I bought this'. You can choose to deploy a 2-click, secure checkout experience using TBC or Bank of Georgia.",
+    interceptHook: "While most are still stuck in manual bank transfers and banking bureaucracy, you can choose to deploy a professional checkout.",
     interceptFeatures: [
       "Native TBC/BoG Payment Gateways",
       "Instant Tri-Lingual Checkout UI",
-      "Automated Booking & confirmation",
-      "Optional Legal-Assisted Merchant Onboarding"
+      "Automated Booking & confirmation"
     ],
 
     // Stage 3: Scale Without Burnout (The Vault)
