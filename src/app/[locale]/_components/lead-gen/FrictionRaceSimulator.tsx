@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { LeadCaptureForm } from "./LeadCaptureForm";
 import { AuditCitation } from "./AuditCitation";
 import { getMessages, type Locale } from "@/lib/i18n";
+import { Scan, X } from "lucide-react";
 
 interface FrictionRaceSimulatorProps {
   locale: Locale;
@@ -15,6 +16,7 @@ export function FrictionRaceSimulator({ locale, isDashboard }: FrictionRaceSimul
   const [isRacing, setIsRacing] = useState(false);
   const [raceStep, setRaceStep] = useState(0);
   const [showForm, setShowForm] = useState(false);
+  const [showSource, setShowSource] = useState(false);
   const t = getMessages(locale);
 
   useEffect(() => {
@@ -81,15 +83,50 @@ export function FrictionRaceSimulator({ locale, isDashboard }: FrictionRaceSimul
                  Typical 5-step social media checkout funnel.
               </p>
            </div>
-           <div className="rounded-xl border border-emerald-500/10 bg-emerald-500/5 p-4">
+           <div className="relative rounded-xl border border-emerald-500/10 bg-emerald-500/5 p-4">
               <h4 className="text-[10px] font-black uppercase tracking-widest text-emerald-400 mb-2">
                  {t.leadTools?.friction?.premiumRouteTitle}
               </h4>
               <p className="text-xs text-slate-400">
                  Optimized 1-step direct storefront.
               </p>
+
+              {isDashboard && (
+                <button 
+                  onClick={() => setShowSource(true)}
+                  className="absolute bottom-2 right-2 flex items-center gap-1.5 text-[9px] font-black uppercase tracking-tighter text-emerald-400/60 hover:text-emerald-400 transition"
+                >
+                  <Scan className="h-3 w-3" />
+                  View Science
+                </button>
+              )}
            </div>
         </div>
+
+        <AnimatePresence>
+          {showSource && (
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="absolute inset-0 z-[40] flex flex-col items-center justify-center p-6 md:p-12 bg-zinc-950/95 backdrop-blur-3xl"
+            >
+               <button 
+                 onClick={() => setShowSource(false)}
+                 className="absolute top-4 right-4 h-8 w-8 rounded-full bg-white/5 flex items-center justify-center text-slate-400"
+               >
+                 <X className="h-4 w-4" />
+               </button>
+               <div className="w-full max-w-md">
+                 <AuditCitation
+                   dataPoint={t.leadTools?.friction?.citationPoint}
+                   explanation={t.leadTools?.friction?.citationExplanation}
+                   source={t.leadTools?.friction?.citationSource}
+                 />
+               </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {isDashboard && (
            <div className="flex flex-col gap-4">

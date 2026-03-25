@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { LeadCaptureForm } from "./LeadCaptureForm";
 import { AuditCitation } from "./AuditCitation";
 import { getMessages, type Locale } from "@/lib/i18n";
+import { Scan, X } from "lucide-react";
 
 interface TrueAudienceVisualizerProps {
   locale: Locale;
@@ -15,6 +16,7 @@ export function TrueAudienceVisualizer({ locale, isDashboard }: TrueAudienceVisu
   const [followers, setFollowers] = useState(10000);
   const [engagementRate, setEngagementRate] = useState(5);
   const [showForm, setShowForm] = useState(false);
+  const [showSource, setShowSource] = useState(false);
   const t = getMessages(locale);
 
   // Calculate reached audience
@@ -70,7 +72,7 @@ export function TrueAudienceVisualizer({ locale, isDashboard }: TrueAudienceVisu
           />
         </div>
 
-        <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-4">
+        <div className="relative rounded-xl border border-red-500/30 bg-red-500/10 p-4">
           <h3 className="text-lg font-semibold text-red-200">
             {t.leadTools?.audience?.insightTitle}
           </h3>
@@ -83,7 +85,42 @@ export function TrueAudienceVisualizer({ locale, isDashboard }: TrueAudienceVisu
             </strong>{" "}
             {t.leadTools?.audience?.insightBodySuffix}
           </p>
+
+          {isDashboard && (
+            <button 
+              onClick={() => setShowSource(true)}
+              className="absolute bottom-2 right-2 flex items-center gap-1.5 text-[9px] font-black uppercase tracking-tighter text-red-400/60 hover:text-red-400 transition"
+            >
+              <Scan className="h-3 w-3" />
+              View Science
+            </button>
+          )}
         </div>
+
+        <AnimatePresence>
+          {showSource && (
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="absolute inset-0 z-[40] flex flex-col items-center justify-center p-6 md:p-12 bg-zinc-950/95 backdrop-blur-3xl"
+            >
+               <button 
+                 onClick={() => setShowSource(false)}
+                 className="absolute top-4 right-4 h-8 w-8 rounded-full bg-white/5 flex items-center justify-center text-slate-400"
+               >
+                 <X className="h-4 w-4" />
+               </button>
+               <div className="w-full max-w-md">
+                 <AuditCitation
+                   dataPoint={t.leadTools?.audience?.citationPoint}
+                   explanation={t.leadTools?.audience?.citationExplanation}
+                   source={t.leadTools?.audience?.citationSource}
+                 />
+               </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {!isDashboard && (
            <AuditCitation
