@@ -13,7 +13,11 @@ import {
   Zap, 
   Fingerprint, 
   ShieldCheck, 
-  Maximize2 
+  Maximize2,
+  Activity,
+  Scan,
+  Sparkles,
+  Lock
 } from "lucide-react";
 import { getMessages, type Locale } from "@/lib/i18n";
 import { KineticText } from "../KineticText";
@@ -71,6 +75,7 @@ export function LeadGenHub({ locale }: LeadGenHubProps) {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // Update mounted set when dashboard opens or index changes
   useEffect(() => {
     if (!hasMounted) return;
     setMounted((prev) => {
@@ -89,115 +94,141 @@ export function LeadGenHub({ locale }: LeadGenHubProps) {
   if (!hasMounted) return null;
 
   return (
-    <section id="interactive-audit" className="relative mx-auto max-w-6xl px-4 py-24 sm:px-6">
-      {/* 🏁 THE LAUNCHPAD: High-Fidelity Trigger Card */}
-      <div className="relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-slate-900/40 p-1 backdrop-blur-3xl shadow-2xl">
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-indigo-500/10 opacity-30" />
+    <section id="interactive-audit" className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
+      {/* 🏁 THE SOVEREIGN GATE: Bento-Hierarchy Trigger Card */}
+      <div className="relative overflow-hidden rounded-[3rem] border border-white/5 bg-slate-950/40 p-1 backdrop-blur-3xl shadow-[0_32px_128px_-32px_rgba(0,0,0,0.8)]">
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-indigo-500/10 opacity-40" />
         
-        <div className="relative flex flex-col items-center justify-between gap-8 rounded-[2.25rem] border border-white/5 bg-black/40 px-8 py-12 md:flex-row md:px-16 md:py-20">
-          <div className="max-w-xl text-center md:text-left">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-emerald-500/10 px-4 py-1.5 border border-emerald-500/20">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
-              </span>
-              <span className="text-[10px] font-black uppercase tracking-widest text-emerald-400 font-space">
-                System Diagnostic Available
+        <div className="relative flex flex-col items-stretch lg:flex-row rounded-[2.8rem] border border-white/5 bg-black/60 overflow-hidden">
+          {/* Left: Strategic Content */}
+          <div className="flex-grow p-8 sm:p-12 lg:p-20 lg:max-w-[60%]">
+            <div className="mb-8 inline-flex items-center gap-3 rounded-full bg-emerald-500/10 px-5 py-2 border border-emerald-500/20 backdrop-blur-md">
+              <Activity className="h-4 w-4 text-emerald-400 animate-pulse" />
+              <span className="text-[11px] font-black uppercase tracking-[0.2em] text-emerald-400 font-space">
+                System Diagnostic: Active
               </span>
             </div>
             
-            <h2 className="text-3xl font-bold text-white md:text-5xl font-space leading-tight mb-6">
-              {t.leadHub?.title ?? "Quantify Your Growth Delta"}
+            <h2 className="text-4xl font-black text-white sm:text-5xl lg:text-6xl font-space leading-tight mb-8">
+              Explore your <span className="text-emerald-400">digital</span> foundation.
             </h2>
             
-            <p className="text-lg text-slate-400 md:text-xl leading-relaxed">
-              {t.leadHub?.body ?? "Run a global infrastructure audit to identify hidden conversion bottlenecks and automate your revenue capture."}
+            <p className="text-lg text-slate-400 sm:text-xl leading-relaxed mb-12 max-w-xl">
+              Launch a sovereign infrastructure audit to identify hidden bottlenecks and automate your high-value growth loops.
             </p>
 
-            <div className="mt-10 flex flex-wrap justify-center gap-4 md:justify-start">
-               <div className="flex items-center gap-2 text-xs font-medium text-slate-500 uppercase tracking-widest border-r border-white/10 pr-4">
-                  <Orbit className="h-4 w-4 text-emerald-500/60" /> 5 Audit Modules
-               </div>
-               <div className="flex items-center gap-2 text-xs font-medium text-slate-500 uppercase tracking-widest">
-                  <Fingerprint className="h-4 w-4 text-emerald-500/60" /> Precision Analytics
-               </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
+               {[
+                 { icon: Scan, text: "Structural Analysis" },
+                 { icon: Fingerprint, text: "Behavioral Identity" },
+                 { icon: Zap, text: "Friction Recovery" },
+                 { icon: ShieldCheck, text: "Risk Appraisal" }
+               ].map((item, i) => (
+                 <div key={i} className="flex items-center gap-4 text-xs font-bold text-slate-500 uppercase tracking-widest">
+                    <div className="h-10 w-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-emerald-500/60 transition group-hover:text-emerald-400">
+                       <item.icon className="h-5 w-5" />
+                    </div>
+                    {item.text}
+                 </div>
+               ))}
             </div>
           </div>
 
-          <div className="shrink-0">
-            <button
-              onClick={() => setIsDashboardOpen(true)}
-              className="group relative flex h-40 w-40 items-center justify-center rounded-full bg-emerald-500 p-2 text-slate-950 transition-all hover:scale-105 hover:bg-emerald-400 active:scale-95 shadow-[0_0_50px_rgba(16,185,129,0.3)]"
-            >
-              <div className="absolute inset-0 animate-pulse rounded-full border-4 border-emerald-500/30" />
-              <div className="flex flex-col items-center text-center">
-                 <Maximize2 className="h-8 w-8 mb-2 group-hover:rotate-6 transition-transform" />
-                 <span className="text-[10px] font-black uppercase tracking-tighter leading-none">
+          {/* Right: The Visual Anchor (Audit Pulse) */}
+          <div className="relative lg:w-[40%] bg-zinc-900/40 border-l border-white/5 flex items-center justify-center p-12 min-h-[400px]">
+             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.05)_0%,transparent_70%)]" />
+             
+             {/* Animated Orbital Pulse */}
+             <div className="relative flex items-center justify-center">
+                <motion.div 
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                  className="absolute h-80 w-80 rounded-full border border-dashed border-white/10"
+                />
+                <motion.div 
+                  animate={{ rotate: -360 }}
+                  transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                  className="absolute h-64 w-64 rounded-full border border-emerald-500/10"
+                />
+                <div className="absolute h-48 w-48 rounded-full bg-emerald-500/5 blur-3xl" />
+                
+                <button
+                  onClick={() => setIsDashboardOpen(true)}
+                  className="group relative flex h-48 w-48 flex-col items-center justify-center rounded-full bg-emerald-500 p-4 text-slate-950 transition-all hover:scale-105 hover:bg-emerald-400 active:scale-95 shadow-[0_0_80px_rgba(16,185,129,0.4)]"
+                >
+                  <div className="absolute inset-0 animate-pulse rounded-full border-[6px] border-emerald-500/30" />
+                  <Maximize2 className="h-10 w-10 mb-3 group-hover:rotate-12 transition-transform duration-500" />
+                  <span className="text-[12px] font-black uppercase tracking-tighter leading-none text-center">
                     Launch<br/>Dashboard
-                 </span>
-              </div>
-            </button>
+                  </span>
+                  <div className="mt-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                     <Sparkles className="h-3 w-3" />
+                     <span className="text-[8px] font-black uppercase font-space">Sovereign Mode</span>
+                  </div>
+                </button>
+             </div>
           </div>
         </div>
       </div>
 
-      {/* 🔮 THE SOVEREIGN DASHBOARD: Full-Screen Modal */}
+      {/* 🔮 THE SOVEREIGN DASHBOARD: Full-Screen Modal v1.5 */}
       <AnimatePresence>
         {isDashboardOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[200] flex flex-col bg-zinc-950 text-white overflow-hidden"
+            className="fixed inset-0 z-[500] flex flex-col bg-zinc-950 text-white overflow-hidden"
           >
-            {/* Header: Segmented Control & Navigation */}
-            <div className="px-5 pt-12 pb-6 border-b border-white/5 bg-zinc-950/80 backdrop-blur-xl shrink-0 z-20">
-              <div className="flex items-center justify-between mb-8 max-w-6xl mx-auto w-full">
-                 <div>
-                    <span className="text-[10px] font-black tracking-[0.25em] text-emerald-500 uppercase font-space animate-pulse">
-                       LIVE INFRASTRUCTURE AUDIT
-                    </span>
-                    <h1 className="text-xl md:text-2xl font-bold font-space flex items-center gap-3">
-                       Sovereign Dashboard 
-                       <span className="hidden md:inline-block rounded-md border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] text-slate-400">v1.4</span>
-                    </h1>
+            {/* Header: v1.5 Muted Exit & Spacious Tabs */}
+            <div className="px-5 pt-12 pb-8 border-b border-white/5 bg-zinc-950/80 backdrop-blur-2xl shrink-0 z-20">
+              <div className="flex items-center justify-between mb-10 max-w-7xl mx-auto w-full">
+                 <div className="flex items-center gap-4">
+                    <div className="h-10 w-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                       <Scan className="h-5 w-5" />
+                    </div>
+                    <div>
+                       <span className="text-[10px] font-black tracking-[0.3em] text-emerald-500 uppercase font-space animate-pulse">
+                          ENCRYPTED AUDIT HUD
+                       </span>
+                       <h1 className="text-xl md:text-3xl font-black font-space tracking-tight">
+                          Sovereign Dashboard 
+                       </h1>
+                    </div>
                  </div>
+
+                 {/* v1.5 Muted Glassmorphic Exit */}
                  <button 
                     onClick={() => setIsDashboardOpen(false)}
-                    className="group h-12 w-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 transition hover:bg-red-500/20 hover:text-red-400 hover:border-red-500/30"
+                    className="group relative h-14 w-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/30 hover:rotate-90 shadow-xl"
                  >
                     <span className="sr-only">Close Audit</span>
-                    <div className="relative h-4 w-4">
-                       <div className="absolute top-1/2 left-0 w-full h-0.5 bg-current rotate-45" />
-                       <div className="absolute top-1/2 left-0 w-full h-0.5 bg-current -rotate-45" />
-                    </div>
+                    <XIcon className="h-5 w-5" />
                  </button>
               </div>
 
-              {/* Enhanced Segmented Control */}
-              <div className="relative flex p-1.5 bg-black/40 border border-white/10 rounded-2xl max-w-4xl mx-auto w-full overflow-x-auto no-scrollbar scroll-smooth">
+              {/* Spacious Segmented Control v1.5 */}
+              <div className="relative flex p-2 bg-black/60 border border-white/5 rounded-[1.5rem] max-w-4xl mx-auto w-full overflow-x-auto no-scrollbar scroll-smooth">
                   {TOOL_IDS.map((id, i) => {
                      const toolCopy = (t.leadHub?.tools as any)?.[id] ?? { name: id };
                      const isActive = activeIndex === i;
-                     
-                     // Get Icon based on tool ID
                      const ToolIcon = i === 0 ? BarChart3 : i === 1 ? Orbit : i === 2 ? Zap : i === 3 ? Fingerprint : ShieldCheck;
 
                      return (
                        <button
                          key={id}
                          onClick={() => setActiveIndex(i)}
-                         className={`relative z-10 flex flex-1 items-center justify-center gap-2 min-w-[100px] py-3 text-[10px] font-black uppercase tracking-widest transition-all duration-300 font-space whitespace-nowrap px-4 ${
+                         className={`relative z-10 flex flex-1 items-center justify-center gap-4 min-w-[120px] py-4 text-[11px] font-black uppercase tracking-[0.15em] transition-all duration-500 font-space whitespace-nowrap px-8 ${
                            isActive ? "text-slate-950" : "text-slate-500 hover:text-slate-300"
                          }`}
                        >
-                         <ToolIcon className={`h-3.5 w-3.5 ${isActive ? "text-slate-950" : "text-emerald-500/40"}`} />
+                         <ToolIcon className={`h-5 w-5 transition-transform duration-500 ${isActive ? "text-black scale-110" : "text-emerald-500/30 group-hover:text-emerald-400"}`} />
                          {toolCopy.name.split(' ')[0]}
                          {isActive && (
                            <motion.div 
-                             layoutId="dashboard-pill"
-                             className="absolute inset-0 z-[-1] bg-emerald-400 rounded-xl shadow-[0_0_30px_rgba(16,185,129,0.4)]"
-                             transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                             layoutId="dashboard-pill-v1.5"
+                             className="absolute inset-0 z-[-1] bg-emerald-400 rounded-2xl shadow-[0_0_40px_rgba(16,185,129,0.5)]"
+                             transition={{ type: "spring", stiffness: 350, damping: 30 }}
                            />
                          )}
                        </button>
@@ -206,81 +237,93 @@ export function LeadGenHub({ locale }: LeadGenHubProps) {
               </div>
             </div>
 
-            {/* Main Content Area: FIXED Viewport Lock but INNER content scroll */}
-            <div className="flex-grow relative overflow-y-auto overscroll-contain bg-zinc-950 pb-24 md:pb-32">
-               <div className="max-w-6xl mx-auto w-full px-4 md:px-8 py-8 md:py-16">
+            {/* Main Content: Locked Body + Fluid Core + Fade Gradients */}
+            <div className="flex-grow relative overflow-y-auto overscroll-contain bg-zinc-950 px-4 md:px-8 pb-32">
+               {/* Fade Gradients for visual continuity */}
+               <div className="sticky top-0 left-0 right-0 h-12 bg-gradient-to-b from-zinc-950 to-transparent z-10 pointer-events-none" />
+               
+               <div className="max-w-6xl mx-auto w-full py-8 md:py-16">
                   <AnimatePresence mode="wait">
                      <motion.div
                        key={activeIndex}
-                       initial={{ opacity: 0, x: 20, filter: "blur(10px)" }}
-                       animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                       exit={{ opacity: 0, x: -20, filter: "blur(10px)" }}
-                       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                       className="w-full"
+                       initial={{ opacity: 0, y: 30, filter: "blur(20px)" }}
+                       animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                       exit={{ opacity: 0, y: -30, filter: "blur(20px)" }}
+                       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                       className="w-full flex flex-col items-center"
                      >
-                       {mounted.has(activeIndex) ? (
-                            <div className="w-full">
-                                {(() => {
-                                    const Tool = tools[activeIndex].component;
-                                    return <Tool locale={locale} isDashboard={true} />;
-                                })()}
+                       <div className="w-full p-4 md:p-8 max-w-4xl rounded-[2rem] border border-white/5 bg-white/[0.02] backdrop-blur-md">
+                          {mounted.has(activeIndex) ? (
+                              <div className="w-full">
+                                  {(() => {
+                                      const Tool = tools[activeIndex].component;
+                                      return <Tool locale={locale} isDashboard={true} />;
+                                  })()}
+                              </div>
+                          ) : (
+                            <div className="flex min-h-[400px] flex-col items-center justify-center gap-6">
+                               <Orbit className="h-10 w-10 text-emerald-500 animate-spin-slow" />
+                               <div className="text-slate-500 font-space text-[12px] tracking-[0.4em] uppercase">
+                                 Synchronizing Audit Node {activeIndex + 1}...
+                               </div>
                             </div>
-                       ) : (
-                         <div className="flex min-h-[400px] items-center justify-center text-slate-500 font-space text-[12px] tracking-widest animate-pulse uppercase">
-                           Synchronizing Neural Nodes...
-                         </div>
-                       )}
+                          )}
+                       </div>
                      </motion.div>
                   </AnimatePresence>
                </div>
+               
+               <div className="sticky bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-zinc-950 to-transparent z-10 pointer-events-none" />
             </div>
 
-            {/* Global Progress Bar & Info Footer */}
-            <div className="fixed bottom-0 left-0 right-0 z-30 px-6 py-6 border-t border-white/10 bg-zinc-950/95 backdrop-blur-md">
-                 <div className="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-                    <div className="flex items-center gap-4">
-                        <div className="h-10 w-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-emerald-500">
-                            <Zap className="h-5 w-5" />
+            {/* Global Authority Footer v1.5 */}
+            <div className="fixed bottom-0 left-0 right-0 z-[600] px-6 py-8 border-t border-white/5 bg-zinc-950/90 backdrop-blur-xl">
+                 <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+                    <div className="flex items-center gap-5">
+                        <div className="h-14 w-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-emerald-500 relative">
+                             <Lock className="h-6 w-6" />
+                             <div className="absolute -top-1 -right-1 h-3 w-3 bg-emerald-500 rounded-full border-2 border-zinc-950 animate-pulse" />
                         </div>
                         <div>
-                            <span className="block text-[10px] font-black text-slate-400 uppercase tracking-widest font-space">
-                               Module Progress
+                            <span className="block text-[11px] font-black text-slate-500 uppercase tracking-[0.2em] font-space mb-1">
+                               System Integrity
                             </span>
-                            <span className="block text-sm font-bold text-white font-space">
-                               Audit Active — Step {activeIndex + 1} of {total}
+                            <span className="block text-lg font-black text-white font-space tracking-tight">
+                               Step {activeIndex + 1} of {total}: <span className="text-emerald-400">Encryption Active</span>
                             </span>
                         </div>
                     </div>
                     
                     <div className="flex-grow max-w-sm w-full">
-                        <div className="flex justify-between items-center mb-1.5 px-1">
-                            <span className="text-[9px] font-black text-emerald-500 font-space uppercase">Compute Load: Optimized</span>
-                            <span className="text-[9px] font-black text-emerald-500 font-space">{Math.round(((activeIndex+1)/total)*100)}%</span>
+                        <div className="flex justify-between items-center mb-2 px-1">
+                            <span className="text-[10px] font-black text-emerald-500/60 font-space uppercase tracking-widest">Audit Logic: Propagating</span>
+                            <span className="text-[10px] font-black text-emerald-500 font-space">{Math.round(((activeIndex+1)/total)*100)}%</span>
                         </div>
-                        <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+                        <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden p-[1px]">
                             <motion.div 
-                              className="h-full bg-emerald-500" 
+                              className="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 rounded-full" 
                               initial={false}
                               animate={{ width: `${((activeIndex + 1) / total) * 100}%` }}
-                              transition={{ duration: 0.8, ease: "circOut" }}
+                              transition={{ duration: 1, ease: [0.33, 1, 0.68, 1] }}
                             />
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3">
                          <button 
                             disabled={activeIndex === 0}
                             onClick={() => setActiveIndex(prev => Math.max(0, prev - 1))}
-                            className="p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition disabled:opacity-30 disabled:cursor-not-allowed"
+                            className="h-14 w-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition duration-300 disabled:opacity-20 disabled:grayscale"
                          >
-                            <ChevronLeft className="h-4 w-4" />
+                            <ChevronLeft className="h-6 w-6" />
                          </button>
                          <button 
                             disabled={activeIndex === total - 1}
                             onClick={() => setActiveIndex(prev => Math.min(total - 1, prev + 1))}
-                            className="p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition disabled:opacity-30 disabled:cursor-not-allowed"
+                            className="h-14 px-8 rounded-2xl bg-emerald-500 text-slate-950 font-black uppercase text-[11px] tracking-widest hover:bg-emerald-400 transition-all duration-300 shadow-[0_0_30px_rgba(16,185,129,0.3)] disabled:opacity-20 flex items-center gap-3"
                          >
-                            <ChevronRight className="h-4 w-4" />
+                            Next Module
+                            <ChevronRight className="h-5 w-5" />
                          </button>
                     </div>
                  </div>
@@ -289,5 +332,13 @@ export function LeadGenHub({ locale }: LeadGenHubProps) {
         )}
       </AnimatePresence>
     </section>
+  );
+}
+
+function XIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+    </svg>
   );
 }
