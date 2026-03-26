@@ -387,13 +387,15 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="fixed inset-0 z-[600] flex items-center justify-center p-6 bg-zinc-950/90 backdrop-blur-3xl"
+                  onClick={() => setIsScienceOpen(false)}
+                  className="fixed inset-0 z-[600] flex items-center justify-center p-6 bg-zinc-950/90 backdrop-blur-3xl cursor-pointer"
                 >
                   <motion.div
                     initial={{ scale: 0.95, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     exit={{ scale: 0.95, opacity: 0 }}
-                    className="w-full max-w-xl relative"
+                    onClick={(e) => e.stopPropagation()}
+                    className="w-full max-w-xl relative cursor-default"
                   >
                     <button
                       onClick={() => setIsScienceOpen(false)}

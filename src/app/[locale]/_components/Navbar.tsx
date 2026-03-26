@@ -28,7 +28,6 @@ export function Navbar({ locale }: { locale: Locale }) {
   const navLinks = [
     { href: `/${locale}/architect`, label: "Start Building", highlight: true },
     { href: `/${locale}#footprint`, label: t.nav.footprint },
-    { href: `/${locale}#contact`, label: t.nav.contact },
   ];
 
   return (
@@ -59,14 +58,6 @@ export function Navbar({ locale }: { locale: Locale }) {
                 {link.label}
               </Link>
             ))}
-            <div className="ml-4 h-4 w-px bg-white/10" />
-            <MagneticButton
-              as={Link}
-              href={`/${locale}/apply`}
-              className="rounded-full bg-emerald-500/10 border border-emerald-500/20 px-5 py-2 text-xs font-black uppercase tracking-widest text-emerald-400 transition-all hover:bg-emerald-500 hover:text-slate-950"
-            >
-              {t.nav.cta}
-            </MagneticButton>
           </div>
 
           <button
@@ -122,20 +113,6 @@ export function Navbar({ locale }: { locale: Locale }) {
                   </motion.div>
                 ))}
 
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                  className="mt-12"
-                >
-                  <Link
-                    href={`/${locale}/apply`}
-                    onClick={close}
-                    className="inline-flex w-full items-center justify-center rounded-2xl bg-emerald-500 py-6 text-xl font-black uppercase tracking-[0.1em] text-slate-950 shadow-[0_15px_45px_rgba(16,185,129,0.3)] active:scale-95 transition-transform"
-                  >
-                    {t.nav.cta}
-                  </Link>
-                </motion.div>
               </div>
             </div>
 

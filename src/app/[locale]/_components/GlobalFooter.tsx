@@ -53,7 +53,7 @@ export function GlobalFooter({ locale }: { locale: Locale }) {
         className="mt-10"
       >
         <motion.a
-          href={`/${locale}/apply`}
+          href={`/${locale}/architect`}
           onMouseMove={handleCtaMove}
           onMouseLeave={handleCtaLeave}
           style={{ x: springX, y: springY }}

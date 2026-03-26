@@ -128,7 +128,14 @@ export const TrueAudienceVisualizer = memo(function TrueAudienceVisualizer({ loc
       <>
         {content}
         {showForm && (
-           <div className="fixed inset-0 z-[110] bg-zinc-950 p-6 overflow-y-auto">
+           <div 
+             onClick={() => setShowForm(false)}
+             className="fixed inset-0 z-[110] bg-zinc-950 p-6 overflow-y-auto cursor-pointer"
+           >
+              <div 
+                onClick={(e) => e.stopPropagation()}
+                className="max-w-4xl mx-auto cursor-default"
+              >
               <button 
                 onClick={() => setShowForm(false)}
                 className="mb-8 h-10 w-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400"
@@ -141,6 +148,7 @@ export const TrueAudienceVisualizer = memo(function TrueAudienceVisualizer({ loc
                 painPoint={`${t.leadTools?.audience?.leadPainPointPrefix} ${reachedAudience} ${t.leadTools?.audience?.leadPainPointSuffix} ${followers}`}
                 ctaText={t.leadTools?.audience?.leadCta}
               />
+              </div>
            </div>
         )}
       </>

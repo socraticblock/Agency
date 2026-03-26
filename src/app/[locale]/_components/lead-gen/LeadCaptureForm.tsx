@@ -51,7 +51,7 @@ export function LeadCaptureForm({
     }
 
     redirectTimer.current = setTimeout(() => {
-      router.push(`/${locale}/book-strategy`);
+      router.push(`/${locale}/architect`);
     }, 2200);
 
     return () => {
@@ -61,7 +61,7 @@ export function LeadCaptureForm({
 
   const goToBooking = () => {
     if (redirectTimer.current) clearTimeout(redirectTimer.current);
-    router.push(`/${locale}/book-strategy`);
+    router.push(`/${locale}/architect`);
   };
 
   if (isLeadCaptureSuccess(state)) {
