@@ -199,7 +199,7 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
                   return (
                     <button
                       key={id}
-                      ref={el => tabRefs.current[i] = el}
+                      ref={el => { tabRefs.current[i] = el; }}
                       onClick={() => setActiveIndex(i)}
                       className={`relative z-10 flex flex-1 items-center justify-center gap-2 md:gap-4 min-w-[70px] md:min-w-[100px] py-2.5 md:py-4 px-4 md:px-8 text-[9px] md:text-[11px] font-black uppercase tracking-[0.15em] transition-all duration-500 font-space whitespace-nowrap snap-center ${isActive ? "text-slate-950" : "text-slate-600 hover:text-slate-300"
                         }`}
