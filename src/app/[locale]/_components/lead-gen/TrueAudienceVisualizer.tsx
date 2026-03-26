@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { LeadCaptureForm } from "./LeadCaptureForm";
 import { AuditCitation } from "./AuditCitation";
@@ -12,7 +12,7 @@ interface TrueAudienceVisualizerProps {
   isDashboard?: boolean;
 }
 
-export function TrueAudienceVisualizer({ locale, isDashboard }: TrueAudienceVisualizerProps) {
+export const TrueAudienceVisualizer = memo(function TrueAudienceVisualizer({ locale, isDashboard }: TrueAudienceVisualizerProps) {
   const [followers, setFollowers] = useState(10000);
   const [engagementRate, setEngagementRate] = useState(5);
   const [showForm, setShowForm] = useState(false);
@@ -171,4 +171,4 @@ export function TrueAudienceVisualizer({ locale, isDashboard }: TrueAudienceVisu
       )}
     </div>
   );
-}
+});

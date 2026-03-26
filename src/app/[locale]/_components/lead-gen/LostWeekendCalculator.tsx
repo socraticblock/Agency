@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { LeadCaptureForm } from "./LeadCaptureForm";
 import { getMessages, type Locale } from "@/lib/i18n";
@@ -12,7 +12,7 @@ interface LostWeekendCalculatorProps {
   isDashboard?: boolean;
 }
 
-export function LostWeekendCalculator({ locale, isDashboard }: LostWeekendCalculatorProps) {
+export const LostWeekendCalculator = memo(function LostWeekendCalculator({ locale, isDashboard }: LostWeekendCalculatorProps) {
   const [dailySales, setDailySales] = useState(500);
   const [hoursOnline, setHoursOnline] = useState(10);
   const [showForm, setShowForm] = useState(false);
@@ -207,4 +207,4 @@ export function LostWeekendCalculator({ locale, isDashboard }: LostWeekendCalcul
       )}
     </div>
   );
-}
+});

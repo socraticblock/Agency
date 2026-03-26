@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect, useRef, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { LeadCaptureForm } from "./LeadCaptureForm";
 import { getMessages, type Locale } from "@/lib/i18n";
@@ -12,7 +12,7 @@ interface TimeDebtReceiptProps {
   isDashboard?: boolean;
 }
 
-export function TimeDebtReceipt({ locale, isDashboard }: TimeDebtReceiptProps) {
+export const TimeDebtReceipt = memo(function TimeDebtReceipt({ locale, isDashboard }: TimeDebtReceiptProps) {
   const [hoursPerWeek, setHoursPerWeek] = useState(5);
   const [hourlyRate, setHourlyRate] = useState(15.6);
   const [isPrinting, setIsPrinting] = useState(false);
@@ -219,4 +219,4 @@ export function TimeDebtReceipt({ locale, isDashboard }: TimeDebtReceiptProps) {
       )}
     </div>
   );
-}
+});

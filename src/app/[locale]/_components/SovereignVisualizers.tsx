@@ -80,12 +80,12 @@ export function DesignVisual() {
         return (
           <motion.div
             key={i}
-            layout
+            layout="position"
             onHoverStart={() => setHoveredIndex(i)}
             onHoverEnd={() => setHoveredIndex(null)}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             whileHover={{ scale: 1.02, zIndex: 10 }}
-            className="relative flex-none w-[85%] md:w-1/3 min-w-[85%] md:min-w-0 mx-2 h-40 rounded-2xl glass-card backdrop-blur-md border border-white/10 flex flex-col items-center justify-center p-3 cursor-pointer overflow-hidden group snap-center"
+            className="relative flex-none w-[85%] md:w-1/3 min-w-[85%] md:min-w-0 mx-2 h-40 rounded-2xl glass-card backdrop-blur-sm border border-white/10 flex flex-col items-center justify-center p-3 cursor-pointer overflow-hidden group snap-center"
           >
             {/* Radial Mouse Track following Spotlight Glow */}
             <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-[radial-gradient(circle_at_center,_rgba(16,185,129,0.12),_transparent_70%)]" />
@@ -216,6 +216,7 @@ export function InterceptVisual() {
       {/* Persistent Checkout Component */}
       <motion.div
         layoutId="checkout-container"
+        layout="position"
         initial={false}
         animate={{
           opacity: !isPaid ? 1 : 0,

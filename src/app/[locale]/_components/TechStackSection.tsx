@@ -26,6 +26,7 @@ export function TechStackSection({ locale }: { locale: Locale }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.5, delay: i * 0.08 }}
+            style={{ willChange: 'transform, opacity' }}
             className="group relative isolate z-10 mb-4 flex flex-col gap-3 overflow-hidden rounded-2xl glass-card p-6 shadow-[0_0_30px_rgba(16,185,129,0.06)] last:mb-0 md:flex-row md:items-start md:gap-6"
           >
             {/* Subtle grid background */}

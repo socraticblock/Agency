@@ -300,7 +300,7 @@ export function SovereignTriptych({ dict }: { dict: any }) {
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
-              layout
+              layout="position"
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0, height: "auto" }}
               exit={{ opacity: 0, x: -20 }}
@@ -309,7 +309,8 @@ export function SovereignTriptych({ dict }: { dict: any }) {
                 ease: "easeOut",
                 height: { duration: 0.3 }
               }}
-              className="glass-card static md:sticky md:top-24 rounded-3xl p-8 shadow-[0_0_40px_rgba(16,185,129,0.08)] backdrop-blur-md border border-white/10 flex flex-col justify-between overflow-hidden group min-h-[400px]"
+              style={{ willChange: 'transform, opacity' }}
+              className="glass-card static md:sticky md:top-24 rounded-3xl p-8 shadow-[0_0_40px_rgba(16,185,129,0.08)] backdrop-blur-sm border border-white/10 flex flex-col justify-between overflow-hidden group min-h-[400px]"
             >
               <div className="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(circle_at_center,_rgba(16,185,129,0.4),_transparent_60%)]" />
 

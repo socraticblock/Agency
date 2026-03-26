@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { LeadCaptureForm } from "./LeadCaptureForm";
 import { AuditCitation } from "./AuditCitation";
@@ -12,7 +12,7 @@ interface PlatformRiskMeterProps {
   isDashboard?: boolean;
 }
 
-export function PlatformRiskMeter({ locale, isDashboard }: PlatformRiskMeterProps) {
+export const PlatformRiskMeter = memo(function PlatformRiskMeter({ locale, isDashboard }: PlatformRiskMeterProps) {
   const [answers, setAnswers] = useState<Record<number, boolean | null>>({
     0: null,
     1: null,
@@ -232,4 +232,4 @@ export function PlatformRiskMeter({ locale, isDashboard }: PlatformRiskMeterProp
       )}
     </div>
   );
-}
+});

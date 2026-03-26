@@ -297,7 +297,7 @@ export default function SummaryDashboard({
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Box 1 */}
-              <div className="glass-card border border-white/5 bg-white/[0.02] backdrop-blur-xl p-8 rounded-2xl flex flex-col gap-4 relative overflow-hidden group h-full">
+              <div style={{ willChange: 'transform, opacity' }} className="glass-card border border-white/5 bg-white/[0.02] backdrop-blur-md p-8 rounded-2xl flex flex-col gap-4 relative overflow-hidden group h-full">
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent opacity-50" />
                 <div className="flex justify-between items-center border-b border-white/5 pb-2 z-10">
                   <span className="text-xs font-black font-space text-slate-400 uppercase tracking-wider flex items-center gap-1">
@@ -341,7 +341,7 @@ export default function SummaryDashboard({
               </div>
 
               {/* Box 2 */}
-              <div className="glass-card border border-white/5 bg-white/[0.02] backdrop-blur-xl p-8 rounded-2xl flex flex-col gap-4 relative overflow-hidden group h-full">
+              <div style={{ willChange: 'transform, opacity' }} className="glass-card border border-white/5 bg-white/[0.02] backdrop-blur-md p-8 rounded-2xl flex flex-col gap-4 relative overflow-hidden group h-full">
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent opacity-50" />
                 <div className="flex justify-between items-center border-b border-white/5 pb-2 z-10">
                   <span className="text-xs font-black font-space text-slate-400 uppercase tracking-wider flex items-center gap-1">
@@ -394,7 +394,7 @@ export default function SummaryDashboard({
               </div>
 
               {/* Box 3 */}
-              <div className="glass-card border border-white/5 bg-white/[0.02] backdrop-blur-xl p-8 rounded-2xl flex flex-col gap-4 relative overflow-hidden group h-full">
+              <div style={{ willChange: 'transform, opacity' }} className="glass-card border border-white/5 bg-white/[0.02] backdrop-blur-md p-8 rounded-2xl flex flex-col gap-4 relative overflow-hidden group h-full">
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent opacity-50" />
                 <div className="flex justify-between items-center border-b border-white/5 pb-2 z-10">
                   <span className="text-xs font-black font-space text-slate-400 uppercase tracking-wider flex items-center gap-1">
@@ -498,7 +498,7 @@ export default function SummaryDashboard({
               </div>
             </div>
 
-            <div className="w-full bg-black/60 backdrop-blur-2xl border border-white/5 p-6 rounded-2xl grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 items-center min-h-[140px]">
+            <div className="w-full bg-black/60 backdrop-blur-md border border-white/5 p-6 rounded-2xl grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 items-center min-h-[140px]">
               {/* Column 1: Dynamic Manifest */}
               <div className="flex flex-col gap-1.5 md:border-r border-white/5 md:pr-4 h-full justify-center items-center text-center">
                 <div className="flex items-center gap-1.5 justify-center">

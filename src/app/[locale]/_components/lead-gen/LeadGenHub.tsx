@@ -63,6 +63,22 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
     }
   }, [activeIndex]);
 
+  // 🏥 PERFORMANCE PATCH (v2.2): Background Scroll Lockdown
+  useEffect(() => {
+    if (isDashboardOpen) {
+      document.body.style.overflow = 'hidden';
+      // Prevent layout shift on some browsers by adding padding
+      document.body.style.paddingRight = 'var(--scrollbar-width, 0px)';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+    };
+  }, [isDashboardOpen]);
+
   // Update mounted tools and scroll state
   useEffect(() => {
     if (!hasMounted || !isDashboardOpen) return;
@@ -91,7 +107,7 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
   return (
     <section id="interactive-audit" className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
       {/* 🏁 THE SOVEREIGN GATE: Bento-Hierarchy Trigger Card */}
-      <div className="relative overflow-hidden rounded-[3rem] border border-white/5 bg-slate-950/40 p-1 backdrop-blur-3xl shadow-[0_32px_128px_-32px_rgba(0,0,0,0.8)]">
+      <div className="relative overflow-hidden rounded-[3rem] border border-white/5 bg-slate-950/40 p-1 shadow-[0_32px_128px_-32px_rgba(0,0,0,0.8)]">
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-indigo-500/10 opacity-40" />
 
         <div className="relative flex flex-col items-stretch lg:flex-row rounded-[2.8rem] border border-white/5 bg-black/60 overflow-hidden">
@@ -179,7 +195,7 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
             </div>
 
             {/* 🛸 COMPACT HEADER (v1.6): Single-Row on Mobile */}
-            <div className="px-4 py-3 md:px-8 md:pt-2 md:pb-4 border-b border-white/5 bg-[#030717]/80 backdrop-blur-2xl shrink-0 z-20 relative">
+            <div className="px-4 py-3 md:px-8 md:pt-2 md:pb-4 border-b border-white/5 bg-[#030717]/80 backdrop-blur-lg shrink-0 z-20 relative">
               <div className="flex items-center justify-between mb-2 md:mb-2 max-w-7xl mx-auto w-full">
                 <div className="flex items-center gap-3 md:gap-4 font-space">
                   <div className="h-8 w-8 md:h-10 md:w-10 rounded-lg md:rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
@@ -276,10 +292,11 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeIndex}
-                    initial={{ opacity: 0, y: 15, filter: "blur(10px)" }}
-                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, y: -15, filter: "blur(10px)" }}
-                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    layout="position"
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -15 }}
+                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                     className="w-full flex flex-col items-center"
                   >
                     {/* Sovereign Stage Identity HUD (v1.9): Elevated Science Trigger */}
@@ -301,7 +318,7 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
                       </div>
                     </div>
 
-                    <div className="w-full p-2 md:p-10 max-w-4xl md:rounded-[2rem] md:border border-white/5 md:bg-white/[0.02] backdrop-blur-md mb-0 md:mb-5">
+                    <div className="w-full p-2 md:p-10 max-w-4xl md:rounded-[2rem] md:border border-white/5 md:bg-white/[0.02] backdrop-blur-sm mb-0 md:mb-5">
                       {mounted.has(activeIndex) ? (
                         <div className="w-full">
                           {(() => {

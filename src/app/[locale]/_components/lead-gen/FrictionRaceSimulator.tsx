@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { LeadCaptureForm } from "./LeadCaptureForm";
 import { AuditCitation } from "./AuditCitation";
@@ -12,7 +12,7 @@ interface FrictionRaceSimulatorProps {
   isDashboard?: boolean;
 }
 
-export function FrictionRaceSimulator({ locale, isDashboard }: FrictionRaceSimulatorProps) {
+export const FrictionRaceSimulator = memo(function FrictionRaceSimulator({ locale, isDashboard }: FrictionRaceSimulatorProps) {
   const [isRacing, setIsRacing] = useState(false);
   const [raceStep, setRaceStep] = useState(0);
   const [showForm, setShowForm] = useState(false);
@@ -265,4 +265,4 @@ export function FrictionRaceSimulator({ locale, isDashboard }: FrictionRaceSimul
       )}
     </div>
   );
-}
+});
