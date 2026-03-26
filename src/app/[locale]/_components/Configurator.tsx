@@ -55,7 +55,7 @@ export default function Configurator() {
     hydrated,
     setHydrated,
     scrollRef,
-    handleScroll, // This might not be used with the new layout
+    handleScroll,
     canGoToStep,
     goToStep,
     activeFoundation,
@@ -79,11 +79,36 @@ export default function Configurator() {
     updateQuantity,
   } = useConfigurator();
 
+  const topAnchorRef = useRef<HTMLDivElement>(null);
+  const isFirstRender = useRef(true);
+
   useEffect(() => {
+    // Only scroll if we are on client and hydrated
+    if (!hydrated || !topAnchorRef.current) return;
+
+    // First-Render Lock: Prevent yanking the user on initial page load
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    // Calculate Y offset (Navbar 64px + 16px buffer = 80px)
+    const navOffset = 80;
+    const elementPosition = topAnchorRef.current.getBoundingClientRect().top;
+    const offsetPosition = elementPosition + window.pageYOffset - navOffset;
+
+    // Use smooth for internal selections (foundation/discovery) and instant for steps
+    // For now, consistent smooth scroll for feedback.
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: "smooth"
+    });
+    
+    // Also reset the internal container scroll just in case
     if (scrollRef && 'current' in scrollRef && scrollRef.current) {
       scrollRef.current.scrollTo(0, 0);
     }
-  }, [step, scrollRef]);
+  }, [step, foundation, discoveryStep, hydrated, scrollRef]);
 
   if (!hydrated) {
     return (
@@ -105,78 +130,79 @@ export default function Configurator() {
         {/* Main Flow Side */}
         <div className="flex-grow flex flex-col gap-5 lg:w-2/3">
           {/* Progress Bar */}
+          <div ref={topAnchorRef} />
           <StepNav step={step} goToStep={goToStep} canGoToStep={canGoToStep} stepLabels={stepLabels} />
 
           <div
             ref={scrollRef}
             className="flex-1 overflow-y-auto px-1 pb-12 scrollbar-none sm:pb-10 [-webkit-overflow-scrolling:touch]"
           >
-                {step === 1 && (
-                  <FoundationGrid
-                    foundation={foundation}
-                    setFoundation={setFoundation}
-                    activeFoundation={activeFoundation}
-                    formatPrice={formatPrice}
-                    scrollRef={scrollRef}
-                    handleScroll={handleScroll}
-                    mobileIndex={mobileIndex}
-                    setDrawerItem={setDrawerItem}
-                    goToStep={goToStep}
-                  />
-                )}
+            {step === 1 && (
+              <FoundationGrid
+                foundation={foundation}
+                setFoundation={setFoundation}
+                activeFoundation={activeFoundation}
+                formatPrice={formatPrice}
+                scrollRef={scrollRef}
+                handleScroll={handleScroll}
+                mobileIndex={mobileIndex}
+                setDrawerItem={setDrawerItem}
+                goToStep={goToStep}
+              />
+            )}
 
-                {step === 2 && (
-                  <ModuleGrid
-                    selectedModules={selectedModules}
-                    toggleModule={toggleModule}
-                    formatPrice={formatPrice}
-                    setDrawerItem={setDrawerItem}
-                    hasGita={hasGita}
-                    goToStep={goToStep}
-                    activeFoundation={activeFoundation}
-                    moduleQuantities={moduleQuantities}
-                    updateQuantity={updateQuantity}
-                  />
-                )}
+            {step === 2 && (
+              <ModuleGrid
+                selectedModules={selectedModules}
+                toggleModule={toggleModule}
+                formatPrice={formatPrice}
+                setDrawerItem={setDrawerItem}
+                hasGita={hasGita}
+                goToStep={goToStep}
+                activeFoundation={activeFoundation}
+                moduleQuantities={moduleQuantities}
+                updateQuantity={updateQuantity}
+              />
+            )}
 
-                {step === 3 && (
-                  <ShieldGrid
-                    shieldTier={shieldTier}
-                    setShieldTier={setShieldTier}
-                    formatPrice={formatPrice}
-                    goToStep={goToStep}
-                    setIsModalOpen={setIsModalOpen}
-                  />
-                )}
+            {step === 3 && (
+              <ShieldGrid
+                shieldTier={shieldTier}
+                setShieldTier={setShieldTier}
+                formatPrice={formatPrice}
+                goToStep={goToStep}
+                setIsModalOpen={setIsModalOpen}
+              />
+            )}
 
-                {step === 4 && (
-                  <DiscoveryModule
-                    foundation={foundation}
-                    selectedModules={selectedModules}
-                    goToStep={goToStep}
-                    answers={answers}
-                    setAnswers={setAnswers}
-                    discoveryStep={discoveryStep}
-                    setDiscoveryStep={setDiscoveryStep}
-                    isEditing={isEditing}
-                    setIsEditing={setIsEditing}
-                  />
-                )}
+            {step === 4 && (
+              <DiscoveryModule
+                foundation={foundation}
+                selectedModules={selectedModules}
+                goToStep={goToStep}
+                answers={answers}
+                setAnswers={setAnswers}
+                discoveryStep={discoveryStep}
+                setDiscoveryStep={setDiscoveryStep}
+                isEditing={isEditing}
+                setIsEditing={setIsEditing}
+              />
+            )}
 
-                {step === 5 && (
-                  <SummaryDashboard
-                    foundation={foundation}
-                    selectedModules={selectedModules}
-                    shieldTier={shieldTier}
-                    answers={answers}
-                    goToStep={goToStep}
-                    setDiscoveryStep={setDiscoveryStep}
-                    setIsEditing={setIsEditing}
-                    moduleQuantities={moduleQuantities}
-                    oneTimeTotal={oneTimeTotal}
-                    monthlyTotal={monthlyTotal}
-                  />
-                )}
+            {step === 5 && (
+              <SummaryDashboard
+                foundation={foundation}
+                selectedModules={selectedModules}
+                shieldTier={shieldTier}
+                answers={answers}
+                goToStep={goToStep}
+                setDiscoveryStep={setDiscoveryStep}
+                setIsEditing={setIsEditing}
+                moduleQuantities={moduleQuantities}
+                oneTimeTotal={oneTimeTotal}
+                monthlyTotal={monthlyTotal}
+              />
+            )}
           </div>
 
           {/* Persistent Footer Navigation */}
@@ -185,23 +211,23 @@ export default function Configurator() {
 
 
 
-                {step < 5 && (
-                  <ConfigSidebar
-                    activeFoundation={activeFoundation}
-                    selectedModules={selectedModules}
-                    moduleQuantities={moduleQuantities}
-                    oneTimeTotal={oneTimeTotal}
-                    monthlyTotal={monthlyTotal}
-                    isUSD={isUSD}
-                    setIsUSD={setIsUSD}
-                    formatPrice={formatPrice}
-                    savingsUSD={savingsUSD}
-                    setIsModalOpen={() => setIsModalOpen(true)}
-                    totalHoursSaved={totalHoursSaved}
-                    shieldTier={shieldTier}
-                    resetAll={clearConfiguration}
-                  />
-                )}
+        {step < 5 && (
+          <ConfigSidebar
+            activeFoundation={activeFoundation}
+            selectedModules={selectedModules}
+            moduleQuantities={moduleQuantities}
+            oneTimeTotal={oneTimeTotal}
+            monthlyTotal={monthlyTotal}
+            isUSD={isUSD}
+            setIsUSD={setIsUSD}
+            formatPrice={formatPrice}
+            savingsUSD={savingsUSD}
+            setIsModalOpen={() => setIsModalOpen(true)}
+            totalHoursSaved={totalHoursSaved}
+            shieldTier={shieldTier}
+            resetAll={clearConfiguration}
+          />
+        )}
 
         {/* Modal / Drawer Overlay */}
         <ConfigDrawer

@@ -163,8 +163,8 @@ export default function DiscoveryModule({
         <div className="absolute top-0 left-0 w-full px-5 md:px-14 pt-6 flex gap-1.5 z-20">
           {QUESTIONS.map((_, i) => (
             <div key={i} className={`h-1 flex-1 rounded-full transition-all duration-500 ${i < safeStep ? "bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"
-                : i === safeStep ? "bg-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.8)]"
-                  : "bg-white/10"
+              : i === safeStep ? "bg-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.8)]"
+                : "bg-white/10"
               }`} />
           ))}
         </div>
@@ -205,8 +205,8 @@ export default function DiscoveryModule({
                         key={opt.value}
                         onClick={() => handleSelect(q.id, opt.value)}
                         className={`group relative text-left p-5 md:p-8 rounded-2xl transition-all duration-300 overflow-hidden ${isSelected
-                            ? "bg-emerald-500/10 border-2 border-emerald-500 shadow-[inset_0_0_30px_rgba(16,185,129,0.1)]"
-                            : "bg-zinc-900/40 hover:bg-zinc-800/80 border border-white/10 hover:border-emerald-500/40"
+                          ? "bg-emerald-500/10 border-2 border-emerald-500 shadow-[inset_0_0_30px_rgba(16,185,129,0.1)]"
+                          : "bg-zinc-900/40 hover:bg-zinc-800/80 border border-white/10 hover:border-emerald-500/40"
                           }`}
                       >
                         {isSelected && (
@@ -243,8 +243,8 @@ export default function DiscoveryModule({
                           key={opt}
                           onClick={() => handleSelect(q.id, opt)}
                           className={`flex min-h-11 items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-bold font-space transition-all duration-300 md:px-5 md:text-sm ${isSelected
-                              ? "bg-emerald-400 text-black shadow-md shadow-emerald-500/20"
-                              : "text-slate-400 hover:text-white hover:bg-white/5"
+                            ? "bg-emerald-400 text-black shadow-md shadow-emerald-500/20"
+                            : "text-slate-400 hover:text-white hover:bg-white/5"
                             }`}
                         >
                           {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-black" />}
@@ -306,8 +306,8 @@ export default function DiscoveryModule({
                         key={opt}
                         onClick={() => handleSelect(q.id, opt)}
                         className={`px-4 py-2 rounded-full border text-xs font-bold font-space transition-all duration-300 ${answers[q.id] === opt
-                            ? "border-emerald-400 bg-emerald-500/20 text-emerald-300 shadow-[0_0_15px_rgba(16,185,129,0.2)]"
-                            : "border-white/10 bg-white/5 text-slate-400 hover:border-white/30 hover:text-white"
+                          ? "border-emerald-400 bg-emerald-500/20 text-emerald-300 shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+                          : "border-white/10 bg-white/5 text-slate-400 hover:border-white/30 hover:text-white"
                           }`}
                       >
                         {opt}
@@ -357,8 +357,8 @@ export default function DiscoveryModule({
                       key={opt}
                       onClick={() => handleSelect(q.id, opt)}
                       className={`p-4 rounded-xl border text-left text-sm font-bold font-space transition-all duration-300 flex justify-between items-center ${answers[q.id] === opt
-                          ? "border-emerald-400 bg-emerald-500/10 text-emerald-400"
-                          : "border-white/5 bg-white/[0.02] hover:bg-white/5 text-slate-300"
+                        ? "border-emerald-400 bg-emerald-500/10 text-emerald-400"
+                        : "border-white/5 bg-white/[0.02] hover:bg-white/5 text-slate-300"
                         }`}
                     >
                       {opt}
@@ -426,8 +426,8 @@ export default function DiscoveryModule({
                 onClick={safeStep === QUESTIONS.length - 1 ? handlesSubmit : handleNext}
                 disabled={!canPrimaryAction || isAnalyzing}
                 className={`group relative flex min-h-12 w-full items-center justify-center gap-3 rounded-full px-6 py-3.5 font-space text-xs font-bold uppercase tracking-widest transition-all duration-300 sm:w-auto sm:px-8 ${canPrimaryAction && !isAnalyzing
-                    ? "bg-emerald-500 text-black shadow-[0_10px_30px_-10px_rgba(16,185,129,0.3)] hover:shadow-[0_15px_40px_-5px_rgba(16,185,129,0.4)] hover:bg-emerald-400 active:scale-95"
-                    : "bg-zinc-800 text-zinc-500 cursor-not-allowed opacity-50"
+                  ? "bg-emerald-500 text-black shadow-[0_10px_30px_-10px_rgba(16,185,129,0.3)] hover:shadow-[0_15px_40px_-5px_rgba(16,185,129,0.4)] hover:bg-emerald-400 active:scale-95"
+                  : "bg-zinc-800 text-zinc-500 cursor-not-allowed opacity-50"
                   }`}
               >
                 {isAnalyzing ? "Processing..." : safeStep === QUESTIONS.length - 1 ? "Generate Blueprint" : "Continue"}
