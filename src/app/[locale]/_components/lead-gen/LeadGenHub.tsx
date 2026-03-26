@@ -267,7 +267,7 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
                       className={`relative z-10 flex flex-1 items-center justify-center gap-2 md:gap-4 min-w-[70px] md:min-w-[100px] py-2.5 md:py-4 px-4 md:px-8 text-[9px] md:text-[11px] font-black uppercase tracking-[0.15em] transition-all duration-500 font-space whitespace-nowrap snap-center ${isActive ? "text-slate-950" : "text-slate-600 hover:text-slate-300"
                         }`}
                     >
-                      <ToolIcon className={`h-4 w-4 md:h-5 md:w-5 transition-transform duration-500 ${isActive ? "text-black scale-110" : "text-emerald-500/10 group-hover:text-emerald-400"}`} />
+                      <ToolIcon className={`h-4 w-4 md:h-5 md:w-5 transition-transform duration-500 ${isActive ? "text-black scale-110" : "text-white/40 group-hover:text-white/80"}`} />
                       {isActive && (
                         <motion.div
                           key="dashboard-pill-bg"
@@ -301,21 +301,21 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
                   >
                     {/* Sovereign Stage Identity HUD (v1.9): Elevated Science Trigger */}
                     <div className="w-full max-w-4xl mx-auto px-4 mb-2 flex flex-col items-center">
-                      <button
-                        onClick={() => setIsScienceOpen(true)}
-                        className="mb-1 flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-emerald-400/40 hover:text-emerald-400 transition outline-none"
-                      >
-                        <Scan className="h-3 w-3" />
-                        [ View Audit Science ]
-                      </button>
-
                       <div className="w-full flex items-center gap-4">
                         <div className="h-[1px] flex-grow bg-white/5" />
-                        <span className="text-[9px] md:text-[11px] font-black uppercase tracking-[0.4em] text-white/45 whitespace-nowrap font-space">
+                        <span className="text-[9px] md:text-[11px] font-black uppercase tracking-[0.4em] text-white/80 whitespace-nowrap font-space">
                           [ {String(activeIndex + 1).padStart(2, '0')} // {(t.leadHub?.tools as any)?.[TOOL_IDS[activeIndex]]?.name} ]
                         </span>
                         <div className="h-[1px] flex-grow bg-white/5" />
                       </div>
+
+                      <button
+                        onClick={() => setIsScienceOpen(true)}
+                        className="mt-2 flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-emerald-400/80 hover:text-emerald-400 transition outline-none"
+                      >
+                        <Scan className="h-3 w-3" />
+                        [ View Audit Science ]
+                      </button>
                     </div>
 
                     <div className="w-full p-2 md:p-10 max-w-4xl md:rounded-[2rem] md:border border-white/5 md:bg-white/[0.02] backdrop-blur-sm mb-0 md:mb-5">

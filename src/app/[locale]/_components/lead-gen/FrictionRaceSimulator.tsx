@@ -120,14 +120,6 @@ export const FrictionRaceSimulator = memo(function FrictionRaceSimulator({ local
                  </button>
                </motion.div>
               
-              {raceStep === 5 && !showForm && (
-                <button
-                  onClick={() => setShowForm(true)}
-                  className="w-full rounded-xl bg-white/5 border border-white/10 px-6 py-4 font-bold text-white"
-                >
-                  View Solution
-                </button>
-              )}
            </div>
         )}
 
