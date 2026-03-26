@@ -82,7 +82,7 @@ export default function Configurator() {
   const topAnchorRef = useRef<HTMLDivElement>(null);
   const isFirstRender = useRef(true);
   const prevStepRef = useRef(step);
-  
+
   useEffect(() => {
     // Only scroll if we are on client and hydrated
     if (!hydrated) return;
@@ -106,10 +106,10 @@ export default function Configurator() {
 
       // Use 'auto' (instant) for step transitions to prevent layout-shift stall on mobile
       window.scrollTo({
-        top: stepChanged ? 0 : offsetPosition, 
+        top: stepChanged ? 0 : offsetPosition,
         behavior: stepChanged ? "auto" : "smooth"
       });
-      
+
       // Also reset the internal container scroll
       if (scrollRef && 'current' in scrollRef && scrollRef.current) {
         scrollRef.current.scrollTo(0, 0);
