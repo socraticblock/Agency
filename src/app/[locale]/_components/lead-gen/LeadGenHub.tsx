@@ -24,6 +24,7 @@ import { FrictionRaceSimulator } from "./FrictionRaceSimulator";
 import { LostWeekendCalculator } from "./LostWeekendCalculator";
 import { TimeDebtReceipt } from "./TimeDebtReceipt";
 import { PlatformRiskMeter } from "./PlatformRiskMeter";
+import { AuditCitation } from "./AuditCitation";
 
 type ToolId = 'audience' | 'weekend' | 'friction' | 'time' | 'risk';
 
@@ -39,6 +40,7 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
 
   // Lazy Mount State to preserve mobile performance
   const [mounted, setMounted] = useState<Set<number>>(new Set([0]));
+  const [isScienceOpen, setIsScienceOpen] = useState(false);
 
   const total = TOOL_IDS.length;
   const activeId = TOOL_IDS[activeIndex];
@@ -182,12 +184,46 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
                   </div>
                 </div>
 
-                <button
-                  onClick={() => setIsDashboardOpen(false)}
-                  className="group relative h-10 w-10 md:h-14 md:w-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/30 hover:rotate-90"
-                >
-                  <XIcon className="h-4 w-4 md:h-5 md:w-5" />
-                </button>
+                <div className="flex items-center gap-2 md:gap-4">
+                  <div className="flex items-center gap-1 md:gap-2 mr-2 md:mr-4">
+                    <button
+                      disabled={activeIndex === 0}
+                      onClick={() => setActiveIndex(prev => Math.max(0, prev - 1))}
+                      className="h-8 w-8 md:h-10 md:w-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition disabled:opacity-20"
+                    >
+                      <ChevronLeft className="h-4 w-4 md:h-5 md:w-5" />
+                    </button>
+                    <div className="px-2 md:px-3 py-1 rounded-md bg-white/5 border border-white/10">
+                      <span className="text-[10px] md:text-xs font-black font-space text-emerald-400">
+                        {activeIndex + 1} / {total}
+                      </span>
+                    </div>
+                    <button
+                      disabled={activeIndex === total - 1}
+                      onClick={() => setActiveIndex(prev => Math.min(total - 1, prev + 1))}
+                      className="h-8 w-8 md:h-10 md:w-10 rounded-lg bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 hover:bg-emerald-500/30 transition disabled:opacity-20"
+                    >
+                      <ChevronRight className="h-4 w-4 md:h-5 md:w-5" />
+                    </button>
+                  </div>
+
+                  <button
+                    onClick={() => setIsDashboardOpen(false)}
+                    className="group relative h-8 w-8 md:h-10 md:w-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/30 hover:rotate-90"
+                  >
+                    <XIcon className="h-4 w-4 md:h-5 md:w-5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* v1.9 DYNAMIC PROGRESS LINE */}
+              <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-white/5">
+                <motion.div
+                  className="h-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"
+                  initial={false}
+                  animate={{ width: `${((activeIndex + 1) / total) * 100}%` }}
+                  transition={{ duration: 1.2, ease: [0.33, 1, 0.68, 1] }}
+                />
               </div>
 
               {/* v1.6 SLIM TABS: Maximum Viewport Conservation (v1.8 Identity Refactor: Icons-Only) */}
@@ -232,9 +268,17 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
                     transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                     className="w-full flex flex-col items-center"
                   >
-                    {/* Sovereign Stage Identity HUD (v1.8) */}
-                    <div className="w-full max-w-4xl mx-auto px-4 mb-3">
-                      <div className="flex items-center gap-4">
+                    {/* Sovereign Stage Identity HUD (v1.9): Elevated Science Trigger */}
+                    <div className="w-full max-w-4xl mx-auto px-4 mb-3 flex flex-col items-center">
+                      <button 
+                        onClick={() => setIsScienceOpen(true)}
+                        className="mb-3 flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-emerald-400/40 hover:text-emerald-400 transition outline-none"
+                      >
+                        <Scan className="h-3 w-3" />
+                        [ View Audit Science ]
+                      </button>
+
+                      <div className="w-full flex items-center gap-4">
                         <div className="h-[1px] flex-grow bg-white/5" />
                         <span className="text-[9px] md:text-[11px] font-black uppercase tracking-[0.4em] text-white/45 whitespace-nowrap font-space">
                           [ {String(activeIndex + 1).padStart(2, '0')} // {(t.leadHub?.tools as any)?.[TOOL_IDS[activeIndex]]?.name} ]
@@ -264,54 +308,81 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
               <div className="sticky bottom-0 left-0 right-0 h-8 md:h-12 bg-gradient-to-t from-zinc-950 to-transparent z-10 pointer-events-none" />
             </div>
 
-            {/* 🛠 SLIM FOOTER (v1.6): Single-Row Unified Control */}
-            <div className="shrink-0 px-4 py-4 md:px-12 md:py-10 border-t border-white/5 bg-zinc-950/95 backdrop-blur-3xl safe-area-bottom">
-              <div className="max-w-7xl mx-auto flex items-center justify-between gap-4 md:gap-12">
-                <div className="hidden md:flex items-center gap-4 min-w-[200px]">
-                  <div className="h-10 w-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-emerald-500 relative">
-                    <Lock className="h-5 w-5" />
-                  </div>
-                  <div className="font-space">
-                    <span className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-0.5">Step {activeIndex + 1} of {total}</span>
-                    <span className="block text-sm font-black text-white tracking-tight">Active Node Engaged</span>
-                  </div>
-                </div>
 
-                <div className="flex-grow max-w-2xl">
-                  <div className="flex justify-between items-center mb-1.5 md:mb-2 px-1">
-                    <span className="text-[8px] md:text-[10px] font-black text-emerald-500/50 uppercase font-space tracking-[0.2em]">Audit Flow Matrix</span>
-                    <span className="text-[9px] md:text-[10px] font-black text-emerald-400 font-space tracking-tighter">{Math.round(((activeIndex + 1) / total) * 100)}%</span>
-                  </div>
-                  <div className="h-1 md:h-2 w-full bg-white/5 rounded-full overflow-hidden">
-                    <motion.div
-                      className="h-full bg-gradient-to-r from-emerald-600 to-emerald-400"
-                      initial={false}
-                      animate={{ width: `${((activeIndex + 1) / total) * 100}%` }}
-                      transition={{ duration: 1.2, ease: [0.33, 1, 0.68, 1] }}
-                    />
-                  </div>
-                </div>
 
-                <div className="flex items-center gap-2 md:gap-3 shrink-0">
-                  <button
-                    disabled={activeIndex === 0}
-                    onClick={() => setActiveIndex(prev => Math.max(0, prev - 1))}
-                    className="h-10 w-10 md:h-14 md:w-14 rounded-lg md:rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition disabled:opacity-20"
+            {/* 🛸 AUDIT SCIENCE OVERLAY */}
+            <AnimatePresence>
+              {isScienceOpen && (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 z-[600] flex items-center justify-center p-6 bg-zinc-950/90 backdrop-blur-3xl"
+                >
+                  <motion.div 
+                    initial={{ scale: 0.95, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.95, opacity: 0 }}
+                    className="w-full max-w-xl relative"
                   >
-                    <ChevronLeft className="h-5 w-5 md:h-6 md:w-6" />
-                  </button>
-                  <button
-                    disabled={activeIndex === total - 1}
-                    onClick={() => setActiveIndex(prev => Math.min(total - 1, prev + 1))}
-                    className="h-10 px-4 md:h-14 md:px-8 rounded-lg md:rounded-2xl bg-emerald-500 text-slate-950 font-black uppercase text-[10px] md:text-[11px] tracking-widest hover:bg-emerald-400 transition-all flex items-center gap-2 md:gap-3 shadow-[0_0_32px_rgba(16,185,129,0.3)] disabled:opacity-20"
-                  >
-                    <span className="hidden sm:inline">Next Module</span>
-                    <span className="inline sm:hidden">Next</span>
-                    <ChevronRight className="h-4 w-4 md:h-5 md:w-5" />
-                  </button>
-                </div>
-              </div>
-            </div>
+                    <button 
+                      onClick={() => setIsScienceOpen(false)}
+                      className="absolute -top-12 right-0 h-10 w-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white transition"
+                    >
+                      <XIcon className="h-5 w-5" />
+                    </button>
+                    
+                    <div className="clay-card p-2">
+                       {(() => {
+                         const currentTool = TOOL_IDS[activeIndex];
+                         let data = { point: "", explanation: "", source: "" };
+                         
+                         // Global Mapping Strategy
+                         if (currentTool === 'audience') {
+                           data = { 
+                             point: t.leadTools?.audience?.citationPoint, 
+                             explanation: t.leadTools?.audience?.citationExplanation, 
+                             source: t.leadTools?.audience?.citationSource 
+                           };
+                         } else if (currentTool === 'weekend') {
+                           data = { 
+                             point: "82% of consumers demand an immediate response.", 
+                             explanation: "Modern commerce operates 24/7. When your business sleeps, your competitors don't.", 
+                             source: "HubSpot Consumer Survey / Sprout Social Index" 
+                           };
+                         } else if (currentTool === 'friction') {
+                           data = { 
+                             point: t.leadTools?.friction?.citationPoint, 
+                             explanation: t.leadTools?.friction?.citationExplanation, 
+                             source: t.leadTools?.friction?.citationSource 
+                           };
+                         } else if (currentTool === 'time') {
+                           data = { 
+                             point: "Context switching costs 23 minutes of focus per interruption.", 
+                             explanation: "Every time you pause deep work to answer a basic 'how much is this?' DM, you pay a massive Time Debt.", 
+                             source: "UC Irvine Study" 
+                           };
+                         } else if (currentTool === 'risk') {
+                           data = { 
+                             point: t.leadTools?.risk?.citationPoint, 
+                             explanation: t.leadTools?.risk?.citationExplanation, 
+                             source: t.leadTools?.risk?.citationSource 
+                           };
+                         }
+
+                         return (
+                           <AuditCitation 
+                             dataPoint={data.point}
+                             explanation={data.explanation}
+                             source={data.source}
+                           />
+                         );
+                       })()}
+                    </div>
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
         )}
       </AnimatePresence>

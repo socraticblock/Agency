@@ -16,7 +16,6 @@ export function TrueAudienceVisualizer({ locale, isDashboard }: TrueAudienceVisu
   const [followers, setFollowers] = useState(10000);
   const [engagementRate, setEngagementRate] = useState(5);
   const [showForm, setShowForm] = useState(false);
-  const [showSource, setShowSource] = useState(false);
   const t = getMessages(locale);
 
   // Calculate reached audience
@@ -86,41 +85,8 @@ export function TrueAudienceVisualizer({ locale, isDashboard }: TrueAudienceVisu
             {t.leadTools?.audience?.insightBodySuffix}
           </p>
 
-          {isDashboard && (
-            <button 
-              onClick={() => setShowSource(true)}
-              className="absolute bottom-2 right-2 flex items-center gap-1.5 text-[9px] font-black uppercase tracking-tighter text-red-400/60 hover:text-red-400 transition"
-            >
-              <Scan className="h-3 w-3" />
-              View Science
-            </button>
-          )}
         </div>
 
-        <AnimatePresence>
-          {showSource && (
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="absolute inset-0 z-[40] flex flex-col items-center justify-center p-6 md:p-12 bg-zinc-950/95 backdrop-blur-3xl"
-            >
-               <button 
-                 onClick={() => setShowSource(false)}
-                 className="absolute top-4 right-4 h-8 w-8 rounded-full bg-white/5 flex items-center justify-center text-slate-400"
-               >
-                 <X className="h-4 w-4" />
-               </button>
-               <div className="w-full max-w-md">
-                 <AuditCitation
-                   dataPoint={t.leadTools?.audience?.citationPoint}
-                   explanation={t.leadTools?.audience?.citationExplanation}
-                   source={t.leadTools?.audience?.citationSource}
-                 />
-               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
         {!isDashboard && (
            <AuditCitation
@@ -141,7 +107,12 @@ export function TrueAudienceVisualizer({ locale, isDashboard }: TrueAudienceVisu
       </div>
 
       {/* Visualization */}
-      <div className={`flex items-center justify-center rounded-2xl bg-black/60 border border-white/5 ${isDashboard ? "min-h-[40%] m-4" : "p-6"}`}>
+      <div className={`flex items-center justify-center rounded-2xl bg-black/60 border border-white/5 relative ${isDashboard ? "min-h-[40%] m-4" : "p-6"}`}>
+        {isDashboard && (
+          <div className="absolute bottom-4 right-4 z-10">
+            {/* Science moved to global LeadGenHub Stage HUD */}
+          </div>
+        )}
         <div className="grid grid-cols-20 gap-1 sm:gap-1.5" style={{ gridTemplateColumns: 'repeat(20, minmax(0, 1fr))' }}>
           {dots.map((dot) => (
             <motion.div

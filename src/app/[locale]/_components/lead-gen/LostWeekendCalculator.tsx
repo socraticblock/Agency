@@ -16,7 +16,6 @@ export function LostWeekendCalculator({ locale, isDashboard }: LostWeekendCalcul
   const [dailySales, setDailySales] = useState(500);
   const [hoursOnline, setHoursOnline] = useState(10);
   const [showForm, setShowForm] = useState(false);
-  const [showSource, setShowSource] = useState(false);
   const [tickingLoss, setTickingLoss] = useState(0);
   const t = getMessages(locale);
 
@@ -94,40 +93,7 @@ export function LostWeekendCalculator({ locale, isDashboard }: LostWeekendCalcul
             {t.midnightCalc.frictionSuffix}
           </p>
 
-          {isDashboard && (
-            <button 
-              onClick={() => setShowSource(true)}
-              className="absolute bottom-2 right-2 flex items-center gap-1.5 text-[9px] font-black uppercase tracking-tighter text-amber-400/60 hover:text-amber-400 transition"
-            >
-              <Scan className="h-3 w-3" />
-              View Science
-            </button>
-          )}
 
-          <AnimatePresence>
-            {showSource && (
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                className="absolute inset-0 z-[40] flex flex-col items-center justify-center p-6 md:p-12 bg-zinc-950/95 backdrop-blur-3xl"
-              >
-                 <button 
-                   onClick={() => setShowSource(false)}
-                   className="absolute top-4 right-4 h-8 w-8 rounded-full bg-white/5 flex items-center justify-center text-slate-400"
-                 >
-                   <X className="h-4 w-4" />
-                 </button>
-                 <div className="w-full max-w-md">
-                   <AuditCitation
-                     dataPoint="82% of consumers demand an immediate response."
-                     explanation="Modern commerce operates 24/7. When your business sleeps, your competitors don't."
-                     source="HubSpot Consumer Survey / Sprout Social Index"
-                   />
-                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
         </div>
 
         {!isDashboard && (
@@ -149,7 +115,12 @@ export function LostWeekendCalculator({ locale, isDashboard }: LostWeekendCalcul
       </div>
 
       {/* Visualization */}
-      <div className={`flex flex-col items-center justify-center rounded-2xl bg-black/60 border border-white/5 ${isDashboard ? "min-h-[40%] m-4" : "p-6"}`}>
+      <div className={`flex flex-col items-center justify-center rounded-2xl bg-black/60 border border-white/5 relative ${isDashboard ? "min-h-[40%] m-4" : "p-6"}`}>
+        {isDashboard && (
+          <div className="absolute bottom-4 right-4 z-10">
+            {/* Science moved to global LeadGenHub Stage HUD */}
+          </div>
+        )}
         <div className="relative flex h-40 w-40 items-center justify-center rounded-full border-4 border-slate-800 sm:h-48 sm:w-48">
           <svg className="absolute inset-0 h-full w-full -rotate-90">
             <circle

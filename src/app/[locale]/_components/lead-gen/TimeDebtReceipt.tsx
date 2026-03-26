@@ -17,7 +17,6 @@ export function TimeDebtReceipt({ locale, isDashboard }: TimeDebtReceiptProps) {
   const [hourlyRate, setHourlyRate] = useState(15.6);
   const [isPrinting, setIsPrinting] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [showSource, setShowSource] = useState(false);
   const t = getMessages(locale);
 
   const monthlyHours = hoursPerWeek * 4;
@@ -81,42 +80,7 @@ export function TimeDebtReceipt({ locale, isDashboard }: TimeDebtReceiptProps) {
            />
         )}
 
-        {isDashboard && (
-           <div className="absolute top-2 right-2 z-10">
-             <button 
-               onClick={() => setShowSource(true)}
-               className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-tighter text-emerald-400/60 hover:text-emerald-400 transition"
-             >
-               <Scan className="h-3 w-3" />
-               View Science
-             </button>
-           </div>
-        )}
 
-        <AnimatePresence>
-          {showSource && (
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="absolute inset-0 z-[40] flex flex-col items-center justify-center p-6 md:p-12 bg-zinc-950/95 backdrop-blur-3xl"
-            >
-               <button 
-                 onClick={() => setShowSource(false)}
-                 className="absolute top-4 right-4 h-8 w-8 rounded-full bg-white/5 flex items-center justify-center text-slate-400"
-               >
-                 <X className="h-4 w-4" />
-               </button>
-               <div className="w-full max-w-md">
-                 <AuditCitation
-                   dataPoint="Context switching costs 23 minutes of focus per interruption."
-                   explanation="Every time you pause deep work to answer a basic 'how much is this?' DM, you pay a massive Time Debt."
-                   source="UC Irvine 'The Cost of Interrupted Work' Study"
-                 />
-               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
         {isPrinting && !showForm && (
           <motion.button
@@ -133,6 +97,11 @@ export function TimeDebtReceipt({ locale, isDashboard }: TimeDebtReceiptProps) {
 
       {/* Receipt Visualization */}
       <div className={`relative flex justify-center overflow-hidden rounded-2xl bg-black/60 border border-white/5 ${isDashboard ? "min-h-[40%] m-4" : "p-6 min-h-[300px]"}`}>
+        {isDashboard && (
+          <div className="absolute bottom-4 right-4 z-10">
+            {/* Science moved to global LeadGenHub Stage HUD */}
+          </div>
+        )}
         {!isPrinting && (
            <div className="flex items-center justify-center text-[10px] font-black uppercase tracking-widest text-slate-700">
               Awaiting Calculation...

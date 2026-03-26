@@ -19,7 +19,6 @@ export function PlatformRiskMeter({ locale, isDashboard }: PlatformRiskMeterProp
     2: null,
   });
   const [showForm, setShowForm] = useState(false);
-  const [showSource, setShowSource] = useState(false);
   const t = getMessages(locale);
 
   const questions: string[] =
@@ -121,42 +120,7 @@ export function PlatformRiskMeter({ locale, isDashboard }: PlatformRiskMeterProp
           </div>
         )}
 
-        {isDashboard && (
-          <div className="absolute top-2 right-2 z-10">
-            <button 
-              onClick={() => setShowSource(true)}
-              className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-tighter text-indigo-400/60 hover:text-indigo-400 transition outline-none"
-            >
-              <Scan className="h-3 w-3" />
-              View Science
-            </button>
-          </div>
-        )}
 
-        <AnimatePresence>
-          {showSource && (
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="absolute inset-0 z-[40] flex flex-col items-center justify-center p-6 md:p-12 bg-zinc-950/95 backdrop-blur-3xl"
-            >
-               <button 
-                 onClick={() => setShowSource(false)}
-                 className="absolute top-4 right-4 h-8 w-8 rounded-full bg-white/5 flex items-center justify-center text-slate-400 focus:outline-none"
-               >
-                 <X className="h-4 w-4" />
-               </button>
-               <div className="w-full max-w-md">
-                 <AuditCitation
-                   dataPoint={t.leadTools?.risk?.citationPoint}
-                   explanation={t.leadTools?.risk?.citationExplanation}
-                   source={t.leadTools?.risk?.citationSource}
-                 />
-               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
 
       {/* Meter Visualization */}
@@ -164,6 +128,12 @@ export function PlatformRiskMeter({ locale, isDashboard }: PlatformRiskMeterProp
         <h3 className="mb-4 text-sm font-semibold text-slate-300 uppercase tracking-widest">
           {t.leadTools?.risk?.ownershipScoreLabel ?? "Ownership Score"}
         </h3>
+
+        {isDashboard && (
+          <div className="absolute bottom-4 right-4 z-10">
+            {/* Science moved to global LeadGenHub Stage HUD */}
+          </div>
+        )}
         
         <div className="relative flex h-32 w-32 items-end justify-center overflow-hidden sm:h-40 sm:w-40">
           {/* Gauge Background */}
