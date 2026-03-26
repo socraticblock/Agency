@@ -163,7 +163,7 @@ export default function Configurator() {
 
           <div
             ref={scrollRef}
-            className="flex-1 overflow-y-auto px-1 pb-12 scrollbar-none sm:pb-10 [-webkit-overflow-scrolling:touch]"
+            className="flex-1 touch-manipulation overflow-y-auto px-1 pb-12 scrollbar-none sm:pb-10 [-webkit-overflow-scrolling:touch]"
           >
             {step === 1 && (
               <FoundationGrid

@@ -17,6 +17,7 @@
 - [015] Mobile-friendly pass: viewport export + safe areas; Navbar slide-out menu (lg+ desktop links); anchor `scroll-margin-top`; `touch-form-control` / 16px inputs; hero parallax off for coarse pointer + reduced motion; Architect/LeadGen touch targets and horizontal scroll polish.
 - [016] Real-device touch fixes: LeadGenHub removed window scroll spring + blur/scale carousel; lazy-mount tool chunks ±1 slide; `MagneticButton` plain link/button on coarse/`hover:none`; Navbar menu z-index + `touch-manipulation`; Roadmap `useTransform` + `initial={false}` / viewport amount; Sovereign mobile accordion `type="button"`.
 - [017] Framer `useScroll` targets: `ScrollReveal` root is always `relative`; `StickyCardStack` uses a `relative` wrapper ref for scroll tracking (sticky card no longer the ref target).
+- [018] Architect step-2 `ModuleItem` accordion: price/header taps + `touch-manipulation`; STATUS control isolates `stopPropagation`; configurator scroll panel `touch-manipulation`.
 
 # Detailed Observations
 
@@ -104,3 +105,8 @@
 - **Context:** Browser console warned that scroll offset requires a non-static positioned container for Framer `useScroll` targets.
 - **Decision:** `ScrollReveal` always applies `relative` on its `motion.div` ref; `StickyCardStack` `StickyCard` attaches `useScroll` `target` to an outer `div.relative` and keeps transforms on the inner `motion.article` (sticky).
 - **Impact:** Clears Framer layout measurement warning for those components; THREE `Clock` deprecation (if present) remains upstream in Three/R3F until dependency updates.
+
+## [018]
+- **Context:** Live mobile architect step 2 often needed multiple taps to expand module rows; users hit price/STATUS area while the parent used `stopPropagation` on the whole right cluster.
+- **Decision:** Removed wrapper `stopPropagation` so price taps bubble to the card toggle; `type="button"` + `stopPropagation` + `touch-manipulation` + mobile min hit target on STATUS only; `touch-manipulation` on module card and `Configurator` main `overflow-y-auto` panel.
+- **Impact:** First-tap expand works when tapping price or title; STATUS still toggles selection without collapsing/expanding; aligns with prior mobile `touch-manipulation` fixes without widening scope beyond architect UI.

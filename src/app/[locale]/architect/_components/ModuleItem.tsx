@@ -60,38 +60,32 @@ export default memo(function ModuleItem({ m, isSelected, isExpanded, setExpanded
 
   return (
     <div
-      className={`${CARD_STYLES.base} relative ${isSelected ? 'border-green-400 bg-green-500/[0.02] shadow-[0_0_15px_rgba(34,197,94,0.05)]' : isExpanded ? CARD_STYLES.selected : CARD_STYLES.idle} flex-col !items-stretch !justify-start gap-1 ${isHeavyNode ? 'shadow-[0_15px_40px_rgba(0,0,0,0.45)] z-20' : 'z-10'}`}
+      onClick={() => setExpanded()}
+      className={`${CARD_STYLES.base} ${isSelected ? 'border-green-400 bg-green-500/[0.02] shadow-[0_0_15px_rgba(34,197,94,0.05)]' : isExpanded ? CARD_STYLES.selected : CARD_STYLES.idle} touch-manipulation cursor-pointer flex-col !items-stretch !justify-start gap-1 ${isHeavyNode ? 'shadow-[0_15px_40px_rgba(0,0,0,0.45)] z-10' : 'z-0'}`}
     >
-      {/* 🛡️ HAPTIC HIT-BOX: High-Fidelity Expansion Trigger */}
-      <div 
-        className="absolute inset-0 z-0 cursor-pointer" 
-        onClick={() => setExpanded()}
-      />
-
-      {/* Row 1: Header - GRID ARCHITECTURE */}
-      <div className="relative z-10 grid grid-cols-[1fr_auto] items-center w-full gap-3 pointer-events-none md:pointer-events-auto">
-        {/* Left Col: Identification */}
-        <div className="flex items-center gap-1.5 min-w-0">
-          <span className="text-base font-black text-slate-200 leading-tight block sm:inline" style={{ WebkitTextStroke: "0.3px rgba(0,0,0,0.8)", textShadow: "0px 2px 4px rgba(0,0,0,0.9)" }}>
-            {m.name}
-          </span>
+      {/* Row 1: Header */}
+      <div className="flex justify-between items-center w-full">
+        <div className="flex items-center gap-1.5 max-w-[70%]">
+          <span className="text-base font-black text-slate-200" style={{ WebkitTextStroke: "0.3px rgba(0,0,0,0.8)", textShadow: "0px 2px 4px rgba(0,0,0,0.9)" }}>{m.name}</span>
+          {/* Removed Architect's Choice */}
           {m.tooltip && (
-            <div className="group relative pointer-events-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="group relative" onClick={(e) => e.stopPropagation()}>
               <Info className="h-3 w-3 text-slate-500 cursor-help hover:text-emerald-400 transition-colors" />
               <div className="absolute bottom-full left-0 mb-1 hidden group-hover:block w-40 p-1.5 bg-black border border-zinc-800 rounded-lg text-xs text-slate-400 shadow-xl backdrop-blur-xl z-30 leading-relaxed">
                 {m.tooltip}
               </div>
             </div>
           )}
+
         </div>
 
-        {/* Right Col: Metrics & Action */}
-        <div className="flex items-center gap-3 flex-shrink-0 pointer-events-auto">
+        <div className="flex items-center gap-3">
           <span className="text-lg font-black font-space text-emerald-400" style={{ WebkitTextStroke: "0.2px rgba(0,0,0,0.4)", textShadow: "0px 1px 2px rgba(0,0,0,0.9)" }}>
             {formatPrice(displayedPrice * Math.max(1, quantity))}
             {m.id === 'pro-copy' && <span className="text-xs text-zinc-500 font-bold"> / pg</span>}
           </span>
           <button
+            type="button"
             onClick={(e) => {
               e.stopPropagation();
               if (m.id === 'pay-gateway' && isSelected && selectedModules.includes('bank-rep')) {
@@ -99,18 +93,16 @@ export default memo(function ModuleItem({ m, isSelected, isExpanded, setExpanded
               }
               toggleModule(m.id);
             }}
-            className="font-space font-black text-[9px] uppercase tracking-wider transition-all duration-200 cursor-pointer flex items-center min-w-[70px] justify-end"
+            className="font-space font-black text-[9px] uppercase tracking-wider touch-manipulation transition-all duration-200 cursor-pointer flex items-center min-h-10 min-w-[7rem] justify-center sm:min-h-0 sm:min-w-0"
           >
             {isSelected ? (
               <span className="text-green-400 font-bold flex items-center gap-1">
                 <div className="h-1 w-1 bg-green-400 rounded-full animate-pulse" />
-                <span className="hidden sm:inline">[ STATUS: ONLINE ]</span>
-                <span className="sm:hidden">[ ONLINE ]</span>
+                [ STATUS: ONLINE ]
               </span>
             ) : (
               <span className="text-orange-500 font-bold">
-                <span className="hidden sm:inline">[ STATUS: IDLE ]</span>
-                <span className="sm:hidden">[ IDLE ]</span>
+                [ STATUS: IDLE ]
               </span>
             )}
           </button>
