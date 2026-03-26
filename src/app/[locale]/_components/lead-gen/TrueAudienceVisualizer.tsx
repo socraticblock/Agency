@@ -95,15 +95,6 @@ export function TrueAudienceVisualizer({ locale, isDashboard }: TrueAudienceVisu
              source={t.leadTools?.audience?.citationSource}
            />
         )}
-
-        {!showForm && (
-          <button
-            onClick={() => setShowForm(true)}
-            className="w-full rounded-xl bg-emerald-500/20 px-6 py-3 font-medium text-emerald-200 transition hover:bg-emerald-500/30"
-          >
-            {t.leadTools?.audience?.cta}
-          </button>
-        )}
       </div>
 
       {/* Visualization */}

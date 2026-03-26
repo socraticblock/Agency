@@ -104,14 +104,6 @@ export function LostWeekendCalculator({ locale, isDashboard }: LostWeekendCalcul
           />
         )}
 
-        {!showForm && (
-          <button
-            onClick={() => setShowForm(true)}
-            className="w-full rounded-xl bg-emerald-500/20 px-6 py-3 font-medium text-emerald-200 transition hover:bg-emerald-500/30"
-          >
-            {t.midnightCalc.autoBtn}
-          </button>
-        )}
       </div>
 
       {/* Visualization */}

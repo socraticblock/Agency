@@ -287,7 +287,7 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
                       </div>
                     </div>
 
-                    <div className="w-full p-4 md:p-8 max-w-4xl md:rounded-[2rem] md:border border-white/5 md:bg-white/[0.02] backdrop-blur-md">
+                    <div className="w-full p-4 md:p-8 max-w-4xl md:rounded-[2rem] md:border border-white/5 md:bg-white/[0.02] backdrop-blur-md mb-12">
                       {mounted.has(activeIndex) ? (
                         <div className="w-full">
                           {(() => {
@@ -300,6 +300,45 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
                           <Orbit className="h-8 w-8 text-emerald-500 animate-spin-slow" />
                         </div>
                       )}
+                    </div>
+
+                    {/* v2.0 GHOST NAVIGATION */}
+                    <div className="w-full max-w-4xl mx-auto px-4 pb-20 flex items-center justify-between">
+                      <div>
+                        {activeIndex > 0 && (
+                          <button 
+                            onClick={() => setActiveIndex(activeIndex - 1)}
+                            className="group flex flex-col items-start transition-all duration-300 outline-none"
+                          >
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 group-hover:text-slate-300">
+                              ← Previous
+                            </span>
+                            <span className="text-xs font-bold text-slate-600 group-hover:text-emerald-400 group-hover:drop-shadow-[0_0_8px_rgba(16,185,129,0.4)] transition-all">
+                              {(t.leadHub?.tools as any)?.[TOOL_IDS[activeIndex - 1]]?.name}
+                            </span>
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="flex items-center gap-1.5 opacity-20">
+                         {/* Horizontal pagination dots purged per objective */}
+                      </div>
+
+                      <div className="text-right">
+                        {activeIndex < total - 1 && (
+                          <button 
+                            onClick={() => setActiveIndex(activeIndex + 1)}
+                            className="group flex flex-col items-end transition-all duration-300 outline-none"
+                          >
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 group-hover:text-slate-300">
+                              Next →
+                            </span>
+                            <span className="text-xs font-bold text-slate-600 group-hover:text-emerald-400 group-hover:drop-shadow-[0_0_8px_rgba(16,185,129,0.4)] transition-all">
+                              {(t.leadHub?.tools as any)?.[TOOL_IDS[activeIndex + 1]]?.name}
+                            </span>
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </motion.div>
                 </AnimatePresence>

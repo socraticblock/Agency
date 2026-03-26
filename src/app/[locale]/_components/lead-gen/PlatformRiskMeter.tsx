@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { LeadCaptureForm } from "./LeadCaptureForm";
 import { AuditCitation } from "./AuditCitation";
@@ -20,6 +20,7 @@ export function PlatformRiskMeter({ locale, isDashboard }: PlatformRiskMeterProp
   });
   const [showForm, setShowForm] = useState(false);
   const t = getMessages(locale);
+  const meterRef = useRef<HTMLDivElement>(null);
 
   const questions: string[] =
     t.leadTools?.risk?.questions ??
@@ -37,6 +38,15 @@ export function PlatformRiskMeter({ locale, isDashboard }: PlatformRiskMeterProp
   const yesCount = Object.values(answers).filter((a) => a === true).length;
   const isComplete = answeredCount === questions.length;
 
+  useEffect(() => {
+    if (isComplete && meterRef.current) {
+      const timer = setTimeout(() => {
+        meterRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 600);
+      return () => clearTimeout(timer);
+    }
+  }, [isComplete]);
+
   const calculateRotation = () => {
     if (answeredCount === 0) return 90;
     const score = yesCount / answeredCount;
@@ -53,8 +63,15 @@ export function PlatformRiskMeter({ locale, isDashboard }: PlatformRiskMeterProp
 
   const content = (
     <div className={`grid gap-8 md:grid-cols-2 ${isDashboard ? "flex-grow flex flex-col-reverse justify-end" : ""}`}>
-      {/* Quiz / Controls */}
-      <div className={`space-y-4 ${isDashboard ? "px-6 pb-20 pt-4" : ""}`}>
+      {/* Questionnaire Controls */}
+      <motion.div 
+        layout
+        animate={{ 
+          opacity: isComplete && isDashboard ? 0.4 : 1,
+          scale: isComplete && isDashboard ? 0.98 : 1
+        }}
+        className={`space-y-4 ${isDashboard ? "px-6 pb-20 pt-4" : ""}`}
+      >
         {questions.map((q, index) => (
           <div
             key={index}
@@ -101,12 +118,6 @@ export function PlatformRiskMeter({ locale, isDashboard }: PlatformRiskMeterProp
             <p className="text-xs font-medium text-red-200">
               {t.leadTools?.risk?.promptBody}
             </p>
-            <button
-              onClick={() => setShowForm(true)}
-              className="mt-3 w-full rounded-xl bg-emerald-500 px-6 py-3 font-bold text-slate-950 transition hover:bg-emerald-400 shadow-[0_4px_15px_rgba(16,185,129,0.3)]"
-            >
-              {t.leadTools?.risk?.promptCta}
-            </button>
           </motion.div>
         )}
 
@@ -119,12 +130,14 @@ export function PlatformRiskMeter({ locale, isDashboard }: PlatformRiskMeterProp
             />
           </div>
         )}
-
-
-      </div>
+      </motion.div>
 
       {/* Meter Visualization */}
-      <div className={`flex flex-col items-center justify-center rounded-2xl bg-black/60 border border-white/5 ${isDashboard ? "min-h-[40%] m-4" : "p-6"}`}>
+      <motion.div 
+        layout
+        ref={meterRef}
+        className={`flex flex-col items-center justify-center rounded-2xl bg-black/60 border border-white/5 relative ${isDashboard ? "min-h-[40%] m-4" : "p-6"}`}
+      >
         <h3 className="mb-4 text-sm font-semibold text-slate-300 uppercase tracking-widest">
           {t.leadTools?.risk?.ownershipScoreLabel ?? "Ownership Score"}
         </h3>
@@ -170,7 +183,7 @@ export function PlatformRiskMeter({ locale, isDashboard }: PlatformRiskMeterProp
               : t.leadTools?.risk?.scoreLow ?? "Critical Risk"
             : t.leadTools?.risk?.scorePending ?? "Testing..."}
         </motion.div>
-      </div>
+      </motion.div>
     </div>
   );
 

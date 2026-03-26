@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { LeadCaptureForm } from "./LeadCaptureForm";
 import { getMessages, type Locale } from "@/lib/i18n";
@@ -13,11 +13,12 @@ interface TimeDebtReceiptProps {
 }
 
 export function TimeDebtReceipt({ locale, isDashboard }: TimeDebtReceiptProps) {
-  const [hoursPerWeek, setHoursPerWeek] = useState(15);
+  const [hoursPerWeek, setHoursPerWeek] = useState(5);
   const [hourlyRate, setHourlyRate] = useState(15.6);
   const [isPrinting, setIsPrinting] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const t = getMessages(locale);
+  const receiptRef = useRef<HTMLDivElement>(null);
 
   const monthlyHours = hoursPerWeek * 4;
   const monthlyDebt = monthlyHours * hourlyRate;
@@ -27,10 +28,28 @@ export function TimeDebtReceipt({ locale, isDashboard }: TimeDebtReceiptProps) {
     setTimeout(() => setIsPrinting(true), 100);
   };
 
+  useEffect(() => {
+    if (isPrinting && receiptRef.current) {
+      const timer = setTimeout(() => {
+        receiptRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [isPrinting]);
+
   const content = (
     <div className={`grid gap-8 md:grid-cols-2 ${isDashboard ? "flex-grow flex flex-col-reverse justify-end" : ""}`}>
       {/* Controls */}
-      <div className={`space-y-6 ${isDashboard ? "px-6 pb-20 pt-4" : ""}`}>
+      <motion.div
+        layout
+        initial={false}
+        animate={{
+          opacity: isPrinting && isDashboard ? 0.4 : 1,
+          height: isPrinting && isDashboard ? "auto" : "auto",
+          scale: isPrinting && isDashboard ? 0.98 : 1
+        }}
+        className={`space-y-6 transition-all duration-700 ${isDashboard ? "px-6 pb-20 pt-4" : ""}`}
+      >
         <div>
           <label className="mb-2 flex justify-between text-sm font-medium text-slate-300">
             <span>{t.calcReceipt.hoursLabel}</span>
@@ -81,7 +100,6 @@ export function TimeDebtReceipt({ locale, isDashboard }: TimeDebtReceiptProps) {
         )}
 
 
-
         {isPrinting && !showForm && (
           <motion.button
             initial={{ opacity: 0 }}
@@ -93,10 +111,14 @@ export function TimeDebtReceipt({ locale, isDashboard }: TimeDebtReceiptProps) {
             {t.calcReceipt.protectBtn}
           </motion.button>
         )}
-      </div>
+      </motion.div>
 
       {/* Receipt Visualization */}
-      <div className={`relative flex justify-center overflow-hidden rounded-2xl bg-black/60 border border-white/5 ${isDashboard ? "min-h-[40%] m-4" : "p-6 min-h-[300px]"}`}>
+      <motion.div
+        layout
+        ref={receiptRef}
+        className={`relative flex justify-center overflow-hidden rounded-2xl bg-black/60 border border-white/5 ${isDashboard ? "min-h-[40%] m-4" : "p-6 min-h-[300px]"}`}
+      >
         {isDashboard && (
           <div className="absolute bottom-4 right-4 z-10">
             {/* Science moved to global LeadGenHub Stage HUD */}
@@ -147,7 +169,7 @@ export function TimeDebtReceipt({ locale, isDashboard }: TimeDebtReceiptProps) {
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
+      </motion.div>
     </div>
   );
 

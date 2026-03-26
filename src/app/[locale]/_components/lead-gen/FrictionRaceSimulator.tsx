@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { LeadCaptureForm } from "./LeadCaptureForm";
 import { AuditCitation } from "./AuditCitation";
 import { getMessages, type Locale } from "@/lib/i18n";
-import { Scan, X } from "lucide-react";
+import { Scan, X, Play } from "lucide-react";
 
 interface FrictionRaceSimulatorProps {
   locale: Locale;
@@ -96,13 +96,29 @@ export function FrictionRaceSimulator({ locale, isDashboard }: FrictionRaceSimul
 
         {isDashboard && (
            <div className="flex flex-col gap-4">
-              <button
-                onClick={startRace}
-                disabled={isRacing}
-                className="w-full rounded-xl bg-emerald-500 px-6 py-4 font-black uppercase tracking-widest text-slate-950 shadow-[0_4px_20px_rgba(16,185,129,0.3)] transition hover:bg-emerald-400 disabled:opacity-50"
-              >
-                {raceStep === 5 ? "Reset Simulation" : isRacing ? "Computing..." : "Start Journey"}
-              </button>
+               <motion.div
+                 animate={!isRacing && raceStep === 0 ? {
+                   scale: [1, 1.01, 1],
+                   filter: ["drop-shadow(0 0 0px rgba(16, 185, 129, 0))", "drop-shadow(0 0 12px rgba(16, 185, 129, 0.4))", "drop-shadow(0 0 0px rgba(16, 185, 129, 0))"]
+                 } : {}}
+                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                 className="w-full"
+               >
+                 <button
+                   onClick={startRace}
+                   disabled={isRacing}
+                   className="group relative w-full overflow-hidden rounded-xl bg-emerald-500 px-6 py-4 font-black uppercase tracking-widest text-slate-950 shadow-[0_4px_20px_rgba(16,185,129,0.3)] transition-all hover:bg-emerald-400 disabled:opacity-50 active:scale-95"
+                 >
+                   <span className="relative z-10">
+                     {raceStep === 5 ? "Reset Simulation" : isRacing ? "Computing..." : "Start Journey"}
+                   </span>
+                   {/* Haptic Glow on click */}
+                   <motion.div 
+                     whileTap={{ scale: 2, opacity: 0 }}
+                     className="absolute inset-0 z-0 bg-white/20 opacity-0 rounded-full scale-0"
+                   />
+                 </button>
+               </motion.div>
               
               {raceStep === 5 && !showForm && (
                 <button
@@ -115,14 +131,6 @@ export function FrictionRaceSimulator({ locale, isDashboard }: FrictionRaceSimul
            </div>
         )}
 
-        {!isDashboard && raceStep === 5 && !showForm && (
-          <button
-            onClick={() => setShowForm(true)}
-            className="w-full rounded-xl bg-emerald-500/20 px-8 py-4 text-lg font-medium text-emerald-200 transition hover:bg-emerald-500/30"
-          >
-            {t.leadTools?.friction?.buttonCta ?? "Make it easy to say yes."}
-          </button>
-        )}
       </div>
 
       {/* Race Visualization */}
@@ -139,6 +147,14 @@ export function FrictionRaceSimulator({ locale, isDashboard }: FrictionRaceSimul
           </h3>
           <div className={`relative overflow-hidden rounded-xl border border-white/5 bg-black/40 flex items-center justify-center ${isDashboard ? "h-32" : "h-48 md:h-64"}`}>
             <AnimatePresence mode="popLayout">
+               {raceStep === 0 && (
+                 <motion.div 
+                   initial={{ opacity: 0 }}
+                   animate={{ opacity: [0.1, 0.25, 0.1] }}
+                   transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                   className="absolute inset-0 shimmer-premium"
+                 />
+               )}
               {raceStep > 0 && (
                 <motion.div
                   key={raceStep}
@@ -169,6 +185,14 @@ export function FrictionRaceSimulator({ locale, isDashboard }: FrictionRaceSimul
           </h3>
           <div className={`relative overflow-hidden rounded-xl border border-white/5 bg-black/40 flex items-center justify-center ${isDashboard ? "h-32" : "h-48 md:h-64"}`}>
             <AnimatePresence mode="popLayout">
+               {raceStep === 0 && (
+                 <motion.div 
+                   initial={{ opacity: 0 }}
+                   animate={{ opacity: [0.1, 0.25, 0.1] }}
+                   transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                   className="absolute inset-0 shimmer-premium"
+                 />
+               )}
               {raceStep > 0 && (
                 <motion.div
                   key="genezisi-done"
