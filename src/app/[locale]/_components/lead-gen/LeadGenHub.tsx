@@ -41,7 +41,6 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
   // Lazy Mount State to preserve mobile performance
   const [mounted, setMounted] = useState<Set<number>>(new Set([0]));
   const [isScienceOpen, setIsScienceOpen] = useState(false);
-
   const total = TOOL_IDS.length;
   const activeId = TOOL_IDS[activeIndex];
 
@@ -56,6 +55,13 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
   useEffect(() => {
     setHasMounted(true);
   }, []);
+
+  // Reset scroll when navigating between tools
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo(0, 0);
+    }
+  }, [activeIndex]);
 
   // Update mounted tools and scroll state
   useEffect(() => {
@@ -198,7 +204,7 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
                     >
                       <ChevronLeft className="h-4 w-4 md:h-5 md:w-5" />
                     </button>
-                    <div className="px-2 md:px-3 py-1 rounded-md bg-white/5 border border-white/10">
+                    <div className="px-2 md:px-3 py-1 rounded-md bg-white/5 border border-white/10 flex items-center justify-center whitespace-nowrap min-w-[3rem]">
                       <span className="text-[10px] md:text-xs font-black font-space text-emerald-400">
                         {activeIndex + 1} / {total}
                       </span>
@@ -260,7 +266,10 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
               </div>
             </div>
 
-            <div className="flex-grow relative overflow-y-auto overscroll-contain bg-transparent px-0 md:px-8 z-10">
+            <div 
+              ref={scrollContainerRef}
+              className="flex-grow relative overflow-y-auto overscroll-contain bg-transparent px-0 md:px-8 z-10"
+            >
               <div className="sticky top-0 left-0 right-0 h-4 md:h-6 bg-gradient-to-b from-[#030717] to-transparent z-10 pointer-events-none" />
 
               <div className="max-w-6xl mx-auto w-full py-4 md:pt-4 md:pb-16">
