@@ -44,9 +44,9 @@ export function LostWeekendCalculator({ locale, isDashboard }: LostWeekendCalcul
   }, [dailySales, hoursOnline]);
 
   const content = (
-    <div className={`grid gap-8 md:grid-cols-2 ${isDashboard ? "flex-grow flex flex-col-reverse justify-end" : ""}`}>
+    <div className={`flex flex-col gap-6 ${isDashboard ? "px-0 pb-12 pt-0" : "grid md:grid-cols-2 md:gap-8"}`}>
       {/* Controls */}
-      <div className={`space-y-6 ${isDashboard ? "px-6 pb-20 pt-4" : ""}`}>
+      <div className={`space-y-6 ${isDashboard ? "px-4 pt-4" : ""}`}>
         <div>
           <label className="mb-2 flex justify-between text-sm font-medium text-slate-300">
             <span>{t.midnightCalc.dailySalesLabel}</span>
@@ -107,7 +107,7 @@ export function LostWeekendCalculator({ locale, isDashboard }: LostWeekendCalcul
       </div>
 
       {/* Visualization */}
-      <div className={`flex flex-col items-center justify-center rounded-2xl bg-black/60 border border-white/5 relative ${isDashboard ? "min-h-[40%] m-4" : "p-6"}`}>
+      <div className={`flex flex-col items-center justify-center rounded-2xl bg-white/[0.03] backdrop-blur-xl border border-white/5 relative ${isDashboard ? "p-8 m-4" : "p-6"}`}>
         {isDashboard && (
           <div className="absolute bottom-4 right-4 z-10">
             {/* Science moved to global LeadGenHub Stage HUD */}

@@ -45,9 +45,9 @@ export function FrictionRaceSimulator({ locale, isDashboard }: FrictionRaceSimul
     ];
 
   const content = (
-    <div className={`grid gap-5 md:gap-8 md:grid-cols-2 ${isDashboard ? "flex-grow flex flex-col-reverse justify-end" : ""}`}>
+    <div className={`flex flex-col gap-6 ${isDashboard ? "px-0 pb-12 pt-0" : "grid md:grid-cols-2 md:gap-8"}`}>
       {/* Controls & Action Zone */}
-      <div className={`space-y-6 ${isDashboard ? "px-6 pb-20 pt-4" : ""}`}>
+      <div className={`space-y-6 ${isDashboard ? "px-4 pt-4" : ""}`}>
         {!isDashboard && (
           <div className="mb-6 md:mb-8 flex justify-center">
             <button
@@ -145,10 +145,11 @@ export function FrictionRaceSimulator({ locale, isDashboard }: FrictionRaceSimul
           <h3 className="mb-3 text-center text-[9px] font-black font-space uppercase tracking-wider text-red-300">
             Standard
           </h3>
-          <div className={`relative overflow-hidden rounded-xl border border-white/5 bg-black/40 flex items-center justify-center ${isDashboard ? "h-32" : "h-48 md:h-64"}`}>
+          <div className={`relative overflow-hidden rounded-xl border border-white/5 bg-white/[0.03] backdrop-blur-xl flex items-center justify-center ${isDashboard ? "h-32" : "h-48 md:h-64"}`}>
             <AnimatePresence mode="popLayout">
                {raceStep === 0 && (
                  <motion.div 
+                   key="idle-shimmer-standard"
                    initial={{ opacity: 0 }}
                    animate={{ opacity: [0.1, 0.25, 0.1] }}
                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
@@ -183,10 +184,11 @@ export function FrictionRaceSimulator({ locale, isDashboard }: FrictionRaceSimul
           <h3 className="mb-3 text-center text-[9px] font-black font-space uppercase tracking-wider text-emerald-300">
             Premium
           </h3>
-          <div className={`relative overflow-hidden rounded-xl border border-white/5 bg-black/40 flex items-center justify-center ${isDashboard ? "h-32" : "h-48 md:h-64"}`}>
+          <div className={`relative overflow-hidden rounded-xl border border-white/5 bg-white/[0.03] backdrop-blur-xl flex items-center justify-center ${isDashboard ? "h-32" : "h-48 md:h-64"}`}>
             <AnimatePresence mode="popLayout">
                {raceStep === 0 && (
                  <motion.div 
+                   key="idle-shimmer-premium"
                    initial={{ opacity: 0 }}
                    animate={{ opacity: [0.1, 0.25, 0.1] }}
                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}

@@ -38,7 +38,7 @@ export function TimeDebtReceipt({ locale, isDashboard }: TimeDebtReceiptProps) {
   }, [isPrinting]);
 
   const content = (
-    <div className={`grid gap-8 md:grid-cols-2 ${isDashboard ? "flex-grow flex flex-col-reverse justify-end" : ""}`}>
+    <div className={`flex flex-col gap-6 ${isDashboard ? "px-0 pb-12 pt-0" : "grid md:grid-cols-2 md:gap-8"}`}>
       {/* Controls */}
       <motion.div
         layout
@@ -48,7 +48,7 @@ export function TimeDebtReceipt({ locale, isDashboard }: TimeDebtReceiptProps) {
           height: isPrinting && isDashboard ? "auto" : "auto",
           scale: isPrinting && isDashboard ? 0.98 : 1
         }}
-        className={`space-y-6 transition-all duration-700 ${isDashboard ? "px-6 pb-20 pt-4" : ""}`}
+        className={`space-y-6 transition-all duration-700 ${isDashboard ? "px-4 pt-4" : ""}`}
       >
         <div>
           <label className="mb-2 flex justify-between text-sm font-medium text-slate-300">
@@ -117,7 +117,7 @@ export function TimeDebtReceipt({ locale, isDashboard }: TimeDebtReceiptProps) {
       <motion.div
         layout
         ref={receiptRef}
-        className={`relative flex justify-center overflow-hidden rounded-2xl bg-black/60 border border-white/5 ${isDashboard ? "min-h-[40%] m-4" : "p-6 min-h-[300px]"}`}
+        className={`relative flex justify-center overflow-hidden rounded-2xl bg-white/[0.03] backdrop-blur-xl border border-white/5 ${isDashboard ? "p-8 m-4" : "p-6 min-h-[300px]"}`}
       >
         {isDashboard && (
           <div className="absolute bottom-4 right-4 z-10">
@@ -129,9 +129,10 @@ export function TimeDebtReceipt({ locale, isDashboard }: TimeDebtReceiptProps) {
               Awaiting Calculation...
            </div>
         )}
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           {isPrinting && (
             <motion.div
+              key="logic-receipt-actual"
               initial={{ y: "-100%" }}
               animate={{ y: 0 }}
               transition={{ duration: 1.2, ease: "easeOut" }}

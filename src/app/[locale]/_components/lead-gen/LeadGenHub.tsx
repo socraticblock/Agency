@@ -165,11 +165,16 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[500] flex flex-col bg-zinc-950 text-white overflow-hidden"
+            className="fixed inset-0 z-[500] flex flex-col bg-[#030717] text-white overflow-hidden"
           >
+            {/* 💎 SOVEREIGN SHINE (v2.1): Depth Layer */}
+            <div className="absolute inset-0 pointer-events-none z-0">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.06),_transparent_70%)] opacity-100" />
+            </div>
+
             {/* 🛸 COMPACT HEADER (v1.6): Single-Row on Mobile */}
-            <div className="px-4 py-4 md:px-8 md:pt-12 md:pb-8 border-b border-white/5 bg-zinc-950/80 backdrop-blur-2xl shrink-0 z-20">
-              <div className="flex items-center justify-between mb-4 md:mb-10 max-w-7xl mx-auto w-full">
+            <div className="px-4 py-3 md:px-8 md:pt-2 md:pb-4 border-b border-white/5 bg-[#030717]/80 backdrop-blur-2xl shrink-0 z-20 relative">
+              <div className="flex items-center justify-between mb-2 md:mb-2 max-w-7xl mx-auto w-full">
                 <div className="flex items-center gap-3 md:gap-4 font-space">
                   <div className="h-8 w-8 md:h-10 md:w-10 rounded-lg md:rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
                     <Scan className="h-4 w-4 md:h-5 md:w-5" />
@@ -178,7 +183,7 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
                     <span className="hidden md:block text-[10px] font-black tracking-[0.3em] text-emerald-500 uppercase animate-pulse">
                       ENCRYPTED AUDIT HUD
                     </span>
-                    <h1 className="text-sm md:text-3xl font-black tracking-tight uppercase md:normal-case">
+                    <h1 className="text-sm md:text-2xl font-black tracking-tight uppercase md:normal-case">
                       Sovereign Dashboard
                     </h1>
                   </div>
@@ -243,6 +248,7 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
                       <ToolIcon className={`h-4 w-4 md:h-5 md:w-5 transition-transform duration-500 ${isActive ? "text-black scale-110" : "text-emerald-500/10 group-hover:text-emerald-400"}`} />
                       {isActive && (
                         <motion.div
+                          key="dashboard-pill-bg"
                           layoutId="dashboard-pill-v1.6"
                           className="absolute inset-0 z-[-1] bg-emerald-400 rounded-lg md:rounded-2xl"
                           transition={{ type: "spring", stiffness: 400, damping: 30 }}
@@ -254,25 +260,24 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
               </div>
             </div>
 
-            {/* 🚀 LEAN CORE (v1.6): 80% Viewport Area */}
-            <div className="flex-grow relative overflow-y-auto overscroll-contain bg-zinc-950 px-0 md:px-8">
-              <div className="sticky top-0 left-0 right-0 h-8 md:h-12 bg-gradient-to-b from-zinc-950 to-transparent z-10 pointer-events-none" />
+            <div className="flex-grow relative overflow-y-auto overscroll-contain bg-transparent px-0 md:px-8 z-10">
+              <div className="sticky top-0 left-0 right-0 h-4 md:h-6 bg-gradient-to-b from-[#030717] to-transparent z-10 pointer-events-none" />
 
-              <div className="max-w-6xl mx-auto w-full py-4 md:py-16">
+              <div className="max-w-6xl mx-auto w-full py-4 md:pt-4 md:pb-16">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeIndex}
-                    initial={{ opacity: 0, y: 30, filter: "blur(20px)" }}
+                    initial={{ opacity: 0, y: 15, filter: "blur(10px)" }}
                     animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, y: -30, filter: "blur(20px)" }}
-                    transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                    exit={{ opacity: 0, y: -15, filter: "blur(10px)" }}
+                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                     className="w-full flex flex-col items-center"
                   >
                     {/* Sovereign Stage Identity HUD (v1.9): Elevated Science Trigger */}
-                    <div className="w-full max-w-4xl mx-auto px-4 mb-3 flex flex-col items-center">
-                      <button 
+                    <div className="w-full max-w-4xl mx-auto px-4 mb-2 flex flex-col items-center">
+                      <button
                         onClick={() => setIsScienceOpen(true)}
-                        className="mb-3 flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-emerald-400/40 hover:text-emerald-400 transition outline-none"
+                        className="mb-1 flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-emerald-400/40 hover:text-emerald-400 transition outline-none"
                       >
                         <Scan className="h-3 w-3" />
                         [ View Audit Science ]
@@ -287,7 +292,7 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
                       </div>
                     </div>
 
-                    <div className="w-full p-4 md:p-8 max-w-4xl md:rounded-[2rem] md:border border-white/5 md:bg-white/[0.02] backdrop-blur-md mb-12">
+                    <div className="w-full p-2 md:p-10 max-w-4xl md:rounded-[2rem] md:border border-white/5 md:bg-white/[0.02] backdrop-blur-md mb-0 md:mb-5">
                       {mounted.has(activeIndex) ? (
                         <div className="w-full">
                           {(() => {
@@ -303,10 +308,10 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
                     </div>
 
                     {/* v2.0 GHOST NAVIGATION */}
-                    <div className="w-full max-w-4xl mx-auto px-4 pb-20 flex items-center justify-between">
+                    <div className="w-full max-w-4xl mx-auto px-4 pb-6 md:pb-20 flex items-center justify-between">
                       <div>
                         {activeIndex > 0 && (
-                          <button 
+                          <button
                             onClick={() => setActiveIndex(activeIndex - 1)}
                             className="group flex flex-col items-start transition-all duration-300 outline-none"
                           >
@@ -321,12 +326,12 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
                       </div>
 
                       <div className="flex items-center gap-1.5 opacity-20">
-                         {/* Horizontal pagination dots purged per objective */}
+                        {/* Horizontal pagination dots purged per objective */}
                       </div>
 
                       <div className="text-right">
                         {activeIndex < total - 1 && (
-                          <button 
+                          <button
                             onClick={() => setActiveIndex(activeIndex + 1)}
                             className="group flex flex-col items-end transition-all duration-300 outline-none"
                           >
@@ -344,7 +349,7 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
                 </AnimatePresence>
               </div>
 
-              <div className="sticky bottom-0 left-0 right-0 h-8 md:h-12 bg-gradient-to-t from-zinc-950 to-transparent z-10 pointer-events-none" />
+              <div className="sticky bottom-0 left-0 right-0 h-4 md:h-6 bg-gradient-to-t from-[#030717] to-transparent z-10 pointer-events-none" />
             </div>
 
 
@@ -352,71 +357,71 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
             {/* 🛸 AUDIT SCIENCE OVERLAY */}
             <AnimatePresence>
               {isScienceOpen && (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   className="fixed inset-0 z-[600] flex items-center justify-center p-6 bg-zinc-950/90 backdrop-blur-3xl"
                 >
-                  <motion.div 
+                  <motion.div
                     initial={{ scale: 0.95, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     exit={{ scale: 0.95, opacity: 0 }}
                     className="w-full max-w-xl relative"
                   >
-                    <button 
+                    <button
                       onClick={() => setIsScienceOpen(false)}
                       className="absolute -top-12 right-0 h-10 w-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white transition"
                     >
                       <XIcon className="h-5 w-5" />
                     </button>
-                    
-                    <div className="clay-card p-2">
-                       {(() => {
-                         const currentTool = TOOL_IDS[activeIndex];
-                         let data = { point: "", explanation: "", source: "" };
-                         
-                         // Global Mapping Strategy
-                         if (currentTool === 'audience') {
-                           data = { 
-                             point: t.leadTools?.audience?.citationPoint, 
-                             explanation: t.leadTools?.audience?.citationExplanation, 
-                             source: t.leadTools?.audience?.citationSource 
-                           };
-                         } else if (currentTool === 'weekend') {
-                           data = { 
-                             point: "82% of consumers demand an immediate response.", 
-                             explanation: "Modern commerce operates 24/7. When your business sleeps, your competitors don't.", 
-                             source: "HubSpot Consumer Survey / Sprout Social Index" 
-                           };
-                         } else if (currentTool === 'friction') {
-                           data = { 
-                             point: t.leadTools?.friction?.citationPoint, 
-                             explanation: t.leadTools?.friction?.citationExplanation, 
-                             source: t.leadTools?.friction?.citationSource 
-                           };
-                         } else if (currentTool === 'time') {
-                           data = { 
-                             point: "Context switching costs 23 minutes of focus per interruption.", 
-                             explanation: "Every time you pause deep work to answer a basic 'how much is this?' DM, you pay a massive Time Debt.", 
-                             source: "UC Irvine Study" 
-                           };
-                         } else if (currentTool === 'risk') {
-                           data = { 
-                             point: t.leadTools?.risk?.citationPoint, 
-                             explanation: t.leadTools?.risk?.citationExplanation, 
-                             source: t.leadTools?.risk?.citationSource 
-                           };
-                         }
 
-                         return (
-                           <AuditCitation 
-                             dataPoint={data.point}
-                             explanation={data.explanation}
-                             source={data.source}
-                           />
-                         );
-                       })()}
+                    <div className="clay-card p-2">
+                      {(() => {
+                        const currentTool = TOOL_IDS[activeIndex];
+                        let data = { point: "", explanation: "", source: "" };
+
+                        // Global Mapping Strategy
+                        if (currentTool === 'audience') {
+                          data = {
+                            point: t.leadTools?.audience?.citationPoint,
+                            explanation: t.leadTools?.audience?.citationExplanation,
+                            source: t.leadTools?.audience?.citationSource
+                          };
+                        } else if (currentTool === 'weekend') {
+                          data = {
+                            point: "82% of consumers demand an immediate response.",
+                            explanation: "Modern commerce operates 24/7. When your business sleeps, your competitors don't.",
+                            source: "HubSpot Consumer Survey / Sprout Social Index"
+                          };
+                        } else if (currentTool === 'friction') {
+                          data = {
+                            point: t.leadTools?.friction?.citationPoint,
+                            explanation: t.leadTools?.friction?.citationExplanation,
+                            source: t.leadTools?.friction?.citationSource
+                          };
+                        } else if (currentTool === 'time') {
+                          data = {
+                            point: "Context switching costs 23 minutes of focus per interruption.",
+                            explanation: "Every time you pause deep work to answer a basic 'how much is this?' DM, you pay a massive Time Debt.",
+                            source: "UC Irvine Study"
+                          };
+                        } else if (currentTool === 'risk') {
+                          data = {
+                            point: t.leadTools?.risk?.citationPoint,
+                            explanation: t.leadTools?.risk?.citationExplanation,
+                            source: t.leadTools?.risk?.citationSource
+                          };
+                        }
+
+                        return (
+                          <AuditCitation
+                            dataPoint={data.point}
+                            explanation={data.explanation}
+                            source={data.source}
+                          />
+                        );
+                      })()}
                     </div>
                   </motion.div>
                 </motion.div>

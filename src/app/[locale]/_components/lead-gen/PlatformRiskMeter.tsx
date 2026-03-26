@@ -62,7 +62,7 @@ export function PlatformRiskMeter({ locale, isDashboard }: PlatformRiskMeterProp
   };
 
   const content = (
-    <div className={`grid gap-8 md:grid-cols-2 ${isDashboard ? "flex-grow flex flex-col-reverse justify-end" : ""}`}>
+    <div className={`flex flex-col gap-6 ${isDashboard ? "px-0 pb-12 pt-0" : "grid md:grid-cols-2 md:gap-8"}`}>
       {/* Questionnaire Controls */}
       <motion.div 
         layout
@@ -70,7 +70,7 @@ export function PlatformRiskMeter({ locale, isDashboard }: PlatformRiskMeterProp
           opacity: isComplete && isDashboard ? 0.4 : 1,
           scale: isComplete && isDashboard ? 0.98 : 1
         }}
-        className={`space-y-4 ${isDashboard ? "px-6 pb-20 pt-4" : ""}`}
+        className={`space-y-4 md:space-y-6 ${isDashboard ? "px-4 pt-4" : ""}`}
       >
         {questions.map((q, index) => (
           <div
@@ -136,7 +136,7 @@ export function PlatformRiskMeter({ locale, isDashboard }: PlatformRiskMeterProp
       <motion.div 
         layout
         ref={meterRef}
-        className={`flex flex-col items-center justify-center rounded-2xl bg-black/60 border border-white/5 relative ${isDashboard ? "min-h-[40%] m-4" : "p-6"}`}
+        className={`flex flex-col items-center justify-center rounded-2xl bg-white/[0.03] backdrop-blur-xl border border-white/5 relative ${isDashboard ? "p-8 m-4" : "p-6"}`}
       >
         <h3 className="mb-4 text-sm font-semibold text-slate-300 uppercase tracking-widest">
           {t.leadTools?.risk?.ownershipScoreLabel ?? "Ownership Score"}
