@@ -25,16 +25,8 @@ export default async function ArchitectPage({
         {/* Continuous mesh grid backgound overlay */}
         <NanoBananaBackground />
 
-        <div className="relative z-10 mx-auto max-w-7xl px-4 pb-4 pt-6 sm:px-6">
-          <div className="mb-6 flex flex-col gap-1">
-            <span className="text-xs font-black font-space uppercase tracking-widest text-emerald-400">Genezisi Architect Studio</span>
-            <h1 className="font-space text-2xl font-black tracking-tight text-white md:text-3xl">
-              Build Your Digital Infrastructure
-            </h1>
-            <p className="max-w-xl text-base text-slate-400 sm:text-sm">
-              Design your asset from the ground up. Choose a foundation, customize with precision modules, and secure it with our Sentinel shield.
-            </p>
-          </div>
+        <div className="relative z-10 mx-auto max-w-7xl px-4 pb-4 pt-6 sm:px-6 invisible hidden opacity-0 pointer-events-none h-0 p-0 m-0 overflow-hidden">
+          {/* Hero section moved to Configurator for conditional step-based rendering */}
         </div>
         
         <div className="relative z-10">

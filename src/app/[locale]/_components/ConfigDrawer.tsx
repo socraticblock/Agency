@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, Info, Lightbulb, Sparkles, Shield, Trash2 } from "lucide-react";
+import { Check, Lightbulb, Sparkles, Shield, Trash2 } from "lucide-react";
 import { ServiceItem } from "@/constants/pricing";
 
 interface ConfigDrawerProps {
@@ -54,7 +54,7 @@ export default function ConfigDrawer({
             initial={{ x: "100%", y: 0 }} animate={{ x: 0, y: 0 }} exit={{ x: "100%", y: 0 }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
           >
-            <button 
+            <button
               onClick={() => setDrawerItem(null)}
               className="absolute top-4 right-4 z-[60] p-2 rounded-full bg-zinc-900/80 border border-white/5 backdrop-blur-md text-emerald-500 hover:scale-110 active:scale-95 transition-all shadow-2xl"
               aria-label="Close details"
@@ -67,10 +67,10 @@ export default function ConfigDrawer({
             <div className="flex items-center gap-1.5 bg-zinc-900 border border-zinc-800 rounded-lg p-1.5 px-2.5 self-start mb-1">
               <div className={`h-1.5 w-1.5 rounded-full ${selectedModules.includes(drawerItem.id) || activeFoundationId === drawerItem.id ? 'bg-emerald-400 animate-pulse shadow-[0_0_10px_#10b981]' : 'bg-zinc-500'}`} />
               <span className={`text-[9px] font-black font-space uppercase tracking-wider ${selectedModules.includes(drawerItem.id) || activeFoundationId === drawerItem.id ? 'text-emerald-400' : 'text-zinc-400'}`}>
-                 [ STATUS: {activeFoundationId === drawerItem.id ? 'ACTIVE FOUNDATION' : selectedModules.includes(drawerItem.id) ? 'ACTIVE IN ARCHITECTURE' : activeFoundationId && (drawerItem.category === 'Base' || !drawerItem.category) ? 'PREVIEWING INCLUDED ASSET' : 'READY FOR DEPLOYMENT'} ]
+                [ STATUS: {activeFoundationId === drawerItem.id ? 'ACTIVE FOUNDATION' : selectedModules.includes(drawerItem.id) ? 'ACTIVE IN ARCHITECTURE' : activeFoundationId && (drawerItem.category === 'Base' || !drawerItem.category) ? 'PREVIEWING INCLUDED ASSET' : 'READY FOR DEPLOYMENT'} ]
               </span>
             </div>
-            
+
             <div className="flex flex-col">
               <span className="text-xs font-black font-space text-emerald-400 uppercase tracking-wider">{drawerItem.category || "Foundation"}</span>
               <h3 className="text-xl font-black text-white">{drawerItem.name}</h3>
@@ -87,20 +87,20 @@ export default function ConfigDrawer({
             )}
 
             {drawerItem.strategicBacking && (
-                <div className="border-t border-zinc-800/40 pt-3 flex flex-col gap-3">
-                  <span className="text-xs font-black uppercase text-emerald-400 font-space flex items-center gap-1">
-                    Strategic Backing: Why Upgrade?
-                  </span>
-                  {drawerItem.strategicBacking.map((item, id) => (
-                    <div key={id} className="p-3 bg-zinc-900/50 border border-zinc-800/50 rounded-xl flex flex-col gap-1">
-                      <h4 className="text-sm font-black text-white">{item.title}</h4>
-                      <p className="text-xs text-slate-400"><span className="text-emerald-400 font-bold">The Fact:</span> {item.fact}</p>
-                      <p className="text-xs text-slate-400"><span className="text-emerald-400 font-bold">The Reality:</span> {item.reality}</p>
-                      <p className="text-xs text-emerald-300 font-bold bg-emerald-500/5 p-1 rounded mt-1 border border-emerald-500/10"><span className="text-white">The Cost:</span> {item.cost}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
+              <div className="border-t border-zinc-800/40 pt-3 flex flex-col gap-3">
+                <span className="text-xs font-black uppercase text-emerald-400 font-space flex items-center gap-1">
+                  Strategic Backing: Why Upgrade?
+                </span>
+                {drawerItem.strategicBacking.map((item, id) => (
+                  <div key={id} className="p-3 bg-zinc-900/50 border border-zinc-800/50 rounded-xl flex flex-col gap-1">
+                    <h4 className="text-sm font-black text-white">{item.title}</h4>
+                    <p className="text-xs text-slate-400"><span className="text-emerald-400 font-bold">The Fact:</span> {item.fact}</p>
+                    <p className="text-xs text-slate-400"><span className="text-emerald-400 font-bold">The Reality:</span> {item.reality}</p>
+                    <p className="text-xs text-emerald-300 font-bold bg-emerald-500/5 p-1 rounded mt-1 border border-emerald-500/10"><span className="text-white">The Cost:</span> {item.cost}</p>
+                  </div>
+                ))}
+              </div>
+            )}
 
             {whatItIsText && (
               <div className="border-t border-zinc-800/40 pt-3">
@@ -135,12 +135,6 @@ export default function ConfigDrawer({
                   <span className="text-xs font-black uppercase text-emerald-400 font-space flex items-center gap-1">
                     <Check className="h-3.5 w-3.5" /> WHAT YOU GET IN THIS BASE
                   </span>
-                  <div className="group relative">
-                    <Info className="h-3 w-3 text-emerald-400/60 cursor-help" />
-                    <div className="absolute bottom-full left-0 mb-1 hidden group-hover:block w-52 p-2 bg-black border border-zinc-800 rounded-xl text-xs text-slate-400 shadow-2xl z-30 leading-relaxed">
-                      This is your high-performance starting kit. It’s the engine of your project before you add custom business modules in the next steps.
-                    </div>
-                  </div>
                 </div>
                 <ul className="grid grid-cols-1 gap-1">
                   {drawerItem.scope.map((item, id) => (
@@ -174,33 +168,31 @@ export default function ConfigDrawer({
                   initial={{ scale: 0.98 }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => { 
+                  onClick={() => {
                     if (drawerItem.category === "Base" || !drawerItem.category) {
-                      setFoundation(drawerItem.id); 
+                      setFoundation(drawerItem.id);
                     } else {
                       toggleModule(drawerItem.id);
                     }
-                    setTimeout(() => setDrawerItem(null), 250); 
+                    setTimeout(() => setDrawerItem(null), 250);
                   }}
-                  className={`w-full font-black font-space py-3.5 rounded-xl text-xs uppercase flex items-center justify-center gap-2 shadow-xl transition-all cursor-pointer ${
-                    selectedModules.includes(drawerItem.id) 
-                      ? "bg-red-500/10 border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white" 
-                      : "bg-emerald-500/10 border-2 border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-slate-950"
-                  }`}
+                  className={`w-full font-black font-space py-3.5 rounded-xl text-xs uppercase flex items-center justify-center gap-2 shadow-xl transition-all cursor-pointer ${selectedModules.includes(drawerItem.id)
+                    ? "bg-red-500/10 border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
+                    : "bg-emerald-500/10 border-2 border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-slate-950"
+                    }`}
                 >
                   {selectedModules.includes(drawerItem.id) ? <Trash2 className="h-3.5 w-3.5" /> : <Shield className="h-3.5 w-3.5" />}
                   {drawerItem.category === "Base" || !drawerItem.category
-                    ? "Deploy Workspace" 
-                    : selectedModules.includes(drawerItem.id) 
-                      ? "Decommission Node" 
+                    ? "Deploy Workspace"
+                    : selectedModules.includes(drawerItem.id)
+                      ? "Decommission Node"
                       : "Deploy Node"}
                 </motion.button>
-                
+
                 <button
                   onClick={() => setDrawerItem(null)}
-                  className={`w-full py-3.5 text-center text-xs font-black font-space tracking-widest uppercase border border-white/5 bg-zinc-900/40 hover:bg-white/5 text-zinc-500 hover:text-zinc-300 transition-all rounded-xl cursor-pointer ${
-                    selectedModules.includes(drawerItem.id) ? 'border-red-500/30 text-red-500/60 hover:bg-red-500/10 hover:text-red-400' : ''
-                  }`}
+                  className={`w-full py-3.5 text-center text-xs font-black font-space tracking-widest uppercase border border-white/5 bg-zinc-900/40 hover:bg-white/5 text-zinc-500 hover:text-zinc-300 transition-all rounded-xl cursor-pointer ${selectedModules.includes(drawerItem.id) ? 'border-red-500/30 text-red-500/60 hover:bg-red-500/10 hover:text-red-400' : ''
+                    }`}
                 >
                   {selectedModules.includes(drawerItem.id) ? "Back to Grid" : "Skip for now"}
                 </button>

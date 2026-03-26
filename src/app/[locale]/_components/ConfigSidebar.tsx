@@ -33,6 +33,8 @@ interface ConfigSidebarProps {
   moduleQuantities?: Record<string, number>;
   shieldTier?: number;
   resetAll?: () => void;
+  step?: number;
+  goToStep?: (s: any) => void;
 }
 
 export default memo(function ConfigSidebar({
@@ -48,7 +50,9 @@ export default memo(function ConfigSidebar({
   selectedModules = [],
   moduleQuantities = {},
   shieldTier = 0,
-  resetAll
+  resetAll,
+  step,
+  goToStep,
 }: ConfigSidebarProps) {
 
   const handleResetAll = () => {
@@ -127,20 +131,50 @@ export default memo(function ConfigSidebar({
         )}
 
         <div className="flex flex-col gap-2 mb-2">
-          <div className="flex justify-between items-center">
-            <span className="text-base text-slate-400 font-medium font-space">Total One-Time:</span>
-            <motion.span
-              key={oneTimeTotal}
-              variants={countUpVariants} initial="hidden" animate="visible"
-              className="text-xl font-black font-mono text-emerald-400 tracking-tight"
-            >
-              {activeFoundation?.isBespoke ? (
-                <span className="text-sm font-black font-space animate-pulse text-amber-400">Project-Based</span>
-              ) : (
-                formatPrice(oneTimeTotal)
-              )}
-            </motion.span>
-          </div>
+          {activeFoundation?.isBespoke ? (
+            <div className="bg-black/40 border border-emerald-500/20 rounded-2xl p-4 flex flex-col items-center text-center gap-3 shadow-[0_0_30px_rgba(16,185,129,0.05)] relative overflow-hidden group/bespoke">
+              {/* Subtle Animated Glow Accent */}
+              <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/5 to-transparent opacity-50" />
+              
+              <div className="relative z-10 flex flex-col gap-1">
+                <span className="text-xs font-black font-space text-white/70 uppercase tracking-[0.2em] mb-1">
+                  Total One-Time
+                </span>
+                <span className="text-2xl font-black font-space text-amber-400 animate-pulse tracking-tight" style={{ textShadow: "0 0 15px rgba(251,191,36,0.3)" }}>
+                  PROJECT-BASED
+                </span>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  const isUpgrade = activeFoundation.id === 'upgrade';
+                  const MSG = isUpgrade 
+                    ? "Hi Genezisi! My site [ Add URL ] is acting slow and glitchy. I need an Architect to look under the hood for a Legacy Upgrade audit and custom renovation roadmap. Can we talk?"
+                    : "Hi Genezisi! I just explored your Architect tool and I'm interested in a Customized Build. I have a specific project in mind that requires unique software logic. When are you free for a quick Discovery Call to discuss the architecture?";
+                  window.open(`https://wa.me/995591039019?text=${encodeURIComponent(MSG)}`, '_blank');
+                }}
+                className="w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black font-space rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(16,185,129,0.3)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer relative z-10"
+              >
+                Consult with Architect Directly <Sparkles className="h-4 w-4" />
+              </button>
+
+              <div className="relative z-10 text-[9px] font-bold text-emerald-500/40 uppercase tracking-widest font-space">
+                [ COMMAND DISPATCH ACTIVE ]
+              </div>
+            </div>
+          ) : (
+            <div className="flex justify-between items-center group/total">
+              <span className="text-base text-slate-400 font-medium font-space">Total One-Time:</span>
+              <motion.span
+                key={oneTimeTotal}
+                variants={countUpVariants} initial="hidden" animate="visible"
+                className="text-xl font-black font-mono text-emerald-400 tracking-tight"
+              >
+                {formatPrice(oneTimeTotal)}
+              </motion.span>
+            </div>
+          )}
 
           {!activeFoundation?.isBespoke && (
             <div className="flex justify-between items-center">
@@ -209,12 +243,46 @@ export default memo(function ConfigSidebar({
         </div>
 
         {((activeFoundation && !activeFoundation.isBespoke) || (selectedModules && selectedModules.length > 0)) && (
-          <button
-            onClick={handleResetAll}
-            className="w-full mt-3 py-2 bg-red-950/30 hover:bg-red-950/50 border border-red-500/10 hover:border-red-500/30 rounded-xl text-[11px] font-black font-space text-red-400 hover:text-red-300 transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer relative z-50"
-          >
-            Reset All Configurations
-          </button>
+          <div className="flex flex-col gap-2 mt-3">
+            {/* Primary Action Button - Adapts to current step */}
+            {step === 1 && activeFoundation && (
+              <button
+                onClick={() => goToStep && goToStep(2)}
+                className="w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black font-space rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+              >
+                Configure Modules <Sparkles className="h-3.5 w-3.5" />
+              </button>
+            )}
+
+            {step === 2 && (
+              <button
+                onClick={() => goToStep && goToStep(3)}
+                className={`w-full py-4 font-black font-space rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer ${
+                  selectedModules.length > 0
+                    ? "bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+                    : "bg-zinc-800 text-slate-400 border border-zinc-700"
+                }`}
+              >
+                {selectedModules.length > 0 ? "Confirm & Continue" : "Continue Without Modules"} <Sparkles className="h-3.5 w-3.5" />
+              </button>
+            )}
+
+            {step === 3 && (
+              <button
+                onClick={() => goToStep && goToStep(4)}
+                className="w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black font-space rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+              >
+                Proceed to Strategy Discovery <Sparkles className="h-3.5 w-3.5" />
+              </button>
+            )}
+
+            <button
+              onClick={handleResetAll}
+              className="w-full py-2 bg-red-950/30 hover:bg-red-950/50 border border-red-500/10 hover:border-red-500/30 rounded-xl text-[11px] font-black font-space text-red-400 hover:text-red-300 transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer relative z-50 mt-1"
+            >
+              Reset All Configurations
+            </button>
+          </div>
         )}
 
 

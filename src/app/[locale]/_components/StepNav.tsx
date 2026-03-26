@@ -12,7 +12,7 @@ interface StepNavProps {
 
 export default memo(function StepNav({ step, goToStep, canGoToStep, stepLabels }: StepNavProps) {
   return (
-    <div className="mx-auto flex w-full max-w-md items-center overflow-x-auto overflow-y-visible pb-1 scrollbar-none sm:mx-0 sm:overflow-visible sm:pb-0">
+    <div className="mx-auto flex w-full max-w-md sm:max-w-3xl items-center overflow-x-auto overflow-y-visible pb-1 scrollbar-none sm:mx-0 sm:overflow-visible sm:pb-0 sm:gap-4 md:gap-8 justify-between">
       {stepLabels.map((s, i) => {
         const stepNum = (i + 1) as 1 | 2 | 3 | 4 | 5;
         const isActive = step === stepNum;
@@ -40,7 +40,7 @@ export default memo(function StepNav({ step, goToStep, canGoToStep, stepLabels }
               }`}>
                 {isCompleted ? <Check className="h-3.5 w-3.5" /> : s.num}
               </div>
-              <span className={`hidden text-xs font-bold font-space sm:block ${
+              <span className={`hidden text-xs font-black font-space sm:block whitespace-nowrap uppercase tracking-widest ${
                 isActive ? "text-white" : "text-zinc-500"
               }`}>{s.label}</span>
             </button>

@@ -285,14 +285,11 @@ export default function SummaryDashboard({
             transition={{ duration: 0.4 }}
             className="flex flex-col gap-8 w-full"
           >
-            <div className="text-center">
-              <h1 className="text-3xl font-space font-black text-white flex items-center justify-center gap-2">
-                <LayoutDashboard className="h-7 w-7 text-emerald-400" />
-                THE ARCHITECT&apos;S AUDIT
+            <div>
+              <h1 className="text-xl font-black font-space tracking-tight text-white flex items-center gap-2">
+                5. Final Audit Summary
               </h1>
-              <p className="text-xs text-slate-400 max-w-sm mx-auto mt-1">
-                Review your digital infrastructure blueprints before deployment indexation.
-              </p>
+              <p className="text-xs text-slate-500 font-medium mt-0.5">Review your digital infrastructure blueprints before deployment indexation.</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

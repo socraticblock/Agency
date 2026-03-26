@@ -154,6 +154,12 @@ export default function DiscoveryModule({
 
   return (
     <div className="flex-1 w-full max-w-4xl mx-auto py-8 lg:py-16">
+      <div className="mb-6">
+        <h3 className="text-xl font-black font-space tracking-tight text-white flex items-center gap-2">
+          4. Strategic Discovery
+        </h3>
+        <p className="text-xs text-slate-500 font-medium mt-0.5">Fine-tune the logic and requirements of your bespoke architecture.</p>
+      </div>
 
       <div className="glass-card relative rounded-[2rem] p-5 md:p-14 shadow-2xl overflow-hidden border border-emerald-500/10 bg-zinc-950/80 backdrop-blur-2xl min-h-[400px] md:min-h-[500px] flex flex-col">
         {/* Glow Effects */}

@@ -81,33 +81,40 @@ export default function Configurator() {
 
   const topAnchorRef = useRef<HTMLDivElement>(null);
   const isFirstRender = useRef(true);
-
+  const prevStepRef = useRef(step);
+  
   useEffect(() => {
     // Only scroll if we are on client and hydrated
-    if (!hydrated || !topAnchorRef.current) return;
+    if (!hydrated) return;
 
     // First-Render Lock: Prevent yanking the user on initial page load
     if (isFirstRender.current) {
       isFirstRender.current = false;
+      prevStepRef.current = step;
       return;
     }
 
-    // Calculate Y offset (Navbar 64px + 16px buffer = 80px)
-    const navOffset = 80;
-    const elementPosition = topAnchorRef.current.getBoundingClientRect().top;
-    const offsetPosition = elementPosition + window.pageYOffset - navOffset;
+    const stepChanged = prevStepRef.current !== step;
+    prevStepRef.current = step;
 
-    // Use smooth for internal selections (foundation/discovery) and instant for steps
-    // For now, consistent smooth scroll for feedback.
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: "smooth"
+    // Ensure the DOM has finished its swap before scrolling
+    requestAnimationFrame(() => {
+      // Calculate Y offset (Navbar 64px + 16px buffer = 80px)
+      const navOffset = 80;
+      const elementPosition = topAnchorRef.current?.getBoundingClientRect().top || 0;
+      const offsetPosition = elementPosition + window.pageYOffset - navOffset;
+
+      // Use 'auto' (instant) for step transitions to prevent layout-shift stall on mobile
+      window.scrollTo({
+        top: stepChanged ? 0 : offsetPosition, 
+        behavior: stepChanged ? "auto" : "smooth"
+      });
+      
+      // Also reset the internal container scroll
+      if (scrollRef && 'current' in scrollRef && scrollRef.current) {
+        scrollRef.current.scrollTo(0, 0);
+      }
     });
-    
-    // Also reset the internal container scroll just in case
-    if (scrollRef && 'current' in scrollRef && scrollRef.current) {
-      scrollRef.current.scrollTo(0, 0);
-    }
   }, [step, foundation, discoveryStep, hydrated, scrollRef]);
 
   if (!hydrated) {
@@ -131,6 +138,27 @@ export default function Configurator() {
         <div className="flex-grow flex flex-col gap-5 lg:w-2/3">
           {/* Progress Bar */}
           <div ref={topAnchorRef} />
+
+          <AnimatePresence mode="wait">
+            {step === 1 && (
+              <m.div
+                key="hero-intro"
+                initial={{ opacity: 0, height: 0, marginBottom: 0 }}
+                animate={{ opacity: 1, height: "auto", marginBottom: 24 }}
+                exit={{ opacity: 0, height: 0, marginBottom: 0, transition: { duration: 0.4, ease: "easeInOut" } }}
+                className="flex flex-col gap-1 overflow-hidden"
+              >
+                <span className="text-xs font-black font-space uppercase tracking-widest text-emerald-400">Genezisi Architect Studio</span>
+                <h1 className="font-space text-2xl font-black tracking-tight text-white md:text-3xl">
+                  Build Your Digital Infrastructure
+                </h1>
+                <p className="max-w-xl text-base text-slate-400 sm:text-sm">
+                  Design your asset from the ground up. Choose a foundation, customize with precision modules, and secure it with our Sentinel shield.
+                </p>
+              </m.div>
+            )}
+          </AnimatePresence>
+
           <StepNav step={step} goToStep={goToStep} canGoToStep={canGoToStep} stepLabels={stepLabels} />
 
           <div
@@ -226,6 +254,8 @@ export default function Configurator() {
             totalHoursSaved={totalHoursSaved}
             shieldTier={shieldTier}
             resetAll={clearConfiguration}
+            step={step}
+            goToStep={goToStep}
           />
         )}
 

@@ -27,9 +27,16 @@ export default function ShieldGrid({
       exit={{ opacity: 0, x: -20 }}
       className="flex flex-col gap-4"
     >
+      <div>
+        <h3 className="text-xl font-black font-space tracking-tight text-white flex items-center gap-2">
+          3. Secure Your Asset
+        </h3>
+        <p className="text-xs text-slate-500 font-medium mt-0.5">Protect your digital estate with the Sentinel active security protocol.</p>
+      </div>
+
       <div className="bg-zinc-900/40 p-3 rounded-2xl border border-zinc-800/50 flex flex-col gap-1">
-        <h4 className="text-sm font-black font-space tracking-tight text-white flex items-center gap-1.5">
-          The Sentinel: Digital Life Insurance
+        <h4 className="text-[10px] font-black font-space tracking-[0.2em] text-emerald-400 uppercase">
+          [ Sentinel Protocol Active ]
         </h4>
         <p className="text-sm text-slate-400 font-medium leading-relaxed">
           "Your website is your only owned real estate. Social media is rented space." Google blacklists 10,000 sites daily for security lapses. We are the 'Sentinel' protecting your asset flawlessly.

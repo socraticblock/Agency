@@ -97,24 +97,13 @@ export default function ModuleGrid({
         </m.div>
       )}
 
-      <div className="flex justify-between mt-4 pt-4 border-t border-white/5">
+      <div className="flex justify-start mt-4 pt-4 border-t border-white/5">
         <button
           type="button"
           onClick={() => goToStep(1)}
           className="flex items-center gap-1.5 text-slate-400 hover:text-white font-bold px-4 py-2 rounded-lg text-xs font-space transition-colors"
         >
           <ArrowLeft className="h-3 w-3" /> Back
-        </button>
-        <button
-          type="button"
-          onClick={() => goToStep(3)}
-          className={`flex items-center gap-1.5 font-bold px-5 py-2.5 rounded-lg text-xs font-space transition-all shadow-md border-0 ${
-            selectedModules.length > 0
-              ? "bg-emerald-500 text-black hover:bg-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.3)]"
-              : "bg-zinc-800 text-slate-200 hover:bg-zinc-700 border border-zinc-700 hover:text-white"
-          }`}
-        >
-          {selectedModules.length > 0 ? "Confirm & Continue" : "Continue Without Modules"} <ArrowRight className="h-3 w-3" />
         </button>
       </div>
     </div>

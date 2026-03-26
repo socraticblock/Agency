@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion";
-import { Check, Info, Sparkles, Lightbulb } from "lucide-react";
+import { Check, Sparkles, Lightbulb } from "lucide-react";
 import { FOUNDATIONS, type Foundation } from "@/constants/pricing";
 
 interface FoundationCardProps {
@@ -117,7 +117,7 @@ export default function FoundationCard({ f, isSelected, onClick, formatPrice, se
           >
             {/* Inheritance Value Anchor */}
             {f.inheritedValue && (
-              <div 
+              <div
                 onClick={(e) => {
                   e.stopPropagation();
                   if (setDrawerItem) {
@@ -127,24 +127,24 @@ export default function FoundationCard({ f, isSelected, onClick, formatPrice, se
                 }}
                 className="bg-emerald-500/5 hover:bg-emerald-500/10 border border-emerald-500/10 hover:border-emerald-500/30 rounded-xl p-3 mb-1 flex items-center justify-between shadow-[0_0_20px_rgba(16,185,129,0.02)] backdrop-blur-md cursor-pointer transition-all group/inherit"
               >
-                 <div className="flex items-center gap-2">
-                     <div className="bg-emerald-500/20 group-hover/inherit:bg-emerald-500/30 p-1.5 rounded-lg border border-emerald-500/30 group-hover/inherit:scale-110 transition-transform">
-                       <svg className="h-4 w-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
-                     </div>
-                     <div className="flex flex-col text-left">
-                       <span className="text-[10px] uppercase font-black font-space text-emerald-400 tracking-wider flex items-center gap-1">
-                          [ INHERITED INFRASTRUCTURE ] <Info className="h-2.5 w-2.5 opacity-60 group-hover/inherit:opacity-100 transition-opacity" />
-                       </span>
-                       <span className="text-xs font-black text-white group-hover/inherit:underline decoration-emerald-500/40 underline-offset-2 transition-all">
-                          {f.inheritedValue.name}
-                       </span>
-                     </div>
-                 </div>
-                 <div className="bg-emerald-500/10 group-hover/inherit:bg-emerald-500/20 px-2 py-1 rounded-lg border border-emerald-500/20 transition-colors">
-                     <span className="text-[11px] font-black text-emerald-300 font-mono">
-                        +{f.inheritedValue.priceGEL.toLocaleString()} ₾ VALUE
-                     </span>
-                 </div>
+                <div className="flex items-center gap-2">
+                  <div className="bg-emerald-500/20 group-hover/inherit:bg-emerald-500/30 p-1.5 rounded-lg border border-emerald-500/30 group-hover/inherit:scale-110 transition-transform">
+                    <svg className="h-4 w-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                  </div>
+                  <div className="flex flex-col text-left">
+                    <span className="text-[10px] uppercase font-black font-space text-emerald-400 tracking-wider flex items-center gap-1">
+                      [ INHERITED INFRASTRUCTURE ]
+                    </span>
+                    <span className="text-xs font-black text-white group-hover/inherit:underline decoration-emerald-500/40 underline-offset-2 transition-all">
+                      {f.inheritedValue.name}
+                    </span>
+                  </div>
+                </div>
+                <div className="bg-emerald-500/10 group-hover/inherit:bg-emerald-500/20 px-2 py-1 rounded-lg border border-emerald-500/20 transition-colors">
+                  <span className="text-[11px] font-black text-emerald-300 font-mono">
+                    +{f.inheritedValue.priceGEL.toLocaleString()} ₾ VALUE
+                  </span>
+                </div>
               </div>
             )}
 
@@ -152,20 +152,14 @@ export default function FoundationCard({ f, isSelected, onClick, formatPrice, se
             {f.scope && (
               <div className="p-3 bg-zinc-950/40 rounded-xl border border-zinc-800/40 flex flex-col gap-1.5 shadow-inner">
                 <div className="flex items-center gap-1">
-                   <span className="text-[10px] font-black font-space text-emerald-400 uppercase tracking-wider flex items-center gap-1">
-                     WHAT YOU GET IN THIS BASE
-                   </span>
-                   <div className="group relative">
-                     <Info className="h-3 w-3 text-emerald-400/60 cursor-help" />
-                     <div className="absolute top-full left-0 mt-1 hidden group-hover:block w-52 p-2 bg-black border border-zinc-800 rounded-xl text-xs text-slate-400 shadow-2xl z-30 leading-relaxed">
-                       This is your high-performance starting kit. It’s the engine of your project before you add custom business modules in the next steps.
-                     </div>
-                   </div>
+                  <span className="text-[10px] font-black font-space text-emerald-400 uppercase tracking-wider flex items-center gap-1">
+                    WHAT YOU GET IN THIS BASE
+                  </span>
                 </div>
                 <ul className="grid grid-cols-1 md:grid-cols-2 gap-1.5 mt-1">
                   {f.scope.map((item, id) => (
                     <li key={id} className="text-xs text-slate-300 flex items-start gap-1.5">
-                      <Check className="h-3.5 w-3.5 text-emerald-500 flex-shrink-0 mt-0.5" /> 
+                      <Check className="h-3.5 w-3.5 text-emerald-500 flex-shrink-0 mt-0.5" />
                       <span className="leading-relaxed">{item}</span>
                     </li>
                   ))}
@@ -233,7 +227,7 @@ export default function FoundationCard({ f, isSelected, onClick, formatPrice, se
                 ))}
               </div>
             )}
-            
+
           </motion.div>
         )}
       </AnimatePresence>

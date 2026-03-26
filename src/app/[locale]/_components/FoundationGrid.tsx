@@ -121,29 +121,6 @@ export default function FoundationGrid({
                 </AnimatePresence>
               </div>
 
-              <div className="flex items-center gap-2 w-full sm:w-auto justify-end mt-2 sm:mt-0">
-                {activeFoundation?.isBespoke ? (
-                  <button
-                    onClick={() => {
-                      const isUpgrade = activeFoundation.id === 'upgrade';
-                      const MSG = isUpgrade 
-                        ? "Hi Genezisi! My site [ Add URL ] is acting slow and glitchy. I need an Architect to look under the hood for a Legacy Upgrade audit and custom renovation roadmap. Can we talk?"
-                        : "Hi Genezisi! I just explored your Architect tool and I'm interested in a Customized Build. I have a specific project in mind that requires unique software logic. When are you free for a quick Discovery Call to discuss the architecture?";
-                      window.open(`https://wa.me/995591039019?text=${encodeURIComponent(MSG)}`, '_blank');
-                    }}
-                    className="flex items-center gap-1.5 font-bold bg-emerald-500 text-slate-900 hover:bg-emerald-400 px-3 py-1.5 rounded-lg text-[11px] uppercase tracking-wide font-space transition-all duration-300 shadow-[0_0_15px_rgba(16,185,129,0.2)] cursor-pointer"
-                  >
-                    Consult with the Architect <ArrowRight className="h-3 w-3" />
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => goToStep(2)}
-                    className="flex items-center gap-1.5 font-bold bg-emerald-500 text-slate-900 hover:bg-emerald-400 px-3 py-1.5 rounded-lg text-[11px] uppercase tracking-wide font-space transition-all duration-300 shadow-[0_0_15px_rgba(16,185,129,0.2)] cursor-pointer"
-                  >
-                    Configure Modules <ArrowRight className="h-3 w-3" />
-                  </button>
-                )}
-              </div>
             </m.div>
 
             <FoundationCard
