@@ -20,7 +20,6 @@ export default async function ArchitectPage({
 
   return (
     <>
-      <Navbar locale={lang} />
       <main className="min-h-screen bg-background relative overflow-hidden">
         {/* Continuous mesh grid backgound overlay */}
         <NanoBananaBackground />

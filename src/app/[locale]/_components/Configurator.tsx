@@ -14,6 +14,8 @@ import StepNav from "./StepNav";
 import FoundationGrid from "./FoundationGrid";
 import ModuleGrid from "./ModuleGrid";
 import ShieldGrid from "./ShieldGrid";
+import StudioHeader from "./StudioHeader";
+import { useParams } from "next/navigation";
 
 const DiscoveryModule = dynamic(() => import("./DiscoveryModule"), {
   ssr: false,
@@ -79,6 +81,9 @@ export default function Configurator() {
     updateQuantity,
   } = useConfigurator();
 
+  const params = useParams();
+  const locale = (params.locale as string) || "en";
+
   const topAnchorRef = useRef<HTMLDivElement>(null);
   const isFirstRender = useRef(true);
   const prevStepRef = useRef(step);
@@ -99,6 +104,9 @@ export default function Configurator() {
 
     // Ensure the DOM has finished its swap before scrolling
     requestAnimationFrame(() => {
+      // Defer to internal scroll for discovery/audit (steps 4 and 5)
+      if (step >= 4) return;
+
       // Calculate Y offset (Navbar 64px + 16px buffer = 80px)
       const navOffset = 80;
       const elementPosition = topAnchorRef.current?.getBoundingClientRect().top || 0;
@@ -130,6 +138,7 @@ export default function Configurator() {
 
   return (
     <LazyMotion features={loadFeatures}>
+      <StudioHeader locale={locale} />
       <div className="relative mx-auto flex max-w-[1400px] flex-col gap-5 px-3 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:px-4 lg:flex-row">
 
         <div className="absolute inset-x-0 bottom-0 top-[20%] bg-gradient-to-t from-emerald-500/5 to-transparent pointer-events-none" />
@@ -159,7 +168,9 @@ export default function Configurator() {
             )}
           </AnimatePresence>
 
-          <StepNav step={step} goToStep={goToStep} canGoToStep={canGoToStep} stepLabels={stepLabels} />
+          {step < 4 && (
+            <StepNav step={step} goToStep={goToStep} canGoToStep={canGoToStep} stepLabels={stepLabels} />
+          )}
 
           <div
             ref={scrollRef}

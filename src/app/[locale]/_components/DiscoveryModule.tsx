@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, type ComponentType } from "react";
+import { useState, useEffect, useRef, type ComponentType } from "react";
 import { m, AnimatePresence } from "framer-motion";
 import { Zap, CheckCircle, ArrowRight, ArrowLeft } from "lucide-react";
 import {
@@ -47,6 +47,8 @@ export default function DiscoveryModule({
     isUpgrade: IS_UPGRADE,
   });
 
+  const questionRef = useRef<HTMLDivElement>(null);
+
   const maxStep = Math.max(0, QUESTIONS.length - 1);
   const safeStep = Math.min(step, maxStep);
   const q = QUESTIONS[safeStep];
@@ -54,6 +56,13 @@ export default function DiscoveryModule({
   useEffect(() => {
     if (step !== safeStep) {
       setStep(safeStep);
+    }
+    
+    // Scroll to question on step change
+    if (questionRef.current) {
+      const yOffset = -64; // Exactly match sticky header height to hide everything else
+      const y = questionRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
     }
   }, [step, safeStep, setStep]);
 
@@ -141,7 +150,11 @@ export default function DiscoveryModule({
   };
 
   const handlePrev = () => {
-    if (step > 0) setStep(s => s - 1);
+    if (step > 0) {
+      setStep(s => s - 1);
+    } else {
+      goToStep(3);
+    }
   };
 
   if (!q) return null;
@@ -161,19 +174,10 @@ export default function DiscoveryModule({
         <p className="text-xs text-slate-500 font-medium mt-0.5">Fine-tune the logic and requirements of your bespoke architecture.</p>
       </div>
 
-      <div className="glass-card relative rounded-[2rem] p-5 md:p-14 shadow-2xl overflow-hidden border border-emerald-500/10 bg-zinc-950/80 backdrop-blur-2xl min-h-[400px] md:min-h-[500px] flex flex-col">
+      <div ref={questionRef} className="glass-card relative rounded-[2rem] p-5 md:p-14 shadow-2xl overflow-hidden border border-emerald-500/10 bg-zinc-950/80 backdrop-blur-2xl min-h-[400px] md:min-h-[500px] flex flex-col">
         {/* Glow Effects */}
         <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-500/5 blur-[100px] pointer-events-none" />
 
-        {/* Segmented Progress Bar */}
-        <div className="absolute top-0 left-0 w-full px-5 md:px-14 pt-6 flex gap-1.5 z-20">
-          {QUESTIONS.map((_, i) => (
-            <div key={i} className={`h-1 flex-1 rounded-full transition-all duration-500 ${i < safeStep ? "bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"
-              : i === safeStep ? "bg-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.8)]"
-                : "bg-white/10"
-              }`} />
-          ))}
-        </div>
 
         <AnimatePresence mode="wait">
           <m.div
@@ -182,23 +186,23 @@ export default function DiscoveryModule({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -30, scale: 1.02 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="flex flex-col flex-grow mt-8 z-10"
+            className="flex flex-col flex-grow mt-0 z-10"
           >
             <div className="space-y-3 relative">
               <span className="font-space text-emerald-400 text-[10px] font-bold tracking-[0.2em] uppercase">
-                Step {safeStep + 1}: {q.label || "Discovery"}
+                Question {safeStep + 1} of {QUESTIONS.length}
               </span>
-              <h2 className="font-space text-3xl md:text-5xl font-black text-white leading-[1.1] tracking-tight">
+              <h2 className="font-space text-3xl md:text-5xl font-black text-white leading-[1.7] tracking-tight">
                 {q.title}
               </h2>
               {q.description && (
-                <p className="text-slate-400 font-sans text-sm max-w-2xl mt-2 leading-relaxed">
+                <p className="text-slate-400 font-sans text-sm max-w-2xl mt-4leading-relaxed">
                   {q.description}
                 </p>
               )}
             </div>
 
-            <div className="mt-6 md:mt-10 flex-grow flex flex-col justify-center">
+            <div className="mt-2 md:mt-4 flex-grow flex flex-col justify-center">
 
               {/* === CARDS === */}
               {q.type === "cards" && (
@@ -207,8 +211,9 @@ export default function DiscoveryModule({
                     const Icon = opt.icon;
                     const isSelected = answers[q.id] === opt.value;
                     return (
-                      <button
+                      <m.button
                         key={opt.value}
+                        whileTap={{ scale: 0.96 }}
                         onClick={() => handleSelect(q.id, opt.value)}
                         className={`group relative text-left p-5 md:p-8 rounded-2xl transition-all duration-300 overflow-hidden ${isSelected
                           ? "bg-emerald-500/10 border-2 border-emerald-500 shadow-[inset_0_0_30px_rgba(16,185,129,0.1)]"
@@ -232,7 +237,7 @@ export default function DiscoveryModule({
                         <div className={`mt-6 font-space text-[9px] uppercase tracking-widest ${isSelected ? "text-emerald-500/60" : "text-slate-600"}`}>
                           [ Press {i + 1} ]
                         </div>
-                      </button>
+                      </m.button>
                     );
                   })}
                 </div>
@@ -245,8 +250,9 @@ export default function DiscoveryModule({
                     {(q.options as string[])?.map((opt, i) => {
                       const isSelected = answers[q.id] === opt;
                       return (
-                        <button
+                        <m.button
                           key={opt}
+                          whileTap={{ scale: 0.96 }}
                           onClick={() => handleSelect(q.id, opt)}
                           className={`flex min-h-11 items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-bold font-space transition-all duration-300 md:px-5 md:text-sm ${isSelected
                             ? "bg-emerald-400 text-black shadow-md shadow-emerald-500/20"
@@ -256,7 +262,7 @@ export default function DiscoveryModule({
                           {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-black" />}
                           {opt}
                           <span className={`text-[8px] ml-1 opacity-50 ${isSelected ? "text-black" : "hidden md:inline"}`}>[{i + 1}]</span>
-                        </button>
+                        </m.button>
                       );
                     })}
                   </div>
@@ -308,8 +314,9 @@ export default function DiscoveryModule({
                 <div className="flex flex-col gap-4">
                   <div className="flex flex-wrap gap-3">
                     {(q.options as string[])?.map((opt) => (
-                      <button
+                      <m.button
                         key={opt}
+                        whileTap={{ scale: 0.96 }}
                         onClick={() => handleSelect(q.id, opt)}
                         className={`px-4 py-2 rounded-full border text-xs font-bold font-space transition-all duration-300 ${answers[q.id] === opt
                           ? "border-emerald-400 bg-emerald-500/20 text-emerald-300 shadow-[0_0_15px_rgba(16,185,129,0.2)]"
@@ -317,7 +324,7 @@ export default function DiscoveryModule({
                           }`}
                       >
                         {opt}
-                      </button>
+                      </m.button>
                     ))}
                   </div>
                   {Boolean((q as { allowCustom?: boolean }).allowCustom) && (
@@ -359,8 +366,9 @@ export default function DiscoveryModule({
               {q.type === "toggle" && (
                 <div className="flex flex-col gap-3 w-full max-w-md">
                   {(q.options as string[])?.map((opt, i) => (
-                    <button
+                    <m.button
                       key={opt}
+                      whileTap={{ scale: 0.98 }}
                       onClick={() => handleSelect(q.id, opt)}
                       className={`p-4 rounded-xl border text-left text-sm font-bold font-space transition-all duration-300 flex justify-between items-center ${answers[q.id] === opt
                         ? "border-emerald-400 bg-emerald-500/10 text-emerald-400"
@@ -369,7 +377,7 @@ export default function DiscoveryModule({
                     >
                       {opt}
                       <span className="text-[9px] opacity-40">[{i + 1}]</span>
-                    </button>
+                    </m.button>
                   ))}
                 </div>
               )}
@@ -403,21 +411,12 @@ export default function DiscoveryModule({
 
         {/* Footer Navigation */}
         <div className="z-20 mt-8 md:mt-12 flex flex-col gap-4 border-t border-white/10 pt-6 md:pt-8 sm:flex-row sm:items-center sm:justify-between">
-          <button
-            type="button"
-            onClick={handlePrev}
-            disabled={safeStep === 0}
-            className={`group flex min-h-11 items-center gap-2 font-space text-[11px] uppercase tracking-widest transition-colors ${safeStep === 0 ? "pointer-events-none opacity-0" : "text-slate-500 hover:text-white"}`}
-          >
-            <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" />
-            Previous
-          </button>
-
-          <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:items-end">
+          <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:items-end order-1 sm:order-2">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
               {isEditing && (
-                <button
+                <m.button
                   type="button"
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => {
                     setIsEditing(false);
                     goToStep(5);
@@ -425,10 +424,11 @@ export default function DiscoveryModule({
                   className="min-h-11 cursor-pointer rounded-full border border-white/10 px-5 py-3 font-space text-xs font-bold uppercase tracking-widest text-slate-400 transition-all duration-300 hover:border-emerald-500/40 hover:text-white sm:px-6 sm:py-3.5"
                 >
                   SAVE AND RETURN TO SUMMARY
-                </button>
+                </m.button>
               )}
-              <button
+              <m.button
                 type="button"
+                whileTap={{ scale: 0.98 }}
                 onClick={safeStep === QUESTIONS.length - 1 ? handlesSubmit : handleNext}
                 disabled={!canPrimaryAction || isAnalyzing}
                 className={`group relative flex min-h-12 w-full items-center justify-center gap-3 rounded-full px-6 py-3.5 font-space text-xs font-bold uppercase tracking-widest transition-all duration-300 sm:w-auto sm:px-8 ${canPrimaryAction && !isAnalyzing
@@ -438,7 +438,7 @@ export default function DiscoveryModule({
               >
                 {isAnalyzing ? "Processing..." : safeStep === QUESTIONS.length - 1 ? "Generate Blueprint" : "Continue"}
                 {!isAnalyzing && <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />}
-              </button>
+              </m.button>
             </div>
             {finishError && (
               <p className="text-[10px] text-amber-400 font-bold font-space text-right max-w-xs leading-snug">
@@ -451,6 +451,16 @@ export default function DiscoveryModule({
                 : "[ Press Enter ↵ ]"}
             </span>
           </div>
+
+          <m.button
+            type="button"
+            whileTap={{ scale: 0.98 }}
+            onClick={handlePrev}
+            className={`order-2 sm:order-1 group flex min-h-11 items-center gap-2 font-space text-[11px] uppercase tracking-widest transition-colors text-slate-500 hover:text-white sm:mr-auto`}
+          >
+            <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" />
+            {safeStep === 0 ? "Back to Shield Selection" : "Previous"}
+          </m.button>
         </div>
 
       </div>
