@@ -452,15 +452,17 @@ export default function DiscoveryModule({
             </span>
           </div>
 
-          <m.button
-            type="button"
-            whileTap={{ scale: 0.98 }}
-            onClick={handlePrev}
-            className={`order-2 sm:order-1 group flex min-h-11 items-center gap-2 font-space text-[11px] uppercase tracking-widest transition-colors text-slate-500 hover:text-white sm:mr-auto`}
-          >
-            <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" />
-            {safeStep === 0 ? "Back to Shield Selection" : "Previous"}
-          </m.button>
+          {safeStep > 0 && (
+            <m.button
+              type="button"
+              whileTap={{ scale: 0.98 }}
+              onClick={handlePrev}
+              className={`order-2 sm:order-1 group flex min-h-11 items-center gap-2 font-space text-[11px] uppercase tracking-widest transition-colors text-slate-500 hover:text-white sm:mr-auto`}
+            >
+              <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" />
+              Previous
+            </m.button>
+          )}
         </div>
 
       </div>

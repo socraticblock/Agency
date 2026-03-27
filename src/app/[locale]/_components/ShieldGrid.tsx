@@ -103,14 +103,6 @@ export default function ShieldGrid({
         </div>
       </div>
 
-      <div className="flex justify-between items-center mt-2">
-        <button onClick={() => goToStep(2)} className="flex items-center gap-1.5 text-slate-400 hover:text-white font-bold px-4 py-1.5 rounded-lg text-xs font-space transition-colors">
-          <ArrowLeft className="h-3 w-3" /> Back
-        </button>
-        <button onClick={() => goToStep(4)} className="flex items-center justify-center gap-1.5 bg-emerald-400 text-black font-black font-space px-5 py-2 rounded-xl text-sm shadow-[0_4px_25px_rgba(16,185,129,0.25)] hover:scale-[1.02] transition-all border-0">
-          Architect Business Strategy →
-        </button>
-      </div>
     </m.div>
   );
 }

@@ -97,15 +97,6 @@ export default function ModuleGrid({
         </m.div>
       )}
 
-      <div className="flex justify-start mt-4 pt-4 border-t border-white/5">
-        <button
-          type="button"
-          onClick={() => goToStep(1)}
-          className="flex items-center gap-1.5 text-slate-400 hover:text-white font-bold px-4 py-2 rounded-lg text-xs font-space transition-colors"
-        >
-          <ArrowLeft className="h-3 w-3" /> Back
-        </button>
-      </div>
     </div>
   );
 }

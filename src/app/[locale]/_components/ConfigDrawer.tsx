@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, Lightbulb, Sparkles, Shield, Trash2 } from "lucide-react";
 import { ServiceItem } from "@/constants/pricing";
@@ -38,6 +39,17 @@ export default function ConfigDrawer({
   selectedModules,
   activeFoundationId,
 }: ConfigDrawerProps) {
+  useEffect(() => {
+    if (drawerItem) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [drawerItem]);
+
   const activeOverride = drawerItem?.id === 'micro-animations' && activeFoundationId && ANIMATION_OVERRIDES[activeFoundationId];
   const whatItIsText = activeOverride ? activeOverride.whatItIs : drawerItem?.whatItIs;
   const howItHelpsText = activeOverride ? activeOverride.howItHelps : drawerItem?.howItHelps;
@@ -52,13 +64,13 @@ export default function ConfigDrawer({
             onClick={() => setDrawerItem(null)}
           />
           <motion.div
-            className="fixed bottom-0 md:bottom-auto md:top-0 right-0 left-0 md:left-auto w-full md:w-[420px] h-screen bg-zinc-950 border-t md:border-t-0 md:border-l border-zinc-800 p-6 z-50 flex flex-col gap-4 shadow-2xl overflow-y-auto"
+            className="fixed inset-0 md:left-auto md:right-0 md:w-[420px] h-screen bg-zinc-950 border-t md:border-t-0 md:border-l border-zinc-800 p-6 pt-16 md:pt-6 z-[100] flex flex-col gap-4 shadow-2xl overflow-y-auto"
             initial={{ x: 0, y: "100%" }} animate={{ x: 0, y: 0 }} exit={{ x: 0, y: "100%" }}
             transition={{ type: "spring", damping: 30, stiffness: 300, mass: 0.8 }}
           >
             <button
               onClick={() => setDrawerItem(null)}
-              className="absolute top-4 right-4 z-[60] p-2 rounded-full bg-zinc-900/80 border border-white/5 backdrop-blur-md text-emerald-500 hover:scale-110 active:scale-95 transition-all shadow-2xl"
+              className="fixed top-4 right-4 z-[110] p-2 rounded-full bg-zinc-900 border border-white/10 text-emerald-500 hover:scale-110 active:scale-95 transition-all shadow-2xl backdrop-blur-md"
               aria-label="Close details"
             >
               <span className="text-xl font-black">×</span>

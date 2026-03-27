@@ -255,24 +255,49 @@ export default memo(function ConfigSidebar({
             )}
 
             {step === 2 && (
-              <button
-                onClick={() => goToStep && goToStep(3)}
-                className={`w-full py-4 font-black font-space rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer ${
-                  selectedModules.length > 0
-                    ? "bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-[0_0_20px_rgba(16,185,129,0.3)]"
-                    : "bg-zinc-800 text-slate-400 border border-zinc-700"
-                }`}
-              >
-                {selectedModules.length > 0 ? "Confirm & Continue" : "Continue Without Modules"} <Sparkles className="h-3.5 w-3.5" />
-              </button>
+              <div className="flex flex-col gap-2">
+                <button
+                  onClick={() => goToStep && goToStep(3)}
+                  className={`w-full py-4 font-black font-space rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer ${
+                    selectedModules.length > 0
+                      ? "bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+                      : "bg-zinc-800 text-slate-400 border border-zinc-700"
+                  }`}
+                >
+                  {selectedModules.length > 0 ? "Confirm & Continue" : "Continue Without Modules"} <Sparkles className="h-3.5 w-3.5" />
+                </button>
+                <button
+                  onClick={() => goToStep && goToStep(1)}
+                  className="w-full py-3 border border-white/5 hover:bg-white/5 text-slate-500 hover:text-slate-300 font-bold font-space rounded-xl text-[10px] uppercase tracking-widest transition-all"
+                >
+                  ← Go Back to Foundations
+                </button>
+              </div>
             )}
 
             {step === 3 && (
+              <div className="flex flex-col gap-2">
+                <button
+                  onClick={() => goToStep && goToStep(4)}
+                  className="w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black font-space rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                >
+                  Proceed to Strategy Discovery <Sparkles className="h-3.5 w-3.5" />
+                </button>
+                <button
+                  onClick={() => goToStep && goToStep(2)}
+                  className="w-full py-3 border border-white/5 hover:bg-white/5 text-slate-500 hover:text-slate-300 font-bold font-space rounded-xl text-[10px] uppercase tracking-widest transition-all"
+                >
+                  ← Go Back to Module Selection
+                </button>
+              </div>
+            )}
+
+            {step === 4 && (
               <button
-                onClick={() => goToStep && goToStep(4)}
-                className="w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black font-space rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                onClick={() => goToStep && goToStep(3)}
+                className="w-full py-3 border border-white/5 hover:bg-white/5 text-slate-500 hover:text-slate-300 font-bold font-space rounded-xl text-[10px] uppercase tracking-widest transition-all"
               >
-                Proceed to Strategy Discovery <Sparkles className="h-3.5 w-3.5" />
+                ← Go Back to Shield Selection
               </button>
             )}
 
