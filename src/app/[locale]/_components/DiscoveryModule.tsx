@@ -130,17 +130,17 @@ export default function DiscoveryModule({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [step, QUESTIONS, answers]);
 
-  const handleSelectForce = (qId: string, value: unknown, type: string) => {
+  const handleSelectForce = (qId: string, value: unknown, type: string, isCustom = false) => {
     setAnswers((prev) => ({ ...prev, [qId]: value }));
     const autoAdvance = ["cards", "tabs", "toggle", "tags"];
-    if (autoAdvance.includes(type) && step < QUESTIONS.length - 1) {
+    if (autoAdvance.includes(type) && step < QUESTIONS.length - 1 && !isCustom) {
       setTimeout(() => handleNext(), 300);
     }
   };
 
-  const handleSelect = (qId: string, value: unknown) => {
+  const handleSelect = (qId: string, value: unknown, isCustom = false) => {
     if (!q) return;
-    handleSelectForce(qId, value, q.type as string);
+    handleSelectForce(qId, value, q.type as string, isCustom);
   };
 
   const handlesSubmit = () => {
@@ -372,7 +372,7 @@ export default function DiscoveryModule({
                           ? (answers[q.id] as string) || ""
                           : ""
                       }
-                      onChange={(e) => handleSelect(q.id, e.target.value)}
+                      onChange={(e) => handleSelect(q.id, e.target.value, true)}
                       className="touch-form-control w-full border-b border-white/20 bg-transparent py-2 text-base font-medium text-white placeholder:text-slate-600 transition-colors focus:border-emerald-400 focus:ring-0"
                     />
                   )}
@@ -440,7 +440,7 @@ export default function DiscoveryModule({
                           ? (answers[q.id] as string) || ""
                           : ""
                       }
-                      onChange={(e) => handleSelect(q.id, e.target.value)}
+                      onChange={(e) => handleSelect(q.id, e.target.value, true)}
                       className="touch-form-control max-w-xs border-b border-white/20 bg-transparent py-2 text-base font-medium text-white placeholder:text-slate-600 transition-colors focus:border-emerald-400 focus:ring-0"
                     />
                   )}
