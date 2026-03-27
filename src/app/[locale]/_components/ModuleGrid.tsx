@@ -43,19 +43,14 @@ export default function ModuleGrid({
           2. Build Your Engine
         </h3>
 
-        <div className="mb-5 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl shadow-[inset_0_1px_0_0_rgba(16,185,129,0.1)]">
-          <p className="text-sm font-black text-emerald-400 font-space mb-1.5 flex items-center gap-2">
-            <span className="text-lg">📈</span> Scale at Your Own Pace
+        <div className="mb-6 p-5 bg-emerald-500/[0.03] border border-emerald-500/20 rounded-2xl shadow-[inset_0_1px_0_0_rgba(16,185,129,0.05)]">
+          <p className="text-[10px] font-black text-emerald-400 font-space mb-2 flex items-center gap-2 uppercase tracking-[0.2em]">
+            🏛️ ARCHITECTURE PROTOCOL
           </p>
           <p className="text-sm text-slate-300 font-medium leading-relaxed">
-            Your selected foundation is a fully functional, high-performance asset on its own. You don’t need these modules to launch. We’ve designed our architecture to be modular—meaning you can start with the core today and &apos;plug in&apos; these advanced growth tools whenever your business is ready for the next level.
+            Your foundation is a high-performance asset on its own—these modules are optional &apos;plug-ins&apos; designed to scale with you. While this list is pre-validated for your current architecture, it isn&apos;t the limit. If you have a unique software idea for your project, we can architect it. We&apos;ll discuss your vision during the discovery phase and blueprint the custom logic together.
           </p>
         </div>
-
-        <p className="text-xs text-slate-500 font-medium mt-0.5">
-          Modules shown here are curated for your selected foundation. For add-ons beyond this list, tell us during
-          discovery or reach out after you submit—we map bespoke scope in the audit.
-        </p>
       </div>
 
       {recommendedModules.length > 0 && (

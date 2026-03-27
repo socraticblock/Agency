@@ -553,11 +553,11 @@ export default function SummaryDashboard({
                     <div className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
                     <span>READY FOR INDEXATION</span>
                   </div>
-                  <p className="text-xl font-black font-mono text-emerald-400">
+                  <p className="text-xl font-black font-mono text-emerald-400 whitespace-nowrap">
                     {oneTimeTotal.toLocaleString()} ₾ One-Time
                   </p>
                   {monthlyTotal > 0 && (
-                    <p className="text-xs font-bold font-mono text-emerald-300">
+                    <p className="text-xs font-bold font-mono text-emerald-300 whitespace-nowrap">
                       +{monthlyTotal.toLocaleString()} ₾/mo Recurring
                     </p>
                   )}

@@ -80,9 +80,9 @@ export default memo(function ModuleItem({ m, isSelected, isExpanded, setExpanded
         </div>
 
         <div className="flex items-center gap-3">
-          <span className="text-lg font-black font-space text-emerald-400" style={{ WebkitTextStroke: "0.2px rgba(0,0,0,0.4)", textShadow: "0px 1px 2px rgba(0,0,0,0.9)" }}>
+          <span className="text-lg font-black font-space text-emerald-400 whitespace-nowrap" style={{ WebkitTextStroke: "0.2px rgba(0,0,0,0.4)", textShadow: "0px 1px 2px rgba(0,0,0,0.9)" }}>
             {formatPrice(displayedPrice * Math.max(1, quantity))}
-            {m.id === 'pro-copy' && <span className="text-xs text-zinc-500 font-bold"> / pg</span>}
+            {m.id === 'pro-copy' && <span className="text-xs text-zinc-500 font-bold whitespace-nowrap"> / pg</span>}
           </span>
           <button
             type="button"
@@ -178,7 +178,7 @@ export default memo(function ModuleItem({ m, isSelected, isExpanded, setExpanded
                         }}
                         className={`px-1.5 py-0.5 rounded text-[9px] font-extrabold cursor-pointer ${(kycChoice === 'no' || (kycChoice === 'none' && selectedModules.includes('bank-rep'))) ? 'bg-amber-400 text-slate-950' : 'bg-zinc-800 text-slate-400'}`}
                       >
-                        No (+{bankRepPrice.toLocaleString()} ₾)
+                        <span className="whitespace-nowrap">No (+{bankRepPrice.toLocaleString()} ₾)</span>
                       </button>
                     </div>
                   </div>

@@ -186,7 +186,7 @@ export default function FoundationGrid({
                         <div />
                         <div className="flex flex-col items-end">
                           <span className="text-[8px] font-black font-space text-zinc-500 uppercase tracking-widest leading-none mb-1 opacity-50">Base Price</span>
-                          <span className="text-base font-black font-space text-emerald-300 leading-none">
+                          <span className="text-base font-black font-space text-emerald-300 leading-none whitespace-nowrap">
                             {formatPrice(f.priceGEL)}
                           </span>
                         </div>

@@ -64,7 +64,7 @@ export default function ConfigDrawer({
             onClick={() => setDrawerItem(null)}
           />
           <motion.div
-            className="fixed inset-0 md:left-auto md:right-0 md:w-[420px] h-screen bg-zinc-950 border-t md:border-t-0 md:border-l border-zinc-800 p-6 pt-16 md:pt-6 z-[100] flex flex-col gap-4 shadow-2xl overflow-y-auto"
+            className="fixed inset-0 md:left-auto md:right-0 md:w-[420px] h-[100dvh] bg-zinc-950 border-t md:border-t-0 md:border-l border-zinc-800 p-6 pt-16 pb-5 md:pt-6 md:pb-6 z-[100] flex flex-col gap-4 shadow-2xl overflow-y-auto scrollbar-none"
             initial={{ x: 0, y: "100%" }} animate={{ x: 0, y: 0 }} exit={{ x: 0, y: "100%" }}
             transition={{ type: "spring", damping: 30, stiffness: 300, mass: 0.8 }}
           >

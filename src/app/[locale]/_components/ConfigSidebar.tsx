@@ -169,7 +169,7 @@ export default memo(function ConfigSidebar({
               <motion.span
                 key={oneTimeTotal}
                 variants={countUpVariants} initial="hidden" animate="visible"
-                className="text-xl font-black font-mono text-emerald-400 tracking-tight"
+                className="text-xl font-black font-mono text-emerald-400 tracking-tight whitespace-nowrap"
               >
                 {formatPrice(oneTimeTotal)}
               </motion.span>
@@ -182,7 +182,7 @@ export default memo(function ConfigSidebar({
               <motion.span
                 key={monthlyTotal}
                 variants={countUpVariants} initial="hidden" animate="visible"
-                className="text-base font-black font-mono text-emerald-300 tracking-tight"
+                className="text-base font-black font-mono text-emerald-300 tracking-tight whitespace-nowrap"
               >
                 {formatPrice(monthlyTotal)}
                 {monthlyTotal > 0 && "/mo"}
@@ -258,11 +258,7 @@ export default memo(function ConfigSidebar({
               <div className="flex flex-col gap-2">
                 <button
                   onClick={() => goToStep && goToStep(3)}
-                  className={`w-full py-4 font-black font-space rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer ${
-                    selectedModules.length > 0
-                      ? "bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-[0_0_20px_rgba(16,185,129,0.3)]"
-                      : "bg-zinc-800 text-slate-400 border border-zinc-700"
-                  }`}
+                  className="w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black font-space rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
                 >
                   {selectedModules.length > 0 ? "Confirm & Continue" : "Continue Without Modules"} <Sparkles className="h-3.5 w-3.5" />
                 </button>
