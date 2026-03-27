@@ -165,9 +165,10 @@ export default function FoundationGrid({
                 {FOUNDATIONS.map((f) => (
                   <div key={f.id} className="snap-center shrink-0 w-[85vw]">
                     <m.div
-                      onClick={() => setFoundation(f.id)}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => setDrawerItem(f)}
                       role="button"
-                      className="relative cursor-pointer text-left p-4 rounded-xl border border-zinc-800/60 bg-zinc-900/30 flex flex-col justify-between w-full h-[140px] transition-all"
+                      className="relative cursor-pointer text-left p-4 rounded-xl border border-zinc-800/60 bg-zinc-900/30 flex flex-col justify-between w-full h-[140px] transition-all hover:bg-zinc-800/40"
                     >
                       <div className="flex flex-col text-left">
                         <h4 className="text-base font-black text-white mt-0.5">{f.name}</h4>
@@ -181,16 +182,14 @@ export default function FoundationGrid({
                           </div>
                         )}
                       </div>
-                      <div className="flex justify-between items-center w-full pt-1.5 border-t border-zinc-900/40">
-                        <button
-                          onClick={(e) => { e.stopPropagation(); setDrawerItem(f); }}
-                          className="text-emerald-400 text-xs font-bold underline"
-                        >
-                          Review Technical Strategy
-                        </button>
-                        <span className="text-sm font-black font-space text-emerald-300">
-                          {formatPrice(f.priceGEL)}
-                        </span>
+                      <div className="flex justify-between items-end w-full pt-1.5 border-t border-zinc-900/40">
+                        <div />
+                        <div className="flex flex-col items-end">
+                          <span className="text-[8px] font-black font-space text-zinc-500 uppercase tracking-widest leading-none mb-1 opacity-50">Base Price</span>
+                          <span className="text-base font-black font-space text-emerald-300 leading-none">
+                            {formatPrice(f.priceGEL)}
+                          </span>
+                        </div>
                       </div>
                     </m.div>
                   </div>

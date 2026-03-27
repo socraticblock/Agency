@@ -8,6 +8,7 @@ interface ConfigDrawerProps {
   drawerItem: ServiceItem | null;
   setDrawerItem: (item: ServiceItem | null) => void;
   setFoundation: (id: string) => void;
+  selectFoundationAndAdvance: (id: string) => void;
   toggleModule: (id: string) => void;
   selectedModules: string[];
   activeFoundationId?: string | null;
@@ -32,9 +33,10 @@ export default function ConfigDrawer({
   drawerItem,
   setDrawerItem,
   setFoundation,
+  selectFoundationAndAdvance,
   toggleModule,
   selectedModules,
-  activeFoundationId
+  activeFoundationId,
 }: ConfigDrawerProps) {
   const activeOverride = drawerItem?.id === 'micro-animations' && activeFoundationId && ANIMATION_OVERRIDES[activeFoundationId];
   const whatItIsText = activeOverride ? activeOverride.whatItIs : drawerItem?.whatItIs;
@@ -50,9 +52,9 @@ export default function ConfigDrawer({
             onClick={() => setDrawerItem(null)}
           />
           <motion.div
-            className="fixed bottom-0 md:bottom-auto md:top-0 right-0 left-0 md:left-auto w-full md:w-[420px] h-[85vh] md:h-screen bg-zinc-950 border-t md:border-t-0 md:border-l border-zinc-800 rounded-t-3xl md:rounded-none p-6 z-50 flex flex-col gap-4 shadow-2xl overflow-y-auto"
-            initial={{ x: "100%", y: 0 }} animate={{ x: 0, y: 0 }} exit={{ x: "100%", y: 0 }}
-            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+            className="fixed bottom-0 md:bottom-auto md:top-0 right-0 left-0 md:left-auto w-full md:w-[420px] h-screen bg-zinc-950 border-t md:border-t-0 md:border-l border-zinc-800 p-6 z-50 flex flex-col gap-4 shadow-2xl overflow-y-auto"
+            initial={{ x: 0, y: "100%" }} animate={{ x: 0, y: 0 }} exit={{ x: 0, y: "100%" }}
+            transition={{ type: "spring", damping: 30, stiffness: 300, mass: 0.8 }}
           >
             <button
               onClick={() => setDrawerItem(null)}
@@ -170,11 +172,10 @@ export default function ConfigDrawer({
                   whileTap={{ scale: 0.98 }}
                   onClick={() => {
                     if (drawerItem.category === "Base" || !drawerItem.category) {
-                      setFoundation(drawerItem.id);
+                      selectFoundationAndAdvance(drawerItem.id);
                     } else {
                       toggleModule(drawerItem.id);
                     }
-                    setTimeout(() => setDrawerItem(null), 250);
                   }}
                   className={`w-full font-black font-space py-3.5 rounded-xl text-xs uppercase flex items-center justify-center gap-2 shadow-xl transition-all cursor-pointer ${selectedModules.includes(drawerItem.id)
                     ? "bg-red-500/10 border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white"

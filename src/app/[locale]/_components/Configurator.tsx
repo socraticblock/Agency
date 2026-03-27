@@ -60,6 +60,7 @@ export default function Configurator() {
     handleScroll,
     canGoToStep,
     goToStep,
+    selectFoundationAndAdvance,
     activeFoundation,
     oneTimeTotal,
     monthlyTotal,
@@ -275,6 +276,7 @@ export default function Configurator() {
           drawerItem={drawerItem}
           setDrawerItem={setDrawerItem}
           setFoundation={setFoundation}
+          selectFoundationAndAdvance={selectFoundationAndAdvance}
           toggleModule={toggleModule}
           selectedModules={selectedModules}
           activeFoundationId={foundation}

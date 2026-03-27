@@ -212,6 +212,12 @@ export function useConfigurator() {
     return true;
   }, [canGoToStep]);
 
+  const selectFoundationAndAdvance = useCallback((id: string) => {
+    setFoundation(id);
+    setStep(2);
+    setDrawerItem(null);
+  }, []);
+
   const exchangeRate = 2.7;
 
   // Calculations
@@ -296,6 +302,7 @@ export function useConfigurator() {
     handleScroll,
     canGoToStep,
     goToStep,
+    selectFoundationAndAdvance,
     activeFoundation,
     oneTimeTotal,
     monthlyTotal,
