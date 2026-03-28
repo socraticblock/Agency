@@ -8,6 +8,7 @@ import {
   isDiscoveryComplete,
 } from "@/lib/discovery/buildDiscoveryQuestions";
 import { z } from "zod";
+import { formatPrice as formatPricePure, EXCHANGE_RATE } from "@/utils/format";
 
 const STORAGE_KEY = "genezisi_architect_config";
 
@@ -21,81 +22,35 @@ const configSchema = z.object({
   discoveryStep: z.number().optional(),
 });
 
-export function useConfigurator() {
-  const [step, setStep] = useState<1 | 2 | 3 | 4 | 5>(() => {
-    if (typeof window === "undefined") return 1;
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const validated = configSchema.safeParse(JSON.parse(saved));
-        if (validated.success && validated.data.step) return validated.data.step;
-      }
-    } catch {}
-    return 1;
-  });
-  const [foundation, setFoundation] = useState<string | null>(() => {
-    if (typeof window === "undefined") return null;
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const validated = configSchema.safeParse(JSON.parse(saved));
-        if (validated.success && validated.data.foundation !== undefined) return validated.data.foundation;
-      }
-    } catch {}
+type ConfigState = z.infer<typeof configSchema>;
+
+// ── Phase B Fix #1: Single localStorage parse ──
+function getInitialState(): ConfigState | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const result = configSchema.safeParse(JSON.parse(raw));
+    return result.success ? result.data : null;
+  } catch {
     return null;
-  });
-  const [selectedModules, setSelectedModules] = useState<string[]>(() => {
-    if (typeof window === "undefined") return [];
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const validated = configSchema.safeParse(JSON.parse(saved));
-        if (validated.success && validated.data.selectedModules) return validated.data.selectedModules;
-      }
-    } catch {}
-    return [];
-  });
-  const [moduleQuantities, setModuleQuantities] = useState<Record<string, number>>(() => {
-    if (typeof window === "undefined") return {};
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const validated = configSchema.safeParse(JSON.parse(saved));
-        if (validated.success && validated.data.moduleQuantities) return validated.data.moduleQuantities;
-      }
-    } catch {}
-    return {};
-  });
+  }
+}
 
-  const [shieldTier, setShieldTier] = useState<number>(() => {
-    if (typeof window === "undefined") return 0;
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const validated = configSchema.safeParse(JSON.parse(saved));
-        if (validated.success && validated.data.shieldTier !== undefined) return validated.data.shieldTier;
-      }
-    } catch {}
-    return 0;
-  });
+export function useConfigurator() {
+  // Parse localStorage ONCE and spread into all initializers
+  const [initial] = useState<ConfigState | null>(getInitialState);
 
-  const [answers, setAnswers] = useState<Record<string, unknown>>(() => {
-    if (typeof window === "undefined") return {};
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const validated = configSchema.safeParse(JSON.parse(saved));
-        if (validated.success && validated.data.answers) return validated.data.answers;
-      }
-    } catch {}
-    return {};
-  });
+  const [step, setStep] = useState<1 | 2 | 3 | 4 | 5>(initial?.step ?? 1);
+  const [foundation, setFoundation] = useState<string | null>(initial?.foundation ?? null);
+  const [selectedModules, setSelectedModules] = useState<string[]>(initial?.selectedModules ?? []);
+  const [moduleQuantities, setModuleQuantities] = useState<Record<string, number>>(initial?.moduleQuantities ?? {});
+  const [shieldTier, setShieldTier] = useState<number>(initial?.shieldTier ?? 0);
+  const [answers, setAnswers] = useState<Record<string, unknown>>(initial?.answers ?? {});
 
   const [discoveryStep, setDiscoveryStep] = useState<number>(0);
   const [isEditing, setIsEditing] = useState(false);
   const [isUSD, setIsUSD] = useState(false);
-
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [drawerItem, setDrawerItem] = useState<ServiceItem | null>(null);
   const [mobileIndex, setMobileIndex] = useState(0);
@@ -128,7 +83,7 @@ export function useConfigurator() {
     [foundation, selectedModules, answers]
   );
 
-  // Hydrate from localStorage on mount
+  // Hydrate flag on mount
   useEffect(() => {
     setHydrated(true);
   }, []);
@@ -151,20 +106,36 @@ export function useConfigurator() {
     }
   }, [foundation, hydrated, setSelectedModules]);
 
-  // Persist state to localStorage
+  // ── Phase B Fix #2: Debounced localStorage persistence ──
+  const persistTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   useEffect(() => {
     if (!hydrated) return;
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        foundation,
-        selectedModules,
-        moduleQuantities,
-        shieldTier,
-        step,
-        answers,
-        discoveryStep
-      }));
-    } catch {}
+
+    // Clear any pending write
+    if (persistTimerRef.current) {
+      clearTimeout(persistTimerRef.current);
+    }
+
+    persistTimerRef.current = setTimeout(() => {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          foundation,
+          selectedModules,
+          moduleQuantities,
+          shieldTier,
+          step,
+          answers,
+          discoveryStep,
+        }));
+      } catch {}
+    }, 250);
+
+    return () => {
+      if (persistTimerRef.current) {
+        clearTimeout(persistTimerRef.current);
+      }
+    };
   }, [foundation, selectedModules, moduleQuantities, shieldTier, step, hydrated, answers, discoveryStep]);
 
   const clearConfiguration = () => {
@@ -204,8 +175,6 @@ export function useConfigurator() {
     setMobileIndex(index);
   };
 
-
-
   const goToStep = useCallback((s: 1 | 2 | 3 | 4 | 5): boolean => {
     if (!canGoToStep(s)) return false;
     setStep(s);
@@ -218,9 +187,8 @@ export function useConfigurator() {
     setDrawerItem(null);
   }, []);
 
-  const exchangeRate = 2.7;
+  const exchangeRate = EXCHANGE_RATE;
 
-  // Calculations
   // Calculations
   const activeFoundation = useMemo(() => FOUNDATIONS.find(f => f.id === foundation), [foundation]);
   const foundationPrice = activeFoundation?.priceGEL || 0;
@@ -244,12 +212,11 @@ export function useConfigurator() {
     MODULES.find(m => m.id === id)?.category === "Georgian Advantage"
   ), [selectedModules]);
 
-  const formatPrice = (price: number) => {
-    const converted = isUSD ? price / exchangeRate : price;
-    return isUSD
-      ? `$${converted.toFixed(0)}`
-      : `${price.toLocaleString('ka-GE')} ₾`;
-  };
+  // ── Phase B Fix #3: formatPrice wraps the pure utility ──
+  const formatPrice = useCallback(
+    (price: number) => formatPricePure(price, isUSD),
+    [isUSD]
+  );
 
   const toggleModule = useCallback((id: string) => {
     setSelectedModules(prev => {
@@ -262,7 +229,7 @@ export function useConfigurator() {
         });
         return prev.filter((m) => m !== id);
       } else {
-        setModuleQuantities(q => ({ ...q, [id]: (q[id] !== undefined && q[id] > 0) ? q[id] : 1 })); // preserve count or initialize at 1
+        setModuleQuantities(q => ({ ...q, [id]: (q[id] !== undefined && q[id] > 0) ? q[id] : 1 }));
         return [...prev, id];
       }
     });

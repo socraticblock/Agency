@@ -42,6 +42,7 @@ export interface Foundation extends ServiceItem {
   scope: string[];
   recommendedModules?: string[];
   inheritedValue?: { id: string, name: string, priceGEL: number };
+  strategyLabel?: string;
 }
 
 export interface Module extends ServiceItem {
@@ -67,11 +68,13 @@ export const FOUNDATIONS: Foundation[] = [
     ],
     bestFor: ["Influencers with 1 Specific Offer", "Webinar & Event Hosts", "Real Estate 'Hero' Listings", "Digital Product Launchers"],
     roiNote: "Designed to maximize your ad-spend ROI.",
+    strategyLabel: "THE CONVERSION TUNNEL",
     recommendedModules: ['exit-pop', 'ga4-analytics', 'pro-copy', 'ab-testing', 'heatmap', 'cro-audit', 'rule-chatbot', 'ugc-video', 'micro-animations', 'extra-page']
   },
   {
     id: 'cms',
     name: 'Digital Command Center',
+    strategyLabel: "THE INDEPENDENCE PRINCIPLE",
     category: 'Base',
     priceGEL: 6750,
     description: "Your professional headquarters. This moves you from a 'one-man show' to a 'global brand' with a system you can actually control.",
@@ -551,7 +554,23 @@ export interface ShieldPerk {
   desc: string;
 }
 
-export const SHIELD_TIERS = [
+export interface ShieldPerk {
+  title: string;
+  desc: string;
+}
+
+export interface ShieldTier {
+  id: number;
+  name: string;
+  priceGEL: number;
+  level: string;
+  risk: string;
+  isRecommended?: boolean;
+  perks: ShieldPerk[];
+  description: string;
+}
+
+export const SHIELD_TIERS: ShieldTier[] = [
   {
     id: 0,
     name: 'Reputation Scout',

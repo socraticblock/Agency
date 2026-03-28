@@ -34,7 +34,7 @@ interface ConfigSidebarProps {
   shieldTier?: number;
   resetAll?: () => void;
   step?: number;
-  goToStep?: (s: any) => void;
+  goToStep?: (s: 1 | 2 | 3 | 4 | 5) => void;
 }
 
 export default memo(function ConfigSidebar({
@@ -106,13 +106,13 @@ export default memo(function ConfigSidebar({
               <div>
                 <span className="text-xs font-black font-space text-zinc-500 uppercase tracking-widest">Active Modules</span>
                 <div className="flex flex-col gap-2 mt-1.5">
-                  {Object.entries(groupedModules).map(([category, mods]: any) => (
+                  {Object.entries(groupedModules).map(([category, mods]: [string, ServiceItem[]]) => (
                     <div key={category} className="flex flex-col gap-1">
                       <span className="text-[8px] font-black font-space text-zinc-500 uppercase tracking-wider">
                         [ {category} ]
                       </span>
                       <div className="flex flex-wrap gap-1">
-                        {mods.map((mod: any) => (
+                        {mods.map((mod: ServiceItem) => (
                           <span key={mod.id} className="flex items-center gap-1 bg-emerald-500/5 border border-emerald-500/10 text-xs font-space font-black text-emerald-300 px-1.5 py-0.5 rounded-md shadow-[0_0_10px_rgba(16,185,129,0.03)]">
                             <div className="h-1 w-1 rounded-full bg-emerald-400" />
                             {mod.name}

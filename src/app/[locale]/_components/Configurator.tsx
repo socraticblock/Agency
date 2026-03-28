@@ -6,7 +6,9 @@ import { m, AnimatePresence, LazyMotion } from "framer-motion";
 const loadFeatures = () => import("framer-motion").then(res => res.domMax);
 import { useConfigurator } from "@/hooks/useConfigurator";
 import ConfigSidebar from "./ConfigSidebar";
-import ConfigDrawer from "./ConfigDrawer";
+const ConfigDrawer = dynamic(() => import("./ConfigDrawer"), {
+  ssr: false,
+});
 import ConfigModal from "./ConfigModal";
 import dynamic from "next/dynamic";
 
@@ -287,6 +289,7 @@ export default function Configurator() {
           setIsModalOpen={() => setIsModalOpen(false)} // Changed from 'onClose' to 'setIsModalOpen'
           activeFoundation={activeFoundation} // Added back based on original ConfigModal props
           selectedModules={selectedModules} // Added back
+          moduleQuantities={moduleQuantities}
           formatPrice={formatPrice} // Added back
           foundationPrice={foundationPrice} // Added back
         />

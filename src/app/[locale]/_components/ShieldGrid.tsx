@@ -2,7 +2,7 @@
 
 import { m } from "framer-motion";
 import { Lock, Download, ArrowLeft } from "lucide-react";
-import { SHIELD_TIERS } from "@/constants/pricing";
+import { SHIELD_TIERS, type ShieldPerk } from "@/constants/pricing";
 
 interface ShieldGridProps {
   shieldTier: number;
@@ -87,7 +87,7 @@ export default function ShieldGrid({
                   transition={{ duration: 0.2 }}
                   className="flex flex-col gap-1 border-t border-zinc-800/80 mt-2 pt-2 w-full overflow-hidden"
                 >
-                  {tier.perks.map((perk: any, idx: number) => (
+                  {tier.perks.map((perk, idx) => (
                     <div key={idx} className="flex flex-col text-xs text-slate-300 gap-0.5">
                       <div className="flex items-center gap-1.5">
                         <div className="h-1 w-1 bg-emerald-400 rounded-full" />

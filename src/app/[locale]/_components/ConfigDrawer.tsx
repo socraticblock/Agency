@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, Lightbulb, Sparkles, Shield, Trash2 } from "lucide-react";
 import { ServiceItem } from "@/constants/pricing";
+import { ANIMATION_OVERRIDES } from "@/constants/content";
 
 interface ConfigDrawerProps {
   drawerItem: ServiceItem | null;
@@ -15,20 +16,8 @@ interface ConfigDrawerProps {
   activeFoundationId?: string | null;
 }
 
-const ANIMATION_OVERRIDES: Record<string, { whatItIs: string, howItHelps: string }> = {
-  landing: {
-    whatItIs: "Targeted kinetic prompts and high-performance button triggers. We engineer 'flicker-free' hover states and magnetic lead-magnet animations that subconsciously draw the visitor’s eye toward your primary Call to Action (CTA).",
-    howItHelps: "It kills 'Banner Blindness.' By adding subtle, high-end motion to your 'Buy' or 'Sign Up' buttons, we increase the probability of a click by up to 30%. These animations act as a silent salesperson, guiding the user’s gaze through your sales narrative and ensuring they don't miss the most important part: the conversion."
-  },
-  cms: {
-    whatItIs: "Seamless layout transitions and 'Elite-Tier' UI responses. We use advanced physics-based libraries to create fluid scroll-reveals and magnetic cursor interactions that make your brand identity feel expensive, stable, and world-class.",
-    howItHelps: "The '0.1% Authority' Signal. High-ticket clients decide whether they trust you in the first 3 seconds. By making your site respond with 'Apple-level' fluidity, you signal that your business is meticulous and modern. It increases 'Dwell Time' and justifies premium pricing by making your digital infrastructure feel like a high-end physical office."
-  },
-  ecomm: {
-    whatItIs: "Tactile product interactions and 'Satisfying' feedback loops. We engineer smooth product image morphs, instant 'Add to Cart' visual confirmations, and elegant cart-drawer reveals that provide the same sensory satisfaction as a physical luxury shopping trip.",
-    howItHelps: "It reduces 'Buyer’s Friction.' Friction is what makes people abandon carts. By making the shopping experience feel lightweight and responsive, we remove the technical lag that kills impulse buys. It makes browsing your catalog a joy rather than a chore, directly increasing your 'Average Order Value' (AOV)."
-  }
-};
+
+
 
 export default function ConfigDrawer({
   drawerItem,
@@ -176,40 +165,79 @@ export default function ConfigDrawer({
               </div>
             )}
 
-            {(!activeFoundationId || activeFoundationId === drawerItem.id || drawerItem.category !== "Base") && (
+            {/* ── Action Footer ── */}
+            {drawerItem.isBespoke ? (
+              /* Enterprise Bespoke Block */
               <div className="flex flex-col gap-2 mt-4 pt-3 border-t border-zinc-800/80">
-                <motion.button
-                  initial={{ scale: 0.98 }}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => {
-                    if (drawerItem.category === "Base" || !drawerItem.category) {
-                      selectFoundationAndAdvance(drawerItem.id);
-                    } else {
-                      toggleModule(drawerItem.id);
-                    }
-                  }}
-                  className={`w-full font-black font-space py-3.5 rounded-xl text-xs uppercase flex items-center justify-center gap-2 shadow-xl transition-all cursor-pointer ${selectedModules.includes(drawerItem.id)
-                    ? "bg-red-500/10 border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
-                    : "bg-emerald-500/10 border-2 border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-slate-950"
-                    }`}
-                >
-                  {selectedModules.includes(drawerItem.id) ? <Trash2 className="h-3.5 w-3.5" /> : <Shield className="h-3.5 w-3.5" />}
-                  {drawerItem.category === "Base" || !drawerItem.category
-                    ? "Deploy Workspace"
-                    : selectedModules.includes(drawerItem.id)
-                      ? "Decommission Node"
-                      : "Deploy Node"}
-                </motion.button>
+                <div className="bg-black/40 border border-emerald-500/20 rounded-2xl p-4 flex flex-col items-center text-center gap-3 shadow-[0_0_30px_rgba(16,185,129,0.05)] relative overflow-hidden group/bespoke">
+                  {/* Subtle Animated Glow Accent */}
+                  <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/5 to-transparent opacity-50" />
+                  
+                  <div className="relative z-10 flex flex-col gap-1">
+                    <span className="text-[10px] font-black font-space text-white/70 uppercase tracking-[0.2em] mb-1">
+                      Total One-Time
+                    </span>
+                    <span className="text-xl font-black font-space text-amber-400 animate-pulse tracking-tight" style={{ textShadow: "0 0 15px rgba(251,191,36,0.3)" }}>
+                      PROJECT-BASED
+                    </span>
+                  </div>
 
-                <button
-                  onClick={() => setDrawerItem(null)}
-                  className={`w-full py-3.5 text-center text-xs font-black font-space tracking-widest uppercase border border-white/5 bg-zinc-900/40 hover:bg-white/5 text-zinc-500 hover:text-zinc-300 transition-all rounded-xl cursor-pointer ${selectedModules.includes(drawerItem.id) ? 'border-red-500/30 text-red-500/60 hover:bg-red-500/10 hover:text-red-400' : ''
-                    }`}
-                >
-                  {selectedModules.includes(drawerItem.id) ? "Back to Grid" : "Skip for now"}
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const isUpgrade = drawerItem.id === 'upgrade';
+                      const MSG = isUpgrade 
+                        ? "Hi Genezisi! My site [ Add URL ] is acting slow and glitchy. I need an Architect to look under the hood for a Legacy Upgrade audit and custom renovation roadmap. Can we talk?"
+                        : "Hi Genezisi! I just explored your Architect tool and I'm interested in a Customized Build. I have a specific project in mind that requires unique software logic. When are you free for a quick Discovery Call to discuss the architecture?";
+                      window.open(`https://wa.me/995591039019?text=${encodeURIComponent(MSG)}`, '_blank');
+                    }}
+                    className="w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black font-space rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(16,185,129,0.3)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer relative z-10"
+                  >
+                    Consult with Architect Directly <Sparkles className="h-4 w-4" />
+                  </button>
+
+                  <div className="relative z-10 text-[9px] font-bold text-emerald-500/40 uppercase tracking-widest font-space">
+                    [ COMMAND DISPATCH ACTIVE ]
+                  </div>
+                </div>
               </div>
+            ) : (
+              /* Standard Selection Flow */
+              (!activeFoundationId || activeFoundationId === drawerItem.id || drawerItem.category !== "Base") && (
+                <div className="flex flex-col gap-2 mt-4 pt-3 border-t border-zinc-800/80">
+                  <motion.button
+                    initial={{ scale: 0.98 }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {
+                      if (drawerItem.category === "Base" || !drawerItem.category) {
+                        selectFoundationAndAdvance(drawerItem.id);
+                      } else {
+                        toggleModule(drawerItem.id);
+                      }
+                    }}
+                    className={`w-full font-black font-space py-3.5 rounded-xl text-xs uppercase flex items-center justify-center gap-2 shadow-xl transition-all cursor-pointer ${selectedModules.includes(drawerItem.id)
+                      ? "bg-red-500/10 border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
+                      : "bg-emerald-500/10 border-2 border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-slate-950"
+                      }`}
+                  >
+                    {selectedModules.includes(drawerItem.id) ? <Trash2 className="h-3.5 w-3.5" /> : <Shield className="h-3.5 w-3.5" />}
+                    {drawerItem.category === "Base" || !drawerItem.category
+                      ? "Deploy Workspace"
+                      : selectedModules.includes(drawerItem.id)
+                        ? "Decommission Node"
+                        : "Deploy Node"}
+                  </motion.button>
+
+                  <button
+                    onClick={() => setDrawerItem(null)}
+                    className={`w-full py-3.5 text-center text-xs font-black font-space tracking-widest uppercase border border-white/5 bg-zinc-900/40 hover:bg-white/5 text-zinc-500 hover:text-zinc-300 transition-all rounded-xl cursor-pointer ${selectedModules.includes(drawerItem.id) ? 'border-red-500/30 text-red-500/60 hover:bg-red-500/10 hover:text-red-400' : ''
+                      }`}
+                  >
+                    {selectedModules.includes(drawerItem.id) ? "Back to Grid" : "Skip for now"}
+                  </button>
+                </div>
+              )
             )}
 
             {activeFoundationId && activeFoundationId !== drawerItem.id && (drawerItem.category === "Base" || !drawerItem.category) && (

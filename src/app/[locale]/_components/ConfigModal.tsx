@@ -2,13 +2,14 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { ShieldCheck, Check } from "lucide-react";
-import { ServiceItem, MODULES } from "@/constants/pricing";
+import { type ServiceItem, MODULES } from "@/constants/pricing";
 
 interface ConfigModalProps {
   isModalOpen: boolean;
   setIsModalOpen: (val: boolean) => void;
   activeFoundation: ServiceItem | null | undefined;
   selectedModules: string[];
+  moduleQuantities: Record<string, number>;
   formatPrice: (price: number) => string;
   foundationPrice: number;
 }
@@ -18,8 +19,9 @@ export default function ConfigModal({
   setIsModalOpen,
   activeFoundation,
   selectedModules,
+  moduleQuantities,
   formatPrice,
-  foundationPrice
+  foundationPrice,
 }: ConfigModalProps) {
   return (
     <AnimatePresence>
@@ -34,7 +36,7 @@ export default function ConfigModal({
           >
             <h4 className="text-base font-black font-space text-white">Infrastructure Blueprint</h4>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Summary container holding standard active foundation nodes accurately flawlessly.
+              Review your active foundation and module selections before downloading.
             </p>
 
             <div className="flex flex-col gap-1.5 border-y border-zinc-800/40 py-2">
@@ -44,10 +46,11 @@ export default function ConfigModal({
               </div>
               {selectedModules.map(id => {
                 const m = MODULES.find(mod => mod.id === id);
+                const qty = moduleQuantities[id] ?? 1;
                 return (
                   <div key={id} className="flex justify-between text-[9px] text-slate-500">
-                    <span>• {m?.name}</span>
-                    <span>{formatPrice(m?.priceGEL || 0)}</span>
+                    <span>• {m?.name}{qty > 1 ? ` ×${qty}` : ""}</span>
+                    <span>{formatPrice((m?.priceGEL || 0) * qty)}</span>
                   </div>
                 );
               })}
@@ -58,19 +61,19 @@ export default function ConfigModal({
                 <ShieldCheck className="h-3 w-3" /> 90-Day Tech Warranty Verified.
               </span>
               <span className="text-[9px] text-emerald-400 font-bold flex items-center gap-1">
-                <Check className="h-3 w-3" /> 100% IP & Code Transfer absolute setups.
+                <Check className="h-3 w-3" /> 100% IP & Code Transfer.
               </span>
             </div>
 
-            <input
-              type="email"
-              placeholder="ceo@yourbrand.com"
-              className="touch-form-control mt-1 rounded-lg border border-zinc-800 bg-zinc-900 p-3 text-base text-white focus:border-emerald-400 focus:outline-none"
-            />
-            <button 
+            <button
               onClick={() => {
-                const activeMods = selectedModules.map(id => MODULES.find(m => m.id === id)?.name || id).join('\n  • ');
-                const text = `======================================\nGENEZISI ARCHITECT STUDIO: BLUEPRINT\n======================================\nFoundation: ${activeFoundation?.name || "None"}\nBase Cost: ${formatPrice(foundationPrice)}\n\nSelected Modules:\n  • ${activeMods || "None"}\n\nWarranties Included:\n- 90-Day Tech Warranty\n- 100% IP & Code Transfer absolute setups\n======================================`;
+                const activeMods = selectedModules.map(id => {
+                  const mod = MODULES.find(m => m.id === id);
+                  const qty = moduleQuantities[id] ?? 1;
+                  const qtyLabel = qty > 1 ? ` ×${qty}` : "";
+                  return `${mod?.name || id}${qtyLabel}`;
+                }).join('\n  • ');
+                const text = `======================================\nGENEZISI ARCHITECT STUDIO: BLUEPRINT\n======================================\nFoundation: ${activeFoundation?.name || "None"}\nBase Cost: ${formatPrice(foundationPrice)}\n\nSelected Modules:\n  • ${activeMods || "None"}\n\nWarranties Included:\n- 90-Day Tech Warranty\n- 100% IP & Code Transfer\n======================================`;
                 const blob = new Blob([text], { type: 'text/plain' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
@@ -78,7 +81,7 @@ export default function ConfigModal({
                 a.download = 'infrastructure_blueprint.txt';
                 a.click();
                 URL.revokeObjectURL(url);
-              }} 
+              }}
               className="min-h-12 w-full rounded-xl bg-emerald-400 py-3 font-space text-sm font-black text-black transition-colors hover:bg-emerald-300"
             >
               Download Blueprint (.txt)

@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useTiltEffect } from "@/hooks/useTiltEffect";
 import { Check, Sparkles, Lightbulb } from "lucide-react";
 import { FOUNDATIONS, type Foundation } from "@/constants/pricing";
 
@@ -10,7 +10,7 @@ interface FoundationCardProps {
   isSelected: boolean;
   onClick: () => void;
   formatPrice: (p: number) => string;
-  setDrawerItem?: (item: any) => void;
+  setDrawerItem?: (item: Foundation) => void;
 }
 
 const CARD_STYLES = {
@@ -20,39 +20,7 @@ const CARD_STYLES = {
 };
 
 export default function FoundationCard({ f, isSelected, onClick, formatPrice, setDrawerItem }: FoundationCardProps) {
-  const ref = useRef<HTMLButtonElement>(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const glowX = useMotionValue(0);
-  const glowY = useMotionValue(0);
-
-  const mouseXSpring = useSpring(x);
-  const mouseYSpring = useSpring(y);
-
-
-  const background = useTransform(
-    [glowX, glowY],
-    ([xVal, yVal]) => `radial-gradient(140px circle at ${xVal}px ${yVal}px, rgba(16,185,129,0.18), transparent)`
-  );
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-
-    glowX.set(mouseX);
-    glowY.set(mouseY);
-    x.set(mouseX / width - 0.5);
-    y.set(mouseY / height - 0.5);
-  };
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
+  const { ref, background, handleMouseMove, handleMouseLeave } = useTiltEffect();
 
   return (
     <motion.button
@@ -173,27 +141,9 @@ export default function FoundationCard({ f, isSelected, onClick, formatPrice, se
                 <div className={`p-3 bg-zinc-900/40 rounded-xl border border-zinc-800/50 flex flex-col items-center justify-center text-center gap-2 backdrop-blur-md ${!f.proFeatures || f.proFeatures.length === 0 ? 'md:col-span-2' : ''}`}>
                   <Lightbulb className="h-4 w-4 text-emerald-400 flex-shrink-0" />
                   <div className="flex flex-col items-center">
-                    {f.id === 'cms' ? (
-                      <span className="text-[10px] font-black font-space text-emerald-400 uppercase tracking-wider flex items-center justify-center gap-1">
-                        STRATEGIST'S NOTE: THE INDEPENDENCE PRINCIPLE
+                    <span className="text-[10px] font-black font-space text-emerald-400 uppercase tracking-wider flex items-center justify-center gap-1">
+                        STRATEGIST&apos;S NOTE: {f.strategyLabel || "HOW IT WORKS"}
                       </span>
-                    ) : f.id === 'landing' ? (
-                      <span className="text-[10px] font-black font-space text-emerald-400 uppercase tracking-wider flex items-center justify-center gap-1">
-                        STRATEGIST'S NOTE: THE CONVERSION TUNNEL
-                      </span>
-                    ) : f.id === 'ecomm' ? (
-                      <span className="text-[10px] font-black font-space text-emerald-400 uppercase tracking-wider flex items-center justify-center gap-1">
-                        STRATEGIST'S NOTE: THE SHIELD PROTOCOL
-                      </span>
-                    ) : f.id === 'saas' ? (
-                      <span className="text-[10px] font-black font-space text-emerald-400 uppercase tracking-wider flex items-center justify-center gap-1">
-                        STRATEGIST'S NOTE: THE BLUEPRINT PRINCIPLE
-                      </span>
-                    ) : (
-                      <span className="text-[10px] font-black font-space text-emerald-400 uppercase tracking-wider flex items-center justify-center gap-1">
-                        Strategists Note: How it Works
-                      </span>
-                    )}
                     <p className="text-xs text-slate-400 mt-1 leading-relaxed font-medium whitespace-pre-line text-center">
                       {f.strategy}
                     </p>
