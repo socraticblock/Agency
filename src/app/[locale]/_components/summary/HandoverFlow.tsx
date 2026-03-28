@@ -2,9 +2,8 @@
 
 import { m, AnimatePresence } from "framer-motion";
 import { CheckCircle2, Smartphone, Mail, Check } from "lucide-react";
+import { WHATSAPP_INTAKE } from "@/constants/content";
 import { type ServiceItem } from "@/constants/pricing";
-
-const WHATSAPP_INTAKE = "995591039019";
 
 interface HandoverFlowProps {
   blueprintId: string | null;

@@ -27,7 +27,6 @@ export function Navbar({ locale }: { locale: Locale }) {
 
   const navLinks = [
     { href: `/${locale}/architect`, label: "Start Building", highlight: true },
-    { href: `/${locale}#footprint`, label: t.nav.footprint },
   ];
 
   return (

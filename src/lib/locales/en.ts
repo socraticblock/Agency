@@ -1,7 +1,4 @@
 export const en = {
-  nav: {
-    footprint: "What We Build",
-  },
   leadHub: {
     label: "Interactive tools",
     title: "Explore your digital foundation",

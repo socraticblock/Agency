@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, Lightbulb, Sparkles, Shield, Trash2 } from "lucide-react";
 import { ServiceItem } from "@/constants/pricing";
-import { ANIMATION_OVERRIDES } from "@/constants/content";
+import { ANIMATION_OVERRIDES, WHATSAPP_INTAKE } from "@/constants/content";
 
 interface ConfigDrawerProps {
   drawerItem: ServiceItem | null;
@@ -189,7 +189,7 @@ export default function ConfigDrawer({
                       const MSG = isUpgrade 
                         ? "Hi Genezisi! My site [ Add URL ] is acting slow and glitchy. I need an Architect to look under the hood for a Legacy Upgrade audit and custom renovation roadmap. Can we talk?"
                         : "Hi Genezisi! I just explored your Architect tool and I'm interested in a Customized Build. I have a specific project in mind that requires unique software logic. When are you free for a quick Discovery Call to discuss the architecture?";
-                      window.open(`https://wa.me/995591039019?text=${encodeURIComponent(MSG)}`, '_blank');
+                      window.open(`https://wa.me/${WHATSAPP_INTAKE}?text=${encodeURIComponent(MSG)}`, '_blank');
                     }}
                     className="w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black font-space rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(16,185,129,0.3)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer relative z-10"
                   >

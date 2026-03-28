@@ -5,6 +5,8 @@ import Link from "next/link";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
+import { WHATSAPP_INTAKE, WHATSAPP_DEFAULT_MESSAGE } from "@/constants/content";
+import { MessageSquare } from "lucide-react";
 
 export function GlobalFooter({ locale }: { locale: Locale }) {
   const t = getMessages(locale);
@@ -80,9 +82,15 @@ export function GlobalFooter({ locale }: { locale: Locale }) {
           <div className="flex items-center justify-center border-r border-white/5">
             <span>Stack: Next.js 19 / Tailwind 4</span>
           </div>
-          <div className="flex items-center justify-center gap-1">
-            <a href="https://t.me/socraticblock" target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:text-emerald-300 transition-colors uppercase tracking-wider">
-              t.me/socraticblock
+          <div className="flex items-center justify-center">
+            <a 
+              href={`https://wa.me/${WHATSAPP_INTAKE}?text=${encodeURIComponent(WHATSAPP_DEFAULT_MESSAGE)}`} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 transition-colors uppercase tracking-[0.2em] font-black group"
+            >
+              <MessageSquare className="h-3.5 w-3.5 group-hover:scale-110 transition-transform" />
+              <span>Contact on WhatsApp</span>
             </a>
           </div>
         </div>
