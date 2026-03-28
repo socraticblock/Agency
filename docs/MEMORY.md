@@ -19,6 +19,7 @@
 - [017] Framer `useScroll` targets: `ScrollReveal` root is always `relative`; `StickyCardStack` uses a `relative` wrapper ref for scroll tracking (sticky card no longer the ref target).
 - [018] Architect step-2 `ModuleItem` accordion: price/header taps + `touch-manipulation`; STATUS control isolates `stopPropagation`; configurator scroll panel `touch-manipulation`.
 - [019] Ref-counted `acquireBodyScrollLock` (`html`+`body` overflow, measured gutter padding); `Navbar`/`LeadGenHub`/`ConfigDrawer`; LeadGenHub split tab/content refs + Escape; `ConfigDrawer` duplicate closing JSX removed.
+- [020] Dashboard fallback: removed `LeadGenHub` document scroll lock entirely; overlay remains fullscreen with internal scroll to eliminate any possible stale page lock from that flow.
 
 # Detailed Observations
 
@@ -116,3 +117,8 @@
 - **Context:** Sovereign dashboard + mobile menu both set `document.body.style.overflow`; restoring a saved `prev` of `hidden` left the homepage non-scrollable; duplicate `ref` on tab strip vs content broke scroll helpers; `ConfigDrawer` had duplicate closing JSX breaking `tsc`.
 - **Decision:** `lib/bodyScrollLock.ts` ref-count locks `documentElement` and `body`, uses measured scrollbar width for gutter mode; `Navbar`, `LeadGenHub`, `ConfigDrawer` call `acquireBodyScrollLock`; `LeadGenHub` uses `tabStripRef`/`dashboardContentRef`, `closeDashboard` resets science overlay, Escape closes science then dashboard.
 - **Impact:** Stacked overlays release scroll only when all close; tab horizontal scroll and tool vertical scroll use correct refs; typecheck passes; no dedicated route required.
+
+## [020]
+- **Context:** User still reproduced dead wheel/touchpad scrolling after closing the Sovereign dashboard despite ref-counted global lock changes.
+- **Decision:** Removed `LeadGenHub`'s document scroll lock acquisition entirely so the dashboard no longer mutates `html/body` overflow; kept fullscreen fixed overlay + internal `overflow-y-auto` content and close-state hygiene.
+- **Impact:** The dashboard open/close path cannot leave document scroll locked, because it no longer participates in document-level locking; background movement risk is limited to overlay edge cases and is preferable to a stuck page.

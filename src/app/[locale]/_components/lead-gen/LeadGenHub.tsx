@@ -17,7 +17,6 @@ import {
   Maximize2
 } from "lucide-react";
 import { getMessages, type Locale } from "@/lib/i18n";
-import { acquireBodyScrollLock } from "@/lib/bodyScrollLock";
 
 // Tools Imports
 import { TrueAudienceVisualizer } from "./TrueAudienceVisualizer";
@@ -72,11 +71,6 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [isDashboardOpen, isScienceOpen, closeDashboard]);
-
-  useEffect(() => {
-    if (!isDashboardOpen) return;
-    return acquireBodyScrollLock("scrollbarGutter");
-  }, [isDashboardOpen]);
 
   // Reset vertical scroll when switching tools
   useEffect(() => {
