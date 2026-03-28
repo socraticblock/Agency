@@ -59,6 +59,10 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
   const closeDashboard = useCallback(() => {
     setIsScienceOpen(false);
     setIsDashboardOpen(false);
+    // Hard reset in case any legacy overlay path left inline scroll styles behind.
+    document.documentElement.style.overflow = "";
+    document.body.style.overflow = "";
+    document.body.style.paddingRight = "";
   }, []);
 
   useEffect(() => {
@@ -180,14 +184,8 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
         </div>
       </div>
 
-      <AnimatePresence>
-        {isDashboardOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[500] flex flex-col bg-[#030717] text-white overflow-hidden"
-          >
+      {isDashboardOpen && (
+          <div className="fixed inset-0 z-[500] flex flex-col bg-[#030717] text-white overflow-hidden">
             {/* 💎 SOVEREIGN SHINE (v2.1): Depth Layer */}
             <div className="absolute inset-0 pointer-events-none z-0">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.06),_transparent_70%)] opacity-100" />
@@ -455,9 +453,8 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
                 </motion.div>
               )}
             </AnimatePresence>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
     </section>
   );
 }

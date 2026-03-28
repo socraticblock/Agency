@@ -20,6 +20,7 @@
 - [018] Architect step-2 `ModuleItem` accordion: price/header taps + `touch-manipulation`; STATUS control isolates `stopPropagation`; configurator scroll panel `touch-manipulation`.
 - [019] Ref-counted `acquireBodyScrollLock` (`html`+`body` overflow, measured gutter padding); `Navbar`/`LeadGenHub`/`ConfigDrawer`; LeadGenHub split tab/content refs + Escape; `ConfigDrawer` duplicate closing JSX removed.
 - [020] Dashboard fallback: removed `LeadGenHub` document scroll lock entirely; overlay remains fullscreen with internal scroll to eliminate any possible stale page lock from that flow.
+- [021] Dashboard close hardening: removed top-level `AnimatePresence` exit layer for Sovereign overlay and force-cleared `html/body` inline overflow styles in `closeDashboard` to avoid ghost fixed layer + stale lock leftovers.
 
 # Detailed Observations
 
@@ -122,3 +123,8 @@
 - **Context:** User still reproduced dead wheel/touchpad scrolling after closing the Sovereign dashboard despite ref-counted global lock changes.
 - **Decision:** Removed `LeadGenHub`'s document scroll lock acquisition entirely so the dashboard no longer mutates `html/body` overflow; kept fullscreen fixed overlay + internal `overflow-y-auto` content and close-state hygiene.
 - **Impact:** The dashboard open/close path cannot leave document scroll locked, because it no longer participates in document-level locking; background movement risk is limited to overlay edge cases and is preferable to a stuck page.
+
+## [021]
+- **Context:** Scroll still froze after interacting with non-first dashboard tools, suggesting an invisible fixed overlay or stale inline overflow persisted after close rather than active lock management alone.
+- **Decision:** Replaced the top-level dashboard wrapper from `AnimatePresence` + exiting `motion.div` to direct conditional `<div>` mount/unmount (no exit retention), and made `closeDashboard` hard-reset `document.documentElement.style.overflow`, `document.body.style.overflow`, and `document.body.style.paddingRight`.
+- **Impact:** Closing the Sovereign dashboard now removes the fullscreen layer synchronously and clears residual inline scroll styles in the same tick, reducing chance of ghost overlay/wheel capture across tool transitions.
