@@ -7,20 +7,16 @@ import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 import { MagneticButton } from "./MagneticButton";
 import { motion, AnimatePresence } from "framer-motion";
+import { acquireBodyScrollLock } from "@/lib/bodyScrollLock";
 
 export function Navbar({ locale }: { locale: Locale }) {
   const t = getMessages(locale);
   const [open, setOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
 
-  // Lock scroll
   useEffect(() => {
     if (!open) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = prev;
-    };
+    return acquireBodyScrollLock("default");
   }, [open]);
 
   const close = () => setOpen(false);

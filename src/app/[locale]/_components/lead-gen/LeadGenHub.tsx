@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Scan,
@@ -17,6 +17,7 @@ import {
   Maximize2
 } from "lucide-react";
 import { getMessages, type Locale } from "@/lib/i18n";
+import { acquireBodyScrollLock } from "@/lib/bodyScrollLock";
 
 // Tools Imports
 import { TrueAudienceVisualizer } from "./TrueAudienceVisualizer";
@@ -36,13 +37,13 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [hasMounted, setHasMounted] = useState(false);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const tabStripRef = useRef<HTMLDivElement>(null);
+  const dashboardContentRef = useRef<HTMLDivElement>(null);
 
   // Lazy Mount State to preserve mobile performance
   const [mounted, setMounted] = useState<Set<number>>(new Set([0]));
   const [isScienceOpen, setIsScienceOpen] = useState(false);
   const total = TOOL_IDS.length;
-  const activeId = TOOL_IDS[activeIndex];
 
   const tools = [
     { id: 'audience', component: TrueAudienceVisualizer },
@@ -56,37 +57,41 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
     setHasMounted(true);
   }, []);
 
-  // Reset scroll when navigating between tools
+  const closeDashboard = useCallback(() => {
+    setIsScienceOpen(false);
+    setIsDashboardOpen(false);
+  }, []);
+
   useEffect(() => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollTo(0, 0);
+    if (!isDashboardOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      if (isScienceOpen) setIsScienceOpen(false);
+      else closeDashboard();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isDashboardOpen, isScienceOpen, closeDashboard]);
+
+  useEffect(() => {
+    if (!isDashboardOpen) return;
+    return acquireBodyScrollLock("scrollbarGutter");
+  }, [isDashboardOpen]);
+
+  // Reset vertical scroll when switching tools
+  useEffect(() => {
+    if (dashboardContentRef.current) {
+      dashboardContentRef.current.scrollTo(0, 0);
     }
   }, [activeIndex]);
-
-  // 🏥 PERFORMANCE PATCH (v2.2): Background Scroll Lockdown
-  useEffect(() => {
-    if (isDashboardOpen) {
-      document.body.style.overflow = 'hidden';
-      // Prevent layout shift on some browsers by adding padding
-      document.body.style.paddingRight = 'var(--scrollbar-width, 0px)';
-    } else {
-      document.body.style.overflow = '';
-      document.body.style.paddingRight = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-      document.body.style.paddingRight = '';
-    };
-  }, [isDashboardOpen]);
 
   // Update mounted tools and scroll state
   useEffect(() => {
     if (!hasMounted || !isDashboardOpen) return;
 
-    // Center tab in the scroll view
     const activeTab = tabRefs.current[activeIndex];
-    if (activeTab && scrollContainerRef.current) {
-      const container = scrollContainerRef.current;
+    if (activeTab && tabStripRef.current) {
+      const container = tabStripRef.current;
       const scrollLeft = activeTab.offsetLeft - (container.offsetWidth / 2) + (activeTab.offsetWidth / 2);
       container.scrollTo({ left: scrollLeft, behavior: 'smooth' });
     }
@@ -235,7 +240,8 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
                   </div>
 
                   <button
-                    onClick={() => setIsDashboardOpen(false)}
+                    type="button"
+                    onClick={closeDashboard}
                     className="group relative h-8 w-8 md:h-10 md:w-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/30 hover:rotate-90"
                   >
                     <XIcon className="h-4 w-4 md:h-5 md:w-5" />
@@ -254,7 +260,7 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
               </div>
 
               {/* v1.6 SLIM TABS: Maximum Viewport Conservation (v1.8 Identity Refactor: Icons-Only) */}
-              <div ref={scrollContainerRef} className="relative flex p-1 md:p-2 bg-black/60 border border-white/5 rounded-xl md:rounded-[1.5rem] max-w-4xl mx-auto w-full overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory">
+              <div ref={tabStripRef} className="relative flex p-1 md:p-2 bg-black/60 border border-white/5 rounded-xl md:rounded-[1.5rem] max-w-4xl mx-auto w-full overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory">
                 {TOOL_IDS.map((id, i) => {
                   const isActive = activeIndex === i;
                   const ToolIcon = i === 0 ? BarChart3 : i === 1 ? Orbit : i === 2 ? Zap : i === 3 ? Fingerprint : ShieldCheck;
@@ -282,8 +288,8 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
               </div>
             </div>
 
-            <div 
-              ref={scrollContainerRef}
+            <div
+              ref={dashboardContentRef}
               className="flex-grow relative overflow-y-auto overscroll-contain bg-transparent px-0 md:px-8 z-10"
             >
               <div className="sticky top-0 left-0 right-0 h-4 md:h-6 bg-gradient-to-b from-[#030717] to-transparent z-10 pointer-events-none" />

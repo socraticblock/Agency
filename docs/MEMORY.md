@@ -18,6 +18,7 @@
 - [016] Real-device touch fixes: LeadGenHub removed window scroll spring + blur/scale carousel; lazy-mount tool chunks ±1 slide; `MagneticButton` plain link/button on coarse/`hover:none`; Navbar menu z-index + `touch-manipulation`; Roadmap `useTransform` + `initial={false}` / viewport amount; Sovereign mobile accordion `type="button"`.
 - [017] Framer `useScroll` targets: `ScrollReveal` root is always `relative`; `StickyCardStack` uses a `relative` wrapper ref for scroll tracking (sticky card no longer the ref target).
 - [018] Architect step-2 `ModuleItem` accordion: price/header taps + `touch-manipulation`; STATUS control isolates `stopPropagation`; configurator scroll panel `touch-manipulation`.
+- [019] Ref-counted `acquireBodyScrollLock` (`html`+`body` overflow, measured gutter padding); `Navbar`/`LeadGenHub`/`ConfigDrawer`; LeadGenHub split tab/content refs + Escape; `ConfigDrawer` duplicate closing JSX removed.
 
 # Detailed Observations
 
@@ -110,3 +111,8 @@
 - **Context:** Live mobile architect step 2 often needed multiple taps to expand module rows; users hit price/STATUS area while the parent used `stopPropagation` on the whole right cluster.
 - **Decision:** Removed wrapper `stopPropagation` so price taps bubble to the card toggle; `type="button"` + `stopPropagation` + `touch-manipulation` + mobile min hit target on STATUS only; `touch-manipulation` on module card and `Configurator` main `overflow-y-auto` panel.
 - **Impact:** First-tap expand works when tapping price or title; STATUS still toggles selection without collapsing/expanding; aligns with prior mobile `touch-manipulation` fixes without widening scope beyond architect UI.
+
+## [019]
+- **Context:** Sovereign dashboard + mobile menu both set `document.body.style.overflow`; restoring a saved `prev` of `hidden` left the homepage non-scrollable; duplicate `ref` on tab strip vs content broke scroll helpers; `ConfigDrawer` had duplicate closing JSX breaking `tsc`.
+- **Decision:** `lib/bodyScrollLock.ts` ref-count locks `documentElement` and `body`, uses measured scrollbar width for gutter mode; `Navbar`, `LeadGenHub`, `ConfigDrawer` call `acquireBodyScrollLock`; `LeadGenHub` uses `tabStripRef`/`dashboardContentRef`, `closeDashboard` resets science overlay, Escape closes science then dashboard.
+- **Impact:** Stacked overlays release scroll only when all close; tab horizontal scroll and tool vertical scroll use correct refs; typecheck passes; no dedicated route required.

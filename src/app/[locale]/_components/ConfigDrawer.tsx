@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Check, Lightbulb, Sparkles, Shield, Trash2 } from "lucide-react";
 import { ServiceItem } from "@/constants/pricing";
 import { ANIMATION_OVERRIDES, WHATSAPP_INTAKE } from "@/constants/content";
+import { acquireBodyScrollLock } from "@/lib/bodyScrollLock";
 
 interface ConfigDrawerProps {
   drawerItem: ServiceItem | null;
@@ -29,14 +30,8 @@ export default function ConfigDrawer({
   activeFoundationId,
 }: ConfigDrawerProps) {
   useEffect(() => {
-    if (drawerItem) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
+    if (!drawerItem) return;
+    return acquireBodyScrollLock("default");
   }, [drawerItem]);
 
   const activeOverride = drawerItem?.id === 'micro-animations' && activeFoundationId && ANIMATION_OVERRIDES[activeFoundationId];
@@ -172,7 +167,7 @@ export default function ConfigDrawer({
                 <div className="bg-black/40 border border-emerald-500/20 rounded-2xl p-4 flex flex-col items-center text-center gap-3 shadow-[0_0_30px_rgba(16,185,129,0.05)] relative overflow-hidden group/bespoke">
                   {/* Subtle Animated Glow Accent */}
                   <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/5 to-transparent opacity-50" />
-                  
+
                   <div className="relative z-10 flex flex-col gap-1">
                     <span className="text-[10px] font-black font-space text-white/70 uppercase tracking-[0.2em] mb-1">
                       Total One-Time
@@ -186,7 +181,7 @@ export default function ConfigDrawer({
                     type="button"
                     onClick={() => {
                       const isUpgrade = drawerItem.id === 'upgrade';
-                      const MSG = isUpgrade 
+                      const MSG = isUpgrade
                         ? "Hi Genezisi! My site [ Add URL ] is acting slow and glitchy. I need an Architect to look under the hood for a Legacy Upgrade audit and custom renovation roadmap. Can we talk?"
                         : "Hi Genezisi! I just explored your Architect tool and I'm interested in a Customized Build. I have a specific project in mind that requires unique software logic. When are you free for a quick Discovery Call to discuss the architecture?";
                       window.open(`https://wa.me/${WHATSAPP_INTAKE}?text=${encodeURIComponent(MSG)}`, '_blank');
