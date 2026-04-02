@@ -27,6 +27,7 @@
 - [024] Architect Phase-2 tier transformation: upgraded Step-1 foundation metadata/cards for Essential/Professional/Command Center/E-Commerce HQ, added custom+legacy CTA banners, enforced Essential module gating in Step-2, and enabled `/architect?tier=...` preselection.
 - [025] Polish pass: Step-1 mobile foundation cards now surface emoji/tagline/delivery + recommended badge; pricing tier CTAs now use per-tier routes (Essential to strategy, others to `/architect?tier=...`), and `E-Commerce HQ` naming is normalized.
 - [026] Architect Phase-2 finalization: enforced tier-based module access matrix (Essential none, Professional Creative+Marketing, Command Center broad with premium exclusions, E-Commerce full), added Shield tier-aware recommendation badges, introduced Discovery multi-select critical-features question, locked `?tier=` preselection to stay on Step 1, and aligned Step-5/sidebar revision+warranty copy to new tiers.
+- [027] Pricing V2 Elite: `/pricing` rebuilt with client `PricingTierDeck` (Shield radios + WhatsApp), `pricingWhatsApp` helper, comparison table, informational module tiles, dual custom bridge, FAQ/hero/final CTA; E-Commerce HQ `priceGEL` 17,999 ₾ and `installmentLabel` on Essential/Professional in `FOUNDATIONS`.
 
 # Detailed Observations
 
@@ -164,3 +165,8 @@
 - **Context:** Remaining Phase-2 scope required deterministic gating behavior, optional recommendation enhancements, and final consistency before build validation.
 - **Decision:** Added `getAccessibleModuleIdsByFoundation` in shared pricing constants and reconciled module state on foundation switches; updated module UI to show accessible nodes plus locked upgrade messaging; added foundation-aware Shield emphasis labels/messages; expanded Discovery with a persisted multi-select critical-features question; prevented repeated query-param forcing by applying `tier` preset once and keeping users on Step 1; refreshed summary/sidebar warranty and revision copy to match Essential/Professional/Command Center/E-Commerce HQ policy.
 - **Impact:** Architect flow now reflects the intended sales model and access policy end-to-end, with fewer drift points between pricing promises and configurator behavior, while preserving safe fallback behavior and successful production build.
+
+## [027]
+- **Context:** `/pricing` needed WhatsApp-first tier CTAs, inline Shield selection, a comparison matrix, non-navigational module education, and aligned economics without duplicating Shield definitions.
+- **Decision:** Introduced `getPricingTierPayloads` from `FOUNDATIONS` + curated feature groups, `PricingTierDeck` client island using `SHIELD_TIERS` and `buildPricingTierWhatsAppUrl` (`WHATSAPP_INTAKE`), comparison data module, repurposed module showcase, split custom-project WhatsApp cards, updated FAQ/metadata; raised E‑Commerce HQ to 17,999 ₾ in shared constants with optional installment strings on lower tiers.
+- **Impact:** Single source of truth for tier prices carries to `/architect`; pricing page supports the intended consultative funnel while avoiding duplicate Shield pricing data and keeping builds green.

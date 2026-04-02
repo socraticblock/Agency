@@ -43,6 +43,8 @@ export interface ServiceItem {
   recommendation?: string;
   customPriceLabel?: string;
   isBespoke?: boolean;
+  /** Shown on pricing page only (e.g. installment line); optional */
+  installmentLabel?: string;
 }
 
 export interface Foundation extends ServiceItem {
@@ -98,7 +100,8 @@ export const FOUNDATIONS: Foundation[] = [
     bestFor: ["Solo consultants", "Early-stage service providers", "Fast-launch projects"],
     roiNote: "Designed to maximize your ad-spend ROI.",
     strategyLabel: "THE CONVERSION TUNNEL",
-    recommendedModules: []
+    recommendedModules: [],
+    installmentLabel: "or 3 × 333 ₾/month",
   },
   {
     id: 'cms',
@@ -141,7 +144,8 @@ export const FOUNDATIONS: Foundation[] = [
 
     bestFor: ["B2B Consultants & Coaches", "Creative & Marketing Agencies", "High-Ticket Service Providers", "Professional Personal Brands"],
     roiNote: "Built for owner-independence and authority.",
-    recommendedModules: ['calendar-sync', 'hubspot-sync', 'social-sync', 'local-seo', 'multilingual', 'seo-audit', 'deposit-logic', 'micro-animations', 'extra-page', 'map-marker', 'doc-template']
+    recommendedModules: ['calendar-sync', 'hubspot-sync', 'social-sync', 'local-seo', 'multilingual', 'seo-audit', 'deposit-logic', 'micro-animations', 'extra-page', 'map-marker', 'doc-template'],
+    installmentLabel: "or 3 × 767 ₾/month",
   },
   {
     id: 'ecomm',
@@ -149,7 +153,7 @@ export const FOUNDATIONS: Foundation[] = [
     emoji: '💰',
     tagline: 'Georgian e-commerce done right',
     category: 'Base',
-    priceGEL: 7999,
+    priceGEL: 17999,
     inheritedValue: { id: 'saas', name: "Command Center Core", priceGEL: 4999 },
     deliveryTimeline: '8-10 weeks',
     effortEstimate: '~100 work hours',
