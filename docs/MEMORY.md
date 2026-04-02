@@ -23,6 +23,7 @@
 - [021] Dashboard close hardening: removed top-level `AnimatePresence` exit layer for Sovereign overlay and force-cleared `html/body` inline overflow styles in `closeDashboard` to avoid ghost fixed layer + stale lock leftovers.
 - [022] Pricing route Phase-1 launched: new `/${locale}/pricing` hero + nav entry, followed by a responsive 4-tier card grid (Essential, Professional, Command Center, E-commerce) with differentiated feature density, recommended emphasis, and CTA routing to `/architect`.
 - [022] Pricing Phase 1 entry: new `/${locale}/pricing` route with investment-framed hero + primary CTA to compare foundations; navbar now includes `Pricing` link to make pricing a first-class entry path.
+- [023] Pricing Phase-2 completion: added module-category teaser grid, structured FAQ accordion, and final conversion CTA section to `/${locale}/pricing` while keeping decisions data-driven and aligned with existing architect funnel paths.
 
 # Detailed Observations
 
@@ -140,3 +141,8 @@
 - **Context:** Pricing overhaul kickoff required a simpler primary entrypoint before the advanced configurator, aligned to premium “investment, not expense” framing for Georgian LLC owners.
 - **Decision:** Added `src/app/[locale]/pricing/page.tsx` with a static hero (dark geometric backdrop, investment framing headline/subhead, trust microcopy) and dual CTAs to `/${locale}/architect`; updated `Navbar` links to include `Pricing`.
 - **Impact:** Introduces a lightweight top-of-funnel pricing destination without disturbing configurator logic; makes pricing discoverable from global navigation for phased rollout.
+
+## [023]
+- **Context:** Pricing page needed Phase-2 conversion scaffolding after the tier grid: module discovery tease, objection handling, and a stronger close.
+- **Decision:** Implemented Section 4 as a light-background module category preview grid, Section 5 as a structured FAQ accordion block, and Section 6 as a full-width final CTA section with primary/secondary actions to strategy contact paths.
+- **Impact:** Extends `/pricing` from a static tier comparison into a fuller conversion funnel while keeping cognitive load low and preserving the architect route as the depth destination.

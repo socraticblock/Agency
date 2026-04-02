@@ -15,6 +15,19 @@ type TierCard = {
   features: Array<{ category: string; items: string[] }>;
 };
 
+type ModuleCategory = {
+  id: string;
+  icon: string;
+  name: string;
+  moduleCount: number;
+  fromPriceGEL: number;
+};
+
+type PricingFaq = {
+  question: string;
+  answer: string;
+};
+
 const PRICING_TIERS: TierCard[] = [
   {
     id: "essential",
@@ -89,7 +102,7 @@ const PRICING_TIERS: TierCard[] = [
     emoji: "🧠",
     name: "Command Center",
     tagline: "Your operations and sales infrastructure hub.",
-    price: "5,999 ₾",
+    price: "4,999 ₾",
     delivery: "3-4 weeks delivery",
     cta: "Configure My Command Center",
     audience: "Perfect for: Teams replacing manual DM workflows",
@@ -130,7 +143,7 @@ const PRICING_TIERS: TierCard[] = [
     emoji: "🛒",
     name: "E-commerce HQ",
     tagline: "A 24/7 storefront engineered for conversion velocity.",
-    price: "10,999 ₾",
+    price: "7,999 ₾",
     delivery: "4-6 weeks delivery",
     cta: "Build My E-Commerce Empire",
     audience: "Perfect for: Product brands scaling online revenue",
@@ -165,6 +178,94 @@ const PRICING_TIERS: TierCard[] = [
         items: ["Launch supervision sprint", "90-day bug warranty"],
       },
     ],
+  },
+];
+
+const MODULE_CATEGORIES: ModuleCategory[] = [
+  {
+    id: "georgian-advantage",
+    icon: "🇬🇪",
+    name: "Georgian Advantage",
+    moduleCount: 6,
+    fromPriceGEL: 600,
+  },
+  {
+    id: "marketing-seo",
+    icon: "📈",
+    name: "Marketing & SEO",
+    moduleCount: 7,
+    fromPriceGEL: 400,
+  },
+  {
+    id: "business-engines",
+    icon: "⚙️",
+    name: "Business Engines",
+    moduleCount: 8,
+    fromPriceGEL: 700,
+  },
+  {
+    id: "ai-automation",
+    icon: "🤖",
+    name: "AI & Automation",
+    moduleCount: 5,
+    fromPriceGEL: 800,
+  },
+  {
+    id: "creative-extras",
+    icon: "🎨",
+    name: "Creative Extras",
+    moduleCount: 6,
+    fromPriceGEL: 300,
+  },
+  {
+    id: "operations",
+    icon: "🛡️",
+    name: "Operations",
+    moduleCount: 5,
+    fromPriceGEL: 500,
+  },
+];
+
+const PRICING_FAQ: PricingFaq[] = [
+  {
+    question: "Why should not I just use Wix/Squarespace?",
+    answer:
+      "Those platforms are fine for basic pages, but they lock your business into monthly platform costs and limited technical control. Your Genezisi build is engineered for Georgian market workflows, local integrations, and long-term ownership.",
+  },
+  {
+    question: "What is the difference between Essential and Professional?",
+    answer:
+      "Essential is a premium template-based launch path for speed. Professional is a custom conversion architecture with deeper UX strategy, richer trust systems, and stronger scaling readiness.",
+  },
+  {
+    question: "Do I really own the code after launch?",
+    answer:
+      "Yes. You own your digital asset. We deliver full project handoff with access transfer so you are never trapped in vendor lock-in.",
+  },
+  {
+    question: "What happens after you finish building?",
+    answer:
+      "We run launch QA, handoff guidance, and a defined bug-warranty window. If you want ongoing improvements, you can continue with Shield support options.",
+  },
+  {
+    question: "Can I upgrade later if I start with Essential?",
+    answer:
+      "Yes. Most clients can upgrade as they grow. Upgrade credits and migration scope depend on your selected modules and current build state.",
+  },
+  {
+    question: "How do payments work? Do you offer installments?",
+    answer:
+      "We structure payment options around project scope, including split-payment paths for qualified builds. Exact installment availability is confirmed during strategy scoping.",
+  },
+  {
+    question: "What if I need changes after the project ends?",
+    answer:
+      "You can request additional revisions after delivery through scoped updates. For continuous improvements and support response SLAs, Shield plans are available.",
+  },
+  {
+    question: "How long until my site is live?",
+    answer:
+      "Typical delivery starts at 7-10 days for Essential and increases by system complexity for higher tiers. Final timelines depend on content readiness, revision rounds, and integration depth.",
   },
 ];
 
@@ -324,6 +425,105 @@ export default async function PricingPage({
                 Explore Package Builder
               </a>
             </div>
+          </div>
+        </section>
+
+        <section className="border-y border-slate-200/80 bg-slate-50 px-6 py-20 sm:px-10 lg:px-16">
+          <div className="mx-auto max-w-7xl">
+            <div className="mb-8 text-center">
+              <p className="text-xs font-black uppercase tracking-[0.25em] text-emerald-700">
+                Module Preview
+              </p>
+              <h2 className="mt-3 text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">
+                Supercharge Your Build With Add-On Modules
+              </h2>
+              <p className="mx-auto mt-3 max-w-3xl text-sm text-slate-600 sm:text-base">
+                Starting from the Professional tier, enhance your site with powerful integrations and
+                automations.
+              </p>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {MODULE_CATEGORIES.map((category) => (
+                <a
+                  key={category.id}
+                  href={`/${lang}/architect`}
+                  className="group rounded-2xl border border-slate-300 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-400/60 hover:shadow-[0_12px_30px_rgba(16,185,129,0.12)]"
+                >
+                  <p className="text-2xl" aria-hidden>
+                    {category.icon}
+                  </p>
+                  <h3 className="mt-3 text-lg font-black text-slate-900">{category.name}</h3>
+                  <p className="mt-1 text-sm text-slate-600">({category.moduleCount} modules)</p>
+                  <p className="mt-1 text-sm font-bold text-emerald-700">
+                    From {category.fromPriceGEL} ₾
+                  </p>
+                  <p className="mt-3 text-xs font-bold uppercase tracking-wider text-slate-500 group-hover:text-emerald-700">
+                    Explore modules in architect
+                  </p>
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto w-full max-w-5xl px-6 py-20 sm:px-10">
+          <div className="mb-8 text-center">
+            <p className="text-xs font-black uppercase tracking-[0.25em] text-emerald-400">FAQ</p>
+            <h2 className="mt-3 text-2xl font-black tracking-tight text-white sm:text-3xl">
+              Frequently Asked Questions
+            </h2>
+            <p className="mx-auto mt-3 max-w-2xl text-sm text-slate-400 sm:text-base">
+              Clear answers before you commit time or budget.
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            {PRICING_FAQ.map((item) => (
+              <details
+                key={item.question}
+                className="group rounded-xl border border-white/10 bg-[#0b1327]/80 p-5 transition hover:border-emerald-400/40"
+              >
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-left text-sm font-black text-white sm:text-base">
+                  <span>{item.question}</span>
+                  <span className="text-emerald-300 transition group-open:rotate-45" aria-hidden>
+                    +
+                  </span>
+                </summary>
+                <p className="mt-3 text-sm leading-relaxed text-slate-300">{item.answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <section className="border-t border-white/10 bg-[radial-gradient(circle_at_top,rgba(16,185,129,0.18),rgba(5,10,26,0.96)_58%)] px-6 py-24 text-center sm:px-10">
+          <div className="mx-auto max-w-3xl">
+            <h2 className="text-3xl font-black tracking-tight text-white sm:text-4xl">
+              Ready to Build Your Digital Headquarters?
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-200">
+              Join Georgian businesses upgrading their online presence. Start with a conversation, no
+              commitment required.
+            </p>
+
+            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <a
+                href={`/${lang}/book-strategy`}
+                className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-emerald-400 px-7 py-3 text-sm font-black uppercase tracking-wider text-slate-950 transition hover:bg-emerald-300 sm:w-auto"
+              >
+                Book Free Strategy Call
+              </a>
+              <a
+                href={`/${lang}/book-strategy`}
+                className="inline-flex min-h-12 w-full items-center justify-center rounded-full border border-white/25 bg-white/5 px-7 py-3 text-sm font-bold uppercase tracking-wider text-white transition hover:border-emerald-300/60 hover:text-emerald-200 sm:w-auto"
+              >
+                Or Send Us a Message
+              </a>
+            </div>
+
+            <p className="mt-4 text-xs font-medium uppercase tracking-wider text-slate-300/90">
+              Typically responds within 24 hours
+            </p>
           </div>
         </section>
       </main>
