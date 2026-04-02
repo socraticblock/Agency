@@ -116,6 +116,17 @@ export default function ReviewPhase({
                 )}
               </div>
             )}
+            {activeFoundation?.deliveryTimeline ? (
+              <div className="text-xs text-slate-400">
+                ⏱️ Delivery: <span className="font-semibold text-slate-200">{activeFoundation.deliveryTimeline}</span>
+              </div>
+            ) : null}
+            {activeFoundation ? (
+              <div className="text-xs text-slate-400">
+                Base investment:{" "}
+                <span className="font-semibold text-emerald-300">{activeFoundation.priceGEL.toLocaleString()} ₾</span>
+              </div>
+            ) : null}
             {activeModules.length > 0 && (
               <div className="flex flex-wrap gap-1">
                 {activeModules.map((m) => (
@@ -379,7 +390,9 @@ export default function ReviewPhase({
             <div className="flex justify-center w-full">
               <div className="flex items-start gap-1.5 text-left max-w-[380px] w-full text-slate-400">
                 <Check className="h-3.5 w-3.5 flex-shrink-0 mt-0.5 text-emerald-400" />
-                <span className="leading-tight">90-DAY ENGINEERING WARRANTY</span>
+                <span className="leading-tight">
+                  {activeFoundation?.warrantyDays ? `${activeFoundation.warrantyDays}-DAY ENGINEERING WARRANTY` : "ENGINEERING WARRANTY INCLUDED"}
+                </span>
               </div>
             </div>
           </div>

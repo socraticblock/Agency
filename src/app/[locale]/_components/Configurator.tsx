@@ -73,6 +73,7 @@ export default function Configurator() {
     exchangeRate,
     foundationPrice,
     totalHoursSaved,
+    accessibleModuleIds,
     answers,
     setAnswers,
     discoveryStep,
@@ -87,10 +88,15 @@ export default function Configurator() {
   const params = useParams();
   const searchParams = useSearchParams();
   const locale = (params.locale as string) || "en";
+  const hasAppliedTierPreset = useRef(false);
 
   useEffect(() => {
+    if (hasAppliedTierPreset.current) return;
     const requestedTier = searchParams.get("tier");
-    if (!requestedTier) return;
+    if (!requestedTier) {
+      hasAppliedTierPreset.current = true;
+      return;
+    }
 
     const tierMap: Record<string, string> = {
       professional: "cms",
@@ -99,12 +105,12 @@ export default function Configurator() {
       essential: "landing",
     };
 
-    const mappedFoundation = tierMap[requestedTier];
-    if (!mappedFoundation || foundation === mappedFoundation) return;
-    setFoundation(mappedFoundation);
-    if (requestedTier !== "essential") {
-      setStep(2);
+    const mappedFoundation = tierMap[requestedTier.toLowerCase()];
+    if (mappedFoundation && foundation !== mappedFoundation) {
+      setFoundation(mappedFoundation);
+      setStep(1);
     }
+    hasAppliedTierPreset.current = true;
   }, [searchParams, foundation, setFoundation, setStep]);
 
   const topAnchorRef = useRef<HTMLDivElement>(null);
@@ -224,6 +230,7 @@ export default function Configurator() {
                 activeFoundation={activeFoundation}
                 moduleQuantities={moduleQuantities}
                 updateQuantity={updateQuantity}
+                accessibleModuleIds={accessibleModuleIds}
               />
             )}
 
@@ -234,6 +241,7 @@ export default function Configurator() {
                 formatPrice={formatPrice}
                 goToStep={goToStep}
                 setIsModalOpen={setIsModalOpen}
+                foundationId={foundation}
               />
             )}
 

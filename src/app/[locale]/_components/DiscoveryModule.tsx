@@ -143,6 +143,14 @@ export default function DiscoveryModule({
     handleSelectForce(qId, value, q.type as string, isCustom);
   };
 
+  const toggleMultiSelectOption = (qId: string, option: string) => {
+    const existing = Array.isArray(answers[qId]) ? (answers[qId] as string[]) : [];
+    const next = existing.includes(option)
+      ? existing.filter((item) => item !== option)
+      : [...existing, option];
+    setAnswers((prev) => ({ ...prev, [qId]: next }));
+  };
+
   const handlesSubmit = () => {
     setFinishError(null);
     if (!isDiscoveryComplete(answers, QUESTIONS)) {
@@ -444,6 +452,30 @@ export default function DiscoveryModule({
                       className="touch-form-control max-w-xs border-b border-white/20 bg-transparent py-2 text-base font-medium text-white placeholder:text-slate-600 transition-colors focus:border-emerald-400 focus:ring-0"
                     />
                   )}
+                </div>
+              )}
+
+              {/* === MULTI-SELECT === */}
+              {q.type === "multi-select" && (
+                <div className="flex flex-col gap-2.5 w-full max-w-2xl">
+                  {(q.options as string[])?.map((opt, i) => {
+                    const selected = Array.isArray(answers[q.id]) && (answers[q.id] as string[]).includes(opt);
+                    return (
+                      <m.button
+                        key={opt}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => toggleMultiSelectOption(q.id, opt)}
+                        className={`p-3.5 md:p-4 rounded-xl border text-left text-sm font-bold font-space transition-all duration-300 flex justify-between items-center ${
+                          selected
+                            ? "border-emerald-400 bg-emerald-500/10 text-emerald-400"
+                            : "border-white/5 bg-white/[0.02] hover:bg-white/5 text-slate-300"
+                        }`}
+                      >
+                        <span>{opt}</span>
+                        <span className="text-[9px] opacity-60">{selected ? "✓" : `[${i + 1}]`}</span>
+                      </m.button>
+                    );
+                  })}
                 </div>
               )}
 

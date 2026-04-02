@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useRef, useEffect, useMemo, useCallback } from "react";
-import { ServiceItem, FOUNDATIONS, MODULES, SHIELD_TIERS } from "@/constants/pricing";
+import {
+  ServiceItem,
+  FOUNDATIONS,
+  MODULES,
+  SHIELD_TIERS,
+  getAccessibleModuleIdsByFoundation,
+} from "@/constants/pricing";
 import { clearBlueprintSessionId } from "@/lib/blueprint/clientBlueprintId";
 import {
   buildDiscoveryQuestions,
@@ -58,6 +64,10 @@ export function useConfigurator() {
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const prevFoundationRef = useRef<string | null>(foundation || null);
+  const accessibleModuleIds = useMemo(
+    () => getAccessibleModuleIdsByFoundation(foundation),
+    [foundation]
+  );
 
   // Conditional step navigation
   const canGoToStep = useCallback(
@@ -94,12 +104,19 @@ export function useConfigurator() {
     }
   }, [hydrated, step, canGoToStep, setStep]);
 
-  // Reset Discovery when Foundation changes
+  // Reconcile discovery and modules when foundation changes
   useEffect(() => {
     if (!hydrated) return;
     if (foundation !== prevFoundationRef.current) {
-      setSelectedModules([]);
-      setModuleQuantities({});
+      const allowed = new Set(getAccessibleModuleIdsByFoundation(foundation));
+      setSelectedModules((prev) => prev.filter((id) => allowed.has(id)));
+      setModuleQuantities((prev) => {
+        const next: Record<string, number> = {};
+        for (const [id, qty] of Object.entries(prev)) {
+          if (allowed.has(id)) next[id] = qty;
+        }
+        return next;
+      });
       setAnswers({});
       setDiscoveryStep(0);
       prevFoundationRef.current = foundation || null;
@@ -220,6 +237,8 @@ export function useConfigurator() {
 
   const toggleModule = useCallback((id: string) => {
     if (foundation === "landing") return;
+    const allowed = new Set(accessibleModuleIds);
+    if (!allowed.has(id)) return;
     setSelectedModules(prev => {
       const isRemoving = prev.includes(id);
       if (isRemoving) {
@@ -234,7 +253,7 @@ export function useConfigurator() {
         return [...prev, id];
       }
     });
-  }, [foundation]);
+  }, [foundation, accessibleModuleIds]);
 
   const updateQuantity = useCallback((id: string, qty: number) => {
     setModuleQuantities(prev => ({ ...prev, [id]: Math.max(0, qty) }));
@@ -283,6 +302,7 @@ export function useConfigurator() {
     modulesPrice,
     clearConfiguration,
     totalHoursSaved,
+    accessibleModuleIds,
     answers,
     setAnswers,
     discoveryStep,

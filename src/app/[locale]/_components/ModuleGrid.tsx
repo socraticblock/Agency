@@ -16,6 +16,7 @@ interface ModuleGridProps {
   activeFoundation?: Foundation | undefined;
   moduleQuantities: Record<string, number>;
   updateQuantity: (id: string, qty: number) => void;
+  accessibleModuleIds: string[];
 }
 
 export default function ModuleGrid({
@@ -28,14 +29,14 @@ export default function ModuleGrid({
   activeFoundation,
   moduleQuantities,
   updateQuantity,
+  accessibleModuleIds,
 }: ModuleGridProps) {
   const [expandedModuleId, setExpandedModuleId] = useState<string | null>(null);
 
-  const recommendedModuleIDs = activeFoundation?.recommendedModules || [];
-  const recommendedModules = MODULES.filter((mod) =>
-    recommendedModuleIDs.includes(mod.id)
-  );
   const isEssentialFoundation = activeFoundation?.id === "landing";
+  const accessibleIdSet = new Set(accessibleModuleIds);
+  const accessibleModules = MODULES.filter((mod) => accessibleIdSet.has(mod.id));
+  const lockedModules = MODULES.filter((mod) => !accessibleIdSet.has(mod.id));
 
   return (
     <div className="flex flex-col gap-4">
@@ -71,15 +72,15 @@ export default function ModuleGrid({
         </div>
       ) : null}
 
-      {!isEssentialFoundation && recommendedModules.length > 0 && (
+      {!isEssentialFoundation && (
         <div className="flex flex-col gap-1.5">
-          {recommendedModules.map((mod) => {
+          {accessibleModules.map((mod) => {
             const isSelected = selectedModules.includes(mod.id);
             const isExpanded = expandedModuleId === mod.id;
 
             return (
               <ModuleItem
-                key={`rec-${mod.id}`}
+                key={`allowed-${mod.id}`}
                 m={mod}
                 isSelected={isSelected}
                 isExpanded={isExpanded}
@@ -96,6 +97,33 @@ export default function ModuleGrid({
           })}
         </div>
       )}
+
+      {!isEssentialFoundation && lockedModules.length > 0 ? (
+        <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/30 p-4">
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+            Locked For Current Foundation
+          </p>
+          <p className="mt-2 text-xs leading-relaxed text-slate-400">
+            Some modules unlock on higher foundations. Upgrade your foundation in Step 1 to access
+            advanced enterprise nodes.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {lockedModules.slice(0, 12).map((module) => (
+              <span
+                key={`locked-${module.id}`}
+                className="rounded-md border border-zinc-700/70 bg-zinc-950/60 px-2 py-1 text-[10px] font-bold text-zinc-400"
+              >
+                {module.name}
+              </span>
+            ))}
+            {lockedModules.length > 12 ? (
+              <span className="rounded-md border border-zinc-700/70 bg-zinc-950/60 px-2 py-1 text-[10px] font-bold text-zinc-400">
+                +{lockedModules.length - 12} more
+              </span>
+            ) : null}
+          </div>
+        </div>
+      ) : null}
 
       {hasGita && (
         <m.div

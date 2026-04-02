@@ -25,6 +25,8 @@
 - [022] Pricing Phase 1 entry: new `/${locale}/pricing` route with investment-framed hero + primary CTA to compare foundations; navbar now includes `Pricing` link to make pricing a first-class entry path.
 - [023] Pricing Phase-2 completion: added module-category teaser grid, structured FAQ accordion, and final conversion CTA section to `/${locale}/pricing` while keeping decisions data-driven and aligned with existing architect funnel paths.
 - [024] Architect Phase-2 tier transformation: upgraded Step-1 foundation metadata/cards for Essential/Professional/Command Center/E-Commerce HQ, added custom+legacy CTA banners, enforced Essential module gating in Step-2, and enabled `/architect?tier=...` preselection.
+- [025] Polish pass: Step-1 mobile foundation cards now surface emoji/tagline/delivery + recommended badge; pricing tier CTAs now use per-tier routes (Essential to strategy, others to `/architect?tier=...`), and `E-Commerce HQ` naming is normalized.
+- [026] Architect Phase-2 finalization: enforced tier-based module access matrix (Essential none, Professional Creative+Marketing, Command Center broad with premium exclusions, E-Commerce full), added Shield tier-aware recommendation badges, introduced Discovery multi-select critical-features question, locked `?tier=` preselection to stay on Step 1, and aligned Step-5/sidebar revision+warranty copy to new tiers.
 
 # Detailed Observations
 
@@ -152,3 +154,13 @@
 - **Context:** User requested replacing legacy 3-tier assumptions with a 4-tier hybrid model in the architect flow, with Professional as recommended and Essential as a constrained entry tier.
 - **Decision:** Enriched `FOUNDATIONS` with tier-facing metadata (emoji, tagline, timeline/effort, audience, revisions, warranty, CTA labels/links), updated Step-1 card rendering to present this data, added non-selectable CTA banners for custom/legacy paths, blocked module selection when `landing` is active, and mapped query params (`tier`) to foundation preselection.
 - **Impact:** Architect now reflects the commercial positioning model directly in UI and flow control, reducing mismatch between pricing promises and configurator behavior while preserving scalability for future tier-gating rules.
+
+## [025]
+- **Context:** Final UX polish was needed after Phase-2 to improve mobile scanability and align CTA paths with the intended sales flow.
+- **Decision:** Updated compact mobile foundation cards in Step-1 to include tier-defining signals (emoji, tagline, delivery, recommended marker), introduced per-tier CTA destinations in pricing card data, and standardized the `E-Commerce HQ` label casing.
+- **Impact:** Improves first-glance understanding on small screens, reduces CTA intent ambiguity between consultative and configurator paths, and prevents naming drift across pricing/architect entry points.
+
+## [026]
+- **Context:** Remaining Phase-2 scope required deterministic gating behavior, optional recommendation enhancements, and final consistency before build validation.
+- **Decision:** Added `getAccessibleModuleIdsByFoundation` in shared pricing constants and reconciled module state on foundation switches; updated module UI to show accessible nodes plus locked upgrade messaging; added foundation-aware Shield emphasis labels/messages; expanded Discovery with a persisted multi-select critical-features question; prevented repeated query-param forcing by applying `tier` preset once and keeping users on Step 1; refreshed summary/sidebar warranty and revision copy to match Essential/Professional/Command Center/E-Commerce HQ policy.
+- **Impact:** Architect flow now reflects the intended sales model and access policy end-to-end, with fewer drift points between pricing promises and configurator behavior, while preserving safe fallback behavior and successful production build.

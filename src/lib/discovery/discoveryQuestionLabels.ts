@@ -6,6 +6,7 @@ export const DISCOVERY_QUESTION_LABELS: Record<string, string> = {
   typography: "Typography Choice",
   pitch: "One-Sentence Pitch",
   north_star: "The North Star",
+  critical_features: "Critical Success Features",
   emotional_hook: "Emotional Hook",
 
   upgrade_platform: "Current Platform",

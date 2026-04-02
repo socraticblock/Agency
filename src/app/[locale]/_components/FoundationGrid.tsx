@@ -173,19 +173,19 @@ export default function FoundationGrid({
                       whileTap={{ scale: 0.98 }}
                       onClick={() => setDrawerItem(f)}
                       role="button"
-                      className="relative cursor-pointer text-left p-4 rounded-xl border border-zinc-800/60 bg-zinc-900/30 flex flex-col justify-between w-full h-[140px] transition-all hover:bg-zinc-800/40"
+                      className="relative cursor-pointer text-left p-4 rounded-xl border border-zinc-800/60 bg-zinc-900/30 flex flex-col justify-between w-full min-h-[170px] transition-all hover:bg-zinc-800/40"
                     >
                       <div className="flex flex-col text-left">
-                        <h4 className="text-base font-black text-white mt-0.5">{f.name}</h4>
-                        {f.bestFor && (
-                          <div className="flex flex-wrap gap-1 mt-1">
-                            {f.bestFor.slice(0, 2).map((bad, i) => (
-                              <span key={i} className="text-[9px] font-bold bg-emerald-500/10 text-emerald-300 px-1.5 py-0.5 rounded-full border border-emerald-500/10">
-                                {bad}
-                              </span>
-                            ))}
-                          </div>
-                        )}
+                        {f.isRecommendedTier ? (
+                          <span className="mb-1 w-fit rounded-full border border-emerald-300/60 bg-emerald-400/15 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-emerald-200">
+                            ⭐ Recommended
+                          </span>
+                        ) : null}
+                        <h4 className="text-base font-black text-white mt-0.5">
+                          {f.emoji ? `${f.emoji} ` : ""}{f.name}
+                        </h4>
+                        {f.tagline ? <p className="mt-1 text-[11px] font-semibold text-emerald-300/90">{f.tagline}</p> : null}
+                        {f.deliveryTimeline ? <p className="mt-1 text-[10px] text-slate-400">⏱️ {f.deliveryTimeline}</p> : null}
                       </div>
                       <div className="flex justify-between items-end w-full pt-1.5 border-t border-zinc-900/40">
                         <div />

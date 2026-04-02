@@ -81,6 +81,21 @@ export const STANDARD_QUESTIONS = [
     ],
   },
   {
+    id: "critical_features",
+    title: "Critical Success Features",
+    description: "Which features are most critical for your success?",
+    type: "multi-select",
+    options: [
+      "Fast loading speed / performance",
+      "Search engine visibility (SEO)",
+      "Lead capture / form submissions",
+      "Payment processing / e-commerce",
+      "Content management (blogging)",
+      "Mobile user experience",
+      "Integration with existing tools (CRM, calendar)",
+    ],
+  },
+  {
     id: "emotional_hook",
     title: "The Emotional Hook",
     description: "How should someone feel the moment they land on your page?",

@@ -635,6 +635,25 @@ export interface ShieldTier {
   description: string;
 }
 
+export function getAccessibleModuleIdsByFoundation(
+  foundationId: string | null | undefined
+): string[] {
+  if (!foundationId) return [];
+  if (foundationId === "landing") return [];
+  if (foundationId === "ecomm") return MODULES.map((m) => m.id);
+
+  if (foundationId === "cms") {
+    return MODULES.filter((m) => m.category === "Marketing" || m.category === "Creative").map((m) => m.id);
+  }
+
+  if (foundationId === "saas") {
+    const commandExcluded = new Set(["ai-sprint", "course-tracking", "listing-portal"]);
+    return MODULES.filter((m) => !commandExcluded.has(m.id)).map((m) => m.id);
+  }
+
+  return MODULES.map((m) => m.id);
+}
+
 export const SHIELD_TIERS: ShieldTier[] = [
   {
     id: 0,

@@ -9,6 +9,7 @@ type TierCard = {
   price: string;
   delivery: string;
   cta: string;
+  ctaHref: string;
   audience: string;
   recommended?: boolean;
   exclusionNote?: string;
@@ -37,6 +38,7 @@ const PRICING_TIERS: TierCard[] = [
     price: "999 ₾",
     delivery: "7-10 days delivery",
     cta: "Start My Essential Site",
+    ctaHref: "/book-strategy",
     audience: "Perfect for: Solo consultants testing the waters",
     exclusionNote:
       "*Template-based design • Limited customization • Perfect for launching fast*",
@@ -63,6 +65,7 @@ const PRICING_TIERS: TierCard[] = [
     price: "2,299 ₾",
     delivery: "12-16 days delivery",
     cta: "Build My Professional Site",
+    ctaHref: "/architect?tier=professional",
     audience: "Perfect for: Service brands scaling client acquisition",
     recommended: true,
     features: [
@@ -105,6 +108,7 @@ const PRICING_TIERS: TierCard[] = [
     price: "4,999 ₾",
     delivery: "3-4 weeks delivery",
     cta: "Configure My Command Center",
+    ctaHref: "/architect?tier=command-center",
     audience: "Perfect for: Teams replacing manual DM workflows",
     features: [
       {
@@ -140,12 +144,13 @@ const PRICING_TIERS: TierCard[] = [
   },
   {
     id: "ecommerce",
-    emoji: "🛒",
-    name: "E-commerce HQ",
+    emoji: "💰",
+    name: "E-Commerce HQ",
     tagline: "A 24/7 storefront engineered for conversion velocity.",
     price: "7,999 ₾",
     delivery: "4-6 weeks delivery",
     cta: "Build My E-Commerce Empire",
+    ctaHref: "/architect?tier=ecommerce-hq",
     audience: "Perfect for: Product brands scaling online revenue",
     features: [
       {
@@ -386,7 +391,7 @@ export default async function PricingPage({
 
                 <div className="mt-6">
                   <a
-                    href={`/${lang}/architect`}
+                    href={`/${lang}${tier.ctaHref}`}
                     className={`inline-flex w-full items-center justify-center rounded-xl px-4 py-3 text-center text-xs font-black uppercase tracking-wider transition ${
                       tier.recommended
                         ? "bg-emerald-400 text-slate-950 hover:bg-emerald-300"
