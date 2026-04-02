@@ -15,6 +15,16 @@ export interface ServiceItem {
   name: string;
   category: string;
   priceGEL: number;
+  emoji?: string;
+  tagline?: string;
+  deliveryTimeline?: string;
+  effortEstimate?: string;
+  audienceLabel?: string;
+  revisionRounds?: number;
+  warrantyDays?: number;
+  ctaLabel?: string;
+  ctaHref?: string;
+  isRecommendedTier?: boolean;
   description?: string;
   technicalSpec?: string;
   roiNote?: string;
@@ -55,40 +65,79 @@ export const FOUNDATIONS: Foundation[] = [
   {
     id: 'landing',
     name: 'Essential',
+    emoji: '✨',
+    tagline: 'Your first professional web presence',
     category: 'Base',
     priceGEL: 999,
-    description: 'One perfect page designed to do one thing: turn a visitor into a customer. We remove the fluff and leave only the results.',
-    concept: 'One perfect page designed to do one thing: turn a visitor into a customer. We remove the fluff and leave only the results.',
-    strategy: "Focus is the new currency. By removing navigation menus and distractions, we eliminate the 'Paradox of Choice,' leading your visitor on a single, straight path to your 'Buy' button.",
-    howItWorks: 'Removes navigation friction to prevent users from wandering, focusing 100% of the energy on a single call-to-action.',
+    deliveryTimeline: '7-10 business days',
+    effortEstimate: '~12-15 work hours',
+    audienceLabel: 'Perfect for: Solo consultants testing the waters',
+    revisionRounds: 1,
+    warrantyDays: 30,
+    ctaLabel: 'Start My Essential Site',
+    ctaHref: '/book-strategy',
+    description: 'A clean, mobile-ready landing page built from our curated template collection. Perfect for establishing credibility fast without breaking the bank.',
+    concept: 'Template-based launch architecture for fast credibility.',
+    strategy: 'Template-based approach with limited customization, designed for quick launch velocity.',
+    howItWorks: 'Curated template + your brand assets + focused launch setup.',
     scope: [
-      'Structure | 1 Perfectly Crafted Sales Node (Zero fluff, 100% focused on one absolute target offer)',
-      'Capture | Smart Lead Capture Vault (Catches every inquiry instantly so they don\'t go back to Google)',
-      'Design | Conversion-First Wireframe (Designed psychologically to guide visitors to the absolute "Yes" button)'
+      'Design & Structure | Template-based design (3 proven layouts)',
+      'Design & Structure | 1-page landing page (max 6 sections)',
+      'Design & Structure | Mobile-responsive layout',
+      'Design & Structure | Your brand colors, fonts, and images applied',
+      'Functionality | Contact form (name, email, message to email)',
+      'Functionality | Social media link integration',
+      'Functionality | Basic SEO meta tags setup',
+      'Functionality | SSL certificate included',
+      'Delivery & Ownership | Source code ownership (GitHub transfer)',
+      'Delivery & Ownership | Hosting deployment assistance',
+      'Delivery & Ownership | Written launch guide (PDF)',
+      'Delivery & Ownership | 30-day bug-fix warranty',
+      'Delivery & Ownership | 1 revision round included'
     ],
-    bestFor: ["Influencers with 1 Specific Offer", "Webinar & Event Hosts", "Real Estate 'Hero' Listings", "Digital Product Launchers"],
+    bestFor: ["Solo consultants", "Early-stage service providers", "Fast-launch projects"],
     roiNote: "Designed to maximize your ad-spend ROI.",
     strategyLabel: "THE CONVERSION TUNNEL",
-    recommendedModules: ['exit-pop', 'ga4-analytics', 'pro-copy', 'ab-testing', 'heatmap', 'cro-audit', 'rule-chatbot', 'ugc-video', 'micro-animations', 'extra-page']
+    recommendedModules: []
   },
   {
     id: 'cms',
     name: 'Professional',
+    emoji: '⭐',
+    tagline: 'Custom-designed conversion machine',
+    isRecommendedTier: true,
     strategyLabel: "THE INDEPENDENCE PRINCIPLE",
     category: 'Base',
     priceGEL: 2299,
-    description: "Your professional headquarters. This moves you from a 'one-man show' to a 'global brand' with a system you can actually control.",
+    deliveryTimeline: '10-15 business days',
+    effortEstimate: '~24 work hours',
+    audienceLabel: 'Perfect for: Serious consultants ready to invest',
+    revisionRounds: 2,
+    warrantyDays: 90,
+    ctaLabel: 'Build My Professional Site',
+    ctaHref: '/architect?tier=professional',
+    description: "A strategically crafted landing page optimized to turn visitors into leads. Built from scratch for your brand—no templates, no limitations.",
     scope: [
-      'Nodes | 4 Foundational Brand Nodes (Professional Home, About, Contact, Blog)',
-      'CMS | Visual Content Dashboard (A private drag-and-drop editor to update text and photos in seconds—without ever needing to pay a developer)',
-      'Blog | Automated Authority Engine (A blog system that automatically categorizes your thought leadership for absolute Google SEO dominance)',
-      'Leads | Centralized Lead Vault (A secure database that stores every inquiry so you never lose a potential customer)',
-      'Assets | High-Speed Media Vault (An optimized cloud home for your brand’s high-res photography and videos)',
-      'Training | VIP System Onboarding (Includes 1-on-1 strategic training and a custom documentation vault for owner-independence)'
+      'Design & Structure | 100% custom design from scratch',
+      'Design & Structure | Unlimited sections and content blocks',
+      'Design & Structure | Mobile-first responsive approach',
+      'Design & Structure | Conversion-optimized layout architecture',
+      'Design & Structure | Subtle scroll animations and hover effects',
+      'Functionality | Advanced contact form (file uploads, dropdowns)',
+      'Functionality | Social proof section (testimonials, logos, video)',
+      'Functionality | Google Analytics 4 + event tracking',
+      'Functionality | Full SEO suite (schema, OG tags, sitemap)',
+      'Functionality | Performance optimization (<2.5s load target)',
+      'Functionality | CRM-ready integration prep',
+      'Support & Training | Source code ownership + technical docs',
+      'Support & Training | 1-hour recorded training session',
+      'Support & Training | 90-day comprehensive warranty',
+      'Support & Training | 2 revision rounds',
+      'Support & Training | 30-day post-launch email support'
     ],
-    concept: "Your professional headquarters. This moves you from a 'one-man show' to a 'global brand' with a system you can actually control.",
-    strategy: "\"The Command Center moves you from 'renting' a site to 'owning' an asset. We separate your visual design from your business data. This means you can update your brand story yourself in real-time, while the underlying code stays lightning-fast, secure, and ready to scale. You get total control—and you stop paying hourly developer fees just to swap a photo or update text.\"",
-    howItWorks: 'You get a simplified social media-style editor to change photos and text without touching code.',
+    concept: "Custom conversion architecture for premium client acquisition.",
+    strategy: "Template constraints removed. This tier is custom-designed for your brand and conversion goals.",
+    howItWorks: 'Research-informed layout + custom UI + conversion instrumentation.',
 
     bestFor: ["B2B Consultants & Coaches", "Creative & Marketing Agencies", "High-Ticket Service Providers", "Professional Personal Brands"],
     roiNote: "Built for owner-independence and authority.",
@@ -96,14 +145,23 @@ export const FOUNDATIONS: Foundation[] = [
   },
   {
     id: 'ecomm',
-    name: 'E-commerce HQ',
+    name: 'E-Commerce HQ',
+    emoji: '💰',
+    tagline: 'Georgian e-commerce done right',
     category: 'Base',
     priceGEL: 7999,
     inheritedValue: { id: 'saas', name: "Command Center Core", priceGEL: 4999 },
-    description: "A turn-key sales machine built for high-volume growth.",
-    concept: "We build you a digital store that handles the heavy lifting while you sleep. From taking payments via TBC or BOG to automatically telling the tax office (RS.ge) about the sale, we’ve handled the technical 'boring' stuff. You just focus on the products; we've built the engine to move them.",
-    strategy: "A storefront is a high-value financial target. To keep your 'Checkout Tunnel' bulletproof against bots and ensure 100% uptime during sales peaks, we recommend securing this foundation with our [Tier Name] Shield. It’s the insurance policy for your revenue engine.",
-    howItWorks: 'Handles money, shipping, and stock tracking so the entrepreneur can focus on creating.',
+    deliveryTimeline: '8-10 weeks',
+    effortEstimate: '~100 work hours',
+    audienceLabel: 'Perfect for: Product-based businesses ready to scale online',
+    revisionRounds: 4,
+    warrantyDays: 90,
+    ctaLabel: 'Build My E-Commerce Empire',
+    ctaHref: '/architect?tier=ecommerce-hq',
+    description: "Full online store with native Georgian payment integration (TBC/BOG), automated tax reporting to RS.ge, and inventory management. Built to sell while you sleep.",
+    concept: "E-commerce infrastructure designed for Georgian payment and tax realities.",
+    strategy: "Compliance, conversion, and operational reliability form the core of this storefront architecture.",
+    howItWorks: 'Custom storefront + payment rails + fulfillment and order operations.',
     scope: [
       "The \"Buy\" Engine | Architecting a high-speed 'Checkout Tunnel' designed to keep psychological momentum going until payment is confirmed.",
       "Direct Bank Integration | Hooking into TBC, BOG, or Stripe. (Note: Bank approvals take 7-14 days; we guide you through setup)",
@@ -118,11 +176,20 @@ export const FOUNDATIONS: Foundation[] = [
   {
     id: 'saas',
     name: "Command Center",
+    emoji: '🚀',
+    tagline: 'Your professional headquarters',
     category: 'Base',
     priceGEL: 4999,
-    description: "Your operations and sales infrastructure hub.",
-    concept: "A powerful command layer for teams replacing manual sales operations with structured growth systems.",
-    strategy: "The Command Center consolidates lead flow, workflows, and visibility so your business can scale without adding admin chaos.",
+    deliveryTimeline: '25-35 business days',
+    effortEstimate: '~50 work hours',
+    audienceLabel: 'Perfect for: Established businesses scaling operations',
+    revisionRounds: 3,
+    warrantyDays: 90,
+    ctaLabel: 'Configure My Command Center',
+    ctaHref: '/architect?tier=command-center',
+    description: "Multi-page website with blog, CMS, lead capture, and content engine. Moves you from 'one-person show' to 'global brand' with systems you control.",
+    concept: "Professional headquarters architecture for scaling operations.",
+    strategy: "Structured multi-page systems, content operations, and lead visibility in one controllable stack.",
     howItWorks: 'Centralized architecture for automation, sales workflow clarity, and operational control.',
     scope: [
       "Workflow Layer | Custom dashboard logic for pipeline visibility and operational focus.",

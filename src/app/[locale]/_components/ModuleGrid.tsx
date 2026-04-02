@@ -35,6 +35,7 @@ export default function ModuleGrid({
   const recommendedModules = MODULES.filter((mod) =>
     recommendedModuleIDs.includes(mod.id)
   );
+  const isEssentialFoundation = activeFoundation?.id === "landing";
 
   return (
     <div className="flex flex-col gap-4">
@@ -53,7 +54,24 @@ export default function ModuleGrid({
         </div>
       </div>
 
-      {recommendedModules.length > 0 && (
+      {isEssentialFoundation ? (
+        <div className="rounded-2xl border border-amber-400/30 bg-amber-500/5 p-5">
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-300">Module Gating</p>
+          <p className="mt-2 text-sm leading-relaxed text-slate-300">
+            Essential is intentionally streamlined for fast launch. Add-on modules are unlocked from the
+            Professional tier and above.
+          </p>
+          <button
+            type="button"
+            onClick={() => goToStep(1)}
+            className="mt-4 rounded-xl border border-emerald-400/40 bg-emerald-500/10 px-4 py-2 text-xs font-black uppercase tracking-wider text-emerald-300 transition hover:bg-emerald-500/20"
+          >
+            Upgrade Foundation to Unlock Modules
+          </button>
+        </div>
+      ) : null}
+
+      {!isEssentialFoundation && recommendedModules.length > 0 && (
         <div className="flex flex-col gap-1.5">
           {recommendedModules.map((mod) => {
             const isSelected = selectedModules.includes(mod.id);

@@ -219,6 +219,7 @@ export function useConfigurator() {
   );
 
   const toggleModule = useCallback((id: string) => {
+    if (foundation === "landing") return;
     setSelectedModules(prev => {
       const isRemoving = prev.includes(id);
       if (isRemoving) {
@@ -233,7 +234,7 @@ export function useConfigurator() {
         return [...prev, id];
       }
     });
-  }, []);
+  }, [foundation]);
 
   const updateQuantity = useCallback((id: string, qty: number) => {
     setModuleQuantities(prev => ({ ...prev, [id]: Math.max(0, qty) }));

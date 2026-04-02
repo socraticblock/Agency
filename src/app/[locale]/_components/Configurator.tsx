@@ -6,8 +6,8 @@ import { m, AnimatePresence, LazyMotion } from "framer-motion";
 const loadFeatures = () => import("framer-motion").then(res => res.domMax);
 import { useConfigurator } from "@/hooks/useConfigurator";
 import ConfigSidebar from "./ConfigSidebar";
-const ConfigDrawer = dynamic(() => import("./ConfigDrawer"), {
-  ssr: false,
+const ConfigDrawer = dynamic(() => import("./ConfigDrawer"), {
+  ssr: false,
 });
 import ConfigModal from "./ConfigModal";
 import dynamic from "next/dynamic";
@@ -17,7 +17,7 @@ import FoundationGrid from "./FoundationGrid";
 import ModuleGrid from "./ModuleGrid";
 import ShieldGrid from "./ShieldGrid";
 import StudioHeader from "./StudioHeader";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 
 const DiscoveryModule = dynamic(() => import("./DiscoveryModule"), {
   ssr: false,
@@ -85,7 +85,27 @@ export default function Configurator() {
   } = useConfigurator();
 
   const params = useParams();
+  const searchParams = useSearchParams();
   const locale = (params.locale as string) || "en";
+
+  useEffect(() => {
+    const requestedTier = searchParams.get("tier");
+    if (!requestedTier) return;
+
+    const tierMap: Record<string, string> = {
+      professional: "cms",
+      "command-center": "saas",
+      "ecommerce-hq": "ecomm",
+      essential: "landing",
+    };
+
+    const mappedFoundation = tierMap[requestedTier];
+    if (!mappedFoundation || foundation === mappedFoundation) return;
+    setFoundation(mappedFoundation);
+    if (requestedTier !== "essential") {
+      setStep(2);
+    }
+  }, [searchParams, foundation, setFoundation, setStep]);
 
   const topAnchorRef = useRef<HTMLDivElement>(null);
   const isFirstRender = useRef(true);

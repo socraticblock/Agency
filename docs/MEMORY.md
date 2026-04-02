@@ -24,6 +24,7 @@
 - [022] Pricing route Phase-1 launched: new `/${locale}/pricing` hero + nav entry, followed by a responsive 4-tier card grid (Essential, Professional, Command Center, E-commerce) with differentiated feature density, recommended emphasis, and CTA routing to `/architect`.
 - [022] Pricing Phase 1 entry: new `/${locale}/pricing` route with investment-framed hero + primary CTA to compare foundations; navbar now includes `Pricing` link to make pricing a first-class entry path.
 - [023] Pricing Phase-2 completion: added module-category teaser grid, structured FAQ accordion, and final conversion CTA section to `/${locale}/pricing` while keeping decisions data-driven and aligned with existing architect funnel paths.
+- [024] Architect Phase-2 tier transformation: upgraded Step-1 foundation metadata/cards for Essential/Professional/Command Center/E-Commerce HQ, added custom+legacy CTA banners, enforced Essential module gating in Step-2, and enabled `/architect?tier=...` preselection.
 
 # Detailed Observations
 
@@ -146,3 +147,8 @@
 - **Context:** Pricing page needed Phase-2 conversion scaffolding after the tier grid: module discovery tease, objection handling, and a stronger close.
 - **Decision:** Implemented Section 4 as a light-background module category preview grid, Section 5 as a structured FAQ accordion block, and Section 6 as a full-width final CTA section with primary/secondary actions to strategy contact paths.
 - **Impact:** Extends `/pricing` from a static tier comparison into a fuller conversion funnel while keeping cognitive load low and preserving the architect route as the depth destination.
+
+## [024]
+- **Context:** User requested replacing legacy 3-tier assumptions with a 4-tier hybrid model in the architect flow, with Professional as recommended and Essential as a constrained entry tier.
+- **Decision:** Enriched `FOUNDATIONS` with tier-facing metadata (emoji, tagline, timeline/effort, audience, revisions, warranty, CTA labels/links), updated Step-1 card rendering to present this data, added non-selectable CTA banners for custom/legacy paths, blocked module selection when `landing` is active, and mapped query params (`tier`) to foundation preselection.
+- **Impact:** Architect now reflects the commercial positioning model directly in UI and flow control, reducing mismatch between pricing promises and configurator behavior while preserving scalability for future tier-gating rules.

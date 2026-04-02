@@ -5,6 +5,7 @@ import { m, AnimatePresence } from "framer-motion";
 import { Check, Info, ArrowRight, Sparkles, Lightbulb, RefreshCw, ChevronDown } from "lucide-react";
 import { FOUNDATIONS, type Foundation } from "@/constants/pricing";
 import FoundationCard from "../architect/_components/FoundationCard";
+import { useParams } from "next/navigation";
 
 interface FoundationGridProps {
   foundation: string | null;
@@ -29,6 +30,8 @@ export default function FoundationGrid({
   setDrawerItem,
   goToStep
 }: FoundationGridProps) {
+  const params = useParams();
+  const locale = (params.locale as string) || "en";
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const primaryFoundationIds = new Set(["landing", "cms", "saas", "ecomm"]);
@@ -212,6 +215,27 @@ export default function FoundationGrid({
           </m.div>
         )}
       </AnimatePresence>
+
+      {!activeFoundation ? (
+        <div className="grid gap-3 md:grid-cols-2">
+          <a
+            href={`/${locale}/book-strategy`}
+            className="rounded-xl border border-emerald-400/35 bg-emerald-500/10 p-4 text-left transition hover:bg-emerald-500/15"
+          >
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-300">Custom Build</p>
+            <h4 className="mt-1 text-sm font-black text-white">Need Customized Software Architecture?</h4>
+            <p className="mt-1 text-xs text-slate-300">Discuss unique logic, automations, or enterprise scope with an architect.</p>
+          </a>
+          <a
+            href={`/${locale}/book-strategy`}
+            className="rounded-xl border border-amber-400/35 bg-amber-500/10 p-4 text-left transition hover:bg-amber-500/15"
+          >
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-300">Legacy Upgrade</p>
+            <h4 className="mt-1 text-sm font-black text-white">Running on old infrastructure?</h4>
+            <p className="mt-1 text-xs text-slate-300">Get a technical audit and modernization roadmap without changing your brand.</p>
+          </a>
+        </div>
+      ) : null}
     </m.div>
   );
 }
