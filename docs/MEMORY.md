@@ -21,6 +21,7 @@
 - [019] Ref-counted `acquireBodyScrollLock` (`html`+`body` overflow, measured gutter padding); `Navbar`/`LeadGenHub`/`ConfigDrawer`; LeadGenHub split tab/content refs + Escape; `ConfigDrawer` duplicate closing JSX removed.
 - [020] Dashboard fallback: removed `LeadGenHub` document scroll lock entirely; overlay remains fullscreen with internal scroll to eliminate any possible stale page lock from that flow.
 - [021] Dashboard close hardening: removed top-level `AnimatePresence` exit layer for Sovereign overlay and force-cleared `html/body` inline overflow styles in `closeDashboard` to avoid ghost fixed layer + stale lock leftovers.
+- [028] Canonical WhatsApp intake and `wa.me` default: `WHATSAPP_INTAKE` `995579723564`; `generateWhatsAppLink` imports it; `createLocalBusinessSeo` default `telephone` `+995579723564`.
 
 # Detailed Observations
 
@@ -128,3 +129,8 @@
 - **Context:** Scroll still froze after interacting with non-first dashboard tools, suggesting an invisible fixed overlay or stale inline overflow persisted after close rather than active lock management alone.
 - **Decision:** Replaced the top-level dashboard wrapper from `AnimatePresence` + exiting `motion.div` to direct conditional `<div>` mount/unmount (no exit retention), and made `closeDashboard` hard-reset `document.documentElement.style.overflow`, `document.body.style.overflow`, and `document.body.style.paddingRight`.
 - **Impact:** Closing the Sovereign dashboard now removes the fullscreen layer synchronously and clears residual inline scroll styles in the same tick, reducing chance of ghost overlay/wheel capture across tool transitions.
+
+## [028]
+- **Context:** Business and SEO surfaces needed consistent WhatsApp and schema `telephone` without placeholder drift across `content.ts`, `routing.ts`, and JSON-LD defaults.
+- **Decision:** Set `WHATSAPP_INTAKE` to `995579723564`; `generateWhatsAppLink` defaults to `WHATSAPP_INTAKE` instead of a placeholder; `createLocalBusinessSeo` default `telephone` is `+995579723564` (E.164).
+- **Impact:** All `wa.me` links and `PackageGrid` WhatsApp CTAs use one number; LocalBusiness schema matches the real line unless a page overrides `telephone`.
