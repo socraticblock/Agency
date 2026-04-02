@@ -21,6 +21,7 @@
 - [019] Ref-counted `acquireBodyScrollLock` (`html`+`body` overflow, measured gutter padding); `Navbar`/`LeadGenHub`/`ConfigDrawer`; LeadGenHub split tab/content refs + Escape; `ConfigDrawer` duplicate closing JSX removed.
 - [020] Dashboard fallback: removed `LeadGenHub` document scroll lock entirely; overlay remains fullscreen with internal scroll to eliminate any possible stale page lock from that flow.
 - [021] Dashboard close hardening: removed top-level `AnimatePresence` exit layer for Sovereign overlay and force-cleared `html/body` inline overflow styles in `closeDashboard` to avoid ghost fixed layer + stale lock leftovers.
+- [022] Pricing Phase 1 entry: new `/${locale}/pricing` route with investment-framed hero + primary CTA to compare foundations; navbar now includes `Pricing` link to make pricing a first-class entry path.
 
 # Detailed Observations
 
@@ -128,3 +129,8 @@
 - **Context:** Scroll still froze after interacting with non-first dashboard tools, suggesting an invisible fixed overlay or stale inline overflow persisted after close rather than active lock management alone.
 - **Decision:** Replaced the top-level dashboard wrapper from `AnimatePresence` + exiting `motion.div` to direct conditional `<div>` mount/unmount (no exit retention), and made `closeDashboard` hard-reset `document.documentElement.style.overflow`, `document.body.style.overflow`, and `document.body.style.paddingRight`.
 - **Impact:** Closing the Sovereign dashboard now removes the fullscreen layer synchronously and clears residual inline scroll styles in the same tick, reducing chance of ghost overlay/wheel capture across tool transitions.
+
+## [022]
+- **Context:** Pricing overhaul kickoff required a simpler primary entrypoint before the advanced configurator, aligned to premium “investment, not expense” framing for Georgian LLC owners.
+- **Decision:** Added `src/app/[locale]/pricing/page.tsx` with a static hero (dark geometric backdrop, investment framing headline/subhead, trust microcopy) and dual CTAs to `/${locale}/architect`; updated `Navbar` links to include `Pricing`.
+- **Impact:** Introduces a lightweight top-of-funnel pricing destination without disturbing configurator logic; makes pricing discoverable from global navigation for phased rollout.

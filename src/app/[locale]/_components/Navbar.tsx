@@ -22,6 +22,7 @@ export function Navbar({ locale }: { locale: Locale }) {
   const close = () => setOpen(false);
 
   const navLinks = [
+    { href: `/${locale}/pricing`, label: "Pricing", highlight: false },
     { href: `/${locale}/architect`, label: "Start Building", highlight: true },
   ];
 
