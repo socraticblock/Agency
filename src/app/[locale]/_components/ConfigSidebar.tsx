@@ -335,7 +335,7 @@ export default memo(function ConfigSidebar({
             <div className="text-[10px] text-slate-400 leading-relaxed flex items-start gap-1">
               <span className="text-emerald-400 mt-0.5">✅</span>
               <div className="min-w-0 flex-1">
-                <details className="group">
+                <details className="group relative">
                   <summary
                     className="list-none cursor-pointer select-none rounded-md outline-none focus:ring-2 focus:ring-emerald-500/30 focus:ring-offset-0 [&::-webkit-details-marker]:hidden"
                   >
@@ -355,7 +355,7 @@ export default memo(function ConfigSidebar({
                     </div>
                   </summary>
 
-                  <div className="mt-1">
+                  <div className="mt-1 md:mt-0 md:absolute md:bottom-full md:mb-2 md:left-0 md:right-0 md:z-[60] md:rounded-xl md:border md:border-zinc-800/60 md:bg-zinc-950/95 md:p-3 md:shadow-2xl md:backdrop-blur-xl">
                     <div className="space-y-0.5">
                       <div className="flex flex-wrap gap-x-1">
                         <span className="font-black text-slate-200">HIGH-CONVERSION LANDING PAGE:</span>
