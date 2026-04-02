@@ -47,7 +47,7 @@ const PRICING_TIERS: TierCard[] = [
     emoji: "⭐",
     name: "Professional",
     tagline: "A premium conversion foundation for serious growth.",
-    price: "2,699 ₾",
+    price: "2,299 ₾",
     delivery: "12-16 days delivery",
     cta: "Build My Professional Site",
     audience: "Perfect for: Service brands scaling client acquisition",
@@ -89,7 +89,7 @@ const PRICING_TIERS: TierCard[] = [
     emoji: "🧠",
     name: "Command Center",
     tagline: "Your operations and sales infrastructure hub.",
-    price: "6,750 ₾",
+    price: "5,999 ₾",
     delivery: "3-4 weeks delivery",
     cta: "Configure My Command Center",
     audience: "Perfect for: Teams replacing manual DM workflows",
@@ -128,9 +128,9 @@ const PRICING_TIERS: TierCard[] = [
   {
     id: "ecommerce",
     emoji: "🛒",
-    name: "E-commerce",
+    name: "E-commerce HQ",
     tagline: "A 24/7 storefront engineered for conversion velocity.",
-    price: "12,900 ₾",
+    price: "10,999 ₾",
     delivery: "4-6 weeks delivery",
     cta: "Build My E-Commerce Empire",
     audience: "Perfect for: Product brands scaling online revenue",
@@ -298,6 +298,32 @@ export default async function PricingPage({
                 </div>
               </article>
             ))}
+          </div>
+
+          {/* Section 3: Custom-project bridge for non-standard buyers */}
+          <div className="mt-14 rounded-2xl border border-white/10 bg-[#0b1327]/80 p-6 text-center shadow-[0_10px_30px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-8">
+            <h3 className="text-2xl font-black tracking-tight text-white sm:text-3xl">
+              Need a custom architecture?
+            </h3>
+            <p className="mx-auto mt-3 max-w-3xl text-sm leading-relaxed text-slate-300 sm:text-base">
+              Building something unique? We handle custom software architecture, legacy system modernization,
+              and enterprise-grade solutions. We will scope your exact requirements in one focused conversation.
+            </p>
+
+            <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <a
+                href={`/${lang}/book-strategy`}
+                className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-emerald-400 px-6 py-3 text-sm font-black uppercase tracking-wider text-slate-950 transition hover:bg-emerald-300 sm:w-auto"
+              >
+                Discuss Custom Project
+              </a>
+              <a
+                href={`/${lang}/architect`}
+                className="inline-flex min-h-12 w-full items-center justify-center rounded-xl border border-white/20 bg-white/5 px-6 py-3 text-sm font-bold uppercase tracking-wider text-slate-100 transition hover:border-emerald-400/40 hover:text-emerald-300 sm:w-auto"
+              >
+                Explore Package Builder
+              </a>
+            </div>
           </div>
         </section>
       </main>

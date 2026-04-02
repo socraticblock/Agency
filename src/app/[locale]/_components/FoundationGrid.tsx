@@ -31,6 +31,8 @@ export default function FoundationGrid({
 }: FoundationGridProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const primaryFoundationIds = new Set(["landing", "cms", "saas", "ecomm"]);
+  const primaryFoundations = FOUNDATIONS.filter((f) => primaryFoundationIds.has(f.id));
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -104,7 +106,7 @@ export default function FoundationGrid({
                         transition={{ duration: 0.15 }}
                         className="absolute left-0 mt-1.5 bg-zinc-950/95 border border-zinc-800 rounded-xl overflow-hidden shadow-2xl z-20 w-full sm:w-64 py-1 backdrop-blur-xl"
                       >
-                        {FOUNDATIONS.map(f => (
+                        {primaryFoundations.map(f => (
                           <button
                             key={f.id}
                             type="button"
@@ -143,7 +145,7 @@ export default function FoundationGrid({
           >
             {/* Desktop View */}
             <div className="hidden md:grid grid-cols-2 gap-4 items-start">
-              {FOUNDATIONS.map((f) => (
+              {primaryFoundations.map((f) => (
                 <FoundationCard
                   key={f.id}
                   f={f}
@@ -162,7 +164,7 @@ export default function FoundationGrid({
                 onScroll={handleScroll}
 
               >
-                {FOUNDATIONS.map((f) => (
+                {primaryFoundations.map((f) => (
                   <div key={f.id} className="snap-center shrink-0 w-[85vw]">
                     <m.div
                       whileTap={{ scale: 0.98 }}
@@ -198,7 +200,7 @@ export default function FoundationGrid({
 
               {/* Pagination Dots */}
               <div className="flex justify-center gap-1.5">
-                {FOUNDATIONS.map((_, i) => (
+                {primaryFoundations.map((_, i) => (
                   <m.div
                     key={i}
                     animate={{ scale: i === mobileIndex ? 1.4 : 1, opacity: i === mobileIndex ? 1 : 0.4 }}

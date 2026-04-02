@@ -54,9 +54,9 @@ export interface Module extends ServiceItem {
 export const FOUNDATIONS: Foundation[] = [
   {
     id: 'landing',
-    name: 'High-Conversion Landing Page',
+    name: 'Essential',
     category: 'Base',
-    priceGEL: 2699,
+    priceGEL: 999,
     description: 'One perfect page designed to do one thing: turn a visitor into a customer. We remove the fluff and leave only the results.',
     concept: 'One perfect page designed to do one thing: turn a visitor into a customer. We remove the fluff and leave only the results.',
     strategy: "Focus is the new currency. By removing navigation menus and distractions, we eliminate the 'Paradox of Choice,' leading your visitor on a single, straight path to your 'Buy' button.",
@@ -73,10 +73,10 @@ export const FOUNDATIONS: Foundation[] = [
   },
   {
     id: 'cms',
-    name: 'Digital Command Center',
+    name: 'Professional',
     strategyLabel: "THE INDEPENDENCE PRINCIPLE",
     category: 'Base',
-    priceGEL: 6750,
+    priceGEL: 2299,
     description: "Your professional headquarters. This moves you from a 'one-man show' to a 'global brand' with a system you can actually control.",
     scope: [
       'Nodes | 4 Foundational Brand Nodes (Professional Home, About, Contact, Blog)',
@@ -96,10 +96,10 @@ export const FOUNDATIONS: Foundation[] = [
   },
   {
     id: 'ecomm',
-    name: '24/7 E-commerce Storefront',
+    name: 'E-commerce HQ',
     category: 'Base',
-    priceGEL: 12150,
-    inheritedValue: { id: 'cms', name: "Digital Command Center Core", priceGEL: 6750 },
+    priceGEL: 10999,
+    inheritedValue: { id: 'saas', name: "Command Center Core", priceGEL: 5999 },
     description: "A turn-key sales machine built for high-volume growth.",
     concept: "We build you a digital store that handles the heavy lifting while you sleep. From taking payments via TBC or BOG to automatically telling the tax office (RS.ge) about the sale, we’ve handled the technical 'boring' stuff. You just focus on the products; we've built the engine to move them.",
     strategy: "A storefront is a high-value financial target. To keep your 'Checkout Tunnel' bulletproof against bots and ensure 100% uptime during sales peaks, we recommend securing this foundation with our [Tier Name] Shield. It’s the insurance policy for your revenue engine.",
@@ -117,23 +117,21 @@ export const FOUNDATIONS: Foundation[] = [
   },
   {
     id: 'saas',
-    name: "Customized Software Architecture",
+    name: "Command Center",
     category: 'Base',
-    priceGEL: 0,
-    customPriceLabel: "Custom Quote Required",
-    isBespoke: true,
-    description: "Engineered for unique logic and infinite scale.",
-    concept: "Sometimes a standard website or shop isn't enough to solve the problem. If you are building a private portal for your members, an AI-powered knowledge base, or a complex tool that needs to handle specific business logic, you need a customized build. We don't use 'one-size-fits-all' templates; we architect a proprietary digital asset from the ground up.",
-    strategy: "In customized software, the most expensive mistake is building the wrong thing. We skip the 'one-size-fits-all' checkboxes to focus on a high-touch partnership. We build the logic first, then the code—ensuring your investment results in a powerful, proprietary asset, not just another subscription.",
-    howItWorks: 'Strategic engineering with 1-1 consulting tailored strictly around bespoke scope.',
+    priceGEL: 5999,
+    description: "Your operations and sales infrastructure hub.",
+    concept: "A powerful command layer for teams replacing manual sales operations with structured growth systems.",
+    strategy: "The Command Center consolidates lead flow, workflows, and visibility so your business can scale without adding admin chaos.",
+    howItWorks: 'Centralized architecture for automation, sales workflow clarity, and operational control.',
     scope: [
-      "Direct Architect Access | Start with a 1-on-1 deep-cycle discovery to map out exactly how your business logic needs to function.",
-      "Custom Technical Roadmap | Visual blueprints of user flows, logic routes, and security layers architected before a line of code is written.",
-      "Zero-Cap Scalability | Designed with Future-Proof infrastructure designed to grow with your audience as you scale.",
-      "Total Legal Ownership | You own every pixel of code and byte of your database under Georgian Law - it is a sellable business asset."
+      "Workflow Layer | Custom dashboard logic for pipeline visibility and operational focus.",
+      "Automation Hooks | Calendar, CRM, and routing structure for faster response and better conversion.",
+      "Scalable System Core | Built for growth phases without re-platforming every few months.",
+      "Ownership | Full legal ownership of your infrastructure under Georgian law."
     ],
-    bestFor: ["Private Gated Membership Networks", "AI Knowledge Bases & Micro-SaaS tools", "Data intensive custom logic dashboards", "Owner networks needing high security frameworks"],
-    roiNote: "Eliminates tech debt to scale proprietary logic effectively."
+    bestFor: ["Service teams replacing manual DM operations", "Operators needing clear workflow orchestration", "Brands preparing to scale with structured systems"],
+    roiNote: "Built to centralize and scale operations cleanly."
   },
   {
     id: 'upgrade',
