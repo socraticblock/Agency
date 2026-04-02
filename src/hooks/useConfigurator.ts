@@ -9,6 +9,7 @@ import {
   getAccessibleModuleIdsByFoundation,
 } from "@/constants/pricing";
 import { clearBlueprintSessionId } from "@/lib/blueprint/clientBlueprintId";
+import { TIER_SLUG_TO_FOUNDATION } from "@/lib/architectTierUrl";
 import {
   buildDiscoveryQuestions,
   isDiscoveryComplete,
@@ -61,6 +62,7 @@ export function useConfigurator() {
   const [drawerItem, setDrawerItem] = useState<ServiceItem | null>(null);
   const [mobileIndex, setMobileIndex] = useState(0);
   const [hydrated, setHydrated] = useState(false);
+  const [urlSynced, setUrlSynced] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const prevFoundationRef = useRef<string | null>(foundation || null);
@@ -97,6 +99,21 @@ export function useConfigurator() {
   useEffect(() => {
     setHydrated(true);
   }, []);
+
+  // Deep-link from pricing: ?tier=professional | ?foundation=cms
+  useEffect(() => {
+    if (!hydrated || urlSynced) return;
+    const params = new URLSearchParams(window.location.search);
+    const tier = params.get("tier");
+    const fromTier = tier ? TIER_SLUG_TO_FOUNDATION[tier] : undefined;
+    const foundationParam = params.get("foundation");
+    if (fromTier && FOUNDATIONS.some((x) => x.id === fromTier)) {
+      setFoundation(fromTier);
+    } else if (foundationParam && FOUNDATIONS.some((x) => x.id === foundationParam)) {
+      setFoundation(foundationParam);
+    }
+    setUrlSynced(true);
+  }, [hydrated, urlSynced, setFoundation]);
 
   useEffect(() => {
     if (hydrated && !canGoToStep(step)) {

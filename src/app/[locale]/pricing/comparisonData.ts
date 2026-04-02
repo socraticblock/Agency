@@ -8,15 +8,8 @@ export type ComparisonRow = {
   highlightCol?: "essential" | "professional" | "command" | "ecommerce";
 };
 
-export const PRICING_COMPARISON_ROWS: ComparisonRow[] = [
-  {
-    feature: "Price",
-    essential: "999 ₾",
-    professional: "2,299 ₾",
-    commandCenter: "4,999 ₾",
-    ecommerce: "17,999 ₾",
-    highlightCol: "professional",
-  },
+/** Feature rows (excluding Price — that row is built from `FOUNDATIONS` in the UI). */
+export const PRICING_COMPARISON_DETAIL_ROWS: ComparisonRow[] = [
   {
     feature: "Design approach",
     essential: "Template-based",

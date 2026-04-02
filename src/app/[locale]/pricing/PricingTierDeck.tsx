@@ -1,216 +1,155 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { SHIELD_TIERS, type ShieldTier } from "@/constants/pricing";
-import {
-  buildPricingTierWhatsAppUrl,
-  openPricingWhatsApp,
-} from "@/lib/pricingWhatsApp";
-import type { PricingTierPayload } from "./pricingTierData";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import type { Foundation } from "@/constants/pricing";
+import type { Locale } from "@/lib/i18n";
+import { buildPricingTierWhatsAppUrl, openPricingWhatsApp } from "@/lib/pricingWhatsApp";
+import { trackPricingEvent } from "@/lib/pricingAnalytics";
+import { priceDisplayLabel, tierPrimaryHref } from "./pricingTierData";
 
-function formatShieldPrice(t: ShieldTier): string {
-  if (t.priceGEL <= 0) return "Included";
-  return `${t.priceGEL.toLocaleString("en-US")} ₾/mo`;
+const PREVIEW_COUNT = 4;
+
+interface PricingTierDeckProps {
+  locale: Locale;
+  tiers: Foundation[];
 }
 
-export function PricingTierDeck({
-  locale,
-  tiers,
-}: {
-  locale: string;
-  tiers: PricingTierPayload[];
-}) {
-  const [expandedTierId, setExpandedTierId] = useState<string | null>(null);
-  const [selectedShieldId, setSelectedShieldId] = useState<string>("0");
+export function PricingTierDeck({ locale, tiers }: PricingTierDeckProps) {
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
 
-  const shieldById = useMemo(() => {
-    const m = new Map<string, ShieldTier>();
-    SHIELD_TIERS.forEach((t) => m.set(String(t.id), t));
-    return m;
-  }, []);
-
-  function toggleExpand(foundationId: string) {
-    setExpandedTierId((prev) => (prev === foundationId ? null : foundationId));
-  }
-
-  function openWaForTier(
-    tier: PricingTierPayload,
-    opts: { skipShield: boolean }
-  ) {
-    const selected = shieldById.get(selectedShieldId);
-    const url = buildPricingTierWhatsAppUrl({
-      tierName: tier.name,
-      priceLabel: `${tier.priceFormatted}`,
-      deliveryTime: tier.delivery,
-      featureLines: tier.whatsappFeatureLines,
-      shieldTier: opts.skipShield ? undefined : selected,
-      skipShieldLine: opts.skipShield,
+  const toggle = (id: string) => {
+    setExpanded((prev) => {
+      const next = !prev[id];
+      if (next) {
+        trackPricingEvent("pricing_tier_expand", { tierId: id });
+      }
+      return { ...prev, [id]: next };
     });
-    openPricingWhatsApp(url);
-  }
+  };
 
   return (
-    <div className="grid gap-5 lg:grid-cols-4">
-      {tiers.map((tier) => {
-        const expanded = expandedTierId === tier.foundationId;
+    <div className="grid gap-6 lg:grid-cols-2">
+      {tiers.map((f) => {
+        const scope = f.scope ?? [];
+        const preview = scope.slice(0, PREVIEW_COUNT);
+        const rest = scope.slice(PREVIEW_COUNT);
+        const hasMore = rest.length > 0;
+        const isOpen = expanded[f.id] ?? false;
+        const primaryHref = tierPrimaryHref(locale, f);
+        const priceLabel = priceDisplayLabel(f);
+
+        const waUrl = buildPricingTierWhatsAppUrl({
+          projectType: "tier-package",
+          tierName: f.name,
+          priceLabel,
+          deliveryTime: f.deliveryTimeline ?? "",
+          featureLines: preview.map((line) => line.replace(/^[^|]+\|\s*/, "")),
+          skipShieldLine: true,
+        });
+
         return (
           <article
-            key={tier.foundationId}
-            className={`relative flex min-h-[560px] flex-col rounded-2xl border bg-[#0a1125]/85 p-6 shadow-[0_12px_40px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-[min-height] duration-300 motion-reduce:transition-none ${tier.orderClass} ${
-              tier.recommended
-                ? "border-emerald-400/60 ring-1 ring-emerald-400/40"
-                : "border-white/10"
+            key={f.id}
+            className={`relative flex flex-col rounded-2xl border p-6 sm:p-8 ${
+              f.isRecommendedTier
+                ? "border-emerald-500/50 bg-emerald-500/[0.06] shadow-[0_0_40px_rgba(16,185,129,0.12)]"
+                : "border-white/10 bg-white/[0.02]"
             }`}
           >
-            <div className="min-h-7">
-              {tier.recommended ? (
-                <span className="absolute -top-3 left-6 inline-flex rounded-full border border-emerald-300/60 bg-emerald-400/15 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-emerald-300">
-                  Recommended
-                </span>
-              ) : null}
+            {f.isRecommendedTier && (
+              <span className="absolute right-4 top-4 rounded-full bg-emerald-400 px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-slate-950">
+                Recommended
+              </span>
+            )}
+            <div className="mb-4 flex items-start gap-2">
+              {f.emoji && <span className="text-2xl leading-none">{f.emoji}</span>}
+              <div>
+                <h3 className="text-xl font-black tracking-tight text-white">{f.name}</h3>
+                {f.tagline && <p className="mt-1 text-sm font-medium text-slate-400">{f.tagline}</p>}
+              </div>
             </div>
 
-            <div className="mt-1">
-              <h3 className="text-xl font-black uppercase tracking-tight text-white">
-                {tier.emoji} {tier.name}
-              </h3>
-              <p className="mt-1 text-sm italic text-slate-400">{tier.tagline}</p>
-            </div>
-
-            <div className="mt-6">
-              <p className="text-4xl font-black tracking-tight text-emerald-300">
-                {tier.priceFormatted}
+            <div className="mb-4">
+              <p className="text-3xl font-black tabular-nums text-white sm:text-4xl">
+                {f.isBespoke ? f.customPriceLabel ?? "Custom quote" : `${f.priceGEL.toLocaleString("ka-GE")} ₾`}
               </p>
-              {tier.installmentLabel ? (
-                <p className="mt-1 text-xs font-semibold text-slate-400">
-                  {tier.installmentLabel}
-                </p>
-              ) : null}
-              <p className="mt-2 text-xs font-bold uppercase tracking-wider text-slate-400">
-                {tier.delivery}
-              </p>
+              {f.installmentLabel && (
+                <p className="mt-1 text-sm font-medium text-emerald-400/90">{f.installmentLabel}</p>
+              )}
             </div>
 
-            <div className="mt-6 flex flex-1 flex-col gap-4">
-              {tier.features.map((group) => (
-                <div key={`${tier.foundationId}-${group.category}`}>
-                  <p className="mb-1 text-[11px] font-black uppercase tracking-wider text-slate-200">
-                    {group.category}
-                  </p>
-                  <ul className="space-y-1">
-                    {group.items.map((item) => (
-                      <li
-                        key={item}
-                        className="flex items-start gap-1.5 text-[12px] leading-snug text-slate-300"
-                      >
-                        <span className="mt-[2px] shrink-0 text-emerald-400">✓</span>
-                        <span
-                          className={
-                            tier.foundationId === "cms" &&
-                            item.includes("100% custom")
-                              ? "font-bold text-slate-100"
-                              : undefined
-                          }
-                        >
-                          {item}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+            <ul className="mb-4 space-y-2 text-sm text-slate-300">
+              {f.deliveryTimeline && (
+                <li>
+                  <span className="font-bold text-slate-500">Timeline: </span>
+                  {f.deliveryTimeline}
+                </li>
+              )}
+              {typeof f.revisionRounds === "number" && (
+                <li>
+                  <span className="font-bold text-slate-500">Revisions: </span>
+                  {f.revisionRounds} round{f.revisionRounds === 1 ? "" : "s"}
+                </li>
+              )}
+              {typeof f.warrantyDays === "number" && (
+                <li>
+                  <span className="font-bold text-slate-500">Warranty: </span>
+                  {f.warrantyDays} days
+                </li>
+              )}
+            </ul>
+
+            <p className="mb-3 text-xs font-black uppercase tracking-wider text-slate-500">Includes</p>
+            <ul className="mb-4 space-y-2">
+              {(isOpen ? scope : preview).map((line, idx) => (
+                <li key={`${f.id}-${idx}`} className="flex gap-2 text-sm text-slate-300">
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500/80" />
+                  <span>{line}</span>
+                </li>
               ))}
+            </ul>
 
-              {tier.exclusionNote ? (
-                <p className="text-[11px] italic leading-snug text-slate-500">
-                  {tier.exclusionNote}
-                </p>
-              ) : null}
-            </div>
-
-            <div className="mt-6 space-y-3">
+            {hasMore && (
               <button
                 type="button"
-                aria-expanded={expanded}
-                onClick={() => toggleExpand(tier.foundationId)}
-                className={`inline-flex w-full min-h-12 items-center justify-center rounded-xl px-4 py-3 text-center text-xs font-black uppercase tracking-wider transition ${
-                  tier.recommended
-                    ? "bg-emerald-400 text-slate-950 hover:bg-emerald-300"
-                    : "border border-white/20 bg-transparent text-slate-100 hover:border-emerald-400/50 hover:text-emerald-300"
-                }`}
+                onClick={() => toggle(f.id)}
+                className="mb-6 flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-emerald-400 hover:text-emerald-300"
               >
-                {tier.primaryCtaLabel}
+                {isOpen ? (
+                  <>
+                    Show less <ChevronUp className="h-4 w-4" />
+                  </>
+                ) : (
+                  <>
+                    Full details ({rest.length} more) <ChevronDown className="h-4 w-4" />
+                  </>
+                )}
               </button>
+            )}
 
+            <div className="mt-auto flex flex-col gap-2 border-t border-white/10 pt-6">
               <Link
-                href={`/${locale}/architect?tier=${tier.architectTierSlug}`}
-                className="block text-center text-[11px] font-bold uppercase tracking-wider text-slate-500 underline-offset-4 transition hover:text-emerald-400/90"
+                href={primaryHref}
+                onClick={() =>
+                  trackPricingEvent("pricing_tier_primary_cta", { tierId: f.id, href: primaryHref })
+                }
+                className="inline-flex min-h-[48px] w-full items-center justify-center rounded-xl bg-emerald-500 px-4 py-3 text-center text-sm font-black uppercase tracking-wide text-slate-950 transition hover:bg-emerald-400"
               >
-                Or configure it yourself →
+                {f.ctaLabel ?? "Get started"}
               </Link>
-
-              <p className="text-[11px] text-slate-500">{tier.audience}</p>
+              <button
+                type="button"
+                onClick={() => {
+                  trackPricingEvent("pricing_tier_whatsapp", { tierId: f.id });
+                  openPricingWhatsApp(waUrl);
+                }}
+                className="inline-flex min-h-[48px] w-full items-center justify-center rounded-xl border border-white/15 bg-transparent px-4 py-3 text-sm font-bold text-white transition hover:bg-white/5"
+              >
+                Questions? WhatsApp us
+              </button>
             </div>
-
-            {expanded ? (
-              <div className="mt-4 rounded-xl border border-white/10 bg-white/[0.03] p-4 motion-reduce:animate-none">
-                <p className="text-sm font-black text-white">Choose your protection plan</p>
-                <p className="mt-1 text-[11px] text-slate-500">
-                  Optional — monthly Shield add-on. Not required to message us.
-                </p>
-
-                <fieldset className="mt-4 space-y-2">
-                  <legend className="sr-only">Shield tier</legend>
-                  {SHIELD_TIERS.map((s) => (
-                    <label
-                      key={s.id}
-                      className={`flex cursor-pointer items-start gap-3 rounded-lg border px-3 py-2.5 text-left transition ${
-                        selectedShieldId === String(s.id)
-                          ? "border-emerald-400/50 bg-emerald-500/10"
-                          : "border-white/10 hover:border-white/20"
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        className="mt-1 h-4 w-4 accent-emerald-400"
-                        name={`shield-${tier.foundationId}`}
-                        value={String(s.id)}
-                        checked={selectedShieldId === String(s.id)}
-                        onChange={() => setSelectedShieldId(String(s.id))}
-                      />
-                      <span className="min-w-0 flex-1">
-                        <span className="block text-sm font-bold text-white">
-                          {s.name}
-                        </span>
-                        <span className="text-xs font-semibold text-emerald-400">
-                          {formatShieldPrice(s)}
-                        </span>
-                        <span className="mt-0.5 block text-[11px] text-slate-500">
-                          {s.description}
-                        </span>
-                      </span>
-                    </label>
-                  ))}
-                </fieldset>
-
-                <div className="mt-4 flex flex-col gap-2 border-t border-white/10 pt-4 sm:flex-row sm:items-center sm:justify-between">
-                  <button
-                    type="button"
-                    className="text-left text-[12px] font-semibold text-slate-500 underline decoration-slate-600 underline-offset-2 hover:text-slate-300"
-                    onClick={() => openWaForTier(tier, { skipShield: true })}
-                  >
-                    Skip Shield selection →
-                  </button>
-                  <button
-                    type="button"
-                    className="inline-flex min-h-11 items-center justify-center rounded-xl bg-emerald-500 px-4 py-2.5 text-xs font-black uppercase tracking-wider text-slate-950 hover:bg-emerald-400"
-                    onClick={() => openWaForTier(tier, { skipShield: false })}
-                  >
-                    Continue to WhatsApp →
-                  </button>
-                </div>
-              </div>
-            ) : null}
           </article>
         );
       })}

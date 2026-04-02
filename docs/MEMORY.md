@@ -28,6 +28,7 @@
 - [025] Polish pass: Step-1 mobile foundation cards now surface emoji/tagline/delivery + recommended badge; pricing tier CTAs now use per-tier routes (Essential to strategy, others to `/architect?tier=...`), and `E-Commerce HQ` naming is normalized.
 - [026] Architect Phase-2 finalization: enforced tier-based module access matrix (Essential none, Professional Creative+Marketing, Command Center broad with premium exclusions, E-Commerce full), added Shield tier-aware recommendation badges, introduced Discovery multi-select critical-features question, locked `?tier=` preselection to stay on Step 1, and aligned Step-5/sidebar revision+warranty copy to new tiers.
 - [027] Pricing V2 Elite: `/pricing` rebuilt with client `PricingTierDeck` (Shield radios + WhatsApp), `pricingWhatsApp` helper, comparison table, informational module tiles, dual custom bridge, FAQ/hero/final CTA; E-Commerce HQ `priceGEL` 17,999 ₾ and `installmentLabel` on Essential/Professional in `FOUNDATIONS`.
+- [029] Pricing conversion pass: `/${locale}/pricing` with repeated `PricingCtaBand`, expandable tier cards (`FOUNDATIONS` + `pricingTierData`), proof strip, `TierPickerQuiz`, comparison table, FAQ + `pricingAnalytics`; `useConfigurator` reads `?tier=` via `architectTierUrl`; sitemap lists `/pricing`.
 
 # Detailed Observations
 
@@ -170,3 +171,8 @@
 - **Context:** `/pricing` needed WhatsApp-first tier CTAs, inline Shield selection, a comparison matrix, non-navigational module education, and aligned economics without duplicating Shield definitions.
 - **Decision:** Introduced `getPricingTierPayloads` from `FOUNDATIONS` + curated feature groups, `PricingTierDeck` client island using `SHIELD_TIERS` and `buildPricingTierWhatsAppUrl` (`WHATSAPP_INTAKE`), comparison data module, repurposed module showcase, split custom-project WhatsApp cards, updated FAQ/metadata; raised E‑Commerce HQ to 17,999 ₾ in shared constants with optional installment strings on lower tiers.
 - **Impact:** Single source of truth for tier prices carries to `/architect`; pricing page supports the intended consultative funnel while avoiding duplicate Shield pricing data and keeping builds green.
+
+## [029]
+- **Context:** CEO brief asked for obvious repeated next steps, scan-first tier detail, light proof, a “not sure” bridge, FAQ, and lightweight instrumentation on `/pricing` without duplicating tier economics outside `FOUNDATIONS`.
+- **Decision:** Shipped `PricingPageClient` composition (`PricingCtaBand` hero/mid/footer, `PricingProofStrip`, `TierPickerQuiz`, `PricingTierDeck` with expandable scope + per-tier CTA + WhatsApp, `PricingComparisonTable`, `PricingFaq`), `trackPricingEvent` → `dataLayer`/`gtag`, `IntersectionObserver` FAQ inview; `tierPrimaryHref` uses each foundation’s `ctaHref`; `useConfigurator` applies `?tier=` / `?foundation=` once after hydration via `TIER_SLUG_TO_FOUNDATION`; `sitemap.ts` includes `/pricing`.
+- **Impact:** Pricing visitors get multiple clear conversion paths, progressive disclosure reduces cognitive load, analytics hooks support funnel measurement, and architect deep links from pricing now resolve to the intended foundation without manual re-selection.
