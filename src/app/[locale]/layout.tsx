@@ -3,7 +3,7 @@ import { createLocalBusinessSeo } from "@/lib/seo";
 import type { Locale } from "@/lib/i18n";
 import { LangSetter } from "@/components/providers/LangSetter";
 
-const SITE_NAME = "Genezisi Digital";
+const SITE_NAME = "Genezisi";
 const SITE_DESCRIPTION =
   "Escape the social media trap. We build a permanent, high-speed digital home for your brand that sells 24/7.";
 

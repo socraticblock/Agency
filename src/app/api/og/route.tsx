@@ -17,7 +17,7 @@ function siteHostname(): string {
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const rawTitle = searchParams.get("title")?.trim() || "Genezisi Digital";
+  const rawTitle = searchParams.get("title")?.trim() || "Genezisi";
   const title = rawTitle.slice(0, 72);
   const tagline =
     "Permanent digital infrastructure — not rented social reach.";
@@ -59,7 +59,7 @@ export async function GET(request: Request) {
               boxShadow: "0 0 24px rgba(16,185,129,0.9)",
             }}
           />
-          GENEZISI DIGITAL
+          GENEZISI
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           <div
