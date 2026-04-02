@@ -335,40 +335,58 @@ export default memo(function ConfigSidebar({
             <div className="text-[10px] text-slate-400 leading-relaxed flex items-start gap-1">
               <span className="text-emerald-400 mt-0.5">✅</span>
               <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-baseline gap-x-1">
-                  <span className="font-black text-slate-100">Revision Policy</span>
-                  <span className="text-slate-500 font-medium">— Built into every foundation:</span>
-                </div>
+                <details className="group">
+                  <summary
+                    className="list-none cursor-pointer select-none rounded-md outline-none focus:ring-2 focus:ring-emerald-500/30 focus:ring-offset-0 [&::-webkit-details-marker]:hidden"
+                  >
+                    <div className="flex items-baseline justify-between gap-2">
+                      <div className="min-w-0">
+                        <span className="font-black text-slate-100">Revision Policy</span>{" "}
+                        <span className="text-slate-500 font-medium">— Built into every foundation:</span>{" "}
+                        <span className="text-slate-400">
+                          Landing: <span className="font-black text-slate-200">2</span> • Command:{" "}
+                          <span className="font-black text-slate-200">3</span> • E-commerce:{" "}
+                          <span className="font-black text-slate-200">4</span> rounds
+                        </span>
+                      </div>
+                      <span className="shrink-0 text-[8px] text-slate-500 transition-transform duration-200 group-open:rotate-180">
+                        ▼
+                      </span>
+                    </div>
+                  </summary>
 
-                <div className="mt-1 space-y-0.5">
-                  <div className="flex flex-wrap gap-x-1">
-                    <span className="font-black text-slate-200">HIGH-CONVERSION LANDING PAGE:</span>
-                    <span>2 revision rounds included</span>
-                  </div>
-                  <div className="flex flex-wrap gap-x-1">
-                    <span className="font-black text-slate-200">DIGITAL COMMAND CENTER:</span>
-                    <span>3 revision rounds included</span>
-                  </div>
-                  <div className="flex flex-wrap gap-x-1">
-                    <span className="font-black text-slate-200">24/7 E-COMMERCE STOREFRONT:</span>
-                    <span>4 revision rounds included</span>
-                  </div>
-                </div>
+                  <div className="mt-1">
+                    <div className="space-y-0.5">
+                      <div className="flex flex-wrap gap-x-1">
+                        <span className="font-black text-slate-200">HIGH-CONVERSION LANDING PAGE:</span>
+                        <span>2 revision rounds included</span>
+                      </div>
+                      <div className="flex flex-wrap gap-x-1">
+                        <span className="font-black text-slate-200">DIGITAL COMMAND CENTER:</span>
+                        <span>3 revision rounds included</span>
+                      </div>
+                      <div className="flex flex-wrap gap-x-1">
+                        <span className="font-black text-slate-200">24/7 E-COMMERCE STOREFRONT:</span>
+                        <span>4 revision rounds included</span>
+                      </div>
+                    </div>
 
-                <div className="mt-2 pl-3 border-l-2 border-emerald-500/20 text-slate-400">
-                  <p className="text-slate-300/90 font-bold mb-1">
-                    What counts as ONE revision round:
-                  </p>
-                  <ul className="space-y-0.5">
-                    <li>→ Feedback collected within 48 hours of delivery</li>
-                    <li>→ Batched changes (not piecemeal requests)</li>
-                    <li>→ Same scope as original brief</li>
-                  </ul>
-                </div>
+                    <div className="mt-1 pl-2 border-l-2 border-emerald-500/20 text-slate-400">
+                      <p className="text-slate-300/90 font-bold mb-0.5">
+                        What counts as ONE revision round:
+                      </p>
+                      <ul className="space-y-0.5">
+                        <li>→ Feedback collected within 48 hours of delivery</li>
+                        <li>→ Batched changes (not piecemeal requests)</li>
+                        <li>→ Same scope as original brief</li>
+                      </ul>
+                    </div>
 
-                <p className="mt-1.5 text-slate-500 italic">
-                  Additional revisions: 75 ₾/hour or bundle in Active Shield plan
-                </p>
+                    <p className="mt-1 text-slate-500 italic">
+                      Additional revisions: 75 ₾/hour or bundle in Active Shield plan
+                    </p>
+                  </div>
+                </details>
               </div>
             </div>
           </div>
