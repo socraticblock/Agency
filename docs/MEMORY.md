@@ -21,6 +21,7 @@
 - [019] Ref-counted `acquireBodyScrollLock` (`html`+`body` overflow, measured gutter padding); `Navbar`/`LeadGenHub`/`ConfigDrawer`; LeadGenHub split tab/content refs + Escape; `ConfigDrawer` duplicate closing JSX removed.
 - [020] Dashboard fallback: removed `LeadGenHub` document scroll lock entirely; overlay remains fullscreen with internal scroll to eliminate any possible stale page lock from that flow.
 - [021] Dashboard close hardening: removed top-level `AnimatePresence` exit layer for Sovereign overlay and force-cleared `html/body` inline overflow styles in `closeDashboard` to avoid ghost fixed layer + stale lock leftovers.
+- [022] Pricing route Phase-1 launched: new `/${locale}/pricing` hero + nav entry, followed by a responsive 4-tier card grid (Essential, Professional, Command Center, E-commerce) with differentiated feature density, recommended emphasis, and CTA routing to `/architect`.
 - [022] Pricing Phase 1 entry: new `/${locale}/pricing` route with investment-framed hero + primary CTA to compare foundations; navbar now includes `Pricing` link to make pricing a first-class entry path.
 
 # Detailed Observations
@@ -129,6 +130,11 @@
 - **Context:** Scroll still froze after interacting with non-first dashboard tools, suggesting an invisible fixed overlay or stale inline overflow persisted after close rather than active lock management alone.
 - **Decision:** Replaced the top-level dashboard wrapper from `AnimatePresence` + exiting `motion.div` to direct conditional `<div>` mount/unmount (no exit retention), and made `closeDashboard` hard-reset `document.documentElement.style.overflow`, `document.body.style.overflow`, and `document.body.style.paddingRight`.
 - **Impact:** Closing the Sovereign dashboard now removes the fullscreen layer synchronously and clears residual inline scroll styles in the same tick, reducing chance of ghost overlay/wheel capture across tool transitions.
+
+## [022]
+- **Context:** Pricing overhaul required a simpler top-of-funnel page before sending users into the advanced `/architect` configurator.
+- **Decision:** Added `src/app/[locale]/pricing/page.tsx` with investment-framed hero and implemented Section 2 as a data-driven, responsive four-tier card grid (`md:2`, `lg:4`) including recommended badge, tier-specific CTA, category-grouped features, and clearer Essential-vs-Professional feature-density contrast.
+- **Impact:** Improves first-visit pricing clarity and self-selection while preserving advanced customization via `/architect`; card rendering is now structured for iterative copy/pricing changes without JSX duplication.
 
 ## [022]
 - **Context:** Pricing overhaul kickoff required a simpler primary entrypoint before the advanced configurator, aligned to premium “investment, not expense” framing for Georgian LLC owners.
