@@ -21,8 +21,7 @@
 - [019] Ref-counted `acquireBodyScrollLock` (`html`+`body` overflow, measured gutter padding); `Navbar`/`LeadGenHub`/`ConfigDrawer`; LeadGenHub split tab/content refs + Escape; `ConfigDrawer` duplicate closing JSX removed.
 - [020] Dashboard fallback: removed `LeadGenHub` document scroll lock entirely; overlay remains fullscreen with internal scroll to eliminate any possible stale page lock from that flow.
 - [021] Dashboard close hardening: removed top-level `AnimatePresence` exit layer for Sovereign overlay and force-cleared `html/body` inline overflow styles in `closeDashboard` to avoid ghost fixed layer + stale lock leftovers.
-- [022] Pricing route Phase-1 launched: new `/${locale}/pricing` hero + nav entry, followed by a responsive 4-tier card grid (Essential, Professional, Command Center, E-commerce) with differentiated feature density, recommended emphasis, and CTA routing to `/architect`.
-- [022] Pricing Phase 1 entry: new `/${locale}/pricing` route with investment-framed hero + primary CTA to compare foundations; navbar now includes `Pricing` link to make pricing a first-class entry path.
+- [022] Pricing Phase-1: new `/${locale}/pricing` with investment-framed hero (dark geometric backdrop, trust microcopy), `Pricing` in `Navbar`, dual CTAs to `/${locale}/architect`, and Section 2 as a responsive four-tier card grid (`md:2`, `lg:4`) with recommended badge, tier CTAs, category-grouped features, and Essential vs Professional feature-density contrast.
 - [023] Pricing Phase-2 completion: added module-category teaser grid, structured FAQ accordion, and final conversion CTA section to `/${locale}/pricing` while keeping decisions data-driven and aligned with existing architect funnel paths.
 - [024] Architect Phase-2 tier transformation: upgraded Step-1 foundation metadata/cards for Essential/Professional/Command Center/E-Commerce HQ, added custom+legacy CTA banners, enforced Essential module gating in Step-2, and enabled `/architect?tier=...` preselection.
 - [025] Polish pass: Step-1 mobile foundation cards now surface emoji/tagline/delivery + recommended badge; pricing tier CTAs now use per-tier routes (Essential to strategy, others to `/architect?tier=...`), and `E-Commerce HQ` naming is normalized.
@@ -31,6 +30,7 @@
 - [028] Canonical WhatsApp: `WHATSAPP_INTAKE` `995579723564`; `generateWhatsAppLink` defaults (no placeholder); `PackageGrid` + `wa.me` CTAs; `createLocalBusinessSeo` E.164 `telephone`; `content.ts` / `routing.ts` / JSON-LD aligned.
 - [029] Pricing conversion pass: `/${locale}/pricing` with repeated `PricingCtaBand`, expandable tier cards (`FOUNDATIONS` + `pricingTierData`), proof strip, `TierPickerQuiz`, comparison table, FAQ + `pricingAnalytics`; `useConfigurator` reads `?tier=` via `architectTierUrl`; sitemap lists `/pricing`.
 - [030] Site-wide QoL: locale loading/error/not-found, skip link + `#main-content`, navbar mobile a11y + active routes, footer nav links; `useConfigurator` sessionStorage + URL `tier`/`foundation` sync; forms (BookStrategy autocomplete + labels, Apply validation + i18n); global `focus-visible` rings; `NanoBananaBackground` reduced-motion + tab-hidden pause; pricing FAQ/proof `max-w-prose`; WhatsApp `noopener` on `window.open`.
+- [031] Merged `main` economics + stack: Essential **999 ₾**, Professional **1,398 ₾** (reconcile `FOUNDATIONS` on sync); **Cruip** templates for Essential; **Cal.com** for booking/scheduling across funnel CTAs.
 
 # Detailed Observations
 
@@ -140,14 +140,9 @@
 - **Impact:** Closing the Sovereign dashboard now removes the fullscreen layer synchronously and clears residual inline scroll styles in the same tick, reducing chance of ghost overlay/wheel capture across tool transitions.
 
 ## [022]
-- **Context:** Pricing overhaul required a simpler top-of-funnel page before sending users into the advanced `/architect` configurator.
-- **Decision:** Added `src/app/[locale]/pricing/page.tsx` with investment-framed hero and implemented Section 2 as a data-driven, responsive four-tier card grid (`md:2`, `lg:4`) including recommended badge, tier-specific CTA, category-grouped features, and clearer Essential-vs-Professional feature-density contrast.
-- **Impact:** Improves first-visit pricing clarity and self-selection while preserving advanced customization via `/architect`; card rendering is now structured for iterative copy/pricing changes without JSX duplication.
-
-## [022]
-- **Context:** Pricing overhaul kickoff required a simpler primary entrypoint before the advanced configurator, aligned to premium “investment, not expense” framing for Georgian LLC owners.
-- **Decision:** Added `src/app/[locale]/pricing/page.tsx` with a static hero (dark geometric backdrop, investment framing headline/subhead, trust microcopy) and dual CTAs to `/${locale}/architect`; updated `Navbar` links to include `Pricing`.
-- **Impact:** Introduces a lightweight top-of-funnel pricing destination without disturbing configurator logic; makes pricing discoverable from global navigation for phased rollout.
+- **Context:** Pricing overhaul required a simpler top-of-funnel entry before the advanced `/architect` configurator, aligned to premium “investment, not expense” framing for Georgian LLC owners.
+- **Decision:** Added `src/app/[locale]/pricing/page.tsx` with a static investment-framed hero (dark geometric backdrop, headline/subhead, trust microcopy) and dual CTAs to `/${locale}/architect`; updated `Navbar` to include `Pricing`. Section 2 is a data-driven, responsive four-tier card grid (`md:2`, `lg:4`) with recommended badge, tier-specific CTAs, category-grouped features, and clearer Essential-vs-Professional feature-density contrast.
+- **Impact:** First-visit pricing clarity and self-selection improve; pricing is discoverable globally; card rendering stays structured for iterative copy/pricing changes without JSX duplication; advanced customization remains on `/architect`.
 
 ## [023]
 - **Context:** Pricing page needed Phase-2 conversion scaffolding after the tier grid: module discovery tease, objection handling, and a stronger close.
@@ -188,3 +183,8 @@
 - **Context:** Follow-up pass to align navigation, persistence, accessibility, and motion/perf with the pricing/architect funnel work without expanding business logic scope.
 - **Decision:** Shipped `loading`/`error`/`not-found` under `[locale]`, skip-to-content + main landmark, Navbar mobile dialog semantics + `aria-current`, footer wayfinding; moved architect draft to `sessionStorage`, added `FOUNDATION_TO_TIER_SLUG` + `history.replaceState` for shareable `?tier=`/`?foundation=`; hardened BookStrategy/Apply forms (autocomplete, `htmlFor`, Apply per-step validation + `apply`/`bookStrategy` locale keys); global `:focus-visible` styles; `NanoBananaBackground` uses `useReducedMotion` static fallback and skips R3F frames when the document is hidden; `max-w-prose` on pricing FAQ/proof copy; `window.open` for WhatsApp with `noopener,noreferrer`.
 - **Impact:** Fewer dead ends on errors, better keyboard and screen-reader UX, lower long-lived tab CPU from WebGL when backgrounded, safer external opens, and architect URLs that reflect tier selection for sharing—without changing pricing math or server action contracts.
+
+## [031]
+- **Context:** Merge of `main` brought updated tier economics and explicit stack choices (templates + booking) that `project-overhaul` did not yet record alongside the pricing funnel and QoL work.
+- **Decision:** Canonical one-time prices from the merged branches: Essential (`landing`) **999 ₾**, Professional (`cms`) **1,398 ₾** (reconcile `FOUNDATIONS` and any hard-coded comparison copy on the next pricing sync). Essential delivery is anchored on **Cruip** templates to accelerate launch within a defined scope. **Cal.com** is adopted for scheduling and strategy-call flows so booking stays consistent across CTAs rather than ad-hoc forms only.
+- **Impact:** The 999 / 1,398 ladder and Cruip/Cal.com intent are preserved in the log for onboarding and QA; follow-up commits should align `pricing.ts` and marketing tables if this branch still shows an older Professional anchor.
