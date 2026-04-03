@@ -47,6 +47,24 @@ export function GlobalFooter({ locale }: { locale: Locale }) {
           {t.footer.subheadline}
         </p>
       )}
+      <nav
+        aria-label="Footer navigation"
+        className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm font-semibold text-slate-400"
+      >
+        <Link href={`/${locale}`} className="transition hover:text-emerald-300">
+          Home
+        </Link>
+        <Link href={`/${locale}/pricing`} className="transition hover:text-emerald-300">
+          Pricing
+        </Link>
+        <Link href={`/${locale}/architect`} className="transition hover:text-emerald-300">
+          Architect
+        </Link>
+        <Link href={`/${locale}/book-strategy`} className="transition hover:text-emerald-300">
+          Book strategy
+        </Link>
+      </nav>
+
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}

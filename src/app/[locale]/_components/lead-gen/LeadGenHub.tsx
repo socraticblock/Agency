@@ -302,7 +302,9 @@ export function LeadGenHub({ locale }: { locale: Locale }) {
                       <div className="w-full flex items-center gap-4">
                         <div className="h-[1px] flex-grow bg-white/5" />
                         <span className="text-[9px] md:text-[11px] font-black uppercase tracking-[0.4em] text-white/80 whitespace-nowrap font-space">
-                          [ {String(activeIndex + 1).padStart(2, '0')} // {(t.leadHub?.tools as any)?.[TOOL_IDS[activeIndex]]?.name} ]
+                          [ {String(activeIndex + 1).padStart(2, "0")}{" "}
+                          {"//"}{" "}
+                          {(t.leadHub?.tools as any)?.[TOOL_IDS[activeIndex]]?.name} ]
                         </span>
                         <div className="h-[1px] flex-grow bg-white/5" />
                       </div>

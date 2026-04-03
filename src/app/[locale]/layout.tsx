@@ -51,7 +51,9 @@ export default async function LocaleLayout({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className={`locale-${lang}`}>{children}</div>
+      <div id="main-content" className={`locale-${lang} outline-none`} tabIndex={-1}>
+        {children}
+      </div>
     </>
   );
 }

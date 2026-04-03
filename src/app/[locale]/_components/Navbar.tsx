@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
@@ -11,12 +12,26 @@ import { acquireBodyScrollLock } from "@/lib/bodyScrollLock";
 
 export function Navbar({ locale }: { locale: Locale }) {
   const t = getMessages(locale);
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!open) return;
     return acquireBodyScrollLock("default");
+  }, [open]);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
   const close = () => setOpen(false);
@@ -43,24 +58,34 @@ export function Navbar({ locale }: { locale: Locale }) {
           </Link>
 
           <div className="hidden items-center gap-8 lg:flex">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`text-sm font-bold transition-colors ${
-                  link.highlight ? "text-emerald-400" : "text-white/70 hover:text-white"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              const active = pathname === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  aria-current={active ? "page" : undefined}
+                  className={`text-sm font-bold transition-colors ${
+                    active
+                      ? "text-emerald-400 underline decoration-emerald-500/60 underline-offset-4"
+                      : link.highlight
+                        ? "text-emerald-400/90 hover:text-emerald-300"
+                        : "text-white/70 hover:text-white"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </div>
 
           <button
             type="button"
             onClick={() => setOpen(true)}
             className="relative flex h-11 w-11 items-center justify-center rounded-full bg-white/5 text-white lg:hidden border border-white/10"
-            aria-label="Open menu"
+            aria-label="Open navigation menu"
+            aria-expanded={open}
+            aria-controls="mobile-nav-panel"
           >
             <Menu size={22} className="stroke-[2.5]" />
           </button>
@@ -70,18 +95,23 @@ export function Navbar({ locale }: { locale: Locale }) {
       <AnimatePresence>
         {open && (
           <motion.div
+            id="mobile-nav-panel"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[150] flex flex-col bg-slate-950 pt-[env(safe-area-inset-top,0px)] lg:hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile navigation"
           >
             {/* Overlay Header with its own Logo & Close Trigger */}
             <div className="flex h-16 items-center justify-between px-6 border-b border-white/5">
               <span className="text-xl font-black tracking-tighter text-white/20">GENEZISI</span>
               <button
+                type="button"
                 onClick={close}
                 className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white border border-white/20"
-                aria-label="Close menu"
+                aria-label="Close navigation menu"
               >
                 <X size={22} className="stroke-[2.5]" />
               </button>
@@ -90,24 +120,32 @@ export function Navbar({ locale }: { locale: Locale }) {
             {/* Links area - Generous padding-top (32) to clear the header area completely */}
             <div className="flex-1 overflow-y-auto px-10 pt-24 pb-20">
               <div className="flex flex-col gap-10">
-                {navLinks.map((link, i) => (
-                  <motion.div
-                    key={link.href}
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 + i * 0.1 }}
-                  >
-                    <Link
-                      href={link.href}
-                      onClick={close}
-                      className={`block text-5xl font-black tracking-tight transition-all active:scale-95 ${
-                        link.highlight ? "text-emerald-400 shadow-emerald-500/10" : "text-white/80"
-                      }`}
+                {navLinks.map((link, i) => {
+                  const active = pathname === link.href;
+                  return (
+                    <motion.div
+                      key={link.href}
+                      initial={{ opacity: 0, y: 30 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.1 + i * 0.1 }}
                     >
-                      {link.label}
-                    </Link>
-                  </motion.div>
-                ))}
+                      <Link
+                        href={link.href}
+                        onClick={close}
+                        aria-current={active ? "page" : undefined}
+                        className={`block text-5xl font-black tracking-tight transition-all active:scale-95 ${
+                          active
+                            ? "text-emerald-400"
+                            : link.highlight
+                              ? "text-emerald-400 shadow-emerald-500/10"
+                              : "text-white/80"
+                        }`}
+                      >
+                        {link.label}
+                      </Link>
+                    </motion.div>
+                  );
+                })}
 
               </div>
             </div>

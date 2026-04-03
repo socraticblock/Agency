@@ -7,7 +7,7 @@ export function PricingProofStrip() {
       className="mx-auto max-w-5xl rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.06] to-transparent px-6 py-8 sm:px-10"
     >
       <div className="grid gap-8 md:grid-cols-2 md:items-center md:gap-12">
-        <div>
+        <div className="max-w-prose">
           <p className="text-[10px] font-black uppercase tracking-[0.25em] text-emerald-400/90">
             Built for Georgia
           </p>
@@ -19,7 +19,7 @@ export function PricingProofStrip() {
             warranty terms, and revision rounds in plain language before we ship.
           </p>
         </div>
-        <blockquote className="relative border-l-2 border-emerald-500/50 pl-5">
+        <blockquote className="relative max-w-prose border-l-2 border-emerald-500/50 pl-5">
           <Quote className="absolute -left-1 -top-1 h-5 w-5 text-emerald-500/40" aria-hidden />
           <p className="text-sm font-medium italic leading-relaxed text-slate-200">
             &ldquo;Finally a team that spoke plainly about scope, timeline, and what we actually own when
