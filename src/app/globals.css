@@ -54,6 +54,17 @@ body {
     min-height: 2.75rem;
   }
 
+  /* Keyboard focus: visible ring on interactive elements */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible,
+  summary:focus-visible {
+    outline: 2px solid rgb(52 211 153 / 0.9);
+    outline-offset: 2px;
+  }
+
   /* Custom Sleek Scrollbars */
   ::-webkit-scrollbar {
     width: 6px;

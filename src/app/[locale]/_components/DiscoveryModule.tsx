@@ -89,6 +89,52 @@ export default function DiscoveryModule({
     }
   }, [step, safeStep, setStep]);
 
+  const handleNext = () => {
+    if (step < QUESTIONS.length - 1) setStep((s) => s + 1);
+  };
+
+  const handlesSubmit = () => {
+    setFinishError(null);
+    if (!isDiscoveryComplete(answers, QUESTIONS)) {
+      setFinishError(
+        "Every discovery question must be answered. Use Previous to find any missing step."
+      );
+      return;
+    }
+    setIsAnalyzing(true);
+    setTimeout(() => {
+      setIsAnalyzing(false);
+      setIsEditing(false);
+      const moved = goToStep(5);
+      if (!moved) {
+        setFinishError(
+          "Could not open the audit. Your answers may be out of sync — go back through discovery or reset and try again."
+        );
+      }
+    }, 1500);
+  };
+
+  const handleSelectForce = (qId: string, value: unknown, type: string, isCustom = false) => {
+    setAnswers((prev) => ({ ...prev, [qId]: value }));
+    const autoAdvance = ["cards", "tabs", "toggle", "tags"];
+    if (autoAdvance.includes(type) && step < QUESTIONS.length - 1 && !isCustom) {
+      setTimeout(() => handleNext(), 300);
+    }
+  };
+
+  const handleSelect = (qId: string, value: unknown, isCustom = false) => {
+    if (!q) return;
+    handleSelectForce(qId, value, q.type as string, isCustom);
+  };
+
+  const toggleMultiSelectOption = (qId: string, option: string) => {
+    const existing = Array.isArray(answers[qId]) ? (answers[qId] as string[]) : [];
+    const next = existing.includes(option)
+      ? existing.filter((item) => item !== option)
+      : [...existing, option];
+    setAnswers((prev) => ({ ...prev, [qId]: next }));
+  };
+
   // Keyboard Navigation Hook
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -118,9 +164,10 @@ export default function DiscoveryModule({
       const num = parseInt(e.key);
       if (!isNaN(num) && num > 0) {
         if (["cards", "tabs", "toggle"].includes(q.type as string)) {
-          const opts = q.options as any[];
-          if (opts && opts[num - 1]) {
-            const val = typeof opts[num - 1] === "string" ? opts[num - 1] : opts[num - 1].value;
+          const opts = q.options as { value: string }[] | string[] | undefined;
+          const raw = opts?.[num - 1];
+          if (raw) {
+            const val = typeof raw === "string" ? raw : raw.value;
             handleSelectForce(q.id, val, q.type as string);
           }
         }
@@ -128,45 +175,7 @@ export default function DiscoveryModule({
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [step, QUESTIONS, answers]);
-
-  const handleSelectForce = (qId: string, value: unknown, type: string, isCustom = false) => {
-    setAnswers((prev) => ({ ...prev, [qId]: value }));
-    const autoAdvance = ["cards", "tabs", "toggle", "tags"];
-    if (autoAdvance.includes(type) && step < QUESTIONS.length - 1 && !isCustom) {
-      setTimeout(() => handleNext(), 300);
-    }
-  };
-
-  const handleSelect = (qId: string, value: unknown, isCustom = false) => {
-    if (!q) return;
-    handleSelectForce(qId, value, q.type as string, isCustom);
-  };
-
-  const handlesSubmit = () => {
-    setFinishError(null);
-    if (!isDiscoveryComplete(answers, QUESTIONS)) {
-      setFinishError(
-        "Every discovery question must be answered. Use Previous to find any missing step."
-      );
-      return;
-    }
-    setIsAnalyzing(true);
-    setTimeout(() => {
-      setIsAnalyzing(false);
-      setIsEditing(false);
-      const moved = goToStep(5);
-      if (!moved) {
-        setFinishError(
-          "Could not open the audit. Your answers may be out of sync — go back through discovery or reset and try again."
-        );
-      }
-    }, 1500);
-  };
-
-  const handleNext = () => {
-    if (step < QUESTIONS.length - 1) setStep((s) => s + 1);
-  };
+  }, [step, QUESTIONS, answers, q]);
 
   const handlePrev = () => {
     if (step > 0) {
@@ -444,6 +453,30 @@ export default function DiscoveryModule({
                       className="touch-form-control max-w-xs border-b border-white/20 bg-transparent py-2 text-base font-medium text-white placeholder:text-slate-600 transition-colors focus:border-emerald-400 focus:ring-0"
                     />
                   )}
+                </div>
+              )}
+
+              {/* === MULTI-SELECT === */}
+              {q.type === "multi-select" && (
+                <div className="flex flex-col gap-2.5 w-full max-w-2xl">
+                  {(q.options as string[])?.map((opt, i) => {
+                    const selected = Array.isArray(answers[q.id]) && (answers[q.id] as string[]).includes(opt);
+                    return (
+                      <m.button
+                        key={opt}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => toggleMultiSelectOption(q.id, opt)}
+                        className={`p-3.5 md:p-4 rounded-xl border text-left text-sm font-bold font-space transition-all duration-300 flex justify-between items-center ${
+                          selected
+                            ? "border-emerald-400 bg-emerald-500/10 text-emerald-400"
+                            : "border-white/5 bg-white/[0.02] hover:bg-white/5 text-slate-300"
+                        }`}
+                      >
+                        <span>{opt}</span>
+                        <span className="text-[9px] opacity-60">{selected ? "✓" : `[${i + 1}]`}</span>
+                      </m.button>
+                    );
+                  })}
                 </div>
               )}
 

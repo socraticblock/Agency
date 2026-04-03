@@ -2,15 +2,17 @@
 
 import Link from "next/link";
 import { X } from "lucide-react";
-import { motion } from "framer-motion";
 
 export default function StudioHeader({ locale }: { locale: string }) {
   return (
     <header className="sticky top-0 z-[100] border-b border-white/5 bg-zinc-950/80 backdrop-blur-xl pt-[env(safe-area-inset-top,0px)]">
-      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+      <nav
+        aria-label="Architect studio"
+        className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-6"
+      >
         <Link
           href={`/${locale}`}
-          className="group flex items-center gap-2 text-xl font-black tracking-tighter text-white"
+          className="group flex min-w-0 items-center gap-2 text-xl font-black tracking-tighter text-white"
         >
           <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent group-hover:from-emerald-300 group-hover:to-cyan-300 transition-all">
             GENEZISI
@@ -20,13 +22,21 @@ export default function StudioHeader({ locale }: { locale: string }) {
           </span>
         </Link>
 
-        <Link
-          href={`/${locale}`}
-          className="flex h-10 items-center gap-2 rounded-full bg-white/5 px-4 text-[10px] font-black uppercase tracking-widest text-slate-400 transition-all hover:bg-white/10 hover:text-white border border-white/10"
-        >
-          <span>Exit Studio</span>
-          <X size={14} className="stroke-[3]" />
-        </Link>
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+          <Link
+            href={`/${locale}/pricing`}
+            className="flex h-10 items-center rounded-full px-3 text-[10px] font-black uppercase tracking-widest text-slate-400 transition-all hover:bg-white/10 hover:text-white sm:px-4"
+          >
+            Back to pricing
+          </Link>
+          <Link
+            href={`/${locale}`}
+            className="flex h-10 items-center gap-2 rounded-full bg-white/5 px-4 text-[10px] font-black uppercase tracking-widest text-slate-400 transition-all hover:bg-white/10 hover:text-white border border-white/10"
+          >
+            <span>Exit Studio</span>
+            <X size={14} className="stroke-[3]" />
+          </Link>
+        </div>
       </nav>
     </header>
   );

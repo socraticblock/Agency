@@ -10,6 +10,7 @@ interface ShieldGridProps {
   formatPrice: (price: number) => string;
   goToStep: (s: 1 | 2 | 3 | 4) => void;
   setIsModalOpen: (val: boolean) => void;
+  foundationId: string | null;
 }
 
 export default function ShieldGrid({
@@ -17,8 +18,33 @@ export default function ShieldGrid({
   setShieldTier,
   formatPrice,
   goToStep,
-  setIsModalOpen
+  setIsModalOpen,
+  foundationId,
 }: ShieldGridProps) {
+  const emphasisByFoundation: Record<string, { tierId: number; badge: string; reason: string }> = {
+    landing: {
+      tierId: 1,
+      badge: "Popular with Essential",
+      reason: "Extend your coverage beyond 30 days.",
+    },
+    cms: {
+      tierId: 2,
+      badge: "Great with Professional",
+      reason: "Balanced support + ongoing optimization.",
+    },
+    saas: {
+      tierId: 3,
+      badge: "Recommended for Command Center",
+      reason: "Protect operational continuity as complexity grows.",
+    },
+    ecomm: {
+      tierId: 3,
+      badge: "Best for E-Commerce",
+      reason: "Protect your revenue stream with maximum coverage.",
+    },
+  };
+  const emphasis = foundationId ? emphasisByFoundation[foundationId] : undefined;
+
   return (
     <m.div
       key="step3"
@@ -70,8 +96,16 @@ export default function ShieldGrid({
                     <span className="text-sm font-black text-white flex items-center gap-1.5">
                       {tier.name}
                       {tier.isRecommended && <span className="text-[10px] bg-emerald-400 text-black px-1.5 py-0.5 rounded-full font-black">RECOMMENDED</span>}
+                      {emphasis && emphasis.tierId === tier.id ? (
+                        <span className="text-[10px] bg-emerald-500/20 border border-emerald-400/40 text-emerald-200 px-1.5 py-0.5 rounded-full font-black">
+                          {emphasis.badge}
+                        </span>
+                      ) : null}
                     </span>
                     {tier.description && <span className="text-xs text-slate-400 font-medium leading-normal mt-0.5">{tier.description}</span>}
+                    {emphasis && emphasis.tierId === tier.id ? (
+                      <span className="text-[11px] text-emerald-300/90 font-medium leading-normal mt-1">{emphasis.reason}</span>
+                    ) : null}
                   </div>
                 </div>
                 <span className="text-sm font-black font-space text-emerald-400">

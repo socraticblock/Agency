@@ -5,6 +5,7 @@ import { m, AnimatePresence } from "framer-motion";
 import { Check, Info, ArrowRight, Sparkles, Lightbulb, RefreshCw, ChevronDown } from "lucide-react";
 import { FOUNDATIONS, type Foundation } from "@/constants/pricing";
 import FoundationCard from "../architect/_components/FoundationCard";
+import { useParams } from "next/navigation";
 
 interface FoundationGridProps {
   foundation: string | null;
@@ -29,8 +30,12 @@ export default function FoundationGrid({
   setDrawerItem,
   goToStep
 }: FoundationGridProps) {
+  const params = useParams();
+  const locale = (params.locale as string) || "en";
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const primaryFoundationIds = new Set(["landing", "cms", "saas", "ecomm"]);
+  const primaryFoundations = FOUNDATIONS.filter((f) => primaryFoundationIds.has(f.id));
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -104,7 +109,7 @@ export default function FoundationGrid({
                         transition={{ duration: 0.15 }}
                         className="absolute left-0 mt-1.5 bg-zinc-950/95 border border-zinc-800 rounded-xl overflow-hidden shadow-2xl z-20 w-full sm:w-64 py-1 backdrop-blur-xl"
                       >
-                        {FOUNDATIONS.map(f => (
+                        {primaryFoundations.map(f => (
                           <button
                             key={f.id}
                             type="button"
@@ -143,7 +148,7 @@ export default function FoundationGrid({
           >
             {/* Desktop View */}
             <div className="hidden md:grid grid-cols-2 gap-4 items-start">
-              {FOUNDATIONS.map((f) => (
+              {primaryFoundations.map((f) => (
                 <FoundationCard
                   key={f.id}
                   f={f}
@@ -162,25 +167,25 @@ export default function FoundationGrid({
                 onScroll={handleScroll}
 
               >
-                {FOUNDATIONS.map((f) => (
+                {primaryFoundations.map((f) => (
                   <div key={f.id} className="snap-center shrink-0 w-[85vw]">
                     <m.div
                       whileTap={{ scale: 0.98 }}
                       onClick={() => setDrawerItem(f)}
                       role="button"
-                      className="relative cursor-pointer text-left p-4 rounded-xl border border-zinc-800/60 bg-zinc-900/30 flex flex-col justify-between w-full h-[140px] transition-all hover:bg-zinc-800/40"
+                      className="relative cursor-pointer text-left p-4 rounded-xl border border-zinc-800/60 bg-zinc-900/30 flex flex-col justify-between w-full min-h-[170px] transition-all hover:bg-zinc-800/40"
                     >
                       <div className="flex flex-col text-left">
-                        <h4 className="text-base font-black text-white mt-0.5">{f.name}</h4>
-                        {f.bestFor && (
-                          <div className="flex flex-wrap gap-1 mt-1">
-                            {f.bestFor.slice(0, 2).map((bad, i) => (
-                              <span key={i} className="text-[9px] font-bold bg-emerald-500/10 text-emerald-300 px-1.5 py-0.5 rounded-full border border-emerald-500/10">
-                                {bad}
-                              </span>
-                            ))}
-                          </div>
-                        )}
+                        {f.isRecommendedTier ? (
+                          <span className="mb-1 w-fit rounded-full border border-emerald-300/60 bg-emerald-400/15 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-emerald-200">
+                            ⭐ Recommended
+                          </span>
+                        ) : null}
+                        <h4 className="text-base font-black text-white mt-0.5">
+                          {f.emoji ? `${f.emoji} ` : ""}{f.name}
+                        </h4>
+                        {f.tagline ? <p className="mt-1 text-[11px] font-semibold text-emerald-300/90">{f.tagline}</p> : null}
+                        {f.deliveryTimeline ? <p className="mt-1 text-[10px] text-slate-400">⏱️ {f.deliveryTimeline}</p> : null}
                       </div>
                       <div className="flex justify-between items-end w-full pt-1.5 border-t border-zinc-900/40">
                         <div />
@@ -198,7 +203,7 @@ export default function FoundationGrid({
 
               {/* Pagination Dots */}
               <div className="flex justify-center gap-1.5">
-                {FOUNDATIONS.map((_, i) => (
+                {primaryFoundations.map((_, i) => (
                   <m.div
                     key={i}
                     animate={{ scale: i === mobileIndex ? 1.4 : 1, opacity: i === mobileIndex ? 1 : 0.4 }}
@@ -210,6 +215,27 @@ export default function FoundationGrid({
           </m.div>
         )}
       </AnimatePresence>
+
+      {!activeFoundation ? (
+        <div className="grid gap-3 md:grid-cols-2">
+          <a
+            href={`/${locale}/book-strategy`}
+            className="rounded-xl border border-emerald-400/35 bg-emerald-500/10 p-4 text-left transition hover:bg-emerald-500/15"
+          >
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-300">Custom Build</p>
+            <h4 className="mt-1 text-sm font-black text-white">Need Customized Software Architecture?</h4>
+            <p className="mt-1 text-xs text-slate-300">Discuss unique logic, automations, or enterprise scope with an architect.</p>
+          </a>
+          <a
+            href={`/${locale}/book-strategy`}
+            className="rounded-xl border border-amber-400/35 bg-amber-500/10 p-4 text-left transition hover:bg-amber-500/15"
+          >
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-300">Legacy Upgrade</p>
+            <h4 className="mt-1 text-sm font-black text-white">Running on old infrastructure?</h4>
+            <p className="mt-1 text-xs text-slate-300">Get a technical audit and modernization roadmap without changing your brand.</p>
+          </a>
+        </div>
+      ) : null}
     </m.div>
   );
 }

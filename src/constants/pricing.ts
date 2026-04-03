@@ -15,6 +15,16 @@ export interface ServiceItem {
   name: string;
   category: string;
   priceGEL: number;
+  emoji?: string;
+  tagline?: string;
+  deliveryTimeline?: string;
+  effortEstimate?: string;
+  audienceLabel?: string;
+  revisionRounds?: number;
+  warrantyDays?: number;
+  ctaLabel?: string;
+  ctaHref?: string;
+  isRecommendedTier?: boolean;
   description?: string;
   technicalSpec?: string;
   roiNote?: string;
@@ -33,6 +43,8 @@ export interface ServiceItem {
   recommendation?: string;
   customPriceLabel?: string;
   isBespoke?: boolean;
+  /** Shown on pricing page only (e.g. installment line); optional */
+  installmentLabel?: string;
 }
 
 export interface Foundation extends ServiceItem {
@@ -54,56 +66,106 @@ export interface Module extends ServiceItem {
 export const FOUNDATIONS: Foundation[] = [
   {
     id: 'landing',
-    name: 'High-Conversion Landing Page',
+    name: 'Essential',
+    emoji: '✨',
+    tagline: 'Your first professional web presence',
     category: 'Base',
-    priceGEL: 2699,
-    description: 'One perfect page designed to do one thing: turn a visitor into a customer. We remove the fluff and leave only the results.',
-    concept: 'One perfect page designed to do one thing: turn a visitor into a customer. We remove the fluff and leave only the results.',
-    strategy: "Focus is the new currency. By removing navigation menus and distractions, we eliminate the 'Paradox of Choice,' leading your visitor on a single, straight path to your 'Buy' button.",
-    howItWorks: 'Removes navigation friction to prevent users from wandering, focusing 100% of the energy on a single call-to-action.',
+    priceGEL: 999,
+    deliveryTimeline: '7-10 business days',
+    effortEstimate: '~12-15 work hours',
+    audienceLabel: 'Perfect for: Solo consultants testing the waters',
+    revisionRounds: 1,
+    warrantyDays: 30,
+    ctaLabel: 'Start My Essential Site',
+    ctaHref: '/book-strategy',
+    description: 'A clean, mobile-ready landing page built from our curated template collection. Perfect for establishing credibility fast without breaking the bank.',
+    concept: 'Template-based launch architecture for fast credibility.',
+    strategy: 'Template-based approach with limited customization, designed for quick launch velocity.',
+    howItWorks: 'Curated template + your brand assets + focused launch setup.',
     scope: [
-      'Structure | 1 Perfectly Crafted Sales Node (Zero fluff, 100% focused on one absolute target offer)',
-      'Capture | Smart Lead Capture Vault (Catches every inquiry instantly so they don\'t go back to Google)',
-      'Design | Conversion-First Wireframe (Designed psychologically to guide visitors to the absolute "Yes" button)'
+      'Design & Structure | Template-based design (3 proven layouts)',
+      'Design & Structure | 1-page landing page (max 6 sections)',
+      'Design & Structure | Mobile-responsive layout',
+      'Design & Structure | Your brand colors, fonts, and images applied',
+      'Functionality | Contact form (name, email, message to email)',
+      'Functionality | Social media link integration',
+      'Functionality | Basic SEO meta tags setup',
+      'Functionality | SSL certificate included',
+      'Delivery & Ownership | Source code ownership (GitHub transfer)',
+      'Delivery & Ownership | Hosting deployment assistance',
+      'Delivery & Ownership | Written launch guide (PDF)',
+      'Delivery & Ownership | 30-day bug-fix warranty',
+      'Delivery & Ownership | 1 revision round included'
     ],
-    bestFor: ["Influencers with 1 Specific Offer", "Webinar & Event Hosts", "Real Estate 'Hero' Listings", "Digital Product Launchers"],
+    bestFor: ["Solo consultants", "Early-stage service providers", "Fast-launch projects"],
     roiNote: "Designed to maximize your ad-spend ROI.",
     strategyLabel: "THE CONVERSION TUNNEL",
-    recommendedModules: ['exit-pop', 'ga4-analytics', 'pro-copy', 'ab-testing', 'heatmap', 'cro-audit', 'rule-chatbot', 'ugc-video', 'micro-animations', 'extra-page']
+    recommendedModules: [],
+    installmentLabel: "or 3 × 333 ₾/month",
   },
   {
     id: 'cms',
-    name: 'Digital Command Center',
+    name: 'Professional',
+    emoji: '⭐',
+    tagline: 'Custom-designed conversion machine',
+    isRecommendedTier: true,
     strategyLabel: "THE INDEPENDENCE PRINCIPLE",
     category: 'Base',
-    priceGEL: 6750,
-    description: "Your professional headquarters. This moves you from a 'one-man show' to a 'global brand' with a system you can actually control.",
+    priceGEL: 2299,
+    deliveryTimeline: '10-15 business days',
+    effortEstimate: '~24 work hours',
+    audienceLabel: 'Perfect for: Serious consultants ready to invest',
+    revisionRounds: 2,
+    warrantyDays: 90,
+    ctaLabel: 'Build My Professional Site',
+    ctaHref: '/architect?tier=professional',
+    description: "A strategically crafted landing page optimized to turn visitors into leads. Built from scratch for your brand—no templates, no limitations.",
     scope: [
-      'Nodes | 4 Foundational Brand Nodes (Professional Home, About, Contact, Blog)',
-      'CMS | Visual Content Dashboard (A private drag-and-drop editor to update text and photos in seconds—without ever needing to pay a developer)',
-      'Blog | Automated Authority Engine (A blog system that automatically categorizes your thought leadership for absolute Google SEO dominance)',
-      'Leads | Centralized Lead Vault (A secure database that stores every inquiry so you never lose a potential customer)',
-      'Assets | High-Speed Media Vault (An optimized cloud home for your brand’s high-res photography and videos)',
-      'Training | VIP System Onboarding (Includes 1-on-1 strategic training and a custom documentation vault for owner-independence)'
+      'Design & Structure | 100% custom design from scratch',
+      'Design & Structure | Unlimited sections and content blocks',
+      'Design & Structure | Mobile-first responsive approach',
+      'Design & Structure | Conversion-optimized layout architecture',
+      'Design & Structure | Subtle scroll animations and hover effects',
+      'Functionality | Advanced contact form (file uploads, dropdowns)',
+      'Functionality | Social proof section (testimonials, logos, video)',
+      'Functionality | Google Analytics 4 + event tracking',
+      'Functionality | Full SEO suite (schema, OG tags, sitemap)',
+      'Functionality | Performance optimization (<2.5s load target)',
+      'Functionality | CRM-ready integration prep',
+      'Support & Training | Source code ownership + technical docs',
+      'Support & Training | 1-hour recorded training session',
+      'Support & Training | 90-day comprehensive warranty',
+      'Support & Training | 2 revision rounds',
+      'Support & Training | 30-day post-launch email support'
     ],
-    concept: "Your professional headquarters. This moves you from a 'one-man show' to a 'global brand' with a system you can actually control.",
-    strategy: "\"The Command Center moves you from 'renting' a site to 'owning' an asset. We separate your visual design from your business data. This means you can update your brand story yourself in real-time, while the underlying code stays lightning-fast, secure, and ready to scale. You get total control—and you stop paying hourly developer fees just to swap a photo or update text.\"",
-    howItWorks: 'You get a simplified social media-style editor to change photos and text without touching code.',
+    concept: "Custom conversion architecture for premium client acquisition.",
+    strategy: "Template constraints removed. This tier is custom-designed for your brand and conversion goals.",
+    howItWorks: 'Research-informed layout + custom UI + conversion instrumentation.',
 
     bestFor: ["B2B Consultants & Coaches", "Creative & Marketing Agencies", "High-Ticket Service Providers", "Professional Personal Brands"],
     roiNote: "Built for owner-independence and authority.",
-    recommendedModules: ['calendar-sync', 'hubspot-sync', 'social-sync', 'local-seo', 'multilingual', 'seo-audit', 'deposit-logic', 'micro-animations', 'extra-page', 'map-marker', 'doc-template']
+    recommendedModules: ['calendar-sync', 'hubspot-sync', 'social-sync', 'local-seo', 'multilingual', 'seo-audit', 'deposit-logic', 'micro-animations', 'extra-page', 'map-marker', 'doc-template'],
+    installmentLabel: "or 3 × 767 ₾/month",
   },
   {
     id: 'ecomm',
-    name: '24/7 E-commerce Storefront',
+    name: 'E-Commerce HQ',
+    emoji: '💰',
+    tagline: 'Georgian e-commerce done right',
     category: 'Base',
-    priceGEL: 12150,
-    inheritedValue: { id: 'cms', name: "Digital Command Center Core", priceGEL: 6750 },
-    description: "A turn-key sales machine built for high-volume growth.",
-    concept: "We build you a digital store that handles the heavy lifting while you sleep. From taking payments via TBC or BOG to automatically telling the tax office (RS.ge) about the sale, we’ve handled the technical 'boring' stuff. You just focus on the products; we've built the engine to move them.",
-    strategy: "A storefront is a high-value financial target. To keep your 'Checkout Tunnel' bulletproof against bots and ensure 100% uptime during sales peaks, we recommend securing this foundation with our [Tier Name] Shield. It’s the insurance policy for your revenue engine.",
-    howItWorks: 'Handles money, shipping, and stock tracking so the entrepreneur can focus on creating.',
+    priceGEL: 17999,
+    inheritedValue: { id: 'saas', name: "Command Center Core", priceGEL: 4999 },
+    deliveryTimeline: '8-10 weeks',
+    effortEstimate: '~100 work hours',
+    audienceLabel: 'Perfect for: Product-based businesses ready to scale online',
+    revisionRounds: 4,
+    warrantyDays: 90,
+    ctaLabel: 'Build My E-Commerce Empire',
+    ctaHref: '/architect?tier=ecommerce-hq',
+    description: "Full online store with native Georgian payment integration (TBC/BOG), automated tax reporting to RS.ge, and inventory management. Built to sell while you sleep.",
+    concept: "E-commerce infrastructure designed for Georgian payment and tax realities.",
+    strategy: "Compliance, conversion, and operational reliability form the core of this storefront architecture.",
+    howItWorks: 'Custom storefront + payment rails + fulfillment and order operations.',
     scope: [
       "The \"Buy\" Engine | Architecting a high-speed 'Checkout Tunnel' designed to keep psychological momentum going until payment is confirmed.",
       "Direct Bank Integration | Hooking into TBC, BOG, or Stripe. (Note: Bank approvals take 7-14 days; we guide you through setup)",
@@ -117,23 +179,30 @@ export const FOUNDATIONS: Foundation[] = [
   },
   {
     id: 'saas',
-    name: "Customized Software Architecture",
+    name: "Command Center",
+    emoji: '🚀',
+    tagline: 'Your professional headquarters',
     category: 'Base',
-    priceGEL: 0,
-    customPriceLabel: "Custom Quote Required",
-    isBespoke: true,
-    description: "Engineered for unique logic and infinite scale.",
-    concept: "Sometimes a standard website or shop isn't enough to solve the problem. If you are building a private portal for your members, an AI-powered knowledge base, or a complex tool that needs to handle specific business logic, you need a customized build. We don't use 'one-size-fits-all' templates; we architect a proprietary digital asset from the ground up.",
-    strategy: "In customized software, the most expensive mistake is building the wrong thing. We skip the 'one-size-fits-all' checkboxes to focus on a high-touch partnership. We build the logic first, then the code—ensuring your investment results in a powerful, proprietary asset, not just another subscription.",
-    howItWorks: 'Strategic engineering with 1-1 consulting tailored strictly around bespoke scope.',
+    priceGEL: 4999,
+    deliveryTimeline: '25-35 business days',
+    effortEstimate: '~50 work hours',
+    audienceLabel: 'Perfect for: Established businesses scaling operations',
+    revisionRounds: 3,
+    warrantyDays: 90,
+    ctaLabel: 'Configure My Command Center',
+    ctaHref: '/architect?tier=command-center',
+    description: "Multi-page website with blog, CMS, lead capture, and content engine. Moves you from 'one-person show' to 'global brand' with systems you control.",
+    concept: "Professional headquarters architecture for scaling operations.",
+    strategy: "Structured multi-page systems, content operations, and lead visibility in one controllable stack.",
+    howItWorks: 'Centralized architecture for automation, sales workflow clarity, and operational control.',
     scope: [
-      "Direct Architect Access | Start with a 1-on-1 deep-cycle discovery to map out exactly how your business logic needs to function.",
-      "Custom Technical Roadmap | Visual blueprints of user flows, logic routes, and security layers architected before a line of code is written.",
-      "Zero-Cap Scalability | Designed with Future-Proof infrastructure designed to grow with your audience as you scale.",
-      "Total Legal Ownership | You own every pixel of code and byte of your database under Georgian Law - it is a sellable business asset."
+      "Workflow Layer | Custom dashboard logic for pipeline visibility and operational focus.",
+      "Automation Hooks | Calendar, CRM, and routing structure for faster response and better conversion.",
+      "Scalable System Core | Built for growth phases without re-platforming every few months.",
+      "Ownership | Full legal ownership of your infrastructure under Georgian law."
     ],
-    bestFor: ["Private Gated Membership Networks", "AI Knowledge Bases & Micro-SaaS tools", "Data intensive custom logic dashboards", "Owner networks needing high security frameworks"],
-    roiNote: "Eliminates tech debt to scale proprietary logic effectively."
+    bestFor: ["Service teams replacing manual DM operations", "Operators needing clear workflow orchestration", "Brands preparing to scale with structured systems"],
+    roiNote: "Built to centralize and scale operations cleanly."
   },
   {
     id: 'upgrade',
@@ -568,6 +637,25 @@ export interface ShieldTier {
   isRecommended?: boolean;
   perks: ShieldPerk[];
   description: string;
+}
+
+export function getAccessibleModuleIdsByFoundation(
+  foundationId: string | null | undefined
+): string[] {
+  if (!foundationId) return [];
+  if (foundationId === "landing") return [];
+  if (foundationId === "ecomm") return MODULES.map((m) => m.id);
+
+  if (foundationId === "cms") {
+    return MODULES.filter((m) => m.category === "Marketing" || m.category === "Creative").map((m) => m.id);
+  }
+
+  if (foundationId === "saas") {
+    const commandExcluded = new Set(["ai-sprint", "course-tracking", "listing-portal"]);
+    return MODULES.filter((m) => !commandExcluded.has(m.id)).map((m) => m.id);
+  }
+
+  return MODULES.map((m) => m.id);
 }
 
 export const SHIELD_TIERS: ShieldTier[] = [

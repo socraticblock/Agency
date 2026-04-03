@@ -94,13 +94,18 @@ export function BookStrategyView({ locale }: { locale: Locale }) {
             value={leadSession ? JSON.stringify(leadSession) : ""}
           />
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+            <label
+              htmlFor="book-strategy-name"
+              className="block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400"
+            >
               {t.bookStrategy.nameLabel}
             </label>
             <input
+              id="book-strategy-name"
               type="text"
               name="name"
               required
+              autoComplete="name"
               className="touch-form-control mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-base text-white outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30"
               placeholder={t.bookStrategy.namePlaceholder}
             />
@@ -110,8 +115,10 @@ export function BookStrategyView({ locale }: { locale: Locale }) {
               {t.bookStrategy.emailLabel}
             </label>
             <input
+              id="book-strategy-email"
               type="email"
               name="email"
+              autoComplete="email"
               value={emailInput}
               onChange={(e) => setEmailInput(e.target.value)}
               className="touch-form-control mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-base text-white outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30"
@@ -119,12 +126,17 @@ export function BookStrategyView({ locale }: { locale: Locale }) {
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+            <label
+              htmlFor="book-strategy-whatsapp"
+              className="block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400"
+            >
               {t.bookStrategy.whatsappLabel}
             </label>
             <input
+              id="book-strategy-whatsapp"
               type="tel"
               name="whatsapp"
+              autoComplete="tel"
               value={whatsappInput}
               onChange={(e) => setWhatsappInput(e.target.value)}
               className="touch-form-control mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-base text-white outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30"
@@ -132,12 +144,17 @@ export function BookStrategyView({ locale }: { locale: Locale }) {
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+            <label
+              htmlFor="book-strategy-time"
+              className="block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400"
+            >
               {t.bookStrategy.timeLabel}
             </label>
             <input
+              id="book-strategy-time"
               type="text"
               name="time"
+              autoComplete="off"
               className="touch-form-control mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-base text-white outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30"
               placeholder={t.bookStrategy.timePlaceholder}
             />

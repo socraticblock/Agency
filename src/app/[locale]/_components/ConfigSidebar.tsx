@@ -153,7 +153,11 @@ export default memo(function ConfigSidebar({
                   const MSG = isUpgrade 
                     ? "Hi Genezisi! My site [ Add URL ] is acting slow and glitchy. I need an Architect to look under the hood for a Legacy Upgrade audit and custom renovation roadmap. Can we talk?"
                     : "Hi Genezisi! I just explored your Architect tool and I'm interested in a Customized Build. I have a specific project in mind that requires unique software logic. When are you free for a quick Discovery Call to discuss the architecture?";
-                  window.open(`https://wa.me/${WHATSAPP_INTAKE}?text=${encodeURIComponent(MSG)}`, '_blank');
+                  window.open(
+                    `https://wa.me/${WHATSAPP_INTAKE}?text=${encodeURIComponent(MSG)}`,
+                    "_blank",
+                    "noopener,noreferrer",
+                  );
                 }}
                 className="w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black font-space rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(16,185,129,0.3)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer relative z-10"
               >
@@ -324,7 +328,7 @@ export default memo(function ConfigSidebar({
             {[
               "Total Legal Ownership: You legally own every pixel and line of code under Georgian Law.",
               "Source Code Ownership: Full GitHub transfer. No 'vendor lock-in'—you are never trapped with one developer.",
-              "90-Day Tech Warranty: Every build is guaranteed. If a bug appears, we kill it for free.",
+              "Tier Warranty: Essential 30 days; Professional/Command Center/E-Commerce HQ 90 days.",
               "Project & QA Management: We handle the architecture and testing so you stay in your 'creative zone.'"
             ].map((text, idx) => (
               <div key={idx} className="text-[10px] text-slate-400 leading-relaxed flex items-start gap-1">
@@ -344,7 +348,8 @@ export default memo(function ConfigSidebar({
                         <span className="font-black text-slate-100">Revision Policy</span>{" "}
                         <span className="text-slate-500 font-medium">— Built into every foundation:</span>{" "}
                         <span className="text-slate-400">
-                          Landing: <span className="font-black text-slate-200">2</span> • Command:{" "}
+                          Essential: <span className="font-black text-slate-200">1</span> • Professional:{" "}
+                          <span className="font-black text-slate-200">2</span> • Command:{" "}
                           <span className="font-black text-slate-200">3</span> • E-commerce:{" "}
                           <span className="font-black text-slate-200">4</span> rounds
                         </span>
@@ -358,15 +363,19 @@ export default memo(function ConfigSidebar({
                   <div className="mt-1 md:mt-0 md:absolute md:bottom-full md:mb-2 md:left-0 md:right-0 md:z-[60] md:rounded-xl md:border md:border-zinc-800/60 md:bg-zinc-950/95 md:p-3 md:shadow-2xl md:backdrop-blur-xl">
                     <div className="space-y-0.5">
                       <div className="flex flex-wrap gap-x-1">
-                        <span className="font-black text-slate-200">HIGH-CONVERSION LANDING PAGE:</span>
+                        <span className="font-black text-slate-200">ESSENTIAL:</span>
+                        <span>1 revision round included</span>
+                      </div>
+                      <div className="flex flex-wrap gap-x-1">
+                        <span className="font-black text-slate-200">PROFESSIONAL:</span>
                         <span>2 revision rounds included</span>
                       </div>
                       <div className="flex flex-wrap gap-x-1">
-                        <span className="font-black text-slate-200">DIGITAL COMMAND CENTER:</span>
+                        <span className="font-black text-slate-200">COMMAND CENTER:</span>
                         <span>3 revision rounds included</span>
                       </div>
                       <div className="flex flex-wrap gap-x-1">
-                        <span className="font-black text-slate-200">24/7 E-COMMERCE STOREFRONT:</span>
+                        <span className="font-black text-slate-200">E-COMMERCE HQ:</span>
                         <span>4 revision rounds included</span>
                       </div>
                     </div>

@@ -1,8 +1,18 @@
 "use client";
 
 import { useState, useRef, useEffect, useMemo, useCallback } from "react";
-import { ServiceItem, FOUNDATIONS, MODULES, SHIELD_TIERS } from "@/constants/pricing";
+import {
+  ServiceItem,
+  FOUNDATIONS,
+  MODULES,
+  SHIELD_TIERS,
+  getAccessibleModuleIdsByFoundation,
+} from "@/constants/pricing";
 import { clearBlueprintSessionId } from "@/lib/blueprint/clientBlueprintId";
+import {
+  FOUNDATION_TO_TIER_SLUG,
+  TIER_SLUG_TO_FOUNDATION,
+} from "@/lib/architectTierUrl";
 import {
   buildDiscoveryQuestions,
   isDiscoveryComplete,
@@ -24,11 +34,11 @@ const configSchema = z.object({
 
 type ConfigState = z.infer<typeof configSchema>;
 
-// ── Phase B Fix #1: Single localStorage parse ──
+// ── Session-scoped persistence (refresh OK; cleared when tab closes) ──
 function getInitialState(): ConfigState | null {
   if (typeof window === "undefined") return null;
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = sessionStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
     const result = configSchema.safeParse(JSON.parse(raw));
     return result.success ? result.data : null;
@@ -38,7 +48,7 @@ function getInitialState(): ConfigState | null {
 }
 
 export function useConfigurator() {
-  // Parse localStorage ONCE and spread into all initializers
+  // Parse sessionStorage ONCE and spread into all initializers
   const [initial] = useState<ConfigState | null>(getInitialState);
 
   const [step, setStep] = useState<1 | 2 | 3 | 4 | 5>(initial?.step ?? 1);
@@ -55,9 +65,14 @@ export function useConfigurator() {
   const [drawerItem, setDrawerItem] = useState<ServiceItem | null>(null);
   const [mobileIndex, setMobileIndex] = useState(0);
   const [hydrated, setHydrated] = useState(false);
+  const [urlSynced, setUrlSynced] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const prevFoundationRef = useRef<string | null>(foundation || null);
+  const accessibleModuleIds = useMemo(
+    () => getAccessibleModuleIdsByFoundation(foundation),
+    [foundation]
+  );
 
   // Conditional step navigation
   const canGoToStep = useCallback(
@@ -88,25 +103,71 @@ export function useConfigurator() {
     setHydrated(true);
   }, []);
 
+  // Deep-link from pricing: ?tier=professional | ?foundation=cms
+  useEffect(() => {
+    if (!hydrated || urlSynced) return;
+    const params = new URLSearchParams(window.location.search);
+    const tier = params.get("tier");
+    const fromTier = tier ? TIER_SLUG_TO_FOUNDATION[tier] : undefined;
+    const foundationParam = params.get("foundation");
+    if (fromTier && FOUNDATIONS.some((x) => x.id === fromTier)) {
+      setFoundation(fromTier);
+    } else if (foundationParam && FOUNDATIONS.some((x) => x.id === foundationParam)) {
+      setFoundation(foundationParam);
+    }
+    setUrlSynced(true);
+  }, [hydrated, urlSynced, setFoundation]);
+
+  // Keep `?tier=` / `?foundation=` in sync when user changes foundation (shareable deep links)
+  useEffect(() => {
+    if (!hydrated || !urlSynced || typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const slug = foundation ? FOUNDATION_TO_TIER_SLUG[foundation] : undefined;
+    if (slug) {
+      params.set("tier", slug);
+      params.delete("foundation");
+    } else if (foundation) {
+      params.set("foundation", foundation);
+      params.delete("tier");
+    } else {
+      params.delete("tier");
+      params.delete("foundation");
+    }
+    const qs = params.toString();
+    const next =
+      `${window.location.pathname}${qs ? `?${qs}` : ""}${window.location.hash}`;
+    const cur = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    if (next !== cur) {
+      window.history.replaceState(null, "", next);
+    }
+  }, [hydrated, urlSynced, foundation]);
+
   useEffect(() => {
     if (hydrated && !canGoToStep(step)) {
       setStep(1);
     }
   }, [hydrated, step, canGoToStep, setStep]);
 
-  // Reset Discovery when Foundation changes
+  // Reconcile discovery and modules when foundation changes
   useEffect(() => {
     if (!hydrated) return;
     if (foundation !== prevFoundationRef.current) {
-      setSelectedModules([]);
-      setModuleQuantities({});
+      const allowed = new Set(getAccessibleModuleIdsByFoundation(foundation));
+      setSelectedModules((prev) => prev.filter((id) => allowed.has(id)));
+      setModuleQuantities((prev) => {
+        const next: Record<string, number> = {};
+        for (const [id, qty] of Object.entries(prev)) {
+          if (allowed.has(id)) next[id] = qty;
+        }
+        return next;
+      });
       setAnswers({});
       setDiscoveryStep(0);
       prevFoundationRef.current = foundation || null;
     }
   }, [foundation, hydrated, setSelectedModules]);
 
-  // ── Phase B Fix #2: Debounced localStorage persistence ──
+  // ── Phase B Fix #2: Debounced sessionStorage persistence ──
   const persistTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -119,7 +180,7 @@ export function useConfigurator() {
 
     persistTimerRef.current = setTimeout(() => {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
           foundation,
           selectedModules,
           moduleQuantities,
@@ -140,7 +201,7 @@ export function useConfigurator() {
 
   const clearConfiguration = () => {
     try {
-      localStorage.removeItem(STORAGE_KEY);
+      sessionStorage.removeItem(STORAGE_KEY);
     } catch {}
     clearBlueprintSessionId();
     setFoundation(null);
@@ -219,6 +280,9 @@ export function useConfigurator() {
   );
 
   const toggleModule = useCallback((id: string) => {
+    if (foundation === "landing") return;
+    const allowed = new Set(accessibleModuleIds);
+    if (!allowed.has(id)) return;
     setSelectedModules(prev => {
       const isRemoving = prev.includes(id);
       if (isRemoving) {
@@ -233,7 +297,7 @@ export function useConfigurator() {
         return [...prev, id];
       }
     });
-  }, []);
+  }, [foundation, accessibleModuleIds]);
 
   const updateQuantity = useCallback((id: string, qty: number) => {
     setModuleQuantities(prev => ({ ...prev, [id]: Math.max(0, qty) }));
@@ -282,6 +346,7 @@ export function useConfigurator() {
     modulesPrice,
     clearConfiguration,
     totalHoursSaved,
+    accessibleModuleIds,
     answers,
     setAnswers,
     discoveryStep,
