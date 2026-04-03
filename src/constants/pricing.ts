@@ -587,7 +587,7 @@ export const SHIELD_TIERS: ShieldTier[] = [
   {
     id: 1,
     name: 'Micro Shield',
-    priceGEL: 200,
+    priceGEL: 50,
     level: 'Proactive',
     risk: 'Medium',
     isRecommended: true,
@@ -603,7 +603,7 @@ export const SHIELD_TIERS: ShieldTier[] = [
   {
     id: 2,
     name: 'Active Shield',
-    priceGEL: 650,
+    priceGEL: 150,
     level: 'Guardian',
     risk: 'Low',
     perks: [
@@ -618,7 +618,7 @@ export const SHIELD_TIERS: ShieldTier[] = [
   {
     id: 3,
     name: 'Enterprise Shield',
-    priceGEL: 3250,
+    priceGEL: 750,
     level: 'Immune',
     risk: 'None',
     perks: [

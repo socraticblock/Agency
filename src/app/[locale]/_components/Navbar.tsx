@@ -22,6 +22,11 @@ export function Navbar({ locale }: { locale: Locale }) {
   const close = () => setOpen(false);
 
   const navLinks = [
+    {
+      href: `/${locale}/start`,
+      label: locale === "ka" ? "ციფრული ვიზიტკა" : "Digital card",
+      highlight: false,
+    },
     { href: `/${locale}/architect`, label: "Start Building", highlight: true },
   ];
 

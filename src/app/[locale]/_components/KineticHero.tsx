@@ -113,6 +113,17 @@ export function KineticHero({ locale }: { locale: Locale }) {
               {t.hero.cta}
             </span>
           </MagneticButton>
+          <MagneticButton
+            as="a"
+            href={`/${locale}/start`}
+            magneticStrength={24}
+            textStrength={12}
+            className="group relative flex min-h-12 items-center justify-center overflow-hidden rounded-full border border-white/20 bg-white/5 px-8 py-3 text-sm font-bold text-white/90 shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-[1.03] hover:bg-white/10 sm:px-10 sm:py-4"
+          >
+            <span className="relative z-10 block flex items-center gap-1.5">
+              {t.hero.startCardCta}
+            </span>
+          </MagneticButton>
         </motion.div>
       </motion.div>
     </section>

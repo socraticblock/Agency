@@ -110,6 +110,7 @@ export const en = {
     subhead: "Most founders are the bottleneck of their own growth. We architect the systems that handle your operations, so you can scale a platform that runs without you.",
     cta: "Build your online headquarters →",
     ctaSecondary: "Chat on WhatsApp",
+    startCardCta: "Digital business card →",
   },
   sovereign: {
     tagline: "Build your owned space.",

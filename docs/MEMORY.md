@@ -22,6 +22,7 @@
 - [020] Dashboard fallback: removed `LeadGenHub` document scroll lock entirely; overlay remains fullscreen with internal scroll to eliminate any possible stale page lock from that flow.
 - [021] Dashboard close hardening: removed top-level `AnimatePresence` exit layer for Sovereign overlay and force-cleared `html/body` inline overflow styles in `closeDashboard` to avoid ghost fixed layer + stale lock leftovers.
 - [028] Canonical WhatsApp intake and `wa.me` default: `WHATSAPP_INTAKE` `995579723564`; `generateWhatsAppLink` imports it; `createLocalBusinessSeo` default `telephone` `+995579723564`.
+- [029] Lane 1 Digital Business Card: `/{locale}/start` with sector grid, `BusinessCardTemplate` preview, persisted customizer (`genezisi_lane1_customizer_v1`), WhatsApp order via `buildLane1WhatsAppUrl`; warm lane UI; sitemap `/start` + optional `/enterprise` placeholder; homepage hero + Navbar link.
 
 # Detailed Observations
 
@@ -134,3 +135,8 @@
 - **Context:** Business and SEO surfaces needed consistent WhatsApp and schema `telephone` without placeholder drift across `content.ts`, `routing.ts`, and JSON-LD defaults.
 - **Decision:** Set `WHATSAPP_INTAKE` to `995579723564`; `generateWhatsAppLink` defaults to `WHATSAPP_INTAKE` instead of a placeholder; `createLocalBusinessSeo` default `telephone` is `+995579723564` (E.164).
 - **Impact:** All `wa.me` links and `PackageGrid` WhatsApp CTAs use one number; LocalBusiness schema matches the real line unless a page overrides `telephone`.
+
+## [029]
+- **Context:** Product plan required a fast “digital business card” lane with live preview, sector presets, and WhatsApp intake separate from the main dark marketing site.
+- **Decision:** Added `src/app/[locale]/start/*` (template + client customizer, mobile bottom sheet for fields), `lane1-pricing` + `buildLane1WhatsAppUrl`, Navbar + hero CTAs to `/start`, sitemap entries for `/start` and `/enterprise`, and aligned `SHIELD_TIERS` paid prices to **50 / 150 / 750** ₾ in `pricing.ts` per brainstorm/spec.
+- **Impact:** One URL for card orders and preview; architect/shield pricing stays consistent site-wide; SEO discovers the new funnel from `sitemap.ts`.
