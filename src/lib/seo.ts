@@ -36,7 +36,7 @@ export function createLocalBusinessSeo(options: LocalBusinessOptions): SeoResult
     description,
     locale,
     path = "/",
-    telephone = "+995",
+    telephone = "+995579723564",
     streetAddress = "Tbilisi",
     addressLocality = "Tbilisi",
     postalCode = "",

@@ -1,17 +1,19 @@
+import { WHATSAPP_INTAKE } from "@/constants/content";
+
 /**
  * Generates a URL-encoded WhatsApp deep-link for package inquiries.
- * 
+ *
  * @param tierName Name of the selected package tier
  * @param price Price formulation detail of the package
  * @param userName Optional buyer name for personalization
- * @param phoneNumber Target WhatsApp number (Georgian format default)
+ * @param phoneNumber Target WhatsApp number (digits only, no +)
  * @returns Fully qualified WhatsApp deep-link URL string
  */
 export function generateWhatsAppLink(
   tierName: string,
   price: string,
   userName?: string,
-  phoneNumber: string = "995555555555" // Placeholder default
+  phoneNumber: string = WHATSAPP_INTAKE
 ): string {
   
   let message = `I’m ready to set a new track. Let’s move my operation to its permanent home on the internet with the *${tierName}* infrastructure.`;
