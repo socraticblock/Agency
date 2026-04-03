@@ -44,22 +44,22 @@ export default function FoundationCard({ f, isSelected, onClick, formatPrice, se
       )}
 
       <div className="flex flex-col z-10">
-        {f.id === 'upgrade' && (
-          <span className="text-[9px] w-fit font-black font-space text-red-950 bg-red-400 px-1.5 py-0.5 rounded shadow-[0_0_10px_rgba(239,68,68,0.3)] animate-pulse uppercase tracking-wider mb-1">
-            [ 🚨 ACTIVE TECHNICAL RESCUE ]
+        {f.isRecommendedTier ? (
+          <span className="mb-1 w-fit rounded-full border border-emerald-300/60 bg-emerald-400/15 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-emerald-200">
+            ⭐ Recommended
           </span>
-        )}
-        <h4 className="text-lg font-black text-slate-200 mt-0.5" style={{ WebkitTextStroke: "0.3px rgba(0,0,0,0.8)", textShadow: "0px 2px 4px rgba(0,0,0,0.9)" }}>{f.name}</h4>
-        <p className="text-base text-slate-400 mt-1 leading-relaxed font-medium" style={{ textShadow: "0px 1px 3px rgba(0,0,0,0.9)" }}>{f.concept}</p>
+        ) : null}
+        <h4 className="text-lg font-black text-slate-200 mt-0.5" style={{ WebkitTextStroke: "0.3px rgba(0,0,0,0.8)", textShadow: "0px 2px 4px rgba(0,0,0,0.9)" }}>
+          {f.emoji ? `${f.emoji} ` : ""}{f.name}
+        </h4>
+        <p className="text-sm text-emerald-300/90 mt-1 leading-relaxed font-semibold">{f.tagline || f.concept}</p>
+        {f.description ? (
+          <p className="text-xs text-slate-400 mt-1 leading-relaxed font-medium">{f.description}</p>
+        ) : null}
       </div>
 
       <div className="flex justify-between items-end mt-auto w-full pt-2 border-t border-zinc-900/40 z-10">
         <div className="flex items-center gap-2">
-          {f.id === 'cms' && isSelected && (
-            <span className="text-[9px] font-black font-space text-emerald-950 bg-emerald-400 px-1.5 py-0.5 rounded shadow-[0_0_10px_rgba(16,185,129,0.3)] animate-pulse uppercase tracking-wider">
-              [ OWNER INDEPENDENCE ACTIVATED ]
-            </span>
-          )}
           {!isSelected && (
             f.customPriceLabel ? (
               <span className="text-sm font-black font-space text-amber-400" style={{ textShadow: "0px 1px 2px rgba(0,0,0,0.8)" }}>{f.customPriceLabel}</span>
@@ -132,6 +132,21 @@ export default function FoundationCard({ f, isSelected, onClick, formatPrice, se
                     </li>
                   ))}
                 </ul>
+              </div>
+            )}
+
+            {(f.deliveryTimeline || f.effortEstimate) && (
+              <div className="rounded-xl border border-zinc-800/50 bg-zinc-900/30 p-3 text-xs text-slate-300">
+                {f.deliveryTimeline ? <p>⏱️ Delivery: {f.deliveryTimeline}</p> : null}
+                {f.effortEstimate ? <p className="mt-1">🛠️ Effort: {f.effortEstimate}</p> : null}
+              </div>
+            )}
+
+            {(f.revisionRounds !== undefined || f.warrantyDays !== undefined || f.audienceLabel) && (
+              <div className="rounded-xl border border-zinc-800/50 bg-zinc-900/30 p-3 text-xs text-slate-300">
+                {f.audienceLabel ? <p>{f.audienceLabel}</p> : null}
+                {f.revisionRounds !== undefined ? <p className="mt-1">Revision rounds: {f.revisionRounds}</p> : null}
+                {f.warrantyDays !== undefined ? <p className="mt-1">Warranty: {f.warrantyDays} days</p> : null}
               </div>
             )}
 

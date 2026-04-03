@@ -6,8 +6,8 @@ import { m, AnimatePresence, LazyMotion } from "framer-motion";
 const loadFeatures = () => import("framer-motion").then(res => res.domMax);
 import { useConfigurator } from "@/hooks/useConfigurator";
 import ConfigSidebar from "./ConfigSidebar";
-const ConfigDrawer = dynamic(() => import("./ConfigDrawer"), {
-  ssr: false,
+const ConfigDrawer = dynamic(() => import("./ConfigDrawer"), {
+  ssr: false,
 });
 import ConfigModal from "./ConfigModal";
 import dynamic from "next/dynamic";
@@ -17,7 +17,7 @@ import FoundationGrid from "./FoundationGrid";
 import ModuleGrid from "./ModuleGrid";
 import ShieldGrid from "./ShieldGrid";
 import StudioHeader from "./StudioHeader";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 
 const DiscoveryModule = dynamic(() => import("./DiscoveryModule"), {
   ssr: false,
@@ -73,6 +73,7 @@ export default function Configurator() {
     exchangeRate,
     foundationPrice,
     totalHoursSaved,
+    accessibleModuleIds,
     answers,
     setAnswers,
     discoveryStep,
@@ -85,7 +86,32 @@ export default function Configurator() {
   } = useConfigurator();
 
   const params = useParams();
+  const searchParams = useSearchParams();
   const locale = (params.locale as string) || "en";
+  const hasAppliedTierPreset = useRef(false);
+
+  useEffect(() => {
+    if (hasAppliedTierPreset.current) return;
+    const requestedTier = searchParams.get("tier");
+    if (!requestedTier) {
+      hasAppliedTierPreset.current = true;
+      return;
+    }
+
+    const tierMap: Record<string, string> = {
+      professional: "cms",
+      "command-center": "saas",
+      "ecommerce-hq": "ecomm",
+      essential: "landing",
+    };
+
+    const mappedFoundation = tierMap[requestedTier.toLowerCase()];
+    if (mappedFoundation && foundation !== mappedFoundation) {
+      setFoundation(mappedFoundation);
+      setStep(1);
+    }
+    hasAppliedTierPreset.current = true;
+  }, [searchParams, foundation, setFoundation, setStep]);
 
   const topAnchorRef = useRef<HTMLDivElement>(null);
   const isFirstRender = useRef(true);
@@ -204,6 +230,7 @@ export default function Configurator() {
                 activeFoundation={activeFoundation}
                 moduleQuantities={moduleQuantities}
                 updateQuantity={updateQuantity}
+                accessibleModuleIds={accessibleModuleIds}
               />
             )}
 
@@ -214,6 +241,7 @@ export default function Configurator() {
                 formatPrice={formatPrice}
                 goToStep={goToStep}
                 setIsModalOpen={setIsModalOpen}
+                foundationId={foundation}
               />
             )}
 

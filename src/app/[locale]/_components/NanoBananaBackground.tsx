@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { useReducedMotion } from "framer-motion";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { Preload } from "@react-three/drei";
@@ -12,6 +13,7 @@ function NetworkGridModel() {
   const timeRef = useRef(0);
 
   useFrame((state, delta) => {
+    if (typeof document !== "undefined" && document.hidden) return;
     timeRef.current += delta;
     const time = timeRef.current;
     if (geomRef.current) {
@@ -57,8 +59,19 @@ function NetworkGridModel() {
 }
 
 export function NanoBananaBackground() {
+  const reduced = useReducedMotion();
+
+  if (reduced) {
+    return (
+      <div
+        className="pointer-events-none absolute inset-0 z-0 h-full w-full bg-gradient-to-br from-emerald-950/50 via-[#030717] to-slate-950 opacity-70"
+        aria-hidden
+      />
+    );
+  }
+
   return (
-    <div className="pointer-events-none absolute inset-0 z-0 w-full h-full opacity-70">
+    <div className="pointer-events-none absolute inset-0 z-0 h-full w-full opacity-70">
       <Canvas dpr={1} camera={{ position: [0, 0, 8], fov: 55 }} gl={{ powerPreference: "high-performance", antialias: false }}>
         <fog attach="fog" args={['#030717', 4, 12]} />
         <ambientLight intensity={0.5} />
