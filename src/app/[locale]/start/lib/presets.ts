@@ -41,6 +41,26 @@ export interface FontPreset {
   bodyWeight: number;
 }
 
+export interface VibePreset {
+  id: string;
+  labelKa: string;
+  labelEn: string;
+  /** UI features: glass blur, shadow depth, etc. */
+  blur: string;
+  shadow: string;
+  borderOpacity: number;
+}
+
+export interface AnimationPreset {
+  id: string;
+  labelKa: string;
+  labelEn: string;
+  /** Framer motion spring settings or base delay */
+  stagger: number;
+  entranceY: number;
+  springDamping: number;
+}
+
 /** §8.1 — eight solid backgrounds (light + two dark) */
 export const BACKGROUND_SOLID_PRESETS: BackgroundPreset[] = [
   {
@@ -233,21 +253,78 @@ export const FONT_PRESETS: FontPreset[] = [
   },
 ];
 
+export const VIBE_PRESETS: VibePreset[] = [
+  {
+    id: "minimal",
+    labelKa: "მინიმალური",
+    labelEn: "Minimal",
+    blur: "0px",
+    shadow: "0 1px 3px 0 rgb(0 0 0 / 0.1)",
+    borderOpacity: 0.1,
+  },
+  {
+    id: "glass",
+    labelKa: "მინა",
+    labelEn: "Glassmorphic",
+    blur: "16px",
+    shadow: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+    borderOpacity: 0.25,
+  },
+  {
+    id: "neon",
+    labelKa: "ნეონი",
+    labelEn: "Neon glow",
+    blur: "4px",
+    shadow: "0 0 15px currentColor",
+    borderOpacity: 0.4,
+  },
+];
+
+export const ANIMATION_PRESETS: AnimationPreset[] = [
+  {
+    id: "fade",
+    labelKa: "გაქრობა",
+    labelEn: "Subtle fade",
+    stagger: 0.05,
+    entranceY: 10,
+    springDamping: 25,
+  },
+  {
+    id: "spring",
+    labelKa: "ზამბარა",
+    labelEn: "Playful spring",
+    stagger: 0.08,
+    entranceY: 30,
+    springDamping: 12,
+  },
+  {
+    id: "cinematic",
+    labelKa: "კინემატოგრაფიული",
+    labelEn: "Cinematic",
+    stagger: 0.15,
+    entranceY: 50,
+    springDamping: 20,
+  },
+];
+
 export function isBackgroundLockingTextColor(backgroundId: string): boolean {
   const bg = BACKGROUND_PRESETS.find((p) => p.id === backgroundId);
   return Boolean(bg?.locksTextColor);
 }
-
 export function resolveStyleVariables(selection: {
   backgroundId: string;
   textColorId: string;
   accentId: string;
   fontId: string;
+  vibeId: string;
+  animationId: string;
 }): CSSProperties {
   const bg = BACKGROUND_PRESETS.find((p) => p.id === selection.backgroundId) ?? BACKGROUND_PRESETS[0];
   const txt = TEXT_COLOR_PRESETS.find((p) => p.id === selection.textColorId) ?? TEXT_COLOR_PRESETS[0];
   const acc = ACCENT_PRESETS.find((p) => p.id === selection.accentId) ?? ACCENT_PRESETS[0];
   const font = FONT_PRESETS.find((p) => p.id === selection.fontId) ?? FONT_PRESETS[1];
+  const vibe = VIBE_PRESETS.find((p) => p.id === selection.vibeId) ?? VIBE_PRESETS[0];
+  const anim = ANIMATION_PRESETS.find((p) => p.id === selection.animationId) ?? ANIMATION_PRESETS[0];
 
   const textColor =
     bg.locksTextColor ? bg.pairedTextColor : txt.color;
@@ -261,6 +338,12 @@ export function resolveStyleVariables(selection: {
     ["--font-body" as string]: font.fontBody,
     ["--font-heading-weight" as string]: String(font.headingWeight),
     ["--font-body-weight" as string]: String(font.bodyWeight),
+    ["--glass-blur" as string]: vibe.blur,
+    ["--card-shadow" as string]: vibe.shadow,
+    ["--border-opacity" as string]: String(vibe.borderOpacity),
+    ["--stagger-delay" as string]: String(anim.stagger),
+    ["--entrance-y" as string]: String(anim.entranceY),
+    ["--spring-damping" as string]: String(anim.springDamping),
   } as CSSProperties;
 }
 

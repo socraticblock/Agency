@@ -12,6 +12,8 @@ import {
   FONT_PRESETS,
   isBackgroundLockingTextColor,
   TEXT_COLOR_PRESETS,
+  VIBE_PRESETS,
+  ANIMATION_PRESETS,
 } from "../lib/presets";
 import { buildLane1WhatsAppUrl } from "../lib/whatsapp";
 import { LANE1_BASE_GEL, computeLane1Total } from "../lib/lane1-pricing";
@@ -23,6 +25,8 @@ import {
   BackgroundSolidPresetGrid,
   FontPresetGrid,
   TextColorPresetGrid,
+  VibePresetGrid,
+  AnimationPresetGrid,
 } from "./StylePresetGrids";
 import { CollapsibleSection } from "./CollapsibleSection";
 import { MessageCircle, Eye } from "lucide-react";
@@ -144,6 +148,26 @@ export function StartCustomizer({
       setState((s) => ({
         ...s,
         style: { ...s.style, fontId },
+      }));
+    },
+    [setState],
+  );
+
+  const onVibeChange = useCallback(
+    (vibeId: string) => {
+      setState((s) => ({
+        ...s,
+        style: { ...s.style, vibeId },
+      }));
+    },
+    [setState],
+  );
+
+  const onAnimationChange = useCallback(
+    (animationId: string) => {
+      setState((s) => ({
+        ...s,
+        style: { ...s.style, animationId },
       }));
     },
     [setState],
@@ -550,6 +574,27 @@ export function StartCustomizer({
           options={FONT_PRESETS}
           value={state.style.fontId}
           onChange={onFontChange}
+        />
+      </CollapsibleSection>
+
+      <CollapsibleSection
+        id="experience"
+        title="Experience"
+        isOpen={openSection === "experience"}
+        onToggle={() => toggleSection("experience")}
+      >
+        <p className="start-caption">
+          Elevate the feeling of your site with luxury effects.
+        </p>
+        <VibePresetGrid 
+          options={VIBE_PRESETS}
+          value={state.style.vibeId}
+          onChange={onVibeChange}
+        />
+        <AnimationPresetGrid 
+          options={ANIMATION_PRESETS}
+          value={state.style.animationId}
+          onChange={onAnimationChange}
         />
       </CollapsibleSection>
 

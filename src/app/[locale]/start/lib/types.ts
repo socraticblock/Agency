@@ -20,6 +20,8 @@ export interface StylePresetSelection {
   textColorId: string;
   accentId: string;
   fontId: string;
+  vibeId: string;
+  animationId: string;
 }
 
 export const CUSTOMIZER_VERSION = 2 as const;
@@ -93,6 +95,8 @@ export function defaultLane1State(): Lane1CustomizerState {
       textColorId: "ink",
       accentId: "navy",
       fontId: "modern",
+      vibeId: "minimal",
+      animationId: "fade",
     },
     addGoogleMap: false,
     photoDataUrl: null,

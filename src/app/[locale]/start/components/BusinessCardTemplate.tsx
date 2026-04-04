@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, memo, type CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Scale,
   Briefcase,
@@ -21,6 +22,7 @@ import type { Lane1CustomizerState } from "../lib/types";
 import { resolveStyleVariables } from "../lib/presets";
 import { compressImageForLane1Storage } from "../lib/image-compress";
 import { InlineEditable } from "./InlineEditable";
+import { MagneticButton } from "../../_components/MagneticButton";
 import "./business-card-template.css";
 
 const ICONS = [Scale, Briefcase, Building2, Sparkles];
@@ -64,6 +66,46 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   const useSecondary =
     previewLang === "secondary" &&
     state.secondaryMode === "self";
+
+  const isGlass = state.style.vibeId === "glass";
+  const isNeon = state.style.vibeId === "neon";
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: Number(vars["--stagger-delay" as any] || 0.1),
+        delayChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: Number(vars["--entrance-y" as any] || 20) 
+    },
+    show: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        type: "spring",
+        damping: Number(vars["--spring-damping" as any] || 20),
+        stiffness: 100,
+      }
+    },
+  };
+
+  const glassStyle: CSSProperties = isGlass ? {
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    backdropFilter: "blur(var(--glass-blur))",
+    border: "1px solid rgba(255, 255, 255, var(--border-opacity))",
+    boxShadow: "var(--card-shadow)",
+  } : isNeon ? {
+    boxShadow: "var(--card-shadow)",
+    border: "1px solid var(--accent)",
+  } : {};
 
   const showLangToggle =
     Boolean(onPreviewLangChange) &&
@@ -145,6 +187,9 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
         background: "var(--bg-primary)",
       }}
     >
+      {isNeon && (
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_50%_50%,var(--accent),transparent_70%)] opacity-[0.03]" />
+      )}
       {state.secondaryMode === "pro" ? (
         <div
           className="border-b px-4 py-2.5 text-center text-xs leading-snug text-slate-600"
@@ -156,9 +201,12 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
           Georgian translation will be added after your order is confirmed.
         </div>
       ) : null}
-      <div
+      <motion.div
         className={`business-card-template-font-layer pb-12 ${isResponsive ? "md:grid md:grid-cols-12 md:gap-8 md:p-8" : ""}`}
         style={{ opacity: fontFade }}
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
       >
         <input
           ref={fileRef}
@@ -171,7 +219,8 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
         {/* LEFT COLUMN: Identity & Core Details */}
         <div className={isResponsive ? "md:col-span-5 lg:col-span-4 md:sticky md:top-8 md:flex md:flex-col md:gap-6" : ""}>
           {/* Section 1 — sticky header */}
-          <header
+          <motion.header
+            variants={itemVariants}
             className={`sticky top-0 z-20 flex flex-wrap items-center justify-between gap-2 border-b px-4 py-3 ${isResponsive ? "md:relative md:border-none md:px-0 md:py-0" : ""}`}
           style={{
             borderColor: "var(--accent)",
@@ -234,10 +283,18 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
               style={{ color: "var(--accent)", ...headingStyle }}
             />
           </div>
-          </header>
+          </motion.header>
 
           {/* Section 2 — hero */}
-          <section className={`px-4 pb-8 pt-8 text-left ${isResponsive ? "md:rounded-3xl md:border md:p-6" : ""}`} style={{ borderColor: 'var(--accent-secondary)' }}>
+          <motion.section 
+            variants={itemVariants}
+            whileHover={{ y: -4, transition: { duration: 0.2 } }}
+            className={`px-4 pb-8 pt-8 text-left ${isResponsive ? "md:rounded-3xl md:border md:p-6" : ""}`} 
+            style={{ 
+              borderColor: "var(--accent-secondary)",
+              ...glassStyle 
+            }}
+          >
           <div className="flex flex-col items-start gap-4">
             <div
               role={editable ? "button" : undefined}
@@ -353,23 +410,29 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
                 );
               })}
             </div>
-            <a
+            <MagneticButton
+              as="a"
               href={telHref(state.phone)}
               className="inline-flex min-h-[44px] w-full items-center justify-center rounded-lg px-6 py-3 text-sm font-bold text-white transition-opacity hover:opacity-90 active:scale-[0.98]"
               style={{ background: "var(--accent)" }}
             >
               Contact Me
-            </a>
+            </MagneticButton>
           </div>
-         </section>
+         </motion.section>
         </div> {/* END LEFT COLUMN */}
 
         {/* RIGHT COLUMN: Content & Add-ons */}
         <div className={isResponsive ? "md:col-span-7 lg:col-span-8 md:flex md:flex-col md:gap-6" : ""}>
           {/* Section 3 — practice areas with icons */}
-          <section
+          <motion.section
+            variants={itemVariants}
+            whileHover={{ y: -4, transition: { duration: 0.2 } }}
             className={`border-t px-4 py-8 ${isResponsive ? "md:rounded-3xl md:border md:p-8" : ""}`}
-            style={{ borderColor: "var(--accent-secondary)" }}
+            style={{ 
+              borderColor: "var(--accent-secondary)",
+              ...glassStyle
+            }}
           >
           <h2
             className="mb-4 text-lg font-bold"
@@ -429,12 +492,17 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
               );
             })}
           </ul>
-        </section>
+        </motion.section>
 
         {/* Section 4 — contact + footer */}
-        <section
+        <motion.section
+          variants={itemVariants}
+          whileHover={{ y: -4, transition: { duration: 0.2 } }}
           className={`border-t px-4 py-8 ${isResponsive ? "md:rounded-3xl md:border md:p-8" : ""}`}
-          style={{ borderColor: "var(--accent-secondary)" }}
+          style={{ 
+            borderColor: "var(--accent-secondary)",
+            ...glassStyle
+          }}
         >
           <div className={`space-y-3 text-sm ${isResponsive ? "md:text-base" : ""}`}>
             <div className="flex items-center gap-2 font-semibold">
@@ -475,37 +543,43 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
             </a>
             <div className="flex flex-wrap gap-3 pt-2">
               {showSocial(state.social.facebook) && (
-                <a
+                <MagneticButton
+                  as="a"
                   href={state.social.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[var(--accent)]"
                   aria-label="Facebook"
+                  magneticStrength={10}
                 >
                   <Facebook className="h-6 w-6" />
-                </a>
+                </MagneticButton>
               )}
               {showSocial(state.social.instagram) && (
-                <a
+                <MagneticButton
+                  as="a"
                   href={state.social.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[var(--accent)]"
                   aria-label="Instagram"
+                  magneticStrength={10}
                 >
                   <Instagram className="h-6 w-6" />
-                </a>
+                </MagneticButton>
               )}
               {showSocial(state.social.linkedin) && (
-                <a
+                <MagneticButton
+                  as="a"
                   href={state.social.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[var(--accent)]"
                   aria-label="LinkedIn"
+                  magneticStrength={10}
                 >
                   <Linkedin className="h-6 w-6" />
-                </a>
+                </MagneticButton>
               )}
               {showSocial(state.social.tiktok) && (
                 <a
@@ -519,15 +593,17 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
                 </a>
               )}
               {showSocial(state.social.youtube) && (
-                <a
+                <MagneticButton
+                  as="a"
                   href={state.social.youtube}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[var(--accent)]"
                   aria-label="YouTube"
+                  magneticStrength={10}
                 >
                   <Youtube className="h-6 w-6" />
-                </a>
+                </MagneticButton>
               )}
               {state.social.extra.map((e, i) =>
                 e.url.trim() ? (
@@ -632,9 +708,9 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
               )}
             </p>
             </footer>
-          </section>
+          </motion.section>
         </div> {/* END RIGHT COLUMN */}
-      </div>
+      </motion.div>
     </div>
   );
 });
