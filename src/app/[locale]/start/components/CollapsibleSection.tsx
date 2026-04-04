@@ -25,7 +25,7 @@ export function CollapsibleSection({
     if (isOpen && sectionRef.current) {
       sectionRef.current.scrollIntoView({
         behavior: "smooth",
-        block: "nearest",
+        block: "start",
       });
     }
   }, [isOpen]);
@@ -34,7 +34,7 @@ export function CollapsibleSection({
     <section
       id={id}
       ref={sectionRef}
-      className="start-glass overflow-hidden rounded-2xl"
+      className="start-glass overflow-hidden rounded-2xl scroll-mt-[4.5rem] md:scroll-mt-6"
     >
       <button
         type="button"
@@ -42,11 +42,19 @@ export function CollapsibleSection({
         onClick={onToggle}
         aria-expanded={isOpen}
       >
-        <h3 className="start-panel-heading">{title}</h3>
+        <h3 
+          className="start-panel-heading transition-colors"
+          style={{ 
+            color: "var(--text-primary)"
+          }}
+        >
+          {title}
+        </h3>
         <ChevronDown
-          className={`h-5 w-5 shrink-0 text-[#64748b] transition-transform duration-200 ease-out ${
+          className={`h-5 w-5 shrink-0 transition-all duration-200 ease-out ${
             isOpen ? "rotate-180" : ""
           }`}
+          style={{ color: "var(--text-primary)", opacity: 0.6 }}
           aria-hidden
         />
       </button>

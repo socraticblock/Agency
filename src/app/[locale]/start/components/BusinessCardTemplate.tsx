@@ -1,621 +1,210 @@
 "use client";
 
-import { useEffect, useRef, useState, type CSSProperties } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import {
-  Scale,
-  Briefcase,
-  Building2,
-  Sparkles,
-  Phone,
-  Mail,
-  MessageCircle,
-  Facebook,
-  Instagram,
-  Linkedin,
-  Youtube,
-  Camera,
-} from "lucide-react";
+import { useEffect, useRef, useState, memo, type CSSProperties } from "react";
+import { motion } from "framer-motion";
+import { HeroSegment } from "./segments/HeroSegment";
+import { CtaSegment } from "./segments/CtaSegment";
+import { SectionDispatcher } from "./segments/SectionDispatcher";
+import { ContactSegment } from "./segments/ContactSegment";
+import { SocialSegment } from "./segments/SocialSegment";
+import { UtilitySegments } from "./segments/UtilitySegments";
+import { BrandingFooter } from "./segments/BrandingFooter";
+import { containerVariants, itemVariants } from "../lib/animations";
+import { usePwaMetadata } from "../lib/usePwaMetadata";
+import { useCardTilt } from "../lib/useCardTilt";
+import { InlineEditable } from "./InlineEditable";
+import { Scale, Briefcase, Building2, Sparkles } from "lucide-react";
 import type { Lane1CustomizerState } from "../lib/types";
 import { resolveStyleVariables } from "../lib/presets";
 import { compressImageForLane1Storage } from "../lib/image-compress";
-import { InlineEditable } from "./InlineEditable";
 import "./business-card-template.css";
 
 const ICONS = [Scale, Briefcase, Building2, Sparkles];
 
-function telHref(phone: string): string {
-  const digits = phone.replace(/\D/g, "");
-  return digits ? `tel:+${digits}` : "tel:";
-}
-
-function waHref(phone: string): string {
-  const digits = phone.replace(/\D/g, "");
-  if (!digits) return "#";
-  return `https://wa.me/${digits}`;
-}
-
-export function BusinessCardTemplate({
+export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   state,
   previewLang,
   homeHref,
   ownerName,
   onPatch,
   onPreviewLangChange,
+  hideBranding = false,
+  layoutMode = "mobile",
 }: {
   state: Lane1CustomizerState;
   previewLang: "primary" | "secondary";
   homeHref: string;
   ownerName: string;
-  /** When set, preview fields are inline-editable and sync with customizer state. */
   onPatch?: (p: Partial<Lane1CustomizerState>) => void;
-  /** Bilingual preview: EN / GE in header (§2.2). */
   onPreviewLangChange?: (lang: "primary" | "secondary") => void;
+  hideBranding?: boolean;
+  layoutMode?: "mobile" | "responsive";
 }) {
   const editable = Boolean(onPatch);
-  const vars = resolveStyleVariables(state.style);
-  const useSecondary =
-    previewLang === "secondary" &&
-    state.secondaryMode === "self";
+  const isResponsive = layoutMode === "responsive";
+  const vars = resolveStyleVariables(state.style) as any;
+  const useSecondary = previewLang === "secondary" && state.secondaryMode === "self";
+  const { rotateX, rotateY, handleMouseMove, handleMouseLeave } = useCardTilt(isResponsive);
+  usePwaMetadata(state, vars);
 
-  const showLangToggle =
-    Boolean(onPreviewLangChange) &&
-    state.secondaryMode === "self";
-
-  const address = useSecondary ? state.addressSecondary || state.address : state.address;
-
-  const showSocial = (url: string) => url.trim().length > 0;
-
-  /** Brief §4.2: opacity fade when font preset changes (fonts cannot interpolate). */
-  const [fontFade, setFontFade] = useState(1);
-  const fontIdRef = useRef(state.style.fontId);
+  const [expandedService, setExpandedService] = useState<number | null>(null);
+  const [qrDataUrl, setQrDataUrl] = useState<string>("");
+  const [shareFeedback, setShareFeedback] = useState("");
+  const [photoBusy, setPhotoBusy] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (fontIdRef.current === state.style.fontId) return;
-    fontIdRef.current = state.style.fontId;
-    setFontFade(0);
-    const t = window.setTimeout(() => setFontFade(1), 45);
-    return () => window.clearTimeout(t);
-  }, [state.style.fontId]);
+    const nameSlug = state.name.toLowerCase().replace(/\s+/g, "-") || "business-card";
+    const url = `https://genezisi.com/c/${nameSlug}`;
+    import("../lib/identity-kit").then(({ generateBrandedQR }) => {
+      generateBrandedQR(state, url).then(setQrDataUrl);
+    });
+  }, [state.style.accentId, state.name]);
 
-  function patch(p: Partial<Lane1CustomizerState>) {
-    onPatch?.(p);
-  }
-
-  function setServiceLine(i: number, v: string) {
-    if (!onPatch) return;
-    if (useSecondary) {
-      const next = [...state.serviceAreasSecondary] as [
-        string,
-        string,
-        string,
-        string,
-      ];
-      next[i] = v;
-      return onPatch({ serviceAreasSecondary: next });
-    }
-    const next = [...state.serviceAreas] as [string, string, string, string];
+  const patch = (p: Partial<Lane1CustomizerState>) => onPatch?.(p);
+  const setServiceLine = (i: number, v: string) => {
+    const next = useSecondary ? [...state.serviceAreasSecondary] : [...state.serviceAreas];
     next[i] = v;
-    onPatch({ serviceAreas: next });
-  }
-
-  const headingStyle: CSSProperties = {
-    fontFamily: "var(--font-heading)",
-    fontWeight: "var(--font-heading-weight)" as CSSProperties["fontWeight"],
+    patch(useSecondary ? { serviceAreasSecondary: next as any } : { serviceAreas: next as any });
   };
-  const bodyStyle: CSSProperties = {
-    fontFamily: "var(--font-body)",
-    fontWeight: "var(--font-body-weight)" as CSSProperties["fontWeight"],
+  const setServiceDescriptionLine = (i: number, v: string) => {
+    const next = useSecondary ? [...state.serviceDescriptionsSecondary] : [...state.serviceDescriptions];
+    next[i] = v;
+    patch(useSecondary ? { serviceDescriptionsSecondary: next as any } : { serviceDescriptions: next as any });
   };
-
-  const fileRef = useRef<HTMLInputElement>(null);
-  const [photoBusy, setPhotoBusy] = useState(false);
 
   async function onPhotoPicked(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-    e.target.value = "";
     if (!file || !onPatch) return;
     setPhotoBusy(true);
     try {
       const { dataUrl } = await compressImageForLane1Storage(file);
       onPatch({ photoDataUrl: dataUrl });
-    } catch {
-      /* ignore */
-    } finally {
-      setPhotoBusy(false);
-    }
+    } finally { setPhotoBusy(false); }
   }
 
+  const handleShare = async () => {
+    const url = onPatch ? "https://genezisi.com" : window.location.href;
+    if (navigator.share) {
+      try { await navigator.share({ title: state.name, url }); }
+      catch { navigator.clipboard.writeText(url); setShareFeedback("Link copied!"); }
+    } else { navigator.clipboard.writeText(url); setShareFeedback("Link copied!"); }
+    setTimeout(() => setShareFeedback(""), 2500);
+  };
+
+  const glassStyle: CSSProperties = state.style.vibeId === "glass" ? {
+    backgroundColor: "rgba(255, 255, 255, 0.05)", backdropFilter: "blur(var(--glass-blur))",
+    border: "1px solid rgba(255, 255, 255, var(--border-opacity))", boxShadow: "var(--card-shadow)",
+  } : state.style.vibeId === "neon" ? { boxShadow: "var(--card-shadow)", border: "1px solid var(--accent)" } : {};
+
+  const headingStyle: CSSProperties = { fontFamily: "var(--font-heading)", fontWeight: "var(--font-heading-weight)" as any, color: "var(--text-primary)" };
+  const bodyStyle: CSSProperties = { fontFamily: "var(--font-body)", fontWeight: "var(--font-body-weight)" as any, color: "var(--text-primary)" };
+
+  // Common styles for children
+  const entranceY = vars["--entrance-y"];
+  const springDamping = vars["--spring-damping"];
+  const customItemVariants = itemVariants(entranceY, springDamping);
+
   return (
-    <div
-      className="business-card-template mx-auto w-full max-w-[640px] text-[var(--text-primary)]"
-      style={{
-        ...vars,
-        fontFamily: "var(--font-body)",
-        fontWeight: "var(--font-body-weight)" as CSSProperties["fontWeight"],
-        background: "var(--bg-primary)",
-      }}
+    <div className={`business-card-template relative mx-auto w-full text-[var(--text-primary)] ${isResponsive ? "max-w-6xl md:rounded-3xl" : "max-w-[640px]"}`}
+      style={{ ...vars, fontFamily: "var(--font-body)", background: "var(--bg-primary)" }}
+      onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}
     >
-      {state.secondaryMode === "pro" ? (
-        <div
-          className="border-b px-4 py-2.5 text-center text-xs leading-snug text-slate-600"
-          style={{
-            borderColor: "var(--accent-secondary)",
-            background: "color-mix(in srgb, var(--accent) 7%, transparent)",
-          }}
-        >
-          Georgian translation will be added after your order is confirmed.
+      <div className="business-card-noise" aria-hidden /><div className="business-card-glow" aria-hidden />
+      
+      {state.secondaryMode === "pro" && (
+        <div className="border-b px-4 py-2.5 text-center text-xs opacity-70" style={{ borderColor: "var(--accent-secondary)", background: "color-mix(in srgb, var(--accent) 7%, transparent)" }}>
+          English will be used for professional translation in this preview.
         </div>
-      ) : null}
-      <div
-        className="business-card-template-font-layer"
-        style={{ opacity: fontFade }}
+      )}
+
+      <motion.div className={`pb-12 ${isResponsive ? "md:p-8" : ""}`}
+        variants={containerVariants} initial="hidden" animate="show" custom={vars["--stagger-delay"]}
       >
-        <input
-          ref={fileRef}
-          type="file"
-          accept="image/jpeg,image/png,image/webp"
-          className="hidden"
-          onChange={onPhotoPicked}
-          aria-hidden
+        <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onPhotoPicked} />
+        
+        {/* 1. Locked Hero Zone */}
+        <HeroSegment 
+          state={state} 
+          editable={editable} 
+          useSecondary={useSecondary} 
+          isResponsive={isResponsive} 
+          photoBusy={photoBusy} 
+          fileRef={fileRef} 
+          ownerName={ownerName} 
+          previewLang={previewLang} 
+          rotateX={rotateX} 
+          rotateY={rotateY} 
+          handleMouseMove={handleMouseMove} 
+          handleMouseLeave={handleMouseLeave} 
+          patch={patch} 
+          setServiceLine={setServiceLine} 
+          headingStyle={headingStyle} 
+          bodyStyle={bodyStyle} 
+          itemVariants={customItemVariants} 
+          glassStyle={glassStyle} 
         />
-        {/* Section 1 — sticky header */}
-        <header
-          className="sticky top-0 z-20 flex flex-wrap items-center justify-between gap-2 border-b px-4 py-3"
-          style={{
-            borderColor: "var(--accent)",
-            background: "var(--bg-primary)",
-          }}
-        >
-          <div className="max-w-[min(55%,18rem)] min-w-0 truncate text-sm font-bold leading-tight md:text-base">
-            <InlineEditable
-              value={useSecondary ? state.nameSecondary : state.name}
-              onChange={(v) =>
-                patch(useSecondary ? { nameSecondary: v } : { name: v })
-              }
-              fallbackIfEmpty={useSecondary ? state.name : ""}
-              showFallbackIndicator={useSecondary}
-              placeholder="Your name"
-              editable={editable}
-              className="block w-full truncate"
-              style={headingStyle}
-            />
-          </div>
-          <div className="flex min-w-0 flex-wrap items-center justify-end gap-x-3 gap-y-1">
-            {showLangToggle ? (
-              <nav
-                className="flex shrink-0 items-center gap-2 text-xs font-semibold"
-                style={{ color: "var(--text-primary)" }}
-                aria-label="Preview language"
-              >
-                <button
-                  type="button"
-                  className={`min-h-[44px] min-w-[40px] rounded-md px-2 transition-opacity touch-manipulation ${
-                    previewLang === "primary" ? "opacity-100 underline decoration-2 underline-offset-4" : "opacity-55"
-                  }`}
-                  style={{ color: "var(--accent)" }}
-                  onClick={() => onPreviewLangChange?.("primary")}
-                >
-                  EN
-                </button>
-                <span className="opacity-35" aria-hidden>
-                  |
-                </span>
-                <button
-                  type="button"
-                  className={`min-h-[44px] min-w-[40px] rounded-md px-2 transition-opacity touch-manipulation ${
-                    previewLang === "secondary" ? "opacity-100 underline decoration-2 underline-offset-4" : "opacity-55"
-                  }`}
-                  style={{ color: "var(--accent)" }}
-                  onClick={() => onPreviewLangChange?.("secondary")}
-                >
-                  GE
-                </button>
-              </nav>
-            ) : null}
-            <InlineEditable
-              value={state.phone}
-              onChange={(v) => patch({ phone: v })}
-              placeholder="+995…"
-              editable={editable}
-              inputMode="tel"
-              className="shrink-0 text-sm font-semibold underline decoration-2 underline-offset-2"
-              style={{ color: "var(--accent)", ...headingStyle }}
-            />
-          </div>
-        </header>
 
-        {/* Section 2 — hero */}
-        <section className="px-4 pb-8 pt-8 text-left">
-          <div className="flex flex-col items-start gap-4">
-            <div
-              role={editable ? "button" : undefined}
-              tabIndex={editable ? 0 : undefined}
-              onClick={() => {
-                if (editable && !photoBusy) fileRef.current?.click();
-              }}
-              onKeyDown={(e) => {
-                if (!editable) return;
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  fileRef.current?.click();
-                }
-              }}
-              className={`business-card-photo group relative h-[180px] w-[180px] shrink-0 overflow-hidden rounded-full border-4 bg-slate-200 ${
-                editable ? "cursor-pointer" : ""
-              } ${photoBusy ? "opacity-70" : ""}`}
-              style={{ borderColor: "var(--accent)" }}
-            >
-              {state.photoDataUrl ? (
-                <Image
-                  key={state.photoDataUrl.slice(0, 64)}
-                  src={state.photoDataUrl}
-                  alt=""
-                  width={180}
-                  height={180}
-                  className="h-full w-full object-cover"
-                  unoptimized
-                />
-              ) : (
-                <div className="flex h-full w-full flex-col items-center justify-center gap-1 text-xs text-slate-500">
-                  <svg
-                    className="h-16 w-16 opacity-40"
-                    viewBox="0 0 64 64"
-                    fill="currentColor"
-                    aria-hidden
-                  >
-                    <circle cx="32" cy="26" r="12" />
-                    <ellipse cx="32" cy="56" rx="22" ry="14" />
-                  </svg>
-                  <span>Photo</span>
-                </div>
-              )}
-              {editable ? (
-                <span className="pointer-events-none absolute bottom-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-md ring-1 ring-black/5">
-                  <Camera className="h-4 w-4 text-slate-700" aria-hidden />
-                </span>
-              ) : null}
-            </div>
-            <div>
-              <h1
-                className="text-2xl font-bold leading-tight md:text-3xl"
-                style={headingStyle}
-              >
-                <InlineEditable
-                  value={useSecondary ? state.nameSecondary : state.name}
-                  onChange={(v) =>
-                    patch(useSecondary ? { nameSecondary: v } : { name: v })
-                  }
-                  fallbackIfEmpty={useSecondary ? state.name : ""}
-                  showFallbackIndicator={useSecondary}
-                  placeholder="Name"
-                  editable={editable}
-                  className="block w-full"
-                  style={headingStyle}
-                />
-              </h1>
-              <p className="mt-2 text-base opacity-90" style={bodyStyle}>
-                <InlineEditable
-                  value={useSecondary ? state.titleSecondary : state.title}
-                  onChange={(v) =>
-                    patch(useSecondary ? { titleSecondary: v } : { title: v })
-                  }
-                  fallbackIfEmpty={useSecondary ? state.title : ""}
-                  showFallbackIndicator={useSecondary}
-                  placeholder="Title"
-                  editable={editable}
-                  className="block w-full"
-                  style={bodyStyle}
-                />
-              </p>
-            </div>
-            <div
-              className={`grid w-full gap-2 ${
-                state.serviceCount >= 3 ? "grid-cols-2" : "grid-cols-1"
-              }`}
-            >
-              {Array.from({ length: state.serviceCount }).map((_, i) => {
-                const en = state.serviceAreas[i] ?? "";
-                const ge = state.serviceAreasSecondary[i] ?? "";
-                if (useSecondary) {
-                  if (!en.trim() && !ge.trim() && !editable) return null;
-                } else if (!en.trim() && !editable) {
-                  return null;
-                }
-                return (
-                  <div
-                    key={i}
-                    className="rounded border border-black/5 px-3 py-2 text-sm"
-                    style={{ borderColor: "var(--accent-secondary)" }}
-                  >
-                    <InlineEditable
-                      value={useSecondary ? ge : en}
-                      onChange={(v) => setServiceLine(i, v)}
-                      fallbackIfEmpty={useSecondary ? en : ""}
-                      showFallbackIndicator={useSecondary}
-                      placeholder={`Service ${i + 1}`}
-                      editable={editable}
-                      className="block w-full"
-                      style={bodyStyle}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-            <a
-              href={telHref(state.phone)}
-              className="inline-flex min-h-[44px] items-center justify-center rounded-lg px-6 py-3 text-sm font-bold text-white"
-              style={{ background: "var(--accent)" }}
-            >
-              Contact Me
-            </a>
-          </div>
-        </section>
+        {/* 2. Locked Primary CTAs */}
+        <CtaSegment 
+          state={state} 
+          headingStyle={headingStyle} 
+        />
 
-        {/* Section 3 — practice areas with icons */}
-        <section
-          className="border-t px-4 py-8"
-          style={{ borderColor: "var(--accent-secondary)" }}
-        >
-          <h2
-            className="mb-4 text-lg font-bold"
-            style={headingStyle}
-          >
-            <InlineEditable
-              value={
-                useSecondary
-                  ? state.practiceHeadingSecondary
-                  : state.practiceHeading
-              }
-              onChange={(v) =>
-                patch(
-                  useSecondary
-                    ? { practiceHeadingSecondary: v }
-                    : { practiceHeading: v },
-                )
-              }
-              fallbackIfEmpty={useSecondary ? state.practiceHeading : ""}
-              showFallbackIndicator={useSecondary}
-              placeholder="Practice areas"
-              editable={editable}
-              className="block w-full"
-              style={headingStyle}
-            />
-          </h2>
-          <ul className="grid gap-3 sm:grid-cols-2">
-            {Array.from({ length: state.serviceCount }).map((_, i) => {
-              const en = state.serviceAreas[i] ?? "";
-              const ge = state.serviceAreasSecondary[i] ?? "";
-              if (useSecondary) {
-                if (!en.trim() && !ge.trim() && !editable) return null;
-              } else if (!en.trim() && !editable) {
-                return null;
-              }
-              const Icon = ICONS[i % ICONS.length];
-              return (
-                <li key={i} className="flex items-start gap-2">
-                  <Icon
-                    className="mt-0.5 h-5 w-5 shrink-0"
-                    style={{ color: "var(--accent)" }}
-                    aria-hidden
-                  />
-                  <span className="min-w-0 flex-1 text-sm leading-snug">
-                    <InlineEditable
-                      value={useSecondary ? ge : en}
-                      onChange={(v) => setServiceLine(i, v)}
-                      fallbackIfEmpty={useSecondary ? en : ""}
-                      showFallbackIndicator={useSecondary}
-                      placeholder={`Service ${i + 1}`}
-                      editable={editable}
-                      className="block w-full"
-                      style={bodyStyle}
-                    />
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
+        {/* 3. Toggleable Sections System */}
+        <SectionDispatcher 
+          state={state} 
+          editable={editable} 
+          useSecondary={useSecondary} 
+          isResponsive={isResponsive} 
+          patch={patch} 
+          setServiceLine={setServiceLine} 
+          setServiceDescriptionLine={setServiceDescriptionLine} 
+          headingStyle={headingStyle} 
+          bodyStyle={bodyStyle} 
+          itemVariants={customItemVariants} 
+          glassStyle={glassStyle} 
+          icons={ICONS} 
+        />
 
-        {/* Section 4 — contact + footer */}
-        <section
-          className="border-t px-4 py-8"
-          style={{ borderColor: "var(--accent-secondary)" }}
-        >
-          <div className="space-y-3 text-sm">
-            <div className="flex items-center gap-2 font-semibold">
-              <Phone className="h-4 w-4 shrink-0" aria-hidden />
-              <InlineEditable
-                value={state.phone}
-                onChange={(v) => patch({ phone: v })}
-                placeholder="Phone"
-                editable={editable}
-                inputMode="tel"
-                className="min-w-0 flex-1"
-                style={{ color: "var(--accent)", ...bodyStyle }}
-              />
-            </div>
-            <div className="flex items-start gap-2">
-              <Mail className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
-              <span className="min-w-0 flex-1 underline">
-                <InlineEditable
-                  value={state.email}
-                  onChange={(v) => patch({ email: v })}
-                  placeholder="Email"
-                  editable={editable}
-                  inputMode="email"
-                  className="block w-full"
-                  style={bodyStyle}
-                />
-              </span>
-            </div>
-            <a
-              href={waHref(state.phone)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 font-semibold"
-              style={{ color: "var(--accent)" }}
-            >
-              <MessageCircle className="h-4 w-4" aria-hidden />
-              WhatsApp
-            </a>
-            <div className="flex flex-wrap gap-3 pt-2">
-              {showSocial(state.social.facebook) && (
-                <a
-                  href={state.social.facebook}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[var(--accent)]"
-                  aria-label="Facebook"
-                >
-                  <Facebook className="h-6 w-6" />
-                </a>
-              )}
-              {showSocial(state.social.instagram) && (
-                <a
-                  href={state.social.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[var(--accent)]"
-                  aria-label="Instagram"
-                >
-                  <Instagram className="h-6 w-6" />
-                </a>
-              )}
-              {showSocial(state.social.linkedin) && (
-                <a
-                  href={state.social.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[var(--accent)]"
-                  aria-label="LinkedIn"
-                >
-                  <Linkedin className="h-6 w-6" />
-                </a>
-              )}
-              {showSocial(state.social.tiktok) && (
-                <a
-                  href={state.social.tiktok}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[var(--accent)]"
-                  aria-label="TikTok"
-                >
-                  <span className="text-xs font-bold">TT</span>
-                </a>
-              )}
-              {showSocial(state.social.youtube) && (
-                <a
-                  href={state.social.youtube}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[var(--accent)]"
-                  aria-label="YouTube"
-                >
-                  <Youtube className="h-6 w-6" />
-                </a>
-              )}
-              {state.social.extra.map((e, i) =>
-                e.url.trim() ? (
-                  <a
-                    key={i}
-                    href={e.url.trim()}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs font-semibold underline"
-                    style={{ color: "var(--accent)" }}
-                  >
-                    {e.label || "Link"}
-                  </a>
-                ) : null
-              )}
-            </div>
-            <div className="pt-2">
-              {state.addGoogleMap && address.trim() ? (
-                <div
-                  className="mb-2 text-[var(--text-primary)] underline"
-                  style={bodyStyle}
-                >
-                  <InlineEditable
-                    value={useSecondary ? state.addressSecondary : state.address}
-                    onChange={(v) =>
-                      patch(
-                        useSecondary ? { addressSecondary: v } : { address: v },
-                      )
-                    }
-                    fallbackIfEmpty={useSecondary ? state.address : ""}
-                    showFallbackIndicator={useSecondary}
-                    placeholder="Address"
-                    multiline
-                    editable={editable}
-                    className="block w-full"
-                    style={bodyStyle}
-                  />
-                </div>
-              ) : (
-                <div className="text-[var(--text-primary)]" style={bodyStyle}>
-                  <InlineEditable
-                    value={useSecondary ? state.addressSecondary : state.address}
-                    onChange={(v) =>
-                      patch(
-                        useSecondary ? { addressSecondary: v } : { address: v },
-                      )
-                    }
-                    fallbackIfEmpty={useSecondary ? state.address : ""}
-                    showFallbackIndicator={useSecondary}
-                    placeholder="Address"
-                    multiline
-                    editable={editable}
-                    className="block w-full"
-                    style={bodyStyle}
-                  />
-                </div>
-              )}
-            </div>
-            <div>
-              <InlineEditable
-                value={useSecondary ? state.hoursSecondary : state.hours}
-                onChange={(v) =>
-                  patch(useSecondary ? { hoursSecondary: v } : { hours: v })
-                }
-                fallbackIfEmpty={useSecondary ? state.hours : ""}
-                showFallbackIndicator={useSecondary}
-                placeholder="Hours"
-                editable={editable}
-                className="block w-full"
-                style={bodyStyle}
-              />
-            </div>
-            {state.addGoogleMap && address.trim() ? (
-              <div className="mt-4 aspect-video w-full overflow-hidden rounded-lg bg-slate-200">
-                <iframe
-                  title="Map"
-                  className="h-full w-full border-0"
-                  loading="lazy"
-                  src={`https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`}
-                />
-              </div>
-            ) : null}
-          </div>
+        {/* 4. Locked Contact Zone */}
+        <ContactSegment 
+          state={state} 
+          editable={editable} 
+          useSecondary={useSecondary} 
+          isResponsive={isResponsive} 
+          patch={patch} 
+          bodyStyle={bodyStyle} 
+          itemVariants={customItemVariants} 
+          glassStyle={glassStyle} 
+        />
 
-          <footer
-            className="mt-10 border-t pt-6 text-center text-xs opacity-80"
-            style={{ borderColor: "var(--accent-secondary)" }}
-          >
-            <p>
-              © {new Date().getFullYear()} {ownerName || "—"}. Built by{" "}
-              <Link
-                href={homeHref}
-                className="font-semibold underline"
-                style={{ color: "var(--accent)" }}
-              >
-                Genezisi
-              </Link>
-            </p>
-          </footer>
-        </section>
-      </div>
+        {/* 5. Locked Social Row */}
+        <SocialSegment 
+          state={state} 
+          isResponsive={isResponsive} 
+          itemVariants={customItemVariants} 
+        />
+
+        {/* 6. Locked Utility Row */}
+        <UtilitySegments 
+          state={state} 
+          ownerName={ownerName} 
+          qrDataUrl={qrDataUrl} 
+          shareFeedback={shareFeedback} 
+          handleShare={handleShare} 
+          referHref={`https://wa.me/?text=${encodeURIComponent(`I highly recommend ${state.name} — ${state.title}. View their card: ${window.location.href}`)}`} 
+        />
+
+        {/* 7. Locked Footer */}
+        <BrandingFooter 
+          ownerName={ownerName} 
+          hideBranding={hideBranding} 
+          homeHref={homeHref} 
+        />
+      </motion.div>
     </div>
   );
-}
+});
+
+export default BusinessCardTemplate;

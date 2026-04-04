@@ -41,6 +41,52 @@ export interface FontPreset {
   bodyWeight: number;
 }
 
+export interface VibePreset {
+  id: string;
+  labelKa: string;
+  labelEn: string;
+  /** UI features: glass blur, shadow depth, etc. */
+  blur: string;
+  shadow: string;
+  borderOpacity: number;
+}
+
+export interface AnimationPreset {
+  id: string;
+  labelKa: string;
+  labelEn: string;
+  /** Framer motion spring settings or base delay */
+  stagger: number;
+  entranceY: number;
+  springDamping: number;
+}
+
+export interface PhotoShapePreset {
+  id: string;
+  labelKa: string;
+  labelEn: string;
+  icon: string;
+}
+
+export interface PhotoEffectPreset {
+  id: string;
+  labelKa: string;
+  labelEn: string;
+  filter: string;
+}
+
+export interface PhotoBorderPreset {
+  id: string;
+  labelKa: string;
+  labelEn: string;
+}
+
+export interface PhotoOverlayPreset {
+  id: string;
+  labelKa: string;
+  labelEn: string;
+}
+
 /** §8.1 — eight solid backgrounds (light + two dark) */
 export const BACKGROUND_SOLID_PRESETS: BackgroundPreset[] = [
   {
@@ -233,21 +279,78 @@ export const FONT_PRESETS: FontPreset[] = [
   },
 ];
 
+export const VIBE_PRESETS: VibePreset[] = [
+  {
+    id: "minimal",
+    labelKa: "მინიმალური",
+    labelEn: "Minimal",
+    blur: "0px",
+    shadow: "0 1px 3px 0 rgb(0 0 0 / 0.1)",
+    borderOpacity: 0.1,
+  },
+  {
+    id: "glass",
+    labelKa: "მინა",
+    labelEn: "Glassmorphic",
+    blur: "16px",
+    shadow: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+    borderOpacity: 0.25,
+  },
+  {
+    id: "neon",
+    labelKa: "ნეონი",
+    labelEn: "Neon glow",
+    blur: "4px",
+    shadow: "0 0 15px currentColor",
+    borderOpacity: 0.4,
+  },
+];
+
+export const ANIMATION_PRESETS: AnimationPreset[] = [
+  {
+    id: "fade",
+    labelKa: "გაქრობა",
+    labelEn: "Subtle fade",
+    stagger: 0.05,
+    entranceY: 10,
+    springDamping: 25,
+  },
+  {
+    id: "spring",
+    labelKa: "ზამბარა",
+    labelEn: "Playful spring",
+    stagger: 0.08,
+    entranceY: 30,
+    springDamping: 12,
+  },
+  {
+    id: "cinematic",
+    labelKa: "კინემატოგრაფიული",
+    labelEn: "Cinematic",
+    stagger: 0.15,
+    entranceY: 50,
+    springDamping: 20,
+  },
+];
+
 export function isBackgroundLockingTextColor(backgroundId: string): boolean {
   const bg = BACKGROUND_PRESETS.find((p) => p.id === backgroundId);
   return Boolean(bg?.locksTextColor);
 }
-
 export function resolveStyleVariables(selection: {
   backgroundId: string;
   textColorId: string;
   accentId: string;
   fontId: string;
+  vibeId: string;
+  animationId: string;
 }): CSSProperties {
   const bg = BACKGROUND_PRESETS.find((p) => p.id === selection.backgroundId) ?? BACKGROUND_PRESETS[0];
   const txt = TEXT_COLOR_PRESETS.find((p) => p.id === selection.textColorId) ?? TEXT_COLOR_PRESETS[0];
   const acc = ACCENT_PRESETS.find((p) => p.id === selection.accentId) ?? ACCENT_PRESETS[0];
   const font = FONT_PRESETS.find((p) => p.id === selection.fontId) ?? FONT_PRESETS[1];
+  const vibe = VIBE_PRESETS.find((p) => p.id === selection.vibeId) ?? VIBE_PRESETS[0];
+  const anim = ANIMATION_PRESETS.find((p) => p.id === selection.animationId) ?? ANIMATION_PRESETS[0];
 
   const textColor =
     bg.locksTextColor ? bg.pairedTextColor : txt.color;
@@ -261,6 +364,12 @@ export function resolveStyleVariables(selection: {
     ["--font-body" as string]: font.fontBody,
     ["--font-heading-weight" as string]: String(font.headingWeight),
     ["--font-body-weight" as string]: String(font.bodyWeight),
+    ["--glass-blur" as string]: vibe.blur,
+    ["--card-shadow" as string]: vibe.shadow,
+    ["--border-opacity" as string]: String(vibe.borderOpacity),
+    ["--stagger-delay" as string]: String(anim.stagger),
+    ["--entrance-y" as string]: String(anim.entranceY),
+    ["--spring-damping" as string]: String(anim.springDamping),
   } as CSSProperties;
 }
 
@@ -275,3 +384,38 @@ export const LEGACY_BACKGROUND_ID_MAP: Record<string, string> = {
   grad1: "dawn",
   grad2: "ocean",
 };
+
+export const PHOTO_SHAPE_PRESETS: PhotoShapePreset[] = [
+  { id: "circle", labelKa: "წრე", labelEn: "Circle", icon: "Circle" },
+  { id: "rounded-square", labelKa: "კვადრატი", labelEn: "Square", icon: "Square" },
+  { id: "wide-cinematic", labelKa: "კინემატოგრაფიული", labelEn: "Cinematic", icon: "Monitor" },
+];
+
+export const PHOTO_EFFECT_PRESETS: PhotoEffectPreset[] = [
+  { id: "none", labelKa: "ორიგინალი", labelEn: "Original", filter: "none" },
+  { id: "bw", labelKa: "შავ-თეთრი", labelEn: "B&W", filter: "grayscale(100%)" },
+  { id: "sepia", labelKa: "სეპია", labelEn: "Sepia Warm", filter: "sepia(40%)" },
+  { id: "cool", labelKa: "ცივი ტონი", labelEn: "Cool Tone", filter: "saturate(0.7) contrast(1.1) hue-rotate(180deg)" },
+  { id: "high-contrast", labelKa: "კონტრასტული", labelEn: "High Contrast", filter: "contrast(130%) saturate(110%)" },
+  { id: "soft-focus", labelKa: "რბილი", labelEn: "Soft Focus", filter: "blur(2px) brightness(1.1)" },
+  { id: "vivid", labelKa: "კაშკაშა", labelEn: "Vivid", filter: "saturate(150%)" },
+  { id: "duotone", labelKa: "დუოტონი", labelEn: "Duotone", filter: "grayscale(100%) contrast(1.2)" },
+  { id: "film-grain", labelKa: "ფირის მარცვალი", labelEn: "Film Grain", filter: "none" },
+  { id: "fade-to-white", labelKa: "თეთრში დაშლა", labelEn: "Fade to White", filter: "none" },
+];
+
+export const PHOTO_OVERLAY_PRESETS: PhotoOverlayPreset[] = [
+  { id: "none", labelKa: "გარეშე", labelEn: "None" },
+  { id: "gradient-fade", labelKa: "გრადიენტი", labelEn: "Gradient Fade" },
+  { id: "color-tint", labelKa: "ფერადი ტიხარი", labelEn: "Color Tint" },
+  { id: "dark-vignette", labelKa: "ვინეტი", labelEn: "Dark Vignette" },
+];
+
+export const PHOTO_BORDER_PRESETS: PhotoBorderPreset[] = [
+  { id: "none", labelKa: "ჩარჩოს გარეშე", labelEn: "No Border" },
+  { id: "thin-ring", labelKa: "თხელი წრე", labelEn: "Thin Ring" },
+  { id: "thick-ring", labelKa: "სქელი წრე", labelEn: "Thick Ring" },
+  { id: "glow-ring", labelKa: "ნეონ-გლოუ", labelEn: "Glow Ring" },
+  { id: "double-frame", labelKa: "ორმაგი ჩარჩო", labelEn: "Double Frame" },
+  { id: "gradient-border", labelKa: "გრადიენტ-ჩარჩო", labelEn: "Gradient Border" },
+];

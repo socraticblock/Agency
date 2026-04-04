@@ -11,6 +11,10 @@ interface LocalBusinessOptions {
   addressLocality?: string;
   postalCode?: string;
   addressCountry?: string;
+  jobTitle?: string;
+  accentColor?: string;
+  photoUrl?: string;
+  theme?: "light" | "dark";
 }
 
 interface SeoResult {
@@ -41,17 +45,34 @@ export function createLocalBusinessSeo(options: LocalBusinessOptions): SeoResult
     addressLocality = "Tbilisi",
     postalCode = "",
     addressCountry = "GE",
+    jobTitle = "Expert",
+    accentColor = "#fbbf24",
+    photoUrl,
+    theme = "dark",
   } = options;
 
   const baseUrl = getBaseUrl().replace(/\/$/, "");
   /** Public URLs only use routed locales (`/en` today; `/ka` redirects). */
   const pathLocale = locale === "ka" ? defaultLocale : locale;
-  const localizedPath = `/${pathLocale}${path.startsWith("/") ? path : `/${path}`}`;
-  const url = `${baseUrl}${localizedPath}`;
+  const synchronizedPath = `/${pathLocale}${path.startsWith("/") ? path : `/${path}`}`;
+  const url = `${baseUrl}${synchronizedPath}`;
 
-  const title = name;
+  const title = jobTitle ? `${name} | ${jobTitle}` : name;
   const localeTag = getLocaleTag(locale);
-  const ogImageUrl = `${baseUrl}/api/og?locale=${encodeURIComponent(pathLocale)}&title=${encodeURIComponent(name)}`;
+
+  // Construct High-Fidelity OG Image URL with parameters
+  const ogParams = new URLSearchParams({
+    name,
+    title: jobTitle,
+    accent: accentColor,
+    theme,
+  });
+
+  if (photoUrl) {
+    ogParams.set("photo", photoUrl);
+  }
+  
+  const ogImageUrl = `${baseUrl}/api/og?${ogParams.toString()}`;
 
   const metadata: Metadata = {
     title,
@@ -68,7 +89,7 @@ export function createLocalBusinessSeo(options: LocalBusinessOptions): SeoResult
       title,
       description,
       url,
-      siteName: name,
+      siteName: "Genezisi",
       locale: localeTag,
       type: "website",
       images: [
@@ -76,7 +97,7 @@ export function createLocalBusinessSeo(options: LocalBusinessOptions): SeoResult
           url: ogImageUrl,
           width: 1200,
           height: 630,
-          alt: name,
+          alt: `${name} - ${jobTitle}`,
         },
       ],
     },
@@ -104,6 +125,7 @@ export function createLocalBusinessSeo(options: LocalBusinessOptions): SeoResult
     },
     areaServed: "Tbilisi, Georgia",
     image: ogImageUrl,
+    jobTitle,
     priceRange: "$$",
   };
 

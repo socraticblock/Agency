@@ -1,0 +1,24 @@
+---
+description: Rule for guarding Elite Digital Business Card features and preventing redundant re-implementation.
+globs: src/app/[locale]/start/**, src/lib/seo.ts, src/app/api/og/route.tsx
+---
+
+# Elite Digital Business Card: Preservation Rule
+
+You are working on a high-end, production-ready Digital Business Card. Most core "Elite Upgrade" features are already implemented.
+
+## CRITICAL INSTRUCTION: CHECK BEFORE WORK
+**Before proposing or performing any modifications to the Business Card or related SEO/OG logic, you MUST:**
+1.  **Inspect the current implementation**: Run `view_file` on `BusinessCardTemplate.tsx` and its `segments/*.tsx` to verify what exists.
+2.  **Verify Elite Status**: Check for existing cinematic OG logic in `src/app/api/og/route.tsx`.
+3.  **Prevent Redundancy**: Do NOT re-implement features like 3D tilt, viral sharing text, refined OG previews, or modular component structures. They are already complete.
+
+## Existing "Elite" Baseline
+The following features are ALREADY implemented and must be the foundation for any new work:
+- **Modular Componentry**: Main template < 200 lines; UI split into `segments/` (Hero, Services, Contact, Utility, Footer).
+- **Cinematic OG Engine**: Dynamic social previews with radial gradients and premium typography in `src/app/api/og/route.tsx`.
+- **Viral Distribution**: Persuasive "Refer Me" WhatsApp copy in `UtilitySegments.tsx`.
+- **3D Interactive Layer**: Deployed via `useCardTilt.ts`.
+- **Adaptive SEO**: Dynamic metadata injection via `src/lib/seo.ts`.
+
+**FAILURE TO CHECK THE CODE FIRST IS A VIOLATION OF THIS RULE.**

@@ -1,6 +1,6 @@
-import { Navbar } from "../_components/Navbar";
+import { Navbar } from "../../_components/Navbar";
 import type { Locale } from "@/lib/i18n";
-import "./start-shell.css";
+import "../start-shell.css";
 
 function normalizeLocale(locale: string | undefined): Locale {
   if (locale && (locale === "en" || locale === "ka")) return locale;

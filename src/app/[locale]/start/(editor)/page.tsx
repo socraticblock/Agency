@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { createLocalBusinessSeo } from "@/lib/seo";
 import type { Locale } from "@/lib/i18n";
-import { StartPageClient } from "./components/StartPageClient";
+import { StartPageClient } from "../components/StartPageClient";
 
 function normalizeLocale(locale: string | undefined): Locale {
   if (locale && (locale === "en" || locale === "ka")) return locale;

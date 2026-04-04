@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams } from "next/navigation";
 import type { Dispatch, SetStateAction } from "react";
 import type { Lane1CustomizerState, PrimaryLang, SecondaryLangMode } from "../lib/types";
@@ -12,6 +12,12 @@ import {
   FONT_PRESETS,
   isBackgroundLockingTextColor,
   TEXT_COLOR_PRESETS,
+  VIBE_PRESETS,
+  ANIMATION_PRESETS,
+  PHOTO_SHAPE_PRESETS,
+  PHOTO_EFFECT_PRESETS,
+  PHOTO_OVERLAY_PRESETS,
+  PHOTO_BORDER_PRESETS,
 } from "../lib/presets";
 import { buildLane1WhatsAppUrl } from "../lib/whatsapp";
 import { LANE1_BASE_GEL, computeLane1Total } from "../lib/lane1-pricing";
@@ -23,9 +29,16 @@ import {
   BackgroundSolidPresetGrid,
   FontPresetGrid,
   TextColorPresetGrid,
+  VibePresetGrid,
+  AnimationPresetGrid,
+  PhotoShapePresetGrid,
+  PhotoEffectPresetGrid,
+  PhotoOverlayPresetGrid,
+  PhotoBorderPresetGrid,
 } from "./StylePresetGrids";
 import { CollapsibleSection } from "./CollapsibleSection";
-import { MessageCircle, Eye } from "lucide-react";
+import { MessageCircle, Eye, QrCode, Printer, ZoomIn, Move } from "lucide-react";
+import { downloadQRCode, generateBrandedQR } from "../lib/identity-kit";
 
 const fieldClass = "start-field mt-1.5 w-full";
 const labelClass = "start-label mb-1.5";
@@ -80,12 +93,10 @@ function ServiceCountStepper({
 export function StartCustomizer({
   state,
   setState,
-  onBackToSectors,
   showOrderFooter = true,
 }: {
   state: Lane1CustomizerState;
   setState: Dispatch<SetStateAction<Lane1CustomizerState>>;
-  onBackToSectors: () => void;
   /** Set false when the mobile sheet renders a sticky footer outside. */
   showOrderFooter?: boolean;
 }) {
@@ -109,6 +120,66 @@ export function StartCustomizer({
     setOpenSection((current) => (current === sectionId ? null : sectionId));
   }
 
+  const onBackgroundChange = useCallback(
+    (backgroundId: string) => {
+      setState((s) => ({
+        ...s,
+        style: { ...s.style, backgroundId },
+      }));
+    },
+    [setState],
+  );
+
+  const onTextColorChange = useCallback(
+    (textColorId: string) => {
+      setState((s) => ({
+        ...s,
+        style: { ...s.style, textColorId },
+      }));
+    },
+    [setState],
+  );
+
+  const onAccentChange = useCallback(
+    (accentId: string) => {
+      setState((s) => ({
+        ...s,
+        style: { ...s.style, accentId },
+      }));
+    },
+    [setState],
+  );
+
+  const onFontChange = useCallback(
+    (fontId: string) => {
+      setState((s) => ({
+        ...s,
+        style: { ...s.style, fontId },
+      }));
+    },
+    [setState],
+  );
+
+  const onVibeChange = useCallback(
+    (vibeId: string) => {
+      setState((s) => ({
+        ...s,
+        style: { ...s.style, vibeId },
+      }));
+    },
+    [setState],
+  );
+
+  const onAnimationChange = useCallback(
+    (animationId: string) => {
+      setState((s) => ({
+        ...s,
+        style: { ...s.style, animationId },
+      }));
+    },
+    [setState],
+  );
+
   function setServiceArea(i: number, v: string, secondary: boolean) {
     setState((s) => {
       if (secondary) {
@@ -124,6 +195,19 @@ export function StartCustomizer({
       const next = [...s.serviceAreas] as [string, string, string, string];
       next[i] = v;
       return { ...s, serviceAreas: next };
+    });
+  }
+
+  function setServiceDescription(i: number, v: string, secondary: boolean) {
+    setState((s) => {
+      if (secondary) {
+        const next = [...s.serviceDescriptionsSecondary] as [string, string, string, string];
+        next[i] = v;
+        return { ...s, serviceDescriptionsSecondary: next };
+      }
+      const next = [...s.serviceDescriptions] as [string, string, string, string];
+      next[i] = v;
+      return { ...s, serviceDescriptions: next };
     });
   }
 
@@ -162,15 +246,7 @@ export function StartCustomizer({
 
   return (
     <div className="space-y-4 pb-4 md:space-y-6 md:pb-8">
-      <div className="flex flex-wrap items-center justify-between gap-3 px-0.5">
-        <button
-          type="button"
-          onClick={onBackToSectors}
-          className="min-h-[44px] text-sm font-semibold text-[#1A2744] underline decoration-[#1A2744]/30 underline-offset-4 transition hover:decoration-[#1A2744] md:min-h-0"
-        >
-          ← Choose sector
-        </button>
-
+      <div className="flex flex-wrap items-center justify-end gap-3 px-0.5">
         <div className="flex items-center gap-4">
           <button
             type="button"
@@ -178,7 +254,8 @@ export function StartCustomizer({
               sessionStorage.setItem("businessCardPreview", JSON.stringify(state));
               window.open(`/${params.locale}/start/preview`, "_blank");
             }}
-            className="flex items-center gap-2 text-sm font-semibold text-[#1A2744] underline decoration-[#1A2744]/30 underline-offset-4 transition hover:decoration-[#1A2744]"
+            className="flex items-center gap-2 text-sm font-semibold underline underline-offset-4 transition hover:opacity-80"
+            style={{ color: "var(--accent)", textDecorationColor: "color-mix(in srgb, var(--accent) 30%, transparent)" }}
           >
             <Eye className="h-4 w-4" />
             Preview my site
@@ -189,7 +266,8 @@ export function StartCustomizer({
               clearLane1State();
               setState(defaultLane1State());
             }}
-            className="text-xs font-medium text-[#64748b] transition hover:text-[#1e293b]"
+            className="text-xs font-medium opacity-60 transition hover:opacity-100"
+            style={{ color: "var(--text-primary)" }}
           >
             Reset
           </button>
@@ -212,7 +290,8 @@ export function StartCustomizer({
               <input
                 type="radio"
                 name="primaryLang"
-                className="mt-0.5 h-4 w-4 accent-[#1A2744]"
+                className="mt-0.5 h-4 w-4"
+                style={{ accentColor: "var(--accent)" }}
                 checked={state.primaryLang === "en"}
                 onChange={() => patch({ primaryLang: "en" as PrimaryLang })}
               />
@@ -266,6 +345,39 @@ export function StartCustomizer({
             />
           </label>
         ) : null}
+
+        <label className={labelClass}>
+          Company Name
+          <input
+            className={fieldClass}
+            value={state.company}
+            onChange={(e) => patch({ company: e.target.value })}
+            placeholder="e.g. Agency Name"
+          />
+        </label>
+
+        <label className={labelClass}>
+          Tagline (EN)
+          <input
+            className={fieldClass}
+            value={state.tagline}
+            onChange={(e) => patch({ tagline: e.target.value })}
+            placeholder="e.g. Professional tagline..."
+          />
+        </label>
+
+        {state.secondaryMode === "self" ? (
+          <label className={labelClass}>
+            Tagline (GE)
+            <input
+              className={fieldClass}
+              value={state.taglineSecondary}
+              onChange={(e) => patch({ taglineSecondary: e.target.value })}
+              placeholder="სლოგანი"
+            />
+          </label>
+        ) : null}
+
         <label className={labelClass}>
           Phone
           <input
@@ -347,8 +459,7 @@ export function StartCustomizer({
         onToggle={() => toggleSection("photo")}
       >
         <p className="start-caption">
-          JPG or PNG, max 5 MB. We compress to ~200 KB for browser storage. Tap the circle in the
-          preview to upload.
+          JPG or PNG, max 5 MB. We compress to ~200 KB for browser storage. 
         </p>
         <input
           type="file"
@@ -360,6 +471,100 @@ export function StartCustomizer({
         {photoHint ? (
           <p className="text-xs font-medium text-amber-800">{photoHint}</p>
         ) : null}
+
+        {state.photoDataUrl && (
+          <div className="mt-6 space-y-6 animate-in fade-in slide-in-from-top-2">
+            <PhotoShapePresetGrid
+              options={PHOTO_SHAPE_PRESETS}
+              value={state.style?.photoShape || "circle"}
+              onChange={(id) => setState(s => ({ ...s, style: { ...s.style, photoShape: id as any } }))}
+            />
+
+            <div className="flex items-center gap-2 rounded-xl border border-slate-100 bg-white p-1">
+              {(["left", "center"] as const).map((pos) => (
+                <button
+                  key={pos}
+                  onClick={() => setState(s => ({ ...s, style: { ...s.style, photoAlignment: pos } }))}
+                  className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg py-2 text-xs font-semibold capitalize transition-all ${
+                    (state.style?.photoAlignment || "left") === pos
+                      ? "bg-[#1A2744] text-white shadow-sm"
+                      : "text-slate-500 hover:bg-slate-50"
+                  }`}
+                >
+                  <Move className="h-3 w-3" />
+                  {pos === "left" ? "Split" : "Centered"}
+                </button>
+              ))}
+            </div>
+
+            <div className="space-y-4 rounded-xl border border-slate-100 bg-slate-50/50 p-3">
+               <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400">
+                 <ZoomIn className="h-3 w-3" /> Framing & Zoom
+               </div>
+               
+               <label className="block space-y-1.5">
+                 <div className="flex justify-between text-[11px] font-medium text-slate-500">
+                   <span>Scale</span>
+                   <span>{state.style?.photoZoom || 100}%</span>
+                 </div>
+                 <input
+                   type="range"
+                   min="100"
+                   max="200"
+                   step="1"
+                   value={state.style?.photoZoom || 100}
+                   onChange={(e) => setState(s => ({ ...s, style: { ...s.style, photoZoom: parseInt(e.target.value) } }))}
+                   className="w-full transition-all accent-[#1A2744]"
+                 />
+               </label>
+
+               <div className="grid grid-cols-2 gap-4">
+                 <label className="block space-y-1.5">
+                   <div className="text-[11px] font-medium text-slate-500">X Position</div>
+                   <input
+                     type="range"
+                     min="0"
+                     max="100"
+                     step="1"
+                     value={state.style?.photoPositionX ?? 50}
+                     onChange={(e) => setState(s => ({ ...s, style: { ...s.style, photoPositionX: parseInt(e.target.value) } }))}
+                     className="w-full accent-[#1A2744]"
+                   />
+                 </label>
+                 <label className="block space-y-1.5">
+                   <div className="text-[11px] font-medium text-slate-500">Y Position</div>
+                   <input
+                     type="range"
+                     min="0"
+                     max="100"
+                     step="1"
+                     value={state.style?.photoPositionY ?? 50}
+                     onChange={(e) => setState(s => ({ ...s, style: { ...s.style, photoPositionY: parseInt(e.target.value) } }))}
+                     className="w-full accent-[#1A2744]"
+                   />
+                 </label>
+               </div>
+            </div>
+
+            <PhotoEffectPresetGrid
+              options={PHOTO_EFFECT_PRESETS}
+              value={state.style?.photoEffect || "none"}
+              onChange={(id) => setState(s => ({ ...s, style: { ...s.style, photoEffect: id as any } }))}
+            />
+
+            <PhotoOverlayPresetGrid
+              options={PHOTO_OVERLAY_PRESETS}
+              value={state.style?.photoOverlay || "none"}
+              onChange={(id) => setState(s => ({ ...s, style: { ...s.style, photoOverlay: id as any } }))}
+            />
+
+            <PhotoBorderPresetGrid
+              options={PHOTO_BORDER_PRESETS}
+              value={state.style?.photoBorder || "none"}
+              onChange={(id) => setState(s => ({ ...s, style: { ...s.style, photoBorder: id as any } }))}
+            />
+          </div>
+        )}
       </CollapsibleSection>
 
       <CollapsibleSection
@@ -376,27 +581,45 @@ export function StartCustomizer({
           />
         </label>
         {Array.from({ length: state.serviceCount }).map((_, i) => (
-          <label key={i} className={labelClass}>
-            {`Service ${i + 1} (EN)`}
+          <div key={i} className="mb-4 space-y-1.5 last:mb-0">
+            <span className={labelClass}>{`Service ${i + 1} (EN)`}</span>
             <input
               className={fieldClass}
+              placeholder="Title (e.g. Real Estate)"
               value={state.serviceAreas[i]}
               onChange={(e) => setServiceArea(i, e.target.value, false)}
             />
-          </label>
+            <textarea
+              className={`${fieldClass} h-16 min-h-[64px] resize-none pt-2 text-xs`}
+              placeholder="Brief description (optional)..."
+              value={state.serviceDescriptions[i]}
+              onChange={(e) => setServiceDescription(i, e.target.value, false)}
+            />
+          </div>
         ))}
-        {state.secondaryMode === "self"
-          ? Array.from({ length: state.serviceCount }).map((_, i) => (
-              <label key={`s-${i}`} className={labelClass}>
-                {`Service ${i + 1} (GE)`}
+
+        {state.secondaryMode === "self" && (
+          <>
+            <div className="my-4 border-b border-slate-100" />
+            {Array.from({ length: state.serviceCount }).map((_, i) => (
+              <div key={`s-${i}`} className="mb-4 space-y-1.5 last:mb-0">
+                <span className={labelClass}>{`Service ${i + 1} (GE)`}</span>
                 <input
                   className={fieldClass}
+                  placeholder="სათაური"
                   value={state.serviceAreasSecondary[i]}
                   onChange={(e) => setServiceArea(i, e.target.value, true)}
                 />
-              </label>
-            ))
-          : null}
+                <textarea
+                  className={`${fieldClass} h-16 min-h-[64px] resize-none pt-2 text-xs`}
+                  placeholder="აღწერა (დამატებითი)..."
+                  value={state.serviceDescriptionsSecondary[i]}
+                  onChange={(e) => setServiceDescription(i, e.target.value, true)}
+                />
+              </div>
+            ))}
+          </>
+        )}
       </CollapsibleSection>
 
       <CollapsibleSection
@@ -467,24 +690,18 @@ export function StartCustomizer({
         <BackgroundSolidPresetGrid
           options={BACKGROUND_SOLID_PRESETS}
           value={state.style.backgroundId}
-          onChange={(backgroundId) =>
-            patch({ style: { ...state.style, backgroundId } })
-          }
+          onChange={onBackgroundChange}
         />
         <BackgroundGradientPresetGrid
           options={BACKGROUND_GRADIENT_PRESETS}
           value={state.style.backgroundId}
-          onChange={(backgroundId) =>
-            patch({ style: { ...state.style, backgroundId } })
-          }
+          onChange={onBackgroundChange}
         />
         {!textLocked ? (
           <TextColorPresetGrid
             options={TEXT_COLOR_PRESETS}
             value={state.style.textColorId}
-            onChange={(textColorId) =>
-              patch({ style: { ...state.style, textColorId } })
-            }
+            onChange={onTextColorChange}
           />
         ) : (
           <p className="start-caption">
@@ -502,7 +719,7 @@ export function StartCustomizer({
         <AccentPresetGrid
           options={ACCENT_PRESETS}
           value={state.style.accentId}
-          onChange={(accentId) => patch({ style: { ...state.style, accentId } })}
+          onChange={onAccentChange}
         />
       </CollapsibleSection>
 
@@ -515,7 +732,28 @@ export function StartCustomizer({
         <FontPresetGrid
           options={FONT_PRESETS}
           value={state.style.fontId}
-          onChange={(fontId) => patch({ style: { ...state.style, fontId } })}
+          onChange={onFontChange}
+        />
+      </CollapsibleSection>
+
+      <CollapsibleSection
+        id="experience"
+        title="Experience"
+        isOpen={openSection === "experience"}
+        onToggle={() => toggleSection("experience")}
+      >
+        <p className="start-caption">
+          Elevate the feeling of your site with luxury effects.
+        </p>
+        <VibePresetGrid 
+          options={VIBE_PRESETS}
+          value={state.style.vibeId}
+          onChange={onVibeChange}
+        />
+        <AnimationPresetGrid 
+          options={ANIMATION_PRESETS}
+          value={state.style.animationId}
+          onChange={onAnimationChange}
         />
       </CollapsibleSection>
 
@@ -581,6 +819,78 @@ export function StartCustomizer({
         </div>
       </CollapsibleSection>
 
+      <CollapsibleSection
+        id="identity"
+        title="Identity Kit"
+        isOpen={openSection === "identity"}
+        onToggle={() => toggleSection("identity")}
+      >
+        <p className="start-caption mb-4">
+          Professional assets for your physical business cards and phone home-screen.
+        </p>
+        
+        <div className="space-y-6">
+          <div className="flex flex-col items-center gap-3 rounded-xl border border-slate-100 bg-slate-50/50 p-4">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">Branded QR Code</h4>
+            <QRPreview state={state} />
+            <button
+              onClick={() => {
+                const nameSlug = state.name.toLowerCase().replace(/\s+/g, "-") || "business-card";
+                const url = `https://genezisi.com/c/${nameSlug}`;
+                downloadQRCode(state, url);
+              }}
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-bold shadow-sm ring-1 ring-black/5 hover:bg-slate-50 active:scale-95 transition-all"
+            >
+              <QrCode className="h-4 w-4" />
+              Download QR PNG
+            </button>
+            <p className="text-[10px] text-center text-slate-500 leading-tight">
+              High-resolution PNG for printing on physical cards, office signage, or invoices.
+            </p>
+          </div>
+
+          <div className="flex flex-col items-center gap-3 rounded-xl border border-slate-100 bg-slate-50/50 p-4">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">Print Kit</h4>
+            <button
+              onClick={() => window.print()}
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-bold shadow-sm ring-1 ring-black/5 hover:bg-slate-50 active:scale-95 transition-all text-[#1A2744]"
+            >
+              <Printer className="h-4 w-4" />
+              Download Print PDF
+            </button>
+            <p className="text-[10px] text-center text-slate-500 leading-tight">
+              Generates a clean, print-ready view of your name and QR code.
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-slate-100 bg-slate-50/50 p-4">
+             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2 text-center text-slate-500">App-Like Experience</h4>
+             <div className="flex items-center gap-3">
+                <div className="h-12 w-12 shrink-0 rounded-xl bg-slate-200 overflow-hidden shadow-sm ring-1 ring-black/5">
+                   {state.photoDataUrl ? (
+                      <img 
+                        key={state.photoDataUrl?.slice(0, 64) || "empty"}
+                        src={state.photoDataUrl} 
+                        alt="App Icon" 
+                        className="h-full w-full object-cover" 
+                      />
+                   ) : (
+                      <div className="flex h-full w-full items-center justify-center bg-slate-100">
+                         <span className="text-[10px] font-bold text-slate-400">Logo</span>
+                      </div>
+                   )}
+                </div>
+                <div className="flex-1 min-w-0">
+                   <p className="text-xs font-bold text-slate-700 truncate">{state.name || "Your Name"}</p>
+                   <p className="text-[10px] text-slate-500 leading-tight">
+                      When users "Add to Home Screen" on iPhone/Android, they'll see your branded icon.
+                   </p>
+                </div>
+             </div>
+          </div>
+        </div>
+      </CollapsibleSection>
+
       {showOrderFooter ? (
         <div className="start-glass-heavy space-y-4 p-4 md:p-6">
           <p className="start-body">
@@ -601,6 +911,26 @@ export function StartCustomizer({
           </a>
         </div>
       ) : null}
+    </div>
+  );
+}
+
+function QRPreview({ state }: { state: Lane1CustomizerState }) {
+  const [dataUrl, setDataUrl] = useState<string>("");
+
+  useEffect(() => {
+    const nameSlug = state.name.toLowerCase().replace(/\s+/g, "-") || "business-card";
+    const url = `https://genezisi.com/c/${nameSlug}`;
+    generateBrandedQR(state, url).then(setDataUrl);
+  }, [state.style.accentId, state.name]);
+
+  return (
+    <div className="flex h-32 w-32 items-center justify-center rounded-lg bg-white p-2 shadow-sm ring-1 ring-black/5">
+      {dataUrl ? (
+        <img src={dataUrl} alt="QR Preview" className="h-full w-full" />
+      ) : (
+        <div className="h-full w-full animate-pulse bg-slate-100 rounded" />
+      )}
     </div>
   );
 }
