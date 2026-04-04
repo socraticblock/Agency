@@ -132,6 +132,34 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
     return () => window.clearTimeout(t);
   }, [state.style.fontId]);
 
+  // Phase 2: Dynamic PWA Metadata Injection
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+
+    // 1. Apple Touch Icon (Home Screen Logo)
+    let appleIcon = document.querySelector('link[rel="apple-touch-icon"]') as HTMLLinkElement;
+    if (!appleIcon) {
+      appleIcon = document.createElement("link");
+      appleIcon.rel = "apple-touch-icon";
+      document.head.appendChild(appleIcon);
+    }
+    appleIcon.href = state.photoDataUrl || "/favicon.ico";
+
+    // 2. Theme Color (Mobile UI browser bars)
+    let themeColor = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement;
+    if (!themeColor) {
+      themeColor = document.createElement("meta");
+      themeColor.name = "theme-color";
+      document.head.appendChild(themeColor);
+    }
+    const accent = (vars as any)["--accent"] || "#1A2744";
+    themeColor.content = accent;
+
+    return () => {
+      // Optional: Cleanup if needed, but usually fine to leave for the session
+    };
+  }, [state.photoDataUrl, state.style.accentId, vars]);
+
   function patch(p: Partial<Lane1CustomizerState>) {
     onPatch?.(p);
   }
