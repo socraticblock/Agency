@@ -95,11 +95,16 @@ export function StartCustomizer({
 
   const [photoBusy, setPhotoBusy] = useState(false);
   const [photoHint, setPhotoHint] = useState<string | null>(null);
+  const [openSection, setOpenSection] = useState<string | null>("content"); // Default to first section open
 
   const textLocked = isBackgroundLockingTextColor(state.style.backgroundId);
 
   function patch(p: Partial<Lane1CustomizerState>) {
     setState((s) => ({ ...s, ...p }));
+  }
+
+  function toggleSection(sectionId: string) {
+    setOpenSection((current) => (current === sectionId ? null : sectionId));
   }
 
   function setServiceArea(i: number, v: string, secondary: boolean) {
@@ -175,7 +180,12 @@ export function StartCustomizer({
         </button>
       </div>
 
-      <CollapsibleSection title="Content" defaultOpen>
+      <CollapsibleSection
+        id="content"
+        title="Content"
+        isOpen={openSection === "content"}
+        onToggle={() => toggleSection("content")}
+      >
         <p className="start-caption">
           English is the default. Edit inline in the preview or here — both stay in sync.
         </p>
@@ -314,7 +324,12 @@ export function StartCustomizer({
         </label>
       </CollapsibleSection>
 
-      <CollapsibleSection title="Photo" defaultOpen>
+      <CollapsibleSection
+        id="photo"
+        title="Photo"
+        isOpen={openSection === "photo"}
+        onToggle={() => toggleSection("photo")}
+      >
         <p className="start-caption">
           JPG or PNG, max 5 MB. We compress to ~200 KB for browser storage. Tap the circle in the
           preview to upload.
@@ -331,7 +346,12 @@ export function StartCustomizer({
         ) : null}
       </CollapsibleSection>
 
-      <CollapsibleSection title="Service areas" defaultOpen>
+      <CollapsibleSection
+        id="services"
+        title="Service areas"
+        isOpen={openSection === "services"}
+        onToggle={() => toggleSection("services")}
+      >
         <label className={`${labelClass} text-center`}>
           How many services (1–4)
           <ServiceCountStepper
@@ -363,7 +383,12 @@ export function StartCustomizer({
           : null}
       </CollapsibleSection>
 
-      <CollapsibleSection title="Social media" defaultOpen>
+      <CollapsibleSection
+        id="social"
+        title="Social media"
+        isOpen={openSection === "social"}
+        onToggle={() => toggleSection("social")}
+      >
         {(["facebook", "instagram", "linkedin", "tiktok", "youtube"] as const).map((k) => (
           <label key={k} className={`${labelClass} capitalize`}>
             {k}
@@ -416,7 +441,12 @@ export function StartCustomizer({
         </button>
       </CollapsibleSection>
 
-      <CollapsibleSection title="Background" defaultOpen={false}>
+      <CollapsibleSection
+        id="background"
+        title="Background"
+        isOpen={openSection === "background"}
+        onToggle={() => toggleSection("background")}
+      >
         <p className="start-caption">§8.1–8.2 — solids and subtle gradients.</p>
         <BackgroundSolidPresetGrid
           options={BACKGROUND_SOLID_PRESETS}
@@ -447,7 +477,12 @@ export function StartCustomizer({
         )}
       </CollapsibleSection>
 
-      <CollapsibleSection title="Accent color" defaultOpen={false}>
+      <CollapsibleSection
+        id="accent"
+        title="Accent color"
+        isOpen={openSection === "accent"}
+        onToggle={() => toggleSection("accent")}
+      >
         <AccentPresetGrid
           options={ACCENT_PRESETS}
           value={state.style.accentId}
@@ -455,7 +490,12 @@ export function StartCustomizer({
         />
       </CollapsibleSection>
 
-      <CollapsibleSection title="Font style" defaultOpen={false}>
+      <CollapsibleSection
+        id="font"
+        title="Font style"
+        isOpen={openSection === "font"}
+        onToggle={() => toggleSection("font")}
+      >
         <FontPresetGrid
           options={FONT_PRESETS}
           value={state.style.fontId}
@@ -463,7 +503,12 @@ export function StartCustomizer({
         />
       </CollapsibleSection>
 
-      <CollapsibleSection title="Add-ons" defaultOpen={false}>
+      <CollapsibleSection
+        id="addons"
+        title="Add-ons"
+        isOpen={openSection === "addons"}
+        onToggle={() => toggleSection("addons")}
+      >
         <h4 className="start-subsection-title mb-2">Second language</h4>
         <p className="start-caption mb-3">
           Georgian as a second language on the card (bilingual toggle in the preview header).
