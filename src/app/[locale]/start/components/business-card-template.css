@@ -65,12 +65,12 @@
 @media (prefers-color-scheme: dark) {
   .business-card-template {
     /** 
-     * Forced dark mode overrides for light themes. 
-     * If the theme is already dark (locksTextColor is true), these can be more subtle.
+     * Default dark mode fallbacks for light themes.
+     * We remove !important to allow the customizer's inline styles to win.
      */
-    --bg-primary: #0F172A !important;
-    --text-primary: #F1F5F9 !important;
-    --accent-secondary: rgba(255, 255, 255, 0.1) !important;
+    --bg-primary: #0F172A;
+    --text-primary: #F1F5F9;
+    --accent-secondary: rgba(255, 255, 255, 0.1);
   }
 }
 

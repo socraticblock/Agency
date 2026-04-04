@@ -212,10 +212,12 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   const headingStyle: CSSProperties = {
     fontFamily: "var(--font-heading)",
     fontWeight: "var(--font-heading-weight)" as CSSProperties["fontWeight"],
+    color: "var(--text-primary)",
   };
   const bodyStyle: CSSProperties = {
     fontFamily: "var(--font-body)",
     fontWeight: "var(--font-body-weight)" as CSSProperties["fontWeight"],
+    color: "var(--text-primary)",
   };
 
   const fileRef = useRef<HTMLInputElement>(null);
