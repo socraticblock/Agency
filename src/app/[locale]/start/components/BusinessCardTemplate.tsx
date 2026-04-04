@@ -17,12 +17,15 @@ import {
   Linkedin,
   Youtube,
   Camera,
+  UserPlus,
+  ChevronDown,
 } from "lucide-react";
 import type { Lane1CustomizerState } from "../lib/types";
 import { resolveStyleVariables } from "../lib/presets";
 import { compressImageForLane1Storage } from "../lib/image-compress";
 import { InlineEditable } from "./InlineEditable";
 import { MagneticButton } from "../../_components/MagneticButton";
+import { downloadVCF } from "../lib/vcf-utils";
 import "./business-card-template.css";
 
 const ICONS = [Scale, Briefcase, Building2, Sparkles];
@@ -69,6 +72,8 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
 
   const isGlass = state.style.vibeId === "glass";
   const isNeon = state.style.vibeId === "neon";
+
+  const [expandedService, setExpandedService] = useState<number | null>(null);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -146,6 +151,23 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
     const next = [...state.serviceAreas] as [string, string, string, string];
     next[i] = v;
     onPatch({ serviceAreas: next });
+  }
+
+  function setServiceDescriptionLine(i: number, v: string) {
+    if (!onPatch) return;
+    if (useSecondary) {
+      const next = [...state.serviceDescriptionsSecondary] as [
+        string,
+        string,
+        string,
+        string,
+      ];
+      next[i] = v;
+      return onPatch({ serviceDescriptionsSecondary: next });
+    }
+    const next = [...state.serviceDescriptions] as [string, string, string, string];
+    next[i] = v;
+    onPatch({ serviceDescriptions: next });
   }
 
   const headingStyle: CSSProperties = {
@@ -410,14 +432,24 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
                 );
               })}
             </div>
-            <MagneticButton
-              as="a"
-              href={telHref(state.phone)}
-              className="inline-flex min-h-[44px] w-full items-center justify-center rounded-lg px-6 py-3 text-sm font-bold text-white transition-opacity hover:opacity-90 active:scale-[0.98]"
-              style={{ background: "var(--accent)" }}
-            >
-              Contact Me
-            </MagneticButton>
+            <div className="flex flex-col gap-3 w-full">
+              <MagneticButton
+                as="a"
+                href={telHref(state.phone)}
+                className="inline-flex min-h-[44px] w-full items-center justify-center rounded-lg px-6 py-3 text-sm font-bold text-white transition-opacity hover:opacity-90 active:scale-[0.98]"
+                style={{ background: "var(--accent)" }}
+              >
+                Contact Me
+              </MagneticButton>
+              <MagneticButton
+                onClick={() => downloadVCF(state, previewLang)}
+                className="inline-flex min-h-[44px] w-full items-center justify-center rounded-lg border px-6 py-3 text-sm font-bold transition-all hover:bg-black/5 active:scale-[0.98]"
+                style={{ borderColor: "var(--accent)", color: "var(--accent)" }}
+              >
+                <UserPlus className="mr-2 h-4 w-4" />
+                Save Contact
+              </MagneticButton>
+            </div>
           </div>
          </motion.section>
         </div> {/* END LEFT COLUMN */}
@@ -459,35 +491,89 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
               style={headingStyle}
             />
           </h2>
-          <ul className="grid gap-3 sm:grid-cols-2">
+          <ul className="flex flex-col gap-3">
             {Array.from({ length: state.serviceCount }).map((_, i) => {
-              const en = state.serviceAreas[i] ?? "";
-              const ge = state.serviceAreasSecondary[i] ?? "";
+              const enTitle = state.serviceAreas[i] ?? "";
+              const geTitle = state.serviceAreasSecondary[i] ?? "";
+              const enDesc = state.serviceDescriptions[i] ?? "";
+              const geDesc = state.serviceDescriptionsSecondary[i] ?? "";
+
+              const title = useSecondary ? geTitle : enTitle;
+              const desc = useSecondary ? geDesc : enDesc;
+
               if (useSecondary) {
-                if (!en.trim() && !ge.trim() && !editable) return null;
-              } else if (!en.trim() && !editable) {
+                if (!enTitle.trim() && !geTitle.trim() && !editable) return null;
+              } else if (!enTitle.trim() && !editable) {
                 return null;
               }
+
+              const isExpanded = expandedService === i;
               const Icon = ICONS[i % ICONS.length];
+
               return (
-                <li key={i} className="flex items-start gap-2">
-                  <Icon
-                    className="mt-0.5 h-5 w-5 shrink-0"
-                    style={{ color: "var(--accent)" }}
-                    aria-hidden
-                  />
-                  <span className="min-w-0 flex-1 text-sm leading-snug">
-                    <InlineEditable
-                      value={useSecondary ? ge : en}
-                      onChange={(v) => setServiceLine(i, v)}
-                      fallbackIfEmpty={useSecondary ? en : ""}
-                      showFallbackIndicator={useSecondary}
-                      placeholder={`Service ${i + 1}`}
-                      editable={editable}
-                      className="block w-full"
-                      style={bodyStyle}
+                <li
+                  key={i}
+                  className="overflow-hidden rounded-xl border transition-all"
+                  style={{
+                    borderColor: isExpanded ? "var(--accent)" : "rgba(0,0,0,0.05)",
+                    background: isExpanded ? "rgba(0,0,0,0.02)" : "transparent",
+                    ...glassStyle
+                  }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setExpandedService(isExpanded ? null : i)}
+                    className="flex w-full items-start gap-3 p-3 text-left"
+                  >
+                    <Icon
+                      className="mt-0.5 h-5 w-5 shrink-0"
+                      style={{ color: "var(--accent)" }}
+                      aria-hidden
                     />
-                  </span>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-sm font-bold leading-snug">
+                          <InlineEditable
+                            value={title}
+                            onChange={(v) => setServiceLine(i, v)}
+                            fallbackIfEmpty={useSecondary ? enTitle : ""}
+                            showFallbackIndicator={useSecondary}
+                            placeholder={`Service ${i + 1}`}
+                            editable={editable}
+                            className="block w-full"
+                          />
+                        </span>
+                        <ChevronDown
+                          className={`h-4 w-4 shrink-0 transition-transform ${isExpanded ? "rotate-180" : ""}`}
+                          style={{ color: "var(--accent)" }}
+                        />
+                      </div>
+                    </div>
+                  </button>
+
+                  <AnimatePresence>
+                    {isExpanded && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25, ease: "easeInOut" }}
+                      >
+                        <div className="border-t border-black/5 p-3 pt-0 text-sm leading-relaxed text-slate-600">
+                          <InlineEditable
+                            value={desc}
+                            onChange={(v) => setServiceDescriptionLine(i, v)}
+                            fallbackIfEmpty={useSecondary ? enDesc : ""}
+                            showFallbackIndicator={useSecondary}
+                            placeholder="Add a detailed description of your expertise in this area..."
+                            editable={editable}
+                            className="block w-full"
+                            style={bodyStyle}
+                          />
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </li>
               );
             })}

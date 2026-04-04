@@ -43,9 +43,11 @@ export interface Lane1CustomizerState {
   hours: string;
   hoursSecondary: string;
   serviceAreas: [string, string, string, string];
+  serviceDescriptions: [string, string, string, string];
   /** How many service rows are active (1–4) */
   serviceCount: number;
   serviceAreasSecondary: [string, string, string, string];
+  serviceDescriptionsSecondary: [string, string, string, string];
   social: SocialLinksState;
   practiceHeading: string;
   practiceHeadingSecondary: string;
@@ -85,8 +87,10 @@ export function defaultLane1State(): Lane1CustomizerState {
     hours: "",
     hoursSecondary: "",
     serviceAreas: ["", "", "", ""],
+    serviceDescriptions: ["", "", "", ""],
     serviceCount: 3,
     serviceAreasSecondary: ["", "", "", ""],
+    serviceDescriptionsSecondary: ["", "", "", ""],
     social: defaultSocial(),
     practiceHeading: "",
     practiceHeadingSecondary: "",
