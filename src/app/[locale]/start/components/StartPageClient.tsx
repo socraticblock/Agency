@@ -225,9 +225,14 @@ export function StartPageClient({ locale }: { locale: Locale }) {
                   }}
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <div className="start-glass-heavy flex min-h-10 shrink-0 cursor-pointer touch-manipulation items-start justify-center pt-2 pb-1">
+                  <button
+                    type="button"
+                    className="start-glass-heavy flex min-h-10 shrink-0 cursor-pointer touch-manipulation items-start justify-center pt-2 pb-1 outline-none"
+                    onClick={() => setMobileEditorOpen(false)}
+                    aria-label="Close editor"
+                  >
                     <div className="h-1 w-8 rounded-full bg-[#cbd5e1]" />
-                  </div>
+                  </button>
                   <div className="start-glass-heavy min-h-0 flex-1 overflow-y-auto px-4 pb-3">
                     <StartCustomizer
                       onBackToSectors={() => {
