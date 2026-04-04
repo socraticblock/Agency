@@ -85,12 +85,10 @@ function ServiceCountStepper({
 export function StartCustomizer({
   state,
   setState,
-  onBackToSectors,
   showOrderFooter = true,
 }: {
   state: Lane1CustomizerState;
   setState: Dispatch<SetStateAction<Lane1CustomizerState>>;
-  onBackToSectors: () => void;
   /** Set false when the mobile sheet renders a sticky footer outside. */
   showOrderFooter?: boolean;
 }) {
@@ -240,16 +238,7 @@ export function StartCustomizer({
 
   return (
     <div className="space-y-4 pb-4 md:space-y-6 md:pb-8">
-      <div className="flex flex-wrap items-center justify-between gap-3 px-0.5">
-        <button
-          type="button"
-          onClick={onBackToSectors}
-          className="min-h-[44px] text-sm font-semibold underline underline-offset-4 transition hover:opacity-80 md:min-h-0"
-          style={{ color: "var(--accent)", textDecorationColor: "color-mix(in srgb, var(--accent) 30%, transparent)" }}
-        >
-          ← Choose sector
-        </button>
-
+      <div className="flex flex-wrap items-center justify-end gap-3 px-0.5">
         <div className="flex items-center gap-4">
           <button
             type="button"
@@ -348,6 +337,39 @@ export function StartCustomizer({
             />
           </label>
         ) : null}
+
+        <label className={labelClass}>
+          Company Name
+          <input
+            className={fieldClass}
+            value={state.company}
+            onChange={(e) => patch({ company: e.target.value })}
+            placeholder="e.g. Agency Name"
+          />
+        </label>
+
+        <label className={labelClass}>
+          Tagline (EN)
+          <input
+            className={fieldClass}
+            value={state.tagline}
+            onChange={(e) => patch({ tagline: e.target.value })}
+            placeholder="e.g. Professional tagline..."
+          />
+        </label>
+
+        {state.secondaryMode === "self" ? (
+          <label className={labelClass}>
+            Tagline (GE)
+            <input
+              className={fieldClass}
+              value={state.taglineSecondary}
+              onChange={(e) => patch({ taglineSecondary: e.target.value })}
+              placeholder="სლოგანი"
+            />
+          </label>
+        ) : null}
+
         <label className={labelClass}>
           Phone
           <input

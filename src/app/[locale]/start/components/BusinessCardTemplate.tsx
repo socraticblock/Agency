@@ -3,8 +3,10 @@
 import { useEffect, useRef, useState, memo, type CSSProperties } from "react";
 import { motion } from "framer-motion";
 import { HeroSegment } from "./segments/HeroSegment";
-import { ServicesSegment } from "./segments/ServicesSegment";
-import { ContactSocialSegment } from "./segments/ContactSocialSegment";
+import { CtaSegment } from "./segments/CtaSegment";
+import { SectionDispatcher } from "./segments/SectionDispatcher";
+import { ContactSegment } from "./segments/ContactSegment";
+import { SocialSegment } from "./segments/SocialSegment";
 import { UtilitySegments } from "./segments/UtilitySegments";
 import { BrandingFooter } from "./segments/BrandingFooter";
 import { containerVariants, itemVariants } from "../lib/animations";
@@ -98,42 +100,108 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   const headingStyle: CSSProperties = { fontFamily: "var(--font-heading)", fontWeight: "var(--font-heading-weight)" as any, color: "var(--text-primary)" };
   const bodyStyle: CSSProperties = { fontFamily: "var(--font-body)", fontWeight: "var(--font-body-weight)" as any, color: "var(--text-primary)" };
 
+  // Common styles for children
+  const entranceY = vars["--entrance-y"];
+  const springDamping = vars["--spring-damping"];
+  const customItemVariants = itemVariants(entranceY, springDamping);
+
   return (
     <div className={`business-card-template relative mx-auto w-full overflow-hidden text-[var(--text-primary)] ${isResponsive ? "max-w-6xl md:rounded-3xl" : "max-w-[640px]"}`}
       style={{ ...vars, fontFamily: "var(--font-body)", background: "var(--bg-primary)" }}
       onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}
     >
       <div className="business-card-noise" aria-hidden /><div className="business-card-glow" aria-hidden />
+      
       {state.secondaryMode === "pro" && (
         <div className="border-b px-4 py-2.5 text-center text-xs opacity-70" style={{ borderColor: "var(--accent-secondary)", background: "color-mix(in srgb, var(--accent) 7%, transparent)" }}>
-          Georgian translation will be added after your order is confirmed.
+          English will be used for professional translation in this preview.
         </div>
       )}
-      <motion.div className={`pb-12 ${isResponsive ? "md:grid md:grid-cols-12 md:gap-8 md:p-8" : ""}`}
+
+      <motion.div className={`pb-12 ${isResponsive ? "md:p-8" : ""}`}
         variants={containerVariants} initial="hidden" animate="show" custom={vars["--stagger-delay"]}
       >
         <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onPhotoPicked} />
-        <div className={isResponsive ? "md:col-span-12 lg:col-span-4 md:sticky md:top-8 md:flex md:flex-col md:gap-6" : ""}>
-          <motion.header variants={itemVariants(vars["--entrance-y"], vars["--spring-damping"])} className={`sticky top-0 z-20 flex items-center justify-between px-4 py-3 ${isResponsive ? "md:relative md:p-0 md:bg-transparent" : "bg-[var(--bg-primary)] border-b"}`} style={{ borderColor: "var(--accent)" }}>
-            <div className="truncate text-sm font-bold"><InlineEditable value={useSecondary ? state.nameSecondary : state.name} onChange={(v) => patch(useSecondary ? { nameSecondary: v } : { name: v })} placeholder="Name" editable={editable} style={headingStyle} /></div>
-            <div className="flex items-center gap-3">
-              {onPreviewLangChange && state.secondaryMode === "self" && (
-                <nav className="flex gap-2 text-xs font-semibold">
-                  <button className={previewLang === "primary" ? "underline" : "opacity-50"} onClick={() => onPreviewLangChange("primary")}>EN</button>
-                  <button className={previewLang === "secondary" ? "underline" : "opacity-50"} onClick={() => onPreviewLangChange("secondary")}>GE</button>
-                </nav>
-              )}
-              <InlineEditable value={state.phone} onChange={(v) => patch({ phone: v })} placeholder="Phone" editable={editable} style={{ color: "var(--accent)", ...headingStyle }} />
-            </div>
-          </motion.header>
-          <HeroSegment state={state} editable={editable} useSecondary={useSecondary} isResponsive={isResponsive} photoBusy={photoBusy} fileRef={fileRef} ownerName={ownerName} previewLang={previewLang} rotateX={rotateX} rotateY={rotateY} handleMouseMove={handleMouseMove} handleMouseLeave={handleMouseLeave} patch={patch} setServiceLine={setServiceLine} headingStyle={headingStyle} bodyStyle={bodyStyle} itemVariants={itemVariants(vars["--entrance-y"], vars["--spring-damping"])} glassStyle={glassStyle} />
-        </div>
-        <div className={isResponsive ? "md:col-span-12 lg:col-span-8 md:flex md:flex-col md:gap-6" : ""}>
-          <ServicesSegment state={state} editable={editable} useSecondary={useSecondary} isResponsive={isResponsive} expandedService={expandedService} setExpandedService={setExpandedService} patch={patch} setServiceLine={setServiceLine} setServiceDescriptionLine={setServiceDescriptionLine} headingStyle={headingStyle} bodyStyle={bodyStyle} itemVariants={itemVariants(vars["--entrance-y"], vars["--spring-damping"])} glassStyle={glassStyle} icons={ICONS} />
-          <ContactSocialSegment state={state} editable={editable} useSecondary={useSecondary} isResponsive={isResponsive} address={useSecondary ? state.addressSecondary || state.address : state.address} patch={patch} bodyStyle={bodyStyle} itemVariants={itemVariants(vars["--entrance-y"], vars["--spring-damping"])} glassStyle={glassStyle} />
-          <UtilitySegments state={state} ownerName={ownerName} qrDataUrl={qrDataUrl} shareFeedback={shareFeedback} handleShare={handleShare} referHref={`https://wa.me/?text=${encodeURIComponent(`Exclusive Recommendation: ${state.name} — ${state.title}. \n\n${onPatch ? "https://genezisi.com" : window.location.href}`)}`} />
-          <BrandingFooter ownerName={ownerName} hideBranding={hideBranding} homeHref={homeHref} />
-        </div>
+        
+        {/* 1. Locked Hero Zone */}
+        <HeroSegment 
+          state={state} 
+          editable={editable} 
+          useSecondary={useSecondary} 
+          isResponsive={isResponsive} 
+          photoBusy={photoBusy} 
+          fileRef={fileRef} 
+          ownerName={ownerName} 
+          previewLang={previewLang} 
+          rotateX={rotateX} 
+          rotateY={rotateY} 
+          handleMouseMove={handleMouseMove} 
+          handleMouseLeave={handleMouseLeave} 
+          patch={patch} 
+          setServiceLine={setServiceLine} 
+          headingStyle={headingStyle} 
+          bodyStyle={bodyStyle} 
+          itemVariants={customItemVariants} 
+          glassStyle={glassStyle} 
+        />
+
+        {/* 2. Locked Primary CTAs */}
+        <CtaSegment 
+          state={state} 
+          headingStyle={headingStyle} 
+        />
+
+        {/* 3. Toggleable Sections System */}
+        <SectionDispatcher 
+          state={state} 
+          editable={editable} 
+          useSecondary={useSecondary} 
+          isResponsive={isResponsive} 
+          patch={patch} 
+          setServiceLine={setServiceLine} 
+          setServiceDescriptionLine={setServiceDescriptionLine} 
+          headingStyle={headingStyle} 
+          bodyStyle={bodyStyle} 
+          itemVariants={customItemVariants} 
+          glassStyle={glassStyle} 
+          icons={ICONS} 
+        />
+
+        {/* 4. Locked Contact Zone */}
+        <ContactSegment 
+          state={state} 
+          editable={editable} 
+          useSecondary={useSecondary} 
+          isResponsive={isResponsive} 
+          patch={patch} 
+          bodyStyle={bodyStyle} 
+          itemVariants={customItemVariants} 
+          glassStyle={glassStyle} 
+        />
+
+        {/* 5. Locked Social Row */}
+        <SocialSegment 
+          state={state} 
+          isResponsive={isResponsive} 
+          itemVariants={customItemVariants} 
+        />
+
+        {/* 6. Locked Utility Row */}
+        <UtilitySegments 
+          state={state} 
+          ownerName={ownerName} 
+          qrDataUrl={qrDataUrl} 
+          shareFeedback={shareFeedback} 
+          handleShare={handleShare} 
+          referHref={`https://wa.me/?text=${encodeURIComponent(`I highly recommend ${state.name} — ${state.title}. View their card: ${window.location.href}`)}`} 
+        />
+
+        {/* 7. Locked Footer */}
+        <BrandingFooter 
+          ownerName={ownerName} 
+          hideBranding={hideBranding} 
+          homeHref={homeHref} 
+        />
       </motion.div>
     </div>
   );

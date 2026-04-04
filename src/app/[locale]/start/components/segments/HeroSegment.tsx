@@ -65,11 +65,9 @@ export function HeroSegment({
         rotateY: isResponsive ? rotateY : 0,
         transformStyle: "preserve-3d",
       }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
       className={`px-4 pb-8 pt-8 text-left transition-shadow duration-300 ${isResponsive ? "md:rounded-3xl md:border md:p-6 hover:shadow-2xl" : ""}`}
     >
-      <div className="flex flex-col items-start gap-4">
+      <div className="flex flex-col items-start gap-5">
         <div
           role={editable ? "button" : undefined}
           tabIndex={editable ? 0 : undefined}
@@ -100,12 +98,7 @@ export function HeroSegment({
             />
           ) : (
             <div className="flex h-full w-full flex-col items-center justify-center gap-1 text-xs text-slate-500">
-              <svg
-                className="h-16 w-16 opacity-40"
-                viewBox="0 0 64 64"
-                fill="currentColor"
-                aria-hidden
-              >
+              <svg className="h-16 w-16 opacity-40" viewBox="0 0 64 64" fill="currentColor" aria-hidden>
                 <circle cx="32" cy="26" r="12" />
                 <ellipse cx="32" cy="56" rx="22" ry="14" />
               </svg>
@@ -118,96 +111,56 @@ export function HeroSegment({
             </span>
           ) : null}
         </div>
-        <div>
+
+        <div className="w-full space-y-1">
           <h1
             className={`text-2xl font-bold leading-tight ${isResponsive ? "md:text-3xl" : ""}`}
             style={headingStyle}
           >
             <InlineEditable
               value={useSecondary ? state.nameSecondary : state.name}
-              onChange={(v) =>
-                patch(useSecondary ? { nameSecondary: v } : { name: v })
-              }
-              fallbackIfEmpty={useSecondary ? state.name : ""}
-              showFallbackIndicator={useSecondary}
+              onChange={(v) => patch(useSecondary ? { nameSecondary: v } : { name: v })}
               placeholder="Name"
               editable={editable}
               className="block w-full"
               style={headingStyle}
             />
           </h1>
-          <p className="mt-2 text-base opacity-90" style={bodyStyle}>
+          
+          <p className="text-lg opacity-90" style={bodyStyle}>
             <InlineEditable
               value={useSecondary ? state.titleSecondary : state.title}
-              onChange={(v) =>
-                patch(useSecondary ? { titleSecondary: v } : { title: v })
-              }
-              fallbackIfEmpty={useSecondary ? state.title : ""}
-              showFallbackIndicator={useSecondary}
+              onChange={(v) => patch(useSecondary ? { titleSecondary: v } : { title: v })}
               placeholder="Title"
               editable={editable}
               className="block w-full"
               style={bodyStyle}
             />
           </p>
-          {ownerName && (
-            <p
-              className="mt-1 text-sm font-semibold opacity-80"
-              style={{ ...bodyStyle, color: "var(--accent)" }}
-            >
-              {ownerName}
+
+          <p className="text-sm font-semibold tracking-wide uppercase opacity-80" style={{ ...bodyStyle, color: "var(--accent)" }}>
+            <InlineEditable
+              value={state.company}
+              onChange={(v) => patch({ company: v })}
+              placeholder="Company Name"
+              editable={editable}
+              className="block w-full"
+            />
+          </p>
+
+          {/* Tagline Zone */}
+          <div className="pt-2">
+            <p className="text-xs italic opacity-70 leading-relaxed max-w-[90%]" style={bodyStyle}>
+              <InlineEditable
+                value={useSecondary ? state.taglineSecondary : state.tagline}
+                onChange={(v) => patch(useSecondary ? { taglineSecondary: v } : { tagline: v })}
+                placeholder="Add a professional tagline..."
+                editable={editable}
+                className="block w-full"
+                style={bodyStyle}
+              />
             </p>
-          )}
-        </div>
-        <div
-          className={`grid w-full gap-2 ${state.serviceCount >= 3 ? "grid-cols-2" : "grid-cols-1"
-            }`}
-        >
-          {Array.from({ length: state.serviceCount }).map((_, i) => {
-            const en = state.serviceAreas[i] ?? "";
-            const ge = state.serviceAreasSecondary[i] ?? "";
-            if (useSecondary) {
-              if (!en.trim() && !ge.trim() && !editable) return null;
-            } else if (!en.trim() && !editable) {
-              return null;
-            }
-            return (
-              <div
-                key={i}
-                className="rounded border border-black/5 px-3 py-2 text-sm"
-                style={{ borderColor: "var(--accent-secondary)" }}
-              >
-                <InlineEditable
-                  value={useSecondary ? ge : en}
-                  onChange={(v) => setServiceLine(i, v)}
-                  fallbackIfEmpty={useSecondary ? en : ""}
-                  showFallbackIndicator={useSecondary}
-                  placeholder={`Service ${i + 1}`}
-                  editable={editable}
-                  className="block w-full"
-                  style={bodyStyle}
-                />
-              </div>
-            );
-          })}
-        </div>
-        <div className="flex flex-col gap-3 w-full">
-          <MagneticButton
-            as="a"
-            href={telHref(state.phone)}
-            className="inline-flex min-h-[44px] w-full items-center justify-center rounded-lg px-6 py-3 text-sm font-bold text-white transition-opacity hover:opacity-90 active:scale-[0.98]"
-            style={{ background: "var(--accent)" }}
-          >
-            Contact Me
-          </MagneticButton>
-          <MagneticButton
-            onClick={() => downloadVCF(state, previewLang)}
-            className="inline-flex min-h-[44px] w-full items-center justify-center rounded-lg border px-6 py-3 text-sm font-bold transition-all hover:bg-black/5 active:scale-[0.98]"
-            style={{ borderColor: "var(--accent)", color: "var(--accent)" }}
-          >
-            <UserPlus className="mr-2 h-4 w-4" />
-            Save Contact
-          </MagneticButton>
+          </div>
         </div>
       </div>
     </motion.section>

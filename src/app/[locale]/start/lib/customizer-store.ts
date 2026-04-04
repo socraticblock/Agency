@@ -10,14 +10,17 @@ import {
   TEXT_COLOR_PRESETS,
 } from "./presets";
 
-const STORAGE_KEY = "genezisi_lane1_customizer_v2";
+const STORAGE_KEY = "genezisi_lane1_customizer_v3";
+const LEGACY_V2_KEY = "genezisi_lane1_customizer_v2";
+const LEGACY_V1_KEY = "genezisi_lane1_customizer_v1";
 
 function safeParse(raw: string | null): Lane1CustomizerState | null {
   if (!raw) return null;
   try {
     const data = JSON.parse(raw) as Record<string, unknown>;
     const v = typeof data.version === "number" ? data.version : 1;
-    if (v !== 1 && v !== 2) return null;
+    // Allow migration from v1, v2, and v3
+    if (v < 1 || v > 3) return null;
     return migrateLane1State(data as unknown as Lane1CustomizerState);
   } catch {
     return null;
@@ -35,22 +38,11 @@ function migrateLane1State(
     social: { ...base.social, ...data.social },
   };
 
+  // Legacy background ID mapping logic
   const bgMap = LEGACY_BACKGROUND_ID_MAP[merged.style.backgroundId];
   if (bgMap) merged.style.backgroundId = bgMap;
 
-  if (!BACKGROUND_PRESETS.some((p) => p.id === merged.style.backgroundId)) {
-    merged.style.backgroundId = base.style.backgroundId;
-  }
-  if (!TEXT_COLOR_PRESETS.some((p) => p.id === merged.style.textColorId)) {
-    merged.style.textColorId = base.style.textColorId;
-  }
-  if (!ACCENT_PRESETS.some((p) => p.id === merged.style.accentId)) {
-    merged.style.accentId = base.style.accentId;
-  }
-  if (!FONT_PRESETS.some((p) => p.id === merged.style.fontId)) {
-    merged.style.fontId = base.style.fontId;
-  }
-
+  // Cleanup/validation
   if (typeof merged.proTranslationAcknowledged !== "boolean") {
     merged.proTranslationAcknowledged = false;
   }
@@ -61,18 +53,31 @@ function migrateLane1State(
 
 export function loadLane1State(): Lane1CustomizerState {
   if (typeof window === "undefined") return defaultLane1State();
-  const parsed = safeParse(localStorage.getItem(STORAGE_KEY));
-  if (parsed) return parsed;
-  const legacy = safeParse(localStorage.getItem("genezisi_lane1_customizer_v1"));
-  if (legacy) {
+  
+  // 1. Try v3 (Current)
+  const parsedV3 = safeParse(localStorage.getItem(STORAGE_KEY));
+  if (parsedV3) return parsedV3;
+
+  // 2. Try v2 (Legacy)
+  const parsedV2 = safeParse(localStorage.getItem(LEGACY_V2_KEY));
+  if (parsedV2) {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(legacy));
-      localStorage.removeItem("genezisi_lane1_customizer_v1");
-    } catch {
-      /* ignore */
-    }
-    return legacy;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(parsedV2));
+      localStorage.removeItem(LEGACY_V2_KEY);
+    } catch { /* ignore */ }
+    return parsedV2;
   }
+
+  // 3. Try v1 (Ancient)
+  const parsedV1 = safeParse(localStorage.getItem(LEGACY_V1_KEY));
+  if (parsedV1) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(parsedV1));
+      localStorage.removeItem(LEGACY_V1_KEY);
+    } catch { /* ignore */ }
+    return parsedV1;
+  }
+
   return defaultLane1State();
 }
 
@@ -88,5 +93,6 @@ export function saveLane1State(state: Lane1CustomizerState): void {
 export function clearLane1State(): void {
   if (typeof window === "undefined") return;
   localStorage.removeItem(STORAGE_KEY);
-  localStorage.removeItem("genezisi_lane1_customizer_v1");
+  localStorage.removeItem(LEGACY_V2_KEY);
+  localStorage.removeItem(LEGACY_V1_KEY);
 }
