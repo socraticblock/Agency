@@ -60,3 +60,51 @@
   border-radius: 2px;
   background: color-mix(in srgb, var(--accent) 6%, transparent);
 }
+
+/* Phase 3.1 — Dark Mode Auto-Sync (Elite Upgrade) */
+@media (prefers-color-scheme: dark) {
+  .business-card-template {
+    /** 
+     * Forced dark mode overrides for light themes. 
+     * If the theme is already dark (locksTextColor is true), these can be more subtle.
+     */
+    --bg-primary: #0F172A !important;
+    --text-primary: #F1F5F9 !important;
+    --accent-secondary: rgba(255, 255, 255, 0.1) !important;
+  }
+}
+
+/* Phase 3.2 — Print Kit (Elite Upgrade) */
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+    background: white;
+  }
+
+  .business-card-template {
+    max-width: 3.5in !important;
+    margin: 0 auto !important;
+    padding: 0.25in !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Hide interaction-only elements on paper */
+  button, 
+  .start-wa-cta,
+  [role="button"],
+  .magnetic-button,
+  nav {
+    display: none !important;
+  }
+
+  /* Force display of the QR code in the print kit */
+  .qr-code-print-view {
+    display: block !important;
+    margin-top: 20px;
+    text-align: center;
+  }
+}

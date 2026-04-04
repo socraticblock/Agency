@@ -29,7 +29,7 @@ import {
   AnimationPresetGrid,
 } from "./StylePresetGrids";
 import { CollapsibleSection } from "./CollapsibleSection";
-import { MessageCircle, Eye, QrCode } from "lucide-react";
+import { MessageCircle, Eye, QrCode, Printer } from "lucide-react";
 import { downloadQRCode, generateBrandedQR } from "../lib/identity-kit";
 
 const fieldClass = "start-field mt-1.5 w-full";
@@ -719,6 +719,20 @@ export function StartCustomizer({
             </button>
             <p className="text-[10px] text-center text-slate-500 leading-tight">
               High-resolution PNG for printing on physical cards, office signage, or invoices.
+            </p>
+          </div>
+
+          <div className="flex flex-col items-center gap-3 rounded-xl border border-slate-100 bg-slate-50/50 p-4">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">Print Kit</h4>
+            <button
+              onClick={() => window.print()}
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-bold shadow-sm ring-1 ring-black/5 hover:bg-slate-50 active:scale-95 transition-all text-[#1A2744]"
+            >
+              <Printer className="h-4 w-4" />
+              Download Print PDF
+            </button>
+            <p className="text-[10px] text-center text-slate-500 leading-tight">
+              Generates a clean, print-ready view of your name and QR code.
             </p>
           </div>
 

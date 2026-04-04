@@ -19,6 +19,7 @@ import {
   Camera,
   UserPlus,
   ChevronDown,
+  Printer,
 } from "lucide-react";
 import type { Lane1CustomizerState } from "../lib/types";
 import { resolveStyleVariables } from "../lib/presets";
@@ -74,6 +75,16 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   const isNeon = state.style.vibeId === "neon";
 
   const [expandedService, setExpandedService] = useState<number | null>(null);
+
+  const [qrDataUrl, setQrDataUrl] = useState<string>("");
+
+  useEffect(() => {
+    const nameSlug = state.name.toLowerCase().replace(/\s+/g, "-") || "business-card";
+    const url = `https://genezisi.com/c/${nameSlug}`;
+    import("../lib/identity-kit").then(({ generateBrandedQR }) => {
+      generateBrandedQR(state, url).then(setQrDataUrl);
+    });
+  }, [state.style.accentId, state.name]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -824,6 +835,16 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
             </footer>
           </motion.section>
         </div> {/* END RIGHT COLUMN */}
+
+        {/* Phase 3.2: Hidden QR View for Print Kit */}
+        <div className="qr-code-print-view hidden p-8 text-center" aria-hidden>
+           <h3 className="text-xl font-bold mb-4">{state.name}</h3>
+           <p className="text-sm mb-6">{state.title}</p>
+           <div className="flex justify-center mb-6">
+              {qrDataUrl && <img src={qrDataUrl} alt="QR Code" className="h-48 w-48" />}
+           </div>
+           <p className="text-xs opacity-60">Scan to view my full digital business card</p>
+        </div>
       </motion.div>
     </div>
   );
