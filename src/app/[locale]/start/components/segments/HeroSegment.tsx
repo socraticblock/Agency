@@ -65,11 +65,11 @@ export function HeroSegment({
     photoAlignment = "left",
   } = style as any;
 
-  const shapeClass = {
+  const shapeClass = ({
     circle: "rounded-full aspect-square w-[180px]",
     "rounded-square": "rounded-2xl aspect-square w-[180px]",
     "wide-cinematic": "rounded-xl aspect-video w-full",
-  }[photoShape] || "rounded-full aspect-square w-[180px]";
+  } as Record<string, string>)[photoShape as string] || "rounded-full aspect-square w-[180px]";
 
   const effectFilter = PHOTO_EFFECT_PRESETS.find(p => p.id === photoEffect)?.filter || "none";
 

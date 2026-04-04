@@ -81,6 +81,12 @@ export interface PhotoBorderPreset {
   labelEn: string;
 }
 
+export interface PhotoOverlayPreset {
+  id: string;
+  labelKa: string;
+  labelEn: string;
+}
+
 /** §8.1 — eight solid backgrounds (light + two dark) */
 export const BACKGROUND_SOLID_PRESETS: BackgroundPreset[] = [
   {

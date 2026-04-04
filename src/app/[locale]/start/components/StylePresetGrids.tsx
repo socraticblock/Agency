@@ -13,6 +13,7 @@ import type {
   PhotoShapePreset,
   PhotoEffectPreset,
   PhotoBorderPreset,
+  PhotoOverlayPreset,
 } from "../lib/presets";
 import * as LucideIcons from "lucide-react";
 

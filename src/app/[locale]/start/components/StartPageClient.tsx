@@ -141,7 +141,7 @@ export function StartPageClient({ locale }: { locale: Locale }) {
           <div className="relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-[var(--start-shadow-md)]">
             <AnimatePresence mode="wait">
               <motion.div
-                key={vars["--bg-primary"] + state.style.textColorId + state.style.accentId}
+                key={(vars as any)["--bg-primary"] + state.style.textColorId + state.style.accentId}
                 initial={{ opacity: 0.8, filter: "blur(4px)" }}
                 animate={{ opacity: 1, filter: "blur(0px)" }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
@@ -169,7 +169,6 @@ export function StartPageClient({ locale }: { locale: Locale }) {
           <StartCustomizer
             state={state}
             setState={setState}
-            onBackToSectors={() => {}}
           />
         </div>
       </div>
@@ -209,7 +208,6 @@ export function StartPageClient({ locale }: { locale: Locale }) {
               </button>
               <div className="start-glass-heavy min-h-0 flex-1 overflow-y-auto px-4 pb-3">
                 <StartCustomizer
-                  onBackToSectors={() => setMobileEditorOpen(false)}
                   showOrderFooter={false}
                   state={state}
                   setState={setState}
