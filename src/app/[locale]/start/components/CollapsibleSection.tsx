@@ -25,7 +25,7 @@ export function CollapsibleSection({
     if (isOpen && sectionRef.current) {
       sectionRef.current.scrollIntoView({
         behavior: "smooth",
-        block: "nearest",
+        block: "start",
       });
     }
   }, [isOpen]);
@@ -34,7 +34,7 @@ export function CollapsibleSection({
     <section
       id={id}
       ref={sectionRef}
-      className="start-glass overflow-hidden rounded-2xl"
+      className="start-glass overflow-hidden rounded-2xl scroll-mt-[4.5rem] md:scroll-mt-6"
     >
       <button
         type="button"
