@@ -54,7 +54,7 @@ export function MagneticButton({
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
-  const springConfig = { stiffness: 150, damping: 15, mass: 0.1 };
+  const springConfig = { stiffness: 80, damping: 20, mass: 0.6 };
   const smoothX = useSpring(x, springConfig);
   const smoothY = useSpring(y, springConfig);
 

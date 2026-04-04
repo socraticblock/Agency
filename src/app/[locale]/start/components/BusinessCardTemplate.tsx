@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, memo, type CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { useMotionValue, useTransform, useSpring, motion, AnimatePresence } from "framer-motion";
 import {
   Scale,
   Briefcase,
@@ -100,18 +100,54 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   const itemVariants = {
     hidden: { 
       opacity: 0, 
-      y: Number(vars["--entrance-y" as any] || 20) 
+      y: Number(vars["--entrance-y" as any] || 25),
+      scale: 0.98,
+      filter: "blur(12px)",
     },
     show: { 
       opacity: 1, 
       y: 0,
+      scale: 1,
+      filter: "blur(0px)",
       transition: {
         type: "spring",
-        damping: Number(vars["--spring-damping" as any] || 20),
-        stiffness: 100,
+        damping: Number(vars["--spring-damping" as any] || 18),
+        stiffness: 90,
+        mass: 1.2,
       }
     },
   };
+
+  // 3D Tilt & Ambient Glow State
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [7, -7]), { stiffness: 150, damping: 25 });
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-7, 7]), { stiffness: 150, damping: 25 });
+
+  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseXPos = e.clientX - rect.left;
+    const mouseYPos = e.clientY - rect.top;
+    
+    // For 3D Tilt (only if responsive/desktop)
+    if (isResponsive) {
+      const xPct = mouseXPos / width - 0.5;
+      const yPct = mouseYPos / height - 0.5;
+      mouseX.set(xPct);
+      mouseY.set(yPct);
+    }
+
+    // For Ambient Glow CSS variables
+    e.currentTarget.style.setProperty("--mouse-x", `${(mouseXPos / width) * 100}%`);
+    e.currentTarget.style.setProperty("--mouse-y", `${(mouseYPos / height) * 100}%`);
+  }
+
+  function handleMouseLeave() {
+    mouseX.set(0);
+    mouseY.set(0);
+  }
 
   const glassStyle: CSSProperties = isGlass ? {
     backgroundColor: "rgba(255, 255, 255, 0.05)",
@@ -240,8 +276,8 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
 
   return (
     <div
-      className={`business-card-template mx-auto w-full text-[var(--text-primary)] ${
-        isResponsive ? "max-w-6xl md:rounded-3xl md:overflow-hidden" : "max-w-[640px]"
+      className={`business-card-template relative mx-auto w-full overflow-hidden text-[var(--text-primary)] ${
+        isResponsive ? "max-w-6xl md:rounded-3xl" : "max-w-[640px]"
       }`}
       style={{
         ...vars,
@@ -249,7 +285,11 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
         fontWeight: "var(--font-body-weight)" as CSSProperties["fontWeight"],
         background: "var(--bg-primary)",
       }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
+      <div className="business-card-noise" aria-hidden />
+      <div className="business-card-glow" aria-hidden />
       {isNeon && (
         <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_50%_50%,var(--accent),transparent_70%)] opacity-[0.03]" />
       )}
@@ -352,12 +392,16 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
           {/* Section 2 — hero */}
           <motion.section 
             variants={itemVariants}
-            whileHover={{ y: -4, transition: { duration: 0.2 } }}
-            className={`px-4 pb-8 pt-8 text-left ${isResponsive ? "md:rounded-3xl md:border md:p-6" : ""}`} 
             style={{ 
               borderColor: "var(--accent-secondary)",
-              ...glassStyle 
+              ...glassStyle,
+              rotateX: isResponsive ? rotateX : 0,
+              rotateY: isResponsive ? rotateY : 0,
+              transformStyle: "preserve-3d",
             }}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            className={`px-4 pb-8 pt-8 text-left transition-shadow duration-300 ${isResponsive ? "md:rounded-3xl md:border md:p-6 hover:shadow-2xl" : ""}`} 
           >
           <div className="flex flex-col items-start gap-4">
             <div
