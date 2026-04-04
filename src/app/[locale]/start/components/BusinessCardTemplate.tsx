@@ -20,6 +20,9 @@ import {
   UserPlus,
   ChevronDown,
   Printer,
+  Share2,
+  Send,
+  Map,
 } from "lucide-react";
 import type { Lane1CustomizerState } from "../lib/types";
 import { resolveStyleVariables } from "../lib/presets";
@@ -282,6 +285,42 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
       setPhotoBusy(false);
     }
   }
+
+  // Phase 6: Native Sharing Engine
+  const [shareFeedback, setShareFeedback] = useState("");
+  async function handleShare() {
+    if (typeof window === "undefined") return;
+    const shareUrl = window.location.href; // Assumes they are on the published card page. If in preview, it shares the preview URL, which is fine for testing.
+    
+    // In a real environment, the published card URL would be used. 
+    // We construct a clean relative or absolute path based on the env.
+    const urlToShare = onPatch ? "https://genezisi.com" : shareUrl; // Fallback placeholder if in editor
+
+    const shareData = {
+      title: state.name,
+      text: `Digital Business Card: ${state.name}`,
+      url: urlToShare,
+    };
+
+    try {
+      if (navigator.share && (navigator as any).canShare?.(shareData)) {
+        await navigator.share(shareData);
+      } else {
+        // Desktop fallback: Copy to clipboard
+        await navigator.clipboard.writeText(urlToShare);
+        setShareFeedback("Link copied!");
+        setTimeout(() => setShareFeedback(""), 2000);
+      }
+    } catch (err) {
+      console.warn("Share failed:", err);
+    }
+  }
+
+  // Phase 6: The Viral Loop (Refer Me)
+  const referText = encodeURIComponent(
+    `I highly recommend ${state.name} — ${state.title || "Attorney"} at ${ownerName || "Genezisi"}. You can view their digital business card here: ${onPatch ? "https://genezisi.com" : (typeof window !== "undefined" ? window.location.href : "")}`
+  );
+  const referHref = `https://wa.me/?text=${referText}`;
 
   return (
     <div
@@ -861,15 +900,53 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
               />
             </div>
             {state.addGoogleMap && address.trim() ? (
-              <div className="mt-4 aspect-video w-full overflow-hidden rounded-lg bg-slate-200">
-                <iframe
-                  title="Map"
-                  className="h-full w-full border-0"
-                  loading="lazy"
-                  src={`https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`}
-                />
+              <div className="mt-8 space-y-4">
+                {/* The "Elite" action: Native Directions (Zero-cost / Zero-latency) */}
+                <MagneticButton
+                  as="a"
+                  href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl border-2 py-3.5 text-[14px] font-bold transition-transform"
+                  style={{ 
+                    borderColor: "var(--accent)", 
+                    color: "var(--accent)",
+                    background: "rgba(255, 255, 255, 0.05)"
+                  }}
+                >
+                  <Map className="h-4 w-4 opacity-70" />
+                  Get Directions
+                </MagneticButton>
               </div>
             ) : null}
+
+            {/* Growth & Distribution Section */}
+            <div className="mt-10 flex flex-col gap-3">
+              <MagneticButton
+                onClick={handleShare}
+                className="flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-[0.875rem] font-semibold text-white shadow-lg transition-transform"
+                style={{ background: "var(--accent)" }}
+              >
+                <Share2 className="h-4 w-4" />
+                {shareFeedback || "Share Card"}
+              </MagneticButton>
+
+              <MagneticButton
+                as="a"
+                href={referHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex w-full items-center justify-center gap-2 rounded-xl border-2 py-3 text-[0.875rem] font-semibold shadow-sm transition-transform"
+                style={{ 
+                  borderColor: "color-mix(in srgb, var(--accent) 30%, transparent)",
+                  color: "var(--text-primary)",
+                  background: "transparent" 
+                }}
+              >
+                <Send className="h-4 w-4 opacity-70" />
+                Refer {state.name.split(" ")[0] || "Me"} via WhatsApp
+              </MagneticButton>
+            </div>
           </div>
 
           <footer

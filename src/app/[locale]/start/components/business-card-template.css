@@ -97,20 +97,37 @@
 
 /* Phase 3.2 — Print Kit (Elite Upgrade) */
 @media print {
+  @page {
+    size: auto;
+    margin: 0.5in;
+  }
+
   body {
     margin: 0;
     padding: 0;
-    background: white;
+    background: white !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   .business-card-template {
     max-width: 3.5in !important;
+    width: 3.5in !important;
+    min-height: 2in !important;
     margin: 0 auto !important;
-    padding: 0.25in !important;
-    border: none !important;
+    padding: 0.2in !important;
+    border: 1px solid #eee !important;
     box-shadow: none !important;
     background: white !important;
     color: black !important;
+    position: relative !important;
+    overflow: visible !important;
+  }
+
+  /* Force background colors and borders to show on paper */
+  .business-card-template * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   /* Hide interaction-only elements on paper */
@@ -118,14 +135,26 @@
   .start-wa-cta,
   [role="button"],
   .magnetic-button,
-  nav {
+  .business-card-glow,
+  .business-card-noise,
+  nav,
+  header.sticky,
+  .inline-editable-display:hover,
+  .mt-10.flex.flex-col.gap-3 { 
     display: none !important;
   }
 
   /* Force display of the QR code in the print kit */
   .qr-code-print-view {
     display: block !important;
-    margin-top: 20px;
+    margin-top: 2in !important; /* Ensure it starts on a clean area or back of card */
     text-align: center;
+    page-break-before: always;
+  }
+
+  .qr-code-print-view img {
+    margin: 0 auto;
+    width: 1.5in !important;
+    height: 1.5in !important;
   }
 }

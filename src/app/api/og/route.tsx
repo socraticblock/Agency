@@ -1,103 +1,167 @@
-import { ImageResponse } from "next/og";
+import { ImageResponse } from 'next/og';
+import { NextRequest } from 'next/server';
 
-export const runtime = "edge";
+export const runtime = 'edge';
 
-const W = 1200;
-const H = 630;
-
-function siteHostname(): string {
-  const raw = process.env.NEXT_PUBLIC_SITE_URL;
-  if (!raw) return "genezisi.digital";
+export async function GET(req: NextRequest) {
   try {
-    return new URL(raw).hostname.replace(/^www\./, "") || "genezisi.digital";
-  } catch {
-    return "genezisi.digital";
-  }
-}
+    const { searchParams } = new URL(req.url);
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const rawTitle = searchParams.get("title")?.trim() || "Genezisi";
-  const title = rawTitle.slice(0, 72);
-  const tagline =
-    "Permanent digital infrastructure — not rented social reach.";
-  const hostLabel = siteHostname();
+    // Dynamic parameters for the 'Elite' brand card
+    const name = searchParams.get('name') || 'Your Name';
+    const title = searchParams.get('title') || 'Professional Title';
+    const accent = searchParams.get('accent') || '#1A2744';
+    const photo = searchParams.get('photo');
 
-  return new ImageResponse(
-    (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          padding: 64,
-          background: "linear-gradient(145deg, #030717 0%, #0f172a 42%, #064e3b 100%)",
-          fontFamily:
-            'ui-sans-serif, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-        }}
-      >
+    return new ImageResponse(
+      (
         <div
           style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 16,
-            color: "#34d399",
-            fontSize: 22,
-            fontWeight: 600,
-            letterSpacing: "0.35em",
-            textTransform: "uppercase",
+            height: '100%',
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#0F172A', // Deep Navy base
+            position: 'relative',
+            overflow: 'hidden',
           }}
         >
-          <span
+          {/* Branded background gradient */}
+          <div
             style={{
-              width: 12,
-              height: 12,
-              borderRadius: 999,
-              background: "#10b981",
-              boxShadow: "0 0 24px rgba(16,185,129,0.9)",
+              position: 'absolute',
+              top: '-20%',
+              left: '-10%',
+              width: '140%',
+              height: '140%',
+              display: 'flex',
+              background: `radial-gradient(circle at 10% 10%, ${accent} 0%, transparent 45%), radial-gradient(circle at 90% 90%, ${accent} 0%, transparent 45%)`,
+              opacity: 0.25,
             }}
           />
-          GENEZISI
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+
+          {/* Fine-grain noise overlay (simulated) */}
           <div
             style={{
-              fontSize: 64,
-              fontWeight: 800,
-              lineHeight: 1.05,
-              color: "#f8fafc",
-              maxWidth: 980,
+              position: 'absolute',
+              inset: 0,
+              display: 'flex',
+              opacity: 0.03,
+              background: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E")',
             }}
-          >
-            {title}
-          </div>
+          />
+
+          {/* Content Container */}
           <div
             style={{
-              fontSize: 28,
-              lineHeight: 1.35,
-              color: "#94a3b8",
-              maxWidth: 900,
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 60,
+              zIndex: 10,
+              padding: '0 80px',
             }}
           >
-            {tagline}
+            {/* Profile Photo (if provided) */}
+            {photo ? (
+              <div
+                style={{
+                  display: 'flex',
+                  width: 280,
+                  height: 280,
+                  borderRadius: 140,
+                  overflow: 'hidden',
+                  border: `8px solid ${accent}`,
+                  backgroundColor: '#ffffff',
+                }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={photo}
+                  alt={name}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                  }}
+                />
+              </div>
+            ) : null}
+
+            {/* Text Details */}
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                textAlign: photo ? 'left' : 'center',
+              }}
+            >
+              <h1
+                style={{
+                  fontSize: 84,
+                  fontWeight: 900,
+                  color: '#ffffff',
+                  marginBottom: 10,
+                  letterSpacing: '-2px',
+                  fontFamily: 'sans-serif',
+                }}
+              >
+                {name}
+              </h1>
+              <p
+                style={{
+                  fontSize: 38,
+                  fontWeight: 500,
+                  color: '#94A3B8',
+                  marginBottom: 0,
+                  fontFamily: 'sans-serif',
+                }}
+              >
+                {title}
+              </p>
+              
+              {/* Branding Tag */}
+              <div
+                style={{
+                  display: 'flex',
+                  marginTop: 40,
+                  padding: '12px 24px',
+                  borderRadius: 12,
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  alignItems: 'center',
+                  alignSelf: photo ? 'flex-start' : 'center',
+                }}
+              >
+                <span
+                   style={{
+                     fontSize: 18,
+                     fontWeight: 700,
+                     letterSpacing: '2px',
+                     color: accent,
+                     textTransform: 'uppercase',
+                   }}
+                >
+                   Genezisi Digital House
+                </span>
+              </div>
+            </div>
           </div>
         </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-end",
-            fontSize: 20,
-            color: "#64748b",
-          }}
-        >
-          <span>Tbilisi · Georgia</span>
-          <span style={{ color: "#10b981", fontWeight: 600 }}>{hostLabel}</span>
-        </div>
-      </div>
-    ),
-    { width: W, height: H }
-  );
+      ),
+      {
+        width: 1200,
+        height: 630,
+      }
+    );
+  } catch (e: any) {
+    console.log(`${e.message}`);
+    return new Response(`Failed to generate the image`, {
+      status: 500,
+    });
+  }
 }
