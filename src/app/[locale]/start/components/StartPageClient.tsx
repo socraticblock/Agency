@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { MessageCircle, Pencil } from "lucide-react";
 import { acquireBodyScrollLock } from "@/lib/bodyScrollLock";
@@ -76,16 +76,29 @@ export function StartPageClient({ locale }: { locale: Locale }) {
 
   const homeHref = `/${locale}`;
 
-  function onSector(id: SectorId) {
+  const onSector = useCallback((id: SectorId) => {
     setState((s) => mergeSectorPlaceholder(s, id));
     setPhase("customize");
     setPreviewLang("primary");
-  }
+  }, []);
 
-  function onBackToSectors() {
+  const onBackToSectors = useCallback(() => {
     setPhase("pick");
     setMobileEditorOpen(false);
-  }
+  }, []);
+
+  const onPatch = useCallback((p: Partial<Lane1CustomizerState>) => {
+    setState((s) => ({ ...s, ...p }));
+  }, []);
+
+  const handlePreviewLangChange = useCallback((v: "primary" | "secondary") => {
+    setPreviewLang(v);
+  }, []);
+
+  const mobileEditorCloseAndBack = useCallback(() => {
+    onBackToSectors();
+    setMobileEditorOpen(false);
+  }, [onBackToSectors]);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 md:px-6 md:py-14">
@@ -181,10 +194,10 @@ export function StartPageClient({ locale }: { locale: Locale }) {
                   }
                   homeHref={homeHref}
                   ownerName={state.name}
-                  onPatch={(p) => setState((s) => ({ ...s, ...p }))}
+                  onPatch={onPatch}
                   onPreviewLangChange={
                     state.secondaryMode === "self"
-                      ? (v) => setPreviewLang(v)
+                      ? handlePreviewLangChange
                       : undefined
                   }
                 />
@@ -235,10 +248,7 @@ export function StartPageClient({ locale }: { locale: Locale }) {
                   </button>
                   <div className="start-glass-heavy min-h-0 flex-1 overflow-y-auto px-4 pb-3">
                     <StartCustomizer
-                      onBackToSectors={() => {
-                        onBackToSectors();
-                        setMobileEditorOpen(false);
-                      }}
+                      onBackToSectors={mobileEditorCloseAndBack}
                       showOrderFooter={false}
                       state={state}
                       setState={setState}

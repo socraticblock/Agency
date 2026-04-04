@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams } from "next/navigation";
 import type { Dispatch, SetStateAction } from "react";
 import type { Lane1CustomizerState, PrimaryLang, SecondaryLangMode } from "../lib/types";
@@ -108,6 +108,46 @@ export function StartCustomizer({
   function toggleSection(sectionId: string) {
     setOpenSection((current) => (current === sectionId ? null : sectionId));
   }
+
+  const onBackgroundChange = useCallback(
+    (backgroundId: string) => {
+      setState((s) => ({
+        ...s,
+        style: { ...s.style, backgroundId },
+      }));
+    },
+    [setState],
+  );
+
+  const onTextColorChange = useCallback(
+    (textColorId: string) => {
+      setState((s) => ({
+        ...s,
+        style: { ...s.style, textColorId },
+      }));
+    },
+    [setState],
+  );
+
+  const onAccentChange = useCallback(
+    (accentId: string) => {
+      setState((s) => ({
+        ...s,
+        style: { ...s.style, accentId },
+      }));
+    },
+    [setState],
+  );
+
+  const onFontChange = useCallback(
+    (fontId: string) => {
+      setState((s) => ({
+        ...s,
+        style: { ...s.style, fontId },
+      }));
+    },
+    [setState],
+  );
 
   function setServiceArea(i: number, v: string, secondary: boolean) {
     setState((s) => {
@@ -467,24 +507,18 @@ export function StartCustomizer({
         <BackgroundSolidPresetGrid
           options={BACKGROUND_SOLID_PRESETS}
           value={state.style.backgroundId}
-          onChange={(backgroundId) =>
-            patch({ style: { ...state.style, backgroundId } })
-          }
+          onChange={onBackgroundChange}
         />
         <BackgroundGradientPresetGrid
           options={BACKGROUND_GRADIENT_PRESETS}
           value={state.style.backgroundId}
-          onChange={(backgroundId) =>
-            patch({ style: { ...state.style, backgroundId } })
-          }
+          onChange={onBackgroundChange}
         />
         {!textLocked ? (
           <TextColorPresetGrid
             options={TEXT_COLOR_PRESETS}
             value={state.style.textColorId}
-            onChange={(textColorId) =>
-              patch({ style: { ...state.style, textColorId } })
-            }
+            onChange={onTextColorChange}
           />
         ) : (
           <p className="start-caption">
@@ -502,7 +536,7 @@ export function StartCustomizer({
         <AccentPresetGrid
           options={ACCENT_PRESETS}
           value={state.style.accentId}
-          onChange={(accentId) => patch({ style: { ...state.style, accentId } })}
+          onChange={onAccentChange}
         />
       </CollapsibleSection>
 
@@ -515,7 +549,7 @@ export function StartCustomizer({
         <FontPresetGrid
           options={FONT_PRESETS}
           value={state.style.fontId}
-          onChange={(fontId) => patch({ style: { ...state.style, fontId } })}
+          onChange={onFontChange}
         />
       </CollapsibleSection>
 

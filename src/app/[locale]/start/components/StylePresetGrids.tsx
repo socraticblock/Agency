@@ -1,5 +1,7 @@
 "use client";
 
+import { memo } from "react";
+
 import { Check } from "lucide-react";
 import type {
   AccentPreset,
@@ -26,7 +28,7 @@ function SwatchCheck({ show }: { show: boolean }) {
   );
 }
 
-export function BackgroundSolidPresetGrid({
+export const BackgroundSolidPresetGrid = memo(function BackgroundSolidPresetGrid({
   options,
   value,
   onChange,
@@ -69,9 +71,9 @@ export function BackgroundSolidPresetGrid({
       </div>
     </fieldset>
   );
-}
+});
 
-export function BackgroundGradientPresetGrid({
+export const BackgroundGradientPresetGrid = memo(function BackgroundGradientPresetGrid({
   options,
   value,
   onChange,
@@ -114,9 +116,9 @@ export function BackgroundGradientPresetGrid({
       </div>
     </fieldset>
   );
-}
+});
 
-export function TextColorPresetGrid({
+export const TextColorPresetGrid = memo(function TextColorPresetGrid({
   options,
   value,
   onChange,
@@ -162,10 +164,10 @@ export function TextColorPresetGrid({
       </div>
     </fieldset>
   );
-}
+});
 
 /** §8.3 — filled accent circles */
-export function AccentPresetGrid({
+export const AccentPresetGrid = memo(function AccentPresetGrid({
   options,
   value,
   onChange,
@@ -211,9 +213,9 @@ export function AccentPresetGrid({
       </div>
     </fieldset>
   );
-}
+});
 
-export function FontPresetGrid({
+export const FontPresetGrid = memo(function FontPresetGrid({
   options,
   value,
   onChange,
@@ -261,4 +263,4 @@ export function FontPresetGrid({
       </div>
     </fieldset>
   );
-}
+});

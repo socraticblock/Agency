@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, memo, type CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -36,7 +36,7 @@ function waHref(phone: string): string {
   return `https://wa.me/${digits}`;
 }
 
-export function BusinessCardTemplate({
+export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   state,
   previewLang,
   homeHref,
@@ -631,4 +631,4 @@ export function BusinessCardTemplate({
       </div>
     </div>
   );
-}
+});
