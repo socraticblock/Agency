@@ -22,7 +22,7 @@ export function CtaSegment({ state, headingStyle }: CtaSegmentProps) {
   }
 
   return (
-    <section className="px-4 py-6 flex flex-col gap-3">
+    <section className="px-4 py-6 flex flex-col gap-3 bg-[var(--bg-primary)] relative z-10">
       <MagneticButton
         as="a"
         href={telHref(state.phone)}

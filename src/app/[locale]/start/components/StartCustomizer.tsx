@@ -14,6 +14,10 @@ import {
   TEXT_COLOR_PRESETS,
   VIBE_PRESETS,
   ANIMATION_PRESETS,
+  PHOTO_SHAPE_PRESETS,
+  PHOTO_EFFECT_PRESETS,
+  PHOTO_OVERLAY_PRESETS,
+  PHOTO_BORDER_PRESETS,
 } from "../lib/presets";
 import { buildLane1WhatsAppUrl } from "../lib/whatsapp";
 import { LANE1_BASE_GEL, computeLane1Total } from "../lib/lane1-pricing";
@@ -27,9 +31,13 @@ import {
   TextColorPresetGrid,
   VibePresetGrid,
   AnimationPresetGrid,
+  PhotoShapePresetGrid,
+  PhotoEffectPresetGrid,
+  PhotoOverlayPresetGrid,
+  PhotoBorderPresetGrid,
 } from "./StylePresetGrids";
 import { CollapsibleSection } from "./CollapsibleSection";
-import { MessageCircle, Eye, QrCode, Printer } from "lucide-react";
+import { MessageCircle, Eye, QrCode, Printer, ZoomIn, Move } from "lucide-react";
 import { downloadQRCode, generateBrandedQR } from "../lib/identity-kit";
 
 const fieldClass = "start-field mt-1.5 w-full";
@@ -451,8 +459,7 @@ export function StartCustomizer({
         onToggle={() => toggleSection("photo")}
       >
         <p className="start-caption">
-          JPG or PNG, max 5 MB. We compress to ~200 KB for browser storage. Tap the circle in the
-          preview to upload.
+          JPG or PNG, max 5 MB. We compress to ~200 KB for browser storage. 
         </p>
         <input
           type="file"
@@ -464,6 +471,100 @@ export function StartCustomizer({
         {photoHint ? (
           <p className="text-xs font-medium text-amber-800">{photoHint}</p>
         ) : null}
+
+        {state.photoDataUrl && (
+          <div className="mt-6 space-y-6 animate-in fade-in slide-in-from-top-2">
+            <PhotoShapePresetGrid
+              options={PHOTO_SHAPE_PRESETS}
+              value={state.style?.photoShape || "circle"}
+              onChange={(id) => setState(s => ({ ...s, style: { ...s.style, photoShape: id as any } }))}
+            />
+
+            <div className="flex items-center gap-2 rounded-xl border border-slate-100 bg-white p-1">
+              {(["left", "center"] as const).map((pos) => (
+                <button
+                  key={pos}
+                  onClick={() => setState(s => ({ ...s, style: { ...s.style, photoAlignment: pos } }))}
+                  className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg py-2 text-xs font-semibold capitalize transition-all ${
+                    (state.style?.photoAlignment || "left") === pos
+                      ? "bg-[#1A2744] text-white shadow-sm"
+                      : "text-slate-500 hover:bg-slate-50"
+                  }`}
+                >
+                  <Move className="h-3 w-3" />
+                  {pos === "left" ? "Split" : "Centered"}
+                </button>
+              ))}
+            </div>
+
+            <div className="space-y-4 rounded-xl border border-slate-100 bg-slate-50/50 p-3">
+               <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400">
+                 <ZoomIn className="h-3 w-3" /> Framing & Zoom
+               </div>
+               
+               <label className="block space-y-1.5">
+                 <div className="flex justify-between text-[11px] font-medium text-slate-500">
+                   <span>Scale</span>
+                   <span>{state.style?.photoZoom || 100}%</span>
+                 </div>
+                 <input
+                   type="range"
+                   min="100"
+                   max="200"
+                   step="1"
+                   value={state.style?.photoZoom || 100}
+                   onChange={(e) => setState(s => ({ ...s, style: { ...s.style, photoZoom: parseInt(e.target.value) } }))}
+                   className="w-full transition-all accent-[#1A2744]"
+                 />
+               </label>
+
+               <div className="grid grid-cols-2 gap-4">
+                 <label className="block space-y-1.5">
+                   <div className="text-[11px] font-medium text-slate-500">X Position</div>
+                   <input
+                     type="range"
+                     min="0"
+                     max="100"
+                     step="1"
+                     value={state.style?.photoPositionX ?? 50}
+                     onChange={(e) => setState(s => ({ ...s, style: { ...s.style, photoPositionX: parseInt(e.target.value) } }))}
+                     className="w-full accent-[#1A2744]"
+                   />
+                 </label>
+                 <label className="block space-y-1.5">
+                   <div className="text-[11px] font-medium text-slate-500">Y Position</div>
+                   <input
+                     type="range"
+                     min="0"
+                     max="100"
+                     step="1"
+                     value={state.style?.photoPositionY ?? 50}
+                     onChange={(e) => setState(s => ({ ...s, style: { ...s.style, photoPositionY: parseInt(e.target.value) } }))}
+                     className="w-full accent-[#1A2744]"
+                   />
+                 </label>
+               </div>
+            </div>
+
+            <PhotoEffectPresetGrid
+              options={PHOTO_EFFECT_PRESETS}
+              value={state.style?.photoEffect || "none"}
+              onChange={(id) => setState(s => ({ ...s, style: { ...s.style, photoEffect: id as any } }))}
+            />
+
+            <PhotoOverlayPresetGrid
+              options={PHOTO_OVERLAY_PRESETS}
+              value={state.style?.photoOverlay || "none"}
+              onChange={(id) => setState(s => ({ ...s, style: { ...s.style, photoOverlay: id as any } }))}
+            />
+
+            <PhotoBorderPresetGrid
+              options={PHOTO_BORDER_PRESETS}
+              value={state.style?.photoBorder || "none"}
+              onChange={(id) => setState(s => ({ ...s, style: { ...s.style, photoBorder: id as any } }))}
+            />
+          </div>
+        )}
       </CollapsibleSection>
 
       <CollapsibleSection
@@ -767,7 +868,12 @@ export function StartCustomizer({
              <div className="flex items-center gap-3">
                 <div className="h-12 w-12 shrink-0 rounded-xl bg-slate-200 overflow-hidden shadow-sm ring-1 ring-black/5">
                    {state.photoDataUrl ? (
-                      <img src={state.photoDataUrl} alt="App Icon" className="h-full w-full object-cover" />
+                      <img 
+                        key={state.photoDataUrl?.slice(0, 64) || "empty"}
+                        src={state.photoDataUrl} 
+                        alt="App Icon" 
+                        className="h-full w-full object-cover" 
+                      />
                    ) : (
                       <div className="flex h-full w-full items-center justify-center bg-slate-100">
                          <span className="text-[10px] font-bold text-slate-400">Logo</span>

@@ -106,7 +106,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   const customItemVariants = itemVariants(entranceY, springDamping);
 
   return (
-    <div className={`business-card-template relative mx-auto w-full overflow-hidden text-[var(--text-primary)] ${isResponsive ? "max-w-6xl md:rounded-3xl" : "max-w-[640px]"}`}
+    <div className={`business-card-template relative mx-auto w-full text-[var(--text-primary)] ${isResponsive ? "max-w-6xl md:rounded-3xl" : "max-w-[640px]"}`}
       style={{ ...vars, fontFamily: "var(--font-body)", background: "var(--bg-primary)" }}
       onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}
     >

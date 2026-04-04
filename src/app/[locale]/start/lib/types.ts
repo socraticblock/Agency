@@ -48,6 +48,7 @@ export interface StylePresetSelection {
   photoEffect: PhotoEffect;
   photoOverlay: PhotoOverlay;
   photoBorder: PhotoBorder;
+  photoAlignment: "left" | "center";
 
   // Phase 3: Background
   bgType: BackgroundType;
@@ -179,6 +180,7 @@ export function defaultLane1State(): Lane1CustomizerState {
       photoEffect: "none",
       photoOverlay: "none",
       photoBorder: "none",
+      photoAlignment: "left",
 
       // Phase 3 Defaults
       bgType: "solid",
