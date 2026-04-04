@@ -183,7 +183,16 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   useEffect(() => {
     if (typeof document === "undefined") return;
 
-    // 1. Apple Touch Icon (Home Screen Logo)
+    // 1. Favicon (Browser Tab)
+    let favicon = document.querySelector('link[rel="icon"]') as HTMLLinkElement;
+    if (!favicon) {
+      favicon = document.createElement("link");
+      favicon.rel = "icon";
+      document.head.appendChild(favicon);
+    }
+    favicon.href = state.photoDataUrl || "/favicon.ico";
+
+    // 2. Apple Touch Icon (Home Screen Logo)
     let appleIcon = document.querySelector('link[rel="apple-touch-icon"]') as HTMLLinkElement;
     if (!appleIcon) {
       appleIcon = document.createElement("link");
@@ -192,7 +201,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
     }
     appleIcon.href = state.photoDataUrl || "/favicon.ico";
 
-    // 2. Theme Color (Mobile UI browser bars)
+    // 3. Theme Color (Mobile UI browser bars)
     let themeColor = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement;
     if (!themeColor) {
       themeColor = document.createElement("meta");
