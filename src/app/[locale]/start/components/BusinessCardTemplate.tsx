@@ -131,7 +131,7 @@ export function BusinessCardTemplate({
 
   return (
     <div
-      className="business-card-template mx-auto w-full max-w-[640px] text-[var(--text-primary)]"
+      className="business-card-template mx-auto w-full max-w-6xl md:rounded-3xl md:overflow-hidden text-[var(--text-primary)]"
       style={{
         ...vars,
         fontFamily: "var(--font-body)",
@@ -151,7 +151,7 @@ export function BusinessCardTemplate({
         </div>
       ) : null}
       <div
-        className="business-card-template-font-layer"
+        className="business-card-template-font-layer pb-12 md:grid md:grid-cols-12 md:gap-8 md:p-8"
         style={{ opacity: fontFade }}
       >
         <input
@@ -162,9 +162,11 @@ export function BusinessCardTemplate({
           onChange={onPhotoPicked}
           aria-hidden
         />
-        {/* Section 1 — sticky header */}
-        <header
-          className="sticky top-0 z-20 flex flex-wrap items-center justify-between gap-2 border-b px-4 py-3"
+        {/* LEFT COLUMN: Identity & Core Details */}
+        <div className="md:col-span-5 lg:col-span-4 md:sticky md:top-8 md:flex md:flex-col md:gap-6">
+          {/* Section 1 — sticky header */}
+          <header
+            className="sticky top-0 z-20 flex flex-wrap items-center justify-between gap-2 border-b px-4 py-3 md:relative md:border-none md:px-0 md:py-0"
           style={{
             borderColor: "var(--accent)",
             background: "var(--bg-primary)",
@@ -226,10 +228,10 @@ export function BusinessCardTemplate({
               style={{ color: "var(--accent)", ...headingStyle }}
             />
           </div>
-        </header>
+          </header>
 
-        {/* Section 2 — hero */}
-        <section className="px-4 pb-8 pt-8 text-left">
+          {/* Section 2 — hero */}
+          <section className="px-4 pb-8 pt-8 text-left md:rounded-3xl md:border md:p-6" style={{ borderColor: 'var(--accent-secondary)' }}>
           <div className="flex flex-col items-start gap-4">
             <div
               role={editable ? "button" : undefined}
@@ -347,19 +349,22 @@ export function BusinessCardTemplate({
             </div>
             <a
               href={telHref(state.phone)}
-              className="inline-flex min-h-[44px] items-center justify-center rounded-lg px-6 py-3 text-sm font-bold text-white"
+              className="inline-flex min-h-[44px] w-full items-center justify-center rounded-lg px-6 py-3 text-sm font-bold text-white transition-opacity hover:opacity-90 active:scale-[0.98]"
               style={{ background: "var(--accent)" }}
             >
               Contact Me
             </a>
           </div>
         </section>
+        </div> {/* END LEFT COLUMN */}
 
-        {/* Section 3 — practice areas with icons */}
-        <section
-          className="border-t px-4 py-8"
-          style={{ borderColor: "var(--accent-secondary)" }}
-        >
+        {/* RIGHT COLUMN: Content & Add-ons */}
+        <div className="md:col-span-7 lg:col-span-8 md:flex md:flex-col md:gap-6">
+          {/* Section 3 — practice areas with icons */}
+          <section
+            className="border-t px-4 py-8 md:rounded-3xl md:border md:p-8"
+            style={{ borderColor: "var(--accent-secondary)" }}
+          >
           <h2
             className="mb-4 text-lg font-bold"
             style={headingStyle}
@@ -422,10 +427,10 @@ export function BusinessCardTemplate({
 
         {/* Section 4 — contact + footer */}
         <section
-          className="border-t px-4 py-8"
+          className="border-t px-4 py-8 md:rounded-3xl md:border md:p-8"
           style={{ borderColor: "var(--accent-secondary)" }}
         >
-          <div className="space-y-3 text-sm">
+          <div className="space-y-3 text-sm md:text-base">
             <div className="flex items-center gap-2 font-semibold">
               <Phone className="h-4 w-4 shrink-0" aria-hidden />
               <InlineEditable
@@ -620,8 +625,9 @@ export function BusinessCardTemplate({
                 </>
               )}
             </p>
-          </footer>
-        </section>
+            </footer>
+          </section>
+        </div> {/* END RIGHT COLUMN */}
       </div>
     </div>
   );

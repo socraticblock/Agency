@@ -30,7 +30,7 @@ export default function PreviewPage({ params }: { params: { locale: string } }) 
   const homeHref = `/${params.locale}`;
 
   return (
-    <div className="relative min-h-screen bg-[#faf8f5] antialiased">
+    <div className="relative min-h-screen bg-[var(--background,#030717)] antialiased md:p-8 xl:p-12">
       <button
         type="button"
         onClick={() => window.close()}
@@ -41,7 +41,7 @@ export default function PreviewPage({ params }: { params: { locale: string } }) 
       </button>
 
       {/* Actual Site Content */}
-      <div className="mx-auto w-full max-w-[640px] shadow-2xl">
+      <div className="mx-auto w-full max-w-6xl md:rounded-3xl md:shadow-2xl md:overflow-hidden md:bg-[var(--bg-primary,#faf8f5)] md:p-2 xl:p-6 transition-all">
         <BusinessCardTemplate
           state={state}
           previewLang="primary"
