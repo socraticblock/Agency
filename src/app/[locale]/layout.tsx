@@ -24,6 +24,8 @@ export async function generateMetadata({
     description: SITE_DESCRIPTION,
     locale: lang,
     path: "/",
+    jobTitle: "Luxury Branding",
+    accentColor: "#fbbf24",
   });
   return metadata;
 }

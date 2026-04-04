@@ -101,14 +101,14 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   };
 
   const itemVariants = {
-    hidden: { 
-      opacity: 0, 
+    hidden: {
+      opacity: 0,
       y: Number(vars["--entrance-y" as any] || 25),
       scale: 0.98,
       filter: "blur(12px)",
     },
-    show: { 
-      opacity: 1, 
+    show: {
+      opacity: 1,
       y: 0,
       scale: 1,
       filter: "blur(0px)",
@@ -133,7 +133,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
     const height = rect.height;
     const mouseXPos = e.clientX - rect.left;
     const mouseYPos = e.clientY - rect.top;
-    
+
     // For 3D Tilt (only if responsive/desktop)
     if (isResponsive) {
       const xPct = mouseXPos / width - 0.5;
@@ -291,7 +291,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   async function handleShare() {
     if (typeof window === "undefined") return;
     const shareUrl = window.location.href; // Assumes they are on the published card page. If in preview, it shares the preview URL, which is fine for testing.
-    
+
     // In a real environment, the published card URL would be used. 
     // We construct a clean relative or absolute path based on the env.
     const urlToShare = onPatch ? "https://genezisi.com" : shareUrl; // Fallback placeholder if in editor
@@ -318,15 +318,14 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
 
   // Phase 6: The Viral Loop (Refer Me)
   const referText = encodeURIComponent(
-    `I highly recommend ${state.name} — ${state.title || "Attorney"} at ${ownerName || "Genezisi"}. You can view their digital business card here: ${onPatch ? "https://genezisi.com" : (typeof window !== "undefined" ? window.location.href : "")}`
+    `Exclusive Recommendation: I highly recommend ${state.name} — ${state.title || "Attorney"} at ${ownerName || "Genezisi"}. You can view their elite digital business card here: ${onPatch ? "https://genezisi.com" : (typeof window !== "undefined" ? window.location.href : "")}\n\nExperience high-speed luxury branding.`
   );
   const referHref = `https://wa.me/?text=${referText}`;
 
   return (
     <div
-      className={`business-card-template relative mx-auto w-full overflow-hidden text-[var(--text-primary)] ${
-        isResponsive ? "max-w-6xl md:rounded-3xl" : "max-w-[640px]"
-      }`}
+      className={`business-card-template relative mx-auto w-full overflow-hidden text-[var(--text-primary)] ${isResponsive ? "max-w-6xl md:rounded-3xl" : "max-w-[640px]"
+        }`}
       style={{
         ...vars,
         fontFamily: "var(--font-body)",
@@ -374,73 +373,71 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
           <motion.header
             variants={itemVariants}
             className={`sticky top-0 z-20 flex flex-wrap items-center justify-between gap-2 border-b px-4 py-3 ${isResponsive ? "md:relative md:border-none md:px-0 md:py-0" : ""}`}
-          style={{
-            borderColor: "var(--accent)",
-            background: "var(--bg-primary)",
-          }}
-        >
-          <div className={`max-w-[min(55%,18rem)] min-w-0 truncate text-sm font-bold leading-tight ${isResponsive ? "md:text-base" : ""}`}>
-            <InlineEditable
-              value={useSecondary ? state.nameSecondary : state.name}
-              onChange={(v) =>
-                patch(useSecondary ? { nameSecondary: v } : { name: v })
-              }
-              fallbackIfEmpty={useSecondary ? state.name : ""}
-              showFallbackIndicator={useSecondary}
-              placeholder="Your name"
-              editable={editable}
-              className="block w-full truncate"
-              style={headingStyle}
-            />
-          </div>
-          <div className="flex min-w-0 flex-wrap items-center justify-end gap-x-3 gap-y-1">
-            {showLangToggle ? (
-              <nav
-                className="flex shrink-0 items-center gap-2 text-xs font-semibold"
-                style={{ color: "var(--text-primary)" }}
-                aria-label="Preview language"
-              >
-                <button
-                  type="button"
-                  className={`min-h-[44px] min-w-[40px] rounded-md px-2 transition-opacity touch-manipulation ${
-                    previewLang === "primary" ? "opacity-100 underline decoration-2 underline-offset-4" : "opacity-55"
-                  }`}
-                  style={{ color: "var(--accent)" }}
-                  onClick={() => onPreviewLangChange?.("primary")}
+            style={{
+              borderColor: "var(--accent)",
+              background: "var(--bg-primary)",
+            }}
+          >
+            <div className={`max-w-[min(55%,18rem)] min-w-0 truncate text-sm font-bold leading-tight ${isResponsive ? "md:text-base" : ""}`}>
+              <InlineEditable
+                value={useSecondary ? state.nameSecondary : state.name}
+                onChange={(v) =>
+                  patch(useSecondary ? { nameSecondary: v } : { name: v })
+                }
+                fallbackIfEmpty={useSecondary ? state.name : ""}
+                showFallbackIndicator={useSecondary}
+                placeholder="Your name"
+                editable={editable}
+                className="block w-full truncate"
+                style={headingStyle}
+              />
+            </div>
+            <div className="flex min-w-0 flex-wrap items-center justify-end gap-x-3 gap-y-1">
+              {showLangToggle ? (
+                <nav
+                  className="flex shrink-0 items-center gap-2 text-xs font-semibold"
+                  style={{ color: "var(--text-primary)" }}
+                  aria-label="Preview language"
                 >
-                  EN
-                </button>
-                <span className="opacity-35" aria-hidden>
-                  |
-                </span>
-                <button
-                  type="button"
-                  className={`min-h-[44px] min-w-[40px] rounded-md px-2 transition-opacity touch-manipulation ${
-                    previewLang === "secondary" ? "opacity-100 underline decoration-2 underline-offset-4" : "opacity-55"
-                  }`}
-                  style={{ color: "var(--accent)" }}
-                  onClick={() => onPreviewLangChange?.("secondary")}
-                >
-                  GE
-                </button>
-              </nav>
-            ) : null}
-            <InlineEditable
-              value={state.phone}
-              onChange={(v) => patch({ phone: v })}
-              placeholder="+995…"
-              editable={editable}
-              inputMode="tel"
-              className="shrink-0 text-sm font-semibold underline decoration-2 underline-offset-2"
-              style={{ color: "var(--accent)", ...headingStyle }}
-            />
-          </div>
+                  <button
+                    type="button"
+                    className={`min-h-[44px] min-w-[40px] rounded-md px-2 transition-opacity touch-manipulation ${previewLang === "primary" ? "opacity-100 underline decoration-2 underline-offset-4" : "opacity-55"
+                      }`}
+                    style={{ color: "var(--accent)" }}
+                    onClick={() => onPreviewLangChange?.("primary")}
+                  >
+                    EN
+                  </button>
+                  <span className="opacity-35" aria-hidden>
+                    |
+                  </span>
+                  <button
+                    type="button"
+                    className={`min-h-[44px] min-w-[40px] rounded-md px-2 transition-opacity touch-manipulation ${previewLang === "secondary" ? "opacity-100 underline decoration-2 underline-offset-4" : "opacity-55"
+                      }`}
+                    style={{ color: "var(--accent)" }}
+                    onClick={() => onPreviewLangChange?.("secondary")}
+                  >
+                    GE
+                  </button>
+                </nav>
+              ) : null}
+              <InlineEditable
+                value={state.phone}
+                onChange={(v) => patch({ phone: v })}
+                placeholder="+995…"
+                editable={editable}
+                inputMode="tel"
+                className="shrink-0 text-sm font-semibold underline decoration-2 underline-offset-2"
+                style={{ color: "var(--accent)", ...headingStyle }}
+              />
+            </div>
           </motion.header>
 
           {/* Section 2 — hero */}
-          <motion.section 
+          <motion.section
             variants={itemVariants}
-            style={{ 
+            style={{
               borderColor: "var(--accent-secondary)",
               ...glassStyle,
               rotateX: isResponsive ? rotateX : 0,
@@ -449,143 +446,149 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
             }}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
-            className={`px-4 pb-8 pt-8 text-left transition-shadow duration-300 ${isResponsive ? "md:rounded-3xl md:border md:p-6 hover:shadow-2xl" : ""}`} 
+            className={`px-4 pb-8 pt-8 text-left transition-shadow duration-300 ${isResponsive ? "md:rounded-3xl md:border md:p-6 hover:shadow-2xl" : ""}`}
           >
-          <div className="flex flex-col items-start gap-4">
-            <div
-              role={editable ? "button" : undefined}
-              tabIndex={editable ? 0 : undefined}
-              onClick={() => {
-                if (editable && !photoBusy) fileRef.current?.click();
-              }}
-              onKeyDown={(e) => {
-                if (!editable) return;
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  fileRef.current?.click();
-                }
-              }}
-              className={`business-card-photo group relative h-[180px] w-[180px] shrink-0 overflow-hidden rounded-full border-4 bg-slate-200 ${
-                editable ? "cursor-pointer" : ""
-              } ${photoBusy ? "opacity-70" : ""}`}
-              style={{ borderColor: "var(--accent)" }}
-            >
-              {state.photoDataUrl ? (
-                <Image
-                  key={state.photoDataUrl.slice(0, 64)}
-                  src={state.photoDataUrl}
-                  alt=""
-                  width={180}
-                  height={180}
-                  className="h-full w-full object-cover"
-                  unoptimized
-                />
-              ) : (
-                <div className="flex h-full w-full flex-col items-center justify-center gap-1 text-xs text-slate-500">
-                  <svg
-                    className="h-16 w-16 opacity-40"
-                    viewBox="0 0 64 64"
-                    fill="currentColor"
-                    aria-hidden
-                  >
-                    <circle cx="32" cy="26" r="12" />
-                    <ellipse cx="32" cy="56" rx="22" ry="14" />
-                  </svg>
-                  <span>Photo</span>
-                </div>
-              )}
-              {editable ? (
-                <span className="pointer-events-none absolute bottom-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-md ring-1 ring-black/5">
-                  <Camera className="h-4 w-4 text-slate-700" aria-hidden />
-                </span>
-              ) : null}
-            </div>
-            <div>
-              <h1
-                className={`text-2xl font-bold leading-tight ${isResponsive ? "md:text-3xl" : ""}`}
-                style={headingStyle}
+            <div className="flex flex-col items-start gap-4">
+              <div
+                role={editable ? "button" : undefined}
+                tabIndex={editable ? 0 : undefined}
+                onClick={() => {
+                  if (editable && !photoBusy) fileRef.current?.click();
+                }}
+                onKeyDown={(e) => {
+                  if (!editable) return;
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    fileRef.current?.click();
+                  }
+                }}
+                className={`business-card-photo group relative h-[180px] w-[180px] shrink-0 overflow-hidden rounded-full border-4 bg-slate-200 ${editable ? "cursor-pointer" : ""
+                  } ${photoBusy ? "opacity-70" : ""}`}
+                style={{ borderColor: "var(--accent)" }}
               >
-                <InlineEditable
-                  value={useSecondary ? state.nameSecondary : state.name}
-                  onChange={(v) =>
-                    patch(useSecondary ? { nameSecondary: v } : { name: v })
-                  }
-                  fallbackIfEmpty={useSecondary ? state.name : ""}
-                  showFallbackIndicator={useSecondary}
-                  placeholder="Name"
-                  editable={editable}
-                  className="block w-full"
-                  style={headingStyle}
-                />
-              </h1>
-              <p className="mt-2 text-base opacity-90" style={bodyStyle}>
-                <InlineEditable
-                  value={useSecondary ? state.titleSecondary : state.title}
-                  onChange={(v) =>
-                    patch(useSecondary ? { titleSecondary: v } : { title: v })
-                  }
-                  fallbackIfEmpty={useSecondary ? state.title : ""}
-                  showFallbackIndicator={useSecondary}
-                  placeholder="Title"
-                  editable={editable}
-                  className="block w-full"
-                  style={bodyStyle}
-                />
-              </p>
-            </div>
-            <div
-              className={`grid w-full gap-2 ${
-                state.serviceCount >= 3 ? "grid-cols-2" : "grid-cols-1"
-              }`}
-            >
-              {Array.from({ length: state.serviceCount }).map((_, i) => {
-                const en = state.serviceAreas[i] ?? "";
-                const ge = state.serviceAreasSecondary[i] ?? "";
-                if (useSecondary) {
-                  if (!en.trim() && !ge.trim() && !editable) return null;
-                } else if (!en.trim() && !editable) {
-                  return null;
-                }
-                return (
-                  <div
-                    key={i}
-                    className="rounded border border-black/5 px-3 py-2 text-sm"
-                    style={{ borderColor: "var(--accent-secondary)" }}
-                  >
-                    <InlineEditable
-                      value={useSecondary ? ge : en}
-                      onChange={(v) => setServiceLine(i, v)}
-                      fallbackIfEmpty={useSecondary ? en : ""}
-                      showFallbackIndicator={useSecondary}
-                      placeholder={`Service ${i + 1}`}
-                      editable={editable}
-                      className="block w-full"
-                      style={bodyStyle}
-                    />
+                {state.photoDataUrl ? (
+                  <Image
+                    key={state.photoDataUrl.slice(0, 64)}
+                    src={state.photoDataUrl}
+                    alt=""
+                    width={180}
+                    height={180}
+                    className="h-full w-full object-cover"
+                    unoptimized
+                  />
+                ) : (
+                  <div className="flex h-full w-full flex-col items-center justify-center gap-1 text-xs text-slate-500">
+                    <svg
+                      className="h-16 w-16 opacity-40"
+                      viewBox="0 0 64 64"
+                      fill="currentColor"
+                      aria-hidden
+                    >
+                      <circle cx="32" cy="26" r="12" />
+                      <ellipse cx="32" cy="56" rx="22" ry="14" />
+                    </svg>
+                    <span>Photo</span>
                   </div>
-                );
-              })}
-            </div>
-            <div className="flex flex-col gap-3 w-full">
-              <MagneticButton
-                as="a"
-                href={telHref(state.phone)}
-                className="inline-flex min-h-[44px] w-full items-center justify-center rounded-lg px-6 py-3 text-sm font-bold text-white transition-opacity hover:opacity-90 active:scale-[0.98]"
-                style={{ background: "var(--accent)" }}
+                )}
+                {editable ? (
+                  <span className="pointer-events-none absolute bottom-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-md ring-1 ring-black/5">
+                    <Camera className="h-4 w-4 text-slate-700" aria-hidden />
+                  </span>
+                ) : null}
+              </div>
+              <div>
+                <h1
+                  className={`text-2xl font-bold leading-tight ${isResponsive ? "md:text-3xl" : ""}`}
+                  style={headingStyle}
+                >
+                  <InlineEditable
+                    value={useSecondary ? state.nameSecondary : state.name}
+                    onChange={(v) =>
+                      patch(useSecondary ? { nameSecondary: v } : { name: v })
+                    }
+                    fallbackIfEmpty={useSecondary ? state.name : ""}
+                    showFallbackIndicator={useSecondary}
+                    placeholder="Name"
+                    editable={editable}
+                    className="block w-full"
+                    style={headingStyle}
+                  />
+                </h1>
+                <p className="mt-2 text-base opacity-90" style={bodyStyle}>
+                  <InlineEditable
+                    value={useSecondary ? state.titleSecondary : state.title}
+                    onChange={(v) =>
+                      patch(useSecondary ? { titleSecondary: v } : { title: v })
+                    }
+                    fallbackIfEmpty={useSecondary ? state.title : ""}
+                    showFallbackIndicator={useSecondary}
+                    placeholder="Title"
+                    editable={editable}
+                    className="block w-full"
+                    style={bodyStyle}
+                  />
+                </p>
+                {ownerName && (
+                  <p
+                    className="mt-1 text-sm font-semibold opacity-80"
+                    style={{ ...bodyStyle, color: "var(--accent)" }}
+                  >
+                    {ownerName}
+                  </p>
+                )}
+              </div>
+              <div
+                className={`grid w-full gap-2 ${state.serviceCount >= 3 ? "grid-cols-2" : "grid-cols-1"
+                  }`}
               >
-                Contact Me
-              </MagneticButton>
-              <MagneticButton
-                onClick={() => downloadVCF(state, previewLang)}
-                className="inline-flex min-h-[44px] w-full items-center justify-center rounded-lg border px-6 py-3 text-sm font-bold transition-all hover:bg-black/5 active:scale-[0.98]"
-                style={{ borderColor: "var(--accent)", color: "var(--accent)" }}
-              >
-                <UserPlus className="mr-2 h-4 w-4" />
-                Save Contact
-              </MagneticButton>
+                {Array.from({ length: state.serviceCount }).map((_, i) => {
+                  const en = state.serviceAreas[i] ?? "";
+                  const ge = state.serviceAreasSecondary[i] ?? "";
+                  if (useSecondary) {
+                    if (!en.trim() && !ge.trim() && !editable) return null;
+                  } else if (!en.trim() && !editable) {
+                    return null;
+                  }
+                  return (
+                    <div
+                      key={i}
+                      className="rounded border border-black/5 px-3 py-2 text-sm"
+                      style={{ borderColor: "var(--accent-secondary)" }}
+                    >
+                      <InlineEditable
+                        value={useSecondary ? ge : en}
+                        onChange={(v) => setServiceLine(i, v)}
+                        fallbackIfEmpty={useSecondary ? en : ""}
+                        showFallbackIndicator={useSecondary}
+                        placeholder={`Service ${i + 1}`}
+                        editable={editable}
+                        className="block w-full"
+                        style={bodyStyle}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="flex flex-col gap-3 w-full">
+                <MagneticButton
+                  as="a"
+                  href={telHref(state.phone)}
+                  className="inline-flex min-h-[44px] w-full items-center justify-center rounded-lg px-6 py-3 text-sm font-bold text-white transition-opacity hover:opacity-90 active:scale-[0.98]"
+                  style={{ background: "var(--accent)" }}
+                >
+                  Contact Me
+                </MagneticButton>
+                <MagneticButton
+                  onClick={() => downloadVCF(state, previewLang)}
+                  className="inline-flex min-h-[44px] w-full items-center justify-center rounded-lg border px-6 py-3 text-sm font-bold transition-all hover:bg-black/5 active:scale-[0.98]"
+                  style={{ borderColor: "var(--accent)", color: "var(--accent)" }}
+                >
+                  <UserPlus className="mr-2 h-4 w-4" />
+                  Save Contact
+                </MagneticButton>
+              </div>
             </div>
-          </div>
-         </motion.section>
+          </motion.section>
         </div> {/* END LEFT COLUMN */}
 
         {/* RIGHT COLUMN: Content & Add-ons */}
@@ -595,393 +598,402 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
             variants={itemVariants}
             whileHover={{ y: -4, transition: { duration: 0.2 } }}
             className={`border-t px-4 py-8 ${isResponsive ? "md:rounded-3xl md:border md:p-8" : ""}`}
-            style={{ 
+            style={{
               borderColor: "var(--accent-secondary)",
               ...glassStyle
             }}
           >
-          <h2
-            className="mb-4 text-lg font-bold"
-            style={headingStyle}
-          >
-            <InlineEditable
-              value={
-                useSecondary
-                  ? state.practiceHeadingSecondary
-                  : state.practiceHeading
-              }
-              onChange={(v) =>
-                patch(
-                  useSecondary
-                    ? { practiceHeadingSecondary: v }
-                    : { practiceHeading: v },
-                )
-              }
-              fallbackIfEmpty={useSecondary ? state.practiceHeading : ""}
-              showFallbackIndicator={useSecondary}
-              placeholder="Practice areas"
-              editable={editable}
-              className="block w-full"
+            <h2
+              className="mb-4 text-lg font-bold"
               style={headingStyle}
-            />
-          </h2>
-          <ul className="flex flex-col gap-3">
-            {Array.from({ length: state.serviceCount }).map((_, i) => {
-              const enTitle = state.serviceAreas[i] ?? "";
-              const geTitle = state.serviceAreasSecondary[i] ?? "";
-              const enDesc = state.serviceDescriptions[i] ?? "";
-              const geDesc = state.serviceDescriptionsSecondary[i] ?? "";
+            >
+              <InlineEditable
+                value={
+                  useSecondary
+                    ? state.practiceHeadingSecondary
+                    : state.practiceHeading
+                }
+                onChange={(v) =>
+                  patch(
+                    useSecondary
+                      ? { practiceHeadingSecondary: v }
+                      : { practiceHeading: v },
+                  )
+                }
+                fallbackIfEmpty={useSecondary ? state.practiceHeading : ""}
+                showFallbackIndicator={useSecondary}
+                placeholder="Practice areas"
+                editable={editable}
+                className="block w-full"
+                style={headingStyle}
+              />
+            </h2>
+            <ul className="flex flex-col gap-3">
+              {Array.from({ length: state.serviceCount }).map((_, i) => {
+                const enTitle = state.serviceAreas[i] ?? "";
+                const geTitle = state.serviceAreasSecondary[i] ?? "";
+                const enDesc = state.serviceDescriptions[i] ?? "";
+                const geDesc = state.serviceDescriptionsSecondary[i] ?? "";
 
-              const title = useSecondary ? geTitle : enTitle;
-              const desc = useSecondary ? geDesc : enDesc;
+                const title = useSecondary ? geTitle : enTitle;
+                const desc = useSecondary ? geDesc : enDesc;
 
-              if (useSecondary) {
-                if (!enTitle.trim() && !geTitle.trim() && !editable) return null;
-              } else if (!enTitle.trim() && !editable) {
-                return null;
-              }
+                if (useSecondary) {
+                  if (!enTitle.trim() && !geTitle.trim() && !editable) return null;
+                } else if (!enTitle.trim() && !editable) {
+                  return null;
+                }
 
-              const isExpanded = expandedService === i;
-              const Icon = ICONS[i % ICONS.length];
+                const isExpanded = expandedService === i;
+                const Icon = ICONS[i % ICONS.length];
 
-              return (
-                <li
-                  key={i}
-                  className="overflow-hidden rounded-xl border transition-all"
-                  style={{
-                    borderColor: isExpanded ? "var(--accent)" : "rgba(0,0,0,0.05)",
-                    background: isExpanded ? "rgba(0,0,0,0.02)" : "transparent",
-                    ...glassStyle
-                  }}
-                >
-                  <button
-                    type="button"
-                    onClick={() => setExpandedService(isExpanded ? null : i)}
-                    className="flex w-full items-start gap-3 p-3 text-left"
+                return (
+                  <li
+                    key={i}
+                    className="overflow-hidden rounded-xl border transition-all"
+                    style={{
+                      borderColor: isExpanded ? "var(--accent)" : "rgba(0,0,0,0.05)",
+                      background: isExpanded ? "rgba(0,0,0,0.02)" : "transparent",
+                      ...glassStyle
+                    }}
                   >
-                    <Icon
-                      className="mt-0.5 h-5 w-5 shrink-0"
-                      style={{ color: "var(--accent)" }}
-                      aria-hidden
-                    />
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-sm font-bold leading-snug">
-                          <InlineEditable
-                            value={title}
-                            onChange={(v) => setServiceLine(i, v)}
-                            fallbackIfEmpty={useSecondary ? enTitle : ""}
-                            showFallbackIndicator={useSecondary}
-                            placeholder={`Service ${i + 1}`}
-                            editable={editable}
-                            className="block w-full"
-                          />
-                        </span>
-                        <ChevronDown
-                          className={`h-4 w-4 shrink-0 transition-transform ${isExpanded ? "rotate-180" : ""}`}
-                          style={{ color: "var(--accent)" }}
-                        />
-                      </div>
-                    </div>
-                  </button>
-
-                  <AnimatePresence>
-                    {isExpanded && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.25, ease: "easeInOut" }}
-                      >
-                        <div 
-                          className="border-t border-black/5 p-3 pt-0 text-sm leading-relaxed opacity-70"
-                          style={{ color: "var(--text-primary)" }}
-                        >
-                          <InlineEditable
-                            value={desc}
-                            onChange={(v) => setServiceDescriptionLine(i, v)}
-                            fallbackIfEmpty={useSecondary ? enDesc : ""}
-                            showFallbackIndicator={useSecondary}
-                            placeholder="Add a detailed description of your expertise in this area..."
-                            editable={editable}
-                            className="block w-full"
-                            style={bodyStyle}
+                    <button
+                      type="button"
+                      onClick={() => setExpandedService(isExpanded ? null : i)}
+                      className="flex w-full items-start gap-3 p-3 text-left"
+                    >
+                      <Icon
+                        className="mt-0.5 h-5 w-5 shrink-0"
+                        style={{ color: "var(--accent)" }}
+                        aria-hidden
+                      />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-sm font-bold leading-snug">
+                            <InlineEditable
+                              value={title}
+                              onChange={(v) => setServiceLine(i, v)}
+                              fallbackIfEmpty={useSecondary ? enTitle : ""}
+                              showFallbackIndicator={useSecondary}
+                              placeholder={`Service ${i + 1}`}
+                              editable={editable}
+                              className="block w-full"
+                            />
+                          </span>
+                          <ChevronDown
+                            className={`h-4 w-4 shrink-0 transition-transform ${isExpanded ? "rotate-180" : ""}`}
+                            style={{ color: "var(--accent)" }}
                           />
                         </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </li>
-              );
-            })}
-          </ul>
-        </motion.section>
+                      </div>
+                    </button>
 
-        {/* Section 4 — contact + footer */}
-        <motion.section
-          variants={itemVariants}
-          whileHover={{ y: -4, transition: { duration: 0.2 } }}
-          className={`border-t px-4 py-8 ${isResponsive ? "md:rounded-3xl md:border md:p-8" : ""}`}
-          style={{ 
-            borderColor: "var(--accent-secondary)",
-            ...glassStyle
-          }}
-        >
-          <div className={`space-y-3 text-sm ${isResponsive ? "md:text-base" : ""}`}>
-            <div className="flex items-center gap-2 font-semibold">
-              <Phone className="h-4 w-4 shrink-0" aria-hidden />
-              <InlineEditable
-                value={state.phone}
-                onChange={(v) => patch({ phone: v })}
-                placeholder="Phone"
-                editable={editable}
-                inputMode="tel"
-                className="min-w-0 flex-1"
-                style={{ color: "var(--accent)", ...bodyStyle }}
-              />
-            </div>
-            <div className="flex items-start gap-2">
-              <Mail className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
-              <span className="min-w-0 flex-1 underline">
+                    <AnimatePresence>
+                      {isExpanded && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.25, ease: "easeInOut" }}
+                        >
+                          <div
+                            className="border-t border-black/5 p-3 pt-0 text-sm leading-relaxed opacity-70"
+                            style={{ color: "var(--text-primary)" }}
+                          >
+                            <InlineEditable
+                              value={desc}
+                              onChange={(v) => setServiceDescriptionLine(i, v)}
+                              fallbackIfEmpty={useSecondary ? enDesc : ""}
+                              showFallbackIndicator={useSecondary}
+                              placeholder="Add a detailed description of your expertise in this area..."
+                              editable={editable}
+                              className="block w-full"
+                              style={bodyStyle}
+                            />
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </li>
+                );
+              })}
+            </ul>
+          </motion.section>
+
+          {/* Section 4 — contact + footer */}
+          <motion.section
+            variants={itemVariants}
+            whileHover={{ y: -4, transition: { duration: 0.2 } }}
+            className={`border-t px-4 py-8 ${isResponsive ? "md:rounded-3xl md:border md:p-8" : ""}`}
+            style={{
+              borderColor: "var(--accent-secondary)",
+              ...glassStyle
+            }}
+          >
+            <div className={`space-y-3 text-sm ${isResponsive ? "md:text-base" : ""}`}>
+              <div className="flex items-center gap-2 font-semibold">
+                <Phone className="h-4 w-4 shrink-0" aria-hidden />
                 <InlineEditable
-                  value={state.email}
-                  onChange={(v) => patch({ email: v })}
-                  placeholder="Email"
+                  value={state.phone}
+                  onChange={(v) => patch({ phone: v })}
+                  placeholder="Phone"
                   editable={editable}
-                  inputMode="email"
+                  inputMode="tel"
+                  className="min-w-0 flex-1"
+                  style={{ color: "var(--accent)", ...bodyStyle }}
+                />
+              </div>
+              <div className="flex items-start gap-2">
+                <Mail className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+                <span className="min-w-0 flex-1 underline">
+                  <InlineEditable
+                    value={state.email}
+                    onChange={(v) => patch({ email: v })}
+                    placeholder="Email"
+                    editable={editable}
+                    inputMode="email"
+                    className="block w-full"
+                    style={bodyStyle}
+                  />
+                </span>
+              </div>
+              <a
+                href={waHref(state.phone)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 font-semibold"
+                style={{ color: "var(--accent)" }}
+              >
+                <MessageCircle className="h-4 w-4" aria-hidden />
+                WhatsApp
+              </a>
+              <div className="flex flex-wrap gap-3 pt-2">
+                {showSocial(state.social.facebook) && (
+                  <MagneticButton
+                    as="a"
+                    href={state.social.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[var(--accent)]"
+                    aria-label="Facebook"
+                    magneticStrength={10}
+                  >
+                    <Facebook className="h-6 w-6" />
+                  </MagneticButton>
+                )}
+                {showSocial(state.social.instagram) && (
+                  <MagneticButton
+                    as="a"
+                    href={state.social.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[var(--accent)]"
+                    aria-label="Instagram"
+                    magneticStrength={10}
+                  >
+                    <Instagram className="h-6 w-6" />
+                  </MagneticButton>
+                )}
+                {showSocial(state.social.linkedin) && (
+                  <MagneticButton
+                    as="a"
+                    href={state.social.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[var(--accent)]"
+                    aria-label="LinkedIn"
+                    magneticStrength={10}
+                  >
+                    <Linkedin className="h-6 w-6" />
+                  </MagneticButton>
+                )}
+                {showSocial(state.social.tiktok) && (
+                  <a
+                    href={state.social.tiktok}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[var(--accent)]"
+                    aria-label="TikTok"
+                  >
+                    <span className="text-xs font-bold">TT</span>
+                  </a>
+                )}
+                {showSocial(state.social.youtube) && (
+                  <MagneticButton
+                    as="a"
+                    href={state.social.youtube}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[var(--accent)]"
+                    aria-label="YouTube"
+                    magneticStrength={10}
+                  >
+                    <Youtube className="h-6 w-6" />
+                  </MagneticButton>
+                )}
+                {state.social.extra.map((e, i) =>
+                  e.url.trim() ? (
+                    <a
+                      key={i}
+                      href={e.url.trim()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs font-semibold underline"
+                      style={{ color: "var(--accent)" }}
+                    >
+                      {e.label || "Link"}
+                    </a>
+                  ) : null
+                )}
+              </div>
+              <div className="pt-2">
+                {state.addGoogleMap && address.trim() ? (
+                  <div
+                    className="mb-2 text-[var(--text-primary)] underline"
+                    style={bodyStyle}
+                  >
+                    <InlineEditable
+                      value={useSecondary ? state.addressSecondary : state.address}
+                      onChange={(v) =>
+                        patch(
+                          useSecondary ? { addressSecondary: v } : { address: v },
+                        )
+                      }
+                      fallbackIfEmpty={useSecondary ? state.address : ""}
+                      showFallbackIndicator={useSecondary}
+                      placeholder="Address"
+                      multiline
+                      editable={editable}
+                      className="block w-full"
+                      style={bodyStyle}
+                    />
+                  </div>
+                ) : (
+                  <div className="text-[var(--text-primary)]" style={bodyStyle}>
+                    <InlineEditable
+                      value={useSecondary ? state.addressSecondary : state.address}
+                      onChange={(v) =>
+                        patch(
+                          useSecondary ? { addressSecondary: v } : { address: v },
+                        )
+                      }
+                      fallbackIfEmpty={useSecondary ? state.address : ""}
+                      showFallbackIndicator={useSecondary}
+                      placeholder="Address"
+                      multiline
+                      editable={editable}
+                      className="block w-full"
+                      style={bodyStyle}
+                    />
+                  </div>
+                )}
+              </div>
+              <div>
+                <InlineEditable
+                  value={useSecondary ? state.hoursSecondary : state.hours}
+                  onChange={(v) =>
+                    patch(useSecondary ? { hoursSecondary: v } : { hours: v })
+                  }
+                  fallbackIfEmpty={useSecondary ? state.hours : ""}
+                  showFallbackIndicator={useSecondary}
+                  placeholder="Hours"
+                  editable={editable}
                   className="block w-full"
                   style={bodyStyle}
                 />
-              </span>
-            </div>
-            <a
-              href={waHref(state.phone)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 font-semibold"
-              style={{ color: "var(--accent)" }}
-            >
-              <MessageCircle className="h-4 w-4" aria-hidden />
-              WhatsApp
-            </a>
-            <div className="flex flex-wrap gap-3 pt-2">
-              {showSocial(state.social.facebook) && (
-                <MagneticButton
-                  as="a"
-                  href={state.social.facebook}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[var(--accent)]"
-                  aria-label="Facebook"
-                  magneticStrength={10}
-                >
-                  <Facebook className="h-6 w-6" />
-                </MagneticButton>
-              )}
-              {showSocial(state.social.instagram) && (
-                <MagneticButton
-                  as="a"
-                  href={state.social.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[var(--accent)]"
-                  aria-label="Instagram"
-                  magneticStrength={10}
-                >
-                  <Instagram className="h-6 w-6" />
-                </MagneticButton>
-              )}
-              {showSocial(state.social.linkedin) && (
-                <MagneticButton
-                  as="a"
-                  href={state.social.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[var(--accent)]"
-                  aria-label="LinkedIn"
-                  magneticStrength={10}
-                >
-                  <Linkedin className="h-6 w-6" />
-                </MagneticButton>
-              )}
-              {showSocial(state.social.tiktok) && (
-                <a
-                  href={state.social.tiktok}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[var(--accent)]"
-                  aria-label="TikTok"
-                >
-                  <span className="text-xs font-bold">TT</span>
-                </a>
-              )}
-              {showSocial(state.social.youtube) && (
-                <MagneticButton
-                  as="a"
-                  href={state.social.youtube}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[var(--accent)]"
-                  aria-label="YouTube"
-                  magneticStrength={10}
-                >
-                  <Youtube className="h-6 w-6" />
-                </MagneticButton>
-              )}
-              {state.social.extra.map((e, i) =>
-                e.url.trim() ? (
-                  <a
-                    key={i}
-                    href={e.url.trim()}
+              </div>
+              {state.addGoogleMap && address.trim() ? (
+                <div className="mt-8 space-y-4">
+                  {/* The "Elite" action: Native Directions (Zero-cost / Zero-latency) */}
+                  <MagneticButton
+                    as="a"
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xs font-semibold underline"
-                    style={{ color: "var(--accent)" }}
+                    className="flex w-full items-center justify-center gap-2 rounded-xl border-2 py-3.5 text-[14px] font-bold transition-transform"
+                    style={{
+                      borderColor: "var(--accent)",
+                      color: "var(--accent)",
+                      background: "rgba(255, 255, 255, 0.05)"
+                    }}
                   >
-                    {e.label || "Link"}
-                  </a>
-                ) : null
-              )}
-            </div>
-            <div className="pt-2">
-              {state.addGoogleMap && address.trim() ? (
-                <div
-                  className="mb-2 text-[var(--text-primary)] underline"
-                  style={bodyStyle}
+                    <Map className="h-4 w-4 opacity-70" />
+                    Get Directions
+                  </MagneticButton>
+                </div>
+              ) : null}
+
+              {/* Growth & Distribution Section */}
+              <div className="mt-10 flex flex-col gap-3">
+                <MagneticButton
+                  onClick={handleShare}
+                  className="flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-[0.875rem] font-semibold text-white shadow-lg transition-transform"
+                  style={{ background: "var(--accent)" }}
                 >
-                  <InlineEditable
-                    value={useSecondary ? state.addressSecondary : state.address}
-                    onChange={(v) =>
-                      patch(
-                        useSecondary ? { addressSecondary: v } : { address: v },
-                      )
-                    }
-                    fallbackIfEmpty={useSecondary ? state.address : ""}
-                    showFallbackIndicator={useSecondary}
-                    placeholder="Address"
-                    multiline
-                    editable={editable}
-                    className="block w-full"
-                    style={bodyStyle}
-                  />
-                </div>
-              ) : (
-                <div className="text-[var(--text-primary)]" style={bodyStyle}>
-                  <InlineEditable
-                    value={useSecondary ? state.addressSecondary : state.address}
-                    onChange={(v) =>
-                      patch(
-                        useSecondary ? { addressSecondary: v } : { address: v },
-                      )
-                    }
-                    fallbackIfEmpty={useSecondary ? state.address : ""}
-                    showFallbackIndicator={useSecondary}
-                    placeholder="Address"
-                    multiline
-                    editable={editable}
-                    className="block w-full"
-                    style={bodyStyle}
-                  />
-                </div>
-              )}
-            </div>
-            <div>
-              <InlineEditable
-                value={useSecondary ? state.hoursSecondary : state.hours}
-                onChange={(v) =>
-                  patch(useSecondary ? { hoursSecondary: v } : { hours: v })
-                }
-                fallbackIfEmpty={useSecondary ? state.hours : ""}
-                showFallbackIndicator={useSecondary}
-                placeholder="Hours"
-                editable={editable}
-                className="block w-full"
-                style={bodyStyle}
-              />
-            </div>
-            {state.addGoogleMap && address.trim() ? (
-              <div className="mt-8 space-y-4">
-                {/* The "Elite" action: Native Directions (Zero-cost / Zero-latency) */}
+                  <Share2 className="h-4 w-4" />
+                  {shareFeedback || "Share Card"}
+                </MagneticButton>
+
                 <MagneticButton
                   as="a"
-                  href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`}
+                  href={referHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex w-full items-center justify-center gap-2 rounded-xl border-2 py-3.5 text-[14px] font-bold transition-transform"
-                  style={{ 
-                    borderColor: "var(--accent)", 
-                    color: "var(--accent)",
-                    background: "rgba(255, 255, 255, 0.05)"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl border-2 py-3 text-[0.875rem] font-semibold shadow-sm transition-transform"
+                  style={{
+                    borderColor: "color-mix(in srgb, var(--accent) 30%, transparent)",
+                    color: "var(--text-primary)",
+                    background: "transparent"
                   }}
                 >
-                  <Map className="h-4 w-4 opacity-70" />
-                  Get Directions
+                  <Send className="h-4 w-4 opacity-70" />
+                  Refer {state.name.split(" ")[0] || "Me"} via WhatsApp
                 </MagneticButton>
               </div>
-            ) : null}
-
-            {/* Growth & Distribution Section */}
-            <div className="mt-10 flex flex-col gap-3">
-              <MagneticButton
-                onClick={handleShare}
-                className="flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-[0.875rem] font-semibold text-white shadow-lg transition-transform"
-                style={{ background: "var(--accent)" }}
-              >
-                <Share2 className="h-4 w-4" />
-                {shareFeedback || "Share Card"}
-              </MagneticButton>
-
-              <MagneticButton
-                as="a"
-                href={referHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex w-full items-center justify-center gap-2 rounded-xl border-2 py-3 text-[0.875rem] font-semibold shadow-sm transition-transform"
-                style={{ 
-                  borderColor: "color-mix(in srgb, var(--accent) 30%, transparent)",
-                  color: "var(--text-primary)",
-                  background: "transparent" 
-                }}
-              >
-                <Send className="h-4 w-4 opacity-70" />
-                Refer {state.name.split(" ")[0] || "Me"} via WhatsApp
-              </MagneticButton>
             </div>
-          </div>
 
-          <footer
-            className="mt-10 border-t pt-6 text-center text-xs opacity-80"
-            style={{ borderColor: "var(--accent-secondary)" }}
-          >
-            <p>
-              © {new Date().getFullYear()} {ownerName || "—"}.
-              {!hideBranding && (
-                <>
-                  {" "}Built by{" "}
-                  <Link
-                    href={homeHref}
-                    className="font-semibold underline"
-                    style={{ color: "var(--accent)" }}
-                  >
-                    Genezisi
-                  </Link>
-                </>
-              )}
-            </p>
+            <footer
+              className="mt-10 border-t pt-6 text-center text-xs opacity-80"
+              style={{ borderColor: "var(--accent-secondary)" }}
+            >
+              <p>
+                © {new Date().getFullYear()} {ownerName || "—"}.
+                {!hideBranding && (
+                  <>
+                    {" "}Built by{" "}
+                    <Link
+                      href={homeHref}
+                      className="font-semibold underline"
+                      style={{ color: "var(--accent)" }}
+                    >
+                      Genezisi
+                    </Link>
+                  </>
+                )}
+              </p>
             </footer>
           </motion.section>
         </div> {/* END RIGHT COLUMN */}
 
-        {/* Phase 3.2: Hidden QR View for Print Kit */}
+        {/* Phase 3.2: Hidden QR View for Print Kit (Back of Card) */}
         <div className="qr-code-print-view hidden p-8 text-center" aria-hidden>
-           <h3 className="text-xl font-bold mb-4">{state.name}</h3>
-           <p className="text-sm mb-6">{state.title}</p>
-           <div className="flex justify-center mb-6">
+          <div className="flex flex-col items-center justify-center h-full gap-4">
+            <div className="space-y-1">
+              <h3 className="text-xl font-bold">{state.name}</h3>
+              {ownerName && <p className="text-sm font-semibold opacity-80">{ownerName}</p>}
+              <p className="text-xs opacity-60 uppercase tracking-widest">{state.title}</p>
+            </div>
+            <div className="flex justify-center my-4 p-4 bg-white rounded-2xl shadow-sm">
               {qrDataUrl && <img src={qrDataUrl} alt="QR Code" className="h-48 w-48" />}
-           </div>
-           <p className="text-xs opacity-60">Scan to view my full digital business card</p>
+            </div>
+            <div className="max-w-[200px]">
+              <p className="text-[10px] leading-tight opacity-50 font-medium">Scan to view full digital business card, services, and practice areas.</p>
+            </div>
+          </div>
         </div>
       </motion.div>
     </div>
   );
 });
+
+export default BusinessCardTemplate;
