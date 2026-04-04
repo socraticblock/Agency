@@ -2,12 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { MessageCircle, Pencil } from "lucide-react";
 import { acquireBodyScrollLock } from "@/lib/bodyScrollLock";
 import type { Locale } from "@/lib/i18n";
 import type { Lane1CustomizerState, SectorId } from "../lib/types";
 import { defaultLane1State } from "../lib/types";
 import { loadLane1State, saveLane1State } from "../lib/customizer-store";
 import { getSectorPlaceholder } from "../lib/placeholders";
+import { buildLane1WhatsAppUrl } from "../lib/whatsapp";
+import { LANE1_BASE_GEL, computeLane1Total } from "../lib/lane1-pricing";
 import { BusinessCardTemplate } from "./BusinessCardTemplate";
 import { SectorGrid } from "./SectorGrid";
 import { StartCustomizer } from "./StartCustomizer";
@@ -27,6 +30,7 @@ function mergeSectorPlaceholder(
     address: p.address,
     hours: p.hours,
     practiceHeading: p.practiceHeading,
+    practiceHeadingSecondary: p.practiceHeadingSecondary,
     serviceAreas: [...p.serviceAreas] as [string, string, string, string],
     serviceCount: p.serviceCount,
   };
@@ -38,10 +42,17 @@ export function StartPageClient({ locale }: { locale: Locale }) {
   const [phase, setPhase] = useState<"pick" | "customize">("pick");
   const [previewLang, setPreviewLang] = useState<"primary" | "secondary">("primary");
   const [mobileEditorOpen, setMobileEditorOpen] = useState(false);
+  const [fabPulse, setFabPulse] = useState(true);
+
+  const total = computeLane1Total({
+    secondaryMode: state.secondaryMode,
+    addGoogleMap: state.addGoogleMap,
+  });
+  const waUrl = buildLane1WhatsAppUrl(state);
 
   useEffect(() => {
     const loaded = loadLane1State();
-    setState({ ...loaded, primaryLang: "en" });
+    setState(loaded);
     if (loaded.sectorId) setPhase("customize");
     setHydrated(true);
   }, []);
@@ -57,6 +68,12 @@ export function StartPageClient({ locale }: { locale: Locale }) {
     return acquireBodyScrollLock("default");
   }, [mobileEditorOpen]);
 
+  useEffect(() => {
+    if (phase !== "customize") return;
+    const t = window.setTimeout(() => setFabPulse(false), 2000);
+    return () => window.clearTimeout(t);
+  }, [phase]);
+
   const homeHref = `/${locale}`;
 
   function onSector(id: SectorId) {
@@ -70,151 +87,198 @@ export function StartPageClient({ locale }: { locale: Locale }) {
     setMobileEditorOpen(false);
   }
 
-  const title = "Digital business card — start here";
-
   return (
-    <div className="min-h-screen bg-[#FAF6F0] text-amber-950">
-      <div className="mx-auto max-w-6xl px-4 py-10 md:py-14">
-        <header className="mb-10 max-w-2xl">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-800/70">
-            Genezisi
-          </p>
-          <h1 className="mt-2 text-3xl font-black tracking-tight text-amber-950 md:text-4xl">
-            {title}
-          </h1>
-          <p className="mt-3 text-sm leading-relaxed text-amber-900/80 md:text-base">
-            Pick a sector, fill in your details (any language), and see a live preview. Order via
-            WhatsApp.
-          </p>
-        </header>
-
+    <div className="mx-auto max-w-6xl px-4 py-10 md:px-6 md:py-14">
+      <header className="mb-10 max-w-2xl">
+        <p className="mb-2 text-[0.75rem] font-bold uppercase tracking-[0.2em] text-[#64748b]">
+          Genezisi
+        </p>
         {phase === "pick" ? (
-          <SectorGrid onSelect={onSector} />
+          <>
+            <h1 className="start-hero-title mb-2">Your Digital Business Card</h1>
+            <p className="start-body text-[#64748b]">
+              A professional single-page website in 3 days. Just 450 GEL.
+            </p>
+          </>
         ) : (
           <>
-            <div className="mb-4 flex flex-wrap items-center gap-3 lg:hidden">
-              {state.secondaryMode === "self" ? (
-                <div className="flex rounded-full border border-amber-900/20 bg-white/80 p-1 text-xs font-semibold">
-                  <button
-                    type="button"
-                    className={`rounded-full px-3 py-1 ${
-                      previewLang === "primary"
-                        ? "bg-amber-800 text-white"
-                        : "text-amber-900/70"
-                    }`}
-                    onClick={() => setPreviewLang("primary")}
-                  >
-                    Primary
-                  </button>
-                  <button
-                    type="button"
-                    className={`rounded-full px-3 py-1 ${
-                      previewLang === "secondary"
-                        ? "bg-amber-800 text-white"
-                        : "text-amber-900/70"
-                    }`}
-                    onClick={() => setPreviewLang("secondary")}
-                  >
-                    2nd
-                  </button>
-                </div>
-              ) : null}
-              <button
-                type="button"
-                onClick={() => setMobileEditorOpen(true)}
-                className="ml-auto min-h-[44px] rounded-full bg-amber-900 px-5 py-2 text-sm font-bold text-amber-50"
-              >
-                Edit
-              </button>
-            </div>
+            <h1 className="start-page-title mb-2">Customize your card</h1>
+            <p className="start-body text-[#64748b]">
+              Preview updates as you edit. Order via WhatsApp.
+            </p>
+          </>
+        )}
+      </header>
 
-            <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
-              <div className="space-y-4">
-                <div className="hidden flex-wrap items-center gap-3 lg:flex">
-                  {state.secondaryMode === "self" ? (
-                    <div className="flex rounded-full border border-amber-900/20 bg-white/80 p-1 text-xs font-semibold">
-                      <button
-                        type="button"
-                        className={`rounded-full px-3 py-1 ${
-                          previewLang === "primary"
-                            ? "bg-amber-800 text-white"
-                            : "text-amber-900/70"
-                        }`}
-                        onClick={() => setPreviewLang("primary")}
-                      >
-                        Primary
-                      </button>
-                      <button
-                        type="button"
-                        className={`rounded-full px-3 py-1 ${
-                          previewLang === "secondary"
-                            ? "bg-amber-800 text-white"
-                            : "text-amber-900/70"
-                        }`}
-                        onClick={() => setPreviewLang("secondary")}
-                      >
-                        2nd
-                      </button>
-                    </div>
-                  ) : null}
-                </div>
-                <div className="overflow-hidden rounded-2xl border border-amber-900/15 bg-white shadow-md">
-                  <BusinessCardTemplate
-                    state={state}
-                    previewLang={
-                      state.secondaryMode === "self" ? previewLang : "primary"
-                    }
-                    homeHref={homeHref}
-                    ownerName={state.name}
-                  />
-                </div>
+      {phase === "pick" ? (
+        <SectorGrid onSelect={onSector} />
+      ) : (
+        <>
+          <div className="mb-4 flex flex-wrap items-center gap-3 lg:hidden">
+            {state.secondaryMode === "self" ? (
+              <div className="start-glass-heavy flex rounded-full p-1 text-xs font-semibold">
+                <button
+                  type="button"
+                  className={`rounded-full px-3 py-2 transition-colors duration-200 ${
+                    previewLang === "primary"
+                      ? "bg-[#1A2744] text-white"
+                      : "text-[#64748b]"
+                  }`}
+                  onClick={() => setPreviewLang("primary")}
+                >
+                  EN
+                </button>
+                <button
+                  type="button"
+                  className={`rounded-full px-3 py-2 transition-colors duration-200 ${
+                    previewLang === "secondary"
+                      ? "bg-[#1A2744] text-white"
+                      : "text-[#64748b]"
+                  }`}
+                  onClick={() => setPreviewLang("secondary")}
+                >
+                  GE
+                </button>
               </div>
+            ) : null}
+          </div>
 
-              <div className="hidden lg:block">
-                <StartCustomizer
+          <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
+            <div className="space-y-4">
+              <div className="hidden flex-wrap items-center gap-3 lg:flex">
+                {state.secondaryMode === "self" ? (
+                  <div className="start-glass-heavy flex rounded-full p-1 text-xs font-semibold">
+                    <button
+                      type="button"
+                      className={`rounded-full px-3 py-2 transition-colors duration-200 ${
+                        previewLang === "primary"
+                          ? "bg-[#1A2744] text-white"
+                          : "text-[#64748b]"
+                      }`}
+                      onClick={() => setPreviewLang("primary")}
+                    >
+                      EN
+                    </button>
+                    <button
+                      type="button"
+                      className={`rounded-full px-3 py-2 transition-colors duration-200 ${
+                        previewLang === "secondary"
+                          ? "bg-[#1A2744] text-white"
+                          : "text-[#64748b]"
+                      }`}
+                      onClick={() => setPreviewLang("secondary")}
+                    >
+                      GE
+                    </button>
+                  </div>
+                ) : null}
+              </div>
+              <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-[var(--start-shadow-md)]">
+                <BusinessCardTemplate
                   state={state}
-                  setState={setState}
-                  onBackToSectors={onBackToSectors}
+                  previewLang={
+                    state.secondaryMode === "self" ? previewLang : "primary"
+                  }
+                  homeHref={homeHref}
+                  ownerName={state.name}
+                  onPatch={(p) => setState((s) => ({ ...s, ...p }))}
+                  onPreviewLangChange={
+                    state.secondaryMode === "self"
+                      ? (v) => setPreviewLang(v)
+                      : undefined
+                  }
                 />
               </div>
             </div>
 
-            <AnimatePresence>
-              {mobileEditorOpen ? (
+            <div className="hidden lg:block">
+              <StartCustomizer
+                state={state}
+                setState={setState}
+                onBackToSectors={onBackToSectors}
+              />
+            </div>
+          </div>
+
+          <AnimatePresence>
+            {mobileEditorOpen ? (
+              <motion.div
+                className="fixed inset-0 z-[200] flex flex-col bg-black/40 backdrop-blur-[2px] lg:hidden"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                onClick={() => setMobileEditorOpen(false)}
+              >
                 <motion.div
-                  className="fixed inset-0 z-[200] flex flex-col bg-black/40 lg:hidden"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  onClick={() => setMobileEditorOpen(false)}
+                  role="dialog"
+                  aria-modal="true"
+                  aria-label="Editor"
+                  className="mt-auto flex max-h-[85vh] flex-col overflow-hidden rounded-t-2xl shadow-[var(--start-shadow-xl)]"
+                  initial={{ y: "100%" }}
+                  animate={{ y: 0 }}
+                  exit={{ y: "100%" }}
+                  transition={{
+                    type: "tween",
+                    duration: 0.35,
+                    ease: [0.32, 0.72, 0, 1],
+                  }}
+                  onClick={(e) => e.stopPropagation()}
                 >
-                  <motion.div
-                    role="dialog"
-                    aria-modal="true"
-                    aria-label="Editor"
-                    className="mt-auto max-h-[88vh] overflow-y-auto rounded-t-2xl bg-[#FAF6F0] p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-2xl"
-                    initial={{ y: "100%" }}
-                    animate={{ y: 0 }}
-                    exit={{ y: "100%" }}
-                    transition={{ type: "spring", damping: 28, stiffness: 320 }}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-amber-900/20" />
+                  <div className="start-glass-heavy flex min-h-10 shrink-0 cursor-pointer touch-manipulation items-start justify-center pt-2 pb-1">
+                    <div className="h-1 w-8 rounded-full bg-[#cbd5e1]" />
+                  </div>
+                  <div className="start-glass-heavy min-h-0 flex-1 overflow-y-auto px-4 pb-3">
                     <StartCustomizer
-                      state={state}
-                      setState={setState}
                       onBackToSectors={() => {
                         onBackToSectors();
                         setMobileEditorOpen(false);
                       }}
+                      showOrderFooter={false}
+                      state={state}
+                      setState={setState}
                     />
-                  </motion.div>
+                  </div>
+                  <div className="start-glass-heavy shrink-0 border-t border-white/30 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3">
+                    <p className="start-body mb-2 text-center">
+                      Total:{" "}
+                      <span className="start-cta-price">{total} ₾</span>{" "}
+                      <span className="text-xs font-normal text-[#64748b]">
+                        (base {LANE1_BASE_GEL} ₾ + add-ons)
+                      </span>
+                    </p>
+                    <a
+                      href={waUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="start-wa-cta mt-1 inline-flex w-full items-center justify-center gap-2"
+                    >
+                      <MessageCircle className="h-5 w-5 shrink-0" aria-hidden />
+                      Order on WhatsApp
+                    </a>
+                  </div>
                 </motion.div>
-              ) : null}
-            </AnimatePresence>
-          </>
-        )}
-      </div>
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
+
+          {!mobileEditorOpen ? (
+            <button
+              type="button"
+              className={`start-fab-pulse fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-4 z-[100] flex h-14 w-14 touch-manipulation items-center justify-center rounded-full bg-[#1A2744] text-white shadow-[var(--start-shadow-lg)] transition hover:-translate-y-0.5 hover:shadow-[var(--start-shadow-xl)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1A2744] active:translate-y-0 lg:hidden ${
+                fabPulse ? "animate-[startFabPulse_2s_ease-in-out_1]" : ""
+              }`}
+              aria-label="Open editor"
+              onClick={() => setMobileEditorOpen(true)}
+            >
+              <span className="absolute -right-1 -top-1 min-w-[2.25rem] rounded-full bg-white px-1.5 py-0.5 text-center text-[10px] font-bold leading-tight text-[#1A2744] shadow">
+                {total}ᶚ
+              </span>
+              <Pencil className="h-6 w-6" strokeWidth={2} aria-hidden />
+            </button>
+          ) : null}
+        </>
+      )}
     </div>
   );
 }

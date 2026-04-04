@@ -6,6 +6,14 @@ export interface BackgroundPreset {
   labelEn: string;
   /** Resolved background for --bg-primary */
   cssValue: string;
+  category: "solid" | "gradient";
+  /**
+   * When true, --text-primary uses pairedTextColor and the text swatch is hidden.
+   * Dark solids + all gradients (fixed per refinement brief §8.1–8.2).
+   */
+  locksTextColor: boolean;
+  /** Used when locksTextColor is true */
+  pairedTextColor: string;
 }
 
 export interface TextColorPreset {
@@ -27,34 +35,136 @@ export interface FontPreset {
   id: string;
   labelKa: string;
   labelEn: string;
-  /** Heading stack (Georgian-capable) */
   fontHeading: string;
   fontBody: string;
+  headingWeight: number;
+  bodyWeight: number;
 }
 
-export const BACKGROUND_PRESETS: BackgroundPreset[] = [
-  { id: "cream", labelKa: "კრემი", labelEn: "Cream", cssValue: "#FAF8F5" },
-  { id: "white", labelKa: "თეთრი", labelEn: "White", cssValue: "#FFFFFF" },
-  { id: "lightgray", labelKa: "ღია ნაცრისფერი", labelEn: "Light gray", cssValue: "#F3F4F6" },
-  { id: "sand", labelKa: "ქვიში", labelEn: "Warm sand", cssValue: "#F5F0E8" },
-  { id: "softnavy", labelKa: "ღია სანაპირო", labelEn: "Soft navy", cssValue: "#E8EEF5" },
-  { id: "charcoal", labelKa: "ქვა", labelEn: "Stone", cssValue: "#E7E5E4" },
+/** §8.1 — eight solid backgrounds (light + two dark) */
+export const BACKGROUND_SOLID_PRESETS: BackgroundPreset[] = [
   {
-    id: "grad1",
-    labelKa: "გრადიენტი 1",
-    labelEn: "Gradient 1",
-    cssValue: "linear-gradient(180deg, #FAF8F5 0%, #E8EEF5 100%)",
+    id: "warmcream",
+    labelKa: "თბილი კრემი",
+    labelEn: "Warm cream",
+    cssValue: "#FAF8F5",
+    category: "solid",
+    locksTextColor: false,
+    pairedTextColor: "#1A1A2E",
   },
   {
-    id: "grad2",
-    labelKa: "გრადიენტი 2",
-    labelEn: "Gradient 2",
-    cssValue: "linear-gradient(135deg, #F5F0E8 0%, #F3F4F6 100%)",
+    id: "purewhite",
+    labelKa: "წმინდა თეთრი",
+    labelEn: "Pure white",
+    cssValue: "#FFFFFF",
+    category: "solid",
+    locksTextColor: false,
+    pairedTextColor: "#111827",
+  },
+  {
+    id: "coolgray",
+    labelKa: "ღია ნაცრისფერი",
+    labelEn: "Cool gray",
+    cssValue: "#F3F4F6",
+    category: "solid",
+    locksTextColor: false,
+    pairedTextColor: "#111827",
+  },
+  {
+    id: "softblue",
+    labelKa: "ღია ლურჯი",
+    labelEn: "Soft blue",
+    cssValue: "#EFF6FF",
+    category: "solid",
+    locksTextColor: false,
+    pairedTextColor: "#1E3A5F",
+  },
+  {
+    id: "sagemist",
+    labelKa: "ქვიში ნისლი",
+    labelEn: "Sage mist",
+    cssValue: "#F0F5F0",
+    category: "solid",
+    locksTextColor: false,
+    pairedTextColor: "#1A2E1A",
+  },
+  {
+    id: "blush",
+    labelKa: "შიში ვარდისფერი",
+    labelEn: "Blush",
+    cssValue: "#FFF5F5",
+    category: "solid",
+    locksTextColor: false,
+    pairedTextColor: "#4A1A1A",
+  },
+  {
+    id: "deepnavy",
+    labelKa: "ღრმა სანაპირო",
+    labelEn: "Deep navy",
+    cssValue: "#0F172A",
+    category: "solid",
+    locksTextColor: true,
+    pairedTextColor: "#F1F5F9",
+  },
+  {
+    id: "charcoalbg",
+    labelKa: "ქვა",
+    labelEn: "Charcoal",
+    cssValue: "#1F2937",
+    category: "solid",
+    locksTextColor: true,
+    pairedTextColor: "#E5E7EB",
   },
 ];
 
+/** §8.2 — four gradient presets (135deg, subtle) */
+export const BACKGROUND_GRADIENT_PRESETS: BackgroundPreset[] = [
+  {
+    id: "dawn",
+    labelKa: "დილა",
+    labelEn: "Dawn",
+    cssValue: "linear-gradient(135deg, #FAF8F5, #F0ECE6)",
+    category: "gradient",
+    locksTextColor: true,
+    pairedTextColor: "#1A1A2E",
+  },
+  {
+    id: "ocean",
+    labelKa: "ოკეანე",
+    labelEn: "Ocean",
+    cssValue: "linear-gradient(135deg, #EFF6FF, #E0F2FE)",
+    category: "gradient",
+    locksTextColor: true,
+    pairedTextColor: "#1E3A5F",
+  },
+  {
+    id: "forestgrad",
+    labelKa: "ტყე",
+    labelEn: "Forest",
+    cssValue: "linear-gradient(135deg, #F0F5F0, #E8F0E8)",
+    category: "gradient",
+    locksTextColor: true,
+    pairedTextColor: "#1A2E1A",
+  },
+  {
+    id: "dusk",
+    labelKa: "საღამო",
+    labelEn: "Dusk",
+    cssValue: "linear-gradient(135deg, #FFF5F5, #FDF2F8)",
+    category: "gradient",
+    locksTextColor: true,
+    pairedTextColor: "#4A1A1A",
+  },
+];
+
+export const BACKGROUND_PRESETS: BackgroundPreset[] = [
+  ...BACKGROUND_SOLID_PRESETS,
+  ...BACKGROUND_GRADIENT_PRESETS,
+];
+
+/** Dark text on light backgrounds — §8.1 subset when client can pick */
 export const TEXT_COLOR_PRESETS: TextColorPreset[] = [
-  { id: "ink", labelKa: "მუქი მელანი", labelEn: "Ink", color: "#1A1A2E" },
+  { id: "ink", labelKa: "მელანი", labelEn: "Ink", color: "#1A1A2E" },
   { id: "charcoal", labelKa: "ნაცრისფერი", labelEn: "Charcoal", color: "#374151" },
   { id: "navytext", labelKa: "სანაპირო", labelEn: "Navy", color: "#1A2744" },
   { id: "warm", labelKa: "თბილი შავი", labelEn: "Warm black", color: "#292524" },
@@ -62,13 +172,16 @@ export const TEXT_COLOR_PRESETS: TextColorPreset[] = [
   { id: "soft", labelKa: "რბილი", labelEn: "Soft", color: "#4B5563" },
 ];
 
+/** §8.3 — eight accent presets */
 export const ACCENT_PRESETS: AccentPreset[] = [
   { id: "navy", labelKa: "სანაპირო", labelEn: "Navy", accent: "#1A2744", accentSecondary: "#2D3F5E" },
-  { id: "forest", labelKa: "ტყე", labelEn: "Forest", accent: "#14532D", accentSecondary: "#166534" },
-  { id: "burgundy", labelKa: "ბორდო", labelEn: "Burgundy", accent: "#7F1D1D", accentSecondary: "#991B1B" },
-  { id: "slate", labelKa: "სლეითი", labelEn: "Slate", accent: "#475569", accentSecondary: "#64748B" },
   { id: "gold", labelKa: "ოქრო", labelEn: "Gold", accent: "#C5A55A", accentSecondary: "#A8843A" },
+  { id: "forest", labelKa: "ტყე", labelEn: "Forest", accent: "#2D5016", accentSecondary: "#365314" },
+  { id: "burgundy", labelKa: "ბორდო", labelEn: "Burgundy", accent: "#7F1D1D", accentSecondary: "#991B1B" },
   { id: "teal", labelKa: "ტილა", labelEn: "Teal", accent: "#0F766E", accentSecondary: "#115E59" },
+  { id: "slate", labelKa: "სლეითი", labelEn: "Slate", accent: "#475569", accentSecondary: "#64748B" },
+  { id: "copper", labelKa: "სპილენძი", labelEn: "Copper", accent: "#B45309", accentSecondary: "#C2410C" },
+  { id: "indigo", labelKa: "ინდიგო", labelEn: "Indigo", accent: "#3730A3", accentSecondary: "#4338CA" },
 ];
 
 export const FONT_PRESETS: FontPreset[] = [
@@ -76,38 +189,54 @@ export const FONT_PRESETS: FontPreset[] = [
     id: "classic",
     labelKa: "კლასიკური",
     labelEn: "Classic",
-    fontHeading: "Georgia, 'Noto Serif Georgian', serif",
-    fontBody: "var(--font-inter, Inter), system-ui, sans-serif",
+    fontHeading:
+      "var(--font-playfair), 'Noto Serif Georgian', Georgia, serif",
+    fontBody: "var(--font-inter), 'Noto Sans Georgian', system-ui, sans-serif",
+    headingWeight: 700,
+    bodyWeight: 400,
   },
   {
     id: "modern",
     labelKa: "თანამედროვე",
     labelEn: "Modern",
-    fontHeading: "var(--font-space, 'Space Grotesk'), system-ui, sans-serif",
-    fontBody: "var(--font-inter, Inter), system-ui, sans-serif",
+    fontHeading: "var(--font-space), 'Noto Sans Georgian', system-ui, sans-serif",
+    fontBody: "var(--font-inter), 'Noto Sans Georgian', system-ui, sans-serif",
+    headingWeight: 600,
+    bodyWeight: 400,
   },
   {
     id: "bold",
     labelKa: "მძიმე",
     labelEn: "Bold",
-    fontHeading: "system-ui, -apple-system, sans-serif",
-    fontBody: "var(--font-inter, Inter), system-ui, sans-serif",
+    fontHeading: "var(--font-inter), 'Noto Sans Georgian', system-ui, sans-serif",
+    fontBody: "var(--font-inter), 'Noto Sans Georgian', system-ui, sans-serif",
+    headingWeight: 700,
+    bodyWeight: 400,
   },
   {
     id: "minimal",
     labelKa: "მინიმალური",
     labelEn: "Minimal",
-    fontHeading: "var(--font-inter, Inter), system-ui, sans-serif",
-    fontBody: "var(--font-inter, Inter), system-ui, sans-serif",
+    fontHeading: "var(--font-inter), 'Noto Sans Georgian', system-ui, sans-serif",
+    fontBody: "var(--font-inter), 'Noto Sans Georgian', system-ui, sans-serif",
+    headingWeight: 300,
+    bodyWeight: 300,
   },
   {
     id: "traditional",
     labelKa: "ტრადიციული",
     labelEn: "Traditional",
-    fontHeading: "Georgia, 'Noto Serif Georgian', serif",
-    fontBody: "Georgia, 'Noto Serif Georgian', serif",
+    fontHeading: "var(--font-merriweather), 'Noto Serif Georgian', Georgia, serif",
+    fontBody: "var(--font-source-sans), 'Noto Sans Georgian', system-ui, sans-serif",
+    headingWeight: 700,
+    bodyWeight: 400,
   },
 ];
+
+export function isBackgroundLockingTextColor(backgroundId: string): boolean {
+  const bg = BACKGROUND_PRESETS.find((p) => p.id === backgroundId);
+  return Boolean(bg?.locksTextColor);
+}
 
 export function resolveStyleVariables(selection: {
   backgroundId: string;
@@ -119,12 +248,30 @@ export function resolveStyleVariables(selection: {
   const txt = TEXT_COLOR_PRESETS.find((p) => p.id === selection.textColorId) ?? TEXT_COLOR_PRESETS[0];
   const acc = ACCENT_PRESETS.find((p) => p.id === selection.accentId) ?? ACCENT_PRESETS[0];
   const font = FONT_PRESETS.find((p) => p.id === selection.fontId) ?? FONT_PRESETS[1];
+
+  const textColor =
+    bg.locksTextColor ? bg.pairedTextColor : txt.color;
+
   return {
     ["--bg-primary" as string]: bg.cssValue,
-    ["--text-primary" as string]: txt.color,
+    ["--text-primary" as string]: textColor,
     ["--accent" as string]: acc.accent,
     ["--accent-secondary" as string]: acc.accentSecondary,
     ["--font-heading" as string]: font.fontHeading,
     ["--font-body" as string]: font.fontBody,
+    ["--font-heading-weight" as string]: String(font.headingWeight),
+    ["--font-body-weight" as string]: String(font.bodyWeight),
   } as CSSProperties;
 }
+
+/** Migrate legacy preset ids (pre–refinement brief §8) */
+export const LEGACY_BACKGROUND_ID_MAP: Record<string, string> = {
+  cream: "warmcream",
+  white: "purewhite",
+  lightgray: "coolgray",
+  sand: "sagemist",
+  softnavy: "softblue",
+  charcoal: "coolgray",
+  grad1: "dawn",
+  grad2: "ocean",
+};

@@ -1,0 +1,197 @@
+/**
+ * /start route — visual system (Phase 1: foundation).
+ * Glass applies to customizer chrome only; BusinessCardTemplate stays unchanged.
+ * Phase 4: mobile editor FAB is fixed in StartPageClient (z-[100]; full-screen sheet z-[200]).
+ * Phase 5: style preset swatch grids live in StylePresetGrids.tsx (StartCustomizer Style section).
+ */
+
+@keyframes startFabPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.start-shell {
+  --start-bg: #faf8f5;
+  --start-bg-alt: #f0ece6;
+  --start-text: #020617;
+  --start-text-muted: #64748b;
+  --start-caption: #94a3b8;
+  --start-accent: #1a2744;
+  --start-accent-gold: #c5a55a;
+  --start-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --start-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --start-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+  --start-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.16);
+  background-color: var(--start-bg);
+  color: var(--start-text);
+  font-family: var(--font-sans);
+  letter-spacing: 0;
+}
+
+.start-glass {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  box-shadow: var(--start-shadow-lg);
+}
+
+.start-glass-heavy {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 16px;
+  box-shadow: var(--start-shadow-md);
+}
+
+/* Sidebar / sheet form fields — §10.3 */
+.start-field {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--start-text);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.start-field::placeholder {
+  color: #cbd5e1;
+}
+
+.start-field:focus {
+  outline: none;
+  border-color: var(--start-accent);
+  box-shadow: 0 0 0 3px rgba(26, 39, 68, 0.1);
+}
+
+.start-field-textarea {
+  min-height: 88px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+@media (min-width: 1024px) {
+  .start-field {
+    min-height: 40px;
+  }
+}
+
+.start-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0;
+  color: var(--start-text-muted);
+}
+
+/* Section heading — 20px / 1.25rem */
+.start-panel-heading {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: #1e293b;
+}
+
+.start-section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: #334155;
+}
+
+.start-subsection-title {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: #1e293b;
+}
+
+.start-body {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #1e293b;
+}
+
+.start-caption {
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--start-caption);
+}
+
+.start-page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--start-text);
+}
+
+.start-hero-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--start-accent);
+}
+
+.start-cta-price {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--start-accent);
+}
+
+/* WhatsApp CTA — §10.4 base */
+.start-wa-cta {
+  display: inline-flex;
+  min-height: 52px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #25d366 0%, #128c7e 100%);
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  box-shadow: var(--start-shadow-md);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    filter 0.15s ease;
+}
+
+.start-wa-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--start-shadow-lg);
+}
+
+.start-wa-cta:active {
+  transform: translateY(0);
+  box-shadow: var(--start-shadow-sm);
+  filter: brightness(0.95);
+}
+
+@media (min-width: 1024px) {
+  .start-wa-cta {
+    min-height: 48px;
+  }
+}

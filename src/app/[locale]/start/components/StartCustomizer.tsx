@@ -1,31 +1,102 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import type { Dispatch, SetStateAction } from "react";
-import type { Lane1CustomizerState, SecondaryLangMode } from "../lib/types";
+import type { Lane1CustomizerState, PrimaryLang, SecondaryLangMode } from "../lib/types";
+import { compressImageForLane1Storage } from "../lib/image-compress";
 import {
-  BACKGROUND_PRESETS,
-  TEXT_COLOR_PRESETS,
   ACCENT_PRESETS,
+  BACKGROUND_GRADIENT_PRESETS,
+  BACKGROUND_SOLID_PRESETS,
   FONT_PRESETS,
+  isBackgroundLockingTextColor,
+  TEXT_COLOR_PRESETS,
 } from "../lib/presets";
 import { buildLane1WhatsAppUrl } from "../lib/whatsapp";
 import { LANE1_BASE_GEL, computeLane1Total } from "../lib/lane1-pricing";
 import { clearLane1State } from "../lib/customizer-store";
 import { defaultLane1State } from "../lib/types";
+import {
+  AccentPresetGrid,
+  BackgroundGradientPresetGrid,
+  BackgroundSolidPresetGrid,
+  FontPresetGrid,
+  TextColorPresetGrid,
+} from "./StylePresetGrids";
+import { CollapsibleSection } from "./CollapsibleSection";
+import { MessageCircle } from "lucide-react";
+
+const fieldClass = "start-field mt-1.5 w-full";
+const labelClass = "start-label mb-1.5";
+
+function ServiceCountStepper({
+  value,
+  onChange,
+}: {
+  value: number;
+  onChange: (n: number) => void;
+}) {
+  const [pulse, setPulse] = useState(false);
+  function bump(delta: number) {
+    const n = Math.min(4, Math.max(1, value + delta));
+    if (n !== value) {
+      onChange(n);
+      setPulse(true);
+      window.setTimeout(() => setPulse(false), 150);
+    }
+  }
+  return (
+    <div className="flex items-center justify-center gap-4 py-1">
+      <button
+        type="button"
+        disabled={value <= 1}
+        onClick={() => bump(-1)}
+        className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-[#F3F4F6] text-lg font-semibold text-[#111827] transition hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-40"
+        aria-label="Decrease service count"
+      >
+        −
+      </button>
+      <span
+        className={`min-w-[2rem] text-center text-xl font-semibold tabular-nums transition-transform duration-150 ${
+          pulse ? "scale-125" : "scale-100"
+        }`}
+      >
+        {value}
+      </span>
+      <button
+        type="button"
+        disabled={value >= 4}
+        onClick={() => bump(1)}
+        className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-[#F3F4F6] text-lg font-semibold text-[#111827] transition hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-40"
+        aria-label="Increase service count"
+      >
+        +
+      </button>
+    </div>
+  );
+}
 
 export function StartCustomizer({
   state,
   setState,
   onBackToSectors,
+  showOrderFooter = true,
 }: {
   state: Lane1CustomizerState;
   setState: Dispatch<SetStateAction<Lane1CustomizerState>>;
   onBackToSectors: () => void;
+  /** Set false when the mobile sheet renders a sticky footer outside. */
+  showOrderFooter?: boolean;
 }) {
   const total = computeLane1Total({
     secondaryMode: state.secondaryMode,
     addGoogleMap: state.addGoogleMap,
   });
+
+  const [photoBusy, setPhotoBusy] = useState(false);
+  const [photoHint, setPhotoHint] = useState<string | null>(null);
+
+  const textLocked = isBackgroundLockingTextColor(state.style.backgroundId);
 
   function patch(p: Partial<Lane1CustomizerState>) {
     setState((s) => ({ ...s, ...p }));
@@ -49,15 +120,25 @@ export function StartCustomizer({
     });
   }
 
-  function onPhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
+  async function onPhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
+    e.target.value = "";
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      const url = typeof reader.result === "string" ? reader.result : null;
-      patch({ photoDataUrl: url });
-    };
-    reader.readAsDataURL(file);
+    setPhotoHint(null);
+    setPhotoBusy(true);
+    try {
+      const { dataUrl, warnLargeOriginal } = await compressImageForLane1Storage(file);
+      patch({ photoDataUrl: dataUrl });
+      setPhotoHint(
+        warnLargeOriginal
+          ? "Original file was over 2 MB — we compressed it for storage."
+          : null,
+      );
+    } catch {
+      setPhotoHint("Could not process this image. Try JPG or PNG.");
+    } finally {
+      setPhotoBusy(false);
+    }
   }
 
   function addExtraSocial() {
@@ -73,12 +154,12 @@ export function StartCustomizer({
   const waUrl = buildLane1WhatsAppUrl(state);
 
   return (
-    <div className="space-y-8 pb-8">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+    <div className="space-y-4 pb-4 md:space-y-6 md:pb-8">
+      <div className="flex flex-wrap items-center justify-between gap-3 px-0.5">
         <button
           type="button"
           onClick={onBackToSectors}
-          className="text-sm font-semibold text-amber-900/80 underline"
+          className="min-h-[44px] text-sm font-semibold text-[#1A2744] underline decoration-[#1A2744]/30 underline-offset-4 transition hover:decoration-[#1A2744] md:min-h-0"
         >
           ← Choose sector
         </button>
@@ -88,120 +169,181 @@ export function StartCustomizer({
             clearLane1State();
             setState(defaultLane1State());
           }}
-          className="text-xs font-medium text-amber-800/60 hover:text-amber-900"
+          className="text-xs font-medium text-[#64748b] transition hover:text-[#1e293b]"
         >
           Reset
         </button>
       </div>
 
-      <section className="space-y-3 rounded-xl border border-amber-900/10 bg-white/90 p-4">
-        <h3 className="text-sm font-bold text-amber-950">Second language</h3>
-        <p className="text-xs text-amber-900/70">
-          Optional add-on if you want a second language on your card (you can
-          type in Georgian or any language in the fields above).
+      <CollapsibleSection title="Content" defaultOpen>
+        <p className="start-caption">
+          English is the default. Edit inline in the preview or here — both stay in sync.
         </p>
-        {(
-          [
-            ["none", "None"],
-            ["self", "I translate (+50 ₾)"],
-            ["pro", "Professional translation (+150 ₾)"],
-          ] as const
-        ).map(([id, text]) => (
-          <label key={id} className="flex items-center gap-2 text-sm">
-            <input
-              type="radio"
-              name="secondaryMode"
-              checked={state.secondaryMode === id}
-              onChange={() => patch({ secondaryMode: id as SecondaryLangMode })}
-            />
-            {text}
-          </label>
-        ))}
-      </section>
-
-      <section className="space-y-3 rounded-xl border border-amber-900/10 bg-white/90 p-4">
-        <h3 className="text-sm font-bold text-amber-950">Photo</h3>
-        <input type="file" accept="image/*" onChange={onPhotoChange} className="text-sm" />
-      </section>
-
-      <section className="space-y-3 rounded-xl border border-amber-900/10 bg-white/90 p-4">
-        <h3 className="text-sm font-bold text-amber-950">Text</h3>
-        <label className="block text-xs font-medium text-amber-900/80">
-          Name / firm
+        <fieldset>
+          <legend className="start-label mb-2 block">Primary language (site default)</legend>
+          <div className="flex flex-col gap-2 text-sm text-[#1e293b]">
+            <label className="flex cursor-pointer items-start gap-3">
+              <input
+                type="radio"
+                name="primaryLang"
+                className="mt-0.5 h-4 w-4 accent-[#1A2744]"
+                checked={state.primaryLang === "en"}
+                onChange={() => patch({ primaryLang: "en" as PrimaryLang })}
+              />
+              English (recommended)
+            </label>
+            <label className="flex cursor-pointer items-start gap-3">
+              <input
+                type="radio"
+                name="primaryLang"
+                className="mt-0.5 h-4 w-4 accent-[#1A2744]"
+                checked={state.primaryLang === "ka"}
+                onChange={() => patch({ primaryLang: "ka" as PrimaryLang })}
+              />
+              Georgian (WhatsApp order will be in Georgian)
+            </label>
+          </div>
+        </fieldset>
+        <label className={labelClass}>
+          Name / firm (EN)
           <input
-            className="touch-form-control mt-1 w-full rounded border border-amber-900/20 px-3 py-2 text-sm"
+            className={fieldClass}
             value={state.name}
             onChange={(e) => patch({ name: e.target.value })}
           />
         </label>
         {state.secondaryMode === "self" ? (
-          <label className="block text-xs font-medium text-amber-900/80">
-            Name (2nd language)
+          <label className={labelClass}>
+            Name (GE)
             <input
-              className="touch-form-control mt-1 w-full rounded border border-amber-900/20 px-3 py-2 text-sm"
+              className={fieldClass}
               value={state.nameSecondary}
               onChange={(e) => patch({ nameSecondary: e.target.value })}
             />
           </label>
         ) : null}
-        <label className="block text-xs font-medium text-amber-900/80">
-          Title
+        <label className={labelClass}>
+          Title (EN)
           <input
-            className="touch-form-control mt-1 w-full rounded border border-amber-900/20 px-3 py-2 text-sm"
+            className={fieldClass}
             value={state.title}
             onChange={(e) => patch({ title: e.target.value })}
           />
         </label>
         {state.secondaryMode === "self" ? (
-          <label className="block text-xs font-medium text-amber-900/80">
-            Title (2nd language)
+          <label className={labelClass}>
+            Title (GE)
             <input
-              className="touch-form-control mt-1 w-full rounded border border-amber-900/20 px-3 py-2 text-sm"
+              className={fieldClass}
               value={state.titleSecondary}
               onChange={(e) => patch({ titleSecondary: e.target.value })}
             />
           </label>
         ) : null}
-        <label className="block text-xs font-medium text-amber-900/80">
+        <label className={labelClass}>
           Phone
           <input
-            className="touch-form-control mt-1 w-full rounded border border-amber-900/20 px-3 py-2 text-sm"
+            className={fieldClass}
             value={state.phone}
             onChange={(e) => patch({ phone: e.target.value })}
             inputMode="tel"
           />
         </label>
-        <label className="block text-xs font-medium text-amber-900/80">
+        <label className={labelClass}>
           Email
           <input
-            className="touch-form-control mt-1 w-full rounded border border-amber-900/20 px-3 py-2 text-sm"
+            className={fieldClass}
             value={state.email}
             onChange={(e) => patch({ email: e.target.value })}
             type="email"
           />
         </label>
-      </section>
-
-      <section className="space-y-3 rounded-xl border border-amber-900/10 bg-white/90 p-4">
-        <h3 className="text-sm font-bold text-amber-950">Services</h3>
-        <label className="block text-xs">
-          Count (1–4)
+        <label className={labelClass}>
+          Address (EN)
+          <textarea
+            className="start-field start-field-textarea mt-1.5 w-full"
+            rows={2}
+            value={state.address}
+            onChange={(e) => patch({ address: e.target.value })}
+          />
+        </label>
+        {state.secondaryMode === "self" ? (
+          <label className={labelClass}>
+            Address (GE)
+            <textarea
+              className="start-field start-field-textarea mt-1.5 w-full"
+              rows={2}
+              value={state.addressSecondary}
+              onChange={(e) => patch({ addressSecondary: e.target.value })}
+            />
+          </label>
+        ) : null}
+        <label className={labelClass}>
+          Hours (EN)
           <input
-            type="number"
-            min={1}
-            max={4}
-            className="touch-form-control mt-1 w-24 rounded border border-amber-900/20 px-3 py-2 text-sm"
+            className={fieldClass}
+            value={state.hours}
+            onChange={(e) => patch({ hours: e.target.value })}
+          />
+        </label>
+        {state.secondaryMode === "self" ? (
+          <label className={labelClass}>
+            Hours (GE)
+            <input
+              className={fieldClass}
+              value={state.hoursSecondary}
+              onChange={(e) => patch({ hoursSecondary: e.target.value })}
+            />
+          </label>
+        ) : null}
+        <label className={labelClass}>
+          Services heading (EN)
+          <input
+            className={fieldClass}
+            value={state.practiceHeading}
+            onChange={(e) => patch({ practiceHeading: e.target.value })}
+          />
+        </label>
+        <label className={labelClass}>
+          Services heading (GE)
+          <input
+            className={fieldClass}
+            value={state.practiceHeadingSecondary}
+            onChange={(e) => patch({ practiceHeadingSecondary: e.target.value })}
+          />
+        </label>
+      </CollapsibleSection>
+
+      <CollapsibleSection title="Photo" defaultOpen>
+        <p className="start-caption">
+          JPG or PNG, max 5 MB. We compress to ~200 KB for browser storage. Tap the circle in the
+          preview to upload.
+        </p>
+        <input
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          disabled={photoBusy}
+          onChange={onPhotoChange}
+          className={`${fieldClass} cursor-pointer py-2 text-sm file:mr-4 file:cursor-pointer file:rounded-lg file:border-0 file:bg-slate-100 file:px-3 file:py-2 file:text-sm file:font-medium file:text-[#1e293b] disabled:cursor-wait disabled:opacity-60`}
+        />
+        {photoHint ? (
+          <p className="text-xs font-medium text-amber-800">{photoHint}</p>
+        ) : null}
+      </CollapsibleSection>
+
+      <CollapsibleSection title="Service areas" defaultOpen>
+        <label className={`${labelClass} text-center`}>
+          How many services (1–4)
+          <ServiceCountStepper
             value={state.serviceCount}
-            onChange={(e) =>
-              patch({ serviceCount: Math.min(4, Math.max(1, Number(e.target.value) || 1)) })
-            }
+            onChange={(n) => patch({ serviceCount: n })}
           />
         </label>
         {Array.from({ length: state.serviceCount }).map((_, i) => (
-          <label key={i} className="block text-xs font-medium text-amber-900/80">
-            {`Service ${i + 1}`}
+          <label key={i} className={labelClass}>
+            {`Service ${i + 1} (EN)`}
             <input
-              className="touch-form-control mt-1 w-full rounded border border-amber-900/20 px-3 py-2 text-sm"
+              className={fieldClass}
               value={state.serviceAreas[i]}
               onChange={(e) => setServiceArea(i, e.target.value, false)}
             />
@@ -209,93 +351,24 @@ export function StartCustomizer({
         ))}
         {state.secondaryMode === "self"
           ? Array.from({ length: state.serviceCount }).map((_, i) => (
-              <label key={`s-${i}`} className="block text-xs font-medium text-amber-900/80">
-                {`Service ${i + 1} (2nd language)`}
+              <label key={`s-${i}`} className={labelClass}>
+                {`Service ${i + 1} (GE)`}
                 <input
-                  className="touch-form-control mt-1 w-full rounded border border-amber-900/20 px-3 py-2 text-sm"
+                  className={fieldClass}
                   value={state.serviceAreasSecondary[i]}
                   onChange={(e) => setServiceArea(i, e.target.value, true)}
                 />
               </label>
             ))
           : null}
-        <label className="block text-xs font-medium text-amber-900/80">
-          Section heading
-          <input
-            className="touch-form-control mt-1 w-full rounded border border-amber-900/20 px-3 py-2 text-sm"
-            value={state.practiceHeading}
-            onChange={(e) => patch({ practiceHeading: e.target.value })}
-          />
-        </label>
-        {state.secondaryMode === "self" ? (
-          <label className="block text-xs font-medium text-amber-900/80">
-            Section heading (2nd language)
-            <input
-              className="touch-form-control mt-1 w-full rounded border border-amber-900/20 px-3 py-2 text-sm"
-              value={state.practiceHeadingSecondary}
-              onChange={(e) => patch({ practiceHeadingSecondary: e.target.value })}
-            />
-          </label>
-        ) : null}
-      </section>
+      </CollapsibleSection>
 
-      <section className="space-y-3 rounded-xl border border-amber-900/10 bg-white/90 p-4">
-        <h3 className="text-sm font-bold text-amber-950">Contact</h3>
-        <label className="block text-xs font-medium text-amber-900/80">
-          Address
-          <textarea
-            className="touch-form-control mt-1 w-full rounded border border-amber-900/20 px-3 py-2 text-sm"
-            rows={2}
-            value={state.address}
-            onChange={(e) => patch({ address: e.target.value })}
-          />
-        </label>
-        {state.secondaryMode === "self" ? (
-          <label className="block text-xs font-medium text-amber-900/80">
-            Address (2nd language)
-            <textarea
-              className="touch-form-control mt-1 w-full rounded border border-amber-900/20 px-3 py-2 text-sm"
-              rows={2}
-              value={state.addressSecondary}
-              onChange={(e) => patch({ addressSecondary: e.target.value })}
-            />
-          </label>
-        ) : null}
-        <label className="block text-xs font-medium text-amber-900/80">
-          Hours
-          <input
-            className="touch-form-control mt-1 w-full rounded border border-amber-900/20 px-3 py-2 text-sm"
-            value={state.hours}
-            onChange={(e) => patch({ hours: e.target.value })}
-          />
-        </label>
-        {state.secondaryMode === "self" ? (
-          <label className="block text-xs font-medium text-amber-900/80">
-            Hours (2nd language)
-            <input
-              className="touch-form-control mt-1 w-full rounded border border-amber-900/20 px-3 py-2 text-sm"
-              value={state.hoursSecondary}
-              onChange={(e) => patch({ hoursSecondary: e.target.value })}
-            />
-          </label>
-        ) : null}
-        <label className="flex items-center gap-2 text-sm">
-          <input
-            type="checkbox"
-            checked={state.addGoogleMap}
-            onChange={(e) => patch({ addGoogleMap: e.target.checked })}
-          />
-          Google Maps (+75 ₾)
-        </label>
-      </section>
-
-      <section className="space-y-3 rounded-xl border border-amber-900/10 bg-white/90 p-4">
-        <h3 className="text-sm font-bold text-amber-950">Social</h3>
+      <CollapsibleSection title="Social media" defaultOpen>
         {(["facebook", "instagram", "linkedin", "tiktok", "youtube"] as const).map((k) => (
-          <label key={k} className="block text-xs capitalize text-amber-900/80">
+          <label key={k} className={`${labelClass} capitalize`}>
             {k}
             <input
-              className="touch-form-control mt-1 w-full rounded border border-amber-900/20 px-3 py-2 text-sm"
+              className={fieldClass}
               value={state.social[k]}
               onChange={(e) =>
                 setState((s) => ({
@@ -310,7 +383,7 @@ export function StartCustomizer({
           <div key={i} className="flex gap-2">
             <input
               placeholder="Label"
-              className="touch-form-control w-1/3 rounded border border-amber-900/20 px-2 py-2 text-sm"
+              className={`${fieldClass} w-1/3 shrink-0`}
               value={row.label}
               onChange={(e) =>
                 setState((s) => {
@@ -322,7 +395,7 @@ export function StartCustomizer({
             />
             <input
               placeholder="URL"
-              className="touch-form-control flex-1 rounded border border-amber-900/20 px-2 py-2 text-sm"
+              className={`${fieldClass} min-w-0 flex-1`}
               value={row.url}
               onChange={(e) =>
                 setState((s) => {
@@ -337,93 +410,136 @@ export function StartCustomizer({
         <button
           type="button"
           onClick={addExtraSocial}
-          className="text-sm font-semibold text-amber-800 underline"
+          className="text-sm font-semibold text-[#1A2744] underline decoration-[#1A2744]/30 underline-offset-4 transition hover:decoration-[#1A2744]"
         >
-          + Link
+          + Add link
         </button>
-      </section>
+      </CollapsibleSection>
 
-      <section className="space-y-3 rounded-xl border border-amber-900/10 bg-white/90 p-4">
-        <h3 className="text-sm font-bold text-amber-950">Style</h3>
-        <label className="block text-xs">
-          Background
-          <select
-            className="touch-form-control mt-1 w-full rounded border border-amber-900/20 px-3 py-2 text-sm"
-            value={state.style.backgroundId}
-            onChange={(e) =>
-              patch({ style: { ...state.style, backgroundId: e.target.value } })
-            }
-          >
-            {BACKGROUND_PRESETS.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.labelEn}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="block text-xs">
-          Text color
-          <select
-            className="touch-form-control mt-1 w-full rounded border border-amber-900/20 px-3 py-2 text-sm"
+      <CollapsibleSection title="Background" defaultOpen={false}>
+        <p className="start-caption">§8.1–8.2 — solids and subtle gradients.</p>
+        <BackgroundSolidPresetGrid
+          options={BACKGROUND_SOLID_PRESETS}
+          value={state.style.backgroundId}
+          onChange={(backgroundId) =>
+            patch({ style: { ...state.style, backgroundId } })
+          }
+        />
+        <BackgroundGradientPresetGrid
+          options={BACKGROUND_GRADIENT_PRESETS}
+          value={state.style.backgroundId}
+          onChange={(backgroundId) =>
+            patch({ style: { ...state.style, backgroundId } })
+          }
+        />
+        {!textLocked ? (
+          <TextColorPresetGrid
+            options={TEXT_COLOR_PRESETS}
             value={state.style.textColorId}
-            onChange={(e) =>
-              patch({ style: { ...state.style, textColorId: e.target.value } })
+            onChange={(textColorId) =>
+              patch({ style: { ...state.style, textColorId } })
             }
-          >
-            {TEXT_COLOR_PRESETS.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.labelEn}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="block text-xs">
-          Accent
-          <select
-            className="touch-form-control mt-1 w-full rounded border border-amber-900/20 px-3 py-2 text-sm"
-            value={state.style.accentId}
-            onChange={(e) =>
-              patch({ style: { ...state.style, accentId: e.target.value } })
-            }
-          >
-            {ACCENT_PRESETS.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.labelEn}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="block text-xs">
-          Font
-          <select
-            className="touch-form-control mt-1 w-full rounded border border-amber-900/20 px-3 py-2 text-sm"
-            value={state.style.fontId}
-            onChange={(e) =>
-              patch({ style: { ...state.style, fontId: e.target.value } })
-            }
-          >
-            {FONT_PRESETS.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.labelEn}
-              </option>
-            ))}
-          </select>
-        </label>
-      </section>
+          />
+        ) : (
+          <p className="start-caption">
+            Text color is set automatically for this background (dark or gradient preset).
+          </p>
+        )}
+      </CollapsibleSection>
 
-      <div className="rounded-xl border border-amber-800/20 bg-amber-50/90 p-4">
-        <p className="text-sm text-amber-950">
-          Base: {LANE1_BASE_GEL} ₾ + add-ons = <strong>{total} ₾</strong> (one-time)
+      <CollapsibleSection title="Accent color" defaultOpen={false}>
+        <AccentPresetGrid
+          options={ACCENT_PRESETS}
+          value={state.style.accentId}
+          onChange={(accentId) => patch({ style: { ...state.style, accentId } })}
+        />
+      </CollapsibleSection>
+
+      <CollapsibleSection title="Font style" defaultOpen={false}>
+        <FontPresetGrid
+          options={FONT_PRESETS}
+          value={state.style.fontId}
+          onChange={(fontId) => patch({ style: { ...state.style, fontId } })}
+        />
+      </CollapsibleSection>
+
+      <CollapsibleSection title="Add-ons" defaultOpen={false}>
+        <h4 className="start-subsection-title mb-2">Second language</h4>
+        <p className="start-caption mb-3">
+          Georgian as a second language on the card (bilingual toggle in the preview header).
         </p>
-        <a
-          href={waUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-4 inline-flex min-h-[48px] w-full items-center justify-center rounded-xl bg-green-600 px-4 py-3 text-center text-sm font-bold text-white hover:bg-green-700"
-        >
-          Order on WhatsApp
-        </a>
-      </div>
+        {(
+          [
+            ["none", "None"],
+            ["self", "I translate (+50 ₾)"],
+            ["pro", "Professional translation (+150 ₾)"],
+          ] as const
+        ).map(([id, text]) => (
+          <label key={id} className="mb-2 flex cursor-pointer items-start gap-3 text-sm text-[#1e293b]">
+            <input
+              type="radio"
+              name="secondaryMode"
+              className="mt-0.5 h-4 w-4 shrink-0 accent-[#1A2744]"
+              checked={state.secondaryMode === id}
+              onChange={() => patch({ secondaryMode: id as SecondaryLangMode })}
+            />
+            {text}
+          </label>
+        ))}
+        {state.secondaryMode === "pro" ? (
+          <label className="mt-3 flex cursor-pointer items-start gap-3 text-sm text-[#1e293b]">
+            <input
+              type="checkbox"
+              className="mt-0.5 h-5 w-5 shrink-0 rounded border-slate-300 accent-[#1A2744]"
+              checked={state.proTranslationAcknowledged}
+              onChange={(e) => patch({ proTranslationAcknowledged: e.target.checked })}
+            />
+            A professional translator will translate your content. This is not Google Translate.
+          </label>
+        ) : null}
+
+        <div className="mt-6 border-t border-slate-200/80 pt-4">
+          <label className="start-ios-toggle-row flex min-h-[52px] cursor-pointer items-center justify-between gap-4 rounded-xl border border-slate-200/60 bg-white/50 px-3 py-2">
+            <span className="text-sm font-medium text-[#1e293b]">Google Maps (+75 ₾)</span>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={state.addGoogleMap}
+              onClick={() => patch({ addGoogleMap: !state.addGoogleMap })}
+              className={`start-ios-toggle relative h-[31px] w-[51px] shrink-0 rounded-full transition-colors duration-200 ${
+                state.addGoogleMap ? "bg-[#1A2744]" : "bg-[#CBD5E1]"
+              }`}
+            >
+              <span
+                className={`absolute top-[2px] left-[2px] h-[27px] w-[27px] rounded-full bg-white shadow transition-transform duration-200 ${
+                  state.addGoogleMap ? "translate-x-5" : "translate-x-0"
+                }`}
+              />
+            </button>
+          </label>
+        </div>
+      </CollapsibleSection>
+
+      {showOrderFooter ? (
+        <div className="start-glass-heavy space-y-4 p-4 md:p-6">
+          <p className="start-body">
+            Total:{" "}
+            <span className="start-cta-price">
+              {total} ₾
+            </span>{" "}
+            <span className="text-[#64748b]">(one-time, base {LANE1_BASE_GEL} ₾ + add-ons)</span>
+          </p>
+          <a
+            href={waUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="start-wa-cta mt-2 inline-flex items-center justify-center gap-2"
+          >
+            <MessageCircle className="h-5 w-5 shrink-0" aria-hidden />
+            Order on WhatsApp
+          </a>
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -9,6 +9,7 @@ type PartialPlaceholder = Pick<
   | "address"
   | "hours"
   | "practiceHeading"
+  | "practiceHeadingSecondary"
   | "serviceAreas"
 > & { serviceCount: number };
 
@@ -21,6 +22,7 @@ const PLACEHOLDERS: Record<SectorId, PartialPlaceholder> = {
     address: "12 Vazha-Pshavela Ave, Tbilisi",
     hours: "Mon–Fri 10:00–18:00",
     practiceHeading: "Practice areas",
+    practiceHeadingSecondary: "სამუშაო სფეროები",
     serviceCount: 3,
     serviceAreas: ["Contracts", "Employment law", "Corporate advisory", ""],
   },
@@ -32,6 +34,7 @@ const PLACEHOLDERS: Record<SectorId, PartialPlaceholder> = {
     address: "5 Chabukiani St, Tbilisi",
     hours: "Daily 11:00–19:00",
     practiceHeading: "Services",
+    practiceHeadingSecondary: "სერვისები",
     serviceCount: 3,
     serviceAreas: ["Buy & sell", "Rentals", "Valuations", ""],
   },
@@ -43,6 +46,7 @@ const PLACEHOLDERS: Record<SectorId, PartialPlaceholder> = {
     address: "9 Chabukiani St, Office 4, Tbilisi",
     hours: "Mon–Fri 09:00–17:00",
     practiceHeading: "Practice areas",
+    practiceHeadingSecondary: "სამუშაო სფეროები",
     serviceCount: 3,
     serviceAreas: ["Strategy", "Operations", "Finance", ""],
   },
@@ -54,6 +58,7 @@ const PLACEHOLDERS: Record<SectorId, PartialPlaceholder> = {
     address: "3 Shardeni St, Tbilisi",
     hours: "12:00–23:00",
     practiceHeading: "Menu & service",
+    practiceHeadingSecondary: "მენიუ და სერვისი",
     serviceCount: 3,
     serviceAreas: ["Lunch", "Dinner", "Wine & events", ""],
   },
@@ -65,30 +70,34 @@ export function getSectorPlaceholder(sectorId: SectorId): PartialPlaceholder {
 
 export const SECTOR_LABELS: Record<
   SectorId,
-  { titleKa: string; titleEn: string; descKa: string; descEn: string }
+  { titleKa: string; titleEn: string; descKa: string; descEn: string; taglineEn: string }
 > = {
   lawyers: {
-    titleKa: "იურისტები",
+    titleKa: "ადვოკატები",
     titleEn: "Lawyers",
     descKa: "ადვოკატები და იურიდიული ფირმები",
     descEn: "Attorneys and law firms",
+    taglineEn: "Professional online presence",
   },
   realestate: {
     titleKa: "უძრავი ქონება",
     titleEn: "Real estate",
     descKa: "აგენტები და ბროკერები",
     descEn: "Agents and brokers",
+    taglineEn: "List your properties",
   },
   consultants: {
     titleKa: "კონსულტანტები",
     titleEn: "Consultants",
     descKa: "ბიზნესი და სტრატეგია",
     descEn: "Business and strategy",
+    taglineEn: "Build your authority",
   },
   restaurants: {
     titleKa: "რესტორნები",
     titleEn: "Restaurants",
     descKa: "სასურველი და კაფეები",
     descEn: "Dining and cafés",
+    taglineEn: "Your menu online",
   },
 };

@@ -1,5 +1,6 @@
 import { Navbar } from "../_components/Navbar";
 import type { Locale } from "@/lib/i18n";
+import "./start-shell.css";
 
 function normalizeLocale(locale: string | undefined): Locale {
   if (locale && (locale === "en" || locale === "ka")) return locale;
@@ -19,7 +20,7 @@ export default async function StartLayout({
   return (
     <>
       <Navbar locale={lang} />
-      {children}
+      <div className="start-shell min-h-screen font-sans antialiased">{children}</div>
     </>
   );
 }

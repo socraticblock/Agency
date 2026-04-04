@@ -23,6 +23,12 @@
 - [021] Dashboard close hardening: removed top-level `AnimatePresence` exit layer for Sovereign overlay and force-cleared `html/body` inline overflow styles in `closeDashboard` to avoid ghost fixed layer + stale lock leftovers.
 - [028] Canonical WhatsApp intake and `wa.me` default: `WHATSAPP_INTAKE` `995579723564`; `generateWhatsAppLink` imports it; `createLocalBusinessSeo` default `telephone` `+995579723564`.
 - [029] Lane 1 Digital Business Card: `/{locale}/start` with sector grid, `BusinessCardTemplate` preview, persisted customizer (`genezisi_lane1_customizer_v1`), WhatsApp order via `buildLane1WhatsAppUrl`; warm lane UI; sitemap `/start` + optional `/enterprise` placeholder; homepage hero + Navbar link.
+- [030] `/start` Phase 1 visual foundation: `start-shell.css` (cream `#FAF8F5`, glass panels, Inter via `font-sans`, form `.start-field` / focus ring, WhatsApp CTA gradient); layout wraps route in `start-shell`; sector hero + glass cards; preview frame is solid border+shadow (no blur on card); mobile sheet uses glass-heavy + eased slide.
+- [031] `/start` Phase 2 live preview polish: `business-card-template.css` transitions (bg/color + `[style]`/svg); font preset change uses 200ms opacity layer; photo keyframe appear; `compressImageForLane1Storage` (canvas JPEG, ~200KB, warn if original >2MB); `StartCustomizer` async photo + hint.
+- [032] `/start` Phase 3 inline preview editing: `InlineEditable` + `onPatch` on `BusinessCardTemplate`; dotted underline hover; blur/Enter commit; primary vs secondary `self` field routing; non-editable Contact Me, WhatsApp label, social, Genezisi footer.
+- [033] `/start` Phase 4 mobile FAB: fixed pencil button (`lg:hidden`, safe-area bottom) opens the same bottom sheet as before; removed scroll-away top “Edit” row; empty mobile chrome row when no secondary language.
+- [034] `/start` Phase 5 expanded style presets: `StylePresetGrids.tsx` swatch grids (background, text, accent, font “Aa”) replace `<select>`s in `StartCustomizer`; radio buttons + labels; same `presets.ts` ids.
+- [035] `/start` refinement brief (Phases 5–6 scope): presets §8 (8 solids + 4 gradients, 8 accents, 5 Google-font stacks), `CUSTOMIZER_VERSION` 2 + migration, EN/GE preview header + fallbacks, WhatsApp §2.5, collapsible customizer, FAB price badge + pulse, sector cards + iOS map toggle.
 
 # Detailed Observations
 
@@ -140,3 +146,33 @@
 - **Context:** Product plan required a fast “digital business card” lane with live preview, sector presets, and WhatsApp intake separate from the main dark marketing site.
 - **Decision:** Added `src/app/[locale]/start/*` (template + client customizer, mobile bottom sheet for fields), `lane1-pricing` + `buildLane1WhatsAppUrl`, Navbar + hero CTAs to `/start`, sitemap entries for `/start` and `/enterprise`, and aligned `SHIELD_TIERS` paid prices to **50 / 150 / 750** ₾ in `pricing.ts` per brainstorm/spec.
 - **Impact:** One URL for card orders and preview; architect/shield pricing stays consistent site-wide; SEO discovers the new funnel from `sitemap.ts`.
+
+## [030]
+- **Context:** UI refinement brief called for moving `/start` from wireframe-level to a 2026-era glass + typography system without changing Business Card template product logic.
+- **Decision:** Added `start-shell.css` with design tokens (`--start-bg`, shadows, accent navy/gold), `.start-glass` / `.start-glass-heavy`, `.start-field` focus ring per §10.3, `.start-wa-cta` gradient; `start/layout.tsx` wraps children in `start-shell`; `StartPageClient` uses sector hero (“Your Digital Business Card” / 450 GEL), glass-free preview chrome (border+shadow only), Framer bottom sheet with `cubic-bezier(0.32, 0.72, 0, 1)`; `SectorGrid` and `StartCustomizer` use glass panels and updated hierarchy.
+- **Impact:** Customizer reads as a premium tool; live preview is not backdrop-blurred; later phases (inline edit, FAB, expanded presets) can extend the same tokens.
+
+## [031]
+- **Context:** Phase 2 of the refinement brief required smooth style transitions on the live preview, font-swap affordance, photo compression for localStorage, and pixel-faithful template behavior.
+- **Decision:** Added `business-card-template.css` (root `background`/`color` easing; `[style]` + `svg` transitions for accent-driven UI); `BusinessCardTemplate` wraps content in a font-fade layer (opacity 0→1 on `fontId` change) and photo `Image` key + `business-card-photo` scale-in keyframes; `compressImageForLane1Storage` uses `createImageBitmap` + canvas JPEG with quality/size reduction toward 200KB and user hint when source >2MB; `StartCustomizer` uses async upload, `accept` limited to jpeg/png/webp, disabled state while processing.
+- **Impact:** Style changes feel smooth without animating layout; stored photos stay under typical `localStorage` budgets; failures fall back to raw `readAsDataURL` when decode fails.
+
+## [032]
+- **Context:** Phase 3 required WYSIWYG-style inline edits in the live card preview, synced with the same persisted customizer state as the sidebar, without making CTAs/footer/social editable.
+- **Decision:** Introduced `InlineEditable` (click/keyboard to edit, blur saves, Enter commits single-line) plus optional `onPatch` on `BusinessCardTemplate`; `StartPageClient` passes `setState` merge patches; secondary preview (`self`) maps patches to `*Secondary` fields and `serviceAreasSecondary`; hero grid and practice list render all `serviceCount` slots when editing so empty rows remain editable.
+- **Impact:** Users can tune copy directly on the mock card; dotted underline + focus styles signal affordance without animating layout; WhatsApp label, “Contact Me,” social icons, and Genezisi footer stay static per spec.
+
+## [033]
+- **Context:** Refinement roadmap called for a mobile FAB so the customizer stays reachable while users scroll the long live preview; the old top “Edit” button scrolled away and left an empty bar when only one language was active.
+- **Decision:** Added a fixed `Pencil` FAB (`lg:hidden`, `z-[100]`, safe-area bottom padding) that toggles the same `StartCustomizer` sheet as before; hid the FAB while the sheet is open (`z-[200]` overlay); removed the mobile header “Edit” control; render the mobile Primary/2nd row only when `secondaryMode === "self"`.
+- **Impact:** One-handed mobile users always see an entry point to fields; desktop layout unchanged (sidebar remains visible); stacking order keeps the FAB under the modal scrim.
+
+## [034]
+- **Context:** Roadmap after Phase 4 still listed “expanded presets”; the Style section used native selects that hid gradients and accent pairs and made font choice abstract.
+- **Decision:** Added `StylePresetGrids.tsx` with accessible `role="radio"` chip grids for backgrounds (CSS `background` swatch), text colors (filled circle), accents (two-tone bar), and fonts (“Aa” in each heading stack); `StartCustomizer` wires them to the same `style` object and `presets.ts` data — no new ids or pricing logic.
+- **Impact:** Users see exactly what they are choosing; touch targets stay ≥44px height; keyboard focus rings match the start shell accent.
+
+## [035]
+- **Context:** The full UI/UX refinement brief (companion to Build Brief v1.0) specifies exact preset counts, language flows, EN/GE toggle placement, WhatsApp receipt formats, collapsible customizer order, and Phase 6 polish items beyond the earlier phased roadmap.
+- **Decision:** Rebuilt `presets.ts` to §8.1–8.4 (8 solids + 4 gradients with locked text on dark/gradients, 8 accent circles, 5 font stacks using `next/font` Playfair/Merriweather/Source Sans 3 + Inter weights); bumped `Lane1CustomizerState` to v2 with `proTranslationAcknowledged`, migrated `localStorage` keys/ids; `buildLane1WhatsAppUrl` implements §2.5 (bilingual self, pro closing line); `BusinessCardTemplate` adds sticky-header EN/GE links, pro banner, photo pick + silhouette, `--font-*-weight`, and GE fallbacks with amber dots; `StartCustomizer` uses `CollapsibleSection`, EN/GE field labels, `ServiceCountStepper`, iOS-style map toggle, reordered sections; `StartPageClient` FAB shows ₾ badge + one-shot pulse, sheet `max-h-[85vh]` with sticky WhatsApp footer; sector cards show Georgian title + monoline icons + taglines.
+- **Impact:** `/start` tracks the written spec closely enough for sales demos; remaining gaps (sidebar debounce, lazy sheet body, swipe-to-dismiss, tablet 50/50) are optional follow-ups.

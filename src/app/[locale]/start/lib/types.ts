@@ -22,7 +22,7 @@ export interface StylePresetSelection {
   fontId: string;
 }
 
-export const CUSTOMIZER_VERSION = 1 as const;
+export const CUSTOMIZER_VERSION = 2 as const;
 
 export interface Lane1CustomizerState {
   version: typeof CUSTOMIZER_VERSION;
@@ -51,6 +51,8 @@ export interface Lane1CustomizerState {
   addGoogleMap: boolean;
   /** Base64 data URL or null before upload */
   photoDataUrl: string | null;
+  /** Professional translation flow — §2.4 */
+  proTranslationAcknowledged: boolean;
 }
 
 export function defaultSocial(): SocialLinksState {
@@ -87,12 +89,13 @@ export function defaultLane1State(): Lane1CustomizerState {
     practiceHeading: "",
     practiceHeadingSecondary: "",
     style: {
-      backgroundId: "cream",
+      backgroundId: "warmcream",
       textColorId: "ink",
       accentId: "navy",
       fontId: "modern",
     },
     addGoogleMap: false,
     photoDataUrl: null,
+    proTranslationAcknowledged: false,
   };
 }

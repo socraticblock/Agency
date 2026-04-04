@@ -1,0 +1,62 @@
+/**
+ * Delivered business card template — Phase 2: smooth style transitions (brief §4).
+ * No layout-affecting transitions; no motion on the card beyond color/opacity.
+ */
+
+.business-card-template {
+  transition: background 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), color 0.3s ease-out;
+}
+
+.business-card-template [style],
+.business-card-template svg {
+  transition-property: color, background-color, border-color, box-shadow, fill, stroke;
+  transition-duration: 0.35s;
+  transition-timing-function: ease-out;
+}
+
+.business-card-template-font-layer {
+  transition: opacity 0.2s ease-out;
+}
+
+@keyframes business-card-photo-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.business-card-photo img {
+  animation: business-card-photo-in 0.3s ease-out;
+}
+
+/* Phase 3 — inline editing (brief §5): hover cue, no layout shift */
+.inline-editable-display {
+  border-bottom: 1px dotted transparent;
+  border-radius: 2px;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.inline-editable-display:hover {
+  border-bottom-color: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+.inline-editable-display:focus-visible {
+  outline: none;
+  border-bottom-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+
+.inline-editable-input {
+  margin: 0;
+  padding: 2px 4px;
+  border: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+}

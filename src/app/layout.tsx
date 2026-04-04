@@ -1,6 +1,13 @@
 import type { Viewport } from "next";
 import "./globals.css";
-import { inter, notoGeorgian, spaceGrotesk } from "@/fonts";
+import {
+  inter,
+  merriweather,
+  notoGeorgian,
+  playfairDisplay,
+  sourceSans3,
+  spaceGrotesk,
+} from "@/fonts";
 import { MotionPreferences } from "@/components/providers/MotionPreferences";
 
 export const viewport: Viewport = {
@@ -16,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${notoGeorgian.variable} ${spaceGrotesk.variable} font-sans antialiased bg-background text-foreground`}
+        className={`${inter.variable} ${notoGeorgian.variable} ${spaceGrotesk.variable} ${playfairDisplay.variable} ${merriweather.variable} ${sourceSans3.variable} font-sans antialiased bg-background text-foreground`}
       >
         <a
           href="#main-content"
