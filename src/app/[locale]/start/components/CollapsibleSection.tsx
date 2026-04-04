@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { ChevronDown } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function CollapsibleSection({
   id,
@@ -49,18 +50,25 @@ export function CollapsibleSection({
           aria-hidden
         />
       </button>
-      <div
-        ref={contentRef}
-        className="overflow-hidden transition-all duration-300 ease-out"
-        style={{
-          maxHeight: isOpen ? "1000px" : "0px",
-          opacity: isOpen ? "1" : "0",
-        }}
-      >
-        <div className="space-y-4 border-t border-white/25 px-4 pb-4 pt-2 md:px-6 md:pb-6">
-          {children}
-        </div>
-      </div>
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            key="content"
+            initial="collapsed"
+            animate="open"
+            exit="collapsed"
+            variants={{
+              open: { opacity: 1, height: "auto" },
+              collapsed: { opacity: 0, height: 0 },
+            }}
+            transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
+          >
+            <div className="space-y-4 border-t border-white/25 px-4 pb-4 pt-2 md:px-6 md:pb-6">
+              {children}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
