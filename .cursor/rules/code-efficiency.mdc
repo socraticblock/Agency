@@ -1,0 +1,24 @@
+---
+description: General rule for maintaining code efficiency and beauty by enforcing modularization.
+globs: src/**/*.tsx, src/**/*.ts
+---
+
+# Code Efficiency & Beauty: Modularization Rule
+
+To ensure the codebase remains maintainable, performant, and "beautiful" as per the Elite standard, all AI agents must follow this threshold-based refactoring rule:
+
+## THE 400-LINE THRESHOLD
+**Before making any functional changes to an existing file, you MUST check its line count:**
+
+1.  **FILES > 400 LINES**: 
+    - You are **FORBIDDEN** from adding more logic to this file until it has been modularized.
+    - **Step 1**: Identify logical sections (e.g., UI segments, hooks, utility functions).
+    - **Step 2**: Extract these sections into sub-components or separate files.
+    - **Step 3**: Re-integrate them into the main file as a clean orchestrator.
+    - **Goal**: Bring the main file well under the 400-line limit (ideally < 200).
+
+2.  **FILES < 400 LINES**:
+    - If the file is already well-structured and under the limit, proceed with the requested change immediately.
+    - Maintain the existing architectural patterns (e.g., modular segments) during your edit.
+
+**EXCLUSION**: This rule applies to implementation code (`.tsx`, `.ts`). It does not apply to configuration files, JSON, or CSS unless explicitly requested.

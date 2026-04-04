@@ -1,49 +1,23 @@
 "use client";
 
 import { useEffect, useRef, useState, memo, type CSSProperties } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { useMotionValue, useTransform, useSpring, motion, AnimatePresence } from "framer-motion";
-import {
-  Scale,
-  Briefcase,
-  Building2,
-  Sparkles,
-  Phone,
-  Mail,
-  MessageCircle,
-  Facebook,
-  Instagram,
-  Linkedin,
-  Youtube,
-  Camera,
-  UserPlus,
-  ChevronDown,
-  Printer,
-  Share2,
-  Send,
-  Map,
-} from "lucide-react";
+import { motion } from "framer-motion";
+import { HeroSegment } from "./segments/HeroSegment";
+import { ServicesSegment } from "./segments/ServicesSegment";
+import { ContactSocialSegment } from "./segments/ContactSocialSegment";
+import { UtilitySegments } from "./segments/UtilitySegments";
+import { BrandingFooter } from "./segments/BrandingFooter";
+import { containerVariants, itemVariants } from "../lib/animations";
+import { usePwaMetadata } from "../lib/usePwaMetadata";
+import { useCardTilt } from "../lib/useCardTilt";
+import { InlineEditable } from "./InlineEditable";
+import { Scale, Briefcase, Building2, Sparkles } from "lucide-react";
 import type { Lane1CustomizerState } from "../lib/types";
 import { resolveStyleVariables } from "../lib/presets";
 import { compressImageForLane1Storage } from "../lib/image-compress";
-import { InlineEditable } from "./InlineEditable";
-import { MagneticButton } from "../../_components/MagneticButton";
-import { downloadVCF } from "../lib/vcf-utils";
 import "./business-card-template.css";
 
 const ICONS = [Scale, Briefcase, Building2, Sparkles];
-
-function telHref(phone: string): string {
-  const digits = phone.replace(/\D/g, "");
-  return digits ? `tel:+${digits}` : "tel:";
-}
-
-function waHref(phone: string): string {
-  const digits = phone.replace(/\D/g, "");
-  if (!digits) return "#";
-  return `https://wa.me/${digits}`;
-}
 
 export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   state,
@@ -59,27 +33,23 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   previewLang: "primary" | "secondary";
   homeHref: string;
   ownerName: string;
-  /** When set, preview fields are inline-editable and sync with customizer state. */
   onPatch?: (p: Partial<Lane1CustomizerState>) => void;
-  /** Bilingual preview: EN / GE in header (§2.2). */
   onPreviewLangChange?: (lang: "primary" | "secondary") => void;
   hideBranding?: boolean;
-  /** Responsive unlocks Bento grid on desktop. Mobile forces narrow card view. */
   layoutMode?: "mobile" | "responsive";
 }) {
   const editable = Boolean(onPatch);
   const isResponsive = layoutMode === "responsive";
   const vars = resolveStyleVariables(state.style) as any;
-  const useSecondary =
-    previewLang === "secondary" &&
-    state.secondaryMode === "self";
-
-  const isGlass = state.style.vibeId === "glass";
-  const isNeon = state.style.vibeId === "neon";
+  const useSecondary = previewLang === "secondary" && state.secondaryMode === "self";
+  const { rotateX, rotateY, handleMouseMove, handleMouseLeave } = useCardTilt(isResponsive);
+  usePwaMetadata(state, vars);
 
   const [expandedService, setExpandedService] = useState<number | null>(null);
-
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
+  const [shareFeedback, setShareFeedback] = useState("");
+  const [photoBusy, setPhotoBusy] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const nameSlug = state.name.toLowerCase().replace(/\s+/g, "-") || "business-card";
@@ -89,911 +59,80 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
     });
   }, [state.style.accentId, state.name]);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: Number(vars["--stagger-delay" as any] || 0.1),
-        delayChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: {
-      opacity: 0,
-      y: Number(vars["--entrance-y" as any] || 25),
-      scale: 0.98,
-      filter: "blur(12px)",
-    },
-    show: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      filter: "blur(0px)",
-      transition: {
-        type: "spring",
-        damping: Number(vars["--spring-damping" as any] || 18),
-        stiffness: 90,
-        mass: 1.2,
-      }
-    },
-  };
-
-  // 3D Tilt & Ambient Glow State
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [7, -7]), { stiffness: 150, damping: 25 });
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-7, 7]), { stiffness: 150, damping: 25 });
-
-  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseXPos = e.clientX - rect.left;
-    const mouseYPos = e.clientY - rect.top;
-
-    // For 3D Tilt (only if responsive/desktop)
-    if (isResponsive) {
-      const xPct = mouseXPos / width - 0.5;
-      const yPct = mouseYPos / height - 0.5;
-      mouseX.set(xPct);
-      mouseY.set(yPct);
-    }
-
-    // For Ambient Glow CSS variables
-    e.currentTarget.style.setProperty("--mouse-x", `${(mouseXPos / width) * 100}%`);
-    e.currentTarget.style.setProperty("--mouse-y", `${(mouseYPos / height) * 100}%`);
-  }
-
-  function handleMouseLeave() {
-    mouseX.set(0);
-    mouseY.set(0);
-  }
-
-  const glassStyle: CSSProperties = isGlass ? {
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
-    backdropFilter: "blur(var(--glass-blur))",
-    border: "1px solid rgba(255, 255, 255, var(--border-opacity))",
-    boxShadow: "var(--card-shadow)",
-  } : isNeon ? {
-    boxShadow: "var(--card-shadow)",
-    border: "1px solid var(--accent)",
-  } : {};
-
-  const showLangToggle =
-    Boolean(onPreviewLangChange) &&
-    state.secondaryMode === "self";
-
-  const address = useSecondary ? state.addressSecondary || state.address : state.address;
-
-  const showSocial = (url: string) => url.trim().length > 0;
-
-  /** Brief §4.2: opacity fade when font preset changes (fonts cannot interpolate). */
-  const [fontFade, setFontFade] = useState(1);
-  const fontIdRef = useRef(state.style.fontId);
-
-  useEffect(() => {
-    if (fontIdRef.current === state.style.fontId) return;
-    fontIdRef.current = state.style.fontId;
-    setFontFade(0);
-    const t = window.setTimeout(() => setFontFade(1), 45);
-    return () => window.clearTimeout(t);
-  }, [state.style.fontId]);
-
-  // Phase 2: Dynamic PWA Metadata Injection
-  useEffect(() => {
-    if (typeof document === "undefined") return;
-
-    // 1. Favicon (Browser Tab)
-    let favicon = document.querySelector('link[rel="icon"]') as HTMLLinkElement;
-    if (!favicon) {
-      favicon = document.createElement("link");
-      favicon.rel = "icon";
-      document.head.appendChild(favicon);
-    }
-    favicon.href = state.photoDataUrl || "/favicon.ico";
-
-    // 2. Apple Touch Icon (Home Screen Logo)
-    let appleIcon = document.querySelector('link[rel="apple-touch-icon"]') as HTMLLinkElement;
-    if (!appleIcon) {
-      appleIcon = document.createElement("link");
-      appleIcon.rel = "apple-touch-icon";
-      document.head.appendChild(appleIcon);
-    }
-    appleIcon.href = state.photoDataUrl || "/favicon.ico";
-
-    // 3. Theme Color (Mobile UI browser bars)
-    let themeColor = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement;
-    if (!themeColor) {
-      themeColor = document.createElement("meta");
-      themeColor.name = "theme-color";
-      document.head.appendChild(themeColor);
-    }
-    const accent = (vars as any)["--accent"] || "#1A2744";
-    themeColor.content = accent;
-
-    return () => {
-      // Optional: Cleanup if needed, but usually fine to leave for the session
-    };
-  }, [state.photoDataUrl, state.style.accentId, vars]);
-
-  function patch(p: Partial<Lane1CustomizerState>) {
-    onPatch?.(p);
-  }
-
-  function setServiceLine(i: number, v: string) {
-    if (!onPatch) return;
-    if (useSecondary) {
-      const next = [...state.serviceAreasSecondary] as [
-        string,
-        string,
-        string,
-        string,
-      ];
-      next[i] = v;
-      return onPatch({ serviceAreasSecondary: next });
-    }
-    const next = [...state.serviceAreas] as [string, string, string, string];
+  const patch = (p: Partial<Lane1CustomizerState>) => onPatch?.(p);
+  const setServiceLine = (i: number, v: string) => {
+    const next = useSecondary ? [...state.serviceAreasSecondary] : [...state.serviceAreas];
     next[i] = v;
-    onPatch({ serviceAreas: next });
-  }
-
-  function setServiceDescriptionLine(i: number, v: string) {
-    if (!onPatch) return;
-    if (useSecondary) {
-      const next = [...state.serviceDescriptionsSecondary] as [
-        string,
-        string,
-        string,
-        string,
-      ];
-      next[i] = v;
-      return onPatch({ serviceDescriptionsSecondary: next });
-    }
-    const next = [...state.serviceDescriptions] as [string, string, string, string];
+    patch(useSecondary ? { serviceAreasSecondary: next as any } : { serviceAreas: next as any });
+  };
+  const setServiceDescriptionLine = (i: number, v: string) => {
+    const next = useSecondary ? [...state.serviceDescriptionsSecondary] : [...state.serviceDescriptions];
     next[i] = v;
-    onPatch({ serviceDescriptions: next });
-  }
-
-  const headingStyle: CSSProperties = {
-    fontFamily: "var(--font-heading)",
-    fontWeight: "var(--font-heading-weight)" as CSSProperties["fontWeight"],
-    color: "var(--text-primary)",
+    patch(useSecondary ? { serviceDescriptionsSecondary: next as any } : { serviceDescriptions: next as any });
   };
-  const bodyStyle: CSSProperties = {
-    fontFamily: "var(--font-body)",
-    fontWeight: "var(--font-body-weight)" as CSSProperties["fontWeight"],
-    color: "var(--text-primary)",
-  };
-
-  const fileRef = useRef<HTMLInputElement>(null);
-  const [photoBusy, setPhotoBusy] = useState(false);
 
   async function onPhotoPicked(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-    e.target.value = "";
     if (!file || !onPatch) return;
     setPhotoBusy(true);
     try {
       const { dataUrl } = await compressImageForLane1Storage(file);
       onPatch({ photoDataUrl: dataUrl });
-    } catch {
-      /* ignore */
-    } finally {
-      setPhotoBusy(false);
-    }
+    } finally { setPhotoBusy(false); }
   }
 
-  // Phase 6: Native Sharing Engine
-  const [shareFeedback, setShareFeedback] = useState("");
-  async function handleShare() {
-    if (typeof window === "undefined") return;
-    const shareUrl = window.location.href; // Assumes they are on the published card page. If in preview, it shares the preview URL, which is fine for testing.
+  const handleShare = async () => {
+    const url = onPatch ? "https://genezisi.com" : window.location.href;
+    if (navigator.share) {
+      try { await navigator.share({ title: state.name, url }); }
+      catch { navigator.clipboard.writeText(url); setShareFeedback("Link copied!"); }
+    } else { navigator.clipboard.writeText(url); setShareFeedback("Link copied!"); }
+    setTimeout(() => setShareFeedback(""), 2500);
+  };
 
-    // In a real environment, the published card URL would be used. 
-    // We construct a clean relative or absolute path based on the env.
-    const urlToShare = onPatch ? "https://genezisi.com" : shareUrl; // Fallback placeholder if in editor
+  const glassStyle: CSSProperties = state.style.vibeId === "glass" ? {
+    backgroundColor: "rgba(255, 255, 255, 0.05)", backdropFilter: "blur(var(--glass-blur))",
+    border: "1px solid rgba(255, 255, 255, var(--border-opacity))", boxShadow: "var(--card-shadow)",
+  } : state.style.vibeId === "neon" ? { boxShadow: "var(--card-shadow)", border: "1px solid var(--accent)" } : {};
 
-    const shareData = {
-      title: state.name,
-      text: `Digital Business Card: ${state.name}`,
-      url: urlToShare,
-    };
-
-    try {
-      if (navigator.share && (navigator as any).canShare?.(shareData)) {
-        await navigator.share(shareData);
-      } else {
-        // Desktop fallback: Copy to clipboard
-        await navigator.clipboard.writeText(urlToShare);
-        setShareFeedback("Link copied!");
-        setTimeout(() => setShareFeedback(""), 2000);
-      }
-    } catch (err) {
-      console.warn("Share failed:", err);
-    }
-  }
-
-  // Phase 6: The Viral Loop (Refer Me)
-  const referText = encodeURIComponent(
-    `Exclusive Recommendation: I highly recommend ${state.name} — ${state.title || "Professional"}. 
-
-You can view their elite digital business card here: ${typeof window !== "undefined" ? window.location.href : "https://genezisi.com"}
-
-Experience high-speed luxury branding.`
-  );
-  const referHref = `https://wa.me/?text=${referText}`;
+  const headingStyle: CSSProperties = { fontFamily: "var(--font-heading)", fontWeight: "var(--font-heading-weight)" as any, color: "var(--text-primary)" };
+  const bodyStyle: CSSProperties = { fontFamily: "var(--font-body)", fontWeight: "var(--font-body-weight)" as any, color: "var(--text-primary)" };
 
   return (
-    <div
-      className={`business-card-template relative mx-auto w-full overflow-hidden text-[var(--text-primary)] ${isResponsive ? "max-w-6xl md:rounded-3xl" : "max-w-[640px]"
-        }`}
-      style={{
-        ...vars,
-        fontFamily: "var(--font-body)",
-        fontWeight: "var(--font-body-weight)" as CSSProperties["fontWeight"],
-        background: "var(--bg-primary)",
-      }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
+    <div className={`business-card-template relative mx-auto w-full overflow-hidden text-[var(--text-primary)] ${isResponsive ? "max-w-6xl md:rounded-3xl" : "max-w-[640px]"}`}
+      style={{ ...vars, fontFamily: "var(--font-body)", background: "var(--bg-primary)" }}
+      onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}
     >
-      <div className="business-card-noise" aria-hidden />
-      <div className="business-card-glow" aria-hidden />
-      {isNeon && (
-        <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_50%_50%,var(--accent),transparent_70%)] opacity-[0.03]" />
-      )}
-      {state.secondaryMode === "pro" ? (
-        <div
-          className="border-b px-4 py-2.5 text-center text-xs leading-snug opacity-70"
-          style={{
-            borderColor: "var(--accent-secondary)",
-            background: "color-mix(in srgb, var(--accent) 7%, transparent)",
-            color: "var(--text-primary)"
-          }}
-        >
+      <div className="business-card-noise" aria-hidden /><div className="business-card-glow" aria-hidden />
+      {state.secondaryMode === "pro" && (
+        <div className="border-b px-4 py-2.5 text-center text-xs opacity-70" style={{ borderColor: "var(--accent-secondary)", background: "color-mix(in srgb, var(--accent) 7%, transparent)" }}>
           Georgian translation will be added after your order is confirmed.
         </div>
-      ) : null}
-      <motion.div
-        className={`business-card-template-font-layer pb-12 ${isResponsive ? "md:grid md:grid-cols-12 md:gap-8 md:p-8" : ""}`}
-        style={{ opacity: fontFade }}
-        variants={containerVariants}
-        initial="hidden"
-        animate="show"
+      )}
+      <motion.div className={`pb-12 ${isResponsive ? "md:grid md:grid-cols-12 md:gap-8 md:p-8" : ""}`}
+        variants={containerVariants} initial="hidden" animate="show" custom={vars["--stagger-delay"]}
       >
-        <input
-          ref={fileRef}
-          type="file"
-          accept="image/jpeg,image/png,image/webp"
-          className="hidden"
-          onChange={onPhotoPicked}
-          aria-hidden
-        />
-        {/* LEFT COLUMN: Identity & Core Details */}
-        <div className={isResponsive ? "md:col-span-5 lg:col-span-4 md:sticky md:top-8 md:flex md:flex-col md:gap-6" : ""}>
-          {/* Section 1 — sticky header */}
-          <motion.header
-            variants={itemVariants}
-            className={`sticky top-0 z-20 flex flex-wrap items-center justify-between gap-2 border-b px-4 py-3 ${isResponsive ? "md:relative md:border-none md:px-0 md:py-0" : ""}`}
-            style={{
-              borderColor: "var(--accent)",
-              background: "var(--bg-primary)",
-            }}
-          >
-            <div className={`max-w-[min(55%,18rem)] min-w-0 truncate text-sm font-bold leading-tight ${isResponsive ? "md:text-base" : ""}`}>
-              <InlineEditable
-                value={useSecondary ? state.nameSecondary : state.name}
-                onChange={(v) =>
-                  patch(useSecondary ? { nameSecondary: v } : { name: v })
-                }
-                fallbackIfEmpty={useSecondary ? state.name : ""}
-                showFallbackIndicator={useSecondary}
-                placeholder="Your name"
-                editable={editable}
-                className="block w-full truncate"
-                style={headingStyle}
-              />
-            </div>
-            <div className="flex min-w-0 flex-wrap items-center justify-end gap-x-3 gap-y-1">
-              {showLangToggle ? (
-                <nav
-                  className="flex shrink-0 items-center gap-2 text-xs font-semibold"
-                  style={{ color: "var(--text-primary)" }}
-                  aria-label="Preview language"
-                >
-                  <button
-                    type="button"
-                    className={`min-h-[44px] min-w-[40px] rounded-md px-2 transition-opacity touch-manipulation ${previewLang === "primary" ? "opacity-100 underline decoration-2 underline-offset-4" : "opacity-55"
-                      }`}
-                    style={{ color: "var(--accent)" }}
-                    onClick={() => onPreviewLangChange?.("primary")}
-                  >
-                    EN
-                  </button>
-                  <span className="opacity-35" aria-hidden>
-                    |
-                  </span>
-                  <button
-                    type="button"
-                    className={`min-h-[44px] min-w-[40px] rounded-md px-2 transition-opacity touch-manipulation ${previewLang === "secondary" ? "opacity-100 underline decoration-2 underline-offset-4" : "opacity-55"
-                      }`}
-                    style={{ color: "var(--accent)" }}
-                    onClick={() => onPreviewLangChange?.("secondary")}
-                  >
-                    GE
-                  </button>
+        <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onPhotoPicked} />
+        <div className={isResponsive ? "md:col-span-12 lg:col-span-4 md:sticky md:top-8 md:flex md:flex-col md:gap-6" : ""}>
+          <motion.header variants={itemVariants(vars["--entrance-y"], vars["--spring-damping"])} className={`sticky top-0 z-20 flex items-center justify-between px-4 py-3 ${isResponsive ? "md:relative md:p-0 md:bg-transparent" : "bg-[var(--bg-primary)] border-b"}`} style={{ borderColor: "var(--accent)" }}>
+            <div className="truncate text-sm font-bold"><InlineEditable value={useSecondary ? state.nameSecondary : state.name} onChange={(v) => patch(useSecondary ? { nameSecondary: v } : { name: v })} placeholder="Name" editable={editable} style={headingStyle} /></div>
+            <div className="flex items-center gap-3">
+              {onPreviewLangChange && state.secondaryMode === "self" && (
+                <nav className="flex gap-2 text-xs font-semibold">
+                  <button className={previewLang === "primary" ? "underline" : "opacity-50"} onClick={() => onPreviewLangChange("primary")}>EN</button>
+                  <button className={previewLang === "secondary" ? "underline" : "opacity-50"} onClick={() => onPreviewLangChange("secondary")}>GE</button>
                 </nav>
-              ) : null}
-              <InlineEditable
-                value={state.phone}
-                onChange={(v) => patch({ phone: v })}
-                placeholder="+995…"
-                editable={editable}
-                inputMode="tel"
-                className="shrink-0 text-sm font-semibold underline decoration-2 underline-offset-2"
-                style={{ color: "var(--accent)", ...headingStyle }}
-              />
+              )}
+              <InlineEditable value={state.phone} onChange={(v) => patch({ phone: v })} placeholder="Phone" editable={editable} style={{ color: "var(--accent)", ...headingStyle }} />
             </div>
           </motion.header>
-
-          {/* Section 2 — hero */}
-          <motion.section
-            variants={itemVariants}
-            style={{
-              borderColor: "var(--accent-secondary)",
-              ...glassStyle,
-              rotateX: isResponsive ? rotateX : 0,
-              rotateY: isResponsive ? rotateY : 0,
-              transformStyle: "preserve-3d",
-            }}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            className={`px-4 pb-8 pt-8 text-left transition-shadow duration-300 ${isResponsive ? "md:rounded-3xl md:border md:p-6 hover:shadow-2xl" : ""}`}
-          >
-            <div className="flex flex-col items-start gap-4">
-              <div
-                role={editable ? "button" : undefined}
-                tabIndex={editable ? 0 : undefined}
-                onClick={() => {
-                  if (editable && !photoBusy) fileRef.current?.click();
-                }}
-                onKeyDown={(e) => {
-                  if (!editable) return;
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    fileRef.current?.click();
-                  }
-                }}
-                aria-label={editable ? "Upload profile photo" : "Profile photo"}
-                className={`business-card-photo group relative h-[180px] w-[180px] shrink-0 overflow-hidden rounded-full border-4 bg-slate-200 ${editable ? "cursor-pointer" : ""
-                  } ${photoBusy ? "opacity-70" : ""}`}
-                style={{ borderColor: "var(--accent)" }}
-              >
-                {state.photoDataUrl ? (
-                  <Image
-                    key={state.photoDataUrl.slice(0, 64)}
-                    src={state.photoDataUrl}
-                    alt=""
-                    width={180}
-                    height={180}
-                    className="h-full w-full object-cover"
-                    unoptimized
-                  />
-                ) : (
-                  <div className="flex h-full w-full flex-col items-center justify-center gap-1 text-xs text-slate-500">
-                    <svg
-                      className="h-16 w-16 opacity-40"
-                      viewBox="0 0 64 64"
-                      fill="currentColor"
-                      aria-hidden
-                    >
-                      <circle cx="32" cy="26" r="12" />
-                      <ellipse cx="32" cy="56" rx="22" ry="14" />
-                    </svg>
-                    <span>Photo</span>
-                  </div>
-                )}
-                {editable ? (
-                  <span className="pointer-events-none absolute bottom-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-md ring-1 ring-black/5">
-                    <Camera className="h-4 w-4 text-slate-700" aria-hidden />
-                  </span>
-                ) : null}
-              </div>
-              <div>
-                <h1
-                  className={`text-2xl font-bold leading-tight ${isResponsive ? "md:text-3xl" : ""}`}
-                  style={headingStyle}
-                >
-                  <InlineEditable
-                    value={useSecondary ? state.nameSecondary : state.name}
-                    onChange={(v) =>
-                      patch(useSecondary ? { nameSecondary: v } : { name: v })
-                    }
-                    fallbackIfEmpty={useSecondary ? state.name : ""}
-                    showFallbackIndicator={useSecondary}
-                    placeholder="Name"
-                    editable={editable}
-                    className="block w-full"
-                    style={headingStyle}
-                  />
-                </h1>
-                <p className="mt-2 text-base opacity-90" style={bodyStyle}>
-                  <InlineEditable
-                    value={useSecondary ? state.titleSecondary : state.title}
-                    onChange={(v) =>
-                      patch(useSecondary ? { titleSecondary: v } : { title: v })
-                    }
-                    fallbackIfEmpty={useSecondary ? state.title : ""}
-                    showFallbackIndicator={useSecondary}
-                    placeholder="Title"
-                    editable={editable}
-                    className="block w-full"
-                    style={bodyStyle}
-                  />
-                </p>
-                {ownerName && (
-                  <p
-                    className="mt-1 text-sm font-semibold opacity-80"
-                    style={{ ...bodyStyle, color: "var(--accent)" }}
-                  >
-                    {ownerName}
-                  </p>
-                )}
-              </div>
-              <div
-                className={`grid w-full gap-2 ${state.serviceCount >= 3 ? "grid-cols-2" : "grid-cols-1"
-                  }`}
-              >
-                {Array.from({ length: state.serviceCount }).map((_, i) => {
-                  const en = state.serviceAreas[i] ?? "";
-                  const ge = state.serviceAreasSecondary[i] ?? "";
-                  if (useSecondary) {
-                    if (!en.trim() && !ge.trim() && !editable) return null;
-                  } else if (!en.trim() && !editable) {
-                    return null;
-                  }
-                  return (
-                    <div
-                      key={i}
-                      className="rounded border border-black/5 px-3 py-2 text-sm"
-                      style={{ borderColor: "var(--accent-secondary)" }}
-                    >
-                      <InlineEditable
-                        value={useSecondary ? ge : en}
-                        onChange={(v) => setServiceLine(i, v)}
-                        fallbackIfEmpty={useSecondary ? en : ""}
-                        showFallbackIndicator={useSecondary}
-                        placeholder={`Service ${i + 1}`}
-                        editable={editable}
-                        className="block w-full"
-                        style={bodyStyle}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="flex flex-col gap-3 w-full">
-                <MagneticButton
-                  as="a"
-                  href={telHref(state.phone)}
-                  className="inline-flex min-h-[44px] w-full items-center justify-center rounded-lg px-6 py-3 text-sm font-bold text-white transition-opacity hover:opacity-90 active:scale-[0.98]"
-                  style={{ background: "var(--accent)" }}
-                >
-                  Contact Me
-                </MagneticButton>
-                <MagneticButton
-                  onClick={() => downloadVCF(state, previewLang)}
-                  className="inline-flex min-h-[44px] w-full items-center justify-center rounded-lg border px-6 py-3 text-sm font-bold transition-all hover:bg-black/5 active:scale-[0.98]"
-                  style={{ borderColor: "var(--accent)", color: "var(--accent)" }}
-                >
-                  <UserPlus className="mr-2 h-4 w-4" />
-                  Save Contact
-                </MagneticButton>
-              </div>
-            </div>
-          </motion.section>
-        </div> {/* END LEFT COLUMN */}
-
-        {/* RIGHT COLUMN: Content & Add-ons */}
-        <div className={isResponsive ? "md:col-span-7 lg:col-span-8 md:flex md:flex-col md:gap-6" : ""}>
-          {/* Section 3 — practice areas with icons */}
-          <motion.section
-            variants={itemVariants}
-            whileHover={{ y: -4, transition: { duration: 0.2 } }}
-            className={`border-t px-4 py-8 ${isResponsive ? "md:rounded-3xl md:border md:p-8" : ""}`}
-            style={{
-              borderColor: "var(--accent-secondary)",
-              ...glassStyle
-            }}
-          >
-            <h2
-              className="mb-4 text-lg font-bold"
-              style={headingStyle}
-            >
-              <InlineEditable
-                value={
-                  useSecondary
-                    ? state.practiceHeadingSecondary
-                    : state.practiceHeading
-                }
-                onChange={(v) =>
-                  patch(
-                    useSecondary
-                      ? { practiceHeadingSecondary: v }
-                      : { practiceHeading: v },
-                  )
-                }
-                fallbackIfEmpty={useSecondary ? state.practiceHeading : ""}
-                showFallbackIndicator={useSecondary}
-                placeholder="Practice areas"
-                editable={editable}
-                className="block w-full"
-                style={headingStyle}
-              />
-            </h2>
-            <ul className="flex flex-col gap-3">
-              {Array.from({ length: state.serviceCount }).map((_, i) => {
-                const enTitle = state.serviceAreas[i] ?? "";
-                const geTitle = state.serviceAreasSecondary[i] ?? "";
-                const enDesc = state.serviceDescriptions[i] ?? "";
-                const geDesc = state.serviceDescriptionsSecondary[i] ?? "";
-
-                const title = useSecondary ? geTitle : enTitle;
-                const desc = useSecondary ? geDesc : enDesc;
-
-                if (useSecondary) {
-                  if (!enTitle.trim() && !geTitle.trim() && !editable) return null;
-                } else if (!enTitle.trim() && !editable) {
-                  return null;
-                }
-
-                const isExpanded = expandedService === i;
-                const Icon = ICONS[i % ICONS.length];
-
-                return (
-                  <li
-                    key={i}
-                    className="overflow-hidden rounded-xl border transition-all"
-                    style={{
-                      borderColor: isExpanded ? "var(--accent)" : "rgba(0,0,0,0.05)",
-                      background: isExpanded ? "rgba(0,0,0,0.02)" : "transparent",
-                      ...glassStyle
-                    }}
-                  >
-                    <button
-                      type="button"
-                      onClick={() => setExpandedService(isExpanded ? null : i)}
-                      className="flex w-full items-start gap-3 p-3 text-left"
-                    >
-                      <Icon
-                        className="mt-0.5 h-5 w-5 shrink-0"
-                        style={{ color: "var(--accent)" }}
-                        aria-hidden
-                      />
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="text-sm font-bold leading-snug">
-                            <InlineEditable
-                              value={title}
-                              onChange={(v) => setServiceLine(i, v)}
-                              fallbackIfEmpty={useSecondary ? enTitle : ""}
-                              showFallbackIndicator={useSecondary}
-                              placeholder={`Service ${i + 1}`}
-                              editable={editable}
-                              className="block w-full"
-                            />
-                          </span>
-                          <ChevronDown
-                            className={`h-4 w-4 shrink-0 transition-transform ${isExpanded ? "rotate-180" : ""}`}
-                            style={{ color: "var(--accent)" }}
-                          />
-                        </div>
-                      </div>
-                    </button>
-
-                    <AnimatePresence>
-                      {isExpanded && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.25, ease: "easeInOut" }}
-                        >
-                          <div
-                            className="border-t border-black/5 p-3 pt-0 text-sm leading-relaxed opacity-70"
-                            style={{ color: "var(--text-primary)" }}
-                          >
-                            <InlineEditable
-                              value={desc}
-                              onChange={(v) => setServiceDescriptionLine(i, v)}
-                              fallbackIfEmpty={useSecondary ? enDesc : ""}
-                              showFallbackIndicator={useSecondary}
-                              placeholder="Add a detailed description of your expertise in this area..."
-                              editable={editable}
-                              className="block w-full"
-                              style={bodyStyle}
-                            />
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </li>
-                );
-              })}
-            </ul>
-          </motion.section>
-
-          {/* Section 4 — contact + footer */}
-          <motion.section
-            variants={itemVariants}
-            whileHover={{ y: -4, transition: { duration: 0.2 } }}
-            className={`border-t px-4 py-8 ${isResponsive ? "md:rounded-3xl md:border md:p-8" : ""}`}
-            style={{
-              borderColor: "var(--accent-secondary)",
-              ...glassStyle
-            }}
-          >
-            <div className={`space-y-3 text-sm ${isResponsive ? "md:text-base" : ""}`}>
-              <div className="flex items-center gap-2 font-semibold">
-                <Phone className="h-4 w-4 shrink-0" aria-hidden />
-                <InlineEditable
-                  value={state.phone}
-                  onChange={(v) => patch({ phone: v })}
-                  placeholder="Phone"
-                  editable={editable}
-                  inputMode="tel"
-                  className="min-w-0 flex-1"
-                  style={{ color: "var(--accent)", ...bodyStyle }}
-                />
-              </div>
-              <div className="flex items-start gap-2">
-                <Mail className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
-                <span className="min-w-0 flex-1 underline">
-                  <InlineEditable
-                    value={state.email}
-                    onChange={(v) => patch({ email: v })}
-                    placeholder="Email"
-                    editable={editable}
-                    inputMode="email"
-                    className="block w-full"
-                    style={bodyStyle}
-                  />
-                </span>
-              </div>
-              <a
-                href={waHref(state.phone)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 font-semibold"
-                style={{ color: "var(--accent)" }}
-              >
-                <MessageCircle className="h-4 w-4" aria-hidden />
-                WhatsApp
-              </a>
-              <div className="flex flex-wrap gap-3 pt-2">
-                {showSocial(state.social.facebook) && (
-                  <MagneticButton
-                    as="a"
-                    href={state.social.facebook}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[var(--accent)]"
-                    aria-label="Facebook"
-                    magneticStrength={10}
-                  >
-                    <Facebook className="h-6 w-6" />
-                  </MagneticButton>
-                )}
-                {showSocial(state.social.instagram) && (
-                  <MagneticButton
-                    as="a"
-                    href={state.social.instagram}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[var(--accent)]"
-                    aria-label="Instagram"
-                    magneticStrength={10}
-                  >
-                    <Instagram className="h-6 w-6" />
-                  </MagneticButton>
-                )}
-                {showSocial(state.social.linkedin) && (
-                  <MagneticButton
-                    as="a"
-                    href={state.social.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[var(--accent)]"
-                    aria-label="LinkedIn"
-                    magneticStrength={10}
-                  >
-                    <Linkedin className="h-6 w-6" />
-                  </MagneticButton>
-                )}
-                {showSocial(state.social.tiktok) && (
-                  <a
-                    href={state.social.tiktok}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[var(--accent)]"
-                    aria-label="TikTok"
-                  >
-                    <span className="text-xs font-bold">TT</span>
-                  </a>
-                )}
-                {showSocial(state.social.youtube) && (
-                  <MagneticButton
-                    as="a"
-                    href={state.social.youtube}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[var(--accent)]"
-                    aria-label="Visit YouTube Profile"
-                    magneticStrength={10}
-                  >
-                    <Youtube className="h-6 w-6" />
-                  </MagneticButton>
-                )}
-                {state.social.extra.map((e, i) =>
-                  e.url.trim() ? (
-                    <a
-                      key={i}
-                      href={e.url.trim()}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs font-semibold underline"
-                      style={{ color: "var(--accent)" }}
-                    >
-                      {e.label || "Link"}
-                    </a>
-                  ) : null
-                )}
-              </div>
-              <div className="pt-2">
-                {state.addGoogleMap && address.trim() ? (
-                  <div
-                    className="mb-2 text-[var(--text-primary)] underline"
-                    style={bodyStyle}
-                  >
-                    <InlineEditable
-                      value={useSecondary ? state.addressSecondary : state.address}
-                      onChange={(v) =>
-                        patch(
-                          useSecondary ? { addressSecondary: v } : { address: v },
-                        )
-                      }
-                      fallbackIfEmpty={useSecondary ? state.address : ""}
-                      showFallbackIndicator={useSecondary}
-                      placeholder="Address"
-                      multiline
-                      editable={editable}
-                      className="block w-full"
-                      style={bodyStyle}
-                    />
-                  </div>
-                ) : (
-                  <div className="text-[var(--text-primary)]" style={bodyStyle}>
-                    <InlineEditable
-                      value={useSecondary ? state.addressSecondary : state.address}
-                      onChange={(v) =>
-                        patch(
-                          useSecondary ? { addressSecondary: v } : { address: v },
-                        )
-                      }
-                      fallbackIfEmpty={useSecondary ? state.address : ""}
-                      showFallbackIndicator={useSecondary}
-                      placeholder="Address"
-                      multiline
-                      editable={editable}
-                      className="block w-full"
-                      style={bodyStyle}
-                    />
-                  </div>
-                )}
-              </div>
-              <div>
-                <InlineEditable
-                  value={useSecondary ? state.hoursSecondary : state.hours}
-                  onChange={(v) =>
-                    patch(useSecondary ? { hoursSecondary: v } : { hours: v })
-                  }
-                  fallbackIfEmpty={useSecondary ? state.hours : ""}
-                  showFallbackIndicator={useSecondary}
-                  placeholder="Hours"
-                  editable={editable}
-                  className="block w-full"
-                  style={bodyStyle}
-                />
-              </div>
-              {state.addGoogleMap && address.trim() ? (
-                <div className="mt-8 space-y-4">
-                  {/* The "Elite" action: Native Directions (Zero-cost / Zero-latency) */}
-                  <MagneticButton
-                    as="a"
-                    href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex w-full items-center justify-center gap-2 rounded-xl border-2 py-3.5 text-[14px] font-bold transition-transform"
-                    style={{
-                      borderColor: "var(--accent)",
-                      color: "var(--accent)",
-                      background: "rgba(255, 255, 255, 0.05)"
-                    }}
-                  >
-                    <Map className="h-4 w-4 opacity-70" />
-                    Get Directions
-                  </MagneticButton>
-                </div>
-              ) : null}
-
-              {/* Growth & Distribution Section */}
-              <div className="mt-10 flex flex-col gap-3">
-                <MagneticButton
-                  onClick={handleShare}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-[0.875rem] font-semibold text-white shadow-lg transition-transform"
-                  style={{ background: "var(--accent)" }}
-                >
-                  <Share2 className="h-4 w-4" />
-                  {shareFeedback || "Share Card"}
-                </MagneticButton>
-
-                <MagneticButton
-                  as="a"
-                  href={referHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex w-full items-center justify-center gap-2 rounded-xl border-2 py-3 text-[0.875rem] font-semibold shadow-sm transition-transform"
-                  style={{
-                    borderColor: "color-mix(in srgb, var(--accent) 30%, transparent)",
-                    color: "var(--text-primary)",
-                    background: "transparent"
-                  }}
-                  aria-label={`Refer ${state.name.split(" ")[0] || "me"} via WhatsApp`}
-                >
-                  <Send className="h-4 w-4 opacity-70" />
-                  Refer {state.name.split(" ")[0] || "Me"}
-                </MagneticButton>
-              </div>
-            </div>
-          </motion.section>
-        </div> {/* END RIGHT COLUMN */}
-
-        {/* Subtle Branding Footer — Outside the Card Visual */}
-        {!hideBranding && (
-          <footer
-            className="mt-6 pb-8 text-center text-[10px] uppercase tracking-widest opacity-40 transition-opacity hover:opacity-100"
-            style={{ color: "var(--text-primary)" }}
-          >
-            © {new Date().getFullYear()} {ownerName || "Professional"}. 
-            <span className="mx-2 opacity-50">|</span>
-            Powered by{" "}
-            <Link
-              href={homeHref}
-              className="font-bold hover:underline"
-              style={{ color: "var(--accent)" }}
-            >
-              Genezisi
-            </Link>
-          </footer>
-        )}
-
-        {/* Phase 3.2: Hidden QR View for Print Kit (Back of Card) */}
-        <div className="qr-code-print-view hidden p-8 text-center" aria-hidden>
-          <div className="flex flex-col items-center justify-center h-full gap-4">
-            <div className="space-y-1">
-              <h3 className="text-xl font-bold">{state.name}</h3>
-              {ownerName && <p className="text-sm font-semibold opacity-80">{ownerName}</p>}
-              <p className="text-xs opacity-60 uppercase tracking-widest">{state.title}</p>
-            </div>
-            <div className="flex justify-center my-4 p-4 bg-white rounded-2xl shadow-sm">
-              {qrDataUrl && <img src={qrDataUrl} alt="QR Code" className="h-48 w-48" />}
-            </div>
-            <div className="max-w-[200px]">
-              <p className="text-[10px] leading-tight opacity-50 font-medium">Scan to view full digital business card, services, and practice areas.</p>
-            </div>
-          </div>
+          <HeroSegment state={state} editable={editable} useSecondary={useSecondary} isResponsive={isResponsive} photoBusy={photoBusy} fileRef={fileRef} ownerName={ownerName} previewLang={previewLang} rotateX={rotateX} rotateY={rotateY} handleMouseMove={handleMouseMove} handleMouseLeave={handleMouseLeave} patch={patch} setServiceLine={setServiceLine} headingStyle={headingStyle} bodyStyle={bodyStyle} itemVariants={itemVariants(vars["--entrance-y"], vars["--spring-damping"])} glassStyle={glassStyle} />
+        </div>
+        <div className={isResponsive ? "md:col-span-12 lg:col-span-8 md:flex md:flex-col md:gap-6" : ""}>
+          <ServicesSegment state={state} editable={editable} useSecondary={useSecondary} isResponsive={isResponsive} expandedService={expandedService} setExpandedService={setExpandedService} patch={patch} setServiceLine={setServiceLine} setServiceDescriptionLine={setServiceDescriptionLine} headingStyle={headingStyle} bodyStyle={bodyStyle} itemVariants={itemVariants(vars["--entrance-y"], vars["--spring-damping"])} glassStyle={glassStyle} icons={ICONS} />
+          <ContactSocialSegment state={state} editable={editable} useSecondary={useSecondary} isResponsive={isResponsive} address={useSecondary ? state.addressSecondary || state.address : state.address} patch={patch} bodyStyle={bodyStyle} itemVariants={itemVariants(vars["--entrance-y"], vars["--spring-damping"])} glassStyle={glassStyle} />
+          <UtilitySegments state={state} ownerName={ownerName} qrDataUrl={qrDataUrl} shareFeedback={shareFeedback} handleShare={handleShare} referHref={`https://wa.me/?text=${encodeURIComponent(`Exclusive Recommendation: ${state.name} — ${state.title}. \n\n${onPatch ? "https://genezisi.com" : window.location.href}`)}`} />
+          <BrandingFooter ownerName={ownerName} hideBranding={hideBranding} homeHref={homeHref} />
         </div>
       </motion.div>
     </div>

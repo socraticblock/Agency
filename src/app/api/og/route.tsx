@@ -32,69 +32,88 @@ export async function GET(req: NextRequest) {
             alignItems: "center",
             justifyContent: "center",
             backgroundColor: bgPrimary,
-            backgroundImage: `radial-gradient(circle at 15% 15%, ${accent}18 0%, transparent 35%), radial-gradient(circle at 85% 85%, ${accent}12 0%, transparent 35%), radial-gradient(circle at 50% 50%, ${accent}05 0%, transparent 50%)`,
-            fontFamily: "sans-serif",
-            padding: "40px",
+            backgroundImage: isDark
+              ? `radial-gradient(circle at 20% 20%, ${accent}25 0%, transparent 40%), radial-gradient(circle at 80% 80%, ${accent}15 0%, transparent 40%), radial-gradient(circle at 50% 50%, #000 0%, #050510 100%)`
+              : `radial-gradient(circle at 20% 20%, ${accent}15 0%, transparent 40%), radial-gradient(circle at 80% 80%, ${accent}10 0%, transparent 40%), radial-gradient(circle at 50% 50%, #fff 0%, #f0f4f8 100%)`,
+            fontFamily: "Inter, sans-serif",
+            padding: "60px",
+            position: "relative",
+            overflow: "hidden",
           }}
         >
-          {/* Main Card Container */}
+          {/* Cinematic Background Lines */}
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              display: "flex",
+              opacity: isDark ? 0.03 : 0.05,
+              backgroundImage: `linear-gradient(90deg, ${textPrimary} 1px, transparent 1px), linear-gradient(${textPrimary} 1px, transparent 1px)`,
+              backgroundSize: "60px 60px",
+            }}
+          />
+
+          {/* Luxury Card Container */}
           <div
             style={{
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
               width: "100%",
-              maxWidth: "1050px",
-              backgroundColor: glassBg,
-              borderRadius: "56px",
+              maxWidth: "1080px",
+              backgroundColor: isDark ? "rgba(255, 255, 255, 0.02)" : "rgba(0, 0, 0, 0.01)",
+              borderRadius: "64px",
               border: `1px solid ${glassBorder}`,
-              padding: "70px",
-              boxShadow: "0 50px 100px -30px rgba(0, 0, 0, 0.6)",
+              padding: "80px",
+              boxShadow: isDark ? "0 80px 150px -40px rgba(0, 0, 0, 0.9)" : "0 40px 100px -30px rgba(0, 0, 0, 0.1)",
               position: "relative",
-              overflow: "hidden",
             }}
           >
-            {/* Accent Glow Line */}
+            {/* Top Accent Bar */}
             <div
               style={{
                 position: "absolute",
                 top: 0,
-                left: "15%",
-                right: "15%",
-                height: "3px",
+                left: "10%",
+                right: "10%",
+                height: "4px",
                 background: `linear-gradient(90deg, transparent, ${accent}, transparent)`,
               }}
             />
 
-            {/* Left: Photo / Avatar */}
+            {/* Left: Identity Photo */}
             <div
               style={{
                 display: "flex",
-                marginRight: "60px",
+                marginRight: "70px",
                 position: "relative",
               }}
             >
-              {/* Subtle Outer Glow for Photo */}
+              {/* Outer Glow Halo */}
               <div
                 style={{
                   position: "absolute",
-                  inset: "-20px",
-                  borderRadius: "140px",
-                  background: `${accent}11`,
-                  filter: "blur(20px)",
+                  inset: "-30px",
+                  borderRadius: "150px",
+                  background: `${accent}20`,
+                  filter: "blur(35px)",
                 }}
               />
               <div
                 style={{
-                  width: "240px",
-                  height: "240px",
-                  borderRadius: "120px",
-                  border: `6px solid ${accent}`,
+                  width: "280px",
+                  height: "280px",
+                  borderRadius: "140px",
+                  border: `8px solid ${accent}`,
                   overflow: "hidden",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  backgroundColor: isDark ? "#1e293b" : "#e2e8f0",
+                  backgroundColor: isDark ? "#0f172a" : "#cbd5e1",
+                  boxShadow: `0 0 40px ${accent}30`,
                 }}
               >
                 {photo ? (
@@ -109,9 +128,10 @@ export async function GET(req: NextRequest) {
                 ) : (
                   <div
                     style={{
-                      fontSize: "96px",
+                      fontSize: "120px",
                       fontWeight: "900",
                       color: accent,
+                      letterSpacing: "-0.05em",
                     }}
                   >
                     {name.charAt(0)}
@@ -120,44 +140,47 @@ export async function GET(req: NextRequest) {
               </div>
             </div>
 
-            {/* Right: Info */}
-            <div style={{ display: "flex", flexDirection: "column", flex: 1, justifyContent: "center" }}>
+            {/* Right: Premium Typography */}
+            <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
               <div
                 style={{
-                  fontSize: "22px",
+                  fontSize: "24px",
                   color: accent,
                   fontWeight: "bold",
                   textTransform: "uppercase",
-                  letterSpacing: "0.25em",
-                  marginBottom: "16px",
+                  letterSpacing: "0.4em",
+                  marginBottom: "24px",
+                  opacity: 0.8,
                 }}
               >
-                Exclusive Digital Card
+                Digital Profile
               </div>
               <div
                 style={{
-                  fontSize: "88px",
+                  fontSize: "102px",
                   fontWeight: "900",
                   color: textPrimary,
-                  marginBottom: "4px",
-                  letterSpacing: "-0.051em",
-                  lineHeight: 1.05,
+                  marginBottom: "8px",
+                  letterSpacing: "-0.06em",
+                  lineHeight: 0.9,
                 }}
               >
                 {name}
               </div>
               <div
                 style={{
-                  fontSize: "38px",
-                  fontWeight: "500",
+                  fontSize: "42px",
+                  fontWeight: "400",
                   color: textPrimary,
-                  opacity: 0.9,
-                  marginBottom: "28px",
+                  opacity: 0.7,
+                  marginBottom: "40px",
                   letterSpacing: "-0.02em",
+                  fontStyle: "italic",
                 }}
               >
                 {title}
               </div>
+              
               <div
                 style={{
                   display: "flex",
@@ -166,26 +189,41 @@ export async function GET(req: NextRequest) {
               >
                 <div
                   style={{
-                    height: "2px",
-                    width: "50px",
+                    height: "1px",
+                    width: "60px",
                     backgroundColor: accent,
-                    marginRight: "16px",
+                    marginRight: "20px",
                   }}
                 />
                 <div
                   style={{
-                    fontSize: "28px",
+                    fontSize: "30px",
                     fontWeight: "600",
                     color: textPrimary,
-                    opacity: 0.45,
-                    letterSpacing: "0.02em",
+                    opacity: 0.4,
+                    letterSpacing: "0.05em",
                   }}
                 >
-                  {company}
+                  {company === "Genezisi" ? "" : company}
                 </div>
               </div>
             </div>
           </div>
+
+          {/* Glass Overlay Shine */}
+          <div
+            style={{
+              position: "absolute",
+              top: "-50%",
+              left: "-20%",
+              width: "140%",
+              height: "200%",
+              backgroundImage: isDark
+                ? "linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.03) 50%, transparent 55%)"
+                : "linear-gradient(45deg, transparent 45%, rgba(0,0,0,0.02) 50%, transparent 55%)",
+              transform: "rotate(30deg)",
+            }}
+          />
         </div>
       ),
       {
