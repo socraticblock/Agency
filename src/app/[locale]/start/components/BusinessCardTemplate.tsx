@@ -43,6 +43,7 @@ export function BusinessCardTemplate({
   ownerName,
   onPatch,
   onPreviewLangChange,
+  hideBranding = false,
 }: {
   state: Lane1CustomizerState;
   previewLang: "primary" | "secondary";
@@ -52,6 +53,7 @@ export function BusinessCardTemplate({
   onPatch?: (p: Partial<Lane1CustomizerState>) => void;
   /** Bilingual preview: EN / GE in header (§2.2). */
   onPreviewLangChange?: (lang: "primary" | "secondary") => void;
+  hideBranding?: boolean;
 }) {
   const editable = Boolean(onPatch);
   const vars = resolveStyleVariables(state.style);
@@ -604,14 +606,19 @@ export function BusinessCardTemplate({
             style={{ borderColor: "var(--accent-secondary)" }}
           >
             <p>
-              © {new Date().getFullYear()} {ownerName || "—"}. Built by{" "}
-              <Link
-                href={homeHref}
-                className="font-semibold underline"
-                style={{ color: "var(--accent)" }}
-              >
-                Genezisi
-              </Link>
+              © {new Date().getFullYear()} {ownerName || "—"}.
+              {!hideBranding && (
+                <>
+                  {" "}Built by{" "}
+                  <Link
+                    href={homeHref}
+                    className="font-semibold underline"
+                    style={{ color: "var(--accent)" }}
+                  >
+                    Genezisi
+                  </Link>
+                </>
+              )}
             </p>
           </footer>
         </section>

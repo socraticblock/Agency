@@ -47,6 +47,7 @@ export default function PreviewPage({ params }: { params: { locale: string } }) 
           previewLang="primary"
           homeHref={homeHref}
           ownerName={state.name}
+          hideBranding={true}
         />
       </div>
 
