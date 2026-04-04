@@ -255,10 +255,11 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
       )}
       {state.secondaryMode === "pro" ? (
         <div
-          className="border-b px-4 py-2.5 text-center text-xs leading-snug text-slate-600"
+          className="border-b px-4 py-2.5 text-center text-xs leading-snug opacity-70"
           style={{
             borderColor: "var(--accent-secondary)",
             background: "color-mix(in srgb, var(--accent) 7%, transparent)",
+            color: "var(--text-primary)"
           }}
         >
           Georgian translation will be added after your order is confirmed.
@@ -600,7 +601,10 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.25, ease: "easeInOut" }}
                       >
-                        <div className="border-t border-black/5 p-3 pt-0 text-sm leading-relaxed text-slate-600">
+                        <div 
+                          className="border-t border-black/5 p-3 pt-0 text-sm leading-relaxed opacity-70"
+                          style={{ color: "var(--text-primary)" }}
+                        >
                           <InlineEditable
                             value={desc}
                             onChange={(v) => setServiceDescriptionLine(i, v)}

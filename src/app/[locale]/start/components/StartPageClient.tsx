@@ -14,6 +14,7 @@ import { LANE1_BASE_GEL, computeLane1Total } from "../lib/lane1-pricing";
 import { BusinessCardTemplate } from "./BusinessCardTemplate";
 import { SectorGrid } from "./SectorGrid";
 import { StartCustomizer } from "./StartCustomizer";
+import { resolveStyleVariables } from "../lib/presets";
 
 function mergeSectorPlaceholder(
   base: Lane1CustomizerState,
@@ -49,6 +50,7 @@ export function StartPageClient({ locale }: { locale: Locale }) {
     addGoogleMap: state.addGoogleMap,
   });
   const waUrl = buildLane1WhatsAppUrl(state);
+  const vars = resolveStyleVariables(state.style);
 
   useEffect(() => {
     const loaded = loadLane1State();
@@ -101,7 +103,13 @@ export function StartPageClient({ locale }: { locale: Locale }) {
   }, [onBackToSectors]);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10 md:px-6 md:py-14">
+    <div 
+      className="mx-auto max-w-6xl px-4 py-10 md:px-6 md:py-14 transition-colors duration-500 font-sans"
+      style={{
+        ...vars,
+        color: "var(--text-primary)"
+      } as any}
+    >
       <header className="mb-10 max-w-2xl">
         <p className="mb-2 text-[0.75rem] font-bold uppercase tracking-[0.2em] text-[#64748b]">
           Genezisi

@@ -244,7 +244,8 @@ export function StartCustomizer({
         <button
           type="button"
           onClick={onBackToSectors}
-          className="min-h-[44px] text-sm font-semibold text-[#1A2744] underline decoration-[#1A2744]/30 underline-offset-4 transition hover:decoration-[#1A2744] md:min-h-0"
+          className="min-h-[44px] text-sm font-semibold underline underline-offset-4 transition hover:opacity-80 md:min-h-0"
+          style={{ color: "var(--accent)", textDecorationColor: "color-mix(in srgb, var(--accent) 30%, transparent)" }}
         >
           ← Choose sector
         </button>
@@ -256,7 +257,8 @@ export function StartCustomizer({
               sessionStorage.setItem("businessCardPreview", JSON.stringify(state));
               window.open(`/${params.locale}/start/preview`, "_blank");
             }}
-            className="flex items-center gap-2 text-sm font-semibold text-[#1A2744] underline decoration-[#1A2744]/30 underline-offset-4 transition hover:decoration-[#1A2744]"
+            className="flex items-center gap-2 text-sm font-semibold underline underline-offset-4 transition hover:opacity-80"
+            style={{ color: "var(--accent)", textDecorationColor: "color-mix(in srgb, var(--accent) 30%, transparent)" }}
           >
             <Eye className="h-4 w-4" />
             Preview my site
@@ -267,7 +269,8 @@ export function StartCustomizer({
               clearLane1State();
               setState(defaultLane1State());
             }}
-            className="text-xs font-medium text-[#64748b] transition hover:text-[#1e293b]"
+            className="text-xs font-medium opacity-60 transition hover:opacity-100"
+            style={{ color: "var(--text-primary)" }}
           >
             Reset
           </button>
@@ -290,7 +293,8 @@ export function StartCustomizer({
               <input
                 type="radio"
                 name="primaryLang"
-                className="mt-0.5 h-4 w-4 accent-[#1A2744]"
+                className="mt-0.5 h-4 w-4"
+                style={{ accentColor: "var(--accent)" }}
                 checked={state.primaryLang === "en"}
                 onChange={() => patch({ primaryLang: "en" as PrimaryLang })}
               />
