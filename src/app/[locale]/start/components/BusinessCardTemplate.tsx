@@ -65,7 +65,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
 }) {
   const editable = Boolean(onPatch);
   const isResponsive = layoutMode === "responsive";
-  const vars = resolveStyleVariables(state.style);
+  const vars = resolveStyleVariables(state.style) as any;
   const useSecondary =
     previewLang === "secondary" &&
     state.secondaryMode === "self";
