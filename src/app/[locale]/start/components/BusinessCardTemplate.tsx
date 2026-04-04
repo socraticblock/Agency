@@ -44,6 +44,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   onPatch,
   onPreviewLangChange,
   hideBranding = false,
+  layoutMode = "mobile",
 }: {
   state: Lane1CustomizerState;
   previewLang: "primary" | "secondary";
@@ -54,8 +55,11 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   /** Bilingual preview: EN / GE in header (§2.2). */
   onPreviewLangChange?: (lang: "primary" | "secondary") => void;
   hideBranding?: boolean;
+  /** Responsive unlocks Bento grid on desktop. Mobile forces narrow card view. */
+  layoutMode?: "mobile" | "responsive";
 }) {
   const editable = Boolean(onPatch);
+  const isResponsive = layoutMode === "responsive";
   const vars = resolveStyleVariables(state.style);
   const useSecondary =
     previewLang === "secondary" &&
@@ -131,7 +135,9 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
 
   return (
     <div
-      className="business-card-template mx-auto w-full max-w-6xl md:rounded-3xl md:overflow-hidden text-[var(--text-primary)]"
+      className={`business-card-template mx-auto w-full text-[var(--text-primary)] ${
+        isResponsive ? "max-w-6xl md:rounded-3xl md:overflow-hidden" : "max-w-[640px]"
+      }`}
       style={{
         ...vars,
         fontFamily: "var(--font-body)",
@@ -151,7 +157,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
         </div>
       ) : null}
       <div
-        className="business-card-template-font-layer pb-12 md:grid md:grid-cols-12 md:gap-8 md:p-8"
+        className={`business-card-template-font-layer pb-12 ${isResponsive ? "md:grid md:grid-cols-12 md:gap-8 md:p-8" : ""}`}
         style={{ opacity: fontFade }}
       >
         <input
@@ -163,16 +169,16 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
           aria-hidden
         />
         {/* LEFT COLUMN: Identity & Core Details */}
-        <div className="md:col-span-5 lg:col-span-4 md:sticky md:top-8 md:flex md:flex-col md:gap-6">
+        <div className={isResponsive ? "md:col-span-5 lg:col-span-4 md:sticky md:top-8 md:flex md:flex-col md:gap-6" : ""}>
           {/* Section 1 — sticky header */}
           <header
-            className="sticky top-0 z-20 flex flex-wrap items-center justify-between gap-2 border-b px-4 py-3 md:relative md:border-none md:px-0 md:py-0"
+            className={`sticky top-0 z-20 flex flex-wrap items-center justify-between gap-2 border-b px-4 py-3 ${isResponsive ? "md:relative md:border-none md:px-0 md:py-0" : ""}`}
           style={{
             borderColor: "var(--accent)",
             background: "var(--bg-primary)",
           }}
         >
-          <div className="max-w-[min(55%,18rem)] min-w-0 truncate text-sm font-bold leading-tight md:text-base">
+          <div className={`max-w-[min(55%,18rem)] min-w-0 truncate text-sm font-bold leading-tight ${isResponsive ? "md:text-base" : ""}`}>
             <InlineEditable
               value={useSecondary ? state.nameSecondary : state.name}
               onChange={(v) =>
@@ -231,7 +237,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
           </header>
 
           {/* Section 2 — hero */}
-          <section className="px-4 pb-8 pt-8 text-left md:rounded-3xl md:border md:p-6" style={{ borderColor: 'var(--accent-secondary)' }}>
+          <section className={`px-4 pb-8 pt-8 text-left ${isResponsive ? "md:rounded-3xl md:border md:p-6" : ""}`} style={{ borderColor: 'var(--accent-secondary)' }}>
           <div className="flex flex-col items-start gap-4">
             <div
               role={editable ? "button" : undefined}
@@ -283,7 +289,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
             </div>
             <div>
               <h1
-                className="text-2xl font-bold leading-tight md:text-3xl"
+                className={`text-2xl font-bold leading-tight ${isResponsive ? "md:text-3xl" : ""}`}
                 style={headingStyle}
               >
                 <InlineEditable
@@ -355,14 +361,14 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
               Contact Me
             </a>
           </div>
-        </section>
+         </section>
         </div> {/* END LEFT COLUMN */}
 
         {/* RIGHT COLUMN: Content & Add-ons */}
-        <div className="md:col-span-7 lg:col-span-8 md:flex md:flex-col md:gap-6">
+        <div className={isResponsive ? "md:col-span-7 lg:col-span-8 md:flex md:flex-col md:gap-6" : ""}>
           {/* Section 3 — practice areas with icons */}
           <section
-            className="border-t px-4 py-8 md:rounded-3xl md:border md:p-8"
+            className={`border-t px-4 py-8 ${isResponsive ? "md:rounded-3xl md:border md:p-8" : ""}`}
             style={{ borderColor: "var(--accent-secondary)" }}
           >
           <h2
@@ -427,10 +433,10 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
 
         {/* Section 4 — contact + footer */}
         <section
-          className="border-t px-4 py-8 md:rounded-3xl md:border md:p-8"
+          className={`border-t px-4 py-8 ${isResponsive ? "md:rounded-3xl md:border md:p-8" : ""}`}
           style={{ borderColor: "var(--accent-secondary)" }}
         >
-          <div className="space-y-3 text-sm md:text-base">
+          <div className={`space-y-3 text-sm ${isResponsive ? "md:text-base" : ""}`}>
             <div className="flex items-center gap-2 font-semibold">
               <Phone className="h-4 w-4 shrink-0" aria-hidden />
               <InlineEditable
