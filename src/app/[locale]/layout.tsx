@@ -26,8 +26,18 @@ export async function generateMetadata({
     path: "/",
     jobTitle: "Luxury Branding",
     accentColor: "#fbbf24",
+    theme: "dark",
   });
-  return metadata;
+  
+  return {
+    ...metadata,
+    viewport: "width=device-width, initial-scale=1, maximum-scale=5",
+    appleWebApp: {
+      title: SITE_NAME,
+      statusBarStyle: "black-translucent",
+      capable: true,
+    },
+  };
 }
 
 export default async function LocaleLayout({

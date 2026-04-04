@@ -11,9 +11,15 @@ export async function GET(req: NextRequest) {
     const name = searchParams.get("name") || "Genezisi Client";
     const title = searchParams.get("title") || "Professional";
     const company = searchParams.get("company") || "Genezisi";
-    const accent = searchParams.get("accent") || "#fbbf24"; // Default amber-400
-    const textPrimary = searchParams.get("text") || "#ffffff";
-    const bgPrimary = searchParams.get("bg") || "#030712"; // Default slate-950
+    const accent = searchParams.get("accent") || "#fbbf24";
+    const photo = searchParams.get("photo");
+    const theme = searchParams.get("theme") || "dark";
+    
+    const isDark = theme === "dark";
+    const bgPrimary = isDark ? "#030712" : "#f8fafc";
+    const textPrimary = isDark ? "#ffffff" : "#0f172a";
+    const glassBg = isDark ? "rgba(255, 255, 255, 0.03)" : "rgba(0, 0, 0, 0.03)";
+    const glassBorder = isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)";
 
     return new ImageResponse(
       (
@@ -26,7 +32,7 @@ export async function GET(req: NextRequest) {
             alignItems: "center",
             justifyContent: "center",
             backgroundColor: bgPrimary,
-            backgroundImage: `radial-gradient(circle at 25% 25%, ${accent}22 0%, transparent 50%), radial-gradient(circle at 75% 75%, ${accent}11 0%, transparent 50%)`,
+            backgroundImage: `radial-gradient(circle at 15% 15%, ${accent}18 0%, transparent 35%), radial-gradient(circle at 85% 85%, ${accent}12 0%, transparent 35%), radial-gradient(circle at 50% 50%, ${accent}05 0%, transparent 50%)`,
             fontFamily: "sans-serif",
             padding: "40px",
           }}
@@ -37,99 +43,148 @@ export async function GET(req: NextRequest) {
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
-              justifyContent: "space-between",
               width: "100%",
-              maxWidth: "1000px",
-              backgroundColor: "rgba(255, 255, 255, 0.03)",
-              borderRadius: "40px",
-              border: `1px solid ${accent}44`,
-              padding: "60px",
-              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
+              maxWidth: "1050px",
+              backgroundColor: glassBg,
+              borderRadius: "56px",
+              border: `1px solid ${glassBorder}`,
+              padding: "70px",
+              boxShadow: "0 50px 100px -30px rgba(0, 0, 0, 0.6)",
+              position: "relative",
+              overflow: "hidden",
             }}
           >
-            {/* Left Column: Identity */}
-            <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
+            {/* Accent Glow Line */}
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: "15%",
+                right: "15%",
+                height: "3px",
+                background: `linear-gradient(90deg, transparent, ${accent}, transparent)`,
+              }}
+            />
+
+            {/* Left: Photo / Avatar */}
+            <div
+              style={{
+                display: "flex",
+                marginRight: "60px",
+                position: "relative",
+              }}
+            >
+              {/* Subtle Outer Glow for Photo */}
               <div
                 style={{
-                  fontSize: "64px",
+                  position: "absolute",
+                  inset: "-20px",
+                  borderRadius: "140px",
+                  background: `${accent}11`,
+                  filter: "blur(20px)",
+                }}
+              />
+              <div
+                style={{
+                  width: "240px",
+                  height: "240px",
+                  borderRadius: "120px",
+                  border: `6px solid ${accent}`,
+                  overflow: "hidden",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: isDark ? "#1e293b" : "#e2e8f0",
+                }}
+              >
+                {photo ? (
+                  <img
+                    src={photo}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      fontSize: "96px",
+                      fontWeight: "900",
+                      color: accent,
+                    }}
+                  >
+                    {name.charAt(0)}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Right: Info */}
+            <div style={{ display: "flex", flexDirection: "column", flex: 1, justifyContent: "center" }}>
+              <div
+                style={{
+                  fontSize: "22px",
+                  color: accent,
                   fontWeight: "bold",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.25em",
+                  marginBottom: "16px",
+                }}
+              >
+                Exclusive Digital Card
+              </div>
+              <div
+                style={{
+                  fontSize: "88px",
+                  fontWeight: "900",
                   color: textPrimary,
-                  marginBottom: "8px",
-                  letterSpacing: "-0.02em",
+                  marginBottom: "4px",
+                  letterSpacing: "-0.051em",
+                  lineHeight: 1.05,
                 }}
               >
                 {name}
               </div>
               <div
                 style={{
-                  fontSize: "32px",
-                  color: accent,
-                  marginBottom: "24px",
-                  fontWeight: "600",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.1em",
+                  fontSize: "38px",
+                  fontWeight: "500",
+                  color: textPrimary,
+                  opacity: 0.9,
+                  marginBottom: "28px",
+                  letterSpacing: "-0.02em",
                 }}
               >
                 {title}
               </div>
               <div
                 style={{
-                  fontSize: "24px",
-                  color: textPrimary,
-                  opacity: 0.6,
-                }}
-              >
-                {company}
-              </div>
-            </div>
-
-            {/* Right Column: Branding/Logo */}
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-end",
-                justifyContent: "center",
-              }}
-            >
-              <div
-                style={{
                   display: "flex",
-                  width: "120px",
-                  height: "120px",
-                  borderRadius: "30px",
-                  backgroundColor: accent,
                   alignItems: "center",
-                  justifyContent: "center",
                 }}
               >
                 <div
                   style={{
-                    fontSize: "48px",
-                    color: bgPrimary,
-                    fontWeight: "bold",
+                    height: "2px",
+                    width: "50px",
+                    backgroundColor: accent,
+                    marginRight: "16px",
+                  }}
+                />
+                <div
+                  style={{
+                    fontSize: "28px",
+                    fontWeight: "600",
+                    color: textPrimary,
+                    opacity: 0.45,
+                    letterSpacing: "0.02em",
                   }}
                 >
-                  {name.charAt(0)}
+                  {company}
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Footer Branding */}
-          <div
-            style={{
-              position: "absolute",
-              bottom: "40px",
-              right: "40px",
-              display: "flex",
-              alignItems: "center",
-              fontSize: "20px",
-              color: textPrimary,
-              opacity: 0.4,
-            }}
-          >
-            Built by <span style={{ marginLeft: "6px", fontWeight: "bold", color: accent }}>Genezisi</span>
           </div>
         </div>
       ),

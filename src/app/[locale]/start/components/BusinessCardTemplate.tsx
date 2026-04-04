@@ -318,7 +318,11 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
 
   // Phase 6: The Viral Loop (Refer Me)
   const referText = encodeURIComponent(
-    `Exclusive Recommendation: I highly recommend ${state.name} — ${state.title || "Attorney"} at ${ownerName || "Genezisi"}. You can view their elite digital business card here: ${onPatch ? "https://genezisi.com" : (typeof window !== "undefined" ? window.location.href : "")}\n\nExperience high-speed luxury branding.`
+    `Exclusive Recommendation: I highly recommend ${state.name} — ${state.title || "Professional"}. 
+
+You can view their elite digital business card here: ${typeof window !== "undefined" ? window.location.href : "https://genezisi.com"}
+
+Experience high-speed luxury branding.`
   );
   const referHref = `https://wa.me/?text=${referText}`;
 
@@ -462,6 +466,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
                     fileRef.current?.click();
                   }
                 }}
+                aria-label={editable ? "Upload profile photo" : "Profile photo"}
                 className={`business-card-photo group relative h-[180px] w-[180px] shrink-0 overflow-hidden rounded-full border-4 bg-slate-200 ${editable ? "cursor-pointer" : ""
                   } ${photoBusy ? "opacity-70" : ""}`}
                 style={{ borderColor: "var(--accent)" }}
@@ -825,7 +830,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[var(--accent)]"
-                    aria-label="YouTube"
+                    aria-label="Visit YouTube Profile"
                     magneticStrength={10}
                   >
                     <Youtube className="h-6 w-6" />
@@ -945,35 +950,34 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
                     color: "var(--text-primary)",
                     background: "transparent"
                   }}
+                  aria-label={`Refer ${state.name.split(" ")[0] || "me"} via WhatsApp`}
                 >
                   <Send className="h-4 w-4 opacity-70" />
-                  Refer {state.name.split(" ")[0] || "Me"} via WhatsApp
+                  Refer {state.name.split(" ")[0] || "Me"}
                 </MagneticButton>
               </div>
             </div>
-
-            <footer
-              className="mt-10 border-t pt-6 text-center text-xs opacity-80"
-              style={{ borderColor: "var(--accent-secondary)" }}
-            >
-              <p>
-                © {new Date().getFullYear()} {ownerName || "—"}.
-                {!hideBranding && (
-                  <>
-                    {" "}Built by{" "}
-                    <Link
-                      href={homeHref}
-                      className="font-semibold underline"
-                      style={{ color: "var(--accent)" }}
-                    >
-                      Genezisi
-                    </Link>
-                  </>
-                )}
-              </p>
-            </footer>
           </motion.section>
         </div> {/* END RIGHT COLUMN */}
+
+        {/* Subtle Branding Footer — Outside the Card Visual */}
+        {!hideBranding && (
+          <footer
+            className="mt-6 pb-8 text-center text-[10px] uppercase tracking-widest opacity-40 transition-opacity hover:opacity-100"
+            style={{ color: "var(--text-primary)" }}
+          >
+            © {new Date().getFullYear()} {ownerName || "Professional"}. 
+            <span className="mx-2 opacity-50">|</span>
+            Powered by{" "}
+            <Link
+              href={homeHref}
+              className="font-bold hover:underline"
+              style={{ color: "var(--accent)" }}
+            >
+              Genezisi
+            </Link>
+          </footer>
+        )}
 
         {/* Phase 3.2: Hidden QR View for Print Kit (Back of Card) */}
         <div className="qr-code-print-view hidden p-8 text-center" aria-hidden>

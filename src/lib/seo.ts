@@ -13,6 +13,8 @@ interface LocalBusinessOptions {
   addressCountry?: string;
   jobTitle?: string;
   accentColor?: string;
+  photoUrl?: string;
+  theme?: "light" | "dark";
 }
 
 interface SeoResult {
@@ -45,6 +47,8 @@ export function createLocalBusinessSeo(options: LocalBusinessOptions): SeoResult
     addressCountry = "GE",
     jobTitle = "Expert",
     accentColor = "#fbbf24",
+    photoUrl,
+    theme = "dark",
   } = options;
 
   const baseUrl = getBaseUrl().replace(/\/$/, "");
@@ -61,9 +65,12 @@ export function createLocalBusinessSeo(options: LocalBusinessOptions): SeoResult
     name,
     title: jobTitle,
     accent: accentColor,
-    bg: "#030712",
-    text: "#ffffff",
+    theme,
   });
+
+  if (photoUrl) {
+    ogParams.set("photo", photoUrl);
+  }
   
   const ogImageUrl = `${baseUrl}/api/og?${ogParams.toString()}`;
 
