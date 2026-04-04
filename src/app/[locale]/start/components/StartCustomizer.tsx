@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import type { Dispatch, SetStateAction } from "react";
 import type { Lane1CustomizerState, PrimaryLang, SecondaryLangMode } from "../lib/types";
 import { compressImageForLane1Storage } from "../lib/image-compress";
@@ -24,7 +25,7 @@ import {
   TextColorPresetGrid,
 } from "./StylePresetGrids";
 import { CollapsibleSection } from "./CollapsibleSection";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, Eye } from "lucide-react";
 
 const fieldClass = "start-field mt-1.5 w-full";
 const labelClass = "start-label mb-1.5";
@@ -88,6 +89,7 @@ export function StartCustomizer({
   /** Set false when the mobile sheet renders a sticky footer outside. */
   showOrderFooter?: boolean;
 }) {
+  const params = useParams();
   const total = computeLane1Total({
     secondaryMode: state.secondaryMode,
     addGoogleMap: state.addGoogleMap,
@@ -168,16 +170,30 @@ export function StartCustomizer({
         >
           ← Choose sector
         </button>
-        <button
-          type="button"
-          onClick={() => {
-            clearLane1State();
-            setState(defaultLane1State());
-          }}
-          className="text-xs font-medium text-[#64748b] transition hover:text-[#1e293b]"
-        >
-          Reset
-        </button>
+
+        <div className="flex items-center gap-4">
+          <button
+            type="button"
+            onClick={() => {
+              sessionStorage.setItem("businessCardPreview", JSON.stringify(state));
+              window.open(`/${params.locale}/start/preview`, "_blank");
+            }}
+            className="flex items-center gap-2 text-sm font-semibold text-[#1A2744] underline decoration-[#1A2744]/30 underline-offset-4 transition hover:decoration-[#1A2744]"
+          >
+            <Eye className="h-4 w-4" />
+            Preview my site
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              clearLane1State();
+              setState(defaultLane1State());
+            }}
+            className="text-xs font-medium text-[#64748b] transition hover:text-[#1e293b]"
+          >
+            Reset
+          </button>
+        </div>
       </div>
 
       <CollapsibleSection
