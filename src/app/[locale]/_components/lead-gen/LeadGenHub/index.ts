@@ -1,1 +1,1 @@
-export { LeadGenHub } from "./LeadGenHub";
+export { LeadGenHub as default, LeadGenHub } from "./LeadGenHub";

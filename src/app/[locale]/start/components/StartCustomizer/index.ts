@@ -1,1 +1,1 @@
-export { StartCustomizer } from "./StartCustomizer";
+export { StartCustomizer as default, StartCustomizer } from "./StartCustomizer";
