@@ -124,7 +124,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
       }}
       onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}
     >
-      <BackgroundEngine bgEffectId={state.style.bgEffectId} />
+      <BackgroundEngine style={state.style} />
 
       <div className="business-card-noise" aria-hidden /><div className="business-card-glow" aria-hidden />
       
