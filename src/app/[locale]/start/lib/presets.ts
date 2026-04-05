@@ -1,4 +1,36 @@
 import type { CSSProperties } from "react";
+import type { StylePresetSelection } from "./types";
+
+/**
+ * Calculates the relative luminance of a color for accessibility (WCAG 2.0).
+ * Range: 0.0 (Black) to 1.0 (White).
+ */
+function getLuminance(hex: string): number {
+  const h = hex.startsWith("#") ? hex : `#${hex}`;
+  // Basic hex parsing for 6-char hex
+  try {
+    const r = parseInt(h.slice(1, 3), 16) / 255;
+    const g = parseInt(h.slice(3, 5), 16) / 255;
+    const b = parseInt(h.slice(5, 7), 16) / 255;
+
+    const a = [r, g, b].map((v) => {
+      return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    });
+
+    return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+  } catch (e) {
+    return 0.5; // Neutral fallback
+  }
+}
+
+/**
+ * Determines if a color is "dark" based on relative luminance.
+ * Threshold is set to 0.5 (neutral midpoint).
+ */
+export function isDarkColor(hex: string): boolean {
+  if (!hex || !hex.startsWith("#")) return false;
+  return getLuminance(hex) < 0.5;
+}
 
 export interface BackgroundPreset {
   id: string;
@@ -337,39 +369,47 @@ export function isBackgroundLockingTextColor(backgroundId: string): boolean {
   const bg = BACKGROUND_PRESETS.find((p) => p.id === backgroundId);
   return Boolean(bg?.locksTextColor);
 }
-export function resolveStyleVariables(selection: {
-  backgroundId: string;
-  textColorId: string;
-  accentId: string;
-  fontId: string;
-  vibeId: string;
-  animationId: string;
-}): CSSProperties {
-  const bg = BACKGROUND_PRESETS.find((p) => p.id === selection.backgroundId) ?? BACKGROUND_PRESETS[0];
+export function resolveStyleVariables(selection: StylePresetSelection): CSSProperties {
+  const bg = BACKGROUND_PRESETS.find((p) => p.id === selection.backgroundId) ?? BACKGROUND_SOLID_PRESETS[0];
   const txt = TEXT_COLOR_PRESETS.find((p) => p.id === selection.textColorId) ?? TEXT_COLOR_PRESETS[0];
   const acc = ACCENT_PRESETS.find((p) => p.id === selection.accentId) ?? ACCENT_PRESETS[0];
   const font = FONT_PRESETS.find((p) => p.id === selection.fontId) ?? FONT_PRESETS[1];
   const vibe = VIBE_PRESETS.find((p) => p.id === selection.vibeId) ?? VIBE_PRESETS[0];
   const anim = ANIMATION_PRESETS.find((p) => p.id === selection.animationId) ?? ANIMATION_PRESETS[0];
 
-  const textColor =
-    bg.locksTextColor ? bg.pairedTextColor : txt.color;
+  // Logic for Background:
+  // Use custom color if bgType is solid, otherwise use the preset value
+  let backgroundValue = bg.cssValue;
+  let backgroundIsDark = bg.locksTextColor;
+  let textColor = txt.color;
+
+  if (selection.bgType === "solid") {
+    backgroundValue = selection.bgColor1;
+    backgroundIsDark = isDarkColor(selection.bgColor1);
+  }
+
+  // Handle Text Color:
+  // If the background is dark, force light text.
+  // Otherwise use the user's manual textColorId selection.
+  if (backgroundIsDark) {
+    textColor = bg.locksTextColor ? bg.pairedTextColor : "#F1F5F9"; // Fallback to white-ish
+  }
 
   return {
-    ["--bg-primary" as string]: bg.cssValue,
-    ["--text-primary" as string]: textColor,
-    ["--accent" as string]: acc.accent,
-    ["--accent-secondary" as string]: acc.accentSecondary,
-    ["--font-heading" as string]: font.fontHeading,
-    ["--font-body" as string]: font.fontBody,
-    ["--font-heading-weight" as string]: String(font.headingWeight),
-    ["--font-body-weight" as string]: String(font.bodyWeight),
-    ["--glass-blur" as string]: vibe.blur,
-    ["--card-shadow" as string]: vibe.shadow,
-    ["--border-opacity" as string]: String(vibe.borderOpacity),
-    ["--stagger-delay" as string]: String(anim.stagger),
-    ["--entrance-y" as string]: String(anim.entranceY),
-    ["--spring-damping" as string]: String(anim.springDamping),
+    "--bg-primary": backgroundValue,
+    "--text-primary": textColor,
+    "--accent": acc.accent,
+    "--accent-secondary": acc.accentSecondary,
+    "--font-heading": font.fontHeading,
+    "--font-body": font.fontBody,
+    "--font-heading-weight": String(font.headingWeight),
+    "--font-body-weight": String(font.bodyWeight),
+    "--glass-blur": vibe.blur,
+    "--card-shadow": vibe.shadow,
+    "--border-opacity": String(vibe.borderOpacity),
+    "--stagger-delay": String(anim.stagger),
+    "--entrance-y": String(anim.entranceY),
+    "--spring-damping": String(anim.springDamping),
   } as CSSProperties;
 }
 

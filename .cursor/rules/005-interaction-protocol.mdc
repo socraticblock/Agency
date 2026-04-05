@@ -1,0 +1,15 @@
+---
+description: Interaction behavior for questions and deployments
+globs: "*"
+alwaysApply: true
+---
+
+# 005: INTERACTION PROTOCOL
+
+## 1. Question-First Behavior
+- **Constraint**: If the user asks a question (as opposed to giving a direct command to code/fix), you MUST only reply with text first.
+- **No Implicit Deployment**: Do NOT start running terminal commands, generating images, or modifying code as a side-effect of answering a question unless clearly requested.
+- **Clarification**: If a question implies a follow-up action, wait for explicit user consent before proceeding with tool calls.
+
+## 2. Deployment Boundaries
+- **Consent**: Never perform a "deployment-style" action (major code changes, environment modifications, or external service calls) without a text-based confirmation if the task was initiated by a query/investigation.

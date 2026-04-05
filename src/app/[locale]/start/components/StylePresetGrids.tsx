@@ -2,7 +2,7 @@
 
 import { memo } from "react";
 
-import { Check } from "lucide-react";
+import { Check, Plus } from "lucide-react";
 import type {
   AccentPreset,
   BackgroundPreset,
@@ -39,11 +39,17 @@ export const BackgroundSolidPresetGrid = memo(function BackgroundSolidPresetGrid
   options,
   value,
   onChange,
+  onCustomColorChange,
+  customColor,
 }: {
   options: BackgroundPreset[];
   value: string;
-  onChange: (id: string) => void;
+  onChange: (id: string, hex?: string) => void;
+  onCustomColorChange: (hex: string) => void;
+  customColor: string;
 }) {
+  const isCustom = value === "custom";
+  
   return (
     <fieldset className="space-y-2">
       <legend className="start-label mb-1 block">Solid backgrounds</legend>
@@ -61,7 +67,7 @@ export const BackgroundSolidPresetGrid = memo(function BackgroundSolidPresetGrid
               role="radio"
               aria-checked={onSel}
               aria-label={p.labelEn}
-              onClick={() => onChange(p.id)}
+              onClick={() => onChange(p.id, p.cssValue)}
               className={`${chipBase} ${chipSelected(onSel)} min-h-[72px] touch-manipulation`}
             >
               <SwatchCheck show={onSel} />
@@ -75,6 +81,41 @@ export const BackgroundSolidPresetGrid = memo(function BackgroundSolidPresetGrid
             </button>
           );
         })}
+
+        {/* Custom Color Picker */}
+        <div className="relative group">
+          <button
+            type="button"
+            role="radio"
+            aria-checked={isCustom}
+            aria-label="Custom color"
+            className={`${chipBase} ${chipSelected(isCustom)} w-full min-h-[72px] touch-manipulation`}
+            onClick={() => {
+              // Trigger hidden input
+              const el = document.getElementById("bg-color-picker");
+              if (el) el.click();
+            }}
+          >
+            <SwatchCheck show={isCustom} />
+            <div
+              className="flex h-11 w-full min-h-[44px] items-center justify-center rounded-md border border-black/[0.06] bg-slate-50 shadow-inner sm:h-9"
+              style={{ background: isCustom ? customColor : undefined }}
+            >
+              {!isCustom && <Plus className="h-4 w-4 text-[#64748b]" />}
+            </div>
+            <span className="text-[0.65rem] font-medium leading-tight text-[#475569]">
+              {isCustom ? customColor.toUpperCase() : "Custom"}
+            </span>
+          </button>
+          <input
+            id="bg-color-picker"
+            type="color"
+            value={customColor}
+            onChange={(e) => onCustomColorChange(e.target.value)}
+            className="sr-only"
+            aria-label="Pick background color"
+          />
+        </div>
       </div>
     </fieldset>
   );

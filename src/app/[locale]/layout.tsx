@@ -1,7 +1,13 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { createLocalBusinessSeo } from "@/lib/seo";
 import type { Locale } from "@/lib/i18n";
 import { LangSetter } from "@/components/providers/LangSetter";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
 
 const SITE_NAME = "Genezisi";
 const SITE_DESCRIPTION =
@@ -31,7 +37,6 @@ export async function generateMetadata({
   
   return {
     ...metadata,
-    viewport: "width=device-width, initial-scale=1, maximum-scale=5",
     appleWebApp: {
       title: SITE_NAME,
       statusBarStyle: "black-translucent",

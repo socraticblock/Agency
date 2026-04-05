@@ -121,10 +121,33 @@ export function StartCustomizer({
   }
 
   const onBackgroundChange = useCallback(
-    (backgroundId: string) => {
+    (backgroundId: string, hex?: string) => {
+      setState((s) => {
+        const isGradient = BACKGROUND_GRADIENT_PRESETS.some(p => p.id === backgroundId);
+        return {
+          ...s,
+          style: { 
+            ...s.style, 
+            backgroundId,
+            bgType: isGradient ? "linear" : "solid",
+            bgColor1: hex || s.style.bgColor1
+          },
+        };
+      });
+    },
+    [setState],
+  );
+
+  const onCustomColorChange = useCallback(
+    (hex: string) => {
       setState((s) => ({
         ...s,
-        style: { ...s.style, backgroundId },
+        style: { 
+          ...s.style, 
+          backgroundId: "custom",
+          bgType: "solid",
+          bgColor1: hex 
+        },
       }));
     },
     [setState],
@@ -691,6 +714,8 @@ export function StartCustomizer({
           options={BACKGROUND_SOLID_PRESETS}
           value={state.style.backgroundId}
           onChange={onBackgroundChange}
+          customColor={state.style.bgColor1}
+          onCustomColorChange={onCustomColorChange}
         />
         <BackgroundGradientPresetGrid
           options={BACKGROUND_GRADIENT_PRESETS}
