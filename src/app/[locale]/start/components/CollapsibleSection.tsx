@@ -42,19 +42,11 @@ export function CollapsibleSection({
         onClick={onToggle}
         aria-expanded={isOpen}
       >
-        <h3 
-          className="start-panel-heading transition-colors"
-          style={{ 
-            color: "var(--text-primary)"
-          }}
-        >
-          {title}
-        </h3>
+        <h3 className="start-panel-heading transition-colors">{title}</h3>
         <ChevronDown
-          className={`h-5 w-5 shrink-0 transition-all duration-200 ease-out ${
+          className={`h-5 w-5 shrink-0 text-[var(--start-text-muted)] transition-all duration-200 ease-out ${
             isOpen ? "rotate-180" : ""
           }`}
-          style={{ color: "var(--text-primary)", opacity: 0.6 }}
           aria-hidden
         />
       </button>

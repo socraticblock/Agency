@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback, useMemo, type CSSProperties } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { MessageCircle, Pencil } from "lucide-react";
 import { acquireBodyScrollLock } from "@/lib/bodyScrollLock";
@@ -62,12 +62,15 @@ export function StartPageClient({ locale }: { locale: Locale }) {
   }, []);
 
   return (
-    <div 
-      className="mx-auto max-w-6xl px-4 py-10 md:px-6 md:py-14 transition-colors duration-500 font-sans"
-      style={{
-        ...vars,
-        color: "var(--text-primary)"
-      } as any}
+    <div
+      className="mx-auto max-w-6xl px-4 py-10 font-sans transition-colors duration-500 md:px-6 md:py-14"
+      style={
+        {
+          /* Card preview sets its own tokens; keep accent in sync for sidebar links & inputs */
+          "--accent": (vars as Record<string, string | number>)["--accent"],
+          "--accent-secondary": (vars as Record<string, string | number>)["--accent-secondary"],
+        } as CSSProperties
+      }
     >
       <header className="mb-10 max-w-2xl">
         <p className="mb-2 text-[0.75rem] font-bold uppercase tracking-[0.2em] text-[#64748b]">

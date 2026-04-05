@@ -16,10 +16,12 @@
 }
 
 .start-shell {
-  --start-bg: var(--bg-primary, #faf8f5);
-  --start-text: var(--text-primary, #020617);
-  --start-text-muted: color-mix(in srgb, var(--text-primary, #020617) 65%, transparent);
-  --start-caption: color-mix(in srgb, var(--text-primary, #020617) 50%, transparent);
+  /* Editor chrome: fixed contrast — never follow card `--text-primary` (dark cards use light text). */
+  --start-bg: #f8fafc;
+  --start-text: #0f172a;
+  --start-text-muted: #475569;
+  --start-caption: #64748b;
+  /* Theming: accent may be overridden on a child wrapper for pickers / links */
   --start-accent: var(--accent, #1a2744);
   --start-accent-gold: #c5a55a;
   --start-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);

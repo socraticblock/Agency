@@ -78,7 +78,7 @@ export function SectionsLayoutSection({ state, patch, isOpen, onToggle }: Sectio
       </fieldset>
 
       {atCapacity && (
-        <p className="mt-2 text-xs opacity-70" style={{ color: "var(--text-primary)" }}>
+        <p className="mt-2 text-xs text-[var(--start-caption)]">
           Maximum of four sections enabled. Turn one off to add another.
         </p>
       )}

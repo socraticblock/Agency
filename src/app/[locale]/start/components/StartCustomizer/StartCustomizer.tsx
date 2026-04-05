@@ -111,8 +111,7 @@ export function StartCustomizer({
               clearLane1State();
               setState(defaultLane1State());
             }}
-            className="text-xs font-medium opacity-60 transition hover:opacity-100"
-            style={{ color: "var(--text-primary)" }}
+            className="text-xs font-medium text-[var(--start-caption)] transition hover:text-[var(--start-text)]"
           >
             Reset
           </button>
