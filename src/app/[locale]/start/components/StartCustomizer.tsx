@@ -25,8 +25,8 @@ import { clearLane1State } from "../lib/customizer-store";
 import { defaultLane1State } from "../lib/types";
 import {
   AccentPresetGrid,
-  BackgroundGradientPresetGrid,
-  BackgroundSolidPresetGrid,
+  BackgroundBaseControls,
+  BackgroundOverlayControls,
   FontPresetGrid,
   TextColorPresetGrid,
   VibePresetGrid,
@@ -120,17 +120,41 @@ export function StartCustomizer({
     setOpenSection((current) => (current === sectionId ? null : sectionId));
   }
 
+  const onBackgroundStylePatch = useCallback(
+    (p: Partial<Lane1CustomizerState["style"]>) => {
+      setState((s) => ({
+        ...s,
+        style: { ...s.style, ...p },
+      }));
+    },
+    [setState],
+  );
+
   const onBackgroundChange = useCallback(
     (backgroundId: string, hex?: string) => {
       setState((s) => {
-        const isGradient = BACKGROUND_GRADIENT_PRESETS.some(p => p.id === backgroundId);
+        const grad = BACKGROUND_GRADIENT_PRESETS.find(p => p.id === backgroundId);
+        if (grad) {
+          // It's a gradient preset - set it as an overlay
+          return {
+            ...s,
+            style: { 
+              ...s.style, 
+              backgroundId,
+              bgOverlayId: "linear",
+              bgOverlayColor1: "#FAF8F5", // We would ideally parse this, but for now we set a premium default
+              bgOverlayColor2: "#F0ECE6",
+              bgOverlayOpacity: 0.8
+            },
+          };
+        }
         return {
           ...s,
           style: { 
             ...s.style, 
             backgroundId,
-            bgType: isGradient ? "linear" : "solid",
-            bgColor1: hex || s.style.bgColor1
+            bgBaseId: "solid",
+            bgBaseColor: hex || s.style.bgBaseColor
           },
         };
       });
@@ -145,8 +169,8 @@ export function StartCustomizer({
         style: { 
           ...s.style, 
           backgroundId: "custom",
-          bgType: "solid",
-          bgColor1: hex 
+          bgBaseId: "solid",
+          bgBaseColor: hex 
         },
       }));
     },
@@ -709,18 +733,16 @@ export function StartCustomizer({
         isOpen={openSection === "background"}
         onToggle={() => toggleSection("background")}
       >
-        <p className="start-caption">§8.1–8.2 — solids and subtle gradients.</p>
-        <BackgroundSolidPresetGrid
-          options={BACKGROUND_SOLID_PRESETS}
-          value={state.style.backgroundId}
-          onChange={onBackgroundChange}
-          customColor={state.style.bgColor1}
-          onCustomColorChange={onCustomColorChange}
+        <p className="start-caption">Layer your background with high-end effects.</p>
+        
+        <BackgroundBaseControls 
+          state={state}
+          onPatch={onBackgroundStylePatch}
         />
-        <BackgroundGradientPresetGrid
-          options={BACKGROUND_GRADIENT_PRESETS}
-          value={state.style.backgroundId}
-          onChange={onBackgroundChange}
+
+        <BackgroundOverlayControls 
+          state={state}
+          onPatch={onBackgroundStylePatch}
         />
         {!textLocked ? (
           <TextColorPresetGrid

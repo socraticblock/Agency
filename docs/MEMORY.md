@@ -17,3 +17,4 @@
 - Max 4 toggleable sections per card
 - Pre-built typography packs (no individual sliders)
 - Pre-built button styles (no mixing)
+- Language Strategy: English first; avoid automated Georgian (human translation later)

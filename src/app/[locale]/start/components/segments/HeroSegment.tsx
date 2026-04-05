@@ -173,7 +173,7 @@ export function HeroSegment({
           </div>
         </div>
 
-        <div className={`w-full space-y-1 transition-all bg-[var(--bg-primary)] relative z-10 pt-4 ${
+        <div className={`w-full space-y-1 transition-all bg-transparent relative z-10 pt-4 ${
           photoAlignment === "center" ? "text-center" : "text-left"
         }`}>
           <h1

@@ -7,7 +7,8 @@ export type PhotoEffect = "none" | "bw" | "sepia" | "cool" | "high-contrast" | "
 export type PhotoOverlay = "none" | "gradient-fade" | "color-tint" | "dark-vignette";
 export type PhotoBorder = "none" | "thin-ring" | "thick-ring" | "glow-ring" | "double-frame" | "gradient-border";
 
-export type BackgroundType = "solid" | "linear" | "radial" | "mesh" | "image";
+export type BackgroundBaseType = "solid";
+export type BackgroundOverlayType = "none" | "solid" | "linear" | "radial" | "mesh";
 export type TextureId = "none" | "fine-grain" | "coarse-grain" | "dot-grid" | "diagonal-lines" | "cross-hatch" | "waves" | "geometric" | "topographic";
 export type BackgroundEffectId = "none" | "ambient-glow" | "floating-orbs" | "gradient-shift" | "vignette" | "light-leak";
 
@@ -50,13 +51,15 @@ export interface StylePresetSelection {
   photoBorder: PhotoBorder;
   photoAlignment: "left" | "center";
 
-  // Phase 3: Background
-  bgType: BackgroundType;
-  bgColor1: string;
-  bgColor2: string;
-  bgAngle: number;
-  bgImage: string | null;
-  bgBlur: number;
+  // Phase 3: Background Layered System
+  bgBaseId: BackgroundBaseType;
+  bgBaseColor: string;
+  bgBaseBlur: number;
+  bgOverlayId: BackgroundOverlayType;
+  bgOverlayColor1: string;
+  bgOverlayColor2: string;
+  bgOverlayColor3: string;
+  bgOverlayAngle: number;
   bgOverlayOpacity: number;
   textureId: TextureId;
   textureOpacity: number;
@@ -182,14 +185,16 @@ export function defaultLane1State(): Lane1CustomizerState {
       photoBorder: "none",
       photoAlignment: "left",
 
-      // Phase 3 Defaults
-      bgType: "solid",
-      bgColor1: "#ffffff",
-      bgColor2: "#f8fafc",
-      bgAngle: 180,
-      bgImage: null,
-      bgBlur: 0,
-      bgOverlayOpacity: 0,
+      // Phase 3 Defaults (Layered)
+      bgBaseId: "solid",
+      bgBaseColor: "#ffffff",
+      bgBaseBlur: 0,
+      bgOverlayId: "none",
+      bgOverlayColor1: "#1A2744",
+      bgOverlayColor2: "#2D3F5E",
+      bgOverlayColor3: "#C5A55A",
+      bgOverlayAngle: 180,
+      bgOverlayOpacity: 0.5,
       textureId: "none",
       textureOpacity: 5,
       bgEffectId: "none",

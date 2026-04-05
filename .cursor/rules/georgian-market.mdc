@@ -9,6 +9,7 @@ alwaysApply: true
 - Primary market: Tbilisi, Georgia
 - Mobile-first (80%+ traffic on mobile)
 - Must test on Samsung Internet browser
-- Bilingual: Georgian (primary) + English
+- Primary language: English (Standard)
+- Georgian Translation: Use human translation later (no automated / AI Georgian)
 - WhatsApp is the primary communication platform
 - Product is a premium digital business card at 450₾

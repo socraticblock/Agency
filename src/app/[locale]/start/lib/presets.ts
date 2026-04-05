@@ -377,26 +377,50 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
   const vibe = VIBE_PRESETS.find((p) => p.id === selection.vibeId) ?? VIBE_PRESETS[0];
   const anim = ANIMATION_PRESETS.find((p) => p.id === selection.animationId) ?? ANIMATION_PRESETS[0];
 
-  // Logic for Background:
-  // Use custom color if bgType is solid, otherwise use the preset value
-  let backgroundValue = bg.cssValue;
-  let backgroundIsDark = bg.locksTextColor;
-  let textColor = txt.color;
+  // 1. Resolve Base Layer
+  const baseColorValue = selection.bgBaseColor;
 
-  if (selection.bgType === "solid") {
-    backgroundValue = selection.bgColor1;
-    backgroundIsDark = isDarkColor(selection.bgColor1);
+  // 2. Resolve Overlay Layer
+  let overlayImageValue = "none";
+  let overlayColorValue = "transparent";
+
+  if (selection.bgOverlayId === "linear") {
+    overlayImageValue = `linear-gradient(${selection.bgOverlayAngle}deg, ${selection.bgOverlayColor1}, ${selection.bgOverlayColor2})`;
+  } else if (selection.bgOverlayId === "radial") {
+    overlayImageValue = `radial-gradient(circle at center, ${selection.bgOverlayColor1}, ${selection.bgOverlayColor2})`;
+  } else if (selection.bgOverlayId === "mesh") {
+    // High-end organic mesh blend using 3 colors
+    overlayImageValue = `
+      radial-gradient(at 0% 0%, ${selection.bgOverlayColor1} 0%, transparent 50%),
+      radial-gradient(at 100% 0%, ${selection.bgOverlayColor2} 0%, transparent 50%),
+      radial-gradient(at 50% 100%, ${selection.bgOverlayColor3} 0%, transparent 50%)
+    `.trim();
+  } else if (selection.bgOverlayId === "solid") {
+    overlayColorValue = selection.bgOverlayColor1;
   }
 
-  // Handle Text Color:
-  // If the background is dark, force light text.
-  // Otherwise use the user's manual textColorId selection.
+  // 3. Composition
+  const backgroundImage = overlayImageValue;
+
+  // 4. Contrast Logic (Improved)
+  // Determine if the total background is "dark"
+  // If overlay is active and has > 40% opacity, we factor in its color
+  let backgroundIsDark = isDarkColor(baseColorValue);
+  if (selection.bgOverlayId !== "none" && selection.bgOverlayOpacity > 0.4) {
+    backgroundIsDark = isDarkColor(selection.bgOverlayColor1);
+  }
+
+  let textColor = txt.color;
   if (backgroundIsDark) {
-    textColor = bg.locksTextColor ? bg.pairedTextColor : "#F1F5F9"; // Fallback to white-ish
+    textColor = "#F1F5F9"; // Force light text for dark backgrounds
   }
 
   return {
-    "--bg-primary": backgroundValue,
+    "--bg-image-overlay": overlayImageValue,
+    "--bg-overlay-color": overlayColorValue,
+    "--bg-color": baseColorValue,
+    "--bg-primary": baseColorValue,
+    "--bg-overlay-opacity": selection.bgOverlayId === "none" ? "0" : String(selection.bgOverlayOpacity),
     "--text-primary": textColor,
     "--accent": acc.accent,
     "--accent-secondary": acc.accentSecondary,

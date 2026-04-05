@@ -84,17 +84,7 @@
 }
 
 /* Phase 3.1 — Dark Mode Auto-Sync (Elite Upgrade) */
-@media (prefers-color-scheme: dark) {
-  .business-card-template {
-    /** 
-     * Default dark mode fallbacks for light themes.
-     * We remove !important to allow the customizer's inline styles to win.
-     */
-    --bg-primary: #0F172A;
-    --text-primary: #F1F5F9;
-    --accent-secondary: rgba(255, 255, 255, 0.1);
-  }
-}
+/* We remove the hardcoded media query override to ensure the customizer state is the absolute source of truth. */
 
 /* Phase 3.2 — Elite Print Kit (Cardstock Optimized) */
 @media print {

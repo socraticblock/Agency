@@ -107,9 +107,24 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
 
   return (
     <div className={`business-card-template relative mx-auto w-full text-[var(--text-primary)] ${isResponsive ? "max-w-6xl md:rounded-3xl" : "max-w-[640px]"}`}
-      style={{ ...vars, fontFamily: "var(--font-body)", background: "var(--bg-primary)" }}
+      style={{ ...vars, fontFamily: "var(--font-body)", backgroundColor: "var(--bg-color)" }}
       onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}
     >
+      {/* Layered Background Engine */}
+      <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none rounded-[inherit]">
+        {/* Composite Overlay Layer (Gradient, Mesh, or Solid Tint) */}
+        <div 
+          className="absolute inset-0"
+          style={{ 
+            backgroundImage: "var(--bg-image-overlay)",
+            backgroundColor: "var(--bg-overlay-color)",
+            opacity: "var(--bg-overlay-opacity)",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+      </div>
+
       <div className="business-card-noise" aria-hidden /><div className="business-card-glow" aria-hidden />
       
       {state.secondaryMode === "pro" && (

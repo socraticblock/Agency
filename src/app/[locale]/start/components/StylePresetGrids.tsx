@@ -3,6 +3,7 @@
 import { memo } from "react";
 
 import { Check, Plus } from "lucide-react";
+import type { Lane1CustomizerState } from "../lib/types";
 import type {
   AccentPreset,
   BackgroundPreset,
@@ -15,7 +16,8 @@ import type {
   PhotoBorderPreset,
   PhotoOverlayPreset,
 } from "../lib/presets";
-import * as LucideIcons from "lucide-react";
+import { BACKGROUND_SOLID_PRESETS } from "../lib/presets";
+import { Circle } from "lucide-react";
 
 const chipBase =
   "relative flex flex-col items-center gap-1.5 rounded-xl border p-2 text-center transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1A2744]";
@@ -35,136 +37,155 @@ function SwatchCheck({ show }: { show: boolean }) {
   );
 }
 
-export const BackgroundSolidPresetGrid = memo(function BackgroundSolidPresetGrid({
-  options,
-  value,
-  onChange,
-  onCustomColorChange,
-  customColor,
+const BackgroundBaseControls = memo(function BackgroundBaseControls({
+  state,
+  onPatch,
 }: {
-  options: BackgroundPreset[];
-  value: string;
-  onChange: (id: string, hex?: string) => void;
-  onCustomColorChange: (hex: string) => void;
-  customColor: string;
+  state: Lane1CustomizerState;
+  onPatch: (p: Partial<Lane1CustomizerState["style"]>) => void;
 }) {
-  const isCustom = value === "custom";
-  
+  const { bgBaseColor } = state.style;
+
   return (
-    <fieldset className="space-y-2">
-      <legend className="start-label mb-1 block">Solid backgrounds</legend>
-      <div
-        className="grid grid-cols-2 gap-2 sm:grid-cols-4"
-        role="radiogroup"
-        aria-label="Solid backgrounds"
-      >
-        {options.map((p) => {
-          const onSel = value === p.id;
+    <div className="space-y-4">
+      <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Base Color</span>
+      {/* Curated Swatches */}
+      <div className="grid grid-cols-4 gap-2">
+        {BACKGROUND_SOLID_PRESETS.map((p) => {
+          const onSel = bgBaseColor === p.cssValue;
           return (
             <button
               key={p.id}
-              type="button"
-              role="radio"
-              aria-checked={onSel}
-              aria-label={p.labelEn}
-              onClick={() => onChange(p.id, p.cssValue)}
-              className={`${chipBase} ${chipSelected(onSel)} min-h-[72px] touch-manipulation`}
+              onClick={() => onPatch({ bgBaseColor: p.cssValue, backgroundId: p.id })}
+              className={`${chipBase} ${chipSelected(onSel)} min-h-0 !p-1.5`}
+              title={p.labelEn}
             >
-              <SwatchCheck show={onSel} />
-              <div
-                className="h-11 w-full min-h-[44px] rounded-md border border-black/[0.06] shadow-inner sm:h-9"
-                style={{ background: p.cssValue }}
-              />
-              <span className="text-[0.65rem] font-medium leading-tight text-[#475569]">
-                {p.labelEn}
-              </span>
+              <div className="h-8 w-full rounded-md border border-black/5" style={{ background: p.cssValue }} />
             </button>
           );
         })}
-
-        {/* Custom Color Picker */}
-        <div className="relative group">
+        {/* Custom Hex Picker */}
+        <div className="relative">
           <button
-            type="button"
-            role="radio"
-            aria-checked={isCustom}
-            aria-label="Custom color"
-            className={`${chipBase} ${chipSelected(isCustom)} w-full min-h-[72px] touch-manipulation`}
-            onClick={() => {
-              // Trigger hidden input
-              const el = document.getElementById("bg-color-picker");
-              if (el) el.click();
-            }}
+            onClick={() => document.getElementById("bg-base-hex")?.click()}
+            className={`${chipBase} ${chipSelected(false)} min-h-0 !p-1.5 w-full`}
           >
-            <SwatchCheck show={isCustom} />
-            <div
-              className="flex h-11 w-full min-h-[44px] items-center justify-center rounded-md border border-black/[0.06] bg-slate-50 shadow-inner sm:h-9"
-              style={{ background: isCustom ? customColor : undefined }}
+            <div 
+              className="flex h-8 w-full items-center justify-center rounded-md border border-dashed border-slate-300" 
+              style={{ background: bgBaseColor }}
             >
-              {!isCustom && <Plus className="h-4 w-4 text-[#64748b]" />}
+              <Plus className="h-3 w-3 text-slate-400" />
             </div>
-            <span className="text-[0.65rem] font-medium leading-tight text-[#475569]">
-              {isCustom ? customColor.toUpperCase() : "Custom"}
-            </span>
           </button>
-          <input
-            id="bg-color-picker"
-            type="color"
-            value={customColor}
-            onChange={(e) => onCustomColorChange(e.target.value)}
-            className="sr-only"
-            aria-label="Pick background color"
+          <input 
+            id="bg-base-hex" 
+            type="color" 
+            className="sr-only" 
+            value={bgBaseColor} 
+            onChange={(e) => onPatch({ bgBaseColor: e.target.value, backgroundId: "custom" })} 
           />
         </div>
       </div>
-    </fieldset>
+    </div>
   );
 });
 
-export const BackgroundGradientPresetGrid = memo(function BackgroundGradientPresetGrid({
-  options,
-  value,
-  onChange,
+const BackgroundOverlayControls = memo(function BackgroundOverlayControls({
+  state,
+  onPatch,
 }: {
-  options: BackgroundPreset[];
-  value: string;
-  onChange: (id: string) => void;
+  state: Lane1CustomizerState;
+  onPatch: (p: Partial<Lane1CustomizerState["style"]>) => void;
 }) {
+  const { bgOverlayId, bgOverlayColor1, bgOverlayColor2, bgOverlayColor3, bgOverlayAngle, bgOverlayOpacity } = state.style;
+
   return (
-    <fieldset className="space-y-2">
-      <legend className="start-label mb-1 block">Gradients</legend>
-      <div
-        className="grid grid-cols-2 gap-2 sm:grid-cols-4"
-        role="radiogroup"
-        aria-label="Gradient backgrounds"
-      >
-        {options.map((p) => {
-          const onSel = value === p.id;
-          return (
-            <button
-              key={p.id}
-              type="button"
-              role="radio"
-              aria-checked={onSel}
-              aria-label={p.labelEn}
-              onClick={() => onChange(p.id)}
-              className={`${chipBase} ${chipSelected(onSel)} min-h-[88px] touch-manipulation`}
-            >
-              <SwatchCheck show={onSel} />
-              <div
-                className="h-14 w-full min-h-[56px] rounded-md border border-black/[0.06] shadow-inner sm:h-12"
-                style={{ background: p.cssValue }}
-              />
-              <span className="text-[0.65rem] font-medium leading-tight text-[#475569]">
-                {p.labelEn}
-              </span>
-            </button>
-          );
-        })}
+    <div className="space-y-6 pt-4 border-t border-slate-100 mt-6">
+      <div className="flex items-center justify-between">
+        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Overlay Decor</span>
+        <span className="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded font-mono">Optional</span>
       </div>
-    </fieldset>
+
+      {/* Overlay Type Selector */}
+      <div className="grid grid-cols-5 gap-1.5 p-1 bg-slate-100 rounded-xl">
+        {(["none", "solid", "linear", "radial", "mesh"] as const).map((t) => (
+          <button
+            key={t}
+            onClick={() => onPatch({ bgOverlayId: t })}
+            className={`py-1.5 text-[10px] font-bold rounded-lg transition-all capitalize ${
+              bgOverlayId === t ? "bg-white shadow-sm text-[#1A2744]" : "text-slate-500 hover:bg-slate-50"
+            }`}
+          >
+            {t}
+          </button>
+        ))}
+      </div>
+
+      {bgOverlayId !== "none" && (
+        <div className="space-y-5 animate-in fade-in slide-in-from-top-2">
+          {/* Color Pickers */}
+          <div className="flex items-center gap-3">
+            <div className="space-y-1.5 flex-1">
+              <span className="text-[10px] font-bold text-slate-400 uppercase ml-1">Colors</span>
+              <div className="flex gap-2">
+                <input 
+                  type="color" 
+                  value={bgOverlayColor1} 
+                  onChange={(e) => onPatch({ bgOverlayColor1: e.target.value })}
+                  className="h-8 w-12 rounded-md border border-white shadow-sm cursor-pointer"
+                />
+                {bgOverlayId !== "solid" && (
+                  <input 
+                    type="color" 
+                    value={bgOverlayColor2} 
+                    onChange={(e) => onPatch({ bgOverlayColor2: e.target.value })}
+                    className="h-8 w-12 rounded-md border border-white shadow-sm cursor-pointer"
+                  />
+                )}
+                {bgOverlayId === "mesh" && (
+                  <input 
+                    type="color" 
+                    value={bgOverlayColor3} 
+                    onChange={(e) => onPatch({ bgOverlayColor3: e.target.value })}
+                    className="h-8 w-12 rounded-md border border-white shadow-sm cursor-pointer"
+                  />
+                )}
+              </div>
+            </div>
+
+            {bgOverlayId === "linear" && (
+              <div className="space-y-1.5 w-1/3">
+                <span className="text-[10px] font-bold text-slate-400 uppercase ml-1">Angle</span>
+                <input 
+                  type="number" min="0" max="360" 
+                  value={bgOverlayAngle} 
+                  onChange={(e) => onPatch({ bgOverlayAngle: parseInt(e.target.value) })}
+                  className="h-8 w-full rounded-md border border-slate-200 bg-white text-xs font-bold text-center"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Opacity Slider */}
+          <div className="p-3 bg-slate-50/50 rounded-xl border border-slate-100 space-y-3">
+            <div className="flex justify-between text-[11px] font-bold text-slate-500 uppercase tracking-tighter">
+              <span>Effect Opacity</span>
+              <span>{Math.round(bgOverlayOpacity * 100)}%</span>
+            </div>
+            <input 
+              type="range" min="0" max="1" step="0.01" 
+              value={bgOverlayOpacity} 
+              onChange={(e) => onPatch({ bgOverlayOpacity: parseFloat(e.target.value) })}
+              className="w-full accent-[#1A2744]"
+            />
+          </div>
+        </div>
+      )}
+    </div>
   );
 });
+
+export { BackgroundBaseControls, BackgroundOverlayControls };
 
 export const TextColorPresetGrid = memo(function TextColorPresetGrid({
   options,
@@ -425,7 +446,7 @@ export const PhotoShapePresetGrid = memo(function PhotoShapePresetGrid({
       <div className="grid grid-cols-5 gap-2" role="radiogroup">
         {options.map((p) => {
           const onSel = value === p.id;
-          const Icon = (LucideIcons as any)[p.icon] || LucideIcons.Circle;
+          const Icon = Circle;
           return (
             <button
               key={p.id}
