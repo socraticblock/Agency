@@ -11,6 +11,7 @@ import type {
   TextColorPreset,
   VibePreset,
   AnimationPreset,
+  ButtonStylePreset,
   PhotoShapePreset,
   PhotoEffectPreset,
   PhotoBorderPreset,
@@ -335,18 +336,22 @@ export const AccentPresetGrid = memo(function AccentPresetGrid({
   options,
   value,
   onChange,
+  legend = "Accent",
+  groupAriaLabel = "Accent color",
 }: {
   options: AccentPreset[];
   value: string;
   onChange: (id: string) => void;
+  legend?: string;
+  groupAriaLabel?: string;
 }) {
   return (
     <fieldset className="space-y-2">
-      <legend className="start-label mb-1 block">Accent</legend>
+      <legend className="start-label mb-1 block">{legend}</legend>
       <div
         className="grid grid-cols-2 gap-3 sm:grid-cols-4"
         role="radiogroup"
-        aria-label="Accent color"
+        aria-label={groupAriaLabel}
       >
         {options.map((p) => {
           const onSel = value === p.id;
@@ -492,7 +497,7 @@ export const AnimationPresetGrid = memo(function AnimationPresetGrid({
     <fieldset className="space-y-2">
       <legend className="start-label mb-1 block">Movement</legend>
       <div
-        className="grid grid-cols-3 gap-2"
+        className="grid grid-cols-2 gap-2 sm:grid-cols-4"
         role="radiogroup"
         aria-label="Animation presets"
       >
@@ -518,6 +523,46 @@ export const AnimationPresetGrid = memo(function AnimationPresetGrid({
               <span className="text-[0.65rem] font-medium leading-tight text-[#475569]">
                 {p.labelEn}
               </span>
+            </button>
+          );
+        })}
+      </div>
+    </fieldset>
+  );
+});
+
+export const ButtonStyleGrid = memo(function ButtonStyleGrid({
+  options,
+  value,
+  onChange,
+}: {
+  options: ButtonStylePreset[];
+  value: string;
+  onChange: (id: string) => void;
+}) {
+  return (
+    <fieldset className="space-y-2">
+      <legend className="start-label mb-1 block">Button shape</legend>
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3" role="radiogroup" aria-label="Button styles">
+        {options.map((p) => {
+          const onSel = value === p.id;
+          return (
+            <button
+              key={p.id}
+              type="button"
+              role="radio"
+              aria-checked={onSel}
+              aria-label={p.labelEn}
+              className={`${chipBase} ${chipSelected(onSel)} min-h-[72px]`}
+              onClick={() => onChange(p.id)}
+            >
+              <SwatchCheck show={onSel} />
+              <span
+                className={`mx-auto h-8 w-[70%] border-2 border-[#1A2744] bg-[#1A2744]/10 ${
+                  p.id === "sharp" ? "rounded-none" : p.id === "luxury" ? "rounded-xl" : p.id === "minimal" ? "rounded-md" : "rounded-lg"
+                }`}
+              />
+              <span className="text-[0.65rem] font-medium leading-tight text-[#475569]">{p.labelEn}</span>
             </button>
           );
         })}

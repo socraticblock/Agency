@@ -4,6 +4,7 @@ import { Phone, MessageCircle } from "lucide-react";
 import { MagneticButton } from "../../../_components/MagneticButton";
 import type { Lane1CustomizerState } from "../../lib/types";
 import type { CSSProperties } from "react";
+import { lane1CtaPrimarySurface, lane1CtaSecondarySurface } from "../../lib/button-styles";
 
 interface CtaSegmentProps {
   state: Lane1CustomizerState;
@@ -21,13 +22,21 @@ export function CtaSegment({ state, headingStyle }: CtaSegmentProps) {
     return digits ? `https://wa.me/${digits}` : "#";
   }
 
+  const btnId = state.style.buttonStyleId;
+  const primary = lane1CtaPrimarySurface(btnId);
+  const secondary = lane1CtaSecondarySurface(btnId);
+
   return (
-    <section className="px-4 py-6 flex flex-col gap-3 bg-transparent relative z-10">
+    <section className="relative z-10 flex flex-col gap-3 bg-transparent px-4 py-6">
       <MagneticButton
         as="a"
         href={telHref(state.phone)}
-        className="inline-flex min-h-[56px] w-full items-center justify-center rounded-xl px-6 py-4 text-base font-bold text-white shadow-xl transition-all hover:opacity-90 active:scale-[0.98]"
-        style={{ background: "var(--accent)", ...headingStyle }}
+        className={primary.className}
+        style={
+          primary.filledAccent
+            ? { background: "var(--accent)", ...headingStyle }
+            : { ...headingStyle }
+        }
       >
         <Phone className="mr-2 h-5 w-5" />
         {state.ctaTextCall || "Call Me"}
@@ -38,8 +47,12 @@ export function CtaSegment({ state, headingStyle }: CtaSegmentProps) {
         href={waHref(state.phone)}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex min-h-[56px] w-full items-center justify-center rounded-xl border-2 px-6 py-4 text-base font-bold transition-all hover:bg-black/5 active:scale-[0.98]"
-        style={{ borderColor: "var(--accent)", color: "var(--accent)", ...headingStyle }}
+        className={secondary.className}
+        style={{
+          borderColor: "var(--accent)",
+          color: "var(--accent)",
+          ...headingStyle,
+        }}
       >
         <MessageCircle className="mr-2 h-5 w-5" />
         {state.ctaTextWhatsApp || "WhatsApp Me"}

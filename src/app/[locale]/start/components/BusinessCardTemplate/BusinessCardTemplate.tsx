@@ -7,14 +7,15 @@ import { CtaSegment } from "../segments/CtaSegment";
 import { SectionDispatcher } from "../segments/SectionDispatcher";
 import { ContactSegment } from "../segments/ContactSegment";
 import { SocialSegment } from "../segments/SocialSegment";
+import { QrOnCardSegment } from "../segments/QrOnCardSegment";
 import { UtilitySegments } from "../segments/UtilitySegments";
 import { BrandingFooter } from "../segments/BrandingFooter";
-import { containerVariants, itemVariants } from "../../lib/animations";
+import { buildItemVariants, containerVariants } from "../../lib/animations";
 import { usePwaMetadata } from "../../lib/usePwaMetadata";
 import { useCardTilt } from "../../lib/useCardTilt";
 import { Scale, Briefcase, Building2, Sparkles } from "lucide-react";
 import type { Lane1CustomizerState } from "../../lib/types";
-import { resolveStyleVariables } from "../../lib/presets";
+import { ANIMATION_PRESETS, resolveStyleVariables } from "../../lib/presets";
 import { compressImageForLane1Storage } from "../../lib/image-compress";
 import "../business-card-template.css";
 import { BackgroundEngine } from "./BackgroundEngine";
@@ -44,7 +45,10 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   const isResponsive = layoutMode === "responsive";
   const vars = resolveStyleVariables(state.style) as any;
   const useSecondary = previewLang === "secondary" && state.secondaryMode === "self";
-  const { rotateX, rotateY, handleMouseMove, handleMouseLeave } = useCardTilt(isResponsive);
+  const { rotateX, rotateY, handleMouseMove, handleMouseLeave } = useCardTilt(isResponsive, {
+    enabled: state.cardTiltEnabled,
+    maxDeg: state.cardTiltMaxDeg,
+  });
   usePwaMetadata(state, vars);
 
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
@@ -99,16 +103,28 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   const headingStyle: CSSProperties = { fontFamily: "var(--font-heading)", fontWeight: "var(--font-heading-weight)" as any, color: "var(--text-primary)" };
   const bodyStyle: CSSProperties = { fontFamily: "var(--font-body)", fontWeight: "var(--font-body-weight)" as any, color: "var(--text-primary)" };
 
-  const entranceY = vars["--entrance-y"];
-  const springDamping = vars["--spring-damping"];
-  const customItemVariants = itemVariants(entranceY, springDamping);
+  const animPreset =
+    ANIMATION_PRESETS.find((a) => a.id === state.style.animationId) ??
+    ANIMATION_PRESETS.find((x) => x.id === "fade")!;
+  const speed = Math.max(0.5, Math.min(1.75, state.style.animationSpeed / 100));
+  const customItemVariants = buildItemVariants(state.style.animationId, state.style.animationSpeed);
+  const hoverLayerClass =
+    isResponsive && state.cardHoverEffectId !== "none"
+      ? `business-card-hover-${state.cardHoverEffectId}`
+      : "";
 
   return (
-    <div className={`business-card-template relative mx-auto w-full text-[var(--text-primary)] ${isResponsive ? "max-w-6xl md:rounded-3xl" : "max-w-[640px]"}`}
-      style={{ ...vars, fontFamily: "var(--font-body)", backgroundColor: "var(--bg-color)" }}
+    <div className={`business-card-template relative mx-auto w-full text-[var(--text-primary)] ${isResponsive ? "max-w-6xl" : "max-w-[640px]"}`}
+      style={{
+        ...vars,
+        fontFamily: "var(--font-body)",
+        backgroundColor: "var(--bg-color)",
+        borderRadius: "var(--card-radius)",
+        boxShadow: "var(--card-chrome-shadow)",
+      }}
       onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}
     >
-      <BackgroundEngine />
+      <BackgroundEngine bgEffectId={state.style.bgEffectId} />
 
       <div className="business-card-noise" aria-hidden /><div className="business-card-glow" aria-hidden />
       
@@ -118,8 +134,12 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
         </div>
       )}
 
-      <motion.div className={`pb-12 ${isResponsive ? "md:p-8" : ""}`}
-        variants={containerVariants} initial="hidden" animate="show" custom={vars["--stagger-delay"]}
+      <motion.div
+        className={`pb-12 ${isResponsive ? "md:p-8" : ""} ${hoverLayerClass}`}
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+        custom={animPreset.stagger / speed}
       >
         <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onPhotoPicked} />
         
@@ -163,6 +183,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
 
         <ContactSegment state={state} editable={editable} useSecondary={useSecondary} isResponsive={isResponsive} patch={patch} bodyStyle={bodyStyle} itemVariants={customItemVariants} glassStyle={glassStyle} />
         <SocialSegment state={state} isResponsive={isResponsive} itemVariants={customItemVariants} />
+        <QrOnCardSegment state={state} qrDataUrl={qrDataUrl} itemVariants={customItemVariants} isResponsive={isResponsive} />
 
         <UtilitySegments 
           state={state} 

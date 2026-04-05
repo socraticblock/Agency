@@ -1,105 +1,138 @@
 "use client";
 
+import { cloneElement, type ReactElement, type ReactNode } from "react";
 import { motion } from "framer-motion";
-import { Facebook, Instagram, Linkedin, Youtube, Twitter, Github } from "lucide-react";
+import { Facebook, Instagram, Linkedin, Youtube, type LucideIcon } from "lucide-react";
 import type { Lane1CustomizerState } from "../../lib/types";
 import { MagneticButton } from "../../../_components/MagneticButton";
+import {
+  socialIconColorVar,
+  socialIconFillStyle,
+  socialIconFrameClass,
+  socialIconPixelSize,
+} from "../../lib/social-appearance";
 
 interface SocialSegmentProps {
   state: Lane1CustomizerState;
   isResponsive: boolean;
-  itemVariants: any;
+  itemVariants: import("framer-motion").Variants;
 }
 
-export function SocialSegment({
+function SocialIconLink({
   state,
-  isResponsive,
-  itemVariants,
-}: SocialSegmentProps) {
-  const showSocial = (url: string) => url?.trim().length > 0;
+  href,
+  label,
+  icon,
+}: {
+  state: Lane1CustomizerState;
+  href: string;
+  label: string;
+  icon: ReactElement;
+}) {
+  const px = socialIconPixelSize(state.socialIconSize);
+  const color = socialIconColorVar(state);
+  const stroke = socialIconFillStyle(state.socialIconStyle);
+  const frame = socialIconFrameClass(state.socialIconStyle);
+  const roundedBg =
+    state.socialIconStyle === "rounded"
+      ? ({ background: "color-mix(in srgb, var(--accent) 12%, transparent)" } as const)
+      : undefined;
+
+  return (
+    <MagneticButton
+      as="a"
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex flex-col items-center gap-1"
+      style={{ color }}
+      aria-label={label}
+      magneticStrength={10}
+    >
+      <span className={frame} style={roundedBg}>
+        {cloneElement(icon as ReactElement<{ size?: number; strokeWidth?: number }>, {
+          size: px,
+          ...stroke,
+        })}
+      </span>
+      {state.showSocialLabels ? <span className="max-w-[5rem] text-center text-[0.65rem] font-semibold leading-tight">{label}</span> : null}
+    </MagneticButton>
+  );
+}
+
+export function SocialSegment({ state, isResponsive, itemVariants }: SocialSegmentProps) {
+  const show = (u: string) => u?.trim().length > 0;
+  const px = socialIconPixelSize(state.socialIconSize);
+  const color = socialIconColorVar(state);
+
+  const items: { ok: boolean; node: ReactNode }[] = [
+    {
+      ok: show(state.social.facebook),
+      node: (
+        <SocialIconLink state={state} href={state.social.facebook} label="Facebook" icon={<Facebook />} />
+      ),
+    },
+    {
+      ok: show(state.social.instagram),
+      node: (
+        <SocialIconLink state={state} href={state.social.instagram} label="Instagram" icon={<Instagram />} />
+      ),
+    },
+    {
+      ok: show(state.social.linkedin),
+      node: (
+        <SocialIconLink state={state} href={state.social.linkedin} label="LinkedIn" icon={<Linkedin />} />
+      ),
+    },
+    {
+      ok: show(state.social.tiktok),
+      node: (
+        <MagneticButton
+          as="a"
+          href={state.social.tiktok}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex flex-col items-center gap-1 font-black"
+          style={{ color, fontSize: px * 0.55 }}
+          aria-label="TikTok"
+          magneticStrength={10}
+        >
+          <span className={socialIconFrameClass(state.socialIconStyle)}>TT</span>
+          {state.showSocialLabels ? <span className="text-[0.65rem] font-semibold">TikTok</span> : null}
+        </MagneticButton>
+      ),
+    },
+    {
+      ok: show(state.social.youtube),
+      node: (
+        <SocialIconLink state={state} href={state.social.youtube} label="YouTube" icon={<Youtube />} />
+      ),
+    },
+  ];
 
   return (
     <motion.section
       variants={itemVariants}
-      className={`px-4 py-6 border-t flex flex-wrap items-center justify-center gap-6 ${isResponsive ? "md:rounded-3xl md:border md:p-8" : ""}`}
+      className={`flex flex-wrap items-center justify-center gap-6 border-t px-4 py-6 ${isResponsive ? "md:rounded-3xl md:border md:p-8" : ""}`}
       style={{ borderColor: "var(--accent-secondary)" }}
     >
-      {showSocial(state.social.facebook) && (
-        <MagneticButton
-          as="a"
-          href={state.social.facebook}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[var(--accent)]"
-          aria-label="Facebook"
-          magneticStrength={10}
-        >
-          <Facebook className="h-7 w-7" />
-        </MagneticButton>
-      )}
-      {showSocial(state.social.instagram) && (
-        <MagneticButton
-          as="a"
-          href={state.social.instagram}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[var(--accent)]"
-          aria-label="Instagram"
-          magneticStrength={10}
-        >
-          <Instagram className="h-7 w-7" />
-        </MagneticButton>
-      )}
-      {showSocial(state.social.linkedin) && (
-        <MagneticButton
-          as="a"
-          href={state.social.linkedin}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[var(--accent)]"
-          aria-label="LinkedIn"
-          magneticStrength={10}
-        >
-          <Linkedin className="h-7 w-7" />
-        </MagneticButton>
-      )}
-      {showSocial(state.social.tiktok) && (
-        <a
-          href={state.social.tiktok}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[var(--accent)]"
-          aria-label="TikTok"
-        >
-          <span className="text-sm font-black">TT</span>
-        </a>
-      )}
-      {showSocial(state.social.youtube) && (
-        <MagneticButton
-          as="a"
-          href={state.social.youtube}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[var(--accent)]"
-          aria-label="YouTube Profile"
-          magneticStrength={10}
-        >
-          <Youtube className="h-7 w-7" />
-        </MagneticButton>
-      )}
+      {items.filter((x) => x.ok).map((x, i) => (
+        <span key={i}>{x.node}</span>
+      ))}
       {state.social.extra.map((e, i) =>
         e.url?.trim() ? (
           <a
-            key={i}
+            key={`ex-${i}`}
             href={e.url.trim()}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs font-bold uppercase tracking-widest underline underline-offset-4"
-            style={{ color: "var(--accent)" }}
+            className="flex flex-col items-center gap-1 text-center text-xs font-bold uppercase tracking-widest underline underline-offset-4"
+            style={{ color }}
           >
             {e.label || "Link"}
+            {state.showSocialLabels ? <span className="text-[0.6rem] font-normal normal-case opacity-70">Extra</span> : null}
           </a>
-        ) : null
+        ) : null,
       )}
     </motion.section>
   );

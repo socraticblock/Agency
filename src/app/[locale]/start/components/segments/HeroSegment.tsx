@@ -63,7 +63,12 @@ export function HeroSegment({
     photoOverlay = "none",
     photoBorder = "none",
     photoAlignment = "left",
+    photoKenBurns = false,
   } = style as any;
+
+  const cssGrainDataUrl = `url("data:image/svg+xml,${encodeURIComponent(
+    `<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='noiseFilter'><feTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23noiseFilter)'/></svg>`,
+  )}")`;
 
   const shapeClass = ({
     circle: "rounded-full aspect-square w-[180px]",
@@ -122,7 +127,9 @@ export function HeroSegment({
           onClick={() => editable && !photoBusy && fileRef.current?.click()}
         >
           {state.photoDataUrl ? (
-            <div className="h-full w-full overflow-hidden">
+            <div
+              className={`h-full w-full overflow-hidden ${photoKenBurns ? "business-card-hero-ken" : ""}`}
+            >
                <Image
                  key={state.photoDataUrl?.slice(0, 64) || "empty"}
                  src={state.photoDataUrl}
@@ -165,7 +172,10 @@ export function HeroSegment({
               <div className="absolute inset-0 bg-[var(--accent)] mix-blend-multiply opacity-60" />
             )}
             {photoEffect === "film-grain" && (
-              <div className="absolute inset-0 opacity-20 mix-blend-overlay" style={{ backgroundImage: `url('https://www.transparenttextures.com/patterns/black-thread.png')` }} />
+              <div
+                className="absolute inset-0 opacity-[0.22] mix-blend-overlay"
+                style={{ backgroundImage: cssGrainDataUrl, backgroundSize: "220px 220px" }}
+              />
             )}
             {photoEffect === "fade-to-white" && (
               <div className="absolute inset-0 shadow-[inset_0_0_40px_var(--bg-primary)]" />

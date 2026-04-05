@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import type { Dispatch, SetStateAction } from "react";
 import type { Lane1CustomizerState } from "../../lib/types";
@@ -15,9 +15,13 @@ import { PhotoSection } from "./PhotoSection";
 import { ServicesSection } from "./ServicesSection";
 import { SocialSection } from "./SocialSection";
 import { BackgroundSection } from "./BackgroundSection";
-import { AccentSection, FontSection, ExperienceSection } from "./StyleSections";
+import { AccentSection, FontSection, ButtonStyleSection, ExperienceSection } from "./StyleSections";
 import { AddonsSection } from "./AddonsSection";
 import { IdentitySection } from "./IdentitySection";
+import { ThemePresetsSection } from "./ThemePresetsSection";
+import { CardChromeSection } from "./CardChromeSection";
+import { SectionsLayoutSection } from "./SectionsLayoutSection";
+import { SectionsContentSection } from "./SectionsContentSection";
 
 export function StartCustomizer({
   state,
@@ -36,6 +40,20 @@ export function StartCustomizer({
   });
 
   const [openSection, setOpenSection] = useState<string | null>("content"); // Default to first section open
+  const [toast, setToast] = useState("");
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  function showToast(message: string) {
+    setToast(message);
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToast(""), 2600);
+  }
+
+  useEffect(() => {
+    return () => {
+      if (toastTimer.current) clearTimeout(toastTimer.current);
+    };
+  }, []);
 
   function patch(p: Partial<Lane1CustomizerState>) {
     setState((s) => ({ ...s, ...p }));
@@ -64,7 +82,15 @@ export function StartCustomizer({
   const waUrl = buildLane1WhatsAppUrl(state);
 
   return (
-    <div className="space-y-4 pb-4 md:space-y-6 md:pb-8">
+    <div className="relative space-y-4 pb-4 md:space-y-6 md:pb-8">
+      {toast ? (
+        <div
+          className="fixed bottom-6 left-1/2 z-50 max-w-sm -translate-x-1/2 rounded-xl border border-black/10 bg-[#0f172a] px-4 py-2.5 text-center text-sm font-medium text-white shadow-lg"
+          role="status"
+        >
+          {toast}
+        </div>
+      ) : null}
       <div className="flex flex-wrap items-center justify-end gap-3 px-0.5">
         <div className="flex items-center gap-4">
           <button
@@ -98,6 +124,10 @@ export function StartCustomizer({
       <PhotoSection {...sectionProps} isOpen={openSection === "photo"} onToggle={() => toggleSection("photo")} />
       
       <ServicesSection {...sectionProps} isOpen={openSection === "services"} onToggle={() => toggleSection("services")} />
+
+      <SectionsLayoutSection {...sectionProps} isOpen={openSection === "sections"} onToggle={() => toggleSection("sections")} />
+
+      <SectionsContentSection {...sectionProps} isOpen={openSection === "sections-content"} onToggle={() => toggleSection("sections-content")} />
       
       <SocialSection {...sectionProps} isOpen={openSection === "social"} onToggle={() => toggleSection("social")} />
       
@@ -106,12 +136,29 @@ export function StartCustomizer({
       <AccentSection {...sectionProps} onPatch={onBackgroundStylePatch} isOpen={openSection === "accent"} onToggle={() => toggleSection("accent")} />
       
       <FontSection {...sectionProps} onPatch={onBackgroundStylePatch} isOpen={openSection === "font"} onToggle={() => toggleSection("font")} />
+
+      <ButtonStyleSection {...sectionProps} onPatch={onBackgroundStylePatch} isOpen={openSection === "buttons"} onToggle={() => toggleSection("buttons")} />
       
       <ExperienceSection {...sectionProps} onPatch={onBackgroundStylePatch} isOpen={openSection === "experience"} onToggle={() => toggleSection("experience")} />
       
       <AddonsSection {...sectionProps} isOpen={openSection === "addons"} onToggle={() => toggleSection("addons")} />
+
+      <ThemePresetsSection
+        state={state}
+        setState={setState}
+        showToast={showToast}
+        isOpen={openSection === "themes"}
+        onToggle={() => toggleSection("themes")}
+      />
+
+      <CardChromeSection
+        state={state}
+        onPatch={onBackgroundStylePatch}
+        isOpen={openSection === "card-chrome"}
+        onToggle={() => toggleSection("card-chrome")}
+      />
       
-      <IdentitySection state={state} isOpen={openSection === "identity"} onToggle={() => toggleSection("identity")} />
+      <IdentitySection {...sectionProps} isOpen={openSection === "identity"} onToggle={() => toggleSection("identity")} />
 
       {showOrderFooter ? (
         <div className="start-glass-heavy space-y-4 p-4 md:p-6">

@@ -123,6 +123,24 @@ export function ContentSection({
         />
       </label>
       <label className={labelClass}>
+        CTA — Call button label
+        <input
+          className={fieldClass}
+          value={state.ctaTextCall}
+          onChange={(e) => patch({ ctaTextCall: e.target.value })}
+          placeholder="Call Me"
+        />
+      </label>
+      <label className={labelClass}>
+        CTA — WhatsApp button label
+        <input
+          className={fieldClass}
+          value={state.ctaTextWhatsApp}
+          onChange={(e) => patch({ ctaTextWhatsApp: e.target.value })}
+          placeholder="WhatsApp Me"
+        />
+      </label>
+      <label className={labelClass}>
         Email
         <input
           className={fieldClass}

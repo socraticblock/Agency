@@ -1,7 +1,22 @@
 import { CollapsibleSection } from "../CollapsibleSection";
-import { AccentPresetGrid, FontPresetGrid, VibePresetGrid, AnimationPresetGrid } from "../StylePresetGrids";
-import { ACCENT_PRESETS, FONT_PRESETS, VIBE_PRESETS, ANIMATION_PRESETS } from "../../lib/presets";
+import {
+  AccentPresetGrid,
+  FontPresetGrid,
+  VibePresetGrid,
+  AnimationPresetGrid,
+  ButtonStyleGrid,
+} from "../StylePresetGrids";
+import {
+  ACCENT_PRESETS,
+  TYPOGRAPHY_PACK_PRESETS,
+  TYPOGRAPHY_TO_LEGACY_FONT,
+  BUTTON_STYLE_PRESETS,
+  VIBE_PRESETS,
+  ANIMATION_PRESETS,
+} from "../../lib/presets";
+import type { ButtonStyleId, Lane1CustomizerState, TypographyPackId } from "../../lib/types";
 import { type SectionProps } from "./types";
+import { Phase5ExperienceControls } from "./Phase5ExperienceControls";
 
 export function AccentSection({ state, onPatch, isOpen, onToggle }: SectionProps & { onPatch: any }) {
   return (
@@ -15,6 +30,15 @@ export function AccentSection({ state, onPatch, isOpen, onToggle }: SectionProps
         options={ACCENT_PRESETS}
         value={state.style.accentId}
         onChange={(id: string) => onPatch({ accentId: id })}
+        legend="Primary accent"
+        groupAriaLabel="Primary accent color"
+      />
+      <AccentPresetGrid
+        options={ACCENT_PRESETS}
+        value={state.style.secondaryAccentId}
+        onChange={(id: string) => onPatch({ secondaryAccentId: id })}
+        legend="Secondary accent"
+        groupAriaLabel="Secondary accent color"
       />
     </CollapsibleSection>
   );
@@ -24,20 +48,46 @@ export function FontSection({ state, onPatch, isOpen, onToggle }: SectionProps &
   return (
     <CollapsibleSection
       id="font"
-      title="Font style"
+      title="Typography"
       isOpen={isOpen}
       onToggle={onToggle}
     >
+      <p className="start-caption mb-2">Eight pre-built packs control heading and body fonts on the card.</p>
       <FontPresetGrid
-        options={FONT_PRESETS}
-        value={state.style.fontId}
-        onChange={(id: string) => onPatch({ fontId: id })}
+        options={TYPOGRAPHY_PACK_PRESETS}
+        value={state.style.typographyPackId}
+        onChange={(id: string) => {
+          const pack = id as TypographyPackId;
+          onPatch({
+            typographyPackId: pack,
+            fontId: TYPOGRAPHY_TO_LEGACY_FONT[pack],
+          });
+        }}
       />
     </CollapsibleSection>
   );
 }
 
-export function ExperienceSection({ state, onPatch, isOpen, onToggle }: SectionProps & { onPatch: any }) {
+export function ButtonStyleSection({ state, onPatch, isOpen, onToggle }: SectionProps & { onPatch: any }) {
+  return (
+    <CollapsibleSection id="buttons" title="Buttons" isOpen={isOpen} onToggle={onToggle}>
+      <p className="start-caption mb-2">Call-to-action, share, and map buttons share this style.</p>
+      <ButtonStyleGrid
+        options={BUTTON_STYLE_PRESETS}
+        value={state.style.buttonStyleId}
+        onChange={(id: string) => onPatch({ buttonStyleId: id as ButtonStyleId })}
+      />
+    </CollapsibleSection>
+  );
+}
+
+export function ExperienceSection({
+  state,
+  patch,
+  onPatch,
+  isOpen,
+  onToggle,
+}: SectionProps & { onPatch: (p: Partial<Lane1CustomizerState["style"]>) => void }) {
   return (
     <CollapsibleSection
       id="experience"
@@ -58,6 +108,7 @@ export function ExperienceSection({ state, onPatch, isOpen, onToggle }: SectionP
         value={state.style.animationId}
         onChange={(id: string) => onPatch({ animationId: id })}
       />
+      <Phase5ExperienceControls state={state} patch={patch} onStylePatch={onPatch} />
     </CollapsibleSection>
   );
 }

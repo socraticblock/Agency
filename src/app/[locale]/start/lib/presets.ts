@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
-import type { StylePresetSelection } from "./types";
+import type { ButtonStyleId, CardShadowId, StylePresetSelection, TypographyPackId } from "./types";
+import { textureBackgroundImage, textureBackgroundSize } from "./texture-presets";
 
 /**
  * Calculates the relative luminance of a color for accessibility (WCAG 2.0).
@@ -91,6 +92,8 @@ export interface AnimationPreset {
   stagger: number;
   entranceY: number;
   springDamping: number;
+  /** Drives `buildItemVariants` behavior */
+  flavor: "fade" | "spring" | "spring-blur" | "scale";
 }
 
 export interface PhotoShapePreset {
@@ -311,6 +314,117 @@ export const FONT_PRESETS: FontPreset[] = [
   },
 ];
 
+/** Roadmap typography packs — drives `--font-heading` / `--font-body` via `typographyPackId`. */
+export interface TypographyPackPreset extends FontPreset {
+  id: TypographyPackId;
+}
+
+export const TYPOGRAPHY_PACK_PRESETS: TypographyPackPreset[] = [
+  {
+    id: "classic",
+    labelKa: "კლასიკური",
+    labelEn: "Classic",
+    fontHeading:
+      "var(--font-playfair), 'Noto Serif Georgian', Georgia, serif",
+    fontBody: "var(--font-inter), 'Noto Sans Georgian', system-ui, sans-serif",
+    headingWeight: 700,
+    bodyWeight: 400,
+  },
+  {
+    id: "modern",
+    labelKa: "თანამედროვე",
+    labelEn: "Modern",
+    fontHeading: "var(--font-space), 'Noto Sans Georgian', system-ui, sans-serif",
+    fontBody: "var(--font-inter), 'Noto Sans Georgian', system-ui, sans-serif",
+    headingWeight: 600,
+    bodyWeight: 400,
+  },
+  {
+    id: "editorial",
+    labelKa: "რედაქციული",
+    labelEn: "Editorial",
+    fontHeading:
+      "var(--font-playfair), 'Noto Serif Georgian', Georgia, serif",
+    fontBody: "var(--font-inter), 'Noto Sans Georgian', system-ui, sans-serif",
+    headingWeight: 600,
+    bodyWeight: 400,
+  },
+  {
+    id: "bold",
+    labelKa: "მძიმე",
+    labelEn: "Bold",
+    fontHeading: "var(--font-inter), 'Noto Sans Georgian', system-ui, sans-serif",
+    fontBody: "var(--font-inter), 'Noto Sans Georgian', system-ui, sans-serif",
+    headingWeight: 800,
+    bodyWeight: 500,
+  },
+  {
+    id: "minimal",
+    labelKa: "მინიმალური",
+    labelEn: "Minimal",
+    fontHeading: "var(--font-inter), 'Noto Sans Georgian', system-ui, sans-serif",
+    fontBody: "var(--font-inter), 'Noto Sans Georgian', system-ui, sans-serif",
+    headingWeight: 300,
+    bodyWeight: 300,
+  },
+  {
+    id: "warm",
+    labelKa: "თბილი",
+    labelEn: "Warm",
+    fontHeading:
+      "var(--font-merriweather), 'Noto Serif Georgian', Georgia, serif",
+    fontBody: "var(--font-inter), 'Noto Sans Georgian', system-ui, sans-serif",
+    headingWeight: 700,
+    bodyWeight: 400,
+  },
+  {
+    id: "noir",
+    labelKa: "ნუარ",
+    labelEn: "Noir",
+    fontHeading: "var(--font-space), 'Noto Sans Georgian', system-ui, sans-serif",
+    fontBody: "var(--font-inter), 'Noto Sans Georgian', system-ui, sans-serif",
+    headingWeight: 800,
+    bodyWeight: 400,
+  },
+  {
+    id: "elegant",
+    labelKa: "ელეგანტური",
+    labelEn: "Elegant",
+    fontHeading:
+      "var(--font-playfair), 'Noto Serif Georgian', Georgia, serif",
+    fontBody: "var(--font-inter), 'Noto Sans Georgian', system-ui, sans-serif",
+    headingWeight: 500,
+    bodyWeight: 300,
+  },
+];
+
+export interface ButtonStylePreset {
+  id: ButtonStyleId;
+  labelKa: string;
+  labelEn: string;
+}
+
+export const BUTTON_STYLE_PRESETS: ButtonStylePreset[] = [
+  { id: "classic", labelKa: "კლასიკური", labelEn: "Classic" },
+  { id: "outlined", labelKa: "კონტური", labelEn: "Outlined" },
+  { id: "ghost", labelKa: "მინიმალური ჩარჩო", labelEn: "Ghost" },
+  { id: "sharp", labelKa: "კუთხოვანი", labelEn: "Sharp" },
+  { id: "luxury", labelKa: "ლუქსი", labelEn: "Luxury" },
+  { id: "minimal", labelKa: "თხელი", labelEn: "Minimal" },
+];
+
+/** Keep legacy `fontId` in sync for older saves / grids that still key on it. */
+export const TYPOGRAPHY_TO_LEGACY_FONT: Record<TypographyPackId, string> = {
+  classic: "classic",
+  modern: "modern",
+  editorial: "classic",
+  bold: "bold",
+  minimal: "minimal",
+  warm: "traditional",
+  noir: "modern",
+  elegant: "classic",
+};
+
 export const VIBE_PRESETS: VibePreset[] = [
   {
     id: "minimal",
@@ -340,12 +454,22 @@ export const VIBE_PRESETS: VibePreset[] = [
 
 export const ANIMATION_PRESETS: AnimationPreset[] = [
   {
+    id: "none",
+    labelKa: "გარეშე",
+    labelEn: "None",
+    stagger: 0,
+    entranceY: 0,
+    springDamping: 40,
+    flavor: "fade",
+  },
+  {
     id: "fade",
     labelKa: "გაქრობა",
     labelEn: "Subtle fade",
     stagger: 0.05,
     entranceY: 10,
     springDamping: 25,
+    flavor: "spring-blur",
   },
   {
     id: "spring",
@@ -354,6 +478,7 @@ export const ANIMATION_PRESETS: AnimationPreset[] = [
     stagger: 0.08,
     entranceY: 30,
     springDamping: 12,
+    flavor: "spring-blur",
   },
   {
     id: "cinematic",
@@ -362,6 +487,34 @@ export const ANIMATION_PRESETS: AnimationPreset[] = [
     stagger: 0.15,
     entranceY: 50,
     springDamping: 20,
+    flavor: "spring-blur",
+  },
+  {
+    id: "slide-up",
+    labelKa: "ზემოდან",
+    labelEn: "Slide up",
+    stagger: 0.06,
+    entranceY: 36,
+    springDamping: 26,
+    flavor: "spring",
+  },
+  {
+    id: "scale-in",
+    labelKa: "მასშტაბი",
+    labelEn: "Scale in",
+    stagger: 0.07,
+    entranceY: 12,
+    springDamping: 18,
+    flavor: "scale",
+  },
+  {
+    id: "stagger",
+    labelKa: "საფეხური",
+    labelEn: "Soft stagger",
+    stagger: 0.14,
+    entranceY: 18,
+    springDamping: 22,
+    flavor: "spring-blur",
   },
 ];
 
@@ -374,7 +527,14 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
   const bg = BACKGROUND_PRESETS.find((p) => p.id === selection.backgroundId) ?? BACKGROUND_SOLID_PRESETS[0];
   const txt = TEXT_COLOR_PRESETS.find((p) => p.id === selection.textColorId) ?? TEXT_COLOR_PRESETS[0];
   const acc = ACCENT_PRESETS.find((p) => p.id === selection.accentId) ?? ACCENT_PRESETS[0];
-  const font = FONT_PRESETS.find((p) => p.id === selection.fontId) ?? FONT_PRESETS[1];
+  const secondaryFamily =
+    ACCENT_PRESETS.find((p) => p.id === selection.secondaryAccentId) ?? acc;
+  const typo =
+    TYPOGRAPHY_PACK_PRESETS.find((p) => p.id === selection.typographyPackId) ?? null;
+  const font =
+    typo ??
+    FONT_PRESETS.find((p) => p.id === selection.fontId) ??
+    FONT_PRESETS[1];
   const vibe = VIBE_PRESETS.find((p) => p.id === selection.vibeId) ?? VIBE_PRESETS[0];
   const anim = ANIMATION_PRESETS.find((p) => p.id === selection.animationId) ?? ANIMATION_PRESETS[0];
 
@@ -419,17 +579,40 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
     textColor = "#F1F5F9"; // Force light text for dark backgrounds
   }
 
+  let bgResolved = baseColorValue;
+  if (selection.cardDarkSurface) {
+    bgResolved = "#0b1220";
+    textColor = "#e2e8f0";
+  }
+
+  const cardRadius = typeof selection.cardRadiusPx === "number" ? selection.cardRadiusPx : 24;
+  const cardShadowKey = (selection.cardShadowId ?? "soft") as CardShadowId;
+  const CARD_CHROME_SHADOW: Record<CardShadowId, string> = {
+    none: "none",
+    soft: "0 14px 40px rgba(15, 23, 42, 0.12)",
+    elevated: "0 22px 55px rgba(15, 23, 42, 0.18)",
+    luxury: "0 32px 65px rgba(15, 23, 42, 0.26)",
+  };
+
+  const texOp =
+    selection.textureId === "none"
+      ? 0
+      : Math.min(1, Math.max(0, selection.textureOpacity / 100));
+
   return {
     "--bg-base-image": baseImageValue,
     "--bg-base-blur": `${selection.bgBaseBlur}px`,
     "--bg-image-overlay": overlayImageValue,
     "--bg-overlay-color": overlayColorValue,
-    "--bg-color": baseColorValue,
-    "--bg-primary": baseColorValue,
+    "--bg-color": bgResolved,
+    "--bg-primary": bgResolved,
     "--bg-overlay-opacity": selection.bgOverlayId === "none" ? "0" : String(selection.bgOverlayOpacity),
     "--text-primary": textColor,
     "--accent": acc.accent,
-    "--accent-secondary": acc.accentSecondary,
+    "--accent-secondary": secondaryFamily.accentSecondary,
+    "--texture-bg": textureBackgroundImage(selection.textureId),
+    "--texture-bg-size": textureBackgroundSize(selection.textureId),
+    "--texture-opacity": String(texOp),
     "--font-heading": font.fontHeading,
     "--font-body": font.fontBody,
     "--font-heading-weight": String(font.headingWeight),
@@ -440,6 +623,8 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
     "--stagger-delay": String(anim.stagger),
     "--entrance-y": String(anim.entranceY),
     "--spring-damping": String(anim.springDamping),
+    "--card-radius": `${cardRadius}px`,
+    "--card-chrome-shadow": CARD_CHROME_SHADOW[cardShadowKey] ?? CARD_CHROME_SHADOW.soft,
   } as CSSProperties;
 }
 

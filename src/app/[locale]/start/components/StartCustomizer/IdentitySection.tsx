@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { CollapsibleSection } from "../CollapsibleSection";
 import { QrCode, Printer } from "lucide-react";
 import { downloadQRCode, generateBrandedQR } from "../../lib/identity-kit";
-import { type Lane1CustomizerState } from "../../lib/types";
-import { type SectionProps } from "./types";
+import type { Lane1CustomizerState, QrStyle } from "../../lib/types";
+import { type SectionProps, fieldClass, labelClass } from "./types";
 
 function QRPreview({ state }: { state: Lane1CustomizerState }) {
   const [dataUrl, setDataUrl] = useState<string>("");
@@ -12,7 +12,7 @@ function QRPreview({ state }: { state: Lane1CustomizerState }) {
     const nameSlug = state.name.toLowerCase().replace(/\s+/g, "-") || "business-card";
     const url = `https://genezisi.com/c/${nameSlug}`;
     generateBrandedQR(state, url).then(setDataUrl);
-  }, [state.style.accentId, state.name]);
+  }, [state.name, state.qrForegroundColor, state.qrBackgroundColor, state.showQrLogo]);
 
   return (
     <div className="flex h-32 w-32 items-center justify-center rounded-lg bg-white p-2 shadow-sm ring-1 ring-black/5">
@@ -25,7 +25,12 @@ function QRPreview({ state }: { state: Lane1CustomizerState }) {
   );
 }
 
-export function IdentitySection({ state, isOpen, onToggle }: Pick<SectionProps, "state" | "isOpen" | "onToggle">) {
+export function IdentitySection({
+  state,
+  patch,
+  isOpen,
+  onToggle,
+}: Pick<SectionProps, "state" | "patch" | "isOpen" | "onToggle">) {
   return (
     <CollapsibleSection
       id="identity"
@@ -36,6 +41,60 @@ export function IdentitySection({ state, isOpen, onToggle }: Pick<SectionProps, 
       <p className="start-caption mb-4">
         Professional assets for your physical business cards and phone home-screen.
       </p>
+
+      <fieldset className="mb-6 space-y-3 rounded-xl border border-slate-100 bg-white/80 p-4">
+        <legend className={`${labelClass} px-1 font-semibold text-[#1e293b]`}>QR code</legend>
+        <label className="flex cursor-pointer items-center gap-3 text-sm font-medium text-[#1e293b]">
+          <input
+            type="checkbox"
+            className="h-4 w-4"
+            style={{ accentColor: "var(--accent)" }}
+            checked={state.showQrOnCard}
+            onChange={(e) => patch({ showQrOnCard: e.target.checked })}
+          />
+          Show QR on digital card
+        </label>
+        <label className={labelClass}>
+          QR shape (display)
+          <select
+            className={fieldClass}
+            value={state.qrStyle}
+            onChange={(e) => patch({ qrStyle: e.target.value as QrStyle })}
+          >
+            <option value="square">Square</option>
+            <option value="rounded">Rounded</option>
+            <option value="dots">Soft (rounded+)</option>
+          </select>
+        </label>
+        <label className={labelClass}>
+          Foreground (modules)
+          <input
+            className={fieldClass}
+            value={state.qrForegroundColor}
+            onChange={(e) => patch({ qrForegroundColor: e.target.value })}
+            placeholder="#111827"
+          />
+        </label>
+        <label className={labelClass}>
+          Background
+          <input
+            className={fieldClass}
+            value={state.qrBackgroundColor}
+            onChange={(e) => patch({ qrBackgroundColor: e.target.value })}
+            placeholder="#ffffff or transparent"
+          />
+        </label>
+        <label className="flex cursor-pointer items-center gap-3 text-sm font-medium text-[#1e293b]">
+          <input
+            type="checkbox"
+            className="h-4 w-4"
+            style={{ accentColor: "var(--accent)" }}
+            checked={state.showQrLogo}
+            onChange={(e) => patch({ showQrLogo: e.target.checked })}
+          />
+          High error correction (for logo overlay in print workflows)
+        </label>
+      </fieldset>
       
       <div className="space-y-6">
         <div className="flex flex-col items-center gap-3 rounded-xl border border-slate-100 bg-slate-50/50 p-4">

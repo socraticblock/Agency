@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, type LucideIcon } from "lucide-react";
 import type { Lane1CustomizerState } from "../../lib/types";
@@ -11,8 +12,6 @@ interface ServicesSegmentProps {
   editable: boolean;
   useSecondary: boolean;
   isResponsive: boolean;
-  expandedService: number | null;
-  setExpandedService: (i: number | null) => void;
   patch: (p: Partial<Lane1CustomizerState>) => void;
   setServiceLine: (i: number, v: string) => void;
   setServiceDescriptionLine: (i: number, v: string) => void;
@@ -28,8 +27,6 @@ export function ServicesSegment({
   editable,
   useSecondary,
   isResponsive,
-  expandedService,
-  setExpandedService,
   patch,
   setServiceLine,
   setServiceDescriptionLine,
@@ -39,6 +36,8 @@ export function ServicesSegment({
   glassStyle,
   icons,
 }: ServicesSegmentProps) {
+  const [expandedService, setExpandedService] = useState<number | null>(null);
+
   return (
     <motion.section
       variants={itemVariants}

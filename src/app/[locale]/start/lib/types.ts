@@ -23,6 +23,21 @@ export type SocialIconColorMode = "accent" | "text" | "custom";
 
 export type QrStyle = "square" | "rounded" | "dots";
 
+export type CardHoverEffectId = "none" | "lift" | "glow" | "scale";
+
+export type CardShadowId = "none" | "soft" | "elevated" | "luxury";
+
+export interface TestimonialItem {
+  quote: string;
+  name: string;
+  title: string;
+}
+
+export interface AwardItem {
+  title: string;
+  issuer: string;
+}
+
 export interface SocialLinksState {
   facebook: string;
   instagram: string;
@@ -50,6 +65,8 @@ export interface StylePresetSelection {
   photoOverlay: PhotoOverlay;
   photoBorder: PhotoBorder;
   photoAlignment: "left" | "center";
+  /** Subtle zoom/pan on hero photo (respects reduced motion). */
+  photoKenBurns: boolean;
 
   // Phase 3: Background Layered System
   bgBaseId: BackgroundBaseType;
@@ -69,9 +86,17 @@ export interface StylePresetSelection {
   // Phase 4: Typography & Buttons
   typographyPackId: TypographyPackId;
   buttonStyleId: ButtonStyleId;
+
+  /** 50 = slow, 100 = default, 150 = fast */
+  animationSpeed: number;
+
+  /** Dark card surface (visitor-facing preview). */
+  cardDarkSurface: boolean;
+  cardRadiusPx: number;
+  cardShadowId: CardShadowId;
 }
 
-export const CUSTOMIZER_VERSION = 3 as const;
+export const CUSTOMIZER_VERSION = 5 as const;
 
 export interface Lane1CustomizerState {
   version: typeof CUSTOMIZER_VERSION;
@@ -111,6 +136,14 @@ export interface Lane1CustomizerState {
   // Phase 6: Sections
   activeSections: SectionId[];
   sectionOrder: SectionId[];
+  aboutBio: string;
+  aboutBioSecondary: string;
+  testimonials: [TestimonialItem, TestimonialItem, TestimonialItem];
+  galleryImageDataUrls: [string | null, string | null, string | null, string | null, string | null, string | null];
+  awards: [AwardItem, AwardItem, AwardItem, AwardItem];
+  videoUrl: string;
+  bookingUrl: string;
+  bookingLabel: string;
 
   // Phase 7: Social & QR
   socialIconStyle: SocialIconStyle;
@@ -122,6 +155,12 @@ export interface Lane1CustomizerState {
   qrForegroundColor: string;
   qrBackgroundColor: string;
   showQrLogo: boolean;
+
+  /** Phase 5: tilt & hover (desktop-first; tilt uses responsive layout only). */
+  cardTiltEnabled: boolean;
+  /** Max tilt in degrees (3–12). */
+  cardTiltMaxDeg: number;
+  cardHoverEffectId: CardHoverEffectId;
 }
 
 export function defaultSocial(): SocialLinksState {
@@ -169,7 +208,7 @@ export function defaultLane1State(): Lane1CustomizerState {
     
     style: {
       backgroundId: "minimal-white",
-      textColorId: "black",
+      textColorId: "ink",
       accentId: "indigo",
       secondaryAccentId: "slate",
       fontId: "modern",
@@ -185,6 +224,7 @@ export function defaultLane1State(): Lane1CustomizerState {
       photoOverlay: "none",
       photoBorder: "none",
       photoAlignment: "left",
+      photoKenBurns: false,
 
       // Phase 3 Defaults (Layered)
       bgBaseId: "solid",
@@ -204,6 +244,10 @@ export function defaultLane1State(): Lane1CustomizerState {
       // Phase 4 Defaults
       typographyPackId: "minimal",
       buttonStyleId: "minimal",
+      animationSpeed: 100,
+      cardDarkSurface: false,
+      cardRadiusPx: 24,
+      cardShadowId: "soft",
     },
     
     addGoogleMap: true,
@@ -213,6 +257,23 @@ export function defaultLane1State(): Lane1CustomizerState {
     ctaTextWhatsApp: "WhatsApp Me",
     activeSections: ["services"],
     sectionOrder: ["about", "services", "testimonials", "gallery", "awards", "hours", "video", "booking"],
+    aboutBio: "",
+    aboutBioSecondary: "",
+    testimonials: [
+      { quote: "", name: "", title: "" },
+      { quote: "", name: "", title: "" },
+      { quote: "", name: "", title: "" },
+    ],
+    galleryImageDataUrls: [null, null, null, null, null, null],
+    awards: [
+      { title: "", issuer: "" },
+      { title: "", issuer: "" },
+      { title: "", issuer: "" },
+      { title: "", issuer: "" },
+    ],
+    videoUrl: "",
+    bookingUrl: "",
+    bookingLabel: "Book a Consultation",
     socialIconStyle: "minimal",
     socialIconSize: "medium",
     socialIconColorMode: "accent",
@@ -222,5 +283,8 @@ export function defaultLane1State(): Lane1CustomizerState {
     qrForegroundColor: "#000000",
     qrBackgroundColor: "#ffffff",
     showQrLogo: true,
+    cardTiltEnabled: true,
+    cardTiltMaxDeg: 7,
+    cardHoverEffectId: "lift",
   };
 }

@@ -2,7 +2,15 @@
 
 import type { Lane1CustomizerState, SectionId } from "../../lib/types";
 import { ServicesSegment } from "./ServicesSegment";
+import { AboutSegment } from "./AboutSegment";
+import { TestimonialsSegment } from "./TestimonialsSegment";
+import { GallerySegment } from "./GallerySegment";
+import { AwardsSegment } from "./AwardsSegment";
+import { HoursSectionSegment } from "./HoursSectionSegment";
+import { VideoSegment } from "./VideoSegment";
+import { BookingSegment } from "./BookingSegment";
 import type { CSSProperties } from "react";
+import type { LucideIcon } from "lucide-react";
 
 interface SectionDispatcherProps {
   state: Lane1CustomizerState;
@@ -14,9 +22,9 @@ interface SectionDispatcherProps {
   setServiceDescriptionLine: (i: number, v: string) => void;
   headingStyle: CSSProperties;
   bodyStyle: CSSProperties;
-  itemVariants: any;
+  itemVariants: import("framer-motion").Variants;
   glassStyle: CSSProperties;
-  icons: any[];
+  icons: LucideIcon[];
 }
 
 export function SectionDispatcher({
@@ -33,23 +41,20 @@ export function SectionDispatcher({
   glassStyle,
   icons,
 }: SectionDispatcherProps) {
-  // Hard limit of 4 sections enforced in the UI, but we filter here just in case.
-  const activeSections = state.sectionOrder.filter(id => state.activeSections.includes(id)).slice(0, 4);
+  const activeSections = state.sectionOrder.filter((id) => state.activeSections.includes(id)).slice(0, 4);
 
   return (
     <>
-      {activeSections.map((sectionId) => {
+      {activeSections.map((sectionId: SectionId) => {
         switch (sectionId) {
           case "services":
             return (
               <ServicesSegment
-                key="services"
+                key={sectionId}
                 state={state}
                 editable={editable}
                 useSecondary={useSecondary}
                 isResponsive={isResponsive}
-                expandedService={null}
-                setExpandedService={() => {}} // Internal logic handled or passed
                 patch={patch}
                 setServiceLine={setServiceLine}
                 setServiceDescriptionLine={setServiceDescriptionLine}
@@ -60,29 +65,101 @@ export function SectionDispatcher({
                 icons={icons}
               />
             );
-          
           case "about":
-            // TODO: Phase 6
-            return null;
+            return (
+              <AboutSegment
+                key={sectionId}
+                state={state}
+                editable={editable}
+                useSecondary={useSecondary}
+                isResponsive={isResponsive}
+                patch={patch}
+                headingStyle={headingStyle}
+                bodyStyle={bodyStyle}
+                itemVariants={itemVariants}
+                glassStyle={glassStyle}
+              />
+            );
           case "testimonials":
-            // TODO: Phase 6
-            return null;
+            return (
+              <TestimonialsSegment
+                key={sectionId}
+                state={state}
+                editable={editable}
+                isResponsive={isResponsive}
+                patch={patch}
+                headingStyle={headingStyle}
+                bodyStyle={bodyStyle}
+                itemVariants={itemVariants}
+                glassStyle={glassStyle}
+              />
+            );
           case "gallery":
-            // TODO: Phase 6
-            return null;
+            return (
+              <GallerySegment
+                key={sectionId}
+                state={state}
+                editable={editable}
+                isResponsive={isResponsive}
+                headingStyle={headingStyle}
+                itemVariants={itemVariants}
+                glassStyle={glassStyle}
+              />
+            );
           case "awards":
-            // TODO: Phase 6
-            return null;
+            return (
+              <AwardsSegment
+                key={sectionId}
+                state={state}
+                editable={editable}
+                isResponsive={isResponsive}
+                patch={patch}
+                headingStyle={headingStyle}
+                bodyStyle={bodyStyle}
+                itemVariants={itemVariants}
+                glassStyle={glassStyle}
+              />
+            );
           case "hours":
-            // TODO: Phase 6
-            return null;
+            return (
+              <HoursSectionSegment
+                key={sectionId}
+                state={state}
+                editable={editable}
+                useSecondary={useSecondary}
+                isResponsive={isResponsive}
+                patch={patch}
+                headingStyle={headingStyle}
+                bodyStyle={bodyStyle}
+                itemVariants={itemVariants}
+                glassStyle={glassStyle}
+              />
+            );
           case "video":
-            // TODO: Phase 6
-            return null;
+            return (
+              <VideoSegment
+                key={sectionId}
+                state={state}
+                editable={editable}
+                isResponsive={isResponsive}
+                headingStyle={headingStyle}
+                bodyStyle={bodyStyle}
+                itemVariants={itemVariants}
+                glassStyle={glassStyle}
+              />
+            );
           case "booking":
-            // TODO: Phase 6
-            return null;
-            
+            return (
+              <BookingSegment
+                key={sectionId}
+                state={state}
+                editable={editable}
+                isResponsive={isResponsive}
+                headingStyle={headingStyle}
+                itemVariants={itemVariants}
+                glassStyle={glassStyle}
+              />
+            );
           default:
             return null;
         }

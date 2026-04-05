@@ -19,8 +19,8 @@ function safeParse(raw: string | null): Lane1CustomizerState | null {
   try {
     const data = JSON.parse(raw) as Record<string, unknown>;
     const v = typeof data.version === "number" ? data.version : 1;
-    // Allow migration from v1, v2, and v3
-    if (v < 1 || v > 3) return null;
+    // Allow migration from v1–v4
+    if (v < 1 || v > 5) return null;
     return migrateLane1State(data as unknown as Lane1CustomizerState);
   } catch {
     return null;
@@ -45,6 +45,10 @@ function migrateLane1State(
   // Cleanup/validation
   if (typeof merged.proTranslationAcknowledged !== "boolean") {
     merged.proTranslationAcknowledged = false;
+  }
+
+  if (merged.style.textColorId === "black") {
+    merged.style.textColorId = "ink";
   }
 
   merged.version = CUSTOMIZER_VERSION;

@@ -1,21 +1,20 @@
 import QRCode from "qrcode";
-import { resolveStyleVariables } from "./presets";
 import { Lane1CustomizerState } from "./types";
 
 /**
- * Generates a branded QR Code as a Data URL.
- * It uses the client's accent color from the state.
+ * Generates a QR Code as a Data URL from `qrForegroundColor`, `qrBackgroundColor`, and correction level.
  */
 export async function generateBrandedQR(state: Lane1CustomizerState, url: string): Promise<string> {
-  const vars = resolveStyleVariables(state.style) as any;
-  const accentColor = vars["--accent"] || "#1A2744";
+  const fg = state.qrForegroundColor?.trim() || "#111827";
+  let light = state.qrBackgroundColor?.trim() || "#ffffff";
+  if (/^transparent$/i.test(light)) light = "#ffffff00";
 
   return QRCode.toDataURL(url, {
     color: {
-      dark: accentColor,
-      light: "#ffffff00", // Transparent background
+      dark: fg,
+      light,
     },
-    errorCorrectionLevel: "H",
+    errorCorrectionLevel: state.showQrLogo ? "H" : "M",
     width: 1024,
     margin: 2,
   });

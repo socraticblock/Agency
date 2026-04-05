@@ -154,6 +154,19 @@ export function PhotoSection({ state, setState, patch, isOpen, onToggle }: Secti
             value={state.style?.photoBorder || "none"}
             onChange={(id: string) => setState(s => ({ ...s, style: { ...s.style, photoBorder: id as any } }))}
           />
+
+          <label className="flex cursor-pointer items-center gap-3 text-sm font-medium text-[#1e293b]">
+            <input
+              type="checkbox"
+              className="h-4 w-4"
+              style={{ accentColor: "var(--accent)" }}
+              checked={Boolean(state.style?.photoKenBurns)}
+              onChange={(e) =>
+                setState((s) => ({ ...s, style: { ...s.style, photoKenBurns: e.target.checked } }))
+              }
+            />
+            Ken Burns motion on photo (disabled when reduced motion is on)
+          </label>
         </div>
       )}
     </CollapsibleSection>

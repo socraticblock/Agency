@@ -17,7 +17,7 @@ export async function generateMetadata({
   const lang = normalizeLocale(locale);
   const name = "Digital Business Card | Genezisi";
   const description =
-    "Create a digital business card: pick a sector, customize a live preview, and order via WhatsApp.";
+    "Create a premium digital business card: customize a live preview, save your look in the browser, and order via WhatsApp.";
   const { metadata } = createLocalBusinessSeo({
     name,
     description,

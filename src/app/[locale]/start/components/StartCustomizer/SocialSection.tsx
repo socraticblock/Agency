@@ -1,9 +1,11 @@
 import { CollapsibleSection } from "../CollapsibleSection";
+import { SocialAppearanceControls } from "./SocialAppearanceControls";
 import { type SectionProps, fieldClass, labelClass } from "./types";
 
 export function SocialSection({
   state,
   setState,
+  patch,
   isOpen,
   onToggle,
 }: SectionProps) {
@@ -74,6 +76,8 @@ export function SocialSection({
       >
         + Add link
       </button>
+
+      <SocialAppearanceControls state={state} patch={patch} />
     </CollapsibleSection>
   );
 }

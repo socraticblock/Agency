@@ -6,6 +6,7 @@ import type { Lane1CustomizerState } from "../../lib/types";
 import { InlineEditable } from "../InlineEditable";
 import { MagneticButton } from "../../../_components/MagneticButton";
 import type { CSSProperties } from "react";
+import { lane1DirectionsClasses } from "../../lib/button-styles";
 
 interface ContactSegmentProps {
   state: Lane1CustomizerState;
@@ -80,16 +81,18 @@ export function ContactSegment({
           </div>
         </div>
 
-        <div className="pt-2">
-          <InlineEditable
-            value={useSecondary ? state.hoursSecondary : state.hours}
-            onChange={(v) => patch(useSecondary ? { hoursSecondary: v } : { hours: v })}
-            placeholder="Operating Hours"
-            editable={editable}
-            className="block w-full text-xs opacity-70"
-            style={bodyStyle}
-          />
-        </div>
+        {!state.activeSections.includes("hours") && (
+          <div className="pt-2">
+            <InlineEditable
+              value={useSecondary ? state.hoursSecondary : state.hours}
+              onChange={(v) => patch(useSecondary ? { hoursSecondary: v } : { hours: v })}
+              placeholder="Operating Hours"
+              editable={editable}
+              className="block w-full text-xs opacity-70"
+              style={bodyStyle}
+            />
+          </div>
+        )}
 
         {state.addGoogleMap && address?.trim() && (
           <div className="pt-4">
@@ -98,11 +101,11 @@ export function ContactSegment({
               href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex w-full items-center justify-center gap-2 rounded-xl border-2 py-3.5 text-[14px] font-bold transition-all hover:bg-black/5"
+              className={lane1DirectionsClasses(state.style.buttonStyleId)}
               style={{
                 borderColor: "var(--accent)",
                 color: "var(--accent)",
-                background: "rgba(255, 255, 255, 0.05)"
+                background: "rgba(255, 255, 255, 0.05)",
               }}
             >
               <Map className="h-4 w-4 opacity-70" />
