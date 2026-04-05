@@ -1,0 +1,18 @@
+---
+description: Critical anti-patterns and performance blockers to avoid
+globs: "*"
+alwaysApply: true
+---
+
+# Anti-Patterns
+
+- ❌ Never let components exceed 200 lines
+- ❌ Never add backend dependencies for card features
+- ❌ Never use CSS variables as Framer Motion key values
+- ❌ Never hardcode OG tags in client components
+- ❌ Never try to hide web elements for print — use dedicated print container
+- ❌ Never add animations that require JavaScript when CSS can do it
+- ❌ Never use overflow:hidden on ancestors of sticky elements
+- ✅ Always run npm run build after changes
+- ✅ Always use @media print with @page { size: 3.5in 2in; margin: 0; }
+- ✅ Always test on Samsung Internet for mobile features

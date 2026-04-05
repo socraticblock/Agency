@@ -1,0 +1,15 @@
+---
+description: Project structure and directory rules
+globs: "*"
+alwaysApply: true
+---
+
+# Project Structure
+
+- App Router: src/app/[locale]/
+- Components: src/app/[locale]/start/components/
+- Types: src/app/[locale]/start/lib/types.ts
+- Presets: src/app/[locale]/start/lib/presets.ts
+- Constants: src/constants/
+- Max 200 lines per component file
+- No new dependencies without explicit approval

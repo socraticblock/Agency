@@ -1,0 +1,15 @@
+---
+description: Tech stack and core technologies rules
+globs: "*"
+alwaysApply: true
+---
+
+# Tech Stack
+
+- Next.js 15 App Router
+- Tailwind CSS 4
+- Framer Motion (lightweight use only)
+- TypeScript strict mode
+- Vercel deployment
+- No backend database for digital card features
+- All card features must work client-side only

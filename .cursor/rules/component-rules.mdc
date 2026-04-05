@@ -1,0 +1,14 @@
+---
+description: React component structure and performance rules
+globs: "*.tsx, *.ts"
+alwaysApply: true
+---
+
+# Component Rules
+
+- Max 200 lines per component file
+- Sub-components in same directory as parent
+- Props passed down — no direct global state access in children
+- CSS custom properties for all dynamic styling
+- Use CSS animations over Framer Motion when possible (performance)
+- @media (hover: hover) for all hover effects (touch device safety)

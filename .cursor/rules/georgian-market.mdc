@@ -1,0 +1,14 @@
+---
+description: Georgian market and target audience rules
+globs: "*"
+alwaysApply: true
+---
+
+# Georgian Market
+
+- Primary market: Tbilisi, Georgia
+- Mobile-first (80%+ traffic on mobile)
+- Must test on Samsung Internet browser
+- Bilingual: Georgian (primary) + English
+- WhatsApp is the primary communication platform
+- Product is a premium digital business card at 450₾
