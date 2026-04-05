@@ -118,7 +118,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
       style={{
         ...vars,
         fontFamily: "var(--font-body)",
-        backgroundColor: "var(--bg-color)",
+        backgroundColor: "transparent",
         borderRadius: "var(--card-radius)",
         boxShadow: "var(--card-chrome-shadow)",
       }}

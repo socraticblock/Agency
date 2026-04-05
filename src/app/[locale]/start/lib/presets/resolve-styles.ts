@@ -43,7 +43,7 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
       overlayGradient = `
         radial-gradient(at 20% 30%, ${selection.bgOverlayColor1} 0%, transparent 50%),
         radial-gradient(at 80% 70%, ${selection.bgOverlayColor2} 0%, transparent 50%),
-        radial-gradient(at 50% 50%, ${selection.bgOverlayColor1} 0%, transparent 70%)
+        radial-gradient(at 50% 50%, ${selection.bgOverlayColor3 || selection.bgOverlayColor1} 0%, transparent 70%)
       `;
       break;
     case "none":
@@ -59,16 +59,36 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
       texturePattern = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`;
       textureMixBlend = "overlay";
       break;
+    case "coarse-grain":
+      texturePattern = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.45' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`;
+      textureMixBlend = "multiply";
+      break;
     case "dot-grid":
       texturePattern = `radial-gradient(color-mix(in srgb, var(--text-primary) 30%, transparent) 1px, transparent 1px)`;
       break;
     case "waves":
       texturePattern = `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 20c10 0 10-10 20-10s10 10 20 10 10-10 20-10' stroke='rgba(255,255,255,0.1)' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E")`;
       break;
+    case "diagonal-lines":
+      texturePattern = `repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.05) 10px, rgba(255,255,255,0.05) 11px)`;
+      break;
+    case "cross-hatch":
+      texturePattern = `
+        repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(255,255,255,0.03) 15px, rgba(255,255,255,0.03) 16px),
+        repeating-linear-gradient(-45deg, transparent, transparent 15px, rgba(255,255,255,0.03) 15px, rgba(255,255,255,0.03) 16px)
+      `;
+      break;
+    case "geometric":
+      texturePattern = `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h10v10H0V0zm10 10h10v10H10V10z' fill='rgba(255,255,255,0.03)'/%3E%3C/svg%3E")`;
+      break;
+    case "topographic":
+      texturePattern = `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10c20 0 20 50 40 50s20-50 40-50M10 30c20 0 20 50 40 50s20-50 40-50M10 50c20 0 20 50 40 50s20-50 40-50M10 70c20 0 20 50 40 50s20-50 40-50' stroke='rgba(255,255,255,0.04)' fill='none'/%3E%3C/svg%3E")`;
+      break;
   }
 
   return {
     ["--bg-primary" as string]: bg.cssValue, // Legacy fallback
+    ["--bg-color" as string]: selection.bgBaseColor || bg.cssValue, // Legacy fallback map
     ["--bg-base-color" as string]: selection.bgBaseColor || bg.cssValue,
     ["--overlay-gradient" as string]: overlayGradient,
     ["--overlay-opacity" as string]: String(selection.bgOverlayOpacity ?? 0.5),
