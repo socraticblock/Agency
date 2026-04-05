@@ -111,7 +111,7 @@ export function HeroSegment({
         rotateY: isResponsive ? rotateY : 0,
         transformStyle: "preserve-3d",
       }}
-      className={`relative transition-all duration-500 px-4 pb-8 pt-8 border-t ${
+      className={`business-card-print-hero relative border-t px-4 pb-8 pt-8 transition-all duration-500 ${
         isResponsive ? "md:rounded-3xl md:border hover:shadow-2xl" : ""
       }`}
     >

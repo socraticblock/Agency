@@ -84,7 +84,7 @@ export function SectionsLayoutSection({ state, patch, isOpen, onToggle }: Sectio
       )}
 
       <div className="mt-6">
-        <p className={labelClass}>Order (active only)</p>
+        <p className={labelClass}>Order (active only) — move up/down with chevrons</p>
         <ul className="mt-2 space-y-2">
           {orderedActive.map((id) => {
             const i = orderedActive.indexOf(id);

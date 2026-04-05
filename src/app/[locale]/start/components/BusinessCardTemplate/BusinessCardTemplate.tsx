@@ -129,13 +129,13 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
       <div className="business-card-noise" aria-hidden /><div className="business-card-glow" aria-hidden />
       
       {state.secondaryMode === "pro" && (
-        <div className="border-b px-4 py-2.5 text-center text-xs opacity-70" style={{ borderColor: "var(--accent-secondary)", background: "color-mix(in srgb, var(--accent) 7%, transparent)" }}>
+        <div className="business-card-template-print-skip border-b px-4 py-2.5 text-center text-xs opacity-70" style={{ borderColor: "var(--accent-secondary)", background: "color-mix(in srgb, var(--accent) 7%, transparent)" }}>
           English will be used for professional translation in this preview.
         </div>
       )}
 
       <motion.div
-        className={`pb-12 ${isResponsive ? "md:p-8" : ""} ${hoverLayerClass}`}
+        className={`business-card-template-font-layer pb-12 ${isResponsive ? "md:p-8" : ""} ${hoverLayerClass}`}
         variants={containerVariants}
         initial="hidden"
         animate="show"
@@ -166,20 +166,22 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
 
         <CtaSegment state={state} headingStyle={headingStyle} />
 
-        <SectionDispatcher 
-          state={state} 
-          editable={editable} 
-          useSecondary={useSecondary} 
-          isResponsive={isResponsive} 
-          patch={patch} 
-          setServiceLine={setServiceLine} 
-          setServiceDescriptionLine={setServiceDescriptionLine} 
-          headingStyle={headingStyle} 
-          bodyStyle={bodyStyle} 
-          itemVariants={customItemVariants} 
-          glassStyle={glassStyle} 
-          icons={ICONS} 
-        />
+        <div className="business-card-template-print-skip">
+          <SectionDispatcher
+            state={state}
+            editable={editable}
+            useSecondary={useSecondary}
+            isResponsive={isResponsive}
+            patch={patch}
+            setServiceLine={setServiceLine}
+            setServiceDescriptionLine={setServiceDescriptionLine}
+            headingStyle={headingStyle}
+            bodyStyle={bodyStyle}
+            itemVariants={customItemVariants}
+            glassStyle={glassStyle}
+            icons={ICONS}
+          />
+        </div>
 
         <ContactSegment state={state} editable={editable} useSecondary={useSecondary} isResponsive={isResponsive} patch={patch} bodyStyle={bodyStyle} itemVariants={customItemVariants} glassStyle={glassStyle} />
         <SocialSegment state={state} isResponsive={isResponsive} itemVariants={customItemVariants} />

@@ -61,7 +61,9 @@ export function TextureEffectControls({
               className="mt-1 w-full accent-[#1A2744]"
             />
           </label>
-        ) : null}
+        ) : (
+          <p className="start-caption mt-3">Choose a texture first to adjust strength.</p>
+        )}
       </fieldset>
 
       <fieldset>

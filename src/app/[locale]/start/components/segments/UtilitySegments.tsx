@@ -27,7 +27,7 @@ export function UtilitySegments({
 
   return (
     <>
-      <div className="mt-10 flex flex-col gap-3">
+      <div className="business-card-template-print-skip mt-10 flex flex-col gap-3">
         <MagneticButton
           onClick={handleShare}
           className={lane1UtilityPrimaryClasses(id)}

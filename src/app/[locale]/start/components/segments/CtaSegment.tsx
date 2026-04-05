@@ -27,7 +27,7 @@ export function CtaSegment({ state, headingStyle }: CtaSegmentProps) {
   const secondary = lane1CtaSecondarySurface(btnId);
 
   return (
-    <section className="relative z-10 flex flex-col gap-3 bg-transparent px-4 py-6">
+    <section className="business-card-template-print-skip relative z-10 flex flex-col gap-3 bg-transparent px-4 py-6">
       <MagneticButton
         as="a"
         href={telHref(state.phone)}

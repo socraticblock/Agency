@@ -34,7 +34,7 @@ export function ContactSegment({
   return (
     <motion.section
       variants={itemVariants}
-      className={`px-4 py-8 ${isResponsive ? "md:rounded-3xl md:border md:p-8" : "border-t"}`}
+      className={`business-card-print-contact px-4 py-8 ${isResponsive ? "md:rounded-3xl md:border md:p-8" : "border-t"}`}
       style={{ borderColor: "var(--accent-secondary)", ...glassStyle }}
     >
       <div className={`space-y-4 text-sm ${isResponsive ? "md:text-base" : ""}`}>

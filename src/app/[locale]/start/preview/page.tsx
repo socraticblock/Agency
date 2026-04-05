@@ -1,21 +1,27 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { X, ExternalLink } from "lucide-react";
+import { useParams } from "next/navigation";
+import { X } from "lucide-react";
 import type { Lane1CustomizerState } from "../lib/types";
 import { BusinessCardTemplate } from "../components/BusinessCardTemplate";
+import { normalizeLane1StateFromUnknown } from "../lib/customizer-store";
 
-export default function PreviewPage({ params }: { params: { locale: string } }) {
+export default function PreviewPage() {
+  const params = useParams();
+  const locale = typeof params?.locale === "string" ? params.locale : "en";
+
   const [state, setState] = useState<Lane1CustomizerState | null>(null);
 
   useEffect(() => {
     const raw = sessionStorage.getItem("businessCardPreview");
-    if (raw) {
-      try {
-        setState(JSON.parse(raw));
-      } catch (e) {
-        console.error("Failed to parse preview state", e);
-      }
+    if (!raw) return;
+    try {
+      const parsed = JSON.parse(raw) as unknown;
+      const normalized = normalizeLane1StateFromUnknown(parsed);
+      if (normalized) setState(normalized);
+    } catch (e) {
+      console.error("Failed to parse preview state", e);
     }
   }, []);
 
@@ -27,7 +33,7 @@ export default function PreviewPage({ params }: { params: { locale: string } }) 
     );
   }
 
-  const homeHref = `/${params.locale}`;
+  const homeHref = `/${locale}`;
 
   return (
     <div className="relative min-h-screen bg-[var(--background,#030717)] antialiased md:p-8 xl:p-12">
@@ -40,7 +46,6 @@ export default function PreviewPage({ params }: { params: { locale: string } }) 
         <X className="h-5 w-5 md:h-6 md:w-6" />
       </button>
 
-      {/* Actual Site Content */}
       <div className="mx-auto w-full max-w-6xl md:rounded-3xl md:shadow-2xl md:overflow-hidden md:bg-[var(--bg-primary,#faf8f5)] md:p-2 xl:p-6 transition-all">
         <BusinessCardTemplate
           state={state}
@@ -52,9 +57,9 @@ export default function PreviewPage({ params }: { params: { locale: string } }) 
         />
       </div>
 
-      {/* Fallback Close for environments where window.close() fails */}
       <div className="mt-8 pb-12 text-center">
         <button
+          type="button"
           onClick={() => window.close()}
           className="text-xs font-semibold text-[#64748b] underline decoration-[#64748b]/30 underline-offset-4 hover:decoration-[#64748b]"
         >

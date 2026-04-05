@@ -257,34 +257,36 @@
     print-color-adjust: exact !important;
   }
 
-  /* Hide everything except the card itself */
-  body>*:not(main),
-  main>*:not(.business-card-template),
-  .business-card-noise,
-  .business-card-glow,
-  .business-card-bg-effect-layer,
-  .business-card-template-font-layer>input,
-  nav,
-  header,
-  footer,
-  section:nth-of-type(2),
-  /* Practice Areas */
-  .business-card-template-font-layer>div:nth-child(2) header,
-  /* Sticky mini-header */
-  section:nth-of-type(1) .grid.w-full.gap-2,
-  /* Service Area Tags */
-  section:nth-of-type(1) .flex.flex-col.gap-3.w-full,
-  /* Hero CTAs */
-  section:nth-of-type(3) .mt-10.flex.flex-col.gap-3,
-  /* Share/Refer CTAs */
-  section:nth-of-type(3) .flex.flex-wrap.gap-3.pt-2,
-  /* Social Media Icons */
-  section:nth-of-type(3) .mt-8.space-y-4,
-  /* Directions CTA */
-  .magnetic-button,
-  button,
-  .start-wa-cta,
-  [role="button"] {
+  /*
+   * Root layout has no <main>; do not use body > * :not(main).
+   * Visibility trick shows only the card subtree; .business-card-template-print-skip
+   * strips in-card chrome (CTA, social, optional sections, share row).
+   */
+  body * {
+    visibility: hidden;
+  }
+
+  .business-card-template,
+  .business-card-template *,
+  .qr-code-print-view,
+  .qr-code-print-view * {
+    visibility: visible;
+  }
+
+  .business-card-template-print-skip {
+    display: none !important;
+  }
+
+  .business-card-template .business-card-noise,
+  .business-card-template .business-card-glow,
+  .business-card-template .business-card-bg-effect-layer,
+  .business-card-template-font-layer > input[type="file"],
+  .business-card-print-hero .grid.w-full.gap-2,
+  .business-card-print-hero .flex.flex-col.gap-3.w-full,
+  .business-card-template .magnetic-button,
+  .business-card-template button,
+  .business-card-template .start-wa-cta,
+  .business-card-template [role="button"] {
     display: none !important;
   }
 
@@ -315,27 +317,22 @@
     opacity: 1 !important;
   }
 
-  /* FRONT OF CARD LAYOUT */
-  /* Identity Segment (Photo + Name/Title/Company) */
-  .business-card-template-font-layer>div:nth-child(2) {
-    display: block !important;
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 3.5in !important;
-    height: 2in !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-
-  section:nth-of-type(1) {
+  /* FRONT OF CARD LAYOUT — identity (matches BusinessCardTemplate motion.font-layer) */
+  .business-card-print-hero {
+    box-sizing: border-box !important;
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
     gap: 0.15in !important;
     padding: 0.15in !important;
     border: none !important;
+    margin: 0 !important;
     background: transparent !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 3.5in !important;
+    height: 2in !important;
   }
 
   /* Photo sizing for print */
@@ -345,8 +342,8 @@
     border-width: 2px !important;
   }
 
-  /* Contact details Segment (Phone/Email/Address) */
-  .business-card-template-font-layer>div:nth-child(3) {
+  /* Contact details (phone / email / address) */
+  .business-card-print-contact {
     display: block !important;
     position: absolute !important;
     bottom: 0.15in !important;
@@ -354,30 +351,23 @@
     width: 2.2in !important;
     border: none !important;
     padding: 0 !important;
-    background: transparent !important;
-  }
-
-  section:nth-of-type(3) {
-    display: block !important;
-    border: none !important;
-    padding: 0 !important;
     margin: 0 !important;
     background: transparent !important;
   }
 
-  section:nth-of-type(3) .space-y-3 {
+  .business-card-print-contact .space-y-4 {
     display: flex !important;
     flex-direction: column !important;
     gap: 2px !important;
   }
 
-  section:nth-of-type(3) svg {
+  .business-card-print-contact svg {
     width: 8pt !important;
     height: 8pt !important;
   }
 
-  section:nth-of-type(3) .text-sm,
-  section:nth-of-type(3) .text-base {
+  .business-card-print-contact .text-sm,
+  .business-card-print-contact .text-base {
     font-size: 7.5pt !important;
     line-height: 1.1 !important;
     opacity: 1 !important;

@@ -18,13 +18,17 @@ export function QrOnCardSegment({
   if (!state.showQrOnCard || !qrDataUrl) return null;
 
   const radius =
-    state.qrStyle === "rounded" ? "rounded-2xl" : state.qrStyle === "dots" ? "rounded-3xl" : "rounded-md";
+    state.qrStyle === "rounded"
+      ? "rounded-2xl"
+      : state.qrStyle === "dots"
+        ? "rounded-3xl"
+        : "rounded-none";
   const bg = state.qrBackgroundColor?.trim() || "#ffffff";
 
   return (
     <motion.section
       variants={itemVariants}
-      className={`flex flex-col items-center gap-2 border-t px-4 py-6 ${isResponsive ? "md:rounded-3xl md:border md:p-8" : ""}`}
+      className={`business-card-template-print-skip flex flex-col items-center gap-2 border-t px-4 py-6 ${isResponsive ? "md:rounded-3xl md:border md:p-8" : ""}`}
       style={{ borderColor: "var(--accent-secondary)" }}
     >
       <p className="text-center text-xs font-semibold uppercase tracking-widest opacity-60" style={{ color: "var(--text-primary)" }}>

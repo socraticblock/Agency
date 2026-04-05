@@ -19,13 +19,29 @@ function safeParse(raw: string | null): Lane1CustomizerState | null {
   try {
     const data = JSON.parse(raw) as Record<string, unknown>;
     const v = typeof data.version === "number" ? data.version : 1;
-    // Allow migration from v1–v4
+    // Allow migration from v1–v5
     if (v < 1 || v > 5) return null;
     return migrateLane1State(data as unknown as Lane1CustomizerState);
   } catch {
     return null;
   }
 }
+
+/**
+ * Deep-merge snapshot with defaults (session preview, import, etc.).
+ * Safe for partial JSON from `JSON.parse`.
+ */
+export function normalizeLane1StateFromJson(data: unknown): Lane1CustomizerState | null {
+  if (data === null || typeof data !== "object") return null;
+  try {
+    return migrateLane1State(data as Lane1CustomizerState & { version?: number });
+  } catch {
+    return null;
+  }
+}
+
+/** Alias for preview/import callers (same merge as `normalizeLane1StateFromJson`). */
+export const normalizeLane1StateFromUnknown = normalizeLane1StateFromJson;
 
 function migrateLane1State(
   data: Lane1CustomizerState & { version?: number },

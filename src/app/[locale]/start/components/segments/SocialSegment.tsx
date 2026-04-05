@@ -113,7 +113,7 @@ export function SocialSegment({ state, isResponsive, itemVariants }: SocialSegme
   return (
     <motion.section
       variants={itemVariants}
-      className={`flex flex-wrap items-center justify-center gap-6 border-t px-4 py-6 ${isResponsive ? "md:rounded-3xl md:border md:p-8" : ""}`}
+      className={`business-card-template-print-skip flex flex-wrap items-center justify-center gap-6 border-t px-4 py-6 ${isResponsive ? "md:rounded-3xl md:border md:p-8" : ""}`}
       style={{ borderColor: "var(--accent-secondary)" }}
     >
       {items.filter((x) => x.ok).map((x, i) => (
