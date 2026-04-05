@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { MessageCircle, Pencil } from "lucide-react";
 import { acquireBodyScrollLock } from "@/lib/bodyScrollLock";
@@ -27,7 +27,7 @@ export function StartPageClient({ locale }: { locale: Locale }) {
     addGoogleMap: state.addGoogleMap,
   });
   const waUrl = buildLane1WhatsAppUrl(state);
-  const vars = resolveStyleVariables(state.style);
+  const vars = useMemo(() => resolveStyleVariables(state.style), [state.style]);
 
   useEffect(() => {
     const loaded = loadLane1State();
@@ -141,7 +141,7 @@ export function StartPageClient({ locale }: { locale: Locale }) {
           <div className="relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-[var(--start-shadow-md)]">
             <AnimatePresence mode="wait">
               <motion.div
-                key={(vars as any)["--bg-primary"] + state.style.textColorId + state.style.accentId}
+                key={state.style.backgroundId + state.style.vibeId + state.style.fontId}
                 initial={{ opacity: 0.8, filter: "blur(4px)" }}
                 animate={{ opacity: 1, filter: "blur(0px)" }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
