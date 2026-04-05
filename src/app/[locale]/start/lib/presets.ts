@@ -369,6 +369,7 @@ export function isBackgroundLockingTextColor(backgroundId: string): boolean {
   const bg = BACKGROUND_PRESETS.find((p) => p.id === backgroundId);
   return Boolean(bg?.locksTextColor);
 }
+
 export function resolveStyleVariables(selection: StylePresetSelection): CSSProperties {
   const bg = BACKGROUND_PRESETS.find((p) => p.id === selection.backgroundId) ?? BACKGROUND_SOLID_PRESETS[0];
   const txt = TEXT_COLOR_PRESETS.find((p) => p.id === selection.textColorId) ?? TEXT_COLOR_PRESETS[0];
@@ -379,6 +380,9 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
 
   // 1. Resolve Base Layer
   const baseColorValue = selection.bgBaseColor;
+  const baseImageValue = selection.bgBaseId === "image" && selection.bgBaseImageDataUrl 
+    ? `url(${selection.bgBaseImageDataUrl})` 
+    : "none";
 
   // 2. Resolve Overlay Layer
   let overlayImageValue = "none";
@@ -399,13 +403,13 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
     overlayColorValue = selection.bgOverlayColor1;
   }
 
-  // 3. Composition
-  const backgroundImage = overlayImageValue;
-
-  // 4. Contrast Logic (Improved)
-  // Determine if the total background is "dark"
-  // If overlay is active and has > 40% opacity, we factor in its color
+  // 3. Composition & Contrast Logic
   let backgroundIsDark = isDarkColor(baseColorValue);
+  
+  if (selection.bgBaseId === "image") {
+    backgroundIsDark = true; // Assume images need light text for overlaying
+  }
+  
   if (selection.bgOverlayId !== "none" && selection.bgOverlayOpacity > 0.4) {
     backgroundIsDark = isDarkColor(selection.bgOverlayColor1);
   }
@@ -416,6 +420,8 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
   }
 
   return {
+    "--bg-base-image": baseImageValue,
+    "--bg-base-blur": `${selection.bgBaseBlur}px`,
     "--bg-image-overlay": overlayImageValue,
     "--bg-overlay-color": overlayColorValue,
     "--bg-color": baseColorValue,

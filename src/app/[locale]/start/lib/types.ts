@@ -7,7 +7,7 @@ export type PhotoEffect = "none" | "bw" | "sepia" | "cool" | "high-contrast" | "
 export type PhotoOverlay = "none" | "gradient-fade" | "color-tint" | "dark-vignette";
 export type PhotoBorder = "none" | "thin-ring" | "thick-ring" | "glow-ring" | "double-frame" | "gradient-border";
 
-export type BackgroundBaseType = "solid";
+export type BackgroundBaseType = "solid" | "image";
 export type BackgroundOverlayType = "none" | "solid" | "linear" | "radial" | "mesh";
 export type TextureId = "none" | "fine-grain" | "coarse-grain" | "dot-grid" | "diagonal-lines" | "cross-hatch" | "waves" | "geometric" | "topographic";
 export type BackgroundEffectId = "none" | "ambient-glow" | "floating-orbs" | "gradient-shift" | "vignette" | "light-leak";
@@ -54,6 +54,7 @@ export interface StylePresetSelection {
   // Phase 3: Background Layered System
   bgBaseId: BackgroundBaseType;
   bgBaseColor: string;
+  bgBaseImageDataUrl: string | null;
   bgBaseBlur: number;
   bgOverlayId: BackgroundOverlayType;
   bgOverlayColor1: string;
@@ -188,6 +189,7 @@ export function defaultLane1State(): Lane1CustomizerState {
       // Phase 3 Defaults (Layered)
       bgBaseId: "solid",
       bgBaseColor: "#ffffff",
+      bgBaseImageDataUrl: null,
       bgBaseBlur: 0,
       bgOverlayId: "none",
       bgOverlayColor1: "#1A2744",

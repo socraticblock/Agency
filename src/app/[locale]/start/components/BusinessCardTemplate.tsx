@@ -112,7 +112,19 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
     >
       {/* Layered Background Engine */}
       <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none rounded-[inherit]">
-        {/* Composite Overlay Layer (Gradient, Mesh, or Solid Tint) */}
+        {/* 1. Base Image Layer (with independent blur) */}
+        <div 
+          className="absolute inset-0 transition-all duration-700"
+          style={{ 
+            backgroundImage: "var(--bg-base-image)",
+            filter: "blur(var(--bg-base-blur))",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            transform: "scale(1.1)", // Prevent edge bleeding when blurred
+          }}
+        />
+
+        {/* 2. Composite Overlay Layer (Gradient, Mesh, or Solid Tint) */}
         <div 
           className="absolute inset-0"
           style={{ 
