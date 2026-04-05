@@ -135,26 +135,31 @@ export function StartCustomizer({
       setState((s) => {
         const grad = BACKGROUND_GRADIENT_PRESETS.find(p => p.id === backgroundId);
         if (grad) {
-          // It's a gradient preset - set it as an overlay
+          // Gradient preset - set as overlay
           return {
             ...s,
-            style: { 
-              ...s.style, 
+            style: {
+              ...s.style,
               backgroundId,
+              bgBaseId: "solid",
+              bgBaseColor: "#ffffff",
               bgOverlayId: "linear",
-              bgOverlayColor1: "#FAF8F5", // We would ideally parse this, but for now we set a premium default
+              bgOverlayColor1: "#FAF8F5",
               bgOverlayColor2: "#F0ECE6",
               bgOverlayOpacity: 0.8
             },
           };
         }
+        // Solid color preset
         return {
           ...s,
-          style: { 
-            ...s.style, 
+          style: {
+            ...s.style,
             backgroundId,
             bgBaseId: "solid",
-            bgBaseColor: hex || s.style.bgBaseColor
+            bgBaseColor: hex || s.style.bgBaseColor,
+            bgBaseImageDataUrl: null,
+            bgOverlayId: "none"
           },
         };
       });
@@ -166,11 +171,13 @@ export function StartCustomizer({
     (hex: string) => {
       setState((s) => ({
         ...s,
-        style: { 
-          ...s.style, 
+        style: {
+          ...s.style,
           backgroundId: "custom",
           bgBaseId: "solid",
-          bgBaseColor: hex 
+          bgBaseColor: hex,
+          bgBaseImageDataUrl: null,
+          bgOverlayId: "none"
         },
       }));
     },
