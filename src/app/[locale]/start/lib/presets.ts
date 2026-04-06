@@ -72,7 +72,6 @@ export interface FontPreset {
   fontBody: string;
   headingWeight: number;
   bodyWeight: number;
-  textColor?: string;
 }
 
 export interface VibePreset {
@@ -330,7 +329,6 @@ export const TYPOGRAPHY_PACK_PRESETS: TypographyPackPreset[] = [
     fontBody: "var(--font-inter), 'Noto Sans Georgian', system-ui, sans-serif",
     headingWeight: 700,
     bodyWeight: 400,
-    textColor: "#1A1A2E",
   },
   {
     id: "modern",
@@ -340,7 +338,6 @@ export const TYPOGRAPHY_PACK_PRESETS: TypographyPackPreset[] = [
     fontBody: "var(--font-inter), 'Noto Sans Georgian', system-ui, sans-serif",
     headingWeight: 600,
     bodyWeight: 400,
-    textColor: "#374151",
   },
   {
     id: "editorial",
@@ -351,7 +348,6 @@ export const TYPOGRAPHY_PACK_PRESETS: TypographyPackPreset[] = [
     fontBody: "var(--font-inter), 'Noto Sans Georgian', system-ui, sans-serif",
     headingWeight: 600,
     bodyWeight: 400,
-    textColor: "#1A2744",
   },
   {
     id: "bold",
@@ -361,7 +357,6 @@ export const TYPOGRAPHY_PACK_PRESETS: TypographyPackPreset[] = [
     fontBody: "var(--font-inter), 'Noto Sans Georgian', system-ui, sans-serif",
     headingWeight: 800,
     bodyWeight: 500,
-    textColor: "#292524",
   },
   {
     id: "minimal",
@@ -371,7 +366,6 @@ export const TYPOGRAPHY_PACK_PRESETS: TypographyPackPreset[] = [
     fontBody: "var(--font-inter), 'Noto Sans Georgian', system-ui, sans-serif",
     headingWeight: 300,
     bodyWeight: 300,
-    textColor: "#334155",
   },
   {
     id: "warm",
@@ -382,7 +376,6 @@ export const TYPOGRAPHY_PACK_PRESETS: TypographyPackPreset[] = [
     fontBody: "var(--font-inter), 'Noto Sans Georgian', system-ui, sans-serif",
     headingWeight: 700,
     bodyWeight: 400,
-    textColor: "#4B5563",
   },
   {
     id: "noir",
@@ -392,7 +385,6 @@ export const TYPOGRAPHY_PACK_PRESETS: TypographyPackPreset[] = [
     fontBody: "var(--font-inter), 'Noto Sans Georgian', system-ui, sans-serif",
     headingWeight: 800,
     bodyWeight: 400,
-    textColor: "#1A1A1A",
   },
   {
     id: "elegant",
@@ -403,7 +395,6 @@ export const TYPOGRAPHY_PACK_PRESETS: TypographyPackPreset[] = [
     fontBody: "var(--font-inter), 'Noto Sans Georgian', system-ui, sans-serif",
     headingWeight: 500,
     bodyWeight: 300,
-    textColor: "#1A1A2E",
   },
 ];
 
@@ -576,22 +567,18 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
     backgroundIsDark = isDarkColor(selection.bgOverlayColor1);
   }
 
-  // Use typography pack's text color as primary source, fall back to text color preset
-  let textColor = font.textColor ?? txt.color;
+  // User's text color selection takes priority
+  let textColor = txt.color;
   
-  // Only force light text for dark backgrounds if typography doesn't provide a color
-  // This allows users to override text color via typography while maintaining accessibility
-  if (backgroundIsDark && !font.textColor) {
-    textColor = "#F1F5F9"; // Force light text for dark backgrounds
+  // Force light text for dark backgrounds for accessibility
+  if (backgroundIsDark) {
+    textColor = "#F1F5F9";
   }
-
+  
   let bgResolved = baseColorValue;
   if (selection.cardDarkSurface) {
     bgResolved = "#0b1220";
-    // Don't override textColor if typography pack provides it
-    if (!font.textColor) {
-      textColor = "#e2e8f0";
-    }
+    textColor = "#e2e8f0";
   }
 
   const cardRadius = typeof selection.cardRadiusPx === "number" ? selection.cardRadiusPx : 24;
