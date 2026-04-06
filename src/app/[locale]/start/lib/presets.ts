@@ -547,11 +547,14 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
   // 2. Resolve Overlay Layer
   let overlayImageValue = "none";
   let overlayColorValue = "transparent";
+  let overlayGradientValue = "transparent";
 
   if (selection.bgOverlayId === "linear") {
     overlayImageValue = `linear-gradient(${selection.bgOverlayAngle}deg, ${selection.bgOverlayColor1}, ${selection.bgOverlayColor2})`;
+    overlayGradientValue = overlayImageValue;
   } else if (selection.bgOverlayId === "radial") {
     overlayImageValue = `radial-gradient(circle at center, ${selection.bgOverlayColor1}, ${selection.bgOverlayColor2})`;
+    overlayGradientValue = overlayImageValue;
   } else if (selection.bgOverlayId === "mesh") {
     // High-end organic mesh blend using 3 colors
     overlayImageValue = `
@@ -559,8 +562,10 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
       radial-gradient(at 100% 0%, ${selection.bgOverlayColor2} 0%, transparent 50%),
       radial-gradient(at 50% 100%, ${selection.bgOverlayColor3} 0%, transparent 50%)
     `.trim();
+    overlayGradientValue = overlayImageValue;
   } else if (selection.bgOverlayId === "solid") {
     overlayColorValue = selection.bgOverlayColor1;
+    overlayGradientValue = overlayColorValue;
   }
 
   // 3. Composition & Contrast Logic
@@ -605,6 +610,8 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
     "--bg-base-blur": `${selection.bgBaseBlur}px`,
     "--bg-image-overlay": overlayImageValue,
     "--bg-overlay-color": overlayColorValue,
+    "--overlay-gradient": overlayGradientValue,
+    "--overlay-opacity": selection.bgOverlayId === "none" ? "0" : String(selection.bgOverlayOpacity),
     "--bg-color": bgResolved,
     "--bg-primary": bgResolved,
     "--bg-overlay-opacity": selection.bgOverlayId === "none" ? "0" : String(selection.bgOverlayOpacity),

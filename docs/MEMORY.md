@@ -30,9 +30,9 @@
 - **Impact:** Preview tab matches merged defaults; print/PDF no longer blank; `SectionDispatcher` unchanged (`activeSections` ∩ `sectionOrder`).
 
 ### 008
-- **Context:** Background color swatches in `/start` updated `state.style.bgBaseColor`, but `BackgroundEngine`'s base layer used `var(--bg-base-color)` which was never defined in `resolveStyleVariables()`. The selector appeared "inactive" because the computed CSS variable fell back to an invalid/empty value.
-- **Decision:** Added `"--bg-base-color": baseColorValue` to the return object in `resolveStyleVariables()` (maps `selection.bgBaseColor` to the CSS variable `BackgroundEngine` reads).
-- **Impact:** Color selector now immediately updates the card background; `BackgroundEngine`'s Layer 1 (base color) correctly reflects user selection.
+- **Context:** Background color swatches in `/start` updated `state.style.bgBaseColor`, but `BackgroundEngine`'s base layer used `var(--bg-base-color)` which was never defined in `resolveStyleVariables()`. The selector appeared "inactive" because the computed CSS variable fell back to an invalid/empty value. Additionally, overlay decor (solid/linear/radial/mesh) used `var(--overlay-gradient)` which also didn't exist; only `--bg-image-overlay` and `--bg-overlay-color` were exported separately.
+- **Decision:** Added `"--bg-base-color": baseColorValue` and `"--overlay-gradient": overlayGradientValue` (combines image and color branches) to the return object in `resolveStyleVariables()`. The overlay gradient variable now maps correctly to what `BackgroundEngine` Layer 3 reads.
+- **Impact:** Color selector and overlay decor (linear/radial/mesh/solid + opacity) now work; `BackgroundEngine` Layers 1 and 3 render correctly from state.
 
 ## Architecture Decisions
 - Zero backend for card features
