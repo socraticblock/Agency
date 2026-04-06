@@ -18,6 +18,7 @@ export function AboutContentFields({
           value={state.aboutBio}
           onChange={(e) => patch({ aboutBio: e.target.value })}
           placeholder="Short professional bio…"
+          onFocus={(e) => e.target.select()}
         />
       </label>
       <label className={labelClass}>
@@ -27,6 +28,7 @@ export function AboutContentFields({
           value={state.aboutBioSecondary}
           onChange={(e) => patch({ aboutBioSecondary: e.target.value })}
           placeholder="ქართული ტექსტი…"
+          onFocus={(e) => e.target.select()}
         />
       </label>
     </fieldset>

@@ -31,6 +31,7 @@ export function TestimonialsContentFields({
               className={`${fieldClass} min-h-[64px] resize-y`}
               value={t.quote}
               onChange={(e) => patch({ testimonials: setT(state.testimonials, i, "quote", e.target.value) })}
+              onFocus={(e) => e.target.select()}
             />
           </label>
           <label className={labelClass}>
@@ -39,6 +40,7 @@ export function TestimonialsContentFields({
               className={fieldClass}
               value={t.name}
               onChange={(e) => patch({ testimonials: setT(state.testimonials, i, "name", e.target.value) })}
+              onFocus={(e) => e.target.select()}
             />
           </label>
           <label className={labelClass}>
@@ -47,6 +49,7 @@ export function TestimonialsContentFields({
               className={fieldClass}
               value={t.title}
               onChange={(e) => patch({ testimonials: setT(state.testimonials, i, "title", e.target.value) })}
+              onFocus={(e) => e.target.select()}
             />
           </label>
         </div>

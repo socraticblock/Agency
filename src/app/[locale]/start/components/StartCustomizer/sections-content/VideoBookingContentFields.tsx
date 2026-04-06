@@ -18,6 +18,7 @@ export function VideoBookingContentFields({
           value={state.videoUrl}
           onChange={(e) => patch({ videoUrl: e.target.value })}
           placeholder="https://…"
+          onFocus={(e) => e.target.select()}
         />
       </label>
       <label className={labelClass}>
@@ -27,6 +28,7 @@ export function VideoBookingContentFields({
           value={state.bookingUrl}
           onChange={(e) => patch({ bookingUrl: e.target.value })}
           placeholder="https://cal.com/… or similar"
+          onFocus={(e) => e.target.select()}
         />
       </label>
       <label className={labelClass}>
@@ -35,6 +37,7 @@ export function VideoBookingContentFields({
           className={fieldClass}
           value={state.bookingLabel}
           onChange={(e) => patch({ bookingLabel: e.target.value })}
+          onFocus={(e) => e.target.select()}
         />
       </label>
     </fieldset>

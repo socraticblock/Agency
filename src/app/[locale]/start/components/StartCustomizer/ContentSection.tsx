@@ -50,6 +50,7 @@ export function ContentSection({
           className={fieldClass}
           value={state.name}
           onChange={(e) => patch({ name: e.target.value })}
+          onFocus={(e) => e.target.select()}
         />
       </label>
       {state.secondaryMode === "self" ? (
@@ -59,6 +60,7 @@ export function ContentSection({
             className={fieldClass}
             value={state.nameSecondary}
             onChange={(e) => patch({ nameSecondary: e.target.value })}
+            onFocus={(e) => e.target.select()}
           />
         </label>
       ) : null}
@@ -68,6 +70,7 @@ export function ContentSection({
           className={fieldClass}
           value={state.title}
           onChange={(e) => patch({ title: e.target.value })}
+          onFocus={(e) => e.target.select()}
         />
       </label>
       {state.secondaryMode === "self" ? (
@@ -77,6 +80,7 @@ export function ContentSection({
             className={fieldClass}
             value={state.titleSecondary}
             onChange={(e) => patch({ titleSecondary: e.target.value })}
+            onFocus={(e) => e.target.select()}
           />
         </label>
       ) : null}
@@ -88,6 +92,7 @@ export function ContentSection({
           value={state.company}
           onChange={(e) => patch({ company: e.target.value })}
           placeholder="e.g. Agency Name"
+          onFocus={(e) => e.target.select()}
         />
       </label>
 
@@ -98,6 +103,7 @@ export function ContentSection({
           value={state.tagline}
           onChange={(e) => patch({ tagline: e.target.value })}
           placeholder="e.g. Professional tagline..."
+          onFocus={(e) => e.target.select()}
         />
       </label>
 
@@ -109,6 +115,7 @@ export function ContentSection({
             value={state.taglineSecondary}
             onChange={(e) => patch({ taglineSecondary: e.target.value })}
             placeholder="სლოგანი"
+            onFocus={(e) => e.target.select()}
           />
         </label>
       ) : null}
@@ -120,6 +127,7 @@ export function ContentSection({
           value={state.phone}
           onChange={(e) => patch({ phone: e.target.value })}
           inputMode="tel"
+          onFocus={(e) => e.target.select()}
         />
       </label>
       <label className={labelClass}>
@@ -129,6 +137,7 @@ export function ContentSection({
           value={state.ctaTextCall}
           onChange={(e) => patch({ ctaTextCall: e.target.value })}
           placeholder="Call Me"
+          onFocus={(e) => e.target.select()}
         />
       </label>
       <label className={labelClass}>
@@ -138,6 +147,7 @@ export function ContentSection({
           value={state.ctaTextWhatsApp}
           onChange={(e) => patch({ ctaTextWhatsApp: e.target.value })}
           placeholder="WhatsApp Me"
+          onFocus={(e) => e.target.select()}
         />
       </label>
       <label className={labelClass}>
@@ -147,6 +157,7 @@ export function ContentSection({
           value={state.email}
           onChange={(e) => patch({ email: e.target.value })}
           type="email"
+          onFocus={(e) => e.target.select()}
         />
       </label>
       <label className={labelClass}>
@@ -156,6 +167,7 @@ export function ContentSection({
           rows={2}
           value={state.address}
           onChange={(e) => patch({ address: e.target.value })}
+          onFocus={(e) => e.target.select()}
         />
       </label>
       {state.secondaryMode === "self" ? (
@@ -166,6 +178,7 @@ export function ContentSection({
             rows={2}
             value={state.addressSecondary}
             onChange={(e) => patch({ addressSecondary: e.target.value })}
+            onFocus={(e) => e.target.select()}
           />
         </label>
       ) : null}
@@ -175,6 +188,7 @@ export function ContentSection({
           className={fieldClass}
           value={state.hours}
           onChange={(e) => patch({ hours: e.target.value })}
+          onFocus={(e) => e.target.select()}
         />
       </label>
       {state.secondaryMode === "self" ? (
@@ -184,6 +198,7 @@ export function ContentSection({
             className={fieldClass}
             value={state.hoursSecondary}
             onChange={(e) => patch({ hoursSecondary: e.target.value })}
+            onFocus={(e) => e.target.select()}
           />
         </label>
       ) : null}
@@ -193,6 +208,7 @@ export function ContentSection({
           className={fieldClass}
           value={state.practiceHeading}
           onChange={(e) => patch({ practiceHeading: e.target.value })}
+          onFocus={(e) => e.target.select()}
         />
       </label>
       <label className={labelClass}>
@@ -201,6 +217,7 @@ export function ContentSection({
           className={fieldClass}
           value={state.practiceHeadingSecondary}
           onChange={(e) => patch({ practiceHeadingSecondary: e.target.value })}
+          onFocus={(e) => e.target.select()}
         />
       </label>
     </CollapsibleSection>

@@ -30,6 +30,7 @@ export function AwardsContentFields({
               className={fieldClass}
               value={a.title}
               onChange={(e) => patch({ awards: setA(state.awards, i, "title", e.target.value) })}
+              onFocus={(e) => e.target.select()}
             />
           </label>
           <label className={labelClass}>
@@ -38,6 +39,7 @@ export function AwardsContentFields({
               className={fieldClass}
               value={a.issuer}
               onChange={(e) => patch({ awards: setA(state.awards, i, "issuer", e.target.value) })}
+              onFocus={(e) => e.target.select()}
             />
           </label>
         </div>

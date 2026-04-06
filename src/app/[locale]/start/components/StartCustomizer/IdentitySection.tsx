@@ -68,21 +68,39 @@ export function IdentitySection({
         </label>
         <label className={labelClass}>
           Foreground (modules)
-          <input
-            className={fieldClass}
-            value={state.qrForegroundColor}
-            onChange={(e) => patch({ qrForegroundColor: e.target.value })}
-            placeholder="#111827"
-          />
+          <div className="flex gap-2">
+            <input
+              type="color"
+              value={state.qrForegroundColor}
+              onChange={(e) => patch({ qrForegroundColor: e.target.value })}
+              className="h-10 w-10 cursor-pointer rounded border border-slate-200"
+            />
+            <input
+              className={fieldClass}
+              value={state.qrForegroundColor}
+              onChange={(e) => patch({ qrForegroundColor: e.target.value })}
+              placeholder="#111827"
+              onFocus={(e) => e.target.select()}
+            />
+          </div>
         </label>
         <label className={labelClass}>
           Background
-          <input
-            className={fieldClass}
-            value={state.qrBackgroundColor}
-            onChange={(e) => patch({ qrBackgroundColor: e.target.value })}
-            placeholder="#ffffff or transparent"
-          />
+          <div className="flex gap-2">
+            <input
+              type="color"
+              value={state.qrBackgroundColor === "transparent" ? "#ffffff" : state.qrBackgroundColor}
+              onChange={(e) => patch({ qrBackgroundColor: e.target.value })}
+              className="h-10 w-10 cursor-pointer rounded border border-slate-200"
+            />
+            <input
+              className={fieldClass}
+              value={state.qrBackgroundColor}
+              onChange={(e) => patch({ qrBackgroundColor: e.target.value })}
+              placeholder="#ffffff or transparent"
+              onFocus={(e) => e.target.select()}
+            />
+          </div>
         </label>
         <label className="flex cursor-pointer items-center gap-3 text-sm font-medium text-[#1e293b]">
           <input
@@ -92,7 +110,7 @@ export function IdentitySection({
             checked={state.showQrLogo}
             onChange={(e) => patch({ showQrLogo: e.target.checked })}
           />
-          High error correction (for logo overlay in print workflows)
+          Show QR logo
         </label>
       </fieldset>
       

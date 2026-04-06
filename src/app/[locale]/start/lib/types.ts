@@ -126,6 +126,7 @@ export interface Lane1CustomizerState {
   practiceHeadingSecondary: string;
   style: StylePresetSelection;
   addGoogleMap: boolean;
+  showMapPreview: boolean;
   photoDataUrl: string | null;
   proTranslationAcknowledged: boolean;
 
@@ -249,8 +250,9 @@ export function defaultLane1State(): Lane1CustomizerState {
       cardRadiusPx: 24,
       cardShadowId: "soft",
     },
-    
+
     addGoogleMap: true,
+    showMapPreview: true,
     photoDataUrl: "/premium_profile_placeholder.png", // Corrected path to generated asset
     proTranslationAcknowledged: false,
     ctaTextCall: "Call Me",

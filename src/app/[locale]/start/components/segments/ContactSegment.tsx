@@ -94,7 +94,7 @@ export function ContactSegment({
           </div>
         )}
 
-        {state.addGoogleMap && address?.trim() && (
+        {state.addGoogleMap && state.showMapPreview && address?.trim() && (
           <div className="pt-4">
             <MagneticButton
               as="a"
@@ -104,7 +104,7 @@ export function ContactSegment({
               className={lane1DirectionsClasses(state.style.buttonStyleId)}
               style={{
                 borderColor: "var(--accent)",
-                color: "var(--accent)",
+                color: "white",
                 background: "rgba(255, 255, 255, 0.05)",
               }}
             >

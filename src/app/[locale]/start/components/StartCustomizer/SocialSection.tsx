@@ -38,6 +38,7 @@ export function SocialSection({
                 social: { ...s.social, [k]: e.target.value },
               }))
             }
+            onFocus={(e) => e.target.select()}
           />
         </label>
       ))}
@@ -54,6 +55,7 @@ export function SocialSection({
                 return { ...s, social: { ...s.social, extra } };
               })
             }
+            onFocus={(e) => e.target.select()}
           />
           <input
             placeholder="URL"
@@ -66,6 +68,7 @@ export function SocialSection({
                 return { ...s, social: { ...s.social, extra } };
               })
             }
+            onFocus={(e) => e.target.select()}
           />
         </div>
       ))}

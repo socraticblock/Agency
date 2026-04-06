@@ -220,7 +220,7 @@ export function ContactSocialSegment({
             style={bodyStyle}
           />
         </div>
-        {state.addGoogleMap && address?.trim() ? (
+        {state.addGoogleMap && state.showMapPreview && address?.trim() ? (
           <div className="mt-8 space-y-4">
             <MagneticButton
               as="a"
@@ -230,7 +230,7 @@ export function ContactSocialSegment({
               className="flex w-full items-center justify-center gap-2 rounded-xl border-2 py-3.5 text-[14px] font-bold transition-transform"
               style={{
                 borderColor: "var(--accent)",
-                color: "var(--accent)",
+                color: "white",
                 background: "rgba(255, 255, 255, 0.05)"
               }}
             >

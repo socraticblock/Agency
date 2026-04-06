@@ -63,12 +63,14 @@ export function ServicesSection({
             placeholder="Title (e.g. Real Estate)"
             value={state.serviceAreas[i]}
             onChange={(e) => setServiceArea(i, e.target.value, false)}
+            onFocus={(e) => e.target.select()}
           />
           <textarea
             className={`${fieldClass} h-16 min-h-[64px] resize-none pt-2 text-xs`}
             placeholder="Brief description (optional)..."
             value={state.serviceDescriptions[i]}
             onChange={(e) => setServiceDescription(i, e.target.value, false)}
+            onFocus={(e) => e.target.select()}
           />
         </div>
       ))}
@@ -84,12 +86,14 @@ export function ServicesSection({
                 placeholder="სათაური"
                 value={state.serviceAreasSecondary[i]}
                 onChange={(e) => setServiceArea(i, e.target.value, true)}
+                onFocus={(e) => e.target.select()}
               />
               <textarea
                 className={`${fieldClass} h-16 min-h-[64px] resize-none pt-2 text-xs`}
                 placeholder="აღწერა (დამატებითი)..."
                 value={state.serviceDescriptionsSecondary[i]}
                 onChange={(e) => setServiceDescription(i, e.target.value, true)}
+                onFocus={(e) => e.target.select()}
               />
             </div>
           ))}
