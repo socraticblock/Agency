@@ -529,43 +529,31 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
   const acc = ACCENT_PRESETS.find((p) => p.id === selection.accentId) ?? ACCENT_PRESETS[0];
   const secondaryFamily =
     ACCENT_PRESETS.find((p) => p.id === selection.secondaryAccentId) ?? acc;
-  const typo =
-    TYPOGRAPHY_PACK_PRESETS.find((p) => p.id === selection.typographyPackId) ?? null;
   const font =
-    typo ??
+    TYPOGRAPHY_PACK_PRESETS.find((p) => p.id === selection.typographyPackId) ??
     FONT_PRESETS.find((p) => p.id === selection.fontId) ??
     FONT_PRESETS[1];
   const vibe = VIBE_PRESETS.find((p) => p.id === selection.vibeId) ?? VIBE_PRESETS[0];
-  const anim = ANIMATION_PRESETS.find((p) => p.id === selection.animationId) ?? ANIMATION_PRESETS[0];
 
   // 1. Resolve Base Layer
   const baseColorValue = selection.bgBaseColor;
-  const baseImageValue = selection.bgBaseId === "image" && selection.bgBaseImageDataUrl 
-    ? `url(${selection.bgBaseImageDataUrl})` 
-    : "none";
 
   // 2. Resolve Overlay Layer
-  let overlayImageValue = "none";
-  let overlayColorValue = "transparent";
   let overlayGradientValue = "transparent";
 
   if (selection.bgOverlayId === "linear") {
-    overlayImageValue = `linear-gradient(${selection.bgOverlayAngle}deg, ${selection.bgOverlayColor1}, ${selection.bgOverlayColor2})`;
-    overlayGradientValue = overlayImageValue;
+    overlayGradientValue = `linear-gradient(${selection.bgOverlayAngle}deg, ${selection.bgOverlayColor1}, ${selection.bgOverlayColor2})`;
   } else if (selection.bgOverlayId === "radial") {
-    overlayImageValue = `radial-gradient(circle at center, ${selection.bgOverlayColor1}, ${selection.bgOverlayColor2})`;
-    overlayGradientValue = overlayImageValue;
+    overlayGradientValue = `radial-gradient(circle at center, ${selection.bgOverlayColor1}, ${selection.bgOverlayColor2})`;
   } else if (selection.bgOverlayId === "mesh") {
     // High-end organic mesh blend using 3 colors
-    overlayImageValue = `
+    overlayGradientValue = `
       radial-gradient(at 0% 0%, ${selection.bgOverlayColor1} 0%, transparent 50%),
       radial-gradient(at 100% 0%, ${selection.bgOverlayColor2} 0%, transparent 50%),
       radial-gradient(at 50% 100%, ${selection.bgOverlayColor3} 0%, transparent 50%)
     `.trim();
-    overlayGradientValue = overlayImageValue;
   } else if (selection.bgOverlayId === "solid") {
-    overlayColorValue = selection.bgOverlayColor1;
-    overlayGradientValue = overlayColorValue;
+    overlayGradientValue = selection.bgOverlayColor1;
   }
 
   // 3. Composition & Contrast Logic
@@ -591,13 +579,6 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
   }
 
   const cardRadius = typeof selection.cardRadiusPx === "number" ? selection.cardRadiusPx : 24;
-  const cardShadowKey = (selection.cardShadowId ?? "soft") as CardShadowId;
-  const CARD_CHROME_SHADOW: Record<CardShadowId, string> = {
-    none: "none",
-    soft: "0 14px 40px rgba(15, 23, 42, 0.12)",
-    elevated: "0 22px 55px rgba(15, 23, 42, 0.18)",
-    luxury: "0 32px 65px rgba(15, 23, 42, 0.26)",
-  };
 
   const texOp =
     selection.textureId === "none"
@@ -606,21 +587,19 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
 
   return {
     "--bg-base-color": baseColorValue,
-    "--bg-base-image": baseImageValue,
-    "--bg-base-blur": `${selection.bgBaseBlur}px`,
-    "--bg-image-overlay": overlayImageValue,
-    "--bg-overlay-color": overlayColorValue,
     "--overlay-gradient": overlayGradientValue,
     "--overlay-opacity": selection.bgOverlayId === "none" ? "0" : String(selection.bgOverlayOpacity),
-    "--bg-color": bgResolved,
     "--bg-primary": bgResolved,
-    "--bg-overlay-opacity": selection.bgOverlayId === "none" ? "0" : String(selection.bgOverlayOpacity),
     "--text-primary": textColor,
     "--accent": acc.accent,
     "--accent-secondary": secondaryFamily.accentSecondary,
-    "--texture-bg": textureBackgroundImage(selection.textureId),
+    "--texture-pattern": textureBackgroundImage(selection.textureId),
     "--texture-bg-size": textureBackgroundSize(selection.textureId),
     "--texture-opacity": String(texOp),
+    "--texture-blend-mode": selection.textureId === "none" ? "normal" : "overlay",
+    "--bg-gradient": selection.bgOverlayId !== "none"
+      ? overlayGradientValue
+      : `linear-gradient(135deg, ${acc.accent}, ${secondaryFamily.accentSecondary})`,
     "--font-heading": font.fontHeading,
     "--font-body": font.fontBody,
     "--font-heading-weight": String(font.headingWeight),
@@ -628,11 +607,7 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
     "--glass-blur": vibe.blur,
     "--card-shadow": vibe.shadow,
     "--border-opacity": String(vibe.borderOpacity),
-    "--stagger-delay": String(anim.stagger),
-    "--entrance-y": String(anim.entranceY),
-    "--spring-damping": String(anim.springDamping),
     "--card-radius": `${cardRadius}px`,
-    "--card-chrome-shadow": CARD_CHROME_SHADOW[cardShadowKey] ?? CARD_CHROME_SHADOW.soft,
   } as CSSProperties;
 }
 

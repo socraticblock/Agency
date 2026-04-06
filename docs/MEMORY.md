@@ -4,6 +4,9 @@
 - **006** — Elite roadmap wiring (sections, typography, texture/effects, social/QR, motion, themes, card chrome, cleanup)
 - **007** — Preview tab JSON normalization + print/PDF visibility strategy + QR frame radii
 - **008** — BackgroundEngine color selector fix (missing `--bg-base-color` CSS variable)
+- **009** — CSS variable mismatch fixes (texture pattern, blend mode, and gradient variables)
+- **010** — Consolidated duplicate `resolveStyleVariables` functions (removed `presets/resolve-styles.ts`, updated `presets/index.ts`)
+- **011** — Removed dead code exports and duplicate variables (10 unused variables from presets.ts, `--start-accent-gold` from start-shell.css)
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -33,6 +36,21 @@
 - **Context:** Background color swatches in `/start` updated `state.style.bgBaseColor`, but `BackgroundEngine`'s base layer used `var(--bg-base-color)` which was never defined in `resolveStyleVariables()`. The selector appeared "inactive" because the computed CSS variable fell back to an invalid/empty value. Additionally, overlay decor (solid/linear/radial/mesh) used `var(--overlay-gradient)` which also didn't exist; only `--bg-image-overlay` and `--bg-overlay-color` were exported separately.
 - **Decision:** Added `"--bg-base-color": baseColorValue` and `"--overlay-gradient": overlayGradientValue` (combines image and color branches) to the return object in `resolveStyleVariables()`. The overlay gradient variable now maps correctly to what `BackgroundEngine` Layer 3 reads.
 - **Impact:** Color selector and overlay decor (linear/radial/mesh/solid + opacity) now work; `BackgroundEngine` Layers 1 and 3 render correctly from state.
+
+### 009
+- **Context:** CSS Variable Mismatch Audit Report identified 3 critical bugs: (1) `--texture-pattern` read by BackgroundEngine but exported as `--texture-bg`, causing texture overlay to never render; (2) `--texture-blend-mode` read but never exported, causing textures to default to "normal" blend mode instead of "overlay"; (3) `--bg-gradient` used by HeroSegment for gradient-border photo style but never exported, causing silent failures.
+- **Decision:** Renamed `"--texture-bg"` to `"--texture-pattern"` in presets.ts line 621 to match BackgroundEngine usage; added `"--texture-blend-mode": selection.textureId === "none" ? "normal" : "overlay"` export at line 624; added `"--bg-gradient": selection.bgOverlayId !== "none" ? overlayGradientValue : \`linear-gradient(135deg, ${acc.accent}, ${secondaryFamily.accentSecondary})\` export at line 625.
+- **Impact:** Texture overlay layer (Layer 5) now renders correctly with proper blend mode; gradient-border photo style in HeroSegment now works; all 3 critical rendering bugs resolved; build verified with `npm run build`.
+
+### 010
+- **Context:** Audit report identified TWO different `resolveStyleVariables` functions: one in `presets.ts` (526-637, used by BusinessCardTemplate) and another in `presets/resolve-styles.ts` (11-114, exported by `presets/index.ts`). This created confusion, maintenance burden, and potential divergence.
+- **Decision:** Updated `presets/index.ts` line 46 to export `isBackgroundLockingTextColor` and `resolveStyleVariables` from `../presets` instead of `./resolve-styles`; deleted duplicate file `presets/resolve-styles.ts` entirely.
+- **Impact:** Single source of truth for style variable resolution; eliminated 114 lines of duplicate code; reduced maintenance burden; build verified with `npm run build`.
+
+### 011
+- **Context:** Audit report identified 10-11 dead code variables exported by `resolveStyleVariables()` but never read by any component: `--bg-base-image`, `--bg-base-blur`, `--bg-image-overlay`, `--bg-overlay-color`, `--bg-color`, `--bg-overlay-opacity` (duplicate of `--overlay-opacity`), `--stagger-delay`, `--entrance-y`, `--spring-damping`, `--card-chrome-shadow`. Also `--start-accent-gold` defined in start-shell.css but never read.
+- **Decision:** Removed all 10 unused exports from presets.ts return object (lines 609-612, 615, 617, 635-637); removed `--start-accent-gold` from start-shell.css line 26. Also removed unused local variables: `typo`, `anim`, `baseImageValue`, `overlayImageValue`, `overlayColorValue`, `cardShadowKey`, and `CARD_CHROME_SHADOW` object.
+- **Impact:** Reduced CSS variable exports from 26 to 16 (38% reduction); eliminated bloat and confusion; cleaner, more maintainable codebase; simplified function logic by removing unused intermediate variables; build verified with `npm run build`.
 
 ## Architecture Decisions
 - Zero backend for card features

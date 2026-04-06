@@ -44,4 +44,4 @@ export {
 export {
   isBackgroundLockingTextColor,
   resolveStyleVariables,
-} from './resolve-styles';
+} from '../presets';

@@ -23,7 +23,6 @@
   --start-caption: #64748b;
   /* Theming: accent may be overridden on a child wrapper for pickers / links */
   --start-accent: var(--accent, #1a2744);
-  --start-accent-gold: #c5a55a;
   --start-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
   --start-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
   --start-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
