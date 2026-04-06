@@ -193,7 +193,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
           qrDataUrl={qrDataUrl} 
           shareFeedback={shareFeedback} 
           handleShare={handleShare} 
-          referHref={`https://wa.me/?text=${encodeURIComponent(`I highly recommend ${state.name} — ${state.title}. View their card: ${window.location.href}`)}`} 
+          referHref={`https://wa.me/?text=${encodeURIComponent(`I highly recommend ${state.name} — ${state.title}. View their card: ${typeof window !== "undefined" ? window.location.href : ""}`)}`} 
         />
 
         <BrandingFooter ownerName={ownerName} hideBranding={hideBranding} homeHref={homeHref} />
