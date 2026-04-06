@@ -227,11 +227,10 @@ export function ContactSocialSegment({
               href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex w-full items-center justify-center gap-2 rounded-xl border-2 py-3.5 text-[14px] font-bold transition-transform"
+              className="flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-[14px] font-bold transition-all shadow-lg active:scale-95"
               style={{
-                borderColor: "var(--accent)",
-                color: "white",
-                background: "rgba(255, 255, 255, 0.05)"
+                background: "var(--accent)",
+                color: "var(--accent-contrast, #fff)"
               }}
             >
               <Map className="h-4 w-4 opacity-70" />

@@ -15,7 +15,7 @@ export type BackgroundEffectId = "none" | "ambient-glow" | "floating-orbs" | "gr
 export type TypographyPackId = "classic" | "modern" | "editorial" | "bold" | "minimal" | "warm" | "noir" | "elegant";
 export type ButtonStyleId = "classic" | "outlined" | "ghost" | "sharp" | "luxury" | "minimal";
 
-export type SectionId = "about" | "services" | "testimonials" | "gallery" | "awards" | "hours" | "video" | "booking";
+export type SectionId = "about" | "testimonials" | "gallery" | "awards" | "video" | "booking" | "services";
 
 export type SocialIconStyle = "filled" | "outlined" | "rounded" | "minimal";
 export type SocialIconSize = "small" | "medium" | "large";
@@ -145,6 +145,11 @@ export interface Lane1CustomizerState {
   videoUrl: string;
   bookingUrl: string;
   bookingLabel: string;
+  
+  // Counts
+  testimonialCount: number;
+  awardCount: number;
+  galleryCount: number;
 
   // Phase 7: Social & QR
   socialIconStyle: SocialIconStyle;
@@ -258,7 +263,7 @@ export function defaultLane1State(): Lane1CustomizerState {
     ctaTextCall: "Call Me",
     ctaTextWhatsApp: "WhatsApp Me",
     activeSections: ["services"],
-    sectionOrder: ["about", "services", "testimonials", "gallery", "awards", "hours", "video", "booking"],
+    sectionOrder: ["about", "services", "testimonials", "gallery", "awards", "video", "booking"],
     aboutBio: "",
     aboutBioSecondary: "",
     testimonials: [
@@ -276,6 +281,9 @@ export function defaultLane1State(): Lane1CustomizerState {
     videoUrl: "",
     bookingUrl: "",
     bookingLabel: "Book a Consultation",
+    testimonialCount: 2,
+    awardCount: 2,
+    galleryCount: 3,
     socialIconStyle: "minimal",
     socialIconSize: "medium",
     socialIconColorMode: "accent",

@@ -51,7 +51,7 @@ export function TestimonialsSegment({
         Testimonials
       </h2>
       <ul className="flex flex-col gap-4">
-        {state.testimonials.map((t, i) => {
+        {state.testimonials.slice(0, state.testimonialCount).map((t, i) => {
           if (!editable && !t.quote.trim()) return null;
           return (
             <li

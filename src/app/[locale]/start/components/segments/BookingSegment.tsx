@@ -6,10 +6,12 @@ import type { CSSProperties } from "react";
 import type { Lane1CustomizerState } from "../../lib/types";
 import { MagneticButton } from "../../../_components/MagneticButton";
 import { lane1BookingPrimaryClasses } from "../../lib/button-styles";
+import { InlineEditable } from "../InlineEditable";
 
 interface BookingSegmentProps {
   state: Lane1CustomizerState;
   editable: boolean;
+  patch: (p: Partial<Lane1CustomizerState>) => void;
   isResponsive: boolean;
   headingStyle: CSSProperties;
   itemVariants: import("framer-motion").Variants;
@@ -31,13 +33,13 @@ function safeHttpUrl(raw: string): string | null {
 export function BookingSegment({
   state,
   editable,
+  patch,
   isResponsive,
   headingStyle,
   itemVariants,
   glassStyle,
 }: BookingSegmentProps) {
   const href = safeHttpUrl(state.bookingUrl);
-  if (!href && !editable) return null;
 
   const btnId = state.style.buttonStyleId;
   const filled = btnId !== "ghost" && btnId !== "outlined";
@@ -52,10 +54,26 @@ export function BookingSegment({
       <h2 className="mb-4 text-lg font-bold" style={headingStyle}>
         Book time
       </h2>
-      {href ? (
+
+      {editable && (
+        <div className="mb-6">
+          <label className="block text-[10px] uppercase font-bold tracking-wider opacity-50 mb-1">
+            Booking / Calendar Link
+          </label>
+          <input
+            type="text"
+            className="w-full rounded-lg border border-black/10 bg-black/5 px-3 py-2 text-sm focus:border-[var(--accent)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)] transition-colors"
+            placeholder="https://calendly.com/your-link"
+            value={state.bookingUrl}
+            onChange={(e) => patch({ bookingUrl: e.target.value })}
+          />
+        </div>
+      )}
+
+      {href || editable ? (
         <MagneticButton
-          as="a"
-          href={href}
+          as={href ? "a" : "div"}
+          href={href || undefined}
           target="_blank"
           rel="noopener noreferrer"
           className={`inline-flex items-center gap-2 font-semibold ${lane1BookingPrimaryClasses(btnId)}`}
@@ -73,13 +91,14 @@ export function BookingSegment({
           }
         >
           <Calendar className="h-4 w-4 shrink-0" aria-hidden />
-          {state.bookingLabel.trim() || "Book"}
+          <InlineEditable
+            value={state.bookingLabel}
+            onChange={(v) => patch({ bookingLabel: v })}
+            placeholder="Book"
+            editable={editable}
+          />
         </MagneticButton>
-      ) : (
-        <p className="text-sm opacity-60" style={{ color: "var(--text-primary)" }}>
-          Set a booking URL under Sections → Content.
-        </p>
-      )}
+      ) : null}
     </motion.section>
   );
 }

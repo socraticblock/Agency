@@ -16,34 +16,8 @@ export function ContentSection({
       onToggle={onToggle}
     >
       <p className="start-caption">
-        English is the default. Edit inline in the preview or here — both stay in sync.
+        Edit your card's details below. Remember that you can also edit text directly on the card preview!
       </p>
-      <fieldset>
-        <legend className="start-label mb-2 block">Primary language (site default)</legend>
-        <div className="flex flex-col gap-2 text-sm text-[#1e293b]">
-          <label className="flex cursor-pointer items-start gap-3">
-            <input
-              type="radio"
-              name="primaryLang"
-              className="mt-0.5 h-4 w-4"
-              style={{ accentColor: "var(--accent)" }}
-              checked={state.primaryLang === "en"}
-              onChange={() => patch({ primaryLang: "en" as PrimaryLang })}
-            />
-            English (recommended)
-          </label>
-          <label className="flex cursor-pointer items-start gap-3">
-            <input
-              type="radio"
-              name="primaryLang"
-              className="mt-0.5 h-4 w-4 accent-[#1A2744]"
-              checked={state.primaryLang === "ka"}
-              onChange={() => patch({ primaryLang: "ka" as PrimaryLang })}
-            />
-            Georgian (WhatsApp order will be in Georgian)
-          </label>
-        </div>
-      </fieldset>
       <label className={labelClass}>
         Name / firm (EN)
         <input

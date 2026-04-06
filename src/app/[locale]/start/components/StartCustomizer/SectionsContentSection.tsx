@@ -21,12 +21,9 @@ function SectionContentBlock({ sectionId, state, patch }: { sectionId: SectionId
     case "video":
     case "booking":
       // Video and booking share the same content block
-      return state.activeSections.includes("video") || state.activeSections.includes("booking") 
+      return state.activeSections.includes("video") || state.activeSections.includes("booking")
         ? <VideoBookingContentFields state={state} patch={patch} />
         : null;
-    case "hours":
-      // Hours fields are in ContentSection, not here
-      return null;
     case "services":
       // Services are handled in the ServicesSection component
       return null;
@@ -40,8 +37,9 @@ export function SectionsContentSection({ state, patch, isOpen, onToggle }: Secti
   const visibleSectionsInOrder = state.sectionOrder
     .filter((id: SectionId) => state.activeSections.includes(id))
     .filter((id: SectionId) => {
-      // Filter out hours (in ContentSection) and services (in ServicesSection)
-      return id !== "hours" && id !== "services";
+      // Filter out services (handled in ServicesSection component)
+      // Hours are in ContentSection, not a toggleable section
+      return id !== "services";
     });
 
   // Merge video and booking if both are active (they share content block)

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { CollapsibleSection } from "../CollapsibleSection";
 import type { Lane1CustomizerState, SectionId } from "../../lib/types";
 import { labelClass, type SectionProps } from "./types";
@@ -9,7 +10,6 @@ const SECTION_LABELS: Record<SectionId, string> = {
   testimonials: "Testimonials",
   gallery: "Gallery",
   awards: "Awards",
-  hours: "Hours",
   video: "Video",
   booking: "Booking",
 };
@@ -24,6 +24,19 @@ function swapInOrder(order: SectionId[], a: SectionId, b: SectionId): SectionId[
 }
 
 export function SectionsLayoutSection({ state, patch, isOpen, onToggle }: SectionProps) {
+  // Clear any invalid sections from the state (e.g. blank ones)
+  useEffect(() => {
+    const validOrder = state.sectionOrder.filter((id) => !!id && id in SECTION_LABELS);
+    const validActive = state.activeSections.filter((id) => !!id && id in SECTION_LABELS);
+    
+    if (validOrder.length !== state.sectionOrder.length || validActive.length !== state.activeSections.length) {
+      patch({
+        sectionOrder: validOrder,
+        activeSections: validActive,
+      });
+    }
+  }, [state.sectionOrder, state.activeSections, patch]);
+
   const orderedActive = state.sectionOrder.filter((id) => state.activeSections.includes(id)).slice(0, 4);
   const atCapacity = state.activeSections.length >= 4;
 
@@ -48,33 +61,111 @@ export function SectionsLayoutSection({ state, patch, isOpen, onToggle }: Sectio
   return (
     <CollapsibleSection id="sections" title="Sections" isOpen={isOpen} onToggle={onToggle}>
       <p className="start-caption mb-4">
-        Show up to <strong>four</strong> blocks on your card. Reorder changes how they appear between CTAs and contact.
+        ✨ <strong>Tip:</strong> Edit your section's text and images directly on the card preview!
       </p>
 
-      <fieldset className="space-y-2">
+      <fieldset className="space-y-4">
         <legend className={labelClass}>Visible sections</legend>
-        {state.sectionOrder.map((id) => {
-          const on = state.activeSections.includes(id);
-          const disabledOff = !on && atCapacity;
-          return (
-            <label
-              key={id}
-              className={`flex cursor-pointer items-center gap-3 rounded-lg border border-black/10 px-3 py-2 text-sm ${
-                disabledOff ? "cursor-not-allowed opacity-50" : ""
-              }`}
-            >
-              <input
-                type="checkbox"
-                className="h-4 w-4 shrink-0"
-                style={{ accentColor: "var(--accent)" }}
-                checked={on}
-                disabled={disabledOff}
-                onChange={() => toggle(id)}
-              />
-              <span className="font-medium text-[#1e293b]">{SECTION_LABELS[id]}</span>
-            </label>
-          );
-        })}
+        {state.sectionOrder
+          .filter((id) => !!id && id in SECTION_LABELS) // Blank section fix
+          .map((id) => {
+            const on = state.activeSections.includes(id);
+            const disabledOff = !on && atCapacity;
+            
+            return (
+              <div key={id} className="space-y-3">
+                <label
+                  className={`flex cursor-pointer items-center gap-3 rounded-lg border border-black/10 px-3 py-2 text-sm transition-colors ${
+                    on ? "bg-black/5" : ""
+                  } ${disabledOff ? "cursor-not-allowed opacity-50" : ""}`}
+                >
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4 shrink-0"
+                    style={{ accentColor: "var(--accent)" }}
+                    checked={on}
+                    disabled={disabledOff}
+                    onChange={() => toggle(id)}
+                  />
+                  <span className="font-medium text-[#1e293b]">{SECTION_LABELS[id]}</span>
+                </label>
+
+                {on && (
+                  <div className="ml-7 space-y-4 rounded-xl border border-black/5 bg-black/[0.02] p-4">
+                    {id === "services" && (
+                      <label className="block space-y-1.5">
+                        <span className="text-xs font-semibold uppercase tracking-wider text-[#64748b]">
+                          Amount: {state.serviceCount}
+                        </span>
+                        <input
+                          type="range"
+                          min={1}
+                          max={4}
+                          step={1}
+                          className="h-1.5 w-full cursor-pointer appearance-none rounded-lg bg-black/10 accent-[var(--accent)]"
+                          value={state.serviceCount}
+                          onChange={(e) => patch({ serviceCount: parseInt(e.target.value) })}
+                        />
+                      </label>
+                    )}
+                    {id === "testimonials" && (
+                      <label className="block space-y-1.5">
+                        <span className="text-xs font-semibold uppercase tracking-wider text-[#64748b]">
+                          Count: {state.testimonialCount}
+                        </span>
+                        <input
+                          type="range"
+                          min={1}
+                          max={3}
+                          step={1}
+                          className="h-1.5 w-full cursor-pointer appearance-none rounded-lg bg-black/10 accent-[var(--accent)]"
+                          value={state.testimonialCount}
+                          onChange={(e) => patch({ testimonialCount: parseInt(e.target.value) })}
+                        />
+                      </label>
+                    )}
+                    {id === "gallery" && (
+                      <label className="block space-y-1.5">
+                        <span className="text-xs font-semibold uppercase tracking-wider text-[#64748b]">
+                          Photos: {state.galleryCount}
+                        </span>
+                        <input
+                          type="range"
+                          min={1}
+                          max={6}
+                          step={1}
+                          className="h-1.5 w-full cursor-pointer appearance-none rounded-lg bg-black/10 accent-[var(--accent)]"
+                          value={state.galleryCount}
+                          onChange={(e) => patch({ galleryCount: parseInt(e.target.value) })}
+                        />
+                      </label>
+                    )}
+                    {id === "awards" && (
+                      <label className="block space-y-1.5">
+                        <span className="text-xs font-semibold uppercase tracking-wider text-[#64748b]">
+                          Items: {state.awardCount}
+                        </span>
+                        <input
+                          type="range"
+                          min={1}
+                          max={4}
+                          step={1}
+                          className="h-1.5 w-full cursor-pointer appearance-none rounded-lg bg-black/10 accent-[var(--accent)]"
+                          value={state.awardCount}
+                          onChange={(e) => patch({ awardCount: parseInt(e.target.value) })}
+                        />
+                      </label>
+                    )}
+                    {(id === "about" || id === "video" || id === "booking") && (
+                      <p className="text-xs italic text-[#64748b]">
+                        Configuration for this section is available directly on the card preview.
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
       </fieldset>
 
       {atCapacity && (

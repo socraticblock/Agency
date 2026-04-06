@@ -51,7 +51,7 @@ export function AwardsSegment({
         Awards & recognition
       </h2>
       <ul className="flex flex-col gap-3">
-        {state.awards.map((a, i) => {
+        {state.awards.slice(0, state.awardCount).map((a, i) => {
           if (!editable && !a.title.trim() && !a.issuer.trim()) return null;
           return (
             <li

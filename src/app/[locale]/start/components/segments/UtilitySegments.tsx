@@ -50,15 +50,19 @@ export function UtilitySegments({
           href={referHref}
           target="_blank"
           rel="noopener noreferrer"
-          className={lane1UtilitySecondaryClasses(id)}
-          style={{
-            borderColor: "color-mix(in srgb, var(--accent) 30%, transparent)",
-            color: "var(--text-primary)",
-            background: "transparent",
-          }}
+          className={lane1UtilityPrimaryClasses(id)}
+          style={
+            shareFilled
+              ? { background: "var(--accent)", color: "var(--accent-contrast, #fff)" }
+              : {
+                  borderColor: "var(--accent)",
+                  color: "var(--accent)",
+                  background: "transparent",
+                }
+          }
           aria-label={`Refer ${state.name.split(" ")[0] || "me"} via WhatsApp`}
         >
-          <Send className="h-4 w-4 opacity-70" />
+          <Send className="h-4 w-4" />
           Refer {state.name.split(" ")[0] || "Me"}
         </MagneticButton>
       </div>

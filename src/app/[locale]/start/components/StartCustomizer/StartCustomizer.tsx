@@ -12,7 +12,6 @@ import { MessageCircle, Eye } from "lucide-react";
 
 import { ContentSection } from "./ContentSection";
 import { PhotoSection } from "./PhotoSection";
-import { ServicesSection } from "./ServicesSection";
 import { SocialSection } from "./SocialSection";
 import { BackgroundSection } from "./BackgroundSection";
 import { AccentSection, FontSection, ButtonStyleSection, ExperienceSection } from "./StyleSections";
@@ -21,7 +20,6 @@ import { IdentitySection } from "./IdentitySection";
 import { ThemePresetsSection } from "./ThemePresetsSection";
 import { CardChromeSection } from "./CardChromeSection";
 import { SectionsLayoutSection } from "./SectionsLayoutSection";
-import { SectionsContentSection } from "./SectionsContentSection";
 
 export function StartCustomizer({
   state,
@@ -119,15 +117,11 @@ export function StartCustomizer({
       </div>
 
       <ContentSection {...sectionProps} isOpen={openSection === "content"} onToggle={() => toggleSection("content")} />
-      
+
       <PhotoSection {...sectionProps} isOpen={openSection === "photo"} onToggle={() => toggleSection("photo")} />
-      
-      <ServicesSection {...sectionProps} isOpen={openSection === "services"} onToggle={() => toggleSection("services")} />
 
       <SectionsLayoutSection {...sectionProps} isOpen={openSection === "sections"} onToggle={() => toggleSection("sections")} />
 
-      <SectionsContentSection {...sectionProps} isOpen={openSection === "sections-content"} onToggle={() => toggleSection("sections-content")} />
-      
       <SocialSection {...sectionProps} isOpen={openSection === "social"} onToggle={() => toggleSection("social")} />
       
       <BackgroundSection {...sectionProps} onPatch={onBackgroundStylePatch} isOpen={openSection === "background"} onToggle={() => toggleSection("background")} />

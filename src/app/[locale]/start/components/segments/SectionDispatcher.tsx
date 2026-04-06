@@ -6,7 +6,6 @@ import { AboutSegment } from "./AboutSegment";
 import { TestimonialsSegment } from "./TestimonialsSegment";
 import { GallerySegment } from "./GallerySegment";
 import { AwardsSegment } from "./AwardsSegment";
-import { HoursSectionSegment } from "./HoursSectionSegment";
 import { VideoSegment } from "./VideoSegment";
 import { BookingSegment } from "./BookingSegment";
 import type { CSSProperties } from "react";
@@ -100,6 +99,7 @@ export function SectionDispatcher({
                 key={sectionId}
                 state={state}
                 editable={editable}
+                patch={patch}
                 isResponsive={isResponsive}
                 headingStyle={headingStyle}
                 itemVariants={itemVariants}
@@ -120,27 +120,13 @@ export function SectionDispatcher({
                 glassStyle={glassStyle}
               />
             );
-          case "hours":
-            return (
-              <HoursSectionSegment
-                key={sectionId}
-                state={state}
-                editable={editable}
-                useSecondary={useSecondary}
-                isResponsive={isResponsive}
-                patch={patch}
-                headingStyle={headingStyle}
-                bodyStyle={bodyStyle}
-                itemVariants={itemVariants}
-                glassStyle={glassStyle}
-              />
-            );
           case "video":
             return (
               <VideoSegment
                 key={sectionId}
                 state={state}
                 editable={editable}
+                patch={patch}
                 isResponsive={isResponsive}
                 headingStyle={headingStyle}
                 bodyStyle={bodyStyle}
@@ -154,6 +140,7 @@ export function SectionDispatcher({
                 key={sectionId}
                 state={state}
                 editable={editable}
+                patch={patch}
                 isResponsive={isResponsive}
                 headingStyle={headingStyle}
                 itemVariants={itemVariants}
