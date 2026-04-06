@@ -3,6 +3,7 @@
 ## Index
 - **006** — Elite roadmap wiring (sections, typography, texture/effects, social/QR, motion, themes, card chrome, cleanup)
 - **007** — Preview tab JSON normalization + print/PDF visibility strategy + QR frame radii
+- **008** — BackgroundEngine color selector fix (missing `--bg-base-color` CSS variable)
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -27,6 +28,11 @@
 - **Context:** `/start/preview` parsed `sessionStorage` without the same merge/migration as `customizer-store`; print CSS assumed `<main>` and `.business-card-template-font-layer` selectors did not match the DOM; QR “square” style used `rounded-md`.
 - **Decision:** Exported `normalizeLane1StateFromJson` + alias `normalizeLane1StateFromUnknown`; preview uses the latter + `useParams()` for locale. Print: visibility subtree + explicit `.qr-code-print-view` visibility; `business-card-template-font-layer` on main `motion.div`; print-hero/contact + `business-card-template-print-skip`. QR frame: `rounded-none` / `rounded-2xl` / `rounded-3xl`. Sections UI clarifies chevron reorder; texture “none” shows helper copy instead of the strength slider.
 - **Impact:** Preview tab matches merged defaults; print/PDF no longer blank; `SectionDispatcher` unchanged (`activeSections` ∩ `sectionOrder`).
+
+### 008
+- **Context:** Background color swatches in `/start` updated `state.style.bgBaseColor`, but `BackgroundEngine`'s base layer used `var(--bg-base-color)` which was never defined in `resolveStyleVariables()`. The selector appeared "inactive" because the computed CSS variable fell back to an invalid/empty value.
+- **Decision:** Added `"--bg-base-color": baseColorValue` to the return object in `resolveStyleVariables()` (maps `selection.bgBaseColor` to the CSS variable `BackgroundEngine` reads).
+- **Impact:** Color selector now immediately updates the card background; `BackgroundEngine`'s Layer 1 (base color) correctly reflects user selection.
 
 ## Architecture Decisions
 - Zero backend for card features

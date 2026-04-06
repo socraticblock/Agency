@@ -600,6 +600,7 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
       : Math.min(1, Math.max(0, selection.textureOpacity / 100));
 
   return {
+    "--bg-base-color": baseColorValue,
     "--bg-base-image": baseImageValue,
     "--bg-base-blur": `${selection.bgBaseBlur}px`,
     "--bg-image-overlay": overlayImageValue,
