@@ -72,7 +72,7 @@ export function BookingSegment({
 
       {href || editable ? (
         <MagneticButton
-          as={href ? "a" : "div"}
+          as={href ? "a" : "button"}
           href={href || undefined}
           target="_blank"
           rel="noopener noreferrer"
