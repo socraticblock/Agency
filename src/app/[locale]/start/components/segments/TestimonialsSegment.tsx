@@ -84,7 +84,7 @@ export function TestimonialsSegment({
                     <InlineEditable
                       value={t.title}
                       onChange={(v) => patch(patchTestimonial(state.testimonials, i, "title", v))}
-                      placeholder="Title / company"
+                      placeholder="Job title / company"
                       editable={editable}
                       className="inline-block min-w-0"
                     />

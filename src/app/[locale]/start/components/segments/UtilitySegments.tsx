@@ -35,10 +35,10 @@ export function UtilitySegments({
             shareFilled
               ? { background: "var(--accent)", color: "var(--accent-contrast, #fff)" }
               : {
-                  borderColor: "var(--accent)",
-                  color: "var(--accent)",
-                  background: "transparent",
-                }
+                borderColor: "var(--accent)",
+                color: "var(--accent)",
+                background: "transparent",
+              }
           }
         >
           <Share2 className="h-4 w-4" />
@@ -55,10 +55,10 @@ export function UtilitySegments({
             shareFilled
               ? { background: "var(--accent)", color: "var(--accent-contrast, #fff)" }
               : {
-                  borderColor: "var(--accent)",
-                  color: "var(--accent)",
-                  background: "transparent",
-                }
+                borderColor: "var(--accent)",
+                color: "var(--accent)",
+                background: "transparent",
+              }
           }
           aria-label={`Refer ${state.name.split(" ")[0] || "me"} via WhatsApp`}
         >

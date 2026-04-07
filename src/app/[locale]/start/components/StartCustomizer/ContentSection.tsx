@@ -39,7 +39,7 @@ export function ContentSection({
         </label>
       ) : null}
       <label className={labelClass}>
-        Title (EN)
+        Job title (EN)
         <input
           className={fieldClass}
           value={state.title}
@@ -49,7 +49,7 @@ export function ContentSection({
       </label>
       {state.secondaryMode === "self" ? (
         <label className={labelClass}>
-          Title (GE)
+          Job title (GE)
           <input
             className={fieldClass}
             value={state.titleSecondary}

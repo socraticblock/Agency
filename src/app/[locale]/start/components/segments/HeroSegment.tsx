@@ -83,13 +83,13 @@ export function HeroSegment({
     if (photoBorder === "thin-ring") return { border: `1px solid ${accentColor}` };
     if (photoBorder === "thick-ring") return { border: `4px solid ${accentColor}` };
     if (photoBorder === "glow-ring") return { border: `2px solid ${accentColor}`, boxShadow: `0 0 15px ${accentColor}` };
-    if (photoBorder === "double-frame") return { 
+    if (photoBorder === "double-frame") return {
       border: `1px solid ${accentColor}`,
       padding: "3px",
       outline: `1px solid ${accentColor}`,
-      outlineOffset: "-4px" 
+      outlineOffset: "-4px"
     };
-    if (photoBorder === "gradient-border") return { 
+    if (photoBorder === "gradient-border") return {
       border: "3px solid transparent",
       backgroundImage: `linear-gradient(var(--bg-primary), var(--bg-primary)), var(--bg-gradient)`,
       backgroundOrigin: "border-box",
@@ -111,18 +111,15 @@ export function HeroSegment({
         rotateY: isResponsive ? rotateY : 0,
         transformStyle: "preserve-3d",
       }}
-      className={`business-card-print-hero relative border-t px-4 pb-8 pt-8 transition-all duration-500 ${
-        isResponsive ? "md:rounded-3xl md:border hover:shadow-2xl" : ""
-      }`}
+      className={`business-card-print-hero relative border-t px-4 pb-8 pt-8 transition-all duration-500 ${isResponsive ? "md:rounded-3xl md:border hover:shadow-2xl" : ""
+        }`}
     >
-      <div className={`flex w-full flex-col gap-5 ${
-        photoAlignment === "center" ? "items-center text-center" : "items-start text-left"
-      }`}>
+      <div className={`flex w-full flex-col gap-5 ${photoAlignment === "center" ? "items-center text-center" : "items-start text-left"
+        }`}>
         {/* Photo Zone */}
-        <div 
-          className={`group relative shrink-0 overflow-hidden bg-slate-100 transition-all duration-700 ${shapeClass} ${
-            isResponsive ? "md:sticky md:top-4 md:z-0" : ""
-          }`}
+        <div
+          className={`group relative shrink-0 overflow-hidden bg-slate-100 transition-all duration-700 ${shapeClass} ${isResponsive ? "md:sticky md:top-4 md:z-0" : ""
+            }`}
           style={borderStyle}
           onClick={() => editable && !photoBusy && fileRef.current?.click()}
         >
@@ -130,20 +127,20 @@ export function HeroSegment({
             <div
               className={`h-full w-full overflow-hidden ${photoKenBurns ? "business-card-hero-ken" : ""}`}
             >
-               <Image
-                 key={state.photoDataUrl?.slice(0, 64) || "empty"}
-                 src={state.photoDataUrl}
-                 alt=""
-                 width={300}
-                 height={300}
-                 className="h-full w-full object-cover transition-transform duration-300"
-                 style={{ 
-                   filter: effectFilter,
-                   transform: `scale(${photoZoom / 100}) translate(${photoPositionX - 50}%, ${photoPositionY - 50}%)`,
-                   transformOrigin: "center center",
-                 }}
-                 unoptimized
-               />
+              <Image
+                key={state.photoDataUrl?.slice(0, 64) || "empty"}
+                src={state.photoDataUrl}
+                alt=""
+                width={300}
+                height={300}
+                className="h-full w-full object-cover transition-transform duration-300"
+                style={{
+                  filter: effectFilter,
+                  transform: `scale(${photoZoom / 100}) translate(${photoPositionX - 50}%, ${photoPositionY - 50}%)`,
+                  transformOrigin: "center center",
+                }}
+                unoptimized
+              />
             </div>
           ) : (
             <div className="flex h-full w-full flex-col items-center justify-center gap-1 text-xs text-slate-500">
@@ -151,7 +148,7 @@ export function HeroSegment({
               <span>Identity Profile</span>
             </div>
           )}
-          
+
           {editable && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 transition-opacity group-hover:opacity-100">
               <Camera className="h-8 w-8 text-white" />
@@ -183,9 +180,8 @@ export function HeroSegment({
           </div>
         </div>
 
-        <div className={`w-full space-y-1 transition-all bg-transparent relative z-10 pt-4 ${
-          photoAlignment === "center" ? "text-center" : "text-left"
-        }`}>
+        <div className={`w-full space-y-1 transition-all bg-transparent relative z-10 pt-4 ${photoAlignment === "center" ? "text-center" : "text-left"
+          }`}>
           <h1
             className="text-2xl md:text-3xl font-bold leading-tight"
             style={headingStyle}
@@ -199,23 +195,23 @@ export function HeroSegment({
               style={{ ...headingStyle, textAlign: photoAlignment === "center" ? "center" : "inherit" }}
             />
           </h1>
-          
-          <p 
-            className="text-lg opacity-90" 
+
+          <p
+            className="text-lg opacity-90"
             style={bodyStyle}
           >
             <InlineEditable
               value={useSecondary ? state.titleSecondary : state.title}
               onChange={(v) => patch(useSecondary ? { titleSecondary: v } : { title: v })}
-              placeholder="Title"
+              placeholder="Job title"
               editable={editable}
               className="block w-full"
               style={{ ...bodyStyle, textAlign: photoAlignment === "center" ? "center" : "inherit" }}
             />
           </p>
 
-          <p 
-            className="text-sm font-semibold tracking-wide uppercase opacity-80" 
+          <p
+            className="text-sm font-semibold tracking-wide uppercase opacity-80"
             style={{ ...bodyStyle, color: "var(--accent)" }}
           >
             <InlineEditable
@@ -230,8 +226,8 @@ export function HeroSegment({
 
           {/* Tagline Zone */}
           <div className="pt-2">
-            <p 
-              className="text-xs italic opacity-70 leading-relaxed max-w-[90%]" 
+            <p
+              className={`text-xs italic opacity-70 leading-relaxed max-w-[90%] ${photoAlignment === "center" ? "mx-auto" : ""}`}
               style={bodyStyle}
             >
               <InlineEditable

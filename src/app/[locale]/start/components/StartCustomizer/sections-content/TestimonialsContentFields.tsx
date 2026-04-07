@@ -44,7 +44,7 @@ export function TestimonialsContentFields({
             />
           </label>
           <label className={labelClass}>
-            Title / company
+            Job title / company
             <input
               className={fieldClass}
               value={t.title}

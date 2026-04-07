@@ -127,7 +127,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
       <BackgroundEngine style={state.style} />
 
       <div className="business-card-noise" aria-hidden /><div className="business-card-glow" aria-hidden />
-      
+
       {state.secondaryMode === "pro" && (
         <div className="business-card-template-print-skip border-b px-4 py-2.5 text-center text-xs opacity-70" style={{ borderColor: "var(--accent-secondary)", background: "color-mix(in srgb, var(--accent) 7%, transparent)" }}>
           English will be used for professional translation in this preview.
@@ -142,26 +142,26 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
         custom={animPreset.stagger / speed}
       >
         <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onPhotoPicked} />
-        
-        <HeroSegment 
-          state={state} 
-          editable={editable} 
-          useSecondary={useSecondary} 
-          isResponsive={isResponsive} 
-          photoBusy={photoBusy} 
-          fileRef={fileRef} 
-          ownerName={ownerName} 
-          previewLang={previewLang} 
-          rotateX={rotateX} 
-          rotateY={rotateY} 
-          handleMouseMove={handleMouseMove} 
-          handleMouseLeave={handleMouseLeave} 
-          patch={patch} 
-          setServiceLine={setServiceLine} 
-          headingStyle={headingStyle} 
-          bodyStyle={bodyStyle} 
-          itemVariants={customItemVariants} 
-          glassStyle={glassStyle} 
+
+        <HeroSegment
+          state={state}
+          editable={editable}
+          useSecondary={useSecondary}
+          isResponsive={isResponsive}
+          photoBusy={photoBusy}
+          fileRef={fileRef}
+          ownerName={ownerName}
+          previewLang={previewLang}
+          rotateX={rotateX}
+          rotateY={rotateY}
+          handleMouseMove={handleMouseMove}
+          handleMouseLeave={handleMouseLeave}
+          patch={patch}
+          setServiceLine={setServiceLine}
+          headingStyle={headingStyle}
+          bodyStyle={bodyStyle}
+          itemVariants={customItemVariants}
+          glassStyle={glassStyle}
         />
 
         <CtaSegment state={state} headingStyle={headingStyle} />
@@ -187,13 +187,13 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
         <SocialSegment state={state} isResponsive={isResponsive} itemVariants={customItemVariants} />
         <QrOnCardSegment state={state} qrDataUrl={qrDataUrl} itemVariants={customItemVariants} isResponsive={isResponsive} />
 
-        <UtilitySegments 
-          state={state} 
-          ownerName={ownerName} 
-          qrDataUrl={qrDataUrl} 
-          shareFeedback={shareFeedback} 
-          handleShare={handleShare} 
-          referHref={`https://wa.me/?text=${encodeURIComponent(`I highly recommend ${state.name} — ${state.title}. View their card: ${typeof window !== "undefined" ? window.location.href : ""}`)}`} 
+        <UtilitySegments
+          state={state}
+          ownerName={ownerName}
+          qrDataUrl={qrDataUrl}
+          shareFeedback={shareFeedback}
+          handleShare={handleShare}
+          referHref={`https://wa.me/?text=${encodeURIComponent(`I highly recommend ${state.name} — ${state.title}. View their card: ${typeof window !== "undefined" ? window.location.href : ""}`)}`}
         />
 
         <BrandingFooter ownerName={ownerName} hideBranding={hideBranding} homeHref={homeHref} />

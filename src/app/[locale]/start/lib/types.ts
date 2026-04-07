@@ -55,7 +55,7 @@ export interface StylePresetSelection {
   vibeId: string;
   animationId: string;
   secondaryAccentId: string;
-  
+
   // Phase 2: Photo
   photoShape: PhotoShape;
   photoZoom: number;
@@ -145,7 +145,7 @@ export interface Lane1CustomizerState {
   videoUrl: string;
   bookingUrl: string;
   bookingLabel: string;
-  
+
   // Counts
   testimonialCount: number;
   awardCount: number;
@@ -186,23 +186,23 @@ export function defaultLane1State(): Lane1CustomizerState {
     sectorId: null,
     primaryLang: "en",
     secondaryMode: "none",
-    
+
     // User requested placeholders
     name: "Your Name",
     nameSecondary: "თქვენი სახელი",
-    title: "Your Title",
+    title: "Job title",
     titleSecondary: "თქვენი პოზიცია",
     company: "Company Name",
     tagline: "Your tagline here",
     taglineSecondary: "თქვენი სლოგანი აქ",
-    
+
     phone: "+995 5XX XX XX XX",
     email: "your@email.com",
     address: "123 Professional Ave, Tbilisi",
     addressSecondary: "პროფესიული გამზირი 123, თბილისი",
     hours: "Mon-Fri: 09:00 - 18:00",
     hoursSecondary: "ორშ-პარ: 09:00 - 18:00",
-    
+
     serviceAreas: ["Service One", "Service Two", "Service Three", "Service Four"],
     serviceDescriptions: ["", "", "", ""],
     serviceCount: 2,
@@ -211,7 +211,7 @@ export function defaultLane1State(): Lane1CustomizerState {
     social: defaultSocial(),
     practiceHeading: "Professional Services",
     practiceHeadingSecondary: "პროფესიული სერვისები",
-    
+
     style: {
       backgroundId: "minimal-white",
       textColorId: "ink",
@@ -220,7 +220,7 @@ export function defaultLane1State(): Lane1CustomizerState {
       fontId: "modern",
       vibeId: "minimal",
       animationId: "fade",
-      
+
       // Phase 2 Defaults
       photoShape: "circle",
       photoZoom: 100,
