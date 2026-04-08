@@ -159,10 +159,12 @@ export function HeroSegment({
   )}")`;
 
   const shapeClass = ({
-    circle: "rounded-full w-[180px]",
-    "rounded-square": "rounded-2xl w-[180px]",
-    "wide-cinematic": "rounded-xl w-full",
-  } as Record<string, string>)[photoShape as string] || "rounded-full w-[180px]";
+    circle: "w-[180px]",
+    "rounded-square": "w-[180px]",
+    "wide-cinematic": "w-full",
+  } as Record<string, string>)[photoShape as string] || "w-[180px]";
+  const shapeRadius =
+    photoShape === "circle" ? "50%" : photoShape === "rounded-square" ? "16px" : "12px";
 
   const effectFilter = PHOTO_EFFECT_PRESETS.find(p => p.id === photoEffect)?.filter || "none";
 
@@ -240,6 +242,7 @@ export function HeroSegment({
                 touchAction: "none",
                 height: photoShape === "wide-cinematic" ? "135px" : undefined,
                 aspectRatio: photoShape === "wide-cinematic" ? "16/9" : "1/1",
+                borderRadius: shapeRadius,
               }}
               onMouseEnter={() => {
                 photoHoverRef.current = true;
@@ -257,8 +260,8 @@ export function HeroSegment({
               <div className="h-full w-full relative">
                 {/* Masked Image Layer */}
                 <div
-                  className="absolute inset-0 overflow-hidden rounded-[inherit] bg-slate-100"
-                  style={borderStyle}
+                  className="absolute inset-0 overflow-hidden bg-slate-100"
+                  style={{ ...borderStyle, borderRadius: shapeRadius }}
                 >
                   <Image
                     key={state.photoDataUrl?.slice(0, 64) || "empty"}
@@ -313,8 +316,8 @@ export function HeroSegment({
               </div>
             ) : (
               <div
-                className="flex h-full w-full flex-col items-center justify-center gap-1 text-xs text-slate-500 transition-colors group-hover:bg-slate-200 rounded-[inherit] bg-slate-100"
-                style={borderStyle}
+                className="flex h-full w-full flex-col items-center justify-center gap-1 text-xs text-slate-500 transition-colors group-hover:bg-slate-200 bg-slate-100"
+                style={{ ...borderStyle, borderRadius: shapeRadius }}
               >
                 <Camera className="h-10 w-10 opacity-30" />
                 <span>Identity Profile</span>
