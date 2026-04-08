@@ -142,37 +142,21 @@ export function StartPageClient({ locale }: { locale: Locale }) {
             ) : null}
           </div>
           <div className="relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-[var(--start-shadow-md)]">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={
-                  state.style.backgroundId +
-                  state.style.vibeId +
-                  state.style.fontId +
-                  state.style.bodyTypographyPackId +
-                  state.style.buttonTypographyPackId +
-                  state.style.bodyTextHex +
-                  state.style.buttonTextHex
-                }
-                initial={{ opacity: 0.8, filter: "blur(4px)" }}
-                animate={{ opacity: 1, filter: "blur(0px)" }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
-              >
-                <BusinessCardTemplate
-                  state={state}
-                  previewLang={
-                    state.secondaryMode === "self" ? previewLang : "primary"
-                  }
-                  homeHref={homeHref}
-                  ownerName={state.name}
-                  onPatch={onPatch}
-                  onPreviewLangChange={
-                    state.secondaryMode === "self"
-                      ? handlePreviewLangChange
-                      : undefined
-                  }
-                />
-              </motion.div>
-            </AnimatePresence>
+            {/* No motion/key here: remounting was closing bottom float panels (Typography, Background) and replaying blur on every font/color tweak. */}
+            <BusinessCardTemplate
+              state={state}
+              previewLang={
+                state.secondaryMode === "self" ? previewLang : "primary"
+              }
+              homeHref={homeHref}
+              ownerName={state.name}
+              onPatch={onPatch}
+              onPreviewLangChange={
+                state.secondaryMode === "self"
+                  ? handlePreviewLangChange
+                  : undefined
+              }
+            />
           </div>
         </div>
 
