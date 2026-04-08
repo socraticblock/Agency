@@ -7,6 +7,7 @@ import { InlineEditable } from "../InlineEditable";
 import { MagneticButton } from "../../../_components/MagneticButton";
 import type { CSSProperties } from "react";
 import { lane1DirectionsClasses } from "../../lib/button-styles";
+import { hasValidAddress, MAP_ADDRESS_HELPER_TEXT } from "../../lib/location";
 
 interface ContactSegmentProps {
   state: Lane1CustomizerState;
@@ -30,6 +31,7 @@ export function ContactSegment({
   glassStyle,
 }: ContactSegmentProps) {
   const address = useSecondary ? state.addressSecondary || state.address : state.address;
+  const validAddress = hasValidAddress(address);
   const mobileButtonOrder = state.mobileButtonOrder?.length
     ? state.mobileButtonOrder
     : (["map-preview", "get-directions"] as MobileButtonId[]);
@@ -96,7 +98,7 @@ export function ContactSegment({
         </div>
 
         {mobileButtonOrder.map((id) => {
-          if (id === "map-preview" && state.addGoogleMap && state.showMapPreview && address?.trim()) {
+          if (id === "map-preview" && state.addGoogleMap && state.showMapPreview && validAddress) {
             return (
               <div key={id} className="overflow-hidden rounded-xl border border-[color:var(--accent-secondary)]/45 bg-black/10">
                 <iframe
@@ -109,7 +111,14 @@ export function ContactSegment({
               </div>
             );
           }
-          if (id === "get-directions" && state.addGoogleMap && state.showGetDirectionsButton && address?.trim()) {
+          if (id === "map-preview" && state.addGoogleMap && state.showMapPreview && !validAddress) {
+            return (
+              <p key={`${id}-hint`} className="text-xs opacity-75">
+                {MAP_ADDRESS_HELPER_TEXT}
+              </p>
+            );
+          }
+          if (id === "get-directions" && state.addGoogleMap && state.showGetDirectionsButton && validAddress) {
             return (
               <div key={id} className="pt-4">
                 <MagneticButton

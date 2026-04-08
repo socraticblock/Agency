@@ -6,6 +6,7 @@ import type { Lane1CustomizerState, MobileButtonId, SocialPlatformId } from "../
 import { InlineEditable } from "../InlineEditable";
 import { MagneticButton } from "../../../_components/MagneticButton";
 import type { CSSProperties } from "react";
+import { hasValidAddress, MAP_ADDRESS_HELPER_TEXT } from "../../lib/location";
 
 interface ContactSocialSegmentProps {
   state: Lane1CustomizerState;
@@ -37,6 +38,7 @@ export function ContactSocialSegment({
   }
 
   const hasUrl = (url: string) => url?.trim().length > 0;
+  const validAddress = hasValidAddress(address);
   const platformOrder = state.socialPlatformOrder?.length
     ? state.socialPlatformOrder
     : (["facebook", "instagram", "linkedin", "tiktok", "youtube"] as SocialPlatformId[]);
@@ -258,7 +260,7 @@ export function ContactSocialSegment({
           />
         </div>
         {mobileButtonOrder.map((id) => {
-          if (id === "map-preview" && state.addGoogleMap && state.showMapPreview && address?.trim()) {
+          if (id === "map-preview" && state.addGoogleMap && state.showMapPreview && validAddress) {
             return (
               <div key={id} className="mt-6 overflow-hidden rounded-xl border border-[color:var(--accent-secondary)]/45 bg-black/10">
                 <iframe
@@ -271,7 +273,14 @@ export function ContactSocialSegment({
               </div>
             );
           }
-          if (id === "get-directions" && state.addGoogleMap && state.showGetDirectionsButton && address?.trim()) {
+          if (id === "map-preview" && state.addGoogleMap && state.showMapPreview && !validAddress) {
+            return (
+              <p key={`${id}-hint`} className="mt-4 text-xs opacity-75">
+                {MAP_ADDRESS_HELPER_TEXT}
+              </p>
+            );
+          }
+          if (id === "get-directions" && state.addGoogleMap && state.showGetDirectionsButton && validAddress) {
             return (
               <div key={id} className="mt-8 space-y-4">
                 <MagneticButton

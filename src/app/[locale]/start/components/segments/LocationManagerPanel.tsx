@@ -60,7 +60,7 @@ export function LocationManagerPanel({
         Location
       </button>
       {open ? (
-        <div className="absolute bottom-full right-4 mb-2 w-[280px] rounded-xl border border-white/20 bg-black/85 p-3 text-white shadow-2xl backdrop-blur-md">
+        <div className="absolute right-4 top-full mt-2 w-[280px] rounded-xl border border-white/20 bg-black/85 p-3 text-white shadow-2xl backdrop-blur-md">
           <div className="mb-2 flex items-center justify-between">
             <p className="text-xs font-bold uppercase tracking-wide text-white/80">Location UI</p>
             <button type="button" onClick={() => setOpen(false)} className="rounded p-1 text-white/70 transition hover:bg-white/10 hover:text-white" aria-label="Close location manager">
