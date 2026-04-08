@@ -86,6 +86,10 @@ export interface StylePresetSelection {
   bgEffectId: BackgroundEffectId;
   /** 0–100; scales animated background layer (motion tab). */
   bgEffectOpacity: number;
+  /** 50 = slow, 100 = default, 200 = fast (motion cycle). */
+  bgEffectSpeed: number;
+  /** 50 = subtle … 150 = bold (saturation/brightness on motion layer). */
+  bgEffectIntensity: number;
 
   // Phase 4: Typography & Buttons
   typographyPackId: TypographyPackId;
@@ -100,7 +104,7 @@ export interface StylePresetSelection {
   cardShadowId: CardShadowId;
 }
 
-export const CUSTOMIZER_VERSION = 6 as const;
+export const CUSTOMIZER_VERSION = 7 as const;
 
 export interface Lane1CustomizerState {
   version: typeof CUSTOMIZER_VERSION;
@@ -256,6 +260,8 @@ export function defaultLane1State(): Lane1CustomizerState {
       textureOpacity: 5,
       bgEffectId: "none",
       bgEffectOpacity: 100,
+      bgEffectSpeed: 100,
+      bgEffectIntensity: 100,
 
       // Phase 4 Defaults
       typographyPackId: "minimal",

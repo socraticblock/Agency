@@ -593,6 +593,10 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
       ? 0
       : Math.min(1, Math.max(0, (selection.bgEffectOpacity ?? 100) / 100));
 
+  const bgEffectSpeed = Math.min(200, Math.max(50, selection.bgEffectSpeed ?? 100));
+  const bgEffectIntensity = Math.min(150, Math.max(50, selection.bgEffectIntensity ?? 100));
+  const bgEffectIntNorm = (bgEffectIntensity - 50) / 100;
+
   return {
     "--bg-base-color": baseColorValue,
     "--overlay-gradient": overlayGradientValue,
@@ -613,6 +617,8 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
           ? "screen"
           : "multiply",
     "--bg-effect-opacity": String(bgEffectOp),
+    "--bg-effect-speed": String(bgEffectSpeed),
+    "--bg-effect-int-norm": String(bgEffectIntNorm),
     "--bg-gradient": selection.bgOverlayId !== "none"
       ? overlayGradientValue
       : `linear-gradient(135deg, ${acc.accent}, ${secondaryFamily.accentSecondary})`,

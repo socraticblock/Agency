@@ -39,17 +39,19 @@ export const BackgroundEngine = memo(function BackgroundEngine({
         />
       )}
 
-      {/* Layer 4: Background Motion Effect (opacity from --bg-effect-opacity) */}
+      {/* Layer 4: Background Motion (opacity, speed, intensity from CSS vars) */}
       {style.bgEffectId !== "none" && (
         <div
           className="pointer-events-none absolute inset-0 transition-opacity duration-700"
           style={{ opacity: "var(--bg-effect-opacity)" }}
         >
-          <div
-            className="business-card-bg-effect-layer absolute inset-0 transition-opacity duration-700"
-            data-effect={style.bgEffectId}
-            aria-hidden
-          />
+          <div className="business-card-bg-effect-strength">
+            <div
+              className="business-card-bg-effect-layer absolute inset-0 transition-opacity duration-700"
+              data-effect={style.bgEffectId}
+              aria-hidden
+            />
+          </div>
         </div>
       )}
 
