@@ -165,7 +165,6 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-[inherit]">
         <BackgroundEngine style={state.style} />
         <div className="business-card-noise opacity-[0.04] mix-blend-overlay absolute inset-0 -z-5" aria-hidden />
-        <div className="business-card-glow absolute inset-0 -z-[6]" aria-hidden />
       </div>
 
       {state.secondaryMode === "pro" && (

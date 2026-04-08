@@ -35,9 +35,6 @@ export function useCardTilt(
       mouseX.set(xPct);
       mouseY.set(yPct);
     }
-
-    e.currentTarget.style.setProperty("--mouse-x", `${(mouseXPos / width) * 100}%`);
-    e.currentTarget.style.setProperty("--mouse-y", `${(mouseYPos / height) * 100}%`);
   }
 
   function handleMouseLeave() {

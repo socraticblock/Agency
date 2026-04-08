@@ -597,10 +597,16 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
     "--text-primary": textColor,
     "--accent": acc.accent,
     "--accent-secondary": secondaryFamily.accentSecondary,
-    "--texture-pattern": textureBackgroundImage(selection.textureId),
+    "--texture-pattern": textureBackgroundImage(selection.textureId, selection.cardDarkSurface),
     "--texture-bg-size": textureBackgroundSize(selection.textureId),
     "--texture-opacity": String(texOp),
-    "--texture-blend-mode": selection.textureId === "none" ? "normal" : "overlay",
+    // multiply / screen keeps grain readable on light vs dark surfaces (overlay mutes mid-tones)
+    "--texture-blend-mode":
+      selection.textureId === "none"
+        ? "normal"
+        : selection.cardDarkSurface
+          ? "screen"
+          : "multiply",
     "--bg-gradient": selection.bgOverlayId !== "none"
       ? overlayGradientValue
       : `linear-gradient(135deg, ${acc.accent}, ${secondaryFamily.accentSecondary})`,
