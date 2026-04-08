@@ -10,7 +10,6 @@ import { VideoSegment } from "./VideoSegment";
 import { BookingSegment } from "./BookingSegment";
 import type { CSSProperties, ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
-import { Pencil } from "lucide-react";
 
 interface SectionDispatcherProps {
   state: Lane1CustomizerState;
@@ -45,7 +44,7 @@ export function SectionDispatcher({
   activeSection,
   setActiveSection,
 }: SectionDispatcherProps) {
-  const activeSections = state.sectionOrder.filter((id) => state.activeSections.includes(id)).slice(0, 4);
+  const activeSections = state.sectionOrder.filter((id) => state.activeSections.includes(id));
 
   const withEditorShell = (sectionId: SectionId, node: ReactNode) => (
     <div
@@ -58,12 +57,6 @@ export function SectionDispatcher({
         setActiveSection(sectionId);
       }}
     >
-      {editable ? (
-        <div className="pointer-events-none absolute right-3 top-3 z-20 hidden items-center gap-1 rounded-full border border-white/20 bg-black/70 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-white opacity-0 transition-opacity duration-150 group-hover:opacity-100 md:flex">
-          <Pencil className="h-3 w-3" />
-          Edit
-        </div>
-      ) : null}
       {node}
     </div>
   );

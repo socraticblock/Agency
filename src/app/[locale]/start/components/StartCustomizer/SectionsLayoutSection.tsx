@@ -37,20 +37,18 @@ export function SectionsLayoutSection({ state, patch, isOpen, onToggle }: Sectio
     }
   }, [state.sectionOrder, state.activeSections, patch]);
 
-  const orderedActive = state.sectionOrder.filter((id) => state.activeSections.includes(id)).slice(0, 4);
-  const atCapacity = state.activeSections.length >= 4;
+  const orderedActive = state.sectionOrder.filter((id) => state.activeSections.includes(id));
 
   function toggle(id: SectionId) {
     if (state.activeSections.includes(id)) {
       patch({ activeSections: state.activeSections.filter((x) => x !== id) });
       return;
     }
-    if (atCapacity) return;
     patch({ activeSections: [...state.activeSections, id] });
   }
 
   function move(id: SectionId, dir: -1 | 1) {
-    const oa = state.sectionOrder.filter((x) => state.activeSections.includes(x)).slice(0, 4);
+    const oa = state.sectionOrder.filter((x) => state.activeSections.includes(x));
     const idx = oa.indexOf(id);
     const j = idx + dir;
     if (idx === -1 || j < 0 || j >= oa.length) return;
@@ -70,7 +68,7 @@ export function SectionsLayoutSection({ state, patch, isOpen, onToggle }: Sectio
           .filter((id) => !!id && id in SECTION_LABELS) // Blank section fix
           .map((id) => {
             const on = state.activeSections.includes(id);
-            const disabledOff = !on && atCapacity;
+            const disabledOff = false;
             
             return (
               <div key={id} className="space-y-3">
@@ -167,12 +165,6 @@ export function SectionsLayoutSection({ state, patch, isOpen, onToggle }: Sectio
             );
           })}
       </fieldset>
-
-      {atCapacity && (
-        <p className="mt-2 text-xs text-[var(--start-caption)]">
-          Maximum of four sections enabled. Turn one off to add another.
-        </p>
-      )}
 
       <div className="mt-6">
         <p className={labelClass}>Order (active only) — move up/down with chevrons</p>

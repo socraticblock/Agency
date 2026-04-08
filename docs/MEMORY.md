@@ -11,6 +11,7 @@
 - **013** — Sovereign handover: removed sidebar Photo section; on-card photo controls are now the single desktop path
 - **014** — Section-first on-card activation shell (single active section state + hover edit affordance around card sections)
 - **015** — Added desktop section drawer for About/Services (on-card click opens right-side editor; shared active-section controller)
+- **016** — Replaced section text drawer with on-card Sections Manager (add/remove/reorder controls) while preserving inline content editing
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -75,6 +76,11 @@
 - **Context:** Section activation existed on-card, but users still needed a practical editing surface for complex section content without relying on legacy sidebar flows.
 - **Decision:** Introduced `SectionEditorDrawer` (desktop-only overlay) wired to the centralized `activeSection` state; clicking `About` opens a textarea editor, clicking `Services` opens structured title/description editors for each service item.
 - **Impact:** Desktop now has a true section-first editing loop (select on card -> edit in contextual drawer -> immediate card update), validating the sovereign interaction model before mobile bottom-sheet rollout.
+
+### 016
+- **Context:** Inline text editing on card already covered section content, making the extra About/Services drawer redundant and adding unnecessary workflow friction.
+- **Decision:** Removed `SectionEditorDrawer` entirely and added `SectionManagerPanel` as an on-card control surface for section visibility and order only (toggle + move up/down), driven by existing `activeSections`/`sectionOrder` state.
+- **Impact:** Editing flow is simpler and more sovereign: content edits remain direct on-card, while structural section management is available in-context without reopening the old sidebar dependency.
 
 ## Architecture Decisions
 - Zero backend for card features

@@ -10,7 +10,7 @@ import { SocialSegment } from "../segments/SocialSegment";
 import { QrOnCardSegment } from "../segments/QrOnCardSegment";
 import { UtilitySegments } from "../segments/UtilitySegments";
 import { BrandingFooter } from "../segments/BrandingFooter";
-import { SectionEditorDrawer } from "../segments/SectionEditorDrawer";
+import { SectionManagerPanel } from "../segments/SectionManagerPanel";
 import { buildItemVariants, containerVariants } from "../../lib/animations";
 import { usePwaMetadata } from "../../lib/usePwaMetadata";
 import { useCardTilt } from "../../lib/useCardTilt";
@@ -189,6 +189,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
         />
 
         <CtaSegment state={state} editable={editable} patch={patch} headingStyle={headingStyle} />
+        <SectionManagerPanel editable={editable} state={state} patch={patch} />
 
         <div className="business-card-template-print-skip">
           <SectionDispatcher
@@ -225,17 +226,6 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
         <BrandingFooter ownerName={ownerName} hideBranding={hideBranding} homeHref={homeHref} />
       </motion.div>
 
-      {editable ? (
-        <SectionEditorDrawer
-          activeSection={activeSection}
-          setActiveSection={setActiveSection}
-          state={state}
-          useSecondary={useSecondary}
-          patch={patch}
-          setServiceLine={setServiceLine}
-          setServiceDescriptionLine={setServiceDescriptionLine}
-        />
-      ) : null}
     </div>
   );
 });
