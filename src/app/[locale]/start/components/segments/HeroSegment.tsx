@@ -165,6 +165,7 @@ export function HeroSegment({
   } as Record<string, string>)[photoShape as string] || "w-[180px]";
   const shapeRadius =
     photoShape === "circle" ? "50%" : photoShape === "rounded-square" ? "16px" : "12px";
+  const imageFitClass = photoShape === "wide-cinematic" ? "object-contain" : "object-cover";
 
   const effectFilter = PHOTO_EFFECT_PRESETS.find(p => p.id === photoEffect)?.filter || "none";
 
@@ -269,7 +270,7 @@ export function HeroSegment({
                     alt=""
                     width={400}
                     height={400}
-                    className="h-full w-full object-cover pointer-events-none select-none"
+                    className={`h-full w-full ${imageFitClass} pointer-events-none select-none`}
                     style={{
                       filter: effectFilter,
                       transform: `scale(${(photoZoom || 100) / 100}) translate(${(photoPositionX || 50) - 50}%, ${(photoPositionY || 50) - 50}%)`,
