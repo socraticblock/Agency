@@ -18,7 +18,6 @@ import { AddonsSection } from "./AddonsSection";
 import { IdentitySection } from "./IdentitySection";
 import { ThemePresetsSection } from "./ThemePresetsSection";
 import { CardChromeSection } from "./CardChromeSection";
-import { SectionsLayoutSection } from "./SectionsLayoutSection";
 
 export function StartCustomizer({
   state,
@@ -116,8 +115,6 @@ export function StartCustomizer({
       </div>
 
       <ContentSection {...sectionProps} isOpen={openSection === "content"} onToggle={() => toggleSection("content")} />
-
-      <SectionsLayoutSection {...sectionProps} isOpen={openSection === "sections"} onToggle={() => toggleSection("sections")} />
 
       <SocialSection {...sectionProps} isOpen={openSection === "social"} onToggle={() => toggleSection("social")} />
       

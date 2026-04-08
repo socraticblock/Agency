@@ -15,6 +15,7 @@
 - **017** — Sections Manager UX hardening (outside-click close + save-status scaffold: idle/saving/saved)
 - **018** — Phase 4 polish for section structure edits (event-based pulse highlight, unified section shell interactions, anti-jitter pulse timing)
 - **019** — Added sticky bottom Live Preview quick action that opens `/start/preview` in a new tab using current in-memory card state
+- **020** — Removed sidebar Sections accordion and retired `SectionsLayoutSection`; section structure control is now exclusively on-card
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -99,6 +100,11 @@
 - **Context:** Users already relied on the top preview action (`Preview my site`) that opens a separate preview tab; the new bottom control needed to match that exact behavior.
 - **Decision:** Replaced the bottom mode toggle with a single sticky `Live Preview` button in `StartPageClient` that writes `businessCardPreview` to `sessionStorage` and opens `/${locale}/start/preview` in a new tab.
 - **Impact:** Preview behavior is now consistent across entry points (top + bottom), avoids in-page mode divergence, and preserves a reliable client-facing preview flow.
+
+### 020
+- **Context:** Desktop polish direction is now fully card-first; the sidebar `Sections` accordion duplicated controls already provided by the on-card `SectionManagerPanel`.
+- **Decision:** Removed `SectionsLayoutSection` from `StartCustomizer` and deleted `StartCustomizer/SectionsLayoutSection.tsx` to eliminate parallel section-structure surfaces.
+- **Impact:** Section visibility/order is managed from a single on-card source of truth, reducing UI redundancy and lowering regression risk from divergent section-management paths.
 
 ## Architecture Decisions
 - Zero backend for card features
