@@ -8,6 +8,7 @@
 - **010** — Consolidated duplicate `resolveStyleVariables` functions (removed `presets/resolve-styles.ts`, updated `presets/index.ts`)
 - **011** — Removed dead code exports and duplicate variables (10 unused variables from presets.ts, `--start-accent-gold` from start-shell.css)
 - **012** — Hero photo shape + toolbelt interaction stabilization (true circle/cinematic sizing, upload reset, expanded active zone, wheel scroll lock)
+- **013** — Sovereign handover: removed sidebar Photo section; on-card photo controls are now the single desktop path
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -57,6 +58,11 @@
 - **Context:** Hero photo controls had production regressions: circle shape rendered as square, cinematic shape stayed constrained to 180px, replacement uploads could retain prior pan/zoom during async processing, and the toolbelt hid too aggressively while moving between photo and hero text.
 - **Decision:** Updated `HeroSegment` to use true shape geometry (`w-full` + `16/9` for cinematic, `1/1` for non-cinematic) and dynamic wrapper sizing; added wheel scroll lock guard while hovering the photo; rewired `PhotoToolbelt` to a wider grid pedestal with 250px proximity + hero text active zone, plus delayed close; reset photo transform before compression and again on apply in both upload handlers.
 - **Impact:** Shape toggle now maps correctly to visible masks, cinematic fills the intended width, new uploads open centered instead of inheriting stale transforms, page scroll no longer hijacks wheel-zoom interactions, and toolbelt/floating-label behavior is stable during hero editing.
+
+### 013
+- **Context:** Desktop photo editing reached parity on-card (`HeroSegment` + `PhotoToolbelt`) and the `StartCustomizer` sidebar `Photo` accordion became duplicate surface area.
+- **Decision:** Removed `PhotoSection` usage from `StartCustomizer.tsx` and deleted `StartCustomizer/PhotoSection.tsx`, making on-card controls the single desktop interaction path for shape/filter/border/overlay/reset/replace.
+- **Impact:** Sidebar is decluttered and photo state flow is simpler (fewer competing handlers/props), reducing future regression risk while mobile parity is handled in a dedicated follow-up pass.
 
 ## Architecture Decisions
 - Zero backend for card features
