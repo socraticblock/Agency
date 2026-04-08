@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { ListTree, ChevronUp, ChevronDown, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ListTree, ChevronUp, ChevronDown, X, Check } from "lucide-react";
 import type { Lane1CustomizerState, SectionId } from "../../lib/types";
 
 const SECTION_LABELS: Record<SectionId, string> = {
@@ -27,20 +27,63 @@ interface SectionManagerPanelProps {
   editable: boolean;
   state: Lane1CustomizerState;
   patch: (p: Partial<Lane1CustomizerState>) => void;
+  onStructureChange?: (sectionId: SectionId) => void;
 }
 
-export function SectionManagerPanel({ editable, state, patch }: SectionManagerPanelProps) {
+export function SectionManagerPanel({ editable, state, patch, onStructureChange }: SectionManagerPanelProps) {
   const [open, setOpen] = useState(false);
+  const [savingStatus, setSavingStatus] = useState<"idle" | "saving" | "saved">("idle");
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const savingDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const savedToIdleRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   if (!editable) return null;
 
   const orderedActive = state.sectionOrder.filter((id) => state.activeSections.includes(id));
 
+  useEffect(() => {
+    if (!open) return;
+    const handleOutsidePointerDown = (e: PointerEvent) => {
+      const target = e.target as Node | null;
+      if (!target) return;
+      if (rootRef.current?.contains(target)) return;
+      setOpen(false);
+    };
+    window.addEventListener("pointerdown", handleOutsidePointerDown);
+    return () => {
+      window.removeEventListener("pointerdown", handleOutsidePointerDown);
+    };
+  }, [open]);
+
+  useEffect(() => {
+    return () => {
+      if (savingDebounceRef.current) clearTimeout(savingDebounceRef.current);
+      if (savedToIdleRef.current) clearTimeout(savedToIdleRef.current);
+    };
+  }, []);
+
+  const runPatchedUpdate = (
+    payload: Partial<Lane1CustomizerState>,
+    changed: boolean,
+    sectionId?: SectionId,
+  ) => {
+    if (!changed) return;
+    if (savingDebounceRef.current) clearTimeout(savingDebounceRef.current);
+    if (savedToIdleRef.current) clearTimeout(savedToIdleRef.current);
+    setSavingStatus("saving");
+    patch(payload);
+    if (sectionId) onStructureChange?.(sectionId);
+    savingDebounceRef.current = setTimeout(() => {
+      setSavingStatus("saved");
+      savedToIdleRef.current = setTimeout(() => setSavingStatus("idle"), 900);
+    }, 260);
+  };
+
   const toggle = (id: SectionId) => {
     if (state.activeSections.includes(id)) {
-      patch({ activeSections: state.activeSections.filter((x) => x !== id) });
+      runPatchedUpdate({ activeSections: state.activeSections.filter((x) => x !== id) }, true, id);
       return;
     }
-    patch({ activeSections: [...state.activeSections, id] });
+    runPatchedUpdate({ activeSections: [...state.activeSections, id] }, true, id);
   };
 
   const move = (id: SectionId, dir: -1 | 1) => {
@@ -48,11 +91,13 @@ export function SectionManagerPanel({ editable, state, patch }: SectionManagerPa
     const nextIdx = idx + dir;
     if (idx === -1 || nextIdx < 0 || nextIdx >= orderedActive.length) return;
     const other = orderedActive[nextIdx];
-    patch({ sectionOrder: swapInOrder(state.sectionOrder, id, other) });
+    const nextOrder = swapInOrder(state.sectionOrder, id, other);
+    const changed = nextOrder.some((value, index) => value !== state.sectionOrder[index]);
+    runPatchedUpdate({ sectionOrder: nextOrder }, changed, id);
   };
 
   return (
-    <div className="business-card-template-print-skip relative z-[120] flex justify-end px-4 pb-2">
+    <div ref={rootRef} className="business-card-template-print-skip relative z-[120] flex justify-end px-4 pb-2">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
@@ -66,14 +111,25 @@ export function SectionManagerPanel({ editable, state, patch }: SectionManagerPa
         <div className="absolute right-4 top-full mt-2 w-[280px] rounded-xl border border-white/20 bg-black/85 p-3 text-white shadow-2xl backdrop-blur-md">
           <div className="mb-2 flex items-center justify-between">
             <p className="text-xs font-bold uppercase tracking-wide text-white/80">Visible sections</p>
-            <button
-              type="button"
-              onClick={() => setOpen(false)}
-              className="rounded p-1 text-white/70 transition hover:bg-white/10 hover:text-white"
-              aria-label="Close section manager"
-            >
-              <X className="h-4 w-4" />
-            </button>
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide text-white/70">
+                {savingStatus === "saving" ? <span className="animate-pulse">Saving...</span> : null}
+                {savingStatus === "saved" ? (
+                  <>
+                    <Check className="h-3 w-3 text-emerald-300" />
+                    <span className="text-emerald-200">Saved</span>
+                  </>
+                ) : null}
+              </span>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                className="rounded p-1 text-white/70 transition hover:bg-white/10 hover:text-white"
+                aria-label="Close section manager"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
           </div>
 
           <div className="space-y-1.5">

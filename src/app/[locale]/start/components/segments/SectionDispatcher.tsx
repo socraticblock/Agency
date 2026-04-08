@@ -10,6 +10,7 @@ import { VideoSegment } from "./VideoSegment";
 import { BookingSegment } from "./BookingSegment";
 import type { CSSProperties, ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
+import { motion, type Variants } from "framer-motion";
 
 interface SectionDispatcherProps {
   state: Lane1CustomizerState;
@@ -26,6 +27,8 @@ interface SectionDispatcherProps {
   icons: LucideIcon[];
   activeSection: SectionId | null;
   setActiveSection: (sectionId: SectionId | null) => void;
+  pulseSectionId: SectionId | null;
+  pulseToken: number;
 }
 
 export function SectionDispatcher({
@@ -43,22 +46,52 @@ export function SectionDispatcher({
   icons,
   activeSection,
   setActiveSection,
+  pulseSectionId,
+  pulseToken,
 }: SectionDispatcherProps) {
   const activeSections = state.sectionOrder.filter((id) => state.activeSections.includes(id));
 
+  const sectionShellVariants: Variants = {
+    idle: {
+      y: 0,
+      transition: { duration: 0.16, ease: "easeOut" },
+    },
+    hover: {
+      y: -2,
+      transition: { duration: 0.16, ease: "easeOut" },
+    },
+  };
+
   const withEditorShell = (sectionId: SectionId, node: ReactNode) => (
-    <div
+    <motion.div
       key={sectionId}
+      variants={sectionShellVariants}
+      initial="idle"
+      animate="idle"
+      whileHover={editable ? "hover" : "idle"}
       className={`group relative rounded-2xl transition-all ${
         editable ? "cursor-pointer" : ""
-      } ${editable && activeSection === sectionId ? "ring-2 ring-[var(--accent)] ring-offset-2 ring-offset-transparent" : ""}`}
+      } ${
+        editable && activeSection === sectionId
+          ? "ring-2 ring-[var(--accent)] ring-offset-2 ring-offset-transparent"
+          : "hover:ring-1 hover:ring-white/15"
+      }`}
       onClick={() => {
         if (!editable) return;
         setActiveSection(sectionId);
       }}
     >
+      {pulseSectionId === sectionId ? (
+        <motion.div
+          key={`pulse-${sectionId}-${pulseToken}`}
+          initial={{ opacity: 0, scale: 0.992 }}
+          animate={{ opacity: [0.0, 0.36, 0.0], scale: [0.992, 1.006, 1.0] }}
+          transition={{ duration: 0.28, ease: "easeOut" }}
+          className="pointer-events-none absolute inset-0 z-10 rounded-2xl ring-2 ring-[var(--accent)]/60"
+        />
+      ) : null}
       {node}
-    </div>
+    </motion.div>
   );
 
   return (

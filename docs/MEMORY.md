@@ -12,6 +12,8 @@
 - **014** — Section-first on-card activation shell (single active section state + hover edit affordance around card sections)
 - **015** — Added desktop section drawer for About/Services (on-card click opens right-side editor; shared active-section controller)
 - **016** — Replaced section text drawer with on-card Sections Manager (add/remove/reorder controls) while preserving inline content editing
+- **017** — Sections Manager UX hardening (outside-click close + save-status scaffold: idle/saving/saved)
+- **018** — Phase 4 polish for section structure edits (event-based pulse highlight, unified section shell interactions, anti-jitter pulse timing)
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -81,6 +83,16 @@
 - **Context:** Inline text editing on card already covered section content, making the extra About/Services drawer redundant and adding unnecessary workflow friction.
 - **Decision:** Removed `SectionEditorDrawer` entirely and added `SectionManagerPanel` as an on-card control surface for section visibility and order only (toggle + move up/down), driven by existing `activeSections`/`sectionOrder` state.
 - **Impact:** Editing flow is simpler and more sovereign: content edits remain direct on-card, while structural section management is available in-context without reopening the old sidebar dependency.
+
+### 017
+- **Context:** Sections overlay required more intuitive dismissal and user reassurance during structural edits (toggle/reorder), especially with mouse/touch workflows where ESC usage is low.
+- **Decision:** Added global outside-click/tap dismissal to `SectionManagerPanel` and introduced a lightweight save-status scaffold (`idle | saving | saved`) around patch updates, with transient status feedback in the panel header.
+- **Impact:** Overlay behavior now matches natural interaction expectations (click anywhere outside to close) while setting the technical foundation for richer auto-save micro-feedback in later polish phases.
+
+### 018
+- **Context:** Section structure changes (add/remove/reorder) needed visual confirmation on-card without noisy per-keystroke motion or jitter during rapid actions.
+- **Decision:** Added event-based section pulse signaling from `SectionManagerPanel` to `BusinessCardTemplate` and into `SectionDispatcher` (`pulseSectionId` + `pulseToken`), rendering a short-lived accent ring pulse overlay only on structural changes; unified shell hover/active visuals with restrained lift and ring behavior.
+- **Impact:** Structural edits now feel immediate and premium (clear “where change happened”) while remaining stable under rapid interaction, with no animation spam during normal text editing.
 
 ## Architecture Decisions
 - Zero backend for card features

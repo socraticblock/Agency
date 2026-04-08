@@ -56,7 +56,10 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   const [shareFeedback, setShareFeedback] = useState("");
   const [photoBusy, setPhotoBusy] = useState(false);
   const [activeSection, setActiveSection] = useState<SectionId | null>(null);
+  const [pulseSectionId, setPulseSectionId] = useState<SectionId | null>(null);
+  const [pulseToken, setPulseToken] = useState(0);
   const fileRef = useRef<HTMLInputElement>(null);
+  const pulseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const nameSlug = state.name.toLowerCase().replace(/\s+/g, "-") || "business-card";
@@ -66,7 +69,19 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
     });
   }, [state.style.accentId, state.name, state]);
 
+  useEffect(() => {
+    return () => {
+      if (pulseTimerRef.current) clearTimeout(pulseTimerRef.current);
+    };
+  }, []);
+
   const patch = (p: Partial<Lane1CustomizerState>) => onPatch?.(p);
+  const triggerSectionPulse = (sectionId: SectionId) => {
+    if (pulseTimerRef.current) clearTimeout(pulseTimerRef.current);
+    setPulseSectionId(sectionId);
+    setPulseToken((v) => v + 1);
+    pulseTimerRef.current = setTimeout(() => setPulseSectionId(null), 320);
+  };
   const setServiceLine = (i: number, v: string) => {
     const next = useSecondary ? [...state.serviceAreasSecondary] : [...state.serviceAreas];
     next[i] = v;
@@ -189,7 +204,12 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
         />
 
         <CtaSegment state={state} editable={editable} patch={patch} headingStyle={headingStyle} />
-        <SectionManagerPanel editable={editable} state={state} patch={patch} />
+        <SectionManagerPanel
+          editable={editable}
+          state={state}
+          patch={patch}
+          onStructureChange={triggerSectionPulse}
+        />
 
         <div className="business-card-template-print-skip">
           <SectionDispatcher
@@ -207,6 +227,8 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
             icons={ICONS}
             activeSection={activeSection}
             setActiveSection={setActiveSection}
+            pulseSectionId={pulseSectionId}
+            pulseToken={pulseToken}
           />
         </div>
 
