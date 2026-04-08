@@ -26,6 +26,7 @@ export function PhotoToolbelt({
   const [floatingLabel, setFloatingLabel] = useState<{ label: string; key: number } | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [resetConfirmOpen, setResetConfirmOpen] = useState(false);
+  const [hoveredTooltip, setHoveredTooltip] = useState<string | null>(null);
   const openTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -237,13 +238,56 @@ export function PhotoToolbelt({
             onPointerDown={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-center gap-1.5 rounded-2xl border border-white/20 bg-black/85 p-2 shadow-2xl backdrop-blur-md">
-              <ToolButton icon={<Shapes className="h-[18px] w-[18px]" />} onClick={cycleShape} />
-              <ToolButton icon={<Wand2 className="h-[18px] w-[18px]" />} onClick={cycleEffect} />
-              <ToolButton icon={<FrameIcon className="h-[18px] w-[18px]" />} onClick={toggleBorder} />
-              <ToolButton icon={<Layers className="h-[18px] w-[18px]" />} onClick={cycleOverlay} />
-              <ToolButton icon={<Crosshair className="h-[18px] w-[18px]" />} onClick={centerPhoto} />
-              <ToolButton icon={<RefreshCw className="h-[18px] w-[18px]" />} onClick={handleReplace} highlight />
-              <ToolButton icon={<RotateCcw className="h-[18px] w-[18px]" />} onClick={openResetConfirm} />
+              <ToolButton
+                icon={<Shapes className="h-[18px] w-[18px]" />}
+                onClick={cycleShape}
+                tooltip="Format / Shape"
+                hoveredTooltip={hoveredTooltip}
+                setHoveredTooltip={setHoveredTooltip}
+              />
+              <ToolButton
+                icon={<Wand2 className="h-[18px] w-[18px]" />}
+                onClick={cycleEffect}
+                tooltip="Filters"
+                hoveredTooltip={hoveredTooltip}
+                setHoveredTooltip={setHoveredTooltip}
+              />
+              <ToolButton
+                icon={<FrameIcon className="h-[18px] w-[18px]" />}
+                onClick={toggleBorder}
+                tooltip="Borders"
+                hoveredTooltip={hoveredTooltip}
+                setHoveredTooltip={setHoveredTooltip}
+              />
+              <ToolButton
+                icon={<Layers className="h-[18px] w-[18px]" />}
+                onClick={cycleOverlay}
+                tooltip="Effect Layers"
+                hoveredTooltip={hoveredTooltip}
+                setHoveredTooltip={setHoveredTooltip}
+              />
+              <ToolButton
+                icon={<Crosshair className="h-[18px] w-[18px]" />}
+                onClick={centerPhoto}
+                tooltip="Center Photo"
+                hoveredTooltip={hoveredTooltip}
+                setHoveredTooltip={setHoveredTooltip}
+              />
+              <ToolButton
+                icon={<RefreshCw className="h-[18px] w-[18px]" />}
+                onClick={handleReplace}
+                tooltip="Replace Photo"
+                hoveredTooltip={hoveredTooltip}
+                setHoveredTooltip={setHoveredTooltip}
+                highlight
+              />
+              <ToolButton
+                icon={<RotateCcw className="h-[18px] w-[18px]" />}
+                onClick={openResetConfirm}
+                tooltip="Reset Photo"
+                hoveredTooltip={hoveredTooltip}
+                setHoveredTooltip={setHoveredTooltip}
+              />
             </div>
           </motion.div>
         )}
@@ -255,24 +299,48 @@ export function PhotoToolbelt({
 function ToolButton({
   icon,
   onClick,
+  tooltip,
+  hoveredTooltip,
+  setHoveredTooltip,
   highlight = false,
 }: {
   icon: React.ReactNode;
   onClick: (e: React.MouseEvent) => void;
+  tooltip: string;
+  hoveredTooltip: string | null;
+  setHoveredTooltip: (value: string | null) => void;
   highlight?: boolean;
 }) {
+  const isTooltipVisible = hoveredTooltip === tooltip;
   return (
-    <button
-      onClick={onClick}
-      className={`
-        flex h-9 w-9 items-center justify-center rounded-xl
-        text-white/90 transition-all duration-150
-        hover:bg-white/15 hover:text-white hover:scale-105
-        active:scale-95 active:bg-white/20
-        ${highlight ? "hover:bg-white/20" : ""}
-      `}
-    >
-      {icon}
-    </button>
+    <div className="relative flex items-center justify-center">
+      <AnimatePresence>
+        {isTooltipVisible && (
+          <motion.span
+            initial={{ opacity: 0, y: 3 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 3 }}
+            transition={{ duration: 0.14, ease: "easeOut" }}
+            className="pointer-events-none absolute -top-8 whitespace-nowrap rounded-md bg-white px-2 py-1 text-[10px] font-semibold text-black shadow"
+          >
+            {tooltip}
+          </motion.span>
+        )}
+      </AnimatePresence>
+      <button
+        onClick={onClick}
+        onMouseEnter={() => setHoveredTooltip(tooltip)}
+        onMouseLeave={() => setHoveredTooltip(null)}
+        className={`
+          flex h-9 w-9 items-center justify-center rounded-xl
+          text-white/90 transition-all duration-150
+          hover:bg-white/15 hover:text-white hover:scale-105
+          active:scale-95 active:bg-white/20
+          ${highlight ? "hover:bg-white/20" : ""}
+        `}
+      >
+        {icon}
+      </button>
+    </div>
   );
 }
