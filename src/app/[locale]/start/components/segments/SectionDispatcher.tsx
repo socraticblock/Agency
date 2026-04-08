@@ -8,8 +8,9 @@ import { GallerySegment } from "./GallerySegment";
 import { AwardsSegment } from "./AwardsSegment";
 import { VideoSegment } from "./VideoSegment";
 import { BookingSegment } from "./BookingSegment";
-import type { CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
+import { Pencil } from "lucide-react";
 
 interface SectionDispatcherProps {
   state: Lane1CustomizerState;
@@ -24,6 +25,8 @@ interface SectionDispatcherProps {
   itemVariants: import("framer-motion").Variants;
   glassStyle: CSSProperties;
   icons: LucideIcon[];
+  activeSection: SectionId | null;
+  setActiveSection: (sectionId: SectionId | null) => void;
 }
 
 export function SectionDispatcher({
@@ -39,17 +42,40 @@ export function SectionDispatcher({
   itemVariants,
   glassStyle,
   icons,
+  activeSection,
+  setActiveSection,
 }: SectionDispatcherProps) {
   const activeSections = state.sectionOrder.filter((id) => state.activeSections.includes(id)).slice(0, 4);
+
+  const withEditorShell = (sectionId: SectionId, node: ReactNode) => (
+    <div
+      key={sectionId}
+      className={`group relative rounded-2xl transition-all ${
+        editable ? "cursor-pointer" : ""
+      } ${editable && activeSection === sectionId ? "ring-2 ring-[var(--accent)] ring-offset-2 ring-offset-transparent" : ""}`}
+      onClick={() => {
+        if (!editable) return;
+        setActiveSection(sectionId);
+      }}
+    >
+      {editable ? (
+        <div className="pointer-events-none absolute right-3 top-3 z-20 hidden items-center gap-1 rounded-full border border-white/20 bg-black/70 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-white opacity-0 transition-opacity duration-150 group-hover:opacity-100 md:flex">
+          <Pencil className="h-3 w-3" />
+          Edit
+        </div>
+      ) : null}
+      {node}
+    </div>
+  );
 
   return (
     <>
       {activeSections.map((sectionId: SectionId) => {
         switch (sectionId) {
           case "services":
-            return (
+            return withEditorShell(
+              sectionId,
               <ServicesSegment
-                key={sectionId}
                 state={state}
                 editable={editable}
                 useSecondary={useSecondary}
@@ -65,9 +91,9 @@ export function SectionDispatcher({
               />
             );
           case "about":
-            return (
+            return withEditorShell(
+              sectionId,
               <AboutSegment
-                key={sectionId}
                 state={state}
                 editable={editable}
                 useSecondary={useSecondary}
@@ -80,9 +106,9 @@ export function SectionDispatcher({
               />
             );
           case "testimonials":
-            return (
+            return withEditorShell(
+              sectionId,
               <TestimonialsSegment
-                key={sectionId}
                 state={state}
                 editable={editable}
                 isResponsive={isResponsive}
@@ -94,9 +120,9 @@ export function SectionDispatcher({
               />
             );
           case "gallery":
-            return (
+            return withEditorShell(
+              sectionId,
               <GallerySegment
-                key={sectionId}
                 state={state}
                 editable={editable}
                 patch={patch}
@@ -107,9 +133,9 @@ export function SectionDispatcher({
               />
             );
           case "awards":
-            return (
+            return withEditorShell(
+              sectionId,
               <AwardsSegment
-                key={sectionId}
                 state={state}
                 editable={editable}
                 isResponsive={isResponsive}
@@ -121,9 +147,9 @@ export function SectionDispatcher({
               />
             );
           case "video":
-            return (
+            return withEditorShell(
+              sectionId,
               <VideoSegment
-                key={sectionId}
                 state={state}
                 editable={editable}
                 patch={patch}
@@ -135,9 +161,9 @@ export function SectionDispatcher({
               />
             );
           case "booking":
-            return (
+            return withEditorShell(
+              sectionId,
               <BookingSegment
-                key={sectionId}
                 state={state}
                 editable={editable}
                 patch={patch}

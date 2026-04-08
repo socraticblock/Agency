@@ -10,11 +10,12 @@ import { SocialSegment } from "../segments/SocialSegment";
 import { QrOnCardSegment } from "../segments/QrOnCardSegment";
 import { UtilitySegments } from "../segments/UtilitySegments";
 import { BrandingFooter } from "../segments/BrandingFooter";
+import { SectionEditorDrawer } from "../segments/SectionEditorDrawer";
 import { buildItemVariants, containerVariants } from "../../lib/animations";
 import { usePwaMetadata } from "../../lib/usePwaMetadata";
 import { useCardTilt } from "../../lib/useCardTilt";
 import { Scale, Briefcase, Building2, Sparkles } from "lucide-react";
-import type { Lane1CustomizerState } from "../../lib/types";
+import type { Lane1CustomizerState, SectionId } from "../../lib/types";
 import { ANIMATION_PRESETS, resolveStyleVariables } from "../../lib/presets";
 import { compressImageForLane1Storage } from "../../lib/image-compress";
 import "../business-card-template.css";
@@ -54,6 +55,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
   const [shareFeedback, setShareFeedback] = useState("");
   const [photoBusy, setPhotoBusy] = useState(false);
+  const [activeSection, setActiveSection] = useState<SectionId | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -202,6 +204,8 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
             itemVariants={customItemVariants}
             glassStyle={glassStyle}
             icons={ICONS}
+            activeSection={activeSection}
+            setActiveSection={setActiveSection}
           />
         </div>
 
@@ -220,6 +224,18 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
 
         <BrandingFooter ownerName={ownerName} hideBranding={hideBranding} homeHref={homeHref} />
       </motion.div>
+
+      {editable ? (
+        <SectionEditorDrawer
+          activeSection={activeSection}
+          setActiveSection={setActiveSection}
+          state={state}
+          useSecondary={useSecondary}
+          patch={patch}
+          setServiceLine={setServiceLine}
+          setServiceDescriptionLine={setServiceDescriptionLine}
+        />
+      ) : null}
     </div>
   );
 });

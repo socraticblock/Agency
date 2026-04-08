@@ -9,6 +9,8 @@
 - **011** — Removed dead code exports and duplicate variables (10 unused variables from presets.ts, `--start-accent-gold` from start-shell.css)
 - **012** — Hero photo shape + toolbelt interaction stabilization (true circle/cinematic sizing, upload reset, expanded active zone, wheel scroll lock)
 - **013** — Sovereign handover: removed sidebar Photo section; on-card photo controls are now the single desktop path
+- **014** — Section-first on-card activation shell (single active section state + hover edit affordance around card sections)
+- **015** — Added desktop section drawer for About/Services (on-card click opens right-side editor; shared active-section controller)
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -63,6 +65,16 @@
 - **Context:** Desktop photo editing reached parity on-card (`HeroSegment` + `PhotoToolbelt`) and the `StartCustomizer` sidebar `Photo` accordion became duplicate surface area.
 - **Decision:** Removed `PhotoSection` usage from `StartCustomizer.tsx` and deleted `StartCustomizer/PhotoSection.tsx`, making on-card controls the single desktop interaction path for shape/filter/border/overlay/reset/replace.
 - **Impact:** Sidebar is decluttered and photo state flow is simpler (fewer competing handlers/props), reducing future regression risk while mobile parity is handled in a dedicated follow-up pass.
+
+### 014
+- **Context:** With photo controls moved on-card, section editing still relied on sidebar mental mapping; users needed direct “click section to edit” affordance to continue sovereign desktop flow.
+- **Decision:** Added centralized `activeSection` state in `BusinessCardTemplate` and passed it into `SectionDispatcher`; wrapped each dynamic section (`about/services/testimonials/gallery/awards/video/booking`) in an on-card editor shell with hover pencil affordance and active ring highlight.
+- **Impact:** The card now acts as section navigation context without opening competing side panels; establishes the single-active-section contract needed for upcoming desktop drawer/mobile bottom-sheet editors.
+
+### 015
+- **Context:** Section activation existed on-card, but users still needed a practical editing surface for complex section content without relying on legacy sidebar flows.
+- **Decision:** Introduced `SectionEditorDrawer` (desktop-only overlay) wired to the centralized `activeSection` state; clicking `About` opens a textarea editor, clicking `Services` opens structured title/description editors for each service item.
+- **Impact:** Desktop now has a true section-first editing loop (select on card -> edit in contextual drawer -> immediate card update), validating the sovereign interaction model before mobile bottom-sheet rollout.
 
 ## Architecture Decisions
 - Zero backend for card features
