@@ -14,6 +14,7 @@
 - **016** — Replaced section text drawer with on-card Sections Manager (add/remove/reorder controls) while preserving inline content editing
 - **017** — Sections Manager UX hardening (outside-click close + save-status scaffold: idle/saving/saved)
 - **018** — Phase 4 polish for section structure edits (event-based pulse highlight, unified section shell interactions, anti-jitter pulse timing)
+- **019** — Added sticky bottom Live Preview quick action that opens `/start/preview` in a new tab using current in-memory card state
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -93,6 +94,11 @@
 - **Context:** Section structure changes (add/remove/reorder) needed visual confirmation on-card without noisy per-keystroke motion or jitter during rapid actions.
 - **Decision:** Added event-based section pulse signaling from `SectionManagerPanel` to `BusinessCardTemplate` and into `SectionDispatcher` (`pulseSectionId` + `pulseToken`), rendering a short-lived accent ring pulse overlay only on structural changes; unified shell hover/active visuals with restrained lift and ring behavior.
 - **Impact:** Structural edits now feel immediate and premium (clear “where change happened”) while remaining stable under rapid interaction, with no animation spam during normal text editing.
+
+### 019
+- **Context:** Users already relied on the top preview action (`Preview my site`) that opens a separate preview tab; the new bottom control needed to match that exact behavior.
+- **Decision:** Replaced the bottom mode toggle with a single sticky `Live Preview` button in `StartPageClient` that writes `businessCardPreview` to `sessionStorage` and opens `/${locale}/start/preview` in a new tab.
+- **Impact:** Preview behavior is now consistent across entry points (top + bottom), avoids in-page mode divergence, and preserves a reliable client-facing preview flow.
 
 ## Architecture Decisions
 - Zero backend for card features

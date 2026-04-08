@@ -254,6 +254,21 @@ export function StartPageClient({ locale }: { locale: Locale }) {
           <Pencil className="h-6 w-6" strokeWidth={2} aria-hidden />
         </button>
       ) : null}
+
+      <div className="business-card-template-print-skip fixed bottom-[max(0.75rem,env(safe-area-inset-bottom))] left-1/2 z-[115] -translate-x-1/2">
+        <div className="start-glass-heavy flex rounded-full p-1 shadow-[var(--start-shadow-lg)]">
+          <button
+            type="button"
+            onClick={() => {
+              sessionStorage.setItem("businessCardPreview", JSON.stringify(state));
+              window.open(`/${locale}/start/preview`, "_blank");
+            }}
+            className="rounded-full bg-[#1A2744] px-3 py-1.5 text-xs font-semibold text-white transition hover:brightness-110"
+          >
+            Live Preview
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
