@@ -275,22 +275,6 @@ export function HeroSegment({
                   </div>
                 </div>
 
-                {/* Desktop FAM — hidden on mobile */}
-                <AnimatePresence>
-                  {editable && (
-                    <div
-                      className="relative z-[100] overflow-visible hidden md:block"
-                      onPointerDown={(e) => e.stopPropagation()}
-                    >
-                      <PhotoToolbelt
-                        state={state}
-                        patch={patch}
-                        onReplace={() => fileRef.current?.click()}
-                      />
-                    </div>
-                  )}
-                </AnimatePresence>
-
                 {/* Mobile tap hint */}
                 {editable && (
                   <div className="absolute inset-0 flex items-center justify-center md:hidden pointer-events-none">
@@ -310,6 +294,19 @@ export function HeroSegment({
               </div>
             )}
           </div>
+
+          {/* Desktop Toolbelt — positioned below photo */}
+          <AnimatePresence>
+            {editable && state.photoDataUrl && (
+              <div className="relative z-[100] mt-4 hidden md:block" onPointerDown={(e) => e.stopPropagation()}>
+                <PhotoToolbelt
+                  state={state}
+                  patch={patch}
+                  onReplace={() => fileRef.current?.click()}
+                />
+              </div>
+            )}
+          </AnimatePresence>
 
           {/* ── Identity Text ───────────────────────────────────── */}
           <div className={`w-full space-y-1 transition-all bg-transparent relative z-10 pt-4 ${

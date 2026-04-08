@@ -82,7 +82,15 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
     setPhotoBusy(true);
     try {
       const { dataUrl } = await compressImageForLane1Storage(file);
-      onPatch({ photoDataUrl: dataUrl });
+      onPatch({ 
+        photoDataUrl: dataUrl,
+        style: {
+          ...state.style,
+          photoZoom: 100,
+          photoPositionX: 50,
+          photoPositionY: 50
+        }
+      });
     } finally { setPhotoBusy(false); }
   }
 
