@@ -6,6 +6,7 @@ import { X } from "lucide-react";
 import type { Lane1CustomizerState } from "../lib/types";
 import { BusinessCardTemplate } from "../components/BusinessCardTemplate";
 import { normalizeLane1StateFromUnknown } from "../lib/customizer-store";
+import { resolveStyleVariables } from "../lib/presets";
 
 export default function PreviewPage() {
   const params = useParams();
@@ -34,9 +35,13 @@ export default function PreviewPage() {
   }
 
   const homeHref = `/${locale}`;
+  const vars = resolveStyleVariables(state.style);
 
   return (
-    <div className="relative min-h-screen bg-[var(--background,#030717)] antialiased md:p-8 xl:p-12">
+    <div 
+      className="relative min-h-screen bg-[var(--background,#030717)] antialiased transition-colors duration-700 md:p-8 xl:p-12"
+      style={vars}
+    >
       <button
         type="button"
         onClick={() => window.close()}
@@ -46,7 +51,7 @@ export default function PreviewPage() {
         <X className="h-5 w-5 md:h-6 md:w-6" />
       </button>
 
-      <div className="mx-auto w-full max-w-6xl md:rounded-3xl md:shadow-2xl md:overflow-hidden md:bg-[var(--bg-primary,#faf8f5)] md:p-2 xl:p-6 transition-all">
+      <div className="mx-auto w-full max-w-6xl md:rounded-3xl md:shadow-2xl md:overflow-hidden md:bg-[var(--bg-primary)] md:p-2 xl:p-6 transition-all duration-700">
         <BusinessCardTemplate
           state={state}
           previewLang="primary"

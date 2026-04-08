@@ -593,6 +593,7 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
     "--overlay-gradient": overlayGradientValue,
     "--overlay-opacity": selection.bgOverlayId === "none" ? "0" : String(selection.bgOverlayOpacity),
     "--bg-primary": bgResolved,
+    "--background": selection.cardDarkSurface ? "#030712" : bgResolved,
     "--text-primary": textColor,
     "--accent": acc.accent,
     "--accent-secondary": secondaryFamily.accentSecondary,
