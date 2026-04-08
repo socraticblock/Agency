@@ -223,10 +223,12 @@ export function HeroSegment({
           photoAlignment === "center" ? "items-center text-center" : "items-start text-left"
         }`}>
 
-          {/* ── Photo Zone with Toolbelt Tracking ───────────────────── */}
+          {/* ── Photo Zone with fixed toolbar anchor ───────────────────── */}
           <div
             ref={photoToolbeltWrapperRef}
-            className={`relative flex flex-shrink-0 ${photoShape === "wide-cinematic" ? "w-full max-w-[520px]" : "w-[250px]"}`}
+            className={`relative flex min-h-[200px] w-full flex-shrink-0 justify-center ${
+              photoShape === "wide-cinematic" ? "max-w-[520px]" : "max-w-[250px]"
+            }`}
           >
             {/* ── Photo Zone ─────────────────────────────────────── */}
             <div
@@ -241,8 +243,9 @@ export function HeroSegment({
                     : "pointer"
                   : "default",
                 touchAction: "none",
-                height: photoShape === "wide-cinematic" ? "250px" : undefined,
-                aspectRatio: photoShape === "wide-cinematic" ? "16/9" : "1/1",
+                width: photoShape === "wide-cinematic" ? "100%" : "250px",
+                height: photoShape === "wide-cinematic" ? "250px" : "250px",
+                aspectRatio: photoShape === "wide-cinematic" ? "16/9" : undefined,
                 borderRadius: shapeRadius,
               }}
               onMouseEnter={() => {
@@ -326,10 +329,13 @@ export function HeroSegment({
             )}
             </div>
 
-            {/* Desktop Toolbelt — absolute positioned ghost layer */}
+            {/* Desktop Toolbelt — anchored to shell bottom */}
             <AnimatePresence>
               {editable && state.photoDataUrl && (
-                <div className={`absolute left-0 z-[100] hidden md:block ${photoShape === "wide-cinematic" ? "top-[165px]" : "top-[250px]"}`} onPointerDown={(e) => e.stopPropagation()}>
+                <div
+                  className="absolute bottom-2 left-1/2 z-[100] hidden -translate-x-1/2 md:block"
+                  onPointerDown={(e) => e.stopPropagation()}
+                >
                   <PhotoToolbelt
                     photoContainerRef={photoContainerRef}
                     heroActiveZoneRef={heroActiveZoneRef}
