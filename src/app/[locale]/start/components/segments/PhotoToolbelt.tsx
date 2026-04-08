@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { RefreshCw, Wand2, Shapes, FrameIcon, Layers, Crosshair } from "lucide-react";
+import { RefreshCw, Wand2, Shapes, FrameIcon, Layers, Crosshair, RotateCcw } from "lucide-react";
 import { PHOTO_EFFECT_PRESETS, PHOTO_SHAPE_PRESETS, PHOTO_OVERLAY_PRESETS, PHOTO_BORDER_PRESETS } from "../../lib/presets";
 import type { Lane1CustomizerState } from "../../lib/types";
 
@@ -25,6 +25,7 @@ export function PhotoToolbelt({
 }: PhotoToolbeltProps) {
   const [floatingLabel, setFloatingLabel] = useState<{ label: string; key: number } | null>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [resetConfirmOpen, setResetConfirmOpen] = useState(false);
   const openTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -145,8 +146,71 @@ export function PhotoToolbelt({
     onReplace();
   };
 
+  const openResetConfirm = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setResetConfirmOpen(true);
+  };
+
+  const resetEverything = () => {
+    patch({
+      style: {
+        ...state.style,
+        photoPositionX: 50,
+        photoPositionY: 50,
+        photoZoom: 100,
+        photoEffect: "none" as any,
+        photoBorder: "none" as any,
+        photoOverlay: "none" as any,
+      },
+    });
+    showFloatingLabel("Photo reset");
+    setResetConfirmOpen(false);
+  };
+
   return (
     <div className="relative" style={{ width }}>
+      <AnimatePresence>
+        {resetConfirmOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[220] flex items-center justify-center bg-black/40 p-4 backdrop-blur-[2px]"
+            onClick={() => setResetConfirmOpen(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 8, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 8, scale: 0.98 }}
+              transition={{ duration: 0.16, ease: "easeOut" }}
+              className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-5 shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h4 className="text-base font-semibold text-slate-900">Reset Photo Styling?</h4>
+              <p className="mt-2 text-sm text-slate-600">
+                This will center your photo and remove all active filters, borders, and overlays.
+              </p>
+              <div className="mt-5 flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setResetConfirmOpen(false)}
+                  className="rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={resetEverything}
+                  className="rounded-lg bg-black px-3 py-2 text-sm font-semibold text-white transition hover:bg-black/90"
+                >
+                  Reset Everything
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <AnimatePresence>
         {isVisible && floatingLabel && (
           <motion.div
@@ -179,6 +243,7 @@ export function PhotoToolbelt({
               <ToolButton icon={<Layers className="h-[18px] w-[18px]" />} onClick={cycleOverlay} />
               <ToolButton icon={<Crosshair className="h-[18px] w-[18px]" />} onClick={centerPhoto} />
               <ToolButton icon={<RefreshCw className="h-[18px] w-[18px]" />} onClick={handleReplace} highlight />
+              <ToolButton icon={<RotateCcw className="h-[18px] w-[18px]" />} onClick={openResetConfirm} />
             </div>
           </motion.div>
         )}
