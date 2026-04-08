@@ -67,6 +67,7 @@ export function HeroSegment({
 
   // ─── Desktop: non-passive wheel for zoom ────────────────────────────────
   const photoContainerRef = useRef<HTMLDivElement>(null);
+  const photoToolbeltWrapperRef = useRef<HTMLDivElement>(null);
   // Use a ref to always get the latest zoom value without re-attaching the listener
   const zoomRef = useRef(photoZoom);
   zoomRef.current = photoZoom;
@@ -145,10 +146,10 @@ export function HeroSegment({
   )}")`;
 
   const shapeClass = ({
-    circle: "rounded-full aspect-square w-[180px]",
-    "rounded-square": "rounded-2xl aspect-square w-[180px]",
-    "wide-cinematic": "rounded-xl aspect-video w-full",
-  } as Record<string, string>)[photoShape as string] || "rounded-full aspect-square w-[180px]";
+    circle: "rounded-full w-[180px]",
+    "rounded-square": "rounded-2xl w-[180px]",
+    "wide-cinematic": "rounded-xl w-[180px]",
+  } as Record<string, string>)[photoShape as string] || "rounded-full w-[180px]";
 
   const effectFilter = PHOTO_EFFECT_PRESETS.find(p => p.id === photoEffect)?.filter || "none";
 
@@ -206,26 +207,29 @@ export function HeroSegment({
           photoAlignment === "center" ? "items-center text-center" : "items-start text-left"
         }`}>
 
-          {/* ── Photo Zone ─────────────────────────────────────── */}
-          <div
-            ref={photoContainerRef}
-            className={`group relative shrink-0 transition-all duration-700 ${shapeClass} ${
-              isResponsive ? "md:sticky md:top-4 md:z-20" : "z-20"
-            }`}
-            style={{
-              cursor: editable
-                ? state.photoDataUrl
-                  ? "move"
-                  : "pointer"
-                : "default",
-              touchAction: "none",
-            }}
-            onPointerDown={onPointerDown}
-            onPointerMove={onPointerMove}
-            onPointerUp={onPointerUp}
-            onPointerCancel={onPointerUp}
-            onClick={onPhotoClick}
-          >
+          {/* ── Photo Zone with Toolbelt Tracking ───────────────────── */}
+          <div ref={photoToolbeltWrapperRef} className="relative flex flex-shrink-0" style={{ width: "180px" }}>
+            {/* ── Photo Zone ─────────────────────────────────────── */}
+            <div
+              ref={photoContainerRef}
+              className={`group relative ${shapeClass} ${
+                isResponsive ? "md:sticky md:top-4 md:z-20" : "z-20"
+              }`}
+              style={{
+                cursor: editable
+                  ? state.photoDataUrl
+                    ? "move"
+                    : "pointer"
+                  : "default",
+                touchAction: "none",
+                height: photoShape === "wide-cinematic" ? "135px" : "180px",
+              }}
+              onPointerDown={onPointerDown}
+              onPointerMove={onPointerMove}
+              onPointerUp={onPointerUp}
+              onPointerCancel={onPointerUp}
+              onClick={onPhotoClick}
+            >
             {state.photoDataUrl ? (
               <div className="h-full w-full relative">
                 {/* Masked Image Layer */}
@@ -293,20 +297,22 @@ export function HeroSegment({
                 <span>Identity Profile</span>
               </div>
             )}
-          </div>
+            </div>
 
-          {/* Desktop Toolbelt — positioned below photo */}
-          <AnimatePresence>
-            {editable && state.photoDataUrl && (
-              <div className="relative z-[100] mt-4 hidden md:block" onPointerDown={(e) => e.stopPropagation()}>
-                <PhotoToolbelt
-                  state={state}
-                  patch={patch}
-                  onReplace={() => fileRef.current?.click()}
-                />
-              </div>
-            )}
-          </AnimatePresence>
+            {/* Desktop Toolbelt — absolute positioned ghost layer */}
+            <AnimatePresence>
+              {editable && state.photoDataUrl && (
+                <div className={`absolute left-0 z-[100] hidden md:block ${photoShape === "wide-cinematic" ? "top-[135px]" : "top-[180px]"}`} onPointerDown={(e) => e.stopPropagation()}>
+                  <PhotoToolbelt
+                    photoContainerRef={photoContainerRef}
+                    state={state}
+                    patch={patch}
+                    onReplace={() => fileRef.current?.click()}
+                  />
+                </div>
+              )}
+            </AnimatePresence>
+          </div>
 
           {/* ── Identity Text ───────────────────────────────────── */}
           <div className={`w-full space-y-1 transition-all bg-transparent relative z-10 pt-4 ${
