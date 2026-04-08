@@ -10,6 +10,7 @@ import type {
   SocialPlatformId,
 } from "../../lib/types";
 import { SocialManagerRow } from "./SocialManagerRow";
+import { SocialSelect } from "./SocialSelect";
 
 function swapInOrder(order: SocialPlatformId[], a: SocialPlatformId, b: SocialPlatformId): SocialPlatformId[] {
   const next = [...order];
@@ -158,20 +159,57 @@ export function SocialManagerPanel({
           <div className="mt-3 border-t border-white/10 pt-2 text-xs">
             <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wide text-white/60">Social icon UI</p>
             <div className="grid grid-cols-2 gap-2">
-              <select value={state.socialIconStyle} onChange={(e) => patch({ socialIconStyle: e.target.value as SocialIconStyle })} className="rounded-md border border-white/20 bg-white/10 px-2 py-1.5 text-xs text-white">
-                <option value="filled">Filled</option><option value="outlined">Outlined</option><option value="rounded">Rounded</option><option value="minimal">Minimal</option>
-              </select>
-              <select value={state.socialIconSize} onChange={(e) => patch({ socialIconSize: e.target.value as SocialIconSize })} className="rounded-md border border-white/20 bg-white/10 px-2 py-1.5 text-xs text-white">
-                <option value="small">Small</option><option value="medium">Medium</option><option value="large">Large</option>
-              </select>
-              <select value={state.socialIconColorMode} onChange={(e) => patch({ socialIconColorMode: e.target.value as SocialIconColorMode })} className="rounded-md border border-white/20 bg-white/10 px-2 py-1.5 text-xs text-white">
-                <option value="accent">Accent</option><option value="text">Body text</option><option value="custom">Custom</option>
-              </select>
+              <SocialSelect
+                value={state.socialIconStyle}
+                onChange={(next) => patch({ socialIconStyle: next as SocialIconStyle })}
+                options={[
+                  { value: "filled", label: "Filled" },
+                  { value: "outlined", label: "Outlined" },
+                  { value: "rounded", label: "Rounded" },
+                  { value: "minimal", label: "Minimal" },
+                ]}
+              />
+              <SocialSelect
+                value={state.socialIconSize}
+                onChange={(next) => patch({ socialIconSize: next as SocialIconSize })}
+                options={[
+                  { value: "small", label: "Small" },
+                  { value: "medium", label: "Medium" },
+                  { value: "large", label: "Large" },
+                ]}
+              />
+              <SocialSelect
+                value={state.socialIconColorMode}
+                onChange={(next) => patch({ socialIconColorMode: next as SocialIconColorMode })}
+                options={[
+                  { value: "accent", label: "Accent" },
+                  { value: "text", label: "Body text" },
+                  { value: "custom", label: "Custom" },
+                ]}
+              />
               <label className="inline-flex items-center gap-2 rounded-md border border-white/20 bg-white/10 px-2 py-1.5">
                 <input type="checkbox" checked={state.showSocialLabels} onChange={(e) => patch({ showSocialLabels: e.target.checked })} />
                 <span>Labels</span>
               </label>
             </div>
+            {state.socialIconColorMode === "custom" ? (
+              <div className="mt-2 grid grid-cols-[40px_1fr] gap-2">
+                <input
+                  type="color"
+                  value={state.socialIconCustomHex}
+                  onChange={(e) => patch({ socialIconCustomHex: e.target.value })}
+                  className="h-8 w-10 cursor-pointer rounded border border-white/20 bg-white/10 p-0.5"
+                  aria-label="Social icon custom color"
+                />
+                <input
+                  type="text"
+                  value={state.socialIconCustomHex}
+                  onChange={(e) => patch({ socialIconCustomHex: e.target.value })}
+                  placeholder="#C5A55A"
+                  className="h-8 rounded-md border border-white/20 bg-white/10 px-2 py-1.5 text-xs text-white placeholder:text-white/35 focus:outline-none focus:ring-1 focus:ring-white/30"
+                />
+              </div>
+            ) : null}
           </div>
 
           <div className="mt-3 border-t border-white/10 pt-2 text-xs">

@@ -36,7 +36,7 @@ export function ContactSocialSegment({
     return `https://wa.me/${digits}`;
   }
 
-  const showSocial = (url: string) => url?.trim().length > 0;
+  const hasUrl = (url: string) => url?.trim().length > 0;
   const platformOrder = state.socialPlatformOrder?.length
     ? state.socialPlatformOrder
     : (["facebook", "instagram", "linkedin", "tiktok", "youtube"] as SocialPlatformId[]);
@@ -95,37 +95,88 @@ export function ContactSocialSegment({
           {platformOrder
             .filter((id) => activePlatforms.includes(id))
             .map((id) => {
-              if (id === "facebook" && showSocial(state.social.facebook)) {
+              if (id === "facebook") {
                 return (
-                  <MagneticButton key={id} as="a" href={state.social.facebook} target="_blank" rel="noopener noreferrer" className="text-[var(--accent)]" aria-label="Facebook" magneticStrength={10}>
+                  <MagneticButton
+                    key={id}
+                    as="a"
+                    href={hasUrl(state.social.facebook) ? state.social.facebook : "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`text-[var(--accent)] ${hasUrl(state.social.facebook) ? "" : "pointer-events-none opacity-60"}`}
+                    aria-label="Facebook"
+                    magneticStrength={10}
+                    aria-disabled={!hasUrl(state.social.facebook)}
+                  >
                     <Facebook className="h-6 w-6" />
                   </MagneticButton>
                 );
               }
-              if (id === "instagram" && showSocial(state.social.instagram)) {
+              if (id === "instagram") {
                 return (
-                  <MagneticButton key={id} as="a" href={state.social.instagram} target="_blank" rel="noopener noreferrer" className="text-[var(--accent)]" aria-label="Instagram" magneticStrength={10}>
+                  <MagneticButton
+                    key={id}
+                    as="a"
+                    href={hasUrl(state.social.instagram) ? state.social.instagram : "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`text-[var(--accent)] ${hasUrl(state.social.instagram) ? "" : "pointer-events-none opacity-60"}`}
+                    aria-label="Instagram"
+                    magneticStrength={10}
+                    aria-disabled={!hasUrl(state.social.instagram)}
+                  >
                     <Instagram className="h-6 w-6" />
                   </MagneticButton>
                 );
               }
-              if (id === "linkedin" && showSocial(state.social.linkedin)) {
+              if (id === "linkedin") {
                 return (
-                  <MagneticButton key={id} as="a" href={state.social.linkedin} target="_blank" rel="noopener noreferrer" className="text-[var(--accent)]" aria-label="LinkedIn" magneticStrength={10}>
+                  <MagneticButton
+                    key={id}
+                    as="a"
+                    href={hasUrl(state.social.linkedin) ? state.social.linkedin : "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`text-[var(--accent)] ${hasUrl(state.social.linkedin) ? "" : "pointer-events-none opacity-60"}`}
+                    aria-label="LinkedIn"
+                    magneticStrength={10}
+                    aria-disabled={!hasUrl(state.social.linkedin)}
+                  >
                     <Linkedin className="h-6 w-6" />
                   </MagneticButton>
                 );
               }
-              if (id === "tiktok" && showSocial(state.social.tiktok)) {
+              if (id === "tiktok") {
                 return (
-                  <a key={id} href={state.social.tiktok} target="_blank" rel="noopener noreferrer" className="text-[var(--accent)]" aria-label="TikTok">
+                  <a
+                    key={id}
+                    href={hasUrl(state.social.tiktok) ? state.social.tiktok : "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`text-[var(--accent)] ${hasUrl(state.social.tiktok) ? "" : "opacity-60"}`}
+                    aria-label="TikTok"
+                    aria-disabled={!hasUrl(state.social.tiktok)}
+                    onClick={(e) => {
+                      if (!hasUrl(state.social.tiktok)) e.preventDefault();
+                    }}
+                  >
                     <span className="text-xs font-bold">TT</span>
                   </a>
                 );
               }
-              if (id === "youtube" && showSocial(state.social.youtube)) {
+              if (id === "youtube") {
                 return (
-                  <MagneticButton key={id} as="a" href={state.social.youtube} target="_blank" rel="noopener noreferrer" className="text-[var(--accent)]" aria-label="Visit YouTube Profile" magneticStrength={10}>
+                  <MagneticButton
+                    key={id}
+                    as="a"
+                    href={hasUrl(state.social.youtube) ? state.social.youtube : "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`text-[var(--accent)] ${hasUrl(state.social.youtube) ? "" : "pointer-events-none opacity-60"}`}
+                    aria-label="Visit YouTube Profile"
+                    magneticStrength={10}
+                    aria-disabled={!hasUrl(state.social.youtube)}
+                  >
                     <Youtube className="h-6 w-6" />
                   </MagneticButton>
                 );

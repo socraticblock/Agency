@@ -45,9 +45,26 @@ export function SocialAppearanceControls({
         >
           <option value="accent">Accent</option>
           <option value="text">Body text</option>
-          <option value="custom">Accent (custom hex later)</option>
+          <option value="custom">Custom</option>
         </select>
       </label>
+      {state.socialIconColorMode === "custom" ? (
+        <div className="grid grid-cols-[42px_1fr] gap-2">
+          <input
+            type="color"
+            value={state.socialIconCustomHex}
+            onChange={(e) => patch({ socialIconCustomHex: e.target.value })}
+            className="h-10 w-10 cursor-pointer rounded-lg border border-black/10 bg-white p-1"
+            aria-label="Social icon custom color"
+          />
+          <input
+            className={fieldClass}
+            value={state.socialIconCustomHex}
+            onChange={(e) => patch({ socialIconCustomHex: e.target.value })}
+            placeholder="#C5A55A"
+          />
+        </div>
+      ) : null}
       <label className="flex cursor-pointer items-center gap-3 text-sm font-medium text-[#1e293b]">
         <input
           type="checkbox"

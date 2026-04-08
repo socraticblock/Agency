@@ -29,6 +29,7 @@ function SocialIconLink({
   label: string;
   icon: ReactElement;
 }) {
+  const hasUrl = href.trim().length > 0;
   const px = socialIconPixelSize(state.socialIconSize);
   const color = socialIconColorVar(state);
   const stroke = socialIconFillStyle(state.socialIconStyle);
@@ -41,13 +42,14 @@ function SocialIconLink({
   return (
     <MagneticButton
       as="a"
-      href={href}
+      href={hasUrl ? href : "#"}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex flex-col items-center gap-1"
+      className={`flex flex-col items-center gap-1 ${hasUrl ? "" : "pointer-events-none opacity-60"}`}
       style={{ color }}
       aria-label={label}
       magneticStrength={10}
+      aria-disabled={!hasUrl}
     >
       <span className={frame} style={roundedBg}>
         {cloneElement(icon as ReactElement<{ size?: number; strokeWidth?: number }>, {
@@ -61,7 +63,6 @@ function SocialIconLink({
 }
 
 export function SocialSegment({ state, isResponsive, itemVariants }: SocialSegmentProps) {
-  const show = (u: string) => u?.trim().length > 0;
   const px = socialIconPixelSize(state.socialIconSize);
   const color = socialIconColorVar(state);
   const platformOrder = state.socialPlatformOrder?.length
@@ -72,19 +73,29 @@ export function SocialSegment({ state, isResponsive, itemVariants }: SocialSegme
     : (["facebook", "instagram", "linkedin", "tiktok", "youtube"] as SocialPlatformId[]);
 
   const items: Record<SocialPlatformId, { ok: boolean; node: ReactNode }> = {
-    facebook: { ok: show(state.social.facebook), node: <SocialIconLink state={state} href={state.social.facebook} label="Facebook" icon={<Facebook />} /> },
-    instagram: { ok: show(state.social.instagram), node: <SocialIconLink state={state} href={state.social.instagram} label="Instagram" icon={<Instagram />} /> },
-    linkedin: { ok: show(state.social.linkedin), node: <SocialIconLink state={state} href={state.social.linkedin} label="LinkedIn" icon={<Linkedin />} /> },
+    facebook: { ok: true, node: <SocialIconLink state={state} href={state.social.facebook} label="Facebook" icon={<Facebook />} /> },
+    instagram: { ok: true, node: <SocialIconLink state={state} href={state.social.instagram} label="Instagram" icon={<Instagram />} /> },
+    linkedin: { ok: true, node: <SocialIconLink state={state} href={state.social.linkedin} label="LinkedIn" icon={<Linkedin />} /> },
     tiktok: {
-      ok: show(state.social.tiktok),
+      ok: true,
       node: (
-        <MagneticButton as="a" href={state.social.tiktok} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-1 font-black" style={{ color, fontSize: px * 0.55 }} aria-label="TikTok" magneticStrength={10}>
+        <MagneticButton
+          as="a"
+          href={state.social.tiktok?.trim() ? state.social.tiktok : "#"}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`flex flex-col items-center gap-1 font-black ${state.social.tiktok?.trim() ? "" : "pointer-events-none opacity-60"}`}
+          style={{ color, fontSize: px * 0.55 }}
+          aria-label="TikTok"
+          magneticStrength={10}
+          aria-disabled={!state.social.tiktok?.trim()}
+        >
           <span className={socialIconFrameClass(state.socialIconStyle)}>TT</span>
           {state.showSocialLabels ? <span className="text-[0.65rem] font-semibold">TikTok</span> : null}
         </MagneticButton>
       ),
     },
-    youtube: { ok: show(state.social.youtube), node: <SocialIconLink state={state} href={state.social.youtube} label="YouTube" icon={<Youtube />} /> },
+    youtube: { ok: true, node: <SocialIconLink state={state} href={state.social.youtube} label="YouTube" icon={<Youtube />} /> },
   };
 
   return (

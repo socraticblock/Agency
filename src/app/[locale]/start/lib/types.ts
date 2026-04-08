@@ -158,6 +158,7 @@ export interface Lane1CustomizerState {
   socialIconStyle: SocialIconStyle;
   socialIconSize: SocialIconSize;
   socialIconColorMode: SocialIconColorMode;
+  socialIconCustomHex: string;
   showSocialLabels: boolean;
   qrStyle: QrStyle;
   showQrOnCard: boolean;
@@ -290,6 +291,7 @@ export function defaultLane1State(): Lane1CustomizerState {
     socialIconStyle: "minimal",
     socialIconSize: "medium",
     socialIconColorMode: "accent",
+    socialIconCustomHex: "#C5A55A",
     activeSocialPlatforms: ["facebook", "instagram", "linkedin", "tiktok", "youtube"],
     socialPlatformOrder: ["facebook", "instagram", "linkedin", "tiktok", "youtube"],
     showSocialLabels: false,

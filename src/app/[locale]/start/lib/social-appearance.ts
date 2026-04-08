@@ -1,11 +1,15 @@
 import type { Lane1CustomizerState, SocialIconSize, SocialIconStyle } from "./types";
 
+function isHexColor(value: string): boolean {
+  return /^#[0-9a-fA-F]{6}$/.test(value.trim());
+}
+
 export function socialIconColorVar(state: Lane1CustomizerState): string {
   switch (state.socialIconColorMode) {
     case "text":
       return "var(--text-primary)";
     case "custom":
-      return "var(--accent)";
+      return isHexColor(state.socialIconCustomHex) ? state.socialIconCustomHex.trim() : "var(--accent)";
     case "accent":
     default:
       return "var(--accent)";

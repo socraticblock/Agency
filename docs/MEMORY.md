@@ -17,6 +17,7 @@
 - **019** — Added sticky bottom Live Preview quick action that opens `/start/preview` in a new tab using current in-memory card state
 - **020** — Removed sidebar Sections accordion and retired `SectionsLayoutSection`; section structure control is now exclusively on-card
 - **021** — Pass A social sovereignty: added on-card Social Manager (toggle/reorder/save feedback/outside-close) plus mobile button toggles
+- **022** — Added true custom social icon color flow (Custom mode now reveals hex + color picker and applies to icon rendering)
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -111,6 +112,11 @@
 - **Context:** Social structure and mobile button display controls still lived primarily in sidebar flows, while section structure had already moved to on-card management.
 - **Decision:** Added `SocialManagerPanel` on-card with section-style management patterns (toggle visibility, reorder active items, `idle/saving/saved` feedback, outside-click close) and included mobile button UI toggles (`addGoogleMap`, `showMapPreview`) plus social icon appearance controls.
 - **Impact:** Social behavior now follows the same sovereign control model as sections, with a single card-proximate management surface and consistent social render ordering/visibility across card segments.
+
+### 022
+- **Context:** Social color mode included a `custom` option, but there was no input surface to define the custom color and rendering still fell back to accent.
+- **Decision:** Added `socialIconCustomHex` to customizer state defaults; updated social color resolver to use validated hex when `custom` is selected; exposed color picker + hex text input in on-card `SocialManagerPanel` (and mirrored in sidebar social appearance controls).
+- **Impact:** `Custom` is now a complete interaction path: users can choose exact brand color and see social icons update live without dead-end UI options.
 
 ## Architecture Decisions
 - Zero backend for card features
