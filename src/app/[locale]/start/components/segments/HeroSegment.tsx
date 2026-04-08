@@ -159,10 +159,10 @@ export function HeroSegment({
   )}")`;
 
   const shapeClass = ({
-    circle: "w-[180px]",
-    "rounded-square": "w-[180px]",
+    circle: "w-[250px]",
+    "rounded-square": "w-[250px]",
     "wide-cinematic": "w-full",
-  } as Record<string, string>)[photoShape as string] || "w-[180px]";
+  } as Record<string, string>)[photoShape as string] || "w-[250px]";
   const shapeRadius =
     photoShape === "circle" ? "50%" : photoShape === "rounded-square" ? "16px" : "12px";
   const imageFitClass = photoShape === "wide-cinematic" ? "object-contain" : "object-cover";
@@ -226,7 +226,7 @@ export function HeroSegment({
           {/* ── Photo Zone with Toolbelt Tracking ───────────────────── */}
           <div
             ref={photoToolbeltWrapperRef}
-            className={`relative flex flex-shrink-0 ${photoShape === "wide-cinematic" ? "w-full max-w-[520px]" : "w-[180px]"}`}
+            className={`relative flex flex-shrink-0 ${photoShape === "wide-cinematic" ? "w-full max-w-[520px]" : "w-[250px]"}`}
           >
             {/* ── Photo Zone ─────────────────────────────────────── */}
             <div
@@ -241,7 +241,7 @@ export function HeroSegment({
                     : "pointer"
                   : "default",
                 touchAction: "none",
-                height: photoShape === "wide-cinematic" ? "135px" : undefined,
+                height: photoShape === "wide-cinematic" ? "250px" : undefined,
                 aspectRatio: photoShape === "wide-cinematic" ? "16/9" : "1/1",
                 borderRadius: shapeRadius,
               }}
@@ -329,7 +329,7 @@ export function HeroSegment({
             {/* Desktop Toolbelt — absolute positioned ghost layer */}
             <AnimatePresence>
               {editable && state.photoDataUrl && (
-                <div className={`absolute left-0 z-[100] hidden md:block ${photoShape === "wide-cinematic" ? "top-[135px]" : "top-[180px]"}`} onPointerDown={(e) => e.stopPropagation()}>
+                <div className={`absolute left-0 z-[100] hidden md:block ${photoShape === "wide-cinematic" ? "top-[165px]" : "top-[250px]"}`} onPointerDown={(e) => e.stopPropagation()}>
                   <PhotoToolbelt
                     photoContainerRef={photoContainerRef}
                     heroActiveZoneRef={heroActiveZoneRef}
