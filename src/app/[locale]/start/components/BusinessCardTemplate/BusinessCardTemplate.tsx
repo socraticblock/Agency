@@ -13,6 +13,7 @@ import { BrandingFooter } from "../segments/BrandingFooter";
 import { SectionManagerPanel } from "../segments/SectionManagerPanel";
 import { SocialManagerPanel } from "../segments/SocialManagerPanel";
 import { LocationManagerPanel } from "../segments/LocationManagerPanel";
+import { BackgroundManagerPanel } from "../segments/BackgroundManagerPanel";
 import { buildItemVariants, containerVariants } from "../../lib/animations";
 import { usePwaMetadata } from "../../lib/usePwaMetadata";
 import { useCardTilt } from "../../lib/useCardTilt";
@@ -250,6 +251,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
         />
 
         <BrandingFooter ownerName={ownerName} hideBranding={hideBranding} homeHref={homeHref} />
+        <BackgroundManagerPanel editable={editable} state={state} patch={patch} />
       </motion.div>
 
     </div>

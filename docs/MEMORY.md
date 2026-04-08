@@ -21,6 +21,7 @@
 - **023** — Removed sidebar Social section and retired legacy social sidebar controls; social management now lives on-card
 - **024** — Split map controls into independent toggles: map preview vs Get Directions button
 - **025** — Added dedicated on-card Location manager and removed map controls from Social manager
+- **026** — On-card Background manager (standalone bottom pill, Base/Overlay/Texture tabs, reuses sidebar control components)
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -135,6 +136,11 @@
 - **Context:** Location/map controls were mixed into the `Social` manager, causing conceptual overlap and clutter in the social editing flow.
 - **Decision:** Created `LocationManagerPanel` with its own on-card trigger (`Location`) and moved map preview/Get Directions toggles + ordering controls there; removed the map controls block from `SocialManagerPanel`.
 - **Impact:** Control surfaces are now domain-clean (Social vs Location), improving discoverability and reducing cognitive load while preserving button ordering behavior on card.
+
+### 026
+- **Context:** Background editing still lived primarily in the right sidebar while other major surfaces moved on-card; users needed a sovereign path without relocating Sections/Social/Location pills.
+- **Decision:** Added `BackgroundManagerPanel` as a single centered bottom pill (after `BrandingFooter`) with `Base` / `Overlay` / `Texture` tabs, reusing `BackgroundBaseControls`, `BackgroundOverlayControls`, `TextureEffectControls`, and conditional `TextColorPresetGrid`; panel opens above the pill with scrollable light inner content and save-status micro-feedback.
+- **Impact:** Background can be tuned entirely from the card while sidebar `BackgroundSection` remains available until a later removal pass; live preview continues to flow through existing `style` patches and `BackgroundEngine`.
 
 ## Architecture Decisions
 - Zero backend for card features
