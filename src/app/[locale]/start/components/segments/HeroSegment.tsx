@@ -1,10 +1,9 @@
-"use client";
-
-import { motion, type MotionValue } from "framer-motion";
+import { motion, AnimatePresence, type MotionValue } from "framer-motion";
 import Image from "next/image";
 import { Camera } from "lucide-react";
 import type { Lane1CustomizerState } from "../../lib/types";
 import { InlineEditable } from "../InlineEditable";
+import { PhotoToolbelt } from "./PhotoToolbelt";
 import {
   PHOTO_SHAPE_PRESETS,
   PHOTO_EFFECT_PRESETS,
@@ -120,38 +119,82 @@ export function HeroSegment({
         <div
           className={`group relative shrink-0 overflow-hidden bg-slate-100 transition-all duration-700 ${shapeClass} ${isResponsive ? "md:sticky md:top-4 md:z-0" : ""
             }`}
-          style={borderStyle}
-          onClick={() => editable && !photoBusy && fileRef.current?.click()}
+          style={{
+            ...borderStyle,
+            cursor: editable ? (state.photoDataUrl ? "move" : "pointer") : "default",
+            touchAction: "none"
+          }}
+          onClick={(e) => {
+            if (!editable || photoBusy) return;
+            if (!state.photoDataUrl) {
+              fileRef.current?.click();
+            }
+          }}
+          onWheel={(e) => {
+            if (!editable || !state.photoDataUrl) return;
+            // Zoom logic: Scroll up zooms in, down zooms out
+            const zoomDelta = -e.deltaY * 0.1;
+            const nextZoom = Math.max(100, Math.min(300, photoZoom + zoomDelta));
+            patch({ style: { ...state.style, photoZoom: Math.round(nextZoom) } });
+          }}
         >
           {state.photoDataUrl ? (
-            <div
-              className={`h-full w-full overflow-hidden ${photoKenBurns ? "business-card-hero-ken" : ""}`}
-            >
-              <Image
-                key={state.photoDataUrl?.slice(0, 64) || "empty"}
-                src={state.photoDataUrl}
-                alt=""
-                width={300}
-                height={300}
-                className="h-full w-full object-cover transition-transform duration-300"
-                style={{
-                  filter: effectFilter,
-                  transform: `scale(${photoZoom / 100}) translate(${photoPositionX - 50}%, ${photoPositionY - 50}%)`,
-                  transformOrigin: "center center",
+            <div className="h-full w-full relative">
+              <motion.div
+                drag={editable}
+                dragMomentum={false}
+                onDrag={(e, info) => {
+                  if (!editable) return;
+                  // Calculate deltas in percentage. 
+                  // info.delta.x is pixels. We need to know container width.
+                  // For now, let's assume a fixed reference or use a ref.
+                  // Actually, we can approximate: 1px is roughly 0.5% for a 200px container.
+                  const dx = (info.delta.x / 1.8); 
+                  const dy = (info.delta.y / 1.8);
+                  
+                  const nextX = Math.max(0, Math.min(100, photoPositionX + dx));
+                  const nextY = Math.max(0, Math.min(100, photoPositionY + dy));
+                  
+                  patch({
+                    style: {
+                      ...state.style,
+                      photoPositionX: nextX,
+                      photoPositionY: nextY
+                    }
+                  });
                 }}
-                unoptimized
-              />
+                className={`h-full w-full ${photoKenBurns ? "business-card-hero-ken" : ""}`}
+              >
+                <Image
+                  key={state.photoDataUrl?.slice(0, 64) || "empty"}
+                  src={state.photoDataUrl}
+                  alt=""
+                  width={400}
+                  height={400}
+                  className="h-full w-full object-cover pointer-events-none"
+                  style={{
+                    filter: effectFilter,
+                    transform: `scale(${photoZoom / 100}) translate(${photoPositionX - 50}%, ${photoPositionY - 50}%)`,
+                    transformOrigin: "center center",
+                  }}
+                  unoptimized
+                />
+              </motion.div>
+              
+              <AnimatePresence>
+                {editable && (
+                  <PhotoToolbelt 
+                    state={state} 
+                    patch={patch} 
+                    onReplace={() => fileRef.current?.click()} 
+                  />
+                )}
+              </AnimatePresence>
             </div>
           ) : (
-            <div className="flex h-full w-full flex-col items-center justify-center gap-1 text-xs text-slate-500">
+            <div className="flex h-full w-full flex-col items-center justify-center gap-1 text-xs text-slate-500 transition-colors group-hover:bg-slate-200">
               <Camera className="h-10 w-10 opacity-30" />
               <span>Identity Profile</span>
-            </div>
-          )}
-
-          {editable && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 transition-opacity group-hover:opacity-100">
-              <Camera className="h-8 w-8 text-white" />
             </div>
           )}
           {/* Overlay Layers */}
@@ -225,21 +268,23 @@ export function HeroSegment({
           </p>
 
           {/* Tagline Zone */}
-          <div className="pt-2">
-            <p
-              className={`text-xs italic opacity-70 leading-relaxed max-w-[90%] ${photoAlignment === "center" ? "mx-auto" : ""}`}
-              style={bodyStyle}
-            >
-              <InlineEditable
-                value={useSecondary ? state.taglineSecondary : state.tagline}
-                onChange={(v) => patch(useSecondary ? { taglineSecondary: v } : { tagline: v })}
-                placeholder="Add a professional tagline..."
-                editable={editable}
-                className="block w-full"
-                style={{ ...bodyStyle, textAlign: photoAlignment === "center" ? "center" : "inherit" }}
-              />
-            </p>
-          </div>
+          {(editable || (useSecondary ? state.taglineSecondary : state.tagline)?.trim()) && (
+            <div className="pt-2">
+              <p
+                className={`text-xs italic opacity-70 leading-relaxed max-w-[90%] ${photoAlignment === "center" ? "mx-auto" : ""}`}
+                style={bodyStyle}
+              >
+                <InlineEditable
+                  value={useSecondary ? state.taglineSecondary : state.tagline}
+                  onChange={(v) => patch(useSecondary ? { taglineSecondary: v } : { tagline: v })}
+                  placeholder="add professional tagline"
+                  editable={editable}
+                  className="block w-full"
+                  style={{ ...bodyStyle, textAlign: photoAlignment === "center" ? "center" : "inherit" }}
+                />
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </motion.section>

@@ -163,7 +163,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
           glassStyle={glassStyle}
         />
 
-        <CtaSegment state={state} headingStyle={headingStyle} />
+        <CtaSegment state={state} editable={editable} patch={patch} headingStyle={headingStyle} />
 
         <div className="business-card-template-print-skip">
           <SectionDispatcher
