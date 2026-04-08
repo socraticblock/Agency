@@ -16,6 +16,7 @@
 - **018** — Phase 4 polish for section structure edits (event-based pulse highlight, unified section shell interactions, anti-jitter pulse timing)
 - **019** — Added sticky bottom Live Preview quick action that opens `/start/preview` in a new tab using current in-memory card state
 - **020** — Removed sidebar Sections accordion and retired `SectionsLayoutSection`; section structure control is now exclusively on-card
+- **021** — Pass A social sovereignty: added on-card Social Manager (toggle/reorder/save feedback/outside-close) plus mobile button toggles
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -105,6 +106,11 @@
 - **Context:** Desktop polish direction is now fully card-first; the sidebar `Sections` accordion duplicated controls already provided by the on-card `SectionManagerPanel`.
 - **Decision:** Removed `SectionsLayoutSection` from `StartCustomizer` and deleted `StartCustomizer/SectionsLayoutSection.tsx` to eliminate parallel section-structure surfaces.
 - **Impact:** Section visibility/order is managed from a single on-card source of truth, reducing UI redundancy and lowering regression risk from divergent section-management paths.
+
+### 021
+- **Context:** Social structure and mobile button display controls still lived primarily in sidebar flows, while section structure had already moved to on-card management.
+- **Decision:** Added `SocialManagerPanel` on-card with section-style management patterns (toggle visibility, reorder active items, `idle/saving/saved` feedback, outside-click close) and included mobile button UI toggles (`addGoogleMap`, `showMapPreview`) plus social icon appearance controls.
+- **Impact:** Social behavior now follows the same sovereign control model as sections, with a single card-proximate management surface and consistent social render ordering/visibility across card segments.
 
 ## Architecture Decisions
 - Zero backend for card features

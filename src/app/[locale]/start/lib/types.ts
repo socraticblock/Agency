@@ -20,6 +20,7 @@ export type SectionId = "about" | "testimonials" | "gallery" | "awards" | "video
 export type SocialIconStyle = "filled" | "outlined" | "rounded" | "minimal";
 export type SocialIconSize = "small" | "medium" | "large";
 export type SocialIconColorMode = "accent" | "text" | "custom";
+export type SocialPlatformId = "facebook" | "instagram" | "linkedin" | "tiktok" | "youtube";
 
 export type QrStyle = "square" | "rounded" | "dots";
 
@@ -152,6 +153,8 @@ export interface Lane1CustomizerState {
   galleryCount: number;
 
   // Phase 7: Social & QR
+  activeSocialPlatforms: SocialPlatformId[];
+  socialPlatformOrder: SocialPlatformId[];
   socialIconStyle: SocialIconStyle;
   socialIconSize: SocialIconSize;
   socialIconColorMode: SocialIconColorMode;
@@ -287,6 +290,8 @@ export function defaultLane1State(): Lane1CustomizerState {
     socialIconStyle: "minimal",
     socialIconSize: "medium",
     socialIconColorMode: "accent",
+    activeSocialPlatforms: ["facebook", "instagram", "linkedin", "tiktok", "youtube"],
+    socialPlatformOrder: ["facebook", "instagram", "linkedin", "tiktok", "youtube"],
     showSocialLabels: false,
     qrStyle: "rounded",
     showQrOnCard: true,

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Phone, Mail, MessageCircle, Facebook, Instagram, Linkedin, Youtube, Map } from "lucide-react";
-import type { Lane1CustomizerState } from "../../lib/types";
+import type { Lane1CustomizerState, SocialPlatformId } from "../../lib/types";
 import { InlineEditable } from "../InlineEditable";
 import { MagneticButton } from "../../../_components/MagneticButton";
 import type { CSSProperties } from "react";
@@ -37,6 +37,12 @@ export function ContactSocialSegment({
   }
 
   const showSocial = (url: string) => url?.trim().length > 0;
+  const platformOrder = state.socialPlatformOrder?.length
+    ? state.socialPlatformOrder
+    : (["facebook", "instagram", "linkedin", "tiktok", "youtube"] as SocialPlatformId[]);
+  const activePlatforms = state.activeSocialPlatforms?.length
+    ? state.activeSocialPlatforms
+    : (["facebook", "instagram", "linkedin", "tiktok", "youtube"] as SocialPlatformId[]);
 
   return (
     <motion.section
@@ -86,69 +92,46 @@ export function ContactSocialSegment({
           WhatsApp
         </a>
         <div className="flex flex-wrap gap-3 pt-2">
-          {showSocial(state.social.facebook) && (
-            <MagneticButton
-              as="a"
-              href={state.social.facebook}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[var(--accent)]"
-              aria-label="Facebook"
-              magneticStrength={10}
-            >
-              <Facebook className="h-6 w-6" />
-            </MagneticButton>
-          )}
-          {showSocial(state.social.instagram) && (
-            <MagneticButton
-              as="a"
-              href={state.social.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[var(--accent)]"
-              aria-label="Instagram"
-              magneticStrength={10}
-            >
-              <Instagram className="h-6 w-6" />
-            </MagneticButton>
-          )}
-          {showSocial(state.social.linkedin) && (
-            <MagneticButton
-              as="a"
-              href={state.social.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[var(--accent)]"
-              aria-label="LinkedIn"
-              magneticStrength={10}
-            >
-              <Linkedin className="h-6 w-6" />
-            </MagneticButton>
-          )}
-          {showSocial(state.social.tiktok) && (
-            <a
-              href={state.social.tiktok}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[var(--accent)]"
-              aria-label="TikTok"
-            >
-              <span className="text-xs font-bold">TT</span>
-            </a>
-          )}
-          {showSocial(state.social.youtube) && (
-            <MagneticButton
-              as="a"
-              href={state.social.youtube}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[var(--accent)]"
-              aria-label="Visit YouTube Profile"
-              magneticStrength={10}
-            >
-              <Youtube className="h-6 w-6" />
-            </MagneticButton>
-          )}
+          {platformOrder
+            .filter((id) => activePlatforms.includes(id))
+            .map((id) => {
+              if (id === "facebook" && showSocial(state.social.facebook)) {
+                return (
+                  <MagneticButton key={id} as="a" href={state.social.facebook} target="_blank" rel="noopener noreferrer" className="text-[var(--accent)]" aria-label="Facebook" magneticStrength={10}>
+                    <Facebook className="h-6 w-6" />
+                  </MagneticButton>
+                );
+              }
+              if (id === "instagram" && showSocial(state.social.instagram)) {
+                return (
+                  <MagneticButton key={id} as="a" href={state.social.instagram} target="_blank" rel="noopener noreferrer" className="text-[var(--accent)]" aria-label="Instagram" magneticStrength={10}>
+                    <Instagram className="h-6 w-6" />
+                  </MagneticButton>
+                );
+              }
+              if (id === "linkedin" && showSocial(state.social.linkedin)) {
+                return (
+                  <MagneticButton key={id} as="a" href={state.social.linkedin} target="_blank" rel="noopener noreferrer" className="text-[var(--accent)]" aria-label="LinkedIn" magneticStrength={10}>
+                    <Linkedin className="h-6 w-6" />
+                  </MagneticButton>
+                );
+              }
+              if (id === "tiktok" && showSocial(state.social.tiktok)) {
+                return (
+                  <a key={id} href={state.social.tiktok} target="_blank" rel="noopener noreferrer" className="text-[var(--accent)]" aria-label="TikTok">
+                    <span className="text-xs font-bold">TT</span>
+                  </a>
+                );
+              }
+              if (id === "youtube" && showSocial(state.social.youtube)) {
+                return (
+                  <MagneticButton key={id} as="a" href={state.social.youtube} target="_blank" rel="noopener noreferrer" className="text-[var(--accent)]" aria-label="Visit YouTube Profile" magneticStrength={10}>
+                    <Youtube className="h-6 w-6" />
+                  </MagneticButton>
+                );
+              }
+              return null;
+            })}
           {state.social.extra.map((e, i) =>
             e.url?.trim() ? (
               <a

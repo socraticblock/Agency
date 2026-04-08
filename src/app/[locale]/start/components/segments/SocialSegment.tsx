@@ -2,8 +2,8 @@
 
 import { cloneElement, type ReactElement, type ReactNode } from "react";
 import { motion } from "framer-motion";
-import { Facebook, Instagram, Linkedin, Youtube, type LucideIcon } from "lucide-react";
-import type { Lane1CustomizerState } from "../../lib/types";
+import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
+import type { Lane1CustomizerState, SocialPlatformId } from "../../lib/types";
 import { MagneticButton } from "../../../_components/MagneticButton";
 import {
   socialIconColorVar,
@@ -64,51 +64,28 @@ export function SocialSegment({ state, isResponsive, itemVariants }: SocialSegme
   const show = (u: string) => u?.trim().length > 0;
   const px = socialIconPixelSize(state.socialIconSize);
   const color = socialIconColorVar(state);
+  const platformOrder = state.socialPlatformOrder?.length
+    ? state.socialPlatformOrder
+    : (["facebook", "instagram", "linkedin", "tiktok", "youtube"] as SocialPlatformId[]);
+  const activePlatforms = state.activeSocialPlatforms?.length
+    ? state.activeSocialPlatforms
+    : (["facebook", "instagram", "linkedin", "tiktok", "youtube"] as SocialPlatformId[]);
 
-  const items: { ok: boolean; node: ReactNode }[] = [
-    {
-      ok: show(state.social.facebook),
-      node: (
-        <SocialIconLink state={state} href={state.social.facebook} label="Facebook" icon={<Facebook />} />
-      ),
-    },
-    {
-      ok: show(state.social.instagram),
-      node: (
-        <SocialIconLink state={state} href={state.social.instagram} label="Instagram" icon={<Instagram />} />
-      ),
-    },
-    {
-      ok: show(state.social.linkedin),
-      node: (
-        <SocialIconLink state={state} href={state.social.linkedin} label="LinkedIn" icon={<Linkedin />} />
-      ),
-    },
-    {
+  const items: Record<SocialPlatformId, { ok: boolean; node: ReactNode }> = {
+    facebook: { ok: show(state.social.facebook), node: <SocialIconLink state={state} href={state.social.facebook} label="Facebook" icon={<Facebook />} /> },
+    instagram: { ok: show(state.social.instagram), node: <SocialIconLink state={state} href={state.social.instagram} label="Instagram" icon={<Instagram />} /> },
+    linkedin: { ok: show(state.social.linkedin), node: <SocialIconLink state={state} href={state.social.linkedin} label="LinkedIn" icon={<Linkedin />} /> },
+    tiktok: {
       ok: show(state.social.tiktok),
       node: (
-        <MagneticButton
-          as="a"
-          href={state.social.tiktok}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex flex-col items-center gap-1 font-black"
-          style={{ color, fontSize: px * 0.55 }}
-          aria-label="TikTok"
-          magneticStrength={10}
-        >
+        <MagneticButton as="a" href={state.social.tiktok} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-1 font-black" style={{ color, fontSize: px * 0.55 }} aria-label="TikTok" magneticStrength={10}>
           <span className={socialIconFrameClass(state.socialIconStyle)}>TT</span>
           {state.showSocialLabels ? <span className="text-[0.65rem] font-semibold">TikTok</span> : null}
         </MagneticButton>
       ),
     },
-    {
-      ok: show(state.social.youtube),
-      node: (
-        <SocialIconLink state={state} href={state.social.youtube} label="YouTube" icon={<Youtube />} />
-      ),
-    },
-  ];
+    youtube: { ok: show(state.social.youtube), node: <SocialIconLink state={state} href={state.social.youtube} label="YouTube" icon={<Youtube />} /> },
+  };
 
   return (
     <motion.section
@@ -116,7 +93,11 @@ export function SocialSegment({ state, isResponsive, itemVariants }: SocialSegme
       className={`business-card-template-print-skip flex flex-wrap items-center justify-center gap-6 border-t px-4 py-6 ${isResponsive ? "md:rounded-3xl md:border md:p-8" : ""}`}
       style={{ borderColor: "var(--accent-secondary)" }}
     >
-      {items.filter((x) => x.ok).map((x, i) => (
+      {platformOrder
+        .filter((id) => activePlatforms.includes(id))
+        .map((id) => items[id])
+        .filter((x) => x.ok)
+        .map((x, i) => (
         <span key={i}>{x.node}</span>
       ))}
       {state.social.extra.map((e, i) =>
