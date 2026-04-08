@@ -123,22 +123,27 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
       }}
       onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}
     >
-      <BackgroundEngine style={state.style} />
-
-      <div className="business-card-noise" aria-hidden /><div className="business-card-glow" aria-hidden />
+      {/* Visual Stack (Behind) */}
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-[inherit]">
+        <BackgroundEngine style={state.style} />
+        <div className="business-card-noise opacity-[0.04] mix-blend-overlay absolute inset-0 -z-5" aria-hidden />
+        <div className="business-card-glow absolute inset-0 -z-[6]" aria-hidden />
+      </div>
 
       {state.secondaryMode === "pro" && (
-        <div className="business-card-template-print-skip border-b px-4 py-2.5 text-center text-xs opacity-70" style={{ borderColor: "var(--accent-secondary)", background: "color-mix(in srgb, var(--accent) 7%, transparent)" }}>
+        <div className="business-card-template-print-skip border-b px-4 py-2.5 text-center text-xs opacity-70 relative z-20" style={{ borderColor: "var(--accent-secondary)", background: "color-mix(in srgb, var(--accent) 7%, transparent)" }}>
           English will be used for professional translation in this preview.
         </div>
       )}
 
+      {/* Interactive Layer (Front) */}
       <motion.div
-        className={`business-card-template-font-layer pb-12 ${isResponsive ? "md:p-8" : ""} ${hoverLayerClass}`}
+        className={`business-card-template-font-layer relative z-10 pb-12 ${isResponsive ? "md:p-8" : ""} ${hoverLayerClass}`}
         variants={containerVariants}
         initial="hidden"
         animate="show"
         custom={animPreset.stagger / speed}
+        style={{ pointerEvents: "auto" }}
       >
         <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onPhotoPicked} />
 

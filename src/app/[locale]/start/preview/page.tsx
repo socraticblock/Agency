@@ -51,7 +51,7 @@ export default function PreviewPage() {
         <X className="h-5 w-5 md:h-6 md:w-6" />
       </button>
 
-      <div className="mx-auto w-full max-w-6xl md:rounded-3xl md:shadow-2xl md:overflow-hidden md:bg-[var(--bg-primary)] md:p-2 xl:p-6 transition-all duration-700">
+      <div className="mx-auto w-full max-w-6xl transition-all duration-700">
         <BusinessCardTemplate
           state={state}
           previewLang="primary"

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { CollapsibleSection } from "../CollapsibleSection";
-import { ZoomIn, Move, Sparkles, Camera } from "lucide-react";
+import { Sparkles, Camera } from "lucide-react";
 import { compressImageForLane1Storage } from "../../lib/image-compress";
 
 import {
@@ -27,7 +27,15 @@ export function PhotoSection({ state, setState, patch, isOpen, onToggle }: Secti
     setPhotoBusy(true);
     try {
       const { dataUrl, warnLargeOriginal } = await compressImageForLane1Storage(file);
-      patch({ photoDataUrl: dataUrl });
+      patch({ 
+        photoDataUrl: dataUrl,
+        style: {
+          ...state.style,
+          photoZoom: 100,
+          photoPositionX: 50,
+          photoPositionY: 50
+        }
+      });
       setPhotoHint(
         warnLargeOriginal
           ? "Original file was over 2 MB — we compressed it for storage."
@@ -77,18 +85,7 @@ export function PhotoSection({ state, setState, patch, isOpen, onToggle }: Secti
               onChange={(id: string) => setState(s => ({ ...s, style: { ...s.style, photoBorder: id as any } }))}
             />
 
-            <label className="flex cursor-pointer items-center gap-3 pt-2 text-sm font-medium text-[#1e293b]">
-              <input
-                type="checkbox"
-                className="h-4 w-4 rounded border-slate-300"
-                style={{ accentColor: "var(--accent)" }}
-                checked={Boolean(state.style?.photoKenBurns)}
-                onChange={(e) =>
-                  setState((s) => ({ ...s, style: { ...s.style, photoKenBurns: e.target.checked } }))
-                }
-              />
-              Ken Burns motion
-            </label>
+
           </div>
 
           <button

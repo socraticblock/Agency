@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { RefreshCw, Wand2, Shapes, Layout, Camera } from "lucide-react";
+import { RefreshCw, Wand2, Shapes } from "lucide-react";
 import { PHOTO_EFFECT_PRESETS, PHOTO_SHAPE_PRESETS } from "../../lib/presets";
 import type { Lane1CustomizerState } from "../../lib/types";
 
@@ -14,7 +14,6 @@ interface PhotoToolbeltProps {
 export function PhotoToolbelt({ state, patch, onReplace }: PhotoToolbeltProps) {
   const currentEffect = state.style.photoEffect || "none";
   const currentShape = state.style.photoShape || "circle";
-  const currentAlign = state.style.photoAlignment || "left";
 
   const cycleEffect = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -37,25 +36,15 @@ export function PhotoToolbelt({ state, patch, onReplace }: PhotoToolbeltProps) {
     });
   };
 
-  const toggleAlign = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    patch({
-      style: {
-        ...state.style,
-        photoAlignment: currentAlign === "left" ? "center" : "left",
-      },
-    });
-  };
 
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9, y: 10 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.9, y: 10 }}
-      className="absolute -bottom-16 left-1/2 z-50 flex -translate-x-1/2 items-center gap-1 rounded-full border border-white/20 bg-black/80 p-1.5 shadow-2xl backdrop-blur-md md:-bottom-20"
+      className="absolute -bottom-16 left-1/2 z-[100] flex -translate-x-1/2 items-center gap-1 rounded-full border border-white/20 bg-black/80 p-1.5 shadow-2xl backdrop-blur-md md:-bottom-20"
     >
       <ToolButton icon={<Shapes className="h-4 w-4" />} label="Shape" onClick={cycleShape} />
-      <ToolButton icon={<Layout className="h-4 w-4" />} label="Layout" onClick={toggleAlign} />
       <ToolButton icon={<Wand2 className="h-4 w-4" />} label="Filter" onClick={cycleEffect} />
       <div className="mx-1 h-4 w-px bg-white/20" />
       <ToolButton
