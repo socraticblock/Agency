@@ -11,7 +11,6 @@ import { defaultLane1State } from "../../lib/types";
 import { MessageCircle, Eye } from "lucide-react";
 
 import { ContentSection } from "./ContentSection";
-import { SocialSection } from "./SocialSection";
 import { BackgroundSection } from "./BackgroundSection";
 import { AccentSection, FontSection, ButtonStyleSection, ExperienceSection } from "./StyleSections";
 import { AddonsSection } from "./AddonsSection";
@@ -116,8 +115,6 @@ export function StartCustomizer({
 
       <ContentSection {...sectionProps} isOpen={openSection === "content"} onToggle={() => toggleSection("content")} />
 
-      <SocialSection {...sectionProps} isOpen={openSection === "social"} onToggle={() => toggleSection("social")} />
-      
       <BackgroundSection {...sectionProps} onPatch={onBackgroundStylePatch} isOpen={openSection === "background"} onToggle={() => toggleSection("background")} />
       
       <AccentSection {...sectionProps} onPatch={onBackgroundStylePatch} isOpen={openSection === "accent"} onToggle={() => toggleSection("accent")} />

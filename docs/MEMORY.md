@@ -18,6 +18,7 @@
 - **020** — Removed sidebar Sections accordion and retired `SectionsLayoutSection`; section structure control is now exclusively on-card
 - **021** — Pass A social sovereignty: added on-card Social Manager (toggle/reorder/save feedback/outside-close) plus mobile button toggles
 - **022** — Added true custom social icon color flow (Custom mode now reveals hex + color picker and applies to icon rendering)
+- **023** — Removed sidebar Social section and retired legacy social sidebar controls; social management now lives on-card
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -117,6 +118,11 @@
 - **Context:** Social color mode included a `custom` option, but there was no input surface to define the custom color and rendering still fell back to accent.
 - **Decision:** Added `socialIconCustomHex` to customizer state defaults; updated social color resolver to use validated hex when `custom` is selected; exposed color picker + hex text input in on-card `SocialManagerPanel` (and mirrored in sidebar social appearance controls).
 - **Impact:** `Custom` is now a complete interaction path: users can choose exact brand color and see social icons update live without dead-end UI options.
+
+### 023
+- **Context:** With on-card social controls now covering platform visibility/order, URL inputs, icon UI settings, and mobile button toggles, the right sidebar social accordion became redundant.
+- **Decision:** Removed `SocialSection` from `StartCustomizer` and deleted `StartCustomizer/SocialSection.tsx` plus `StartCustomizer/SocialAppearanceControls.tsx`.
+- **Impact:** Social configuration now follows a single sovereign control surface on-card, reducing duplicated UI paths and preventing sidebar/card drift.
 
 ## Architecture Decisions
 - Zero backend for card features
