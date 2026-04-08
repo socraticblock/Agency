@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Phone, Mail, MessageCircle, Facebook, Instagram, Linkedin, Youtube, Map } from "lucide-react";
-import type { Lane1CustomizerState, SocialPlatformId } from "../../lib/types";
+import type { Lane1CustomizerState, MobileButtonId, SocialPlatformId } from "../../lib/types";
 import { InlineEditable } from "../InlineEditable";
 import { MagneticButton } from "../../../_components/MagneticButton";
 import type { CSSProperties } from "react";
@@ -43,6 +43,9 @@ export function ContactSocialSegment({
   const activePlatforms = state.activeSocialPlatforms?.length
     ? state.activeSocialPlatforms
     : (["facebook", "instagram", "linkedin", "tiktok", "youtube"] as SocialPlatformId[]);
+  const mobileButtonOrder = state.mobileButtonOrder?.length
+    ? state.mobileButtonOrder
+    : (["map-preview", "get-directions"] as MobileButtonId[]);
 
   return (
     <motion.section
@@ -254,24 +257,42 @@ export function ContactSocialSegment({
             style={bodyStyle}
           />
         </div>
-        {state.addGoogleMap && state.showMapPreview && address?.trim() ? (
-          <div className="mt-8 space-y-4">
-            <MagneticButton
-              as="a"
-              href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-[14px] font-bold transition-all shadow-lg active:scale-95"
-              style={{
-                background: "var(--accent)",
-                color: "var(--accent-contrast, #fff)"
-              }}
-            >
-              <Map className="h-4 w-4 opacity-70" />
-              Get Directions
-            </MagneticButton>
-          </div>
-        ) : null}
+        {mobileButtonOrder.map((id) => {
+          if (id === "map-preview" && state.addGoogleMap && state.showMapPreview && address?.trim()) {
+            return (
+              <div key={id} className="mt-6 overflow-hidden rounded-xl border border-[color:var(--accent-secondary)]/45 bg-black/10">
+                <iframe
+                  title="Location map preview"
+                  src={`https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`}
+                  className="h-40 w-full"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
+            );
+          }
+          if (id === "get-directions" && state.addGoogleMap && state.showGetDirectionsButton && address?.trim()) {
+            return (
+              <div key={id} className="mt-8 space-y-4">
+                <MagneticButton
+                  as="a"
+                  href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-[14px] font-bold transition-all shadow-lg active:scale-95"
+                  style={{
+                    background: "var(--accent)",
+                    color: "var(--accent-contrast, #fff)"
+                  }}
+                >
+                  <Map className="h-4 w-4 opacity-70" />
+                  Get Directions
+                </MagneticButton>
+              </div>
+            );
+          }
+          return null;
+        })}
       </div>
     </motion.section>
   );

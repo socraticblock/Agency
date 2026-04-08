@@ -21,6 +21,7 @@ export type SocialIconStyle = "filled" | "outlined" | "rounded" | "minimal";
 export type SocialIconSize = "small" | "medium" | "large";
 export type SocialIconColorMode = "accent" | "text" | "custom";
 export type SocialPlatformId = "facebook" | "instagram" | "linkedin" | "tiktok" | "youtube";
+export type MobileButtonId = "map-preview" | "get-directions";
 
 export type QrStyle = "square" | "rounded" | "dots";
 
@@ -128,6 +129,8 @@ export interface Lane1CustomizerState {
   style: StylePresetSelection;
   addGoogleMap: boolean;
   showMapPreview: boolean;
+  showGetDirectionsButton: boolean;
+  mobileButtonOrder: MobileButtonId[];
   photoDataUrl: string | null;
   proTranslationAcknowledged: boolean;
 
@@ -262,6 +265,8 @@ export function defaultLane1State(): Lane1CustomizerState {
 
     addGoogleMap: true,
     showMapPreview: true,
+    showGetDirectionsButton: true,
+    mobileButtonOrder: ["map-preview", "get-directions"],
     photoDataUrl: "/premium_profile_placeholder.png", // Corrected path to generated asset
     proTranslationAcknowledged: false,
     ctaTextCall: "Call Me",

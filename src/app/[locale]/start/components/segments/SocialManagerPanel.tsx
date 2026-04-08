@@ -107,6 +107,7 @@ export function SocialManagerPanel({
     runPatchedUpdate({ socialPlatformOrder: nextOrder }, changed);
   };
 
+
   return (
     <div ref={rootRef} className="business-card-template-print-skip relative z-[120] flex justify-end px-4 pb-2">
       <button
@@ -210,18 +211,6 @@ export function SocialManagerPanel({
                 />
               </div>
             ) : null}
-          </div>
-
-          <div className="mt-3 border-t border-white/10 pt-2 text-xs">
-            <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wide text-white/60">Mobile buttons</p>
-            <label className="mb-1.5 flex items-center justify-between rounded-md border border-white/20 bg-white/10 px-2 py-1.5">
-              <span>Enable map feature</span>
-              <input type="checkbox" checked={state.addGoogleMap} onChange={(e) => patch({ addGoogleMap: e.target.checked })} />
-            </label>
-            <label className="flex items-center justify-between rounded-md border border-white/20 bg-white/10 px-2 py-1.5">
-              <span>Show "Get Directions"</span>
-              <input type="checkbox" disabled={!state.addGoogleMap} checked={state.showMapPreview} onChange={(e) => patch({ showMapPreview: e.target.checked })} />
-            </label>
           </div>
         </div>
       ) : null}

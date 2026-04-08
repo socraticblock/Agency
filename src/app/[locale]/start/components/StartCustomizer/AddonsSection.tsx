@@ -64,8 +64,9 @@ export function AddonsSection({ state, patch, isOpen, onToggle }: SectionProps) 
           </button>
         </label>
         {state.addGoogleMap && (
+          <>
           <label className="start-ios-toggle-row mt-2 flex min-h-[52px] cursor-pointer items-center justify-between gap-4 rounded-xl border border-slate-200/60 bg-white/50 px-3 py-2">
-            <span className="text-sm font-medium text-[#1e293b]">Show "Get Directions" button</span>
+            <span className="text-sm font-medium text-[#1e293b]">Show map preview</span>
             <button
               type="button"
               role="switch"
@@ -82,6 +83,25 @@ export function AddonsSection({ state, patch, isOpen, onToggle }: SectionProps) 
               />
             </button>
           </label>
+          <label className="start-ios-toggle-row mt-2 flex min-h-[52px] cursor-pointer items-center justify-between gap-4 rounded-xl border border-slate-200/60 bg-white/50 px-3 py-2">
+            <span className="text-sm font-medium text-[#1e293b]">Show "Get Directions" button</span>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={state.showGetDirectionsButton}
+              onClick={() => patch({ showGetDirectionsButton: !state.showGetDirectionsButton })}
+              className={`start-ios-toggle relative h-[31px] w-[51px] shrink-0 rounded-full transition-colors duration-200 ${
+                state.showGetDirectionsButton ? "bg-[#1A2744]" : "bg-[#CBD5E1]"
+              }`}
+            >
+              <span
+                className={`absolute top-[2px] left-[2px] h-[27px] w-[27px] rounded-full bg-white shadow transition-transform duration-200 ${
+                  state.showGetDirectionsButton ? "translate-x-5" : "translate-x-0"
+                }`}
+              />
+            </button>
+          </label>
+          </>
         )}
       </div>
     </CollapsibleSection>

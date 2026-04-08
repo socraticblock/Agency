@@ -19,6 +19,8 @@
 - **021** — Pass A social sovereignty: added on-card Social Manager (toggle/reorder/save feedback/outside-close) plus mobile button toggles
 - **022** — Added true custom social icon color flow (Custom mode now reveals hex + color picker and applies to icon rendering)
 - **023** — Removed sidebar Social section and retired legacy social sidebar controls; social management now lives on-card
+- **024** — Split map controls into independent toggles: map preview vs Get Directions button
+- **025** — Added dedicated on-card Location manager and removed map controls from Social manager
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -123,6 +125,16 @@
 - **Context:** With on-card social controls now covering platform visibility/order, URL inputs, icon UI settings, and mobile button toggles, the right sidebar social accordion became redundant.
 - **Decision:** Removed `SocialSection` from `StartCustomizer` and deleted `StartCustomizer/SocialSection.tsx` plus `StartCustomizer/SocialAppearanceControls.tsx`.
 - **Impact:** Social configuration now follows a single sovereign control surface on-card, reducing duplicated UI paths and preventing sidebar/card drift.
+
+### 024
+- **Context:** Two map-related toggles behaved like duplicates because both effectively controlled the same Get Directions visibility path.
+- **Decision:** Added `showGetDirectionsButton` state and separated rendering logic: `showMapPreview` now controls an embedded map preview block, while `showGetDirectionsButton` controls the CTA button. Updated on-card and sidebar toggles to match this split.
+- **Impact:** Map UI controls are now semantically correct and predictable: clients can independently show preview context and the navigation action button.
+
+### 025
+- **Context:** Location/map controls were mixed into the `Social` manager, causing conceptual overlap and clutter in the social editing flow.
+- **Decision:** Created `LocationManagerPanel` with its own on-card trigger (`Location`) and moved map preview/Get Directions toggles + ordering controls there; removed the map controls block from `SocialManagerPanel`.
+- **Impact:** Control surfaces are now domain-clean (Social vs Location), improving discoverability and reducing cognitive load while preserving button ordering behavior on card.
 
 ## Architecture Decisions
 - Zero backend for card features

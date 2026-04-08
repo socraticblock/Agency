@@ -12,6 +12,7 @@ import { UtilitySegments } from "../segments/UtilitySegments";
 import { BrandingFooter } from "../segments/BrandingFooter";
 import { SectionManagerPanel } from "../segments/SectionManagerPanel";
 import { SocialManagerPanel } from "../segments/SocialManagerPanel";
+import { LocationManagerPanel } from "../segments/LocationManagerPanel";
 import { buildItemVariants, containerVariants } from "../../lib/animations";
 import { usePwaMetadata } from "../../lib/usePwaMetadata";
 import { useCardTilt } from "../../lib/useCardTilt";
@@ -233,6 +234,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
           />
         </div>
 
+        <LocationManagerPanel editable={editable} state={state} patch={patch} />
         <ContactSegment state={state} editable={editable} useSecondary={useSecondary} isResponsive={isResponsive} patch={patch} bodyStyle={bodyStyle} itemVariants={customItemVariants} glassStyle={glassStyle} />
         <SocialManagerPanel editable={editable} state={state} patch={patch} />
         <SocialSegment state={state} isResponsive={isResponsive} itemVariants={customItemVariants} />
