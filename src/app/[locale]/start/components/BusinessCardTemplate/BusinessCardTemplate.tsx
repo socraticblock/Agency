@@ -14,6 +14,7 @@ import { SectionManagerPanel } from "../segments/SectionManagerPanel";
 import { SocialManagerPanel } from "../segments/SocialManagerPanel";
 import { LocationManagerPanel } from "../segments/LocationManagerPanel";
 import { BackgroundManagerPanel } from "../segments/BackgroundManagerPanel";
+import { TypographyManagerPanel } from "../segments/TypographyManagerPanel";
 import { buildItemVariants, containerVariants } from "../../lib/animations";
 import { usePwaMetadata } from "../../lib/usePwaMetadata";
 import { useCardTilt } from "../../lib/useCardTilt";
@@ -138,8 +139,16 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
     border: "1px solid rgba(255, 255, 255, var(--border-opacity))", boxShadow: "var(--card-shadow)",
   } : state.style.vibeId === "neon" ? { boxShadow: "var(--card-shadow)", border: "1px solid var(--accent)" } : {};
 
-  const headingStyle: CSSProperties = { fontFamily: "var(--font-heading)", fontWeight: "var(--font-heading-weight)" as any, color: "var(--text-primary)" };
-  const bodyStyle: CSSProperties = { fontFamily: "var(--font-body)", fontWeight: "var(--font-body-weight)" as any, color: "var(--text-primary)" };
+  const headingStyle: CSSProperties = {
+    fontFamily: "var(--font-heading)",
+    fontWeight: "var(--font-heading-weight)" as any,
+    color: "var(--text-heading)",
+  };
+  const bodyStyle: CSSProperties = {
+    fontFamily: "var(--font-body)",
+    fontWeight: "var(--font-body-weight)" as any,
+    color: "var(--text-body)",
+  };
 
   const animPreset =
     ANIMATION_PRESETS.find((a) => a.id === state.style.animationId) ??
@@ -152,7 +161,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
       : "";
 
   return (
-    <div className={`business-card-template relative mx-auto w-full text-[var(--text-primary)] ${isResponsive ? "max-w-6xl" : "max-w-[640px]"}`}
+    <div className={`business-card-template relative mx-auto w-full text-[var(--text-body)] ${isResponsive ? "max-w-6xl" : "max-w-[640px]"}`}
       style={{
         ...vars,
         fontFamily: "var(--font-body)",
@@ -251,6 +260,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
 
         <BrandingFooter ownerName={ownerName} hideBranding={hideBranding} homeHref={homeHref} />
         <BackgroundManagerPanel editable={editable} state={state} patch={patch} />
+        <TypographyManagerPanel editable={editable} state={state} patch={patch} />
       </motion.div>
 
     </div>

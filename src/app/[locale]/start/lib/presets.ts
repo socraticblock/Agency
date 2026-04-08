@@ -529,10 +529,16 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
   const acc = ACCENT_PRESETS.find((p) => p.id === selection.accentId) ?? ACCENT_PRESETS[0];
   const secondaryFamily =
     ACCENT_PRESETS.find((p) => p.id === selection.secondaryAccentId) ?? acc;
-  const font =
-    TYPOGRAPHY_PACK_PRESETS.find((p) => p.id === selection.typographyPackId) ??
+  const bodyPackId = selection.bodyTypographyPackId ?? selection.typographyPackId ?? "minimal";
+  const displayPackId = selection.buttonTypographyPackId ?? selection.typographyPackId ?? "minimal";
+  const bodyFont =
+    TYPOGRAPHY_PACK_PRESETS.find((p) => p.id === bodyPackId) ??
     FONT_PRESETS.find((p) => p.id === selection.fontId) ??
     FONT_PRESETS[1];
+  const displayFont =
+    TYPOGRAPHY_PACK_PRESETS.find((p) => p.id === displayPackId) ??
+    TYPOGRAPHY_PACK_PRESETS.find((p) => p.id === selection.typographyPackId) ??
+    TYPOGRAPHY_PACK_PRESETS.find((p) => p.id === "minimal")!;
   const vibe = VIBE_PRESETS.find((p) => p.id === selection.vibeId) ?? VIBE_PRESETS[0];
 
   // 1. Resolve Base Layer
@@ -567,19 +573,24 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
     backgroundIsDark = isDarkColor(selection.bgOverlayColor1);
   }
 
-  // User's text color selection takes priority
+  // User's text color selection takes priority (preset baseline)
   let textColor = txt.color;
-  
+
   // Force light text for dark backgrounds for accessibility
   if (backgroundIsDark) {
     textColor = "#F1F5F9";
   }
-  
+
   let bgResolved = baseColorValue;
   if (selection.cardDarkSurface) {
     bgResolved = "#0b1220";
     textColor = "#e2e8f0";
   }
+
+  const bodyHex = (selection.bodyTextHex ?? "").trim();
+  const buttonHex = (selection.buttonTextHex ?? "").trim();
+  const textBody = bodyHex || textColor;
+  const textHeading = buttonHex || textColor;
 
   const cardRadius = typeof selection.cardRadiusPx === "number" ? selection.cardRadiusPx : 24;
 
@@ -603,7 +614,9 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
     "--overlay-opacity": selection.bgOverlayId === "none" ? "0" : String(selection.bgOverlayOpacity),
     "--bg-primary": bgResolved,
     "--background": selection.cardDarkSurface ? "#030712" : bgResolved,
-    "--text-primary": textColor,
+    "--text-primary": textBody,
+    "--text-body": textBody,
+    "--text-heading": textHeading,
     "--accent": acc.accent,
     "--accent-secondary": secondaryFamily.accentSecondary,
     "--texture-pattern": textureBackgroundImage(selection.textureId, selection.cardDarkSurface),
@@ -622,10 +635,10 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
     "--bg-gradient": selection.bgOverlayId !== "none"
       ? overlayGradientValue
       : `linear-gradient(135deg, ${acc.accent}, ${secondaryFamily.accentSecondary})`,
-    "--font-heading": font.fontHeading,
-    "--font-body": font.fontBody,
-    "--font-heading-weight": String(font.headingWeight),
-    "--font-body-weight": String(font.bodyWeight),
+    "--font-heading": displayFont.fontHeading,
+    "--font-body": bodyFont.fontBody,
+    "--font-heading-weight": String(displayFont.headingWeight),
+    "--font-body-weight": String(bodyFont.bodyWeight),
     "--glass-blur": vibe.blur,
     "--card-shadow": vibe.shadow,
     "--border-opacity": String(vibe.borderOpacity),

@@ -1,0 +1,167 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import { Check, Type, X } from "lucide-react";
+import type { Lane1CustomizerState, TypographyPackId } from "../../lib/types";
+import { FontPresetGrid } from "../StylePresetGrids";
+import { TYPOGRAPHY_PACK_PRESETS, TYPOGRAPHY_TO_LEGACY_FONT } from "../../lib/presets";
+import { TypographyHexColorRow } from "./TypographyHexColorRow";
+
+type TypoTab = "body" | "display";
+
+export function TypographyManagerPanel({
+  editable,
+  state,
+  patch,
+}: {
+  editable: boolean;
+  state: Lane1CustomizerState;
+  patch: (p: Partial<Lane1CustomizerState>) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [tab, setTab] = useState<TypoTab>("body");
+  const [savingStatus, setSavingStatus] = useState<"idle" | "saving" | "saved">("idle");
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const savingDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const savedToIdleRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const onStylePatch = (p: Partial<Lane1CustomizerState["style"]>) => {
+    if (savingDebounceRef.current) clearTimeout(savingDebounceRef.current);
+    if (savedToIdleRef.current) clearTimeout(savedToIdleRef.current);
+    setSavingStatus("saving");
+    const merged: Partial<Lane1CustomizerState["style"]> = { ...p };
+    if (p.bodyTypographyPackId) {
+      merged.typographyPackId = p.bodyTypographyPackId;
+      merged.fontId = TYPOGRAPHY_TO_LEGACY_FONT[p.bodyTypographyPackId];
+    }
+    patch({ style: { ...state.style, ...merged } });
+    savingDebounceRef.current = setTimeout(() => {
+      setSavingStatus("saved");
+      savedToIdleRef.current = setTimeout(() => setSavingStatus("idle"), 900);
+    }, 260);
+  };
+
+  useEffect(() => {
+    if (!open) return;
+    const handleOutsidePointerDown = (e: PointerEvent) => {
+      const target = e.target as Node | null;
+      if (!target) return;
+      if (rootRef.current?.contains(target)) return;
+      setOpen(false);
+    };
+    window.addEventListener("pointerdown", handleOutsidePointerDown);
+    return () => window.removeEventListener("pointerdown", handleOutsidePointerDown);
+  }, [open]);
+
+  useEffect(() => {
+    return () => {
+      if (savingDebounceRef.current) clearTimeout(savingDebounceRef.current);
+      if (savedToIdleRef.current) clearTimeout(savedToIdleRef.current);
+    };
+  }, []);
+
+  if (!editable) return null;
+
+  const { bodyTypographyPackId, buttonTypographyPackId, bodyTextHex, buttonTextHex } = state.style;
+
+  const tabBtn = (id: TypoTab, label: string) => (
+    <button
+      type="button"
+      onClick={() => setTab(id)}
+      className={`rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide transition ${
+        tab === id ? "bg-white/15 text-white" : "text-white/60 hover:bg-white/10 hover:text-white"
+      }`}
+    >
+      {label}
+    </button>
+  );
+
+  return (
+    <div ref={rootRef} className="business-card-template-print-skip relative z-[120] flex w-full justify-center px-4 pb-3 pt-1">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75"
+      >
+        <Type className="h-4 w-4" />
+        Typography
+      </button>
+      {open ? (
+        <div className="absolute bottom-full left-1/2 mb-2 w-[min(100%,320px)] -translate-x-1/2 rounded-xl border border-white/20 bg-black/85 p-2 text-white shadow-2xl backdrop-blur-md">
+          <div className="mb-2 flex items-center justify-between gap-2 px-1">
+            <p className="text-xs font-bold uppercase tracking-wide text-white/80">Typography</p>
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide text-white/70">
+                {savingStatus === "saving" ? <span className="animate-pulse">Saving...</span> : null}
+                {savingStatus === "saved" ? (
+                  <>
+                    <Check className="h-3 w-3 text-emerald-300" />
+                    <span className="text-emerald-200">Saved</span>
+                  </>
+                ) : null}
+              </span>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                className="rounded p-1 text-white/70 transition hover:bg-white/10 hover:text-white"
+                aria-label="Close typography panel"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+          <div className="mb-2 flex flex-wrap justify-center gap-1 rounded-full border border-white/15 bg-white/5 p-1">
+            {tabBtn("body", "Body")}
+            {tabBtn("display", "Display")}
+          </div>
+          <div className="max-h-[min(55vh,380px)] overflow-y-auto rounded-lg bg-white/95 p-3 text-slate-900 shadow-inner">
+            {tab === "body" ? (
+              <div className="[&_fieldset]:border-slate-200 [&_legend]:text-slate-700">
+                <p className="start-caption mb-3">Paragraphs and body copy.</p>
+                <FontPresetGrid
+                  options={TYPOGRAPHY_PACK_PRESETS}
+                  value={bodyTypographyPackId}
+                  preview="body"
+                  legend="Body font"
+                  groupAriaLabel="Body text font"
+                  onChange={(id: string) =>
+                    onStylePatch({ bodyTypographyPackId: id as TypographyPackId })
+                  }
+                />
+                <div className="mt-3">
+                  <TypographyHexColorRow
+                    label="Text color (hex)"
+                    value={bodyTextHex ?? ""}
+                    onChange={(v) => onStylePatch({ bodyTextHex: v })}
+                  />
+                </div>
+              </div>
+            ) : null}
+            {tab === "display" ? (
+              <div className="[&_fieldset]:border-slate-200 [&_legend]:text-slate-700">
+                <p className="start-caption mb-3">Headings, titles, and CTA labels.</p>
+                <FontPresetGrid
+                  options={TYPOGRAPHY_PACK_PRESETS}
+                  value={buttonTypographyPackId}
+                  preview="heading"
+                  legend="Display font"
+                  groupAriaLabel="Heading and button font"
+                  onChange={(id: string) =>
+                    onStylePatch({ buttonTypographyPackId: id as TypographyPackId })
+                  }
+                />
+                <div className="mt-3">
+                  <TypographyHexColorRow
+                    label="Text color (hex)"
+                    value={buttonTextHex ?? ""}
+                    onChange={(v) => onStylePatch({ buttonTextHex: v })}
+                  />
+                </div>
+              </div>
+            ) : null}
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}

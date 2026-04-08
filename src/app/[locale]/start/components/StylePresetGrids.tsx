@@ -397,21 +397,32 @@ export const FontPresetGrid = memo(function FontPresetGrid({
   options,
   value,
   onChange,
+  preview = "heading",
+  legend = "Font",
+  groupAriaLabel = "Font",
 }: {
   options: FontPreset[];
   value: string;
   onChange: (id: string) => void;
+  /** Preview the heading stack (titles, CTAs) or body stack (paragraphs). */
+  preview?: "heading" | "body";
+  legend?: string;
+  groupAriaLabel?: string;
 }) {
   return (
     <fieldset className="space-y-2">
-      <legend className="start-label mb-1 block">Font</legend>
+      <legend className="start-label mb-1 block">{legend}</legend>
       <div
         className="grid grid-cols-2 gap-2 sm:grid-cols-3"
         role="radiogroup"
-        aria-label="Font"
+        aria-label={groupAriaLabel}
       >
         {options.map((p) => {
           const onSel = value === p.id;
+          const previewStyle =
+            preview === "body"
+              ? { fontFamily: p.fontBody, fontWeight: p.bodyWeight as number }
+              : { fontFamily: p.fontHeading, fontWeight: p.headingWeight as number };
           return (
             <button
               key={p.id}
@@ -425,10 +436,7 @@ export const FontPresetGrid = memo(function FontPresetGrid({
               <SwatchCheck show={onSel} />
               <span
                 className="flex h-12 w-full min-h-[48px] items-center justify-center rounded-md border border-slate-200/80 bg-slate-50/80 text-2xl text-[#1e293b]"
-                style={{
-                  fontFamily: p.fontHeading,
-                  fontWeight: p.headingWeight,
-                }}
+                style={previewStyle}
               >
                 Aa
               </span>

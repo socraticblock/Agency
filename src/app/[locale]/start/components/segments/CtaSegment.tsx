@@ -36,7 +36,13 @@ export function CtaSegment({ state, editable, patch, headingStyle }: CtaSegmentP
         className={primary.className}
         style={
           primary.filledAccent
-            ? { background: "var(--accent)", color: "var(--accent-contrast, #fff)", ...headingStyle }
+            ? {
+                ...headingStyle,
+                background: "var(--accent)",
+                color: state.style.buttonTextHex?.trim()
+                  ? "var(--text-heading)"
+                  : "var(--accent-contrast, #fff)",
+              }
             : { ...headingStyle }
         }
       >
@@ -58,7 +64,13 @@ export function CtaSegment({ state, editable, patch, headingStyle }: CtaSegmentP
         className={primary.className}
         style={
           primary.filledAccent
-            ? { background: "var(--accent)", color: "var(--accent-contrast, #fff)", ...headingStyle }
+            ? {
+                ...headingStyle,
+                background: "var(--accent)",
+                color: state.style.buttonTextHex?.trim()
+                  ? "var(--text-heading)"
+                  : "var(--accent-contrast, #fff)",
+              }
             : { ...headingStyle }
         }
       >

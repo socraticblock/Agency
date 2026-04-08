@@ -19,8 +19,8 @@ function safeParse(raw: string | null): Lane1CustomizerState | null {
   try {
     const data = JSON.parse(raw) as Record<string, unknown>;
     const v = typeof data.version === "number" ? data.version : 1;
-    // Allow migration from v1–v7
-    if (v < 1 || v > 7) return null;
+    // Allow migration from v1–v8
+    if (v < 1 || v > 8) return null;
     return migrateLane1State(data as unknown as Lane1CustomizerState);
   } catch {
     return null;
@@ -66,6 +66,14 @@ function migrateLane1State(
   if (merged.style.textColorId === "black") {
     merged.style.textColorId = "ink";
   }
+
+  const ds = data.style as Partial<Lane1CustomizerState["style"]> | undefined;
+  if (ds?.typographyPackId) {
+    if (!("bodyTypographyPackId" in ds)) merged.style.bodyTypographyPackId = ds.typographyPackId;
+    if (!("buttonTypographyPackId" in ds)) merged.style.buttonTypographyPackId = ds.typographyPackId;
+  }
+  if (merged.style.bodyTextHex === undefined) merged.style.bodyTextHex = "";
+  if (merged.style.buttonTextHex === undefined) merged.style.buttonTextHex = "";
 
   merged.version = CUSTOMIZER_VERSION;
   return merged;

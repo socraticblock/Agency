@@ -55,11 +55,13 @@ export function FontSection({ state, onPatch, isOpen, onToggle }: SectionProps &
       <p className="start-caption mb-2">Eight pre-built packs control heading and body fonts on the card.</p>
       <FontPresetGrid
         options={TYPOGRAPHY_PACK_PRESETS}
-        value={state.style.typographyPackId}
+        value={state.style.bodyTypographyPackId}
         onChange={(id: string) => {
           const pack = id as TypographyPackId;
           onPatch({
             typographyPackId: pack,
+            bodyTypographyPackId: pack,
+            buttonTypographyPackId: pack,
             fontId: TYPOGRAPHY_TO_LEGACY_FONT[pack],
           });
         }}

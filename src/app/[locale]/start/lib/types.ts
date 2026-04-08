@@ -92,7 +92,16 @@ export interface StylePresetSelection {
   bgEffectIntensity: number;
 
   // Phase 4: Typography & Buttons
+  /** Legacy single pack; kept in sync with body pack for imports / themes. */
   typographyPackId: TypographyPackId;
+  /** Body copy (paragraphs, descriptions). */
+  bodyTypographyPackId: TypographyPackId;
+  /** Headings, titles, and CTA labels (display font). */
+  buttonTypographyPackId: TypographyPackId;
+  /** Empty = follow text color preset. */
+  bodyTextHex: string;
+  /** Empty = follow text color preset. */
+  buttonTextHex: string;
   buttonStyleId: ButtonStyleId;
 
   /** 50 = slow, 100 = default, 150 = fast */
@@ -104,7 +113,7 @@ export interface StylePresetSelection {
   cardShadowId: CardShadowId;
 }
 
-export const CUSTOMIZER_VERSION = 7 as const;
+export const CUSTOMIZER_VERSION = 8 as const;
 
 export interface Lane1CustomizerState {
   version: typeof CUSTOMIZER_VERSION;
@@ -265,6 +274,10 @@ export function defaultLane1State(): Lane1CustomizerState {
 
       // Phase 4 Defaults
       typographyPackId: "minimal",
+      bodyTypographyPackId: "minimal",
+      buttonTypographyPackId: "minimal",
+      bodyTextHex: "",
+      buttonTextHex: "",
       buttonStyleId: "minimal",
       animationSpeed: 100,
       cardDarkSurface: false,

@@ -12,7 +12,10 @@ function mergeThemeStyle(
 ): StylePresetSelection {
   const next = { ...prev, ...patch };
   if (patch.typographyPackId) {
-    next.fontId = TYPOGRAPHY_TO_LEGACY_FONT[patch.typographyPackId as TypographyPackId];
+    const pack = patch.typographyPackId as TypographyPackId;
+    next.fontId = TYPOGRAPHY_TO_LEGACY_FONT[pack];
+    next.bodyTypographyPackId = pack;
+    next.buttonTypographyPackId = pack;
   }
   return next;
 }
