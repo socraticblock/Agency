@@ -1,8 +1,8 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { RefreshCw, Wand2, Shapes } from "lucide-react";
-import { PHOTO_EFFECT_PRESETS, PHOTO_SHAPE_PRESETS } from "../../lib/presets";
+import { RefreshCw, Wand2, Shapes, FrameIcon, Layers } from "lucide-react";
+import { PHOTO_EFFECT_PRESETS, PHOTO_SHAPE_PRESETS, PHOTO_OVERLAY_PRESETS } from "../../lib/presets";
 import type { Lane1CustomizerState } from "../../lib/types";
 
 interface PhotoToolbeltProps {
@@ -14,6 +14,8 @@ interface PhotoToolbeltProps {
 export function PhotoToolbelt({ state, patch, onReplace }: PhotoToolbeltProps) {
   const currentEffect = state.style.photoEffect || "none";
   const currentShape = state.style.photoShape || "circle";
+  const currentBorder = state.style.photoBorder || "none";
+  const currentOverlay = state.style.photoOverlay || "none";
 
   const cycleEffect = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -36,6 +38,27 @@ export function PhotoToolbelt({ state, patch, onReplace }: PhotoToolbeltProps) {
     });
   };
 
+  const toggleBorder = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    // Toggle between: none -> glow-ring -> thin-ring -> thick-ring -> none
+    const borders = ["none", "glow-ring", "thin-ring", "thick-ring"];
+    const idx = borders.indexOf(currentBorder);
+    const nextIdx = (idx + 1) % borders.length;
+    patch({
+      style: { ...state.style, photoBorder: borders[nextIdx] as any },
+    });
+  };
+
+  const cycleOverlay = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    // Cycle through overlay presets
+    const idx = PHOTO_OVERLAY_PRESETS.findIndex((p) => p.id === currentOverlay);
+    const nextIdx = (idx + 1) % PHOTO_OVERLAY_PRESETS.length;
+    patch({
+      style: { ...state.style, photoOverlay: PHOTO_OVERLAY_PRESETS[nextIdx].id as any },
+    });
+  };
+
 
   return (
     <motion.div
@@ -46,6 +69,8 @@ export function PhotoToolbelt({ state, patch, onReplace }: PhotoToolbeltProps) {
     >
       <ToolButton icon={<Shapes className="h-4 w-4" />} label="Shape" onClick={cycleShape} />
       <ToolButton icon={<Wand2 className="h-4 w-4" />} label="Filter" onClick={cycleEffect} />
+      <ToolButton icon={<FrameIcon className="h-4 w-4" />} label="Border" onClick={toggleBorder} />
+      <ToolButton icon={<Layers className="h-4 w-4" />} label="Overlay" onClick={cycleOverlay} />
       <div className="mx-1 h-4 w-px bg-white/20" />
       <ToolButton
         icon={<RefreshCw className="h-4 w-4" />}
