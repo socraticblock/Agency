@@ -39,13 +39,18 @@ export const BackgroundEngine = memo(function BackgroundEngine({
         />
       )}
 
-      {/* Layer 4: Background Motion Effect */}
+      {/* Layer 4: Background Motion Effect (opacity from --bg-effect-opacity) */}
       {style.bgEffectId !== "none" && (
-        <div 
-          className="business-card-bg-effect-layer absolute inset-0 transition-opacity duration-700" 
-          data-effect={style.bgEffectId} 
-          aria-hidden 
-        />
+        <div
+          className="pointer-events-none absolute inset-0 transition-opacity duration-700"
+          style={{ opacity: "var(--bg-effect-opacity)" }}
+        >
+          <div
+            className="business-card-bg-effect-layer absolute inset-0 transition-opacity duration-700"
+            data-effect={style.bgEffectId}
+            aria-hidden
+          />
+        </div>
       )}
 
       {/* Layer 5: Texture Overlay */}

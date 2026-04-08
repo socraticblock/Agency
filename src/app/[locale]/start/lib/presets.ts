@@ -588,6 +588,11 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
       ? 0
       : Math.min(1, Math.max(0, selection.textureOpacity / 100));
 
+  const bgEffectOp =
+    selection.bgEffectId === "none"
+      ? 0
+      : Math.min(1, Math.max(0, (selection.bgEffectOpacity ?? 100) / 100));
+
   return {
     "--bg-base-color": baseColorValue,
     "--overlay-gradient": overlayGradientValue,
@@ -607,6 +612,7 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
         : selection.cardDarkSurface
           ? "screen"
           : "multiply",
+    "--bg-effect-opacity": String(bgEffectOp),
     "--bg-gradient": selection.bgOverlayId !== "none"
       ? overlayGradientValue
       : `linear-gradient(135deg, ${acc.accent}, ${secondaryFamily.accentSecondary})`,

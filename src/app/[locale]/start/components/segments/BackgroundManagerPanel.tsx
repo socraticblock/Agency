@@ -5,9 +5,10 @@ import { Check, Layers2, X } from "lucide-react";
 import type { Lane1CustomizerState } from "../../lib/types";
 import { BackgroundBaseControls, BackgroundOverlayControls, TextColorPresetGrid } from "../StylePresetGrids";
 import { TextureEffectControls } from "../StartCustomizer/TextureEffectControls";
+import { BackgroundMotionControls } from "./BackgroundMotionControls";
 import { TEXT_COLOR_PRESETS, isBackgroundLockingTextColor } from "../../lib/presets";
 
-type BgTab = "base" | "overlay" | "texture";
+type BgTab = "base" | "overlay" | "texture" | "motion";
 
 export function BackgroundManagerPanel({
   editable,
@@ -109,6 +110,7 @@ export function BackgroundManagerPanel({
             {tabBtn("base", "Base")}
             {tabBtn("overlay", "Overlay")}
             {tabBtn("texture", "Texture")}
+            {tabBtn("motion", "Motion")}
           </div>
           <div className="max-h-[min(55vh,380px)] overflow-y-auto rounded-lg bg-white/95 p-3 text-slate-900 shadow-inner">
             {tab === "base" ? (
@@ -133,6 +135,11 @@ export function BackgroundManagerPanel({
             {tab === "texture" ? (
               <div className="[&_fieldset]:border-slate-200 [&_legend]:text-slate-700">
                 <TextureEffectControls state={state} onPatch={onStylePatch} />
+              </div>
+            ) : null}
+            {tab === "motion" ? (
+              <div className="[&_fieldset]:border-slate-200 [&_legend]:text-slate-700">
+                <BackgroundMotionControls state={state} onPatch={onStylePatch} />
               </div>
             ) : null}
           </div>

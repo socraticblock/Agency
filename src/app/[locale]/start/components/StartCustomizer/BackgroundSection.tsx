@@ -2,6 +2,7 @@ import { CollapsibleSection } from "../CollapsibleSection";
 import { BackgroundBaseControls, BackgroundOverlayControls, TextColorPresetGrid } from "../StylePresetGrids";
 import { TEXT_COLOR_PRESETS, isBackgroundLockingTextColor } from "../../lib/presets";
 import { TextureEffectControls } from "./TextureEffectControls";
+import { BackgroundMotionControls } from "../segments/BackgroundMotionControls";
 import { type SectionProps } from "./types";
 
 export function BackgroundSection({ state, onPatch, isOpen, onToggle }: SectionProps & { onPatch: any }) {
@@ -26,7 +27,10 @@ export function BackgroundSection({ state, onPatch, isOpen, onToggle }: SectionP
         onPatch={onPatch}
       />
 
-      <TextureEffectControls state={state} onPatch={onPatch} />
+      <div className="mt-6 space-y-6 border-t border-black/10 pt-6">
+        <TextureEffectControls state={state} onPatch={onPatch} />
+        <BackgroundMotionControls state={state} onPatch={onPatch} />
+      </div>
 
       {!textLocked ? (
         <TextColorPresetGrid

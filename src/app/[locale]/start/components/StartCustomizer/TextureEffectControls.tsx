@@ -2,7 +2,7 @@
 
 import { Check } from "lucide-react";
 import type { Lane1CustomizerState } from "../../lib/types";
-import { BG_EFFECT_OPTION_META, TEXTURE_OPTION_META } from "../../lib/texture-presets";
+import { TEXTURE_OPTION_META } from "../../lib/texture-presets";
 import { labelClass } from "./types";
 
 const chipBase =
@@ -64,33 +64,6 @@ export function TextureEffectControls({
         ) : (
           <p className="start-caption mt-3">Choose a texture first to adjust strength.</p>
         )}
-      </fieldset>
-
-      <fieldset>
-        <legend className={`${labelClass} mb-2 block`}>Background motion</legend>
-        <p className="start-caption mb-2">Subtle animated layer behind content. Respects reduced motion.</p>
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3" role="radiogroup" aria-label="Background effect">
-          {BG_EFFECT_OPTION_META.map((o) => {
-            const onSel = bgEffectId === o.id;
-            return (
-              <button
-                key={o.id}
-                type="button"
-                role="radio"
-                aria-checked={onSel}
-                className={`${chipBase} ${chipSelected(onSel)} min-h-[52px]`}
-                onClick={() => onPatch({ bgEffectId: o.id })}
-              >
-                {onSel ? (
-                  <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#1A2744] text-white">
-                    <Check className="h-2.5 w-2.5" strokeWidth={3} aria-hidden />
-                  </span>
-                ) : null}
-                {o.labelEn}
-              </button>
-            );
-          })}
-        </div>
       </fieldset>
     </div>
   );
