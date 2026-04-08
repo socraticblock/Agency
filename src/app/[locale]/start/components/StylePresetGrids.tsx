@@ -217,66 +217,75 @@ const BackgroundOverlayControls = memo(function BackgroundOverlayControls({
         ))}
       </div>
 
-      {bgOverlayId !== "none" && (
-        <div className="space-y-5 animate-in fade-in slide-in-from-top-2">
-          {/* Color Pickers */}
-          <div className="flex items-center gap-3">
-            <div className="space-y-1.5 flex-1">
-              <span className="text-[10px] font-bold text-slate-400 uppercase ml-1">Colors</span>
-              <div className="flex gap-2">
-                <input 
-                  type="color" 
-                  value={bgOverlayColor1} 
-                  onChange={(e) => onPatch({ bgOverlayColor1: e.target.value })}
-                  className="h-8 w-12 rounded-md border border-white shadow-sm cursor-pointer"
-                />
-                {bgOverlayId !== "solid" && (
+      {/* Fixed min height avoids panel height jumping when overlay type is "none" vs other modes */}
+      <div className="min-h-[220px]">
+        {bgOverlayId === "none" ? (
+          <div className="flex min-h-[220px] flex-col justify-center rounded-xl border border-dashed border-slate-200/90 bg-slate-50/80 px-4 py-6 text-center">
+            <p className="text-xs font-medium text-slate-500">
+              Choose Solid, Linear, Radial, or Mesh to set colors and opacity. None keeps the overlay off.
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-5 animate-in fade-in slide-in-from-top-2">
+            {/* Color Pickers */}
+            <div className="flex items-center gap-3">
+              <div className="space-y-1.5 flex-1">
+                <span className="text-[10px] font-bold text-slate-400 uppercase ml-1">Colors</span>
+                <div className="flex gap-2">
                   <input 
                     type="color" 
-                    value={bgOverlayColor2} 
-                    onChange={(e) => onPatch({ bgOverlayColor2: e.target.value })}
+                    value={bgOverlayColor1} 
+                    onChange={(e) => onPatch({ bgOverlayColor1: e.target.value })}
                     className="h-8 w-12 rounded-md border border-white shadow-sm cursor-pointer"
                   />
-                )}
-                {bgOverlayId === "mesh" && (
+                  {bgOverlayId !== "solid" && (
+                    <input 
+                      type="color" 
+                      value={bgOverlayColor2} 
+                      onChange={(e) => onPatch({ bgOverlayColor2: e.target.value })}
+                      className="h-8 w-12 rounded-md border border-white shadow-sm cursor-pointer"
+                    />
+                  )}
+                  {bgOverlayId === "mesh" && (
+                    <input 
+                      type="color" 
+                      value={bgOverlayColor3} 
+                      onChange={(e) => onPatch({ bgOverlayColor3: e.target.value })}
+                      className="h-8 w-12 rounded-md border border-white shadow-sm cursor-pointer"
+                    />
+                  )}
+                </div>
+              </div>
+
+              {bgOverlayId === "linear" && (
+                <div className="space-y-1.5 w-1/3">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase ml-1">Angle</span>
                   <input 
-                    type="color" 
-                    value={bgOverlayColor3} 
-                    onChange={(e) => onPatch({ bgOverlayColor3: e.target.value })}
-                    className="h-8 w-12 rounded-md border border-white shadow-sm cursor-pointer"
+                    type="number" min="0" max="360" 
+                    value={bgOverlayAngle} 
+                    onChange={(e) => onPatch({ bgOverlayAngle: parseInt(e.target.value) })}
+                    className="h-8 w-full rounded-md border border-slate-200 bg-white text-xs font-bold text-center"
                   />
-                )}
-              </div>
+                </div>
+              )}
             </div>
 
-            {bgOverlayId === "linear" && (
-              <div className="space-y-1.5 w-1/3">
-                <span className="text-[10px] font-bold text-slate-400 uppercase ml-1">Angle</span>
-                <input 
-                  type="number" min="0" max="360" 
-                  value={bgOverlayAngle} 
-                  onChange={(e) => onPatch({ bgOverlayAngle: parseInt(e.target.value) })}
-                  className="h-8 w-full rounded-md border border-slate-200 bg-white text-xs font-bold text-center"
-                />
+            {/* Opacity Slider */}
+            <div className="p-3 bg-slate-50/50 rounded-xl border border-slate-100 space-y-3">
+              <div className="flex justify-between text-[11px] font-bold text-slate-500 uppercase tracking-tighter">
+                <span>Effect Opacity</span>
+                <span>{Math.round(bgOverlayOpacity * 100)}%</span>
               </div>
-            )}
-          </div>
-
-          {/* Opacity Slider */}
-          <div className="p-3 bg-slate-50/50 rounded-xl border border-slate-100 space-y-3">
-            <div className="flex justify-between text-[11px] font-bold text-slate-500 uppercase tracking-tighter">
-              <span>Effect Opacity</span>
-              <span>{Math.round(bgOverlayOpacity * 100)}%</span>
+              <input 
+                type="range" min="0" max="1" step="0.01" 
+                value={bgOverlayOpacity} 
+                onChange={(e) => onPatch({ bgOverlayOpacity: parseFloat(e.target.value) })}
+                className="w-full accent-[#1A2744]"
+              />
             </div>
-            <input 
-              type="range" min="0" max="1" step="0.01" 
-              value={bgOverlayOpacity} 
-              onChange={(e) => onPatch({ bgOverlayOpacity: parseFloat(e.target.value) })}
-              className="w-full accent-[#1A2744]"
-            />
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 });
