@@ -26,6 +26,14 @@ export function PhotoSection({ state, setState, patch, isOpen, onToggle }: Secti
     setPhotoHint(null);
     setPhotoBusy(true);
     try {
+      patch({
+        style: {
+          ...state.style,
+          photoZoom: 100,
+          photoPositionX: 50,
+          photoPositionY: 50,
+        },
+      });
       const { dataUrl, warnLargeOriginal } = await compressImageForLane1Storage(file);
       patch({ 
         photoDataUrl: dataUrl,

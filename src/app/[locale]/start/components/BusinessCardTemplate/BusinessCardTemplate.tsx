@@ -78,9 +78,19 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
 
   async function onPhotoPicked(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
+    e.target.value = "";
     if (!file || !onPatch) return;
     setPhotoBusy(true);
     try {
+      // Reset transform first so the incoming image never inherits prior pan/zoom.
+      onPatch({
+        style: {
+          ...state.style,
+          photoZoom: 100,
+          photoPositionX: 50,
+          photoPositionY: 50,
+        },
+      });
       const { dataUrl } = await compressImageForLane1Storage(file);
       onPatch({ 
         photoDataUrl: dataUrl,

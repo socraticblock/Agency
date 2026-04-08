@@ -7,6 +7,7 @@
 - **009** — CSS variable mismatch fixes (texture pattern, blend mode, and gradient variables)
 - **010** — Consolidated duplicate `resolveStyleVariables` functions (removed `presets/resolve-styles.ts`, updated `presets/index.ts`)
 - **011** — Removed dead code exports and duplicate variables (10 unused variables from presets.ts, `--start-accent-gold` from start-shell.css)
+- **012** — Hero photo shape + toolbelt interaction stabilization (true circle/cinematic sizing, upload reset, expanded active zone, wheel scroll lock)
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -51,6 +52,11 @@
 - **Context:** Audit report identified 10-11 dead code variables exported by `resolveStyleVariables()` but never read by any component: `--bg-base-image`, `--bg-base-blur`, `--bg-image-overlay`, `--bg-overlay-color`, `--bg-color`, `--bg-overlay-opacity` (duplicate of `--overlay-opacity`), `--stagger-delay`, `--entrance-y`, `--spring-damping`, `--card-chrome-shadow`. Also `--start-accent-gold` defined in start-shell.css but never read.
 - **Decision:** Removed all 10 unused exports from presets.ts return object (lines 609-612, 615, 617, 635-637); removed `--start-accent-gold` from start-shell.css line 26. Also removed unused local variables: `typo`, `anim`, `baseImageValue`, `overlayImageValue`, `overlayColorValue`, `cardShadowKey`, and `CARD_CHROME_SHADOW` object.
 - **Impact:** Reduced CSS variable exports from 26 to 16 (38% reduction); eliminated bloat and confusion; cleaner, more maintainable codebase; simplified function logic by removing unused intermediate variables; build verified with `npm run build`.
+
+### 012
+- **Context:** Hero photo controls had production regressions: circle shape rendered as square, cinematic shape stayed constrained to 180px, replacement uploads could retain prior pan/zoom during async processing, and the toolbelt hid too aggressively while moving between photo and hero text.
+- **Decision:** Updated `HeroSegment` to use true shape geometry (`w-full` + `16/9` for cinematic, `1/1` for non-cinematic) and dynamic wrapper sizing; added wheel scroll lock guard while hovering the photo; rewired `PhotoToolbelt` to a wider grid pedestal with 250px proximity + hero text active zone, plus delayed close; reset photo transform before compression and again on apply in both upload handlers.
+- **Impact:** Shape toggle now maps correctly to visible masks, cinematic fills the intended width, new uploads open centered instead of inheriting stale transforms, page scroll no longer hijacks wheel-zoom interactions, and toolbelt/floating-label behavior is stable during hero editing.
 
 ## Architecture Decisions
 - Zero backend for card features

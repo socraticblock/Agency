@@ -68,6 +68,8 @@ export function HeroSegment({
   // ─── Desktop: non-passive wheel for zoom ────────────────────────────────
   const photoContainerRef = useRef<HTMLDivElement>(null);
   const photoToolbeltWrapperRef = useRef<HTMLDivElement>(null);
+  const heroActiveZoneRef = useRef<HTMLDivElement>(null);
+  const photoHoverRef = useRef(false);
   // Use a ref to always get the latest zoom value without re-attaching the listener
   const zoomRef = useRef(photoZoom);
   zoomRef.current = photoZoom;
@@ -89,6 +91,17 @@ export function HeroSegment({
     el.addEventListener("wheel", handleWheel, { passive: false });
     return () => el.removeEventListener("wheel", handleWheel);
   // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editable, state.photoDataUrl]);
+
+  // Prevent document scroll while interacting with the photo zone.
+  useEffect(() => {
+    if (!editable || !state.photoDataUrl) return;
+    const handleGlobalWheel = (e: WheelEvent) => {
+      if (!photoHoverRef.current) return;
+      e.preventDefault();
+    };
+    window.addEventListener("wheel", handleGlobalWheel, { passive: false, capture: true });
+    return () => window.removeEventListener("wheel", handleGlobalWheel, true);
   }, [editable, state.photoDataUrl]);
 
   // ─── Desktop: raw pointer events for drag/pan ───────────────────────────
@@ -148,7 +161,7 @@ export function HeroSegment({
   const shapeClass = ({
     circle: "rounded-full w-[180px]",
     "rounded-square": "rounded-2xl w-[180px]",
-    "wide-cinematic": "rounded-xl w-[180px]",
+    "wide-cinematic": "rounded-xl w-full",
   } as Record<string, string>)[photoShape as string] || "rounded-full w-[180px]";
 
   const effectFilter = PHOTO_EFFECT_PRESETS.find(p => p.id === photoEffect)?.filter || "none";
@@ -208,7 +221,10 @@ export function HeroSegment({
         }`}>
 
           {/* ── Photo Zone with Toolbelt Tracking ───────────────────── */}
-          <div ref={photoToolbeltWrapperRef} className="relative flex flex-shrink-0" style={{ width: "180px" }}>
+          <div
+            ref={photoToolbeltWrapperRef}
+            className={`relative flex flex-shrink-0 ${photoShape === "wide-cinematic" ? "w-full max-w-[520px]" : "w-[180px]"}`}
+          >
             {/* ── Photo Zone ─────────────────────────────────────── */}
             <div
               ref={photoContainerRef}
@@ -222,7 +238,14 @@ export function HeroSegment({
                     : "pointer"
                   : "default",
                 touchAction: "none",
-                height: photoShape === "wide-cinematic" ? "135px" : "180px",
+                height: photoShape === "wide-cinematic" ? "135px" : undefined,
+                aspectRatio: photoShape === "wide-cinematic" ? "16/9" : "1/1",
+              }}
+              onMouseEnter={() => {
+                photoHoverRef.current = true;
+              }}
+              onMouseLeave={() => {
+                photoHoverRef.current = false;
               }}
               onPointerDown={onPointerDown}
               onPointerMove={onPointerMove}
@@ -305,9 +328,11 @@ export function HeroSegment({
                 <div className={`absolute left-0 z-[100] hidden md:block ${photoShape === "wide-cinematic" ? "top-[135px]" : "top-[180px]"}`} onPointerDown={(e) => e.stopPropagation()}>
                   <PhotoToolbelt
                     photoContainerRef={photoContainerRef}
+                    heroActiveZoneRef={heroActiveZoneRef}
                     state={state}
                     patch={patch}
                     onReplace={() => fileRef.current?.click()}
+                    width={photoShape === "wide-cinematic" ? "min(520px, 100%)" : "320px"}
                   />
                 </div>
               )}
@@ -315,7 +340,7 @@ export function HeroSegment({
           </div>
 
           {/* ── Identity Text ───────────────────────────────────── */}
-          <div className={`w-full space-y-1 transition-all bg-transparent relative z-10 pt-4 ${
+          <div ref={heroActiveZoneRef} className={`w-full space-y-1 transition-all bg-transparent relative z-10 pt-4 ${
             photoAlignment === "center" ? "text-center" : "text-left"
           }`}>
             <h1 className="text-2xl md:text-3xl font-bold leading-tight" style={headingStyle}>
