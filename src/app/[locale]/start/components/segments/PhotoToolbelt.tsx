@@ -11,7 +11,6 @@ interface PhotoToolbeltProps {
   patch: (p: Partial<Lane1CustomizerState>) => void;
   onReplace: () => void;
   photoContainerRef: React.RefObject<HTMLDivElement | null>;
-  heroActiveZoneRef?: React.RefObject<HTMLDivElement | null>;
   width?: string;
 }
 
@@ -20,15 +19,15 @@ export function PhotoToolbelt({
   patch,
   onReplace,
   photoContainerRef,
-  heroActiveZoneRef,
   width = "320px",
 }: PhotoToolbeltProps) {
   const [floatingLabel, setFloatingLabel] = useState<{ label: string; key: number } | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [resetConfirmOpen, setResetConfirmOpen] = useState(false);
   const [hoveredTooltip, setHoveredTooltip] = useState<string | null>(null);
-  const openTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const toolbeltRootRef = useRef<HTMLDivElement | null>(null);
+  const overPhotoRef = useRef(false);
+  const overToolbeltRef = useRef(false);
 
   const currentEffect = state.style.photoEffect || "none";
   const currentShape = state.style.photoShape || "circle";
@@ -47,44 +46,63 @@ export function PhotoToolbelt({
 
   useEffect(() => {
     const photoContainer = photoContainerRef.current;
-    if (!photoContainer) return;
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = photoContainer.getBoundingClientRect();
-      const centerX = rect.x + rect.width / 2;
-      const centerY = rect.y + rect.height / 2;
-      const distance = Math.hypot(e.clientX - centerX, e.clientY - centerY);
-      const inPhotoZone = distance <= Math.max(rect.width, rect.height) / 2 + 250;
-      const activeZoneEl = heroActiveZoneRef?.current;
-      const inHeroTextZone = Boolean(
-        activeZoneEl &&
-        e.clientX >= activeZoneEl.getBoundingClientRect().left &&
-        e.clientX <= activeZoneEl.getBoundingClientRect().right &&
-        e.clientY >= activeZoneEl.getBoundingClientRect().top &&
-        e.clientY <= activeZoneEl.getBoundingClientRect().bottom,
-      );
-      const shouldShow = inPhotoZone || inHeroTextZone;
+    const toolbeltRoot = toolbeltRootRef.current;
+    if (!photoContainer || !toolbeltRoot) return;
 
-      if (shouldShow) {
-        if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
-        if (!isVisible) {
-          if (openTimeoutRef.current) clearTimeout(openTimeoutRef.current);
-          openTimeoutRef.current = setTimeout(() => setIsVisible(true), 120);
-        }
-      } else {
-        if (openTimeoutRef.current) clearTimeout(openTimeoutRef.current);
-        if (isVisible) {
-          if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
-          closeTimeoutRef.current = setTimeout(() => setIsVisible(false), 200);
-        }
+    const syncVisibility = () => {
+      setIsVisible(overPhotoRef.current || overToolbeltRef.current);
+    };
+
+    const handlePhotoEnter = () => {
+      overPhotoRef.current = true;
+      syncVisibility();
+    };
+    const handlePhotoLeave = () => {
+      overPhotoRef.current = false;
+      syncVisibility();
+    };
+    const handlePhotoPointerDown = () => {
+      overPhotoRef.current = true;
+      setIsVisible(true);
+    };
+
+    const handleToolbeltEnter = () => {
+      overToolbeltRef.current = true;
+      syncVisibility();
+    };
+    const handleToolbeltLeave = () => {
+      overToolbeltRef.current = false;
+      syncVisibility();
+    };
+
+    const handleGlobalPointerDown = (e: PointerEvent) => {
+      const target = e.target as Node | null;
+      const insidePhoto = Boolean(target && photoContainer.contains(target));
+      const insideToolbelt = Boolean(target && toolbeltRoot.contains(target));
+      if (!insidePhoto && !insideToolbelt) {
+        overPhotoRef.current = false;
+        overToolbeltRef.current = false;
+        setIsVisible(false);
+        setHoveredTooltip(null);
       }
     };
-    window.addEventListener("mousemove", handleMouseMove);
+
+    photoContainer.addEventListener("mouseenter", handlePhotoEnter);
+    photoContainer.addEventListener("mouseleave", handlePhotoLeave);
+    photoContainer.addEventListener("pointerdown", handlePhotoPointerDown);
+    toolbeltRoot.addEventListener("mouseenter", handleToolbeltEnter);
+    toolbeltRoot.addEventListener("mouseleave", handleToolbeltLeave);
+    window.addEventListener("pointerdown", handleGlobalPointerDown);
+
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      if (openTimeoutRef.current) clearTimeout(openTimeoutRef.current);
-      if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+      photoContainer.removeEventListener("mouseenter", handlePhotoEnter);
+      photoContainer.removeEventListener("mouseleave", handlePhotoLeave);
+      photoContainer.removeEventListener("pointerdown", handlePhotoPointerDown);
+      toolbeltRoot.removeEventListener("mouseenter", handleToolbeltEnter);
+      toolbeltRoot.removeEventListener("mouseleave", handleToolbeltLeave);
+      window.removeEventListener("pointerdown", handleGlobalPointerDown);
     };
-  }, [heroActiveZoneRef, isVisible, photoContainerRef]);
+  }, [photoContainerRef]);
 
   const cycleEffect = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -169,7 +187,7 @@ export function PhotoToolbelt({
   };
 
   return (
-    <div className="relative" style={{ width }}>
+    <div ref={toolbeltRootRef} className="relative" style={{ width }}>
       <AnimatePresence>
         {resetConfirmOpen && (
           <motion.div

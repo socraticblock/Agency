@@ -338,7 +338,6 @@ export function HeroSegment({
                 >
                   <PhotoToolbelt
                     photoContainerRef={photoContainerRef}
-                    heroActiveZoneRef={heroActiveZoneRef}
                     state={state}
                     patch={patch}
                     onReplace={() => fileRef.current?.click()}
