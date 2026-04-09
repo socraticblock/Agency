@@ -1,21 +1,17 @@
 import { CollapsibleSection } from "../CollapsibleSection";
 import {
   AccentPresetGrid,
-  FontPresetGrid,
   VibePresetGrid,
   AnimationPresetGrid,
   ButtonStyleGrid,
 } from "../StylePresetGrids";
 import {
   ACCENT_PRESETS,
-  LEGACY_DISPLAY_TO_BODY_PACK,
-  TYPOGRAPHY_PACK_PRESETS,
-  TYPOGRAPHY_TO_LEGACY_FONT,
   BUTTON_STYLE_PRESETS,
   VIBE_PRESETS,
   ANIMATION_PRESETS,
 } from "../../lib/presets";
-import type { ButtonStyleId, Lane1CustomizerState, TypographyPackId } from "../../lib/types";
+import type { ButtonStyleId, Lane1CustomizerState } from "../../lib/types";
 import { type SectionProps } from "./types";
 import { Phase5ExperienceControls } from "./Phase5ExperienceControls";
 
@@ -40,34 +36,6 @@ export function AccentSection({ state, onPatch, isOpen, onToggle }: SectionProps
         onChange={(id: string) => onPatch({ secondaryAccentId: id })}
         legend="Secondary accent"
         groupAriaLabel="Secondary accent color"
-      />
-    </CollapsibleSection>
-  );
-}
-
-export function FontSection({ state, onPatch, isOpen, onToggle }: SectionProps & { onPatch: any }) {
-  return (
-    <CollapsibleSection
-      id="font"
-      title="Typography"
-      isOpen={isOpen}
-      onToggle={onToggle}
-    >
-      <p className="start-caption mb-2">
-        Display packs control headings and CTAs; each pairs with a recommended body stack for paragraph copy.
-      </p>
-      <FontPresetGrid
-        options={TYPOGRAPHY_PACK_PRESETS}
-        value={state.style.buttonTypographyPackId}
-        onChange={(id: string) => {
-          const pack = id as TypographyPackId;
-          onPatch({
-            typographyPackId: pack,
-            buttonTypographyPackId: pack,
-            bodyTypographyPackId: LEGACY_DISPLAY_TO_BODY_PACK[pack],
-            fontId: TYPOGRAPHY_TO_LEGACY_FONT[pack],
-          });
-        }}
       />
     </CollapsibleSection>
   );

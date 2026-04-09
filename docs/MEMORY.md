@@ -142,7 +142,7 @@
 ### 026
 - **Context:** Background editing still lived primarily in the right sidebar while other major surfaces moved on-card; users needed a sovereign path without relocating Sections/Social/Location pills.
 - **Decision:** Added `BackgroundManagerPanel` as a single centered bottom pill (after `BrandingFooter`) with `Base` / `Overlay` / `Texture` tabs, reusing `BackgroundBaseControls`, `BackgroundOverlayControls`, `TextureEffectControls`, and conditional `TextColorPresetGrid`; panel opens above the pill with scrollable light inner content and save-status micro-feedback.
-- **Impact:** Background can be tuned entirely from the card while sidebar `BackgroundSection` remains available until a later removal pass; live preview continues to flow through existing `style` patches and `BackgroundEngine`.
+- **Impact:** Background is tuned from the on-card `BackgroundManagerPanel`; sidebar `BackgroundSection` was removed once parity shipped; live preview flows through `style` patches and `BackgroundEngine`.
 
 ### 027
 - **Context:** Body and display shared the same eight typography packs; body “Aa” tiles looked nearly identical (mostly Inter), while display options were visually distinct.
