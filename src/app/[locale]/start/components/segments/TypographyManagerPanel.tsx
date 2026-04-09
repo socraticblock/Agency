@@ -20,7 +20,7 @@ import { BodyTypographyPresetGrid } from "./BodyTypographyPresetGrid";
 import { CardTextScaleRow } from "./CardTextScaleRow";
 import { TypographyHexColorRow } from "./TypographyHexColorRow";
 
-type TypoTab = "body" | "display" | "cta";
+type TypoTab = "body" | "display" | "buttons";
 
 export function TypographyManagerPanel({
   editable,
@@ -151,7 +151,7 @@ export function TypographyManagerPanel({
           <div className="mb-2 flex flex-wrap justify-center gap-1 rounded-full border border-white/15 bg-white/5 p-1">
             {tabBtn("body", "Body")}
             {tabBtn("display", "Display")}
-            {tabBtn("cta", "CTA")}
+            {tabBtn("buttons", "Buttons")}
           </div>
           <div className="max-h-[min(55vh,380px)] overflow-y-auto rounded-lg bg-white/95 p-3 text-slate-900 shadow-inner">
             {tab === "body" ? (
@@ -194,17 +194,17 @@ export function TypographyManagerPanel({
                 </div>
               </div>
             ) : null}
-            {tab === "cta" ? (
+            {tab === "buttons" ? (
               <div className="[&_fieldset]:border-slate-200 [&_legend]:text-slate-700">
                 <p className="start-caption mb-3">
-                  Call, WhatsApp, Share, directions, and booking labels — not headings.
+                  Text on Call, WhatsApp, Share, directions, and booking — not headings.
                 </p>
                 <FontPresetGrid
                   options={TYPOGRAPHY_PACK_PRESETS}
                   value={ctaTypographyPackId}
                   preview="heading"
-                  legend="CTA font"
-                  groupAriaLabel="Call-to-action label font"
+                  legend="Button labels"
+                  groupAriaLabel="Button label font"
                   onChange={(id: string) =>
                     onStylePatch({ ctaTypographyPackId: id as TypographyPackId })
                   }

@@ -6,7 +6,7 @@ import type { ButtonStyleId, Lane1CustomizerState, Lane1StatePatch } from "../..
 import { AccentPresetGrid, ButtonStyleGrid } from "../StylePresetGrids";
 import { ACCENT_PRESETS, BUTTON_STYLE_PRESETS } from "../../lib/presets";
 
-/** Accent + CTA button chrome — one surface (“how actions look”). */
+/** Accent + action-button chrome — one surface (“how actions look”). */
 export function LookManagerPanel({
   editable,
   state,
