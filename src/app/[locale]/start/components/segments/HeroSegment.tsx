@@ -61,6 +61,8 @@ export function HeroSegment({
     photoBorder = "none",
   } = style as any;
   const [mobileFloatingLabel, setMobileFloatingLabel] = useState<{ label: string; key: number } | null>(null);
+  const [mobilePhotoToolsOpen, setMobilePhotoToolsOpen] = useState(false);
+  const mobileToolsRef = useRef<HTMLDivElement | null>(null);
 
   // ─── Desktop: non-passive wheel for zoom ────────────────────────────────
   const photoContainerRef = useRef<HTMLDivElement>(null);
@@ -235,6 +237,18 @@ export function HeroSegment({
     const timer = window.setTimeout(() => setMobileFloatingLabel(null), 850);
     return () => window.clearTimeout(timer);
   }, [mobileFloatingLabel]);
+
+  useEffect(() => {
+    if (!mobilePhotoToolsOpen) return;
+    const onPointerDown = (e: PointerEvent) => {
+      const target = e.target as Node | null;
+      if (!target) return;
+      if (mobileToolsRef.current?.contains(target)) return;
+      setMobilePhotoToolsOpen(false);
+    };
+    window.addEventListener("pointerdown", onPointerDown);
+    return () => window.removeEventListener("pointerdown", onPointerDown);
+  }, [mobilePhotoToolsOpen]);
 
   const currentShape = photoShape;
   const currentEffect = photoEffect;
@@ -461,9 +475,9 @@ export function HeroSegment({
           </div>
           {editable && state.photoDataUrl ? (
             <div className="w-full md:hidden">
-              <div className="relative mx-auto w-full max-w-[520px]">
+              <div ref={mobileToolsRef} className="relative mx-auto w-full max-w-[520px]">
                 <AnimatePresence>
-                  {mobileFloatingLabel ? (
+                  {mobilePhotoToolsOpen && mobileFloatingLabel ? (
                     <motion.div
                       key={mobileFloatingLabel.key}
                       initial={{ opacity: 0, y: 2 }}
@@ -476,15 +490,26 @@ export function HeroSegment({
                     </motion.div>
                   ) : null}
                 </AnimatePresence>
-                <div className="flex w-full flex-wrap justify-center gap-1.5 rounded-2xl border border-white/20 bg-black/75 p-2 text-white shadow-lg backdrop-blur-md">
-                  <MobilePhotoToolButton icon={<Shapes className="h-3.5 w-3.5" />} label={useSecondary ? "ფორმა" : "Shape"} onClick={cycleMobileShape} />
-                  <MobilePhotoToolButton icon={<Wand2 className="h-3.5 w-3.5" />} label={useSecondary ? "ფილტრი" : "Filter"} onClick={cycleMobileEffect} />
-                  <MobilePhotoToolButton icon={<FrameIcon className="h-3.5 w-3.5" />} label={useSecondary ? "ჩარჩო" : "Border"} onClick={cycleMobileBorder} />
-                  <MobilePhotoToolButton icon={<Layers className="h-3.5 w-3.5" />} label={useSecondary ? "ეფექტი" : "Layers"} onClick={cycleMobileOverlay} />
-                  <MobilePhotoToolButton icon={<Crosshair className="h-3.5 w-3.5" />} label={useSecondary ? "ცენტრი" : "Center"} onClick={centerMobilePhoto} />
-                  <MobilePhotoToolButton icon={<RefreshCw className="h-3.5 w-3.5" />} label={useSecondary ? "შეცვლა" : "Replace"} onClick={() => fileRef.current?.click()} />
-                  <MobilePhotoToolButton icon={<RotateCcw className="h-3.5 w-3.5" />} label={useSecondary ? "გაანულება" : "Reset"} onClick={resetMobilePhoto} />
-                </div>
+                {mobilePhotoToolsOpen ? (
+                  <div className="flex w-full flex-wrap justify-center gap-1.5 rounded-2xl border border-white/20 bg-black/75 p-2 text-white shadow-lg backdrop-blur-md">
+                    <MobilePhotoToolButton icon={<Shapes className="h-3.5 w-3.5" />} label={useSecondary ? "ფორმა" : "Shape"} onClick={cycleMobileShape} />
+                    <MobilePhotoToolButton icon={<Wand2 className="h-3.5 w-3.5" />} label={useSecondary ? "ფილტრი" : "Filter"} onClick={cycleMobileEffect} />
+                    <MobilePhotoToolButton icon={<FrameIcon className="h-3.5 w-3.5" />} label={useSecondary ? "ჩარჩო" : "Border"} onClick={cycleMobileBorder} />
+                    <MobilePhotoToolButton icon={<Layers className="h-3.5 w-3.5" />} label={useSecondary ? "ეფექტი" : "Layers"} onClick={cycleMobileOverlay} />
+                    <MobilePhotoToolButton icon={<Crosshair className="h-3.5 w-3.5" />} label={useSecondary ? "ცენტრი" : "Center"} onClick={centerMobilePhoto} />
+                    <MobilePhotoToolButton icon={<RefreshCw className="h-3.5 w-3.5" />} label={useSecondary ? "შეცვლა" : "Replace"} onClick={() => fileRef.current?.click()} />
+                    <MobilePhotoToolButton icon={<RotateCcw className="h-3.5 w-3.5" />} label={useSecondary ? "გაანულება" : "Reset"} onClick={resetMobilePhoto} />
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setMobilePhotoToolsOpen(true)}
+                    className="mx-auto inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/75 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-white shadow-lg backdrop-blur-md"
+                  >
+                    <Camera className="h-3.5 w-3.5" />
+                    {useSecondary ? "ფოტოს რედაქტირება" : "Edit photo"}
+                  </button>
+                )}
               </div>
             </div>
           ) : null}
