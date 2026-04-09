@@ -38,6 +38,36 @@ function SwatchCheck({ show }: { show: boolean }) {
   );
 }
 
+function buttonStylePreviewChipClass(id: string): string {
+  switch (id) {
+    case "sharp":
+      return "rounded-none";
+    case "luxury":
+      return "rounded-xl";
+    case "minimal":
+      return "rounded-md";
+    case "brutalist":
+      return "rounded-sm shadow-[3px_3px_0_0_#1e293b]";
+    case "stripe":
+      return "rounded-none border-y-2 border-x-0";
+    case "tint":
+      return "rounded-lg opacity-80";
+    case "clay":
+      return "rounded-2xl";
+    case "metal":
+      return "rounded-lg shadow-[inset_0_1px_0_rgba(255,255,255,0.45)]";
+    case "mesh":
+      return "rounded-lg";
+    case "glassmorph":
+      return "rounded-lg border border-white/50 bg-white/25";
+    case "outlined":
+      return "rounded-lg bg-white";
+    case "classic":
+    default:
+      return "rounded-lg";
+  }
+}
+
 function hexColorEqual(a: string, b: string): boolean {
   return a.trim().toLowerCase() === b.trim().toLowerCase();
 }
@@ -583,9 +613,7 @@ export const ButtonStyleGrid = memo(function ButtonStyleGrid({
             >
               <SwatchCheck show={onSel} />
               <span
-                className={`mx-auto h-8 w-[70%] border-2 border-[#1A2744] bg-[#1A2744]/10 ${
-                  p.id === "sharp" ? "rounded-none" : p.id === "luxury" ? "rounded-xl" : p.id === "minimal" ? "rounded-md" : "rounded-lg"
-                }`}
+                className={`mx-auto h-8 w-[70%] border-2 border-[#1A2744] bg-[#1A2744]/10 ${buttonStylePreviewChipClass(p.id)}`}
               />
               <span className="text-[0.65rem] font-medium leading-tight text-[#475569]">{p.labelEn}</span>
             </button>

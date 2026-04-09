@@ -7,6 +7,7 @@ import { InlineEditable } from "../InlineEditable";
 import { MagneticButton } from "../../../_components/MagneticButton";
 import type { CSSProperties } from "react";
 import { hasValidAddress, MAP_ADDRESS_HELPER_TEXT } from "../../lib/location";
+import { lane1DirectionsClasses, lane1PrimaryAccentBackground } from "../../lib/button-styles";
 
 interface ContactSegmentProps {
   state: Lane1CustomizerState;
@@ -36,6 +37,8 @@ export function ContactSegment({
   const mobileButtonOrder = state.mobileButtonOrder?.length
     ? state.mobileButtonOrder
     : (["map-preview", "get-directions"] as MobileButtonId[]);
+  const btnId = state.style.buttonStyleId;
+  const directionsFill = lane1PrimaryAccentBackground(btnId);
 
   return (
     <motion.section
@@ -127,10 +130,10 @@ export function ContactSegment({
                   href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-[14px] font-bold transition-all shadow-lg active:scale-95"
+                  className={`${lane1DirectionsClasses(btnId)} shadow-lg active:scale-95`}
                   style={{
                     ...ctaLabelStyle,
-                    background: "var(--accent)",
+                    background: directionsFill ?? "var(--accent)",
                     color: state.style.ctaTextHex?.trim()
                       ? "var(--text-cta)"
                       : "var(--accent-contrast, #fff)",

@@ -27,7 +27,19 @@ export type BodyTypographyPackId =
 
 /** Bounded card text scale (preview + print resets zoom to 1). */
 export type CardTextScaleId = "compact" | "default" | "comfortable" | "large";
-export type ButtonStyleId = "classic" | "outlined" | "sharp" | "luxury" | "minimal";
+export type ButtonStyleId =
+  | "classic"
+  | "outlined"
+  | "sharp"
+  | "luxury"
+  | "minimal"
+  | "brutalist"
+  | "stripe"
+  | "tint"
+  | "clay"
+  | "metal"
+  | "mesh"
+  | "glassmorph";
 
 export type SectionId = "about" | "testimonials" | "gallery" | "awards" | "video" | "booking" | "services";
 
@@ -134,7 +146,7 @@ export interface StylePresetSelection {
   cardShadowId: CardShadowId;
 }
 
-export const CUSTOMIZER_VERSION = 13 as const;
+export const CUSTOMIZER_VERSION = 14 as const;
 
 export interface Lane1CustomizerState {
   version: typeof CUSTOMIZER_VERSION;

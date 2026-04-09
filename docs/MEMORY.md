@@ -28,6 +28,7 @@
 - **030** — Typography modal 3-tab split: Body / Display / CTA with `ctaTypographyPackId`, `ctaTextHex`, `--font-cta` / `--text-cta`, v12 migration
 - **031** — On-card “Look” pill merges accent + button shape (`LookManagerPanel`); typography pill labeled “Type”; removed `AccentManagerPanel`
 - **032** — Removed `ghost` from `ButtonStyleId` / `BUTTON_STYLE_PRESETS`; migration maps `ghost` → `outlined`; Noir theme uses `outlined`; `CUSTOMIZER_VERSION` 13
+- **033** — Seven button looks: `brutalist`, `stripe`, `tint`, `clay`, `metal`, `mesh`, `glassmorph`; `accentBackground` + `lane1PrimaryAccentBackground` for tint/mesh/glass; v14
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -177,6 +178,11 @@
 - **Context:** “Ghost” was redundant with Outlined for most users and the name confused the product story.
 - **Decision:** Dropped `ghost` from `ButtonStyleId` and `BUTTON_STYLE_PRESETS`; removed all `case "ghost"` branches from `button-styles.ts`; `migrateLane1State` maps saved `ghost` → `outlined` and invalid ids → `minimal`; elite “Noir” theme uses `outlined` instead of `ghost`; `UtilitySegments` / `BookingSegment` treat only `outlined` as non-filled for accent fill logic.
 - **Impact:** Five on-card button look tiles; legacy saves and imports stay valid via migration; `CUSTOMIZER_VERSION` 13.
+
+### 033
+- **Context:** Product needed a broader button vocabulary (brutalist, glass, etc.) without breaking accent fills or CTAs.
+- **Decision:** Added `brutalist`, `stripe`, `tint`, `clay`, `metal`, `mesh`, `glassmorph` to `ButtonStyleId` and `BUTTON_STYLE_PRESETS`; extended `Lane1CtaSurface` with optional `accentBackground` for layered fills; `lane1PrimaryAccentBackground()` used by `CtaSegment`, `UtilitySegments`, `BookingSegment`, and Get Directions (`ContactSegment`); `lane1DirectionsClasses` drives directions chrome; grid preview uses `buttonStylePreviewChipClass`; `CUSTOMIZER_VERSION` 14.
+- **Impact:** Twelve picker tiles; tint/mesh/glass use `color-mix` / layered gradients instead of only `var(--accent)`; glassmorph uses `backdrop-blur-md` on card CTAs (same zoom context as before—monitor Samsung).
 
 ## Architecture Decisions
 - Zero backend for card features

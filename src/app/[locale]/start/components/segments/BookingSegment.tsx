@@ -5,7 +5,7 @@ import { Calendar } from "lucide-react";
 import type { CSSProperties } from "react";
 import type { Lane1CustomizerState } from "../../lib/types";
 import { MagneticButton } from "../../../_components/MagneticButton";
-import { lane1BookingPrimaryClasses } from "../../lib/button-styles";
+import { lane1BookingPrimaryClasses, lane1PrimaryAccentBackground } from "../../lib/button-styles";
 import { InlineEditable } from "../InlineEditable";
 
 interface BookingSegmentProps {
@@ -45,6 +45,7 @@ export function BookingSegment({
 
   const btnId = state.style.buttonStyleId;
   const filled = btnId !== "outlined";
+  const accentFill = lane1PrimaryAccentBackground(btnId);
 
   return (
     <motion.section
@@ -83,7 +84,7 @@ export function BookingSegment({
             filled
               ? {
                   ...ctaLabelStyle,
-                  background: "var(--accent)",
+                  background: accentFill ?? "var(--accent)",
                   color: state.style.ctaTextHex?.trim()
                     ? "var(--text-cta)"
                     : "var(--accent-contrast, #fff)",

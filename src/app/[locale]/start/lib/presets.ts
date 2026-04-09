@@ -612,6 +612,13 @@ export const BUTTON_STYLE_PRESETS: ButtonStylePreset[] = [
   { id: "sharp", labelKa: "კუთხოვანი", labelEn: "Sharp" },
   { id: "luxury", labelKa: "ლუქსი", labelEn: "Luxury" },
   { id: "minimal", labelKa: "თხელი", labelEn: "Minimal" },
+  { id: "brutalist", labelKa: "ბრუტალისტი", labelEn: "Brutalist" },
+  { id: "stripe", labelKa: "ზოლი", labelEn: "Stripe" },
+  { id: "tint", labelKa: "გაფერადება", labelEn: "Tint" },
+  { id: "clay", labelKa: "კლეი", labelEn: "Clay" },
+  { id: "metal", labelKa: "მეტალი", labelEn: "Metal" },
+  { id: "mesh", labelKa: "ბადე", labelEn: "Mesh" },
+  { id: "glassmorph", labelKa: "მინა", labelEn: "Glass" },
 ];
 
 /** Keep legacy `fontId` in sync for older saves / grids that still key on it. */

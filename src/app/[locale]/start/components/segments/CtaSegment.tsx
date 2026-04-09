@@ -38,7 +38,7 @@ export function CtaSegment({ state, editable, patch, ctaLabelStyle }: CtaSegment
           primary.filledAccent
             ? {
                 ...ctaLabelStyle,
-                background: "var(--accent)",
+                background: primary.accentBackground ?? "var(--accent)",
                 color: state.style.ctaTextHex?.trim()
                   ? "var(--text-cta)"
                   : "var(--accent-contrast, #fff)",
@@ -66,7 +66,7 @@ export function CtaSegment({ state, editable, patch, ctaLabelStyle }: CtaSegment
           primary.filledAccent
             ? {
                 ...ctaLabelStyle,
-                background: "var(--accent)",
+                background: primary.accentBackground ?? "var(--accent)",
                 color: state.style.ctaTextHex?.trim()
                   ? "var(--text-cta)"
                   : "var(--accent-contrast, #fff)",
