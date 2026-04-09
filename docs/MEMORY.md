@@ -34,6 +34,7 @@
 - **036** — Removed `Dark card surface` control/effect; Card surface now radius + shadow only (legacy flag ignored + migrated false)
 - **037** — Moved Card surface controls on-card (`CardSurfaceManagerPanel`); removed sidebar `CardChromeSection`
 - **038** — Dead-code sweep: removed orphaned StartCustomizer sections-content files, legacy preset-grid/preset split modules, and unused exports
+- **039** — Added on-card `QrManagerPanel` (colors + style + static/dropdown mode + logo toggle); moved QR styling controls out of `IdentitySection`; v15
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -213,6 +214,11 @@
 - **Context:** Sidebar migration left several orphaned files/exports from prior accordion-era structures and split preset modules.
 - **Decision:** Deleted unreferenced files under `StartCustomizer/sections-content/`, removed dead `StartCustomizer/SectionsContentSection.tsx` and `ServiceCountStepper.tsx`, removed unused `components/preset-grids/*` and `lib/presets/*` split tree plus `lib/presets-temp.ts` and `lib/vcf-utils.ts`, and removed unused exports `lane1CtaSecondarySurface`, `lane1UtilitySecondaryClasses`, `saveLane1StyleToDisk`, `loadLane1StyleFromDisk`.
 - **Impact:** Smaller code surface with no known runtime loss; `rg` found no remaining references and `npm run build` passes.
+
+### 039
+- **Context:** QR customization (foreground/background/style/show-on-card) lived in sidebar `IdentitySection`, while visual editing moved on-card; users wanted QR display mode (static vs dropdown).
+- **Decision:** Added `qrDisplayMode` (`static | dropdown`) to state + defaults and v15 migration; created on-card `QrManagerPanel` with show toggle, display mode, shape, foreground/background inputs, and logo toggle; inserted panel above `QrOnCardSegment`; updated `QrOnCardSegment` to render either static QR block or dropdown-reveal variant.
+- **Impact:** QR look/behavior now edited on-card; sidebar `IdentitySection` keeps download/print identity kit actions only; live QR behavior updates immediately in preview.
 
 ## Architecture Decisions
 - Zero backend for card features

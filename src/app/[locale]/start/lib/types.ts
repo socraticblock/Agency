@@ -50,6 +50,7 @@ export type SocialPlatformId = "facebook" | "instagram" | "linkedin" | "tiktok" 
 export type MobileButtonId = "map-preview" | "get-directions";
 
 export type QrStyle = "square" | "rounded" | "dots";
+export type QrDisplayMode = "static" | "dropdown";
 
 export type CardHoverEffectId = "none" | "lift" | "glow" | "scale";
 
@@ -146,7 +147,7 @@ export interface StylePresetSelection {
   cardShadowId: CardShadowId;
 }
 
-export const CUSTOMIZER_VERSION = 14 as const;
+export const CUSTOMIZER_VERSION = 15 as const;
 
 export interface Lane1CustomizerState {
   version: typeof CUSTOMIZER_VERSION;
@@ -212,6 +213,7 @@ export interface Lane1CustomizerState {
   socialIconCustomHex: string;
   showSocialLabels: boolean;
   qrStyle: QrStyle;
+  qrDisplayMode: QrDisplayMode;
   showQrOnCard: boolean;
   qrForegroundColor: string;
   qrBackgroundColor: string;
@@ -364,6 +366,7 @@ export function defaultLane1State(): Lane1CustomizerState {
     socialPlatformOrder: ["facebook", "instagram", "linkedin", "tiktok", "youtube"],
     showSocialLabels: false,
     qrStyle: "rounded",
+    qrDisplayMode: "static",
     showQrOnCard: true,
     qrForegroundColor: "#000000",
     qrBackgroundColor: "#ffffff",

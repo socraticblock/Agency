@@ -18,6 +18,7 @@ import { TypographyManagerPanel } from "../segments/TypographyManagerPanel";
 import { ExperienceManagerPanel } from "../segments/ExperienceManagerPanel";
 import { LookManagerPanel } from "../segments/LookManagerPanel";
 import { CardSurfaceManagerPanel } from "../segments/CardSurfaceManagerPanel";
+import { QrManagerPanel } from "../segments/QrManagerPanel";
 import { buildItemVariants, containerVariants } from "../../lib/animations";
 import { usePwaMetadata } from "../../lib/usePwaMetadata";
 import { useCardTilt } from "../../lib/useCardTilt";
@@ -273,6 +274,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
         />
         <SocialManagerPanel editable={editable} state={state} patch={patch} />
         <SocialSegment state={state} isResponsive={isResponsive} itemVariants={customItemVariants} />
+        <QrManagerPanel editable={editable} state={state} patch={patch} />
         <QrOnCardSegment state={state} qrDataUrl={qrDataUrl} itemVariants={customItemVariants} isResponsive={isResponsive} />
 
         <UtilitySegments
