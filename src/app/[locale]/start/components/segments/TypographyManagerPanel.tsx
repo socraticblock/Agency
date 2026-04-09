@@ -118,12 +118,12 @@ export function TypographyManagerPanel({
         className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75"
       >
         <Type className="h-4 w-4" />
-        Typography
+        Type
       </button>
       {open ? (
         <div className="absolute bottom-full left-1/2 mb-2 w-[min(100%,320px)] -translate-x-1/2 rounded-xl border border-white/20 bg-black/85 p-2 text-white shadow-2xl backdrop-blur-md">
           <div className="mb-2 flex items-center justify-between gap-2 px-1">
-            <p className="text-xs font-bold uppercase tracking-wide text-white/80">Typography</p>
+            <p className="text-xs font-bold uppercase tracking-wide text-white/80">Type</p>
             <div className="flex items-center gap-2">
               <span className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide text-white/70">
                 {savingStatus === "saving" ? <span className="animate-pulse">Saving...</span> : null}
@@ -138,7 +138,7 @@ export function TypographyManagerPanel({
                 type="button"
                 onClick={() => setOpen(false)}
                 className="rounded p-1 text-white/70 transition hover:bg-white/10 hover:text-white"
-                aria-label="Close typography panel"
+                aria-label="Close type panel"
               >
                 <X className="h-4 w-4" />
               </button>

@@ -26,6 +26,7 @@
 - **028** — Card text size presets (S/M/L/XL) via `--card-text-zoom` + CSS `zoom` on font layer; print resets zoom to 1
 - **029** — Single user-facing accent: `resolveStyleVariables` uses one preset row; `secondaryAccentId` synced to `accentId`; v11 migration
 - **030** — Typography modal 3-tab split: Body / Display / CTA with `ctaTypographyPackId`, `ctaTextHex`, `--font-cta` / `--text-cta`, v12 migration
+- **031** — On-card “Look” pill merges accent + button shape (`LookManagerPanel`); typography pill labeled “Type”; removed `AccentManagerPanel`
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -165,6 +166,11 @@
 - **Context:** Display typography also drove CTA button label font/color, so bold heading stacks could make action labels unreadable; users needed isolated control.
 - **Decision:** Added `ctaTypographyPackId` + `ctaTextHex`, `resolveStyleVariables` exports `--font-cta`, `--font-cta-weight`, `--text-cta`; `TypographyManagerPanel` third tab; card surfaces use `ctaLabelStyle` (Call/WhatsApp, Share/Refer, Get Directions, booking chip); v12 migration copies prior display pack/hex into CTA when keys absent; theme typography sync sets CTA pack with display.
 - **Impact:** Display edits no longer change CTA labels unless the user uses the CTA tab; live preview still flows through `resolveStyleVariables` on `state.style`.
+
+### 031
+- **Context:** Separate “Accent” and “Typography” pills split brand color from type; button *shape* lived only in the sidebar, so on-card flows felt fragmented.
+- **Decision:** Replaced `AccentManagerPanel` with `LookManagerPanel` (trigger **Look**, header “Brand & actions”): stacked accent grid + `ButtonStyleGrid` in one popover; renamed typography trigger/title to **Type** for a clear Type vs Look pairing.
+- **Impact:** Fewer competing pills for the same mental model (brand + CTA chrome); sidebar `ButtonStyleSection` unchanged for users who still use `StartCustomizer`.
 
 ## Architecture Decisions
 - Zero backend for card features

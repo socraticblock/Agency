@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Check, Palette, X } from "lucide-react";
-import type { Lane1CustomizerState, Lane1StatePatch } from "../../lib/types";
-import { AccentPresetGrid } from "../StylePresetGrids";
-import { ACCENT_PRESETS } from "../../lib/presets";
+import { Check, Sparkles, X } from "lucide-react";
+import type { ButtonStyleId, Lane1CustomizerState, Lane1StatePatch } from "../../lib/types";
+import { AccentPresetGrid, ButtonStyleGrid } from "../StylePresetGrids";
+import { ACCENT_PRESETS, BUTTON_STYLE_PRESETS } from "../../lib/presets";
 
-export function AccentManagerPanel({
+/** Accent + CTA button chrome — one surface (“how actions look”). */
+export function LookManagerPanel({
   editable,
   state,
   patch,
@@ -64,13 +65,13 @@ export function AccentManagerPanel({
         onClick={() => setOpen((v) => !v)}
         className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75"
       >
-        <Palette className="h-4 w-4" />
-        Accent
+        <Sparkles className="h-4 w-4" />
+        Look
       </button>
       {open ? (
         <div className="absolute bottom-full left-1/2 mb-2 w-[min(100%,320px)] -translate-x-1/2 rounded-xl border border-white/20 bg-black/85 p-2 text-white shadow-2xl backdrop-blur-md">
           <div className="mb-2 flex items-center justify-between gap-2 px-1">
-            <p className="text-xs font-bold uppercase tracking-wide text-white/80">Accent color</p>
+            <p className="text-xs font-bold uppercase tracking-wide text-white/80">Brand &amp; actions</p>
             <div className="flex items-center gap-2">
               <span className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide text-white/70">
                 {savingStatus === "saving" ? <span className="animate-pulse">Saving...</span> : null}
@@ -85,16 +86,16 @@ export function AccentManagerPanel({
                 type="button"
                 onClick={() => setOpen(false)}
                 className="rounded p-1 text-white/70 transition hover:bg-white/10 hover:text-white"
-                aria-label="Close accent panel"
+                aria-label="Close look panel"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
           </div>
-          <div className="max-h-[min(50vh,340px)] overflow-y-auto rounded-lg bg-white/95 p-3 text-slate-900 shadow-inner">
+          <div className="max-h-[min(58vh,420px)] overflow-y-auto rounded-lg bg-white/95 p-3 text-slate-900 shadow-inner">
             <div className="[&_fieldset]:border-slate-200 [&_legend]:text-slate-700">
               <p className="start-caption mb-3">
-                Brand accent for buttons and highlights; borders and gradients use its paired tone from the same
+                Accent drives filled buttons and highlights; borders and gradients use the paired tone from the same
                 preset.
               </p>
               <AccentPresetGrid
@@ -103,6 +104,15 @@ export function AccentManagerPanel({
                 onChange={(id: string) => onStylePatch({ accentId: id })}
                 legend="Accent"
                 groupAriaLabel="Accent color"
+              />
+            </div>
+            <div className="my-4 border-t border-slate-200" aria-hidden />
+            <div className="[&_fieldset]:border-slate-200 [&_legend]:text-slate-700">
+              <p className="start-caption mb-3">Call, share, directions, and booking actions share this shape.</p>
+              <ButtonStyleGrid
+                options={BUTTON_STYLE_PRESETS}
+                value={state.style.buttonStyleId}
+                onChange={(id: string) => onStylePatch({ buttonStyleId: id as ButtonStyleId })}
               />
             </div>
           </div>
