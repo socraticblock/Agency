@@ -1,54 +1,9 @@
 import { CollapsibleSection } from "../CollapsibleSection";
-import {
-  AccentPresetGrid,
-  VibePresetGrid,
-  AnimationPresetGrid,
-  ButtonStyleGrid,
-} from "../StylePresetGrids";
-import {
-  ACCENT_PRESETS,
-  BUTTON_STYLE_PRESETS,
-  VIBE_PRESETS,
-  ANIMATION_PRESETS,
-} from "../../lib/presets";
-import type { ButtonStyleId, Lane1CustomizerState } from "../../lib/types";
+import { VibePresetGrid, AnimationPresetGrid } from "../StylePresetGrids";
+import { VIBE_PRESETS, ANIMATION_PRESETS } from "../../lib/presets";
+import type { Lane1CustomizerState } from "../../lib/types";
 import { type SectionProps } from "./types";
 import { Phase5ExperienceControls } from "./Phase5ExperienceControls";
-
-export function AccentSection({ state, onPatch, isOpen, onToggle }: SectionProps & { onPatch: any }) {
-  return (
-    <CollapsibleSection
-      id="accent"
-      title="Accent color"
-      isOpen={isOpen}
-      onToggle={onToggle}
-    >
-      <p className="start-caption mb-2">
-        One accent preset: bold UI uses the main swatch; section borders and gradients use its paired tone.
-      </p>
-      <AccentPresetGrid
-        options={ACCENT_PRESETS}
-        value={state.style.accentId}
-        onChange={(id: string) => onPatch({ accentId: id, secondaryAccentId: id })}
-        legend="Accent color"
-        groupAriaLabel="Accent color"
-      />
-    </CollapsibleSection>
-  );
-}
-
-export function ButtonStyleSection({ state, onPatch, isOpen, onToggle }: SectionProps & { onPatch: any }) {
-  return (
-    <CollapsibleSection id="buttons" title="Buttons" isOpen={isOpen} onToggle={onToggle}>
-      <p className="start-caption mb-2">Call-to-action, share, and map buttons share this style.</p>
-      <ButtonStyleGrid
-        options={BUTTON_STYLE_PRESETS}
-        value={state.style.buttonStyleId}
-        onChange={(id: string) => onPatch({ buttonStyleId: id as ButtonStyleId })}
-      />
-    </CollapsibleSection>
-  );
-}
 
 export function ExperienceSection({
   state,
@@ -67,12 +22,12 @@ export function ExperienceSection({
       <p className="start-caption">
         Elevate the feeling of your site with luxury effects.
       </p>
-      <VibePresetGrid 
+      <VibePresetGrid
         options={VIBE_PRESETS}
         value={state.style.vibeId}
         onChange={(id: string) => onPatch({ vibeId: id })}
       />
-      <AnimationPresetGrid 
+      <AnimationPresetGrid
         options={ANIMATION_PRESETS}
         value={state.style.animationId}
         onChange={(id: string) => onPatch({ animationId: id })}

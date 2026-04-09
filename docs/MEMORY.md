@@ -29,6 +29,7 @@
 - **031** — On-card “Look” pill merges accent + button shape (`LookManagerPanel`); typography pill labeled “Type”; removed `AccentManagerPanel`
 - **032** — Removed `ghost` from `ButtonStyleId` / `BUTTON_STYLE_PRESETS`; migration maps `ghost` → `outlined`; Noir theme uses `outlined`; `CUSTOMIZER_VERSION` 13
 - **033** — Seven button looks: `brutalist`, `stripe`, `tint`, `clay`, `metal`, `mesh`, `glassmorph`; `accentBackground` + `lane1PrimaryAccentBackground` for tint/mesh/glass; v14
+- **034** — Removed sidebar `AccentSection` and `ButtonStyleSection` from `StartCustomizer` (on-card Look + Type only)
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -172,7 +173,7 @@
 ### 031
 - **Context:** Separate “Accent” and “Typography” pills split brand color from type; button *shape* lived only in the sidebar, so on-card flows felt fragmented.
 - **Decision:** Replaced `AccentManagerPanel` with `LookManagerPanel` (trigger **Look**, header “Brand & actions”): stacked accent grid + `ButtonStyleGrid` in one popover; renamed typography trigger/title to **Type** for a clear Type vs Look pairing.
-- **Impact:** Fewer competing pills for the same mental model (brand + CTA chrome); sidebar `ButtonStyleSection` unchanged for users who still use `StartCustomizer`.
+- **Impact:** Fewer competing pills for the same mental model (brand + CTA chrome); sidebar `AccentSection` / `ButtonStyleSection` later removed (see **034**).
 
 ### 032
 - **Context:** “Ghost” was redundant with Outlined for most users and the name confused the product story.
@@ -183,6 +184,11 @@
 - **Context:** Product needed a broader button vocabulary (brutalist, glass, etc.) without breaking accent fills or CTAs.
 - **Decision:** Added `brutalist`, `stripe`, `tint`, `clay`, `metal`, `mesh`, `glassmorph` to `ButtonStyleId` and `BUTTON_STYLE_PRESETS`; extended `Lane1CtaSurface` with optional `accentBackground` for layered fills; `lane1PrimaryAccentBackground()` used by `CtaSegment`, `UtilitySegments`, `BookingSegment`, and Get Directions (`ContactSegment`); `lane1DirectionsClasses` drives directions chrome; grid preview uses `buttonStylePreviewChipClass`; `CUSTOMIZER_VERSION` 14.
 - **Impact:** Twelve picker tiles; tint/mesh/glass use `color-mix` / layered gradients instead of only `var(--accent)`; glassmorph uses `backdrop-blur-md` on card CTAs (same zoom context as before—monitor Samsung).
+
+### 034
+- **Context:** Sidebar “Accent color” and “Buttons” duplicated on-card **Look** (accent + button shape) after sovereign pills shipped.
+- **Decision:** Removed `AccentSection` and `ButtonStyleSection` from `StartCustomizer.tsx`; `StyleSections.tsx` now exports only `ExperienceSection`.
+- **Impact:** Single path for accent + button chrome on the card; quick themes and `ThemePresetsSection` still apply accent + `buttonStyleId`.
 
 ## Architecture Decisions
 - Zero backend for card features
