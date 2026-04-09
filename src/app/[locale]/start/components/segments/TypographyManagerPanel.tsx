@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Check, Type, X } from "lucide-react";
 import type {
   BodyTypographyPackId,
+  CardTextScaleId,
   Lane1CustomizerState,
   Lane1StatePatch,
   TypographyPackId,
@@ -16,6 +17,7 @@ import {
   TYPOGRAPHY_TO_LEGACY_FONT,
 } from "../../lib/presets";
 import { BodyTypographyPresetGrid } from "./BodyTypographyPresetGrid";
+import { CardTextScaleRow } from "./CardTextScaleRow";
 import { TypographyHexColorRow } from "./TypographyHexColorRow";
 
 type TypoTab = "body" | "display";
@@ -77,7 +79,8 @@ export function TypographyManagerPanel({
 
   if (!editable) return null;
 
-  const { bodyTypographyPackId, buttonTypographyPackId, bodyTextHex, buttonTextHex } = state.style;
+  const { bodyTypographyPackId, buttonTypographyPackId, bodyTextHex, buttonTextHex, cardTextScaleId } =
+    state.style;
 
   const bodyResolved = resolveBodyTypographyPack(state.style);
   const bodyCaptionPreviewStyle: CSSProperties = {
@@ -133,6 +136,10 @@ export function TypographyManagerPanel({
               </button>
             </div>
           </div>
+          <CardTextScaleRow
+            value={cardTextScaleId}
+            onChange={(id: CardTextScaleId) => onStylePatch({ cardTextScaleId: id })}
+          />
           <div className="mb-2 flex flex-wrap justify-center gap-1 rounded-full border border-white/15 bg-white/5 p-1">
             {tabBtn("body", "Body")}
             {tabBtn("display", "Display")}

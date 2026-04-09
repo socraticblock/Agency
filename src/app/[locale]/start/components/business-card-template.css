@@ -27,6 +27,8 @@
 
 .business-card-template-font-layer {
   transition: opacity 0.2s ease-out;
+  /* Scales all Tailwind rem text together; --card-text-zoom from resolveStyleVariables */
+  zoom: var(--card-text-zoom, 1);
 }
 
 /* Texture layer reads --texture-* from resolveStyleVariables; effects are decorative only */
@@ -297,6 +299,10 @@
     margin: 0 !important;
     padding: 0 !important;
     box-shadow: none !important;
+  }
+
+  .business-card-template-font-layer {
+    zoom: 1 !important;
   }
 
   /* Ensure backgrounds print */

@@ -24,6 +24,9 @@ export type BodyTypographyPackId =
   | "body-serif"
   | "body-geometric"
   | "body-bold";
+
+/** Bounded card text scale (preview + print resets zoom to 1). */
+export type CardTextScaleId = "compact" | "default" | "comfortable" | "large";
 export type ButtonStyleId = "classic" | "outlined" | "ghost" | "sharp" | "luxury" | "minimal";
 
 export type SectionId = "about" | "testimonials" | "gallery" | "awards" | "video" | "booking" | "services";
@@ -114,6 +117,8 @@ export interface StylePresetSelection {
   /** Empty = follow text color preset. */
   buttonTextHex: string;
   buttonStyleId: ButtonStyleId;
+  /** Overall text size on the card (uses CSS zoom on the font layer). */
+  cardTextScaleId: CardTextScaleId;
 
   /** 50 = slow, 100 = default, 150 = fast */
   animationSpeed: number;
@@ -124,7 +129,7 @@ export interface StylePresetSelection {
   cardShadowId: CardShadowId;
 }
 
-export const CUSTOMIZER_VERSION = 9 as const;
+export const CUSTOMIZER_VERSION = 10 as const;
 
 export interface Lane1CustomizerState {
   version: typeof CUSTOMIZER_VERSION;
@@ -295,6 +300,7 @@ export function defaultLane1State(): Lane1CustomizerState {
       bodyTextHex: "",
       buttonTextHex: "",
       buttonStyleId: "minimal",
+      cardTextScaleId: "default",
       animationSpeed: 100,
       cardDarkSurface: false,
       cardRadiusPx: 24,

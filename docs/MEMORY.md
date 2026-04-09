@@ -23,6 +23,7 @@
 - **025** — Added dedicated on-card Location manager and removed map controls from Social manager
 - **026** — On-card Background manager (standalone bottom pill, Base/Overlay/Texture tabs, reuses sidebar control components)
 - **027** — Split body typography from display packs (eight distinct body stacks, grouped UI, CSS line-height/letter-spacing, customizer v9 migration)
+- **028** — Card text size presets (S/M/L/XL) via `--card-text-zoom` + CSS `zoom` on font layer; print resets zoom to 1
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -147,6 +148,11 @@
 - **Context:** Body and display shared the same eight typography packs; body “Aa” tiles looked nearly identical (mostly Inter), while display options were visually distinct.
 - **Decision:** Introduced `BodyTypographyPackId` + `BODY_TYPOGRAPHY_PRESETS` (Inter / Source Sans 3 / Merriweather / Space Grotesk stacks with tuned weights, line-height, and optional letter-spacing), `--font-body-line-height` and `--font-body-letter-spacing` in `resolveStyleVariables`, grouped `BodyTypographyPresetGrid` with sentence preview, `LEGACY_DISPLAY_TO_BODY_PACK` for themes + sidebar display picker, `migrateLegacyBodyTypographyId` in v9 migration, and Inter font weights 500/600.
 - **Impact:** Clients see clearer body variety without new npm dependencies; saved cards migrate from old display ids to new body ids; `fontId` legacy mapping uses `BODY_TYPOGRAPHY_TO_LEGACY_FONT` when body changes.
+
+### 028
+- **Context:** Clients needed larger/smaller card text without retuning every Tailwind `text-*` class; `rem` ignores parent `font-size`.
+- **Decision:** Added `cardTextScaleId` (`compact`→0.9, `default`→1, `comfortable`→1.08, `large`→1.15), `CARD_TEXT_SCALE_PRESETS`, `--card-text-zoom` in `resolveStyleVariables`, and `zoom: var(--card-text-zoom)` on `.business-card-template-font-layer` so all subtree typography scales together; `CardTextScaleRow` in Typography panel; `@media print` forces `zoom: 1` on that layer for 3.5×2in output; customizer v10 migration defaults invalid/missing ids to `default`.
+- **Impact:** One bounded control scales headings, body, and buttons consistently; print layout stays physically correct; no new dependencies.
 
 ## Architecture Decisions
 - Zero backend for card features

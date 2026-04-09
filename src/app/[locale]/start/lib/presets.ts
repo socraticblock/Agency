@@ -3,6 +3,7 @@ import type {
   BodyTypographyPackId,
   ButtonStyleId,
   CardShadowId,
+  CardTextScaleId,
   StylePresetSelection,
   TypographyPackId,
 } from "./types";
@@ -499,6 +500,27 @@ export function resolveBodyTypographyPack(selection: StylePresetSelection): Body
   );
 }
 
+export interface CardTextScalePreset {
+  id: CardTextScaleId;
+  labelEn: string;
+  labelKa: string;
+  /** CSS zoom factor on `.business-card-template-font-layer` (print forces 1). */
+  zoom: number;
+}
+
+export const CARD_TEXT_SCALE_PRESETS: CardTextScalePreset[] = [
+  { id: "compact", labelEn: "S", labelKa: "S", zoom: 0.9 },
+  { id: "default", labelEn: "M", labelKa: "M", zoom: 1 },
+  { id: "comfortable", labelEn: "L", labelKa: "L", zoom: 1.08 },
+  { id: "large", labelEn: "XL", labelKa: "XL", zoom: 1.15 },
+];
+
+export function resolveCardTextZoomScale(selection: StylePresetSelection): number {
+  const id = selection.cardTextScaleId ?? "default";
+  const p = CARD_TEXT_SCALE_PRESETS.find((x) => x.id === id);
+  return p?.zoom ?? 1;
+}
+
 export const TYPOGRAPHY_PACK_PRESETS: TypographyPackPreset[] = [
   {
     id: "classic",
@@ -783,6 +805,7 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
   const bgEffectSpeed = Math.min(200, Math.max(50, selection.bgEffectSpeed ?? 100));
   const bgEffectIntensity = Math.min(150, Math.max(50, selection.bgEffectIntensity ?? 100));
   const bgEffectIntNorm = (bgEffectIntensity - 50) / 100;
+  const cardTextZoom = resolveCardTextZoomScale(selection);
 
   return {
     "--bg-base-color": baseColorValue,
@@ -817,6 +840,7 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
     "--font-body-weight": String(bodyResolved.bodyWeight),
     "--font-body-line-height": String(bodyResolved.bodyLineHeight),
     "--font-body-letter-spacing": bodyResolved.letterSpacing ?? "normal",
+    "--card-text-zoom": String(cardTextZoom),
     "--glass-blur": vibe.blur,
     "--card-shadow": vibe.shadow,
     "--border-opacity": String(vibe.borderOpacity),
