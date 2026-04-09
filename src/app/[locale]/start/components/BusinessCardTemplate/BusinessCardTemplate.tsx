@@ -17,7 +17,6 @@ import { BackgroundManagerPanel } from "../segments/BackgroundManagerPanel";
 import { TypographyManagerPanel } from "../segments/TypographyManagerPanel";
 import { ExperienceManagerPanel } from "../segments/ExperienceManagerPanel";
 import { LookManagerPanel } from "../segments/LookManagerPanel";
-import { CardSurfaceManagerPanel } from "../segments/CardSurfaceManagerPanel";
 import { QrManagerPanel } from "../segments/QrManagerPanel";
 import { ProfileSetupManagerPanel } from "../segments/ProfileSetupManagerPanel";
 import { buildItemVariants, containerVariants } from "../../lib/animations";
@@ -325,7 +324,6 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
         />
         </motion.div>
         <BackgroundManagerPanel editable={editable} state={state} patch={patch} useSecondary={useSecondary} />
-        <CardSurfaceManagerPanel editable={editable} state={state} patch={patch} useSecondary={useSecondary} />
         <LookManagerPanel editable={editable} state={state} patch={patch} useSecondary={useSecondary} />
         <TypographyManagerPanel editable={editable} state={state} patch={patch} useSecondary={useSecondary} />
         <ExperienceManagerPanel

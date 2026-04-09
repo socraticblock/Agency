@@ -41,6 +41,7 @@
 - **043** — Removed right sidebar editor; start page is now centered card-only with on-card pills and cleaned sidebar dead code
 - **044** — Added mobile photo toolbelt pill under hero photo (all desktop actions + visible labels) and removed unused photo modal
 - **045** — Added 1–4 item count controls for Services/Gallery/Testimonials/Awards in on-card Sections manager with thumb-friendly +/- buttons
+- **046** — Removed on-card Card Surface pill and deleted `CardSurfaceManagerPanel` (radius/shadow still theme-driven only)
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -255,6 +256,11 @@
 - **Context:** Clients could edit section content but could not easily add/remove repeated items per section; Services, Gallery, Testimonials, and Awards needed bounded item counts.
 - **Decision:** Extended `SectionManagerPanel` with explicit count controls (1–4) for those four sections, using large touch targets and existing state fields (`serviceCount`, `galleryCount`, `testimonialCount`, `awardCount`) with shared save feedback.
 - **Impact:** Clients can now add/remove section items directly from the on-card Sections pill with mobile-friendly controls, and card rendering updates immediately through existing segment count wiring.
+
+### 046
+- **Context:** Product direction requested removing the Card Surface editor completely to simplify on-card controls.
+- **Decision:** Removed `CardSurfaceManagerPanel` usage from `BusinessCardTemplate` and deleted the `CardSurfaceManagerPanel.tsx` component file.
+- **Impact:** Radius/shadow are no longer directly editable via a dedicated pill; existing style fields remain for defaults/themes and runtime rendering, but card-surface UI complexity is reduced.
 
 ## Architecture Decisions
 - Zero backend for card features
