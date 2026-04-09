@@ -15,7 +15,7 @@ export const containerVariants = {
 };
 
 function clampSpeed(s: number) {
-  return Math.min(1.75, Math.max(0.45, s));
+  return Math.min(1.5, Math.max(0.15, s));
 }
 
 export function buildItemVariants(animationId: string, speedPercent: number): Variants {

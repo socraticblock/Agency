@@ -164,7 +164,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   const animPreset =
     ANIMATION_PRESETS.find((a) => a.id === state.style.animationId) ??
     ANIMATION_PRESETS.find((x) => x.id === "fade")!;
-  const speed = Math.max(0.5, Math.min(1.75, state.style.animationSpeed / 100));
+  const speed = Math.max(0.15, Math.min(1.5, state.style.animationSpeed / 100));
   const customItemVariants = buildItemVariants(state.style.animationId, state.style.animationSpeed);
   const hoverLayerClass =
     isResponsive && state.cardHoverEffectId !== "none"

@@ -16,7 +16,7 @@ export function Phase5ExperienceControls({
         Animation speed ({state.style.animationSpeed}%)
         <input
           type="range"
-          min={50}
+          min={15}
           max={150}
           value={state.style.animationSpeed}
           onChange={(e) => onStylePatch({ animationSpeed: Number(e.target.value) })}
