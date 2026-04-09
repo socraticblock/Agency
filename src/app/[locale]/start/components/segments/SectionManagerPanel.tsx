@@ -160,7 +160,7 @@ export function SectionManagerPanel({ editable, state, patch, onStructureChange,
       </button>
 
       {open ? (
-        <div className="absolute right-4 top-full mt-2 w-[min(88vw,330px)] rounded-xl border border-white/20 bg-black/85 p-3 text-white shadow-2xl backdrop-blur-md">
+        <div className="absolute right-4 top-full mt-2 w-[min(75vw,300px)] rounded-xl border border-white/20 bg-black/85 p-3 text-white shadow-2xl backdrop-blur-md">
           <div className="mb-2 flex items-center justify-between">
             <p className="text-xs font-bold uppercase tracking-wide text-white/80">
               {useSecondary ? "ხილული სექციები" : "Visible sections"}
