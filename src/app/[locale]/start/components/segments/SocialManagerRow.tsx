@@ -47,11 +47,14 @@ export function SocialManagerRow({
   useSecondary: boolean;
 }) {
   const urlOk = isLikelyUrl(value);
+  const inputId = `social-toggle-${id}`;
   return (
     <div className={`rounded-lg border border-white/10 px-2.5 py-2 text-xs ${checked ? "bg-white/10" : "bg-white/[0.03]"}`}>
       <div className="flex items-center gap-2">
-        <input type="checkbox" checked={checked} onChange={onToggle} className="h-3.5 w-3.5" />
-        <span className="flex-1">{SOCIAL_LABELS[id]}</span>
+        <input id={inputId} type="checkbox" checked={checked} onChange={onToggle} className="h-3.5 w-3.5" />
+        <label htmlFor={inputId} className="flex-1 cursor-pointer">
+          {SOCIAL_LABELS[id]}
+        </label>
         <div className="flex gap-1">
           <button type="button" disabled={!canMoveUp} onClick={() => onMove(-1)} className="rounded p-1 text-white/70 transition hover:bg-white/10 hover:text-white disabled:opacity-30" aria-label={`Move ${SOCIAL_LABELS[id]} up`}>
             <ChevronUp className="h-3.5 w-3.5" />

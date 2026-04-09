@@ -75,24 +75,46 @@ export function LocationManagerPanel({
             const title = isMap
               ? useSecondary ? "რუკის გადახედვის ჩვენება" : "Show map preview"
               : useSecondary ? '„მიმართულების მიღება“ ღილაკის ჩვენება' : 'Show "Get Directions"';
+            const inputId = `location-toggle-${id}`;
             return (
-              <div key={id} className={`flex items-center justify-between rounded-md border border-white/20 bg-white/10 px-2 py-1.5 ${index === 0 ? "mb-1.5" : ""}`}>
-                <span className="text-xs">{title}</span>
-                <div className="flex items-center gap-1">
-                  <button type="button" disabled={index === 0} onClick={() => move(id, -1)} className="rounded p-1 text-white/70 transition hover:bg-white/10 hover:text-white disabled:opacity-30" aria-label={`Move ${title} up`}>
-                    <ChevronUp className="h-3.5 w-3.5" />
-                  </button>
-                  <button type="button" disabled={index === order.length - 1} onClick={() => move(id, 1)} className="rounded p-1 text-white/70 transition hover:bg-white/10 hover:text-white disabled:opacity-30" aria-label={`Move ${title} down`}>
-                    <ChevronDown className="h-3.5 w-3.5" />
-                  </button>
+              <div
+                key={id}
+                className={`flex items-center justify-between rounded-lg border border-white/10 px-2.5 py-2 text-xs ${
+                  checked ? "bg-white/10" : "bg-white/[0.03]"
+                } ${index === 0 ? "mb-1.5" : ""}`}
+              >
+                <label htmlFor={inputId} className="flex min-w-0 flex-1 cursor-pointer items-center gap-2">
                   <input
+                    id={inputId}
                     type="checkbox"
                     disabled={!state.addGoogleMap}
                     checked={checked}
                     onChange={(e) =>
                       patch(isMap ? { showMapPreview: e.target.checked } : { showGetDirectionsButton: e.target.checked })
                     }
+                    className="h-3.5 w-3.5"
                   />
+                  <span className="min-w-0">{title}</span>
+                </label>
+                <div className="ml-2 flex items-center gap-1">
+                  <button
+                    type="button"
+                    disabled={index === 0}
+                    onClick={() => move(id, -1)}
+                    className="rounded p-1 text-white/70 transition hover:bg-white/10 hover:text-white disabled:opacity-30"
+                    aria-label={`Move ${title} up`}
+                  >
+                    <ChevronUp className="h-3.5 w-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    disabled={index === order.length - 1}
+                    onClick={() => move(id, 1)}
+                    className="rounded p-1 text-white/70 transition hover:bg-white/10 hover:text-white disabled:opacity-30"
+                    aria-label={`Move ${title} down`}
+                  >
+                    <ChevronDown className="h-3.5 w-3.5" />
+                  </button>
                 </div>
               </div>
             );
