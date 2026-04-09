@@ -27,6 +27,7 @@
 - **029** — Single user-facing accent: `resolveStyleVariables` uses one preset row; `secondaryAccentId` synced to `accentId`; v11 migration
 - **030** — Typography modal 3-tab split: Body / Display / CTA with `ctaTypographyPackId`, `ctaTextHex`, `--font-cta` / `--text-cta`, v12 migration
 - **031** — On-card “Look” pill merges accent + button shape (`LookManagerPanel`); typography pill labeled “Type”; removed `AccentManagerPanel`
+- **032** — Removed `ghost` from `ButtonStyleId` / `BUTTON_STYLE_PRESETS`; migration maps `ghost` → `outlined`; Noir theme uses `outlined`; `CUSTOMIZER_VERSION` 13
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -171,6 +172,11 @@
 - **Context:** Separate “Accent” and “Typography” pills split brand color from type; button *shape* lived only in the sidebar, so on-card flows felt fragmented.
 - **Decision:** Replaced `AccentManagerPanel` with `LookManagerPanel` (trigger **Look**, header “Brand & actions”): stacked accent grid + `ButtonStyleGrid` in one popover; renamed typography trigger/title to **Type** for a clear Type vs Look pairing.
 - **Impact:** Fewer competing pills for the same mental model (brand + CTA chrome); sidebar `ButtonStyleSection` unchanged for users who still use `StartCustomizer`.
+
+### 032
+- **Context:** “Ghost” was redundant with Outlined for most users and the name confused the product story.
+- **Decision:** Dropped `ghost` from `ButtonStyleId` and `BUTTON_STYLE_PRESETS`; removed all `case "ghost"` branches from `button-styles.ts`; `migrateLane1State` maps saved `ghost` → `outlined` and invalid ids → `minimal`; elite “Noir” theme uses `outlined` instead of `ghost`; `UtilitySegments` / `BookingSegment` treat only `outlined` as non-filled for accent fill logic.
+- **Impact:** Five on-card button look tiles; legacy saves and imports stay valid via migration; `CUSTOMIZER_VERSION` 13.
 
 ## Architecture Decisions
 - Zero backend for card features

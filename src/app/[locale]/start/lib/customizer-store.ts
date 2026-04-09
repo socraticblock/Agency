@@ -5,6 +5,7 @@ import { CUSTOMIZER_VERSION, defaultLane1State } from "./types";
 import {
   ACCENT_PRESETS,
   BACKGROUND_PRESETS,
+  BUTTON_STYLE_PRESETS,
   CARD_TEXT_SCALE_PRESETS,
   coerceSolidBgBaseInStyle,
   FONT_PRESETS,
@@ -22,8 +23,8 @@ function safeParse(raw: string | null): Lane1CustomizerState | null {
   try {
     const data = JSON.parse(raw) as Record<string, unknown>;
     const v = typeof data.version === "number" ? data.version : 1;
-    // Allow migration from v1–v12
-    if (v < 1 || v > 12) return null;
+    // Allow migration from v1–v13
+    if (v < 1 || v > 13) return null;
     return migrateLane1State(data as unknown as Lane1CustomizerState);
   } catch {
     return null;
@@ -102,6 +103,13 @@ function migrateLane1State(
   }
   if (!rawStyle || !("ctaTextHex" in rawStyle)) {
     merged.style.ctaTextHex = merged.style.buttonTextHex ?? "";
+  }
+
+  if ((merged.style.buttonStyleId as string) === "ghost") {
+    merged.style.buttonStyleId = "outlined";
+  }
+  if (!BUTTON_STYLE_PRESETS.some((p) => p.id === merged.style.buttonStyleId)) {
+    merged.style.buttonStyleId = "minimal";
   }
 
   merged.version = CUSTOMIZER_VERSION;

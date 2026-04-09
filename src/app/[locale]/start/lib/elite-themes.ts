@@ -95,7 +95,7 @@ export const ELITE_THEME_PRESETS: EliteThemePreset[] = [
       typographyPackId: "noir",
       vibeId: "neon",
       animationId: "cinematic",
-      buttonStyleId: "ghost",
+      buttonStyleId: "outlined",
       textureId: "coarse-grain",
       textureOpacity: 12,
       bgEffectId: "light-leak",

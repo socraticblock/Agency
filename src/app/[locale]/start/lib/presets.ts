@@ -609,7 +609,6 @@ export interface ButtonStylePreset {
 export const BUTTON_STYLE_PRESETS: ButtonStylePreset[] = [
   { id: "classic", labelKa: "კლასიკური", labelEn: "Classic" },
   { id: "outlined", labelKa: "კონტური", labelEn: "Outlined" },
-  { id: "ghost", labelKa: "მინიმალური ჩარჩო", labelEn: "Ghost" },
   { id: "sharp", labelKa: "კუთხოვანი", labelEn: "Sharp" },
   { id: "luxury", labelKa: "ლუქსი", labelEn: "Luxury" },
   { id: "minimal", labelKa: "თხელი", labelEn: "Minimal" },

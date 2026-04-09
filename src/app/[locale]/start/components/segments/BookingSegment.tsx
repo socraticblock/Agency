@@ -44,7 +44,7 @@ export function BookingSegment({
   const href = safeHttpUrl(state.bookingUrl);
 
   const btnId = state.style.buttonStyleId;
-  const filled = btnId !== "ghost" && btnId !== "outlined";
+  const filled = btnId !== "outlined";
 
   return (
     <motion.section

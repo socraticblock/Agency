@@ -26,7 +26,7 @@ export function UtilitySegments({
   ctaLabelStyle,
 }: UtilitySegmentsProps) {
   const id = state.style.buttonStyleId;
-  const shareFilled = id !== "ghost" && id !== "outlined";
+  const shareFilled = id !== "outlined";
   const utilitySurfaceStyle: CSSProperties = shareFilled
     ? {
         ...ctaLabelStyle,
