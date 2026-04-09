@@ -142,6 +142,13 @@ export function ProfileSetupManagerPanel({ editable, state, patch, useSecondary 
                   <button type="button" onClick={() => setTranslationMethod("self")} className={`rounded-full px-3 py-1 text-xs ${state.translationMethod === "self" ? "bg-white text-slate-900" : "bg-white/10 text-white"}`}>{useSecondary ? "თვითთარგმნა" : "Self-translate"}</button>
                   <button type="button" onClick={() => setTranslationMethod("professional")} className={`rounded-full px-3 py-1 text-xs ${state.translationMethod === "professional" ? "bg-white text-slate-900" : "bg-white/10 text-white"}`}>{useSecondary ? "პროფესიონალი (+150 ₾)" : "Professional (+150 ₾)"}</button>
                 </div>
+                {state.translationMethod === "self" ? (
+                  <p className="text-[11px] text-white/70">
+                    {useSecondary
+                      ? "ენის გადართვა შეგიძლიათ ბარათის ზედა ნაწილში."
+                      : "You can switch languages from the top of the card."}
+                  </p>
+                ) : null}
                 {state.translationMethod === "professional" ? (
                   <div className="flex gap-2">
                     <button type="button" onClick={() => patch({ translationSourceLang: "en" })} className={`rounded-full px-3 py-1 text-xs ${state.translationSourceLang === "en" ? "bg-white text-slate-900" : "bg-white/10 text-white"}`}>EN to KA</button>
