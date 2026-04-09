@@ -244,7 +244,17 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
         </div>
 
         <LocationManagerPanel editable={editable} state={state} patch={patch} />
-        <ContactSegment state={state} editable={editable} useSecondary={useSecondary} isResponsive={isResponsive} patch={patch} bodyStyle={bodyStyle} itemVariants={customItemVariants} glassStyle={glassStyle} />
+        <ContactSegment
+          state={state}
+          editable={editable}
+          useSecondary={useSecondary}
+          isResponsive={isResponsive}
+          patch={patch}
+          bodyStyle={bodyStyle}
+          headingStyle={headingStyle}
+          itemVariants={customItemVariants}
+          glassStyle={glassStyle}
+        />
         <SocialManagerPanel editable={editable} state={state} patch={patch} />
         <SocialSegment state={state} isResponsive={isResponsive} itemVariants={customItemVariants} />
         <QrOnCardSegment state={state} qrDataUrl={qrDataUrl} itemVariants={customItemVariants} isResponsive={isResponsive} />
@@ -255,6 +265,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
           qrDataUrl={qrDataUrl}
           shareFeedback={shareFeedback}
           handleShare={handleShare}
+          headingStyle={headingStyle}
           referHref={`https://wa.me/?text=${encodeURIComponent(`I highly recommend ${state.name} — ${state.title}. View their card: ${typeof window !== "undefined" ? window.location.href : ""}`)}`}
         />
 

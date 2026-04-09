@@ -6,7 +6,6 @@ import type { Lane1CustomizerState, MobileButtonId } from "../../lib/types";
 import { InlineEditable } from "../InlineEditable";
 import { MagneticButton } from "../../../_components/MagneticButton";
 import type { CSSProperties } from "react";
-import { lane1DirectionsClasses } from "../../lib/button-styles";
 import { hasValidAddress, MAP_ADDRESS_HELPER_TEXT } from "../../lib/location";
 
 interface ContactSegmentProps {
@@ -16,6 +15,7 @@ interface ContactSegmentProps {
   isResponsive: boolean;
   patch: (p: Partial<Lane1CustomizerState>) => void;
   bodyStyle: CSSProperties;
+  headingStyle: CSSProperties;
   itemVariants: any;
   glassStyle: CSSProperties;
 }
@@ -27,6 +27,7 @@ export function ContactSegment({
   isResponsive,
   patch,
   bodyStyle,
+  headingStyle,
   itemVariants,
   glassStyle,
 }: ContactSegmentProps) {
@@ -128,8 +129,11 @@ export function ContactSegment({
                   rel="noopener noreferrer"
                   className="flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-[14px] font-bold transition-all shadow-lg active:scale-95"
                   style={{
+                    ...headingStyle,
                     background: "var(--accent)",
-                    color: "var(--accent-contrast, #fff)",
+                    color: state.style.buttonTextHex?.trim()
+                      ? "var(--text-heading)"
+                      : "var(--accent-contrast, #fff)",
                   }}
                 >
                   <Map className="h-4 w-4 opacity-70" />

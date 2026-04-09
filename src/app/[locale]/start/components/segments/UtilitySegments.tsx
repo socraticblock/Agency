@@ -1,9 +1,10 @@
 "use client";
 
 import { Share2, Send } from "lucide-react";
+import type { CSSProperties } from "react";
 import type { Lane1CustomizerState } from "../../lib/types";
 import { MagneticButton } from "../../../_components/MagneticButton";
-import { lane1UtilityPrimaryClasses, lane1UtilitySecondaryClasses } from "../../lib/button-styles";
+import { lane1UtilityPrimaryClasses } from "../../lib/button-styles";
 
 interface UtilitySegmentsProps {
   state: Lane1CustomizerState;
@@ -12,6 +13,7 @@ interface UtilitySegmentsProps {
   shareFeedback: string;
   handleShare: () => void;
   referHref: string;
+  headingStyle: CSSProperties;
 }
 
 export function UtilitySegments({
@@ -21,9 +23,19 @@ export function UtilitySegments({
   shareFeedback,
   handleShare,
   referHref,
+  headingStyle,
 }: UtilitySegmentsProps) {
   const id = state.style.buttonStyleId;
   const shareFilled = id !== "ghost" && id !== "outlined";
+  const utilitySurfaceStyle: CSSProperties = shareFilled
+    ? {
+        ...headingStyle,
+        background: "var(--accent)",
+        color: state.style.buttonTextHex?.trim()
+          ? "var(--text-heading)"
+          : "var(--accent-contrast, #fff)",
+      }
+    : { ...headingStyle };
 
   return (
     <>
@@ -31,15 +43,7 @@ export function UtilitySegments({
         <MagneticButton
           onClick={handleShare}
           className={lane1UtilityPrimaryClasses(id)}
-          style={
-            shareFilled
-              ? { background: "var(--accent)", color: "var(--accent-contrast, #fff)" }
-              : {
-                borderColor: "var(--accent)",
-                color: "var(--accent)",
-                background: "transparent",
-              }
-          }
+          style={utilitySurfaceStyle}
         >
           <Share2 className="h-4 w-4" />
           {shareFeedback || "Share Card"}
@@ -51,15 +55,7 @@ export function UtilitySegments({
           target="_blank"
           rel="noopener noreferrer"
           className={lane1UtilityPrimaryClasses(id)}
-          style={
-            shareFilled
-              ? { background: "var(--accent)", color: "var(--accent-contrast, #fff)" }
-              : {
-                borderColor: "var(--accent)",
-                color: "var(--accent)",
-                background: "transparent",
-              }
-          }
+          style={utilitySurfaceStyle}
           aria-label={`Refer ${state.name.split(" ")[0] || "me"} via WhatsApp`}
         >
           <Send className="h-4 w-4" />
