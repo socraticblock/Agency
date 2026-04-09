@@ -185,7 +185,7 @@ export function StartPageClient({ locale }: { locale: Locale }) {
               sessionStorage.setItem("businessCardPreview", JSON.stringify(state));
               window.open(`/${locale}/start/preview`, "_blank");
             }}
-            className="h-10 w-[11rem] rounded-full border border-emerald-200/55 bg-emerald-500/55 px-5 text-center text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_6px_18px_rgba(16,185,129,0.28)] backdrop-blur-xl transition hover:bg-emerald-400/60"
+            className="h-8 w-[10.5rem] whitespace-nowrap rounded-full border border-emerald-200/55 bg-emerald-500/55 px-4 text-center text-xs font-semibold leading-none text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_6px_18px_rgba(16,185,129,0.28)] backdrop-blur-xl transition hover:bg-emerald-400/60"
           >
             Live Preview
           </button>
