@@ -38,6 +38,7 @@
 - **040** — Profile setup flow added (top on-card pill + first-load auto-open) with language/translation source-of-truth, pricing remap (maps free), and v16 migration
 - **041** — Georgian-aware pill localization: manager labels/controls follow card language mode (`useSecondary`) across on-card pill surfaces
 - **042** — Hero layout locked to centered alignment for all cards (new + migrated states)
+- **043** — Removed right sidebar editor; start page is now centered card-only with on-card pills and cleaned sidebar dead code
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -237,6 +238,11 @@
 - **Context:** Hero alignment options were no longer desired; product direction required a single centered hero layout for consistency.
 - **Decision:** Removed left/center conditional rendering in `HeroSegment` and forced centered hero classes/text alignment; set default `photoAlignment` to `"center"` and added migration normalization to always coerce saved states to centered.
 - **Impact:** All cards render a consistent centered hero regardless of legacy snapshot data, with no user-facing alignment choice.
+
+### 043
+- **Context:** The remaining right sidebar (`Content`, `Add-ons`, `Quick themes`, `Identity Kit`) duplicated controls now living in on-card pills, creating maintenance overhead and desktop/mobile mismatch.
+- **Decision:** Removed `StartCustomizer` from `StartPageClient`, deleted obsolete sidebar modules (`StartCustomizer.tsx`, `ContentSection.tsx`, `AddonsSection.tsx`, `ThemePresetsSection.tsx`, `IdentitySection.tsx`, `index.ts`), and switched the page layout to a centered card-first flow with a single WhatsApp order block under the card.
+- **Impact:** `/start` now has one editing surface (the card pills), less dead code, and a more mobile-friendly centered layout without split UI responsibilities.
 
 ## Architecture Decisions
 - Zero backend for card features

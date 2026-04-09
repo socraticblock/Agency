@@ -98,7 +98,7 @@ export function ProfileSetupManagerPanel({ editable, state, patch, useSecondary 
   };
 
   return (
-    <div ref={rootRef} className="business-card-template-print-skip pointer-events-none absolute inset-x-0 top-2 z-40 flex justify-center px-3">
+    <div ref={rootRef} className="business-card-template-print-skip pointer-events-none absolute inset-x-0 top-2 z-40 flex justify-center px-3 font-sans">
       <div className="pointer-events-auto w-full max-w-[min(96%,620px)]">
         <button
           type="button"

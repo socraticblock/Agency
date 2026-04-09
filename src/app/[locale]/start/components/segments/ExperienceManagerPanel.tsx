@@ -66,7 +66,7 @@ export function ExperienceManagerPanel({
   if (!editable) return null;
 
   return (
-    <div ref={rootRef} className="business-card-template-print-skip relative z-[120] flex w-full justify-center px-4 pb-3 pt-1">
+    <div ref={rootRef} className="business-card-template-print-skip relative z-[120] flex w-full justify-center px-4 pb-3 pt-1 font-sans">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}

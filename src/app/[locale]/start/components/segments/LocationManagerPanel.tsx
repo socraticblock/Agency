@@ -52,7 +52,7 @@ export function LocationManagerPanel({
   };
 
   return (
-    <div ref={rootRef} className="business-card-template-print-skip relative z-[120] flex justify-end px-4 pb-2">
+    <div ref={rootRef} className="business-card-template-print-skip relative z-[120] flex justify-end px-4 pb-2 font-sans">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
