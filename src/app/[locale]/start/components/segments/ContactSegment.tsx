@@ -15,7 +15,7 @@ interface ContactSegmentProps {
   isResponsive: boolean;
   patch: (p: Partial<Lane1CustomizerState>) => void;
   bodyStyle: CSSProperties;
-  headingStyle: CSSProperties;
+  ctaLabelStyle: CSSProperties;
   itemVariants: any;
   glassStyle: CSSProperties;
 }
@@ -27,7 +27,7 @@ export function ContactSegment({
   isResponsive,
   patch,
   bodyStyle,
-  headingStyle,
+  ctaLabelStyle,
   itemVariants,
   glassStyle,
 }: ContactSegmentProps) {
@@ -129,10 +129,10 @@ export function ContactSegment({
                   rel="noopener noreferrer"
                   className="flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-[14px] font-bold transition-all shadow-lg active:scale-95"
                   style={{
-                    ...headingStyle,
+                    ...ctaLabelStyle,
                     background: "var(--accent)",
-                    color: state.style.buttonTextHex?.trim()
-                      ? "var(--text-heading)"
+                    color: state.style.ctaTextHex?.trim()
+                      ? "var(--text-cta)"
                       : "var(--accent-contrast, #fff)",
                   }}
                 >

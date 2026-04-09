@@ -18,6 +18,7 @@ function mergeThemeStyle(
     const pack = patch.typographyPackId as TypographyPackId;
     next.fontId = TYPOGRAPHY_TO_LEGACY_FONT[pack];
     next.buttonTypographyPackId = pack;
+    next.ctaTypographyPackId = pack;
     next.bodyTypographyPackId = LEGACY_DISPLAY_TO_BODY_PACK[pack];
   }
   return next;

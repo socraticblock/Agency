@@ -111,12 +111,16 @@ export interface StylePresetSelection {
   typographyPackId: TypographyPackId;
   /** Body copy (paragraphs, descriptions). */
   bodyTypographyPackId: BodyTypographyPackId;
-  /** Headings, titles, and CTA labels (display font). */
+  /** Headings and titles only (name, job title, section headings). */
   buttonTypographyPackId: TypographyPackId;
+  /** CTA labels: primary actions (Call, Share, Get Directions, booking button text). */
+  ctaTypographyPackId: TypographyPackId;
   /** Empty = follow text color preset. */
   bodyTextHex: string;
-  /** Empty = follow text color preset. */
+  /** Display heading hex; empty = follow text color preset. */
   buttonTextHex: string;
+  /** CTA label hex; empty = follow text color preset. */
+  ctaTextHex: string;
   buttonStyleId: ButtonStyleId;
   /** Overall text size on the card (uses CSS zoom on the font layer). */
   cardTextScaleId: CardTextScaleId;
@@ -130,7 +134,7 @@ export interface StylePresetSelection {
   cardShadowId: CardShadowId;
 }
 
-export const CUSTOMIZER_VERSION = 11 as const;
+export const CUSTOMIZER_VERSION = 12 as const;
 
 export interface Lane1CustomizerState {
   version: typeof CUSTOMIZER_VERSION;
@@ -298,8 +302,10 @@ export function defaultLane1State(): Lane1CustomizerState {
       typographyPackId: "minimal",
       bodyTypographyPackId: "body-air",
       buttonTypographyPackId: "minimal",
+      ctaTypographyPackId: "minimal",
       bodyTextHex: "",
       buttonTextHex: "",
+      ctaTextHex: "",
       buttonStyleId: "minimal",
       cardTextScaleId: "default",
       animationSpeed: 100,

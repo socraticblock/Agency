@@ -25,6 +25,7 @@
 - **027** — Split body typography from display packs (eight distinct body stacks, grouped UI, CSS line-height/letter-spacing, customizer v9 migration)
 - **028** — Card text size presets (S/M/L/XL) via `--card-text-zoom` + CSS `zoom` on font layer; print resets zoom to 1
 - **029** — Single user-facing accent: `resolveStyleVariables` uses one preset row; `secondaryAccentId` synced to `accentId`; v11 migration
+- **030** — Typography modal 3-tab split: Body / Display / CTA with `ctaTypographyPackId`, `ctaTextHex`, `--font-cta` / `--text-cta`, v12 migration
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -159,6 +160,11 @@
 - **Context:** Two accent pickers confused clients; `--accent-secondary` was driven by a second preset’s `accentSecondary`, not its main swatch.
 - **Decision:** `resolveStyleVariables` always takes `--accent` and `--accent-secondary` from the **`accentId`** preset row only; removed secondary UI from `AccentManagerPanel` and sidebar `AccentSection`; any `accentId` patch sets `secondaryAccentId = accentId`; `migrateLane1State` forces that sync; elite themes drop separate `secondaryAccentId`; `CUSTOMIZER_VERSION` 11.
 - **Impact:** Same CSS variables and components keep working; old saves normalize on load; cross-preset accent mixing is no longer possible.
+
+### 030
+- **Context:** Display typography also drove CTA button label font/color, so bold heading stacks could make action labels unreadable; users needed isolated control.
+- **Decision:** Added `ctaTypographyPackId` + `ctaTextHex`, `resolveStyleVariables` exports `--font-cta`, `--font-cta-weight`, `--text-cta`; `TypographyManagerPanel` third tab; card surfaces use `ctaLabelStyle` (Call/WhatsApp, Share/Refer, Get Directions, booking chip); v12 migration copies prior display pack/hex into CTA when keys absent; theme typography sync sets CTA pack with display.
+- **Impact:** Display edits no longer change CTA labels unless the user uses the CTA tab; live preview still flows through `resolveStyleVariables` on `state.style`.
 
 ## Architecture Decisions
 - Zero backend for card features

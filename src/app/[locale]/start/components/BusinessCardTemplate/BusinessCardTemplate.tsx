@@ -145,6 +145,11 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
     fontWeight: "var(--font-heading-weight)" as any,
     color: "var(--text-heading)",
   };
+  const ctaLabelStyle: CSSProperties = {
+    fontFamily: "var(--font-cta)",
+    fontWeight: "var(--font-cta-weight)" as any,
+    color: "var(--text-cta)",
+  };
   const bodyStyle: CSSProperties = {
     fontFamily: "var(--font-body)",
     fontWeight: "var(--font-body-weight)" as any,
@@ -217,7 +222,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
           glassStyle={glassStyle}
         />
 
-        <CtaSegment state={state} editable={editable} patch={patch} headingStyle={headingStyle} />
+        <CtaSegment state={state} editable={editable} patch={patch} ctaLabelStyle={ctaLabelStyle} />
         <SectionManagerPanel
           editable={editable}
           state={state}
@@ -235,6 +240,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
             setServiceLine={setServiceLine}
             setServiceDescriptionLine={setServiceDescriptionLine}
             headingStyle={headingStyle}
+            ctaLabelStyle={ctaLabelStyle}
             bodyStyle={bodyStyle}
             itemVariants={customItemVariants}
             glassStyle={glassStyle}
@@ -254,7 +260,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
           isResponsive={isResponsive}
           patch={patch}
           bodyStyle={bodyStyle}
-          headingStyle={headingStyle}
+          ctaLabelStyle={ctaLabelStyle}
           itemVariants={customItemVariants}
           glassStyle={glassStyle}
         />
@@ -268,7 +274,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
           qrDataUrl={qrDataUrl}
           shareFeedback={shareFeedback}
           handleShare={handleShare}
-          headingStyle={headingStyle}
+          ctaLabelStyle={ctaLabelStyle}
           referHref={`https://wa.me/?text=${encodeURIComponent(`I highly recommend ${state.name} — ${state.title}. View their card: ${typeof window !== "undefined" ? window.location.href : ""}`)}`}
         />
 

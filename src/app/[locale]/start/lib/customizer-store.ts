@@ -22,8 +22,8 @@ function safeParse(raw: string | null): Lane1CustomizerState | null {
   try {
     const data = JSON.parse(raw) as Record<string, unknown>;
     const v = typeof data.version === "number" ? data.version : 1;
-    // Allow migration from v1–v11
-    if (v < 1 || v > 11) return null;
+    // Allow migration from v1–v12
+    if (v < 1 || v > 12) return null;
     return migrateLane1State(data as unknown as Lane1CustomizerState);
   } catch {
     return null;
@@ -95,6 +95,14 @@ function migrateLane1State(
 
   if (merged.style.bodyTextHex === undefined) merged.style.bodyTextHex = "";
   if (merged.style.buttonTextHex === undefined) merged.style.buttonTextHex = "";
+
+  const rawStyle = data.style as unknown as Record<string, unknown> | undefined;
+  if (!rawStyle || !("ctaTypographyPackId" in rawStyle)) {
+    merged.style.ctaTypographyPackId = merged.style.buttonTypographyPackId;
+  }
+  if (!rawStyle || !("ctaTextHex" in rawStyle)) {
+    merged.style.ctaTextHex = merged.style.buttonTextHex ?? "";
+  }
 
   merged.version = CUSTOMIZER_VERSION;
   return merged;

@@ -11,10 +11,10 @@ interface CtaSegmentProps {
   state: Lane1CustomizerState;
   editable: boolean;
   patch: (p: Partial<Lane1CustomizerState>) => void;
-  headingStyle: CSSProperties;
+  ctaLabelStyle: CSSProperties;
 }
 
-export function CtaSegment({ state, editable, patch, headingStyle }: CtaSegmentProps) {
+export function CtaSegment({ state, editable, patch, ctaLabelStyle }: CtaSegmentProps) {
   function telHref(phone: string): string {
     const digits = phone.replace(/\D/g, "");
     return digits ? `tel:+${digits}` : "tel:";
@@ -37,13 +37,13 @@ export function CtaSegment({ state, editable, patch, headingStyle }: CtaSegmentP
         style={
           primary.filledAccent
             ? {
-                ...headingStyle,
+                ...ctaLabelStyle,
                 background: "var(--accent)",
-                color: state.style.buttonTextHex?.trim()
-                  ? "var(--text-heading)"
+                color: state.style.ctaTextHex?.trim()
+                  ? "var(--text-cta)"
                   : "var(--accent-contrast, #fff)",
               }
-            : { ...headingStyle }
+            : { ...ctaLabelStyle }
         }
       >
         <Phone className="mr-2 h-5 w-5" />
@@ -65,13 +65,13 @@ export function CtaSegment({ state, editable, patch, headingStyle }: CtaSegmentP
         style={
           primary.filledAccent
             ? {
-                ...headingStyle,
+                ...ctaLabelStyle,
                 background: "var(--accent)",
-                color: state.style.buttonTextHex?.trim()
-                  ? "var(--text-heading)"
+                color: state.style.ctaTextHex?.trim()
+                  ? "var(--text-cta)"
                   : "var(--accent-contrast, #fff)",
               }
-            : { ...headingStyle }
+            : { ...ctaLabelStyle }
         }
       >
         <MessageCircle className="mr-2 h-5 w-5" />

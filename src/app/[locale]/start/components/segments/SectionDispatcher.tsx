@@ -21,6 +21,7 @@ interface SectionDispatcherProps {
   setServiceLine: (i: number, v: string) => void;
   setServiceDescriptionLine: (i: number, v: string) => void;
   headingStyle: CSSProperties;
+  ctaLabelStyle: CSSProperties;
   bodyStyle: CSSProperties;
   itemVariants: import("framer-motion").Variants;
   glassStyle: CSSProperties;
@@ -40,6 +41,7 @@ export function SectionDispatcher({
   setServiceLine,
   setServiceDescriptionLine,
   headingStyle,
+  ctaLabelStyle,
   bodyStyle,
   itemVariants,
   glassStyle,
@@ -195,6 +197,7 @@ export function SectionDispatcher({
                 patch={patch}
                 isResponsive={isResponsive}
                 headingStyle={headingStyle}
+                ctaLabelStyle={ctaLabelStyle}
                 itemVariants={itemVariants}
                 glassStyle={glassStyle}
               />

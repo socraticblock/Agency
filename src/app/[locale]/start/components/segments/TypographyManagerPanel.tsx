@@ -20,7 +20,7 @@ import { BodyTypographyPresetGrid } from "./BodyTypographyPresetGrid";
 import { CardTextScaleRow } from "./CardTextScaleRow";
 import { TypographyHexColorRow } from "./TypographyHexColorRow";
 
-type TypoTab = "body" | "display";
+type TypoTab = "body" | "display" | "cta";
 
 export function TypographyManagerPanel({
   editable,
@@ -51,6 +51,7 @@ export function TypographyManagerPanel({
     } else if (p.buttonTypographyPackId) {
       merged.fontId = TYPOGRAPHY_TO_LEGACY_FONT[p.buttonTypographyPackId];
     }
+    /* ctaTypographyPackId: isolated — do not sync typographyPackId / legacy fontId */
     patch({ style: merged });
     savingDebounceRef.current = setTimeout(() => {
       setSavingStatus("saved");
@@ -79,8 +80,15 @@ export function TypographyManagerPanel({
 
   if (!editable) return null;
 
-  const { bodyTypographyPackId, buttonTypographyPackId, bodyTextHex, buttonTextHex, cardTextScaleId } =
-    state.style;
+  const {
+    bodyTypographyPackId,
+    buttonTypographyPackId,
+    ctaTypographyPackId,
+    bodyTextHex,
+    buttonTextHex,
+    ctaTextHex,
+    cardTextScaleId,
+  } = state.style;
 
   const bodyResolved = resolveBodyTypographyPack(state.style);
   const bodyCaptionPreviewStyle: CSSProperties = {
@@ -143,6 +151,7 @@ export function TypographyManagerPanel({
           <div className="mb-2 flex flex-wrap justify-center gap-1 rounded-full border border-white/15 bg-white/5 p-1">
             {tabBtn("body", "Body")}
             {tabBtn("display", "Display")}
+            {tabBtn("cta", "CTA")}
           </div>
           <div className="max-h-[min(55vh,380px)] overflow-y-auto rounded-lg bg-white/95 p-3 text-slate-900 shadow-inner">
             {tab === "body" ? (
@@ -165,13 +174,13 @@ export function TypographyManagerPanel({
             ) : null}
             {tab === "display" ? (
               <div className="[&_fieldset]:border-slate-200 [&_legend]:text-slate-700">
-                <p className="start-caption mb-3">Headings, titles, and CTA labels.</p>
+                <p className="start-caption mb-3">Your name, job title, and section headings.</p>
                 <FontPresetGrid
                   options={TYPOGRAPHY_PACK_PRESETS}
                   value={buttonTypographyPackId}
                   preview="heading"
                   legend="Display font"
-                  groupAriaLabel="Heading and button font"
+                  groupAriaLabel="Display heading font"
                   onChange={(id: string) =>
                     onStylePatch({ buttonTypographyPackId: id as TypographyPackId })
                   }
@@ -181,6 +190,30 @@ export function TypographyManagerPanel({
                     label="Text color (hex)"
                     value={buttonTextHex ?? ""}
                     onChange={(v) => onStylePatch({ buttonTextHex: v })}
+                  />
+                </div>
+              </div>
+            ) : null}
+            {tab === "cta" ? (
+              <div className="[&_fieldset]:border-slate-200 [&_legend]:text-slate-700">
+                <p className="start-caption mb-3">
+                  Call, WhatsApp, Share, directions, and booking labels — not headings.
+                </p>
+                <FontPresetGrid
+                  options={TYPOGRAPHY_PACK_PRESETS}
+                  value={ctaTypographyPackId}
+                  preview="heading"
+                  legend="CTA font"
+                  groupAriaLabel="Call-to-action label font"
+                  onChange={(id: string) =>
+                    onStylePatch({ ctaTypographyPackId: id as TypographyPackId })
+                  }
+                />
+                <div className="mt-3">
+                  <TypographyHexColorRow
+                    label="Text color (hex)"
+                    value={ctaTextHex ?? ""}
+                    onChange={(v) => onStylePatch({ ctaTextHex: v })}
                   />
                 </div>
               </div>

@@ -13,7 +13,7 @@ interface UtilitySegmentsProps {
   shareFeedback: string;
   handleShare: () => void;
   referHref: string;
-  headingStyle: CSSProperties;
+  ctaLabelStyle: CSSProperties;
 }
 
 export function UtilitySegments({
@@ -23,19 +23,19 @@ export function UtilitySegments({
   shareFeedback,
   handleShare,
   referHref,
-  headingStyle,
+  ctaLabelStyle,
 }: UtilitySegmentsProps) {
   const id = state.style.buttonStyleId;
   const shareFilled = id !== "ghost" && id !== "outlined";
   const utilitySurfaceStyle: CSSProperties = shareFilled
     ? {
-        ...headingStyle,
+        ...ctaLabelStyle,
         background: "var(--accent)",
-        color: state.style.buttonTextHex?.trim()
-          ? "var(--text-heading)"
+        color: state.style.ctaTextHex?.trim()
+          ? "var(--text-cta)"
           : "var(--accent-contrast, #fff)",
       }
-    : { ...headingStyle };
+    : { ...ctaLabelStyle };
 
   return (
     <>

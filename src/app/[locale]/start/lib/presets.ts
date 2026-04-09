@@ -731,10 +731,15 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
   /* One accent preset: `--accent` + `--accent-secondary` both come from this row. */
   const acc = ACCENT_PRESETS.find((p) => p.id === selection.accentId) ?? ACCENT_PRESETS[0];
   const displayPackId = selection.buttonTypographyPackId ?? selection.typographyPackId ?? "minimal";
+  const ctaPackId =
+    selection.ctaTypographyPackId ?? selection.buttonTypographyPackId ?? selection.typographyPackId ?? "minimal";
   const bodyResolved = resolveBodyTypographyPack(selection);
   const displayFont =
     TYPOGRAPHY_PACK_PRESETS.find((p) => p.id === displayPackId) ??
     TYPOGRAPHY_PACK_PRESETS.find((p) => p.id === selection.typographyPackId) ??
+    TYPOGRAPHY_PACK_PRESETS.find((p) => p.id === "minimal")!;
+  const ctaFont =
+    TYPOGRAPHY_PACK_PRESETS.find((p) => p.id === ctaPackId) ??
     TYPOGRAPHY_PACK_PRESETS.find((p) => p.id === "minimal")!;
   const vibe = VIBE_PRESETS.find((p) => p.id === selection.vibeId) ?? VIBE_PRESETS[0];
 
@@ -786,8 +791,10 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
 
   const bodyHex = (selection.bodyTextHex ?? "").trim();
   const buttonHex = (selection.buttonTextHex ?? "").trim();
+  const ctaHex = (selection.ctaTextHex ?? "").trim();
   const textBody = bodyHex || textColor;
   const textHeading = buttonHex || textColor;
+  const textCta = ctaHex || textColor;
 
   const cardRadius = typeof selection.cardRadiusPx === "number" ? selection.cardRadiusPx : 24;
 
@@ -815,6 +822,7 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
     "--text-primary": textBody,
     "--text-body": textBody,
     "--text-heading": textHeading,
+    "--text-cta": textCta,
     "--accent": acc.accent,
     "--accent-secondary": acc.accentSecondary,
     "--texture-pattern": textureBackgroundImage(selection.textureId, selection.cardDarkSurface),
@@ -834,8 +842,10 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
       ? overlayGradientValue
       : `linear-gradient(135deg, ${acc.accent}, ${acc.accentSecondary})`,
     "--font-heading": displayFont.fontHeading,
+    "--font-cta": ctaFont.fontHeading,
     "--font-body": bodyResolved.fontBody,
     "--font-heading-weight": String(displayFont.headingWeight),
+    "--font-cta-weight": String(ctaFont.headingWeight),
     "--font-body-weight": String(bodyResolved.bodyWeight),
     "--font-body-line-height": String(bodyResolved.bodyLineHeight),
     "--font-body-letter-spacing": bodyResolved.letterSpacing ?? "normal",

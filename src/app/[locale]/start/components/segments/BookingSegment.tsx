@@ -14,6 +14,7 @@ interface BookingSegmentProps {
   patch: (p: Partial<Lane1CustomizerState>) => void;
   isResponsive: boolean;
   headingStyle: CSSProperties;
+  ctaLabelStyle: CSSProperties;
   itemVariants: import("framer-motion").Variants;
   glassStyle: CSSProperties;
 }
@@ -36,6 +37,7 @@ export function BookingSegment({
   patch,
   isResponsive,
   headingStyle,
+  ctaLabelStyle,
   itemVariants,
   glassStyle,
 }: BookingSegmentProps) {
@@ -80,12 +82,15 @@ export function BookingSegment({
           style={
             filled
               ? {
+                  ...ctaLabelStyle,
                   background: "var(--accent)",
-                  color: "var(--accent-contrast, #fff)",
+                  color: state.style.ctaTextHex?.trim()
+                    ? "var(--text-cta)"
+                    : "var(--accent-contrast, #fff)",
                 }
               : {
+                  ...ctaLabelStyle,
                   borderColor: "var(--accent)",
-                  color: "var(--accent)",
                   background: "transparent",
                 }
           }
