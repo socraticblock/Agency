@@ -93,6 +93,8 @@ function migrateLane1State(
   }
 
   merged.style.secondaryAccentId = merged.style.accentId;
+  // Deprecated: dark card override removed; background presets handle dark looks.
+  merged.style.cardDarkSurface = false;
 
   if (merged.style.bodyTextHex === undefined) merged.style.bodyTextHex = "";
   if (merged.style.buttonTextHex === undefined) merged.style.buttonTextHex = "";

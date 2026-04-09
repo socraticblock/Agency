@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import type { Dispatch, SetStateAction } from "react";
 import type { Lane1CustomizerState, Lane1StatePatch, StylePresetSelection } from "../../lib/types";
@@ -14,7 +14,6 @@ import { ContentSection } from "./ContentSection";
 import { AddonsSection } from "./AddonsSection";
 import { IdentitySection } from "./IdentitySection";
 import { ThemePresetsSection } from "./ThemePresetsSection";
-import { CardChromeSection } from "./CardChromeSection";
 
 export function StartCustomizer({
   state,
@@ -65,16 +64,6 @@ export function StartCustomizer({
   function toggleSection(sectionId: string) {
     setOpenSection((current) => (current === sectionId ? null : sectionId));
   }
-
-  const onBackgroundStylePatch = useCallback(
-    (p: Partial<Lane1CustomizerState["style"]>) => {
-      setState((s) => ({
-        ...s,
-        style: { ...s.style, ...p },
-      }));
-    },
-    [setState],
-  );
 
   const sectionProps = {
     state,
@@ -133,13 +122,6 @@ export function StartCustomizer({
         onToggle={() => toggleSection("themes")}
       />
 
-      <CardChromeSection
-        state={state}
-        onPatch={onBackgroundStylePatch}
-        isOpen={openSection === "card-chrome"}
-        onToggle={() => toggleSection("card-chrome")}
-      />
-      
       <IdentitySection {...sectionProps} isOpen={openSection === "identity"} onToggle={() => toggleSection("identity")} />
 
       {showOrderFooter ? (

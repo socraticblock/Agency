@@ -789,11 +789,7 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
     textColor = "#F1F5F9";
   }
 
-  let bgResolved = baseColorValue;
-  if (selection.cardDarkSurface) {
-    bgResolved = "#0b1220";
-    textColor = "#e2e8f0";
-  }
+  const bgResolved = baseColorValue;
 
   const bodyHex = (selection.bodyTextHex ?? "").trim();
   const buttonHex = (selection.buttonTextHex ?? "").trim();
@@ -824,21 +820,21 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
     "--overlay-gradient": overlayGradientValue,
     "--overlay-opacity": selection.bgOverlayId === "none" ? "0" : String(selection.bgOverlayOpacity),
     "--bg-primary": bgResolved,
-    "--background": selection.cardDarkSurface ? "#030712" : bgResolved,
+    "--background": bgResolved,
     "--text-primary": textBody,
     "--text-body": textBody,
     "--text-heading": textHeading,
     "--text-cta": textCta,
     "--accent": acc.accent,
     "--accent-secondary": acc.accentSecondary,
-    "--texture-pattern": textureBackgroundImage(selection.textureId, selection.cardDarkSurface),
+    "--texture-pattern": textureBackgroundImage(selection.textureId, backgroundIsDark),
     "--texture-bg-size": textureBackgroundSize(selection.textureId),
     "--texture-opacity": String(texOp),
     // multiply / screen keeps grain readable on light vs dark surfaces (overlay mutes mid-tones)
     "--texture-blend-mode":
       selection.textureId === "none"
         ? "normal"
-        : selection.cardDarkSurface
+        : backgroundIsDark
           ? "screen"
           : "multiply",
     "--bg-effect-opacity": String(bgEffectOp),

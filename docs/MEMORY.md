@@ -31,6 +31,8 @@
 - **033** — Seven button looks: `brutalist`, `stripe`, `tint`, `clay`, `metal`, `mesh`, `glassmorph`; `accentBackground` + `lane1PrimaryAccentBackground` for tint/mesh/glass; v14
 - **034** — Removed sidebar `AccentSection` and `ButtonStyleSection` from `StartCustomizer` (on-card Look + Type only)
 - **035** — `ExperienceManagerPanel` on-card; deleted `StyleSections.tsx`; vibe/motion/tilt/hover only on card
+- **036** — Removed `Dark card surface` control/effect; Card surface now radius + shadow only (legacy flag ignored + migrated false)
+- **037** — Moved Card surface controls on-card (`CardSurfaceManagerPanel`); removed sidebar `CardChromeSection`
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -195,6 +197,16 @@
 - **Context:** Experience (vibe, animation, tilt, hover) duplicated sidebar vs on-card mental model.
 - **Decision:** Added `ExperienceManagerPanel` (Waves icon, “Experience” pill) on `BusinessCardTemplate`; reuses `VibePresetGrid`, `AnimationPresetGrid`, `Phase5ExperienceControls`; removed `ExperienceSection` from `StartCustomizer` and deleted `StyleSections.tsx`.
 - **Impact:** All card “feel” controls live on the card with Background / Look / Type / Experience pills; sidebar no longer lists Experience.
+
+### 036
+- **Context:** `Card surface` had a `Dark card surface` toggle that overlapped with Background dark presets and confused clients.
+- **Decision:** Removed the `Dark card surface` checkbox from `CardChromeSection`; deleted runtime dark override from `resolveStyleVariables` (`--background` and text no longer switch via `cardDarkSurface`); migration now forces `cardDarkSurface = false`; field kept in `types.ts` only as deprecated JSON compatibility.
+- **Impact:** `Card surface` is now shape/elevation only (corner radius + shadow); dark looks come exclusively from Background presets/overlays; old saved states with `cardDarkSurface: true` normalize to false.
+
+### 037
+- **Context:** `Card surface` still lived in the sidebar after other visual controls moved on-card, creating a split control path.
+- **Decision:** Added `CardSurfaceManagerPanel` bottom pill (Surface icon) to `BusinessCardTemplate` with corner radius + shadow controls and save feedback; removed `CardChromeSection` usage from `StartCustomizer` and deleted `CardChromeSection.tsx`.
+- **Impact:** All visual customization surfaces now live on-card (Background, Surface, Look, Type, Experience); sidebar flow is reduced to content/add-ons/themes/identity only.
 
 ## Architecture Decisions
 - Zero backend for card features

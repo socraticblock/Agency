@@ -140,7 +140,7 @@ export interface StylePresetSelection {
   /** 50 = slow, 100 = default, 150 = fast */
   animationSpeed: number;
 
-  /** Dark card surface (visitor-facing preview). */
+  /** Deprecated (kept for JSON compatibility; ignored at runtime). */
   cardDarkSurface: boolean;
   cardRadiusPx: number;
   cardShadowId: CardShadowId;
