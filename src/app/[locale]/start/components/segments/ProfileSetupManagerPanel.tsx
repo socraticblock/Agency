@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { UserRound } from "lucide-react";
-import type { Lane1CustomizerState, Lane1StatePatch } from "../../lib/types";
+import { ELITE_THEME_PRESETS } from "../../lib/elite-themes";
+import { LEGACY_DISPLAY_TO_BODY_PACK, TYPOGRAPHY_TO_LEGACY_FONT } from "../../lib/presets";
+import type { Lane1CustomizerState, Lane1StatePatch, StylePresetSelection, TypographyPackId } from "../../lib/types";
 
 type Props = {
   editable: boolean;
@@ -19,6 +21,21 @@ const LEGACY_SAMPLE_VALUES = new Set([
   "your@email.com",
   "123 Professional Ave, Tbilisi",
 ]);
+
+function mergeThemeStyle(prev: StylePresetSelection, patch: Partial<StylePresetSelection>): StylePresetSelection {
+  const next = { ...prev, ...patch };
+  if (patch.accentId != null) {
+    next.secondaryAccentId = patch.accentId;
+  }
+  if (patch.typographyPackId) {
+    const pack = patch.typographyPackId as TypographyPackId;
+    next.fontId = TYPOGRAPHY_TO_LEGACY_FONT[pack];
+    next.buttonTypographyPackId = pack;
+    next.ctaTypographyPackId = pack;
+    next.bodyTypographyPackId = LEGACY_DISPLAY_TO_BODY_PACK[pack];
+  }
+  return next;
+}
 
 export function ProfileSetupManagerPanel({ editable, state, patch, useSecondary }: Props & { useSecondary: boolean }) {
   const [open, setOpen] = useState(false);
@@ -74,6 +91,12 @@ export function ProfileSetupManagerPanel({ editable, state, patch, useSecondary 
     });
   };
 
+  const applyThemePreset = (id: string) => {
+    const selected = ELITE_THEME_PRESETS.find((theme) => theme.id === id);
+    if (!selected) return;
+    patch({ style: mergeThemeStyle(state.style, selected.stylePatch) });
+  };
+
   return (
     <div ref={rootRef} className="business-card-template-print-skip pointer-events-none absolute inset-x-0 top-2 z-40 flex justify-center px-3">
       <div className="pointer-events-auto w-full max-w-[min(96%,620px)]">
@@ -97,6 +120,7 @@ export function ProfileSetupManagerPanel({ editable, state, patch, useSecondary 
             </div>
             <input className="mt-2 w-full rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={displayValue(state.address)} placeholder="123 Professional Ave, Tbilisi" onFocus={selectAllOnFocus} onChange={(e) => patch({ address: e.target.value })} />
 
+            <p className="mt-2 text-[11px] text-white/70">{useSecondary ? "ეს ინფორმაცია გამოიყენება მხოლოდ თქვენი ბარათის შინაარსის შესავსებად." : "This information is used only to fill your card content."}</p>
             <div className="mt-3">
               <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-white/80">{useSecondary ? "ენა" : "Language"}</p>
               <div className="flex flex-wrap gap-2">
@@ -126,7 +150,21 @@ export function ProfileSetupManagerPanel({ editable, state, patch, useSecondary 
                 ) : null}
               </div>
             ) : null}
-            <p className="mt-2 text-[11px] text-white/70">{useSecondary ? "ეს ინფორმაცია გამოიყენება მხოლოდ თქვენი ბარათის შინაარსის შესავსებად." : "This information is used only to fill your card content."}</p>
+            <div className="mt-3">
+              <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-white/80">{useSecondary ? "სწრაფი თემები" : "Quick themes"}</p>
+              <div className="grid grid-cols-2 gap-2">
+                {ELITE_THEME_PRESETS.map((theme) => (
+                  <button
+                    key={theme.id}
+                    type="button"
+                    onClick={() => applyThemePreset(theme.id)}
+                    className="rounded-full bg-white/10 px-3 py-1 text-left text-xs text-white transition hover:bg-white/20"
+                  >
+                    {theme.labelEn}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         ) : null}
       </div>
