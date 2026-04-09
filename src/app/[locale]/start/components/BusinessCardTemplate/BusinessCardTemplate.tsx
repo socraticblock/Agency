@@ -147,6 +147,8 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   const bodyStyle: CSSProperties = {
     fontFamily: "var(--font-body)",
     fontWeight: "var(--font-body-weight)" as any,
+    lineHeight: "var(--font-body-line-height)",
+    letterSpacing: "var(--font-body-letter-spacing)",
     color: "var(--text-body)",
   };
 

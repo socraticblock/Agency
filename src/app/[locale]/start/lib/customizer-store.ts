@@ -8,6 +8,7 @@ import {
   coerceSolidBgBaseInStyle,
   FONT_PRESETS,
   LEGACY_BACKGROUND_ID_MAP,
+  migrateLegacyBodyTypographyId,
   TEXT_COLOR_PRESETS,
 } from "./presets";
 
@@ -20,8 +21,8 @@ function safeParse(raw: string | null): Lane1CustomizerState | null {
   try {
     const data = JSON.parse(raw) as Record<string, unknown>;
     const v = typeof data.version === "number" ? data.version : 1;
-    // Allow migration from v1–v8
-    if (v < 1 || v > 8) return null;
+    // Allow migration from v1–v9
+    if (v < 1 || v > 9) return null;
     return migrateLane1State(data as unknown as Lane1CustomizerState);
   } catch {
     return null;
@@ -72,9 +73,16 @@ function migrateLane1State(
 
   const ds = data.style as Partial<Lane1CustomizerState["style"]> | undefined;
   if (ds?.typographyPackId) {
-    if (!("bodyTypographyPackId" in ds)) merged.style.bodyTypographyPackId = ds.typographyPackId;
+    if (!("bodyTypographyPackId" in ds)) {
+      merged.style.bodyTypographyPackId = migrateLegacyBodyTypographyId(ds.typographyPackId);
+    }
     if (!("buttonTypographyPackId" in ds)) merged.style.buttonTypographyPackId = ds.typographyPackId;
   }
+
+  merged.style.bodyTypographyPackId = migrateLegacyBodyTypographyId(
+    merged.style.bodyTypographyPackId as string | undefined,
+  );
+
   if (merged.style.bodyTextHex === undefined) merged.style.bodyTextHex = "";
   if (merged.style.buttonTextHex === undefined) merged.style.buttonTextHex = "";
 

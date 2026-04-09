@@ -13,6 +13,17 @@ export type TextureId = "none" | "fine-grain" | "coarse-grain" | "dot-grid" | "d
 export type BackgroundEffectId = "none" | "ambient-glow" | "floating-orbs" | "gradient-shift" | "vignette" | "light-leak";
 
 export type TypographyPackId = "classic" | "modern" | "editorial" | "bold" | "minimal" | "warm" | "noir" | "elegant";
+
+/** Card body copy only — distinct stacks from display/heading packs. */
+export type BodyTypographyPackId =
+  | "body-neutral"
+  | "body-strong"
+  | "body-air"
+  | "body-humanist"
+  | "body-warm"
+  | "body-serif"
+  | "body-geometric"
+  | "body-bold";
 export type ButtonStyleId = "classic" | "outlined" | "ghost" | "sharp" | "luxury" | "minimal";
 
 export type SectionId = "about" | "testimonials" | "gallery" | "awards" | "video" | "booking" | "services";
@@ -95,7 +106,7 @@ export interface StylePresetSelection {
   /** Legacy single pack; kept in sync with body pack for imports / themes. */
   typographyPackId: TypographyPackId;
   /** Body copy (paragraphs, descriptions). */
-  bodyTypographyPackId: TypographyPackId;
+  bodyTypographyPackId: BodyTypographyPackId;
   /** Headings, titles, and CTA labels (display font). */
   buttonTypographyPackId: TypographyPackId;
   /** Empty = follow text color preset. */
@@ -113,7 +124,7 @@ export interface StylePresetSelection {
   cardShadowId: CardShadowId;
 }
 
-export const CUSTOMIZER_VERSION = 8 as const;
+export const CUSTOMIZER_VERSION = 9 as const;
 
 export interface Lane1CustomizerState {
   version: typeof CUSTOMIZER_VERSION;
@@ -279,7 +290,7 @@ export function defaultLane1State(): Lane1CustomizerState {
 
       // Phase 4 Defaults
       typographyPackId: "minimal",
-      bodyTypographyPackId: "minimal",
+      bodyTypographyPackId: "body-air",
       buttonTypographyPackId: "minimal",
       bodyTextHex: "",
       buttonTextHex: "",

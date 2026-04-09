@@ -1,10 +1,21 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Check, Type, X } from "lucide-react";
-import type { Lane1CustomizerState, Lane1StatePatch, TypographyPackId } from "../../lib/types";
+import type {
+  BodyTypographyPackId,
+  Lane1CustomizerState,
+  Lane1StatePatch,
+  TypographyPackId,
+} from "../../lib/types";
 import { FontPresetGrid } from "../StylePresetGrids";
-import { TYPOGRAPHY_PACK_PRESETS, TYPOGRAPHY_TO_LEGACY_FONT } from "../../lib/presets";
+import {
+  BODY_TYPOGRAPHY_TO_LEGACY_FONT,
+  resolveBodyTypographyPack,
+  TYPOGRAPHY_PACK_PRESETS,
+  TYPOGRAPHY_TO_LEGACY_FONT,
+} from "../../lib/presets";
+import { BodyTypographyPresetGrid } from "./BodyTypographyPresetGrid";
 import { TypographyHexColorRow } from "./TypographyHexColorRow";
 
 type TypoTab = "body" | "display";
@@ -30,9 +41,13 @@ export function TypographyManagerPanel({
     if (savedToIdleRef.current) clearTimeout(savedToIdleRef.current);
     setSavingStatus("saving");
     const merged: Partial<Lane1CustomizerState["style"]> = { ...p };
+    if (p.buttonTypographyPackId) {
+      merged.typographyPackId = p.buttonTypographyPackId;
+    }
     if (p.bodyTypographyPackId) {
-      merged.typographyPackId = p.bodyTypographyPackId;
-      merged.fontId = TYPOGRAPHY_TO_LEGACY_FONT[p.bodyTypographyPackId];
+      merged.fontId = BODY_TYPOGRAPHY_TO_LEGACY_FONT[p.bodyTypographyPackId];
+    } else if (p.buttonTypographyPackId) {
+      merged.fontId = TYPOGRAPHY_TO_LEGACY_FONT[p.buttonTypographyPackId];
     }
     patch({ style: merged });
     savingDebounceRef.current = setTimeout(() => {
@@ -63,6 +78,14 @@ export function TypographyManagerPanel({
   if (!editable) return null;
 
   const { bodyTypographyPackId, buttonTypographyPackId, bodyTextHex, buttonTextHex } = state.style;
+
+  const bodyResolved = resolveBodyTypographyPack(state.style);
+  const bodyCaptionPreviewStyle: CSSProperties = {
+    fontFamily: bodyResolved.fontBody,
+    fontWeight: bodyResolved.bodyWeight,
+    lineHeight: bodyResolved.bodyLineHeight,
+    letterSpacing: bodyResolved.letterSpacing,
+  };
 
   const tabBtn = (id: TypoTab, label: string) => (
     <button
@@ -117,16 +140,12 @@ export function TypographyManagerPanel({
           <div className="max-h-[min(55vh,380px)] overflow-y-auto rounded-lg bg-white/95 p-3 text-slate-900 shadow-inner">
             {tab === "body" ? (
               <div className="[&_fieldset]:border-slate-200 [&_legend]:text-slate-700">
-                <p className="start-caption mb-3">Paragraphs and body copy.</p>
-                <FontPresetGrid
-                  options={TYPOGRAPHY_PACK_PRESETS}
+                <p className="start-caption mb-3" style={bodyCaptionPreviewStyle}>
+                  Paragraphs and body copy.
+                </p>
+                <BodyTypographyPresetGrid
                   value={bodyTypographyPackId}
-                  preview="body"
-                  legend="Body font"
-                  groupAriaLabel="Body text font"
-                  onChange={(id: string) =>
-                    onStylePatch({ bodyTypographyPackId: id as TypographyPackId })
-                  }
+                  onChange={(id: BodyTypographyPackId) => onStylePatch({ bodyTypographyPackId: id })}
                 />
                 <div className="mt-3">
                   <TypographyHexColorRow

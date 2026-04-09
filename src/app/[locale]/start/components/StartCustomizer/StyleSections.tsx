@@ -8,6 +8,7 @@ import {
 } from "../StylePresetGrids";
 import {
   ACCENT_PRESETS,
+  LEGACY_DISPLAY_TO_BODY_PACK,
   TYPOGRAPHY_PACK_PRESETS,
   TYPOGRAPHY_TO_LEGACY_FONT,
   BUTTON_STYLE_PRESETS,
@@ -52,16 +53,18 @@ export function FontSection({ state, onPatch, isOpen, onToggle }: SectionProps &
       isOpen={isOpen}
       onToggle={onToggle}
     >
-      <p className="start-caption mb-2">Eight pre-built packs control heading and body fonts on the card.</p>
+      <p className="start-caption mb-2">
+        Display packs control headings and CTAs; each pairs with a recommended body stack for paragraph copy.
+      </p>
       <FontPresetGrid
         options={TYPOGRAPHY_PACK_PRESETS}
-        value={state.style.bodyTypographyPackId}
+        value={state.style.buttonTypographyPackId}
         onChange={(id: string) => {
           const pack = id as TypographyPackId;
           onPatch({
             typographyPackId: pack,
-            bodyTypographyPackId: pack,
             buttonTypographyPackId: pack,
+            bodyTypographyPackId: LEGACY_DISPLAY_TO_BODY_PACK[pack],
             fontId: TYPOGRAPHY_TO_LEGACY_FONT[pack],
           });
         }}

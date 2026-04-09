@@ -1,5 +1,11 @@
 import type { CSSProperties } from "react";
-import type { ButtonStyleId, CardShadowId, StylePresetSelection, TypographyPackId } from "./types";
+import type {
+  BodyTypographyPackId,
+  ButtonStyleId,
+  CardShadowId,
+  StylePresetSelection,
+  TypographyPackId,
+} from "./types";
 import { textureBackgroundImage, textureBackgroundSize } from "./texture-presets";
 
 const SOLID_HEX_RE = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
@@ -361,6 +367,138 @@ export interface TypographyPackPreset extends FontPreset {
   id: TypographyPackId;
 }
 
+export type BodyTypographyGroup = "neutral" | "humanist" | "distinctive";
+
+/** Card body copy — separate from display packs for visibly different stacks. */
+export interface BodyTypographyPack {
+  id: BodyTypographyPackId;
+  labelKa: string;
+  labelEn: string;
+  group: BodyTypographyGroup;
+  fontBody: string;
+  bodyWeight: number;
+  bodyLineHeight: number;
+  letterSpacing?: string;
+}
+
+export const BODY_TYPOGRAPHY_PRESETS: BodyTypographyPack[] = [
+  {
+    id: "body-neutral",
+    labelKa: "ნეიტრალური",
+    labelEn: "Neutral",
+    group: "neutral",
+    fontBody: "var(--font-inter), 'Noto Sans Georgian', system-ui, sans-serif",
+    bodyWeight: 400,
+    bodyLineHeight: 1.5,
+  },
+  {
+    id: "body-strong",
+    labelKa: "ძლიერი",
+    labelEn: "Strong",
+    group: "neutral",
+    fontBody: "var(--font-inter), 'Noto Sans Georgian', system-ui, sans-serif",
+    bodyWeight: 600,
+    bodyLineHeight: 1.38,
+  },
+  {
+    id: "body-air",
+    labelKa: "ჰაერიანი",
+    labelEn: "Light",
+    group: "neutral",
+    fontBody: "var(--font-inter), 'Noto Sans Georgian', system-ui, sans-serif",
+    bodyWeight: 300,
+    bodyLineHeight: 1.65,
+  },
+  {
+    id: "body-humanist",
+    labelKa: "კითხვადი",
+    labelEn: "Readable",
+    group: "humanist",
+    fontBody: "var(--font-source-sans), 'Noto Sans Georgian', system-ui, sans-serif",
+    bodyWeight: 400,
+    bodyLineHeight: 1.52,
+  },
+  {
+    id: "body-warm",
+    labelKa: "თბილი",
+    labelEn: "Warm",
+    group: "humanist",
+    fontBody: "var(--font-source-sans), 'Noto Sans Georgian', system-ui, sans-serif",
+    bodyWeight: 400,
+    bodyLineHeight: 1.55,
+    letterSpacing: "0.02em",
+  },
+  {
+    id: "body-serif",
+    labelKa: "რედაქციული",
+    labelEn: "Editorial",
+    group: "distinctive",
+    fontBody: "var(--font-merriweather), 'Noto Serif Georgian', Georgia, serif",
+    bodyWeight: 400,
+    bodyLineHeight: 1.58,
+  },
+  {
+    id: "body-geometric",
+    labelKa: "გეომეტრიული",
+    labelEn: "Geometric",
+    group: "distinctive",
+    fontBody: "var(--font-space), 'Noto Sans Georgian', system-ui, sans-serif",
+    bodyWeight: 400,
+    bodyLineHeight: 1.45,
+  },
+  {
+    id: "body-bold",
+    labelKa: "ტექნო",
+    labelEn: "Bold geo",
+    group: "distinctive",
+    fontBody: "var(--font-space), 'Noto Sans Georgian', system-ui, sans-serif",
+    bodyWeight: 700,
+    bodyLineHeight: 1.32,
+  },
+];
+
+/** When a theme or sidebar picks a display pack, pair a recommended body stack. */
+export const LEGACY_DISPLAY_TO_BODY_PACK: Record<TypographyPackId, BodyTypographyPackId> = {
+  classic: "body-neutral",
+  modern: "body-geometric",
+  editorial: "body-serif",
+  bold: "body-strong",
+  minimal: "body-air",
+  warm: "body-humanist",
+  noir: "body-bold",
+  elegant: "body-warm",
+};
+
+/** Maps body packs to legacy `fontId` (FONT_PRESETS) for older tooling. */
+export const BODY_TYPOGRAPHY_TO_LEGACY_FONT: Record<BodyTypographyPackId, string> = {
+  "body-neutral": "minimal",
+  "body-strong": "bold",
+  "body-air": "minimal",
+  "body-humanist": "traditional",
+  "body-warm": "traditional",
+  "body-serif": "traditional",
+  "body-geometric": "modern",
+  "body-bold": "bold",
+};
+
+export function migrateLegacyBodyTypographyId(raw: string | undefined): BodyTypographyPackId {
+  if (!raw) return "body-air";
+  if (BODY_TYPOGRAPHY_PRESETS.some((p) => p.id === raw)) {
+    return raw as BodyTypographyPackId;
+  }
+  if (raw in LEGACY_DISPLAY_TO_BODY_PACK) {
+    return LEGACY_DISPLAY_TO_BODY_PACK[raw as TypographyPackId];
+  }
+  return "body-air";
+}
+
+export function resolveBodyTypographyPack(selection: StylePresetSelection): BodyTypographyPack {
+  const normalized = migrateLegacyBodyTypographyId(String(selection.bodyTypographyPackId ?? ""));
+  return (
+    BODY_TYPOGRAPHY_PRESETS.find((p) => p.id === normalized) ?? BODY_TYPOGRAPHY_PRESETS[0]
+  );
+}
+
 export const TYPOGRAPHY_PACK_PRESETS: TypographyPackPreset[] = [
   {
     id: "classic",
@@ -571,12 +709,8 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
   const acc = ACCENT_PRESETS.find((p) => p.id === selection.accentId) ?? ACCENT_PRESETS[0];
   const secondaryFamily =
     ACCENT_PRESETS.find((p) => p.id === selection.secondaryAccentId) ?? acc;
-  const bodyPackId = selection.bodyTypographyPackId ?? selection.typographyPackId ?? "minimal";
   const displayPackId = selection.buttonTypographyPackId ?? selection.typographyPackId ?? "minimal";
-  const bodyFont =
-    TYPOGRAPHY_PACK_PRESETS.find((p) => p.id === bodyPackId) ??
-    FONT_PRESETS.find((p) => p.id === selection.fontId) ??
-    FONT_PRESETS[1];
+  const bodyResolved = resolveBodyTypographyPack(selection);
   const displayFont =
     TYPOGRAPHY_PACK_PRESETS.find((p) => p.id === displayPackId) ??
     TYPOGRAPHY_PACK_PRESETS.find((p) => p.id === selection.typographyPackId) ??
@@ -678,9 +812,11 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
       ? overlayGradientValue
       : `linear-gradient(135deg, ${acc.accent}, ${secondaryFamily.accentSecondary})`,
     "--font-heading": displayFont.fontHeading,
-    "--font-body": bodyFont.fontBody,
+    "--font-body": bodyResolved.fontBody,
     "--font-heading-weight": String(displayFont.headingWeight),
-    "--font-body-weight": String(bodyFont.bodyWeight),
+    "--font-body-weight": String(bodyResolved.bodyWeight),
+    "--font-body-line-height": String(bodyResolved.bodyLineHeight),
+    "--font-body-letter-spacing": bodyResolved.letterSpacing ?? "normal",
     "--glass-blur": vibe.blur,
     "--card-shadow": vibe.shadow,
     "--border-opacity": String(vibe.borderOpacity),

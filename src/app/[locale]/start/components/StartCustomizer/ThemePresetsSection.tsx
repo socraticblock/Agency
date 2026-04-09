@@ -3,7 +3,7 @@
 import type { Dispatch, SetStateAction } from "react";
 import { CollapsibleSection } from "../CollapsibleSection";
 import { ELITE_THEME_PRESETS } from "../../lib/elite-themes";
-import { TYPOGRAPHY_TO_LEGACY_FONT } from "../../lib/presets";
+import { LEGACY_DISPLAY_TO_BODY_PACK, TYPOGRAPHY_TO_LEGACY_FONT } from "../../lib/presets";
 import type { Lane1CustomizerState, StylePresetSelection, TypographyPackId } from "../../lib/types";
 
 function mergeThemeStyle(
@@ -14,8 +14,8 @@ function mergeThemeStyle(
   if (patch.typographyPackId) {
     const pack = patch.typographyPackId as TypographyPackId;
     next.fontId = TYPOGRAPHY_TO_LEGACY_FONT[pack];
-    next.bodyTypographyPackId = pack;
     next.buttonTypographyPackId = pack;
+    next.bodyTypographyPackId = LEGACY_DISPLAY_TO_BODY_PACK[pack];
   }
   return next;
 }
