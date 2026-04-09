@@ -42,6 +42,7 @@
 - **044** — Added mobile photo toolbelt pill under hero photo (all desktop actions + visible labels) and removed unused photo modal
 - **045** — Added 1–4 item count controls for Services/Gallery/Testimonials/Awards in on-card Sections manager with thumb-friendly +/- buttons
 - **046** — Removed on-card Card Surface pill and deleted `CardSurfaceManagerPanel` (radius/shadow still theme-driven only)
+- **047** — Navbar behavior update: fully hidden on `/start/preview`, auto-hide on scroll-down and show on scroll-up across the site
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -261,6 +262,11 @@
 - **Context:** Product direction requested removing the Card Surface editor completely to simplify on-card controls.
 - **Decision:** Removed `CardSurfaceManagerPanel` usage from `BusinessCardTemplate` and deleted the `CardSurfaceManagerPanel.tsx` component file.
 - **Impact:** Radius/shadow are no longer directly editable via a dedicated pill; existing style fields remain for defaults/themes and runtime rendering, but card-surface UI complexity is reduced.
+
+### 047
+- **Context:** Live preview should be distraction-free (no navbar), while normal site pages need a modern scroll-aware navbar behavior.
+- **Decision:** Updated shared `Navbar` to return `null` on `/start/preview`; added scroll-direction logic to hide navbar on downward scroll and reveal it on upward scroll with a movement threshold and top-of-page reset.
+- **Impact:** Preview page now renders without navigation chrome, and the rest of the site gains cleaner reading space with responsive nav visibility on mobile and desktop.
 
 ## Architecture Decisions
 - Zero backend for card features

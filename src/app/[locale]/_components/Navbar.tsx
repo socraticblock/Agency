@@ -14,7 +14,10 @@ export function Navbar({ locale }: { locale: Locale }) {
   const t = getMessages(locale);
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [isNavVisible, setIsNavVisible] = useState(true);
+  const lastScrollYRef = useRef(0);
   const panelRef = useRef<HTMLDivElement>(null);
+  const hideForRoute = pathname?.endsWith("/start/preview") ?? false;
 
   useEffect(() => {
     if (!open) return;
@@ -24,6 +27,30 @@ export function Navbar({ locale }: { locale: Locale }) {
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    if (hideForRoute) return;
+    lastScrollYRef.current = window.scrollY;
+    setIsNavVisible(true);
+
+    const onScroll = () => {
+      if (open) return;
+      const currentY = window.scrollY;
+      const delta = currentY - lastScrollYRef.current;
+
+      if (currentY <= 24) {
+        setIsNavVisible(true);
+      } else if (delta > 6) {
+        setIsNavVisible(false);
+      } else if (delta < -6) {
+        setIsNavVisible(true);
+      }
+      lastScrollYRef.current = currentY;
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [hideForRoute, open, pathname]);
 
   useEffect(() => {
     if (!open) return;
@@ -42,10 +69,18 @@ export function Navbar({ locale }: { locale: Locale }) {
     { href: `/${locale}/architect`, label: "Start Building", highlight: true },
   ];
 
+  if (hideForRoute) return null;
+
   return (
     <>
       <header 
-        className={`sticky top-0 z-[100] border-b border-white/5 bg-slate-950/80 backdrop-blur-xl pt-[env(safe-area-inset-top,0px)] transition-opacity duration-300 ${open ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+        className={`sticky top-0 z-[100] border-b border-white/5 bg-slate-950/80 backdrop-blur-xl pt-[env(safe-area-inset-top,0px)] transition-transform duration-300 ${
+          open
+            ? "opacity-0 pointer-events-none"
+            : isNavVisible
+              ? "translate-y-0"
+              : "-translate-y-[115%]"
+        }`}
       >
         <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
           <Link
