@@ -64,6 +64,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   const [activeSection, setActiveSection] = useState<SectionId | null>(null);
   const [pulseSectionId, setPulseSectionId] = useState<SectionId | null>(null);
   const [pulseToken, setPulseToken] = useState(0);
+  const [animationReplayKey, setAnimationReplayKey] = useState(0);
   const fileRef = useRef<HTMLInputElement>(null);
   const pulseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -88,6 +89,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
     setPulseToken((v) => v + 1);
     pulseTimerRef.current = setTimeout(() => setPulseSectionId(null), 320);
   };
+  const triggerAnimationReplay = () => setAnimationReplayKey((v) => v + 1);
   const setServiceLine = (i: number, v: string) => {
     const next = useSecondary ? [...state.serviceAreasSecondary] : [...state.serviceAreas];
     next[i] = v;
@@ -192,14 +194,17 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
       )}
 
       {/* Interactive Layer (Front) */}
-      <motion.div
+      <div
         className={`business-card-template-font-layer relative z-10 pb-12 ${isResponsive ? "md:p-8" : ""} ${hoverLayerClass}`}
-        variants={containerVariants}
-        initial="hidden"
-        animate="show"
-        custom={animPreset.stagger / speed}
         style={{ pointerEvents: "auto" }}
       >
+        <motion.div
+          key={animationReplayKey}
+          variants={containerVariants}
+          initial="hidden"
+          animate="show"
+          custom={animPreset.stagger / speed}
+        >
         <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onPhotoPicked} />
 
         <HeroSegment
@@ -280,11 +285,17 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
         />
 
         <BrandingFooter ownerName={ownerName} hideBranding={hideBranding} homeHref={homeHref} />
+        </motion.div>
         <BackgroundManagerPanel editable={editable} state={state} patch={patch} />
         <LookManagerPanel editable={editable} state={state} patch={patch} />
         <TypographyManagerPanel editable={editable} state={state} patch={patch} />
-        <ExperienceManagerPanel editable={editable} state={state} patch={patch} />
-      </motion.div>
+        <ExperienceManagerPanel
+          editable={editable}
+          state={state}
+          patch={patch}
+          onAnimationPreviewReplay={triggerAnimationReplay}
+        />
+      </div>
 
     </div>
   );

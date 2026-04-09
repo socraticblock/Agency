@@ -12,22 +12,29 @@ export function ExperienceManagerPanel({
   editable,
   state,
   patch,
+  onAnimationPreviewReplay,
 }: {
   editable: boolean;
   state: Lane1CustomizerState;
   patch: (p: Lane1StatePatch) => void;
+  onAnimationPreviewReplay?: () => void;
 }) {
   const [open, setOpen] = useState(false);
   const [savingStatus, setSavingStatus] = useState<"idle" | "saving" | "saved">("idle");
   const rootRef = useRef<HTMLDivElement | null>(null);
   const savingDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const savedToIdleRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const replayDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const onStylePatch = (p: Partial<Lane1CustomizerState["style"]>) => {
     if (savingDebounceRef.current) clearTimeout(savingDebounceRef.current);
     if (savedToIdleRef.current) clearTimeout(savedToIdleRef.current);
     setSavingStatus("saving");
     patch({ style: p });
+    if ((p.animationId !== undefined || p.animationSpeed !== undefined) && onAnimationPreviewReplay) {
+      if (replayDebounceRef.current) clearTimeout(replayDebounceRef.current);
+      replayDebounceRef.current = setTimeout(() => onAnimationPreviewReplay(), 180);
+    }
     savingDebounceRef.current = setTimeout(() => {
       setSavingStatus("saved");
       savedToIdleRef.current = setTimeout(() => setSavingStatus("idle"), 900);
@@ -50,6 +57,7 @@ export function ExperienceManagerPanel({
     return () => {
       if (savingDebounceRef.current) clearTimeout(savingDebounceRef.current);
       if (savedToIdleRef.current) clearTimeout(savedToIdleRef.current);
+      if (replayDebounceRef.current) clearTimeout(replayDebounceRef.current);
     };
   }, []);
 
