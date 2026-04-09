@@ -223,7 +223,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
           custom={animPreset.stagger / speed}
         >
         <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onPhotoPicked} />
-        <ProfileSetupManagerPanel editable={editable} state={state} patch={patch} />
+        <ProfileSetupManagerPanel editable={editable} state={state} patch={patch} useSecondary={useSecondary} />
 
         <HeroSegment
           state={state}
@@ -257,6 +257,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
           editable={editable}
           state={state}
           patch={patch}
+          useSecondary={useSecondary}
           onStructureChange={triggerSectionPulse}
         />
 
@@ -282,7 +283,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
           />
         </div>
 
-        <LocationManagerPanel editable={editable} state={state} patch={patch} />
+        <LocationManagerPanel editable={editable} state={state} patch={patch} useSecondary={useSecondary} />
         <ContactSegment
           state={state}
           editable={editable}
@@ -294,9 +295,9 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
           itemVariants={customItemVariants}
           glassStyle={glassStyle}
         />
-        <SocialManagerPanel editable={editable} state={state} patch={patch} />
+        <SocialManagerPanel editable={editable} state={state} patch={patch} useSecondary={useSecondary} />
         <SocialSegment state={state} isResponsive={isResponsive} itemVariants={customItemVariants} />
-        <QrManagerPanel editable={editable} state={state} patch={patch} />
+        <QrManagerPanel editable={editable} state={state} patch={patch} useSecondary={useSecondary} />
         <QrOnCardSegment
           state={state}
           qrDataUrl={qrDataUrl}
@@ -323,14 +324,15 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
           useSecondary={useSecondary}
         />
         </motion.div>
-        <BackgroundManagerPanel editable={editable} state={state} patch={patch} />
-        <CardSurfaceManagerPanel editable={editable} state={state} patch={patch} />
-        <LookManagerPanel editable={editable} state={state} patch={patch} />
-        <TypographyManagerPanel editable={editable} state={state} patch={patch} />
+        <BackgroundManagerPanel editable={editable} state={state} patch={patch} useSecondary={useSecondary} />
+        <CardSurfaceManagerPanel editable={editable} state={state} patch={patch} useSecondary={useSecondary} />
+        <LookManagerPanel editable={editable} state={state} patch={patch} useSecondary={useSecondary} />
+        <TypographyManagerPanel editable={editable} state={state} patch={patch} useSecondary={useSecondary} />
         <ExperienceManagerPanel
           editable={editable}
           state={state}
           patch={patch}
+          useSecondary={useSecondary}
           onAnimationPreviewReplay={triggerAnimationReplay}
         />
       </div>

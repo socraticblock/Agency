@@ -36,6 +36,7 @@
 - **038** — Dead-code sweep: removed orphaned StartCustomizer sections-content files, legacy preset-grid/preset split modules, and unused exports
 - **039** — Added on-card `QrManagerPanel` (colors + style + static/dropdown mode + logo toggle); moved QR styling controls out of `IdentitySection`; v15
 - **040** — Profile setup flow added (top on-card pill + first-load auto-open) with language/translation source-of-truth, pricing remap (maps free), and v16 migration
+- **041** — Georgian-aware pill localization: manager labels/controls follow card language mode (`useSecondary`) across on-card pill surfaces
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -225,6 +226,11 @@
 - **Context:** Profile identity + language/translation decisions were split between sidebar add-ons and implicit preview behavior, causing mismatch with the new on-card workflow.
 - **Decision:** Added `profileLanguageMode` / `translationMethod` / `translationSourceLang` / `profileSetupCompleted` to state with v16 migration and legacy mapping; created `ProfileSetupManagerPanel` as a top on-card pill that auto-opens once on first load; derived preview rules to enforce EN-only, KA-only, both-self toggle, and both-professional source-language-only behavior; updated pricing to make Google Maps free and charge translation based on profile setup.
 - **Impact:** Profile setup is now the source-of-truth for card identity/language decisions, pricing reflects business rules (maps free, pro translation +150₾ only when both languages + professional), and backward compatibility is preserved through migration syncing with legacy fields.
+
+### 041
+- **Context:** Card copy in Georgian mode became consistent, but on-card pills and their control text remained mostly English, creating a mixed-language editing experience.
+- **Decision:** Threaded `useSecondary` from `BusinessCardTemplate` into on-card manager pills and key nested controls, then localized high-visibility pill labels/status/tabs/options (Background/Look/Type/Experience/Surface/Sections/Social/Location/QR/Profile setup) and related control copy.
+- **Impact:** When previewing Georgian mode, pill UI now aligns with card language context, reducing cognitive switching and making the editing experience more coherent without changing state schema.
 
 ## Architecture Decisions
 - Zero backend for card features

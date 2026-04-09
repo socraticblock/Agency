@@ -13,10 +13,12 @@ export function BackgroundManagerPanel({
   editable,
   state,
   patch,
+  useSecondary,
 }: {
   editable: boolean;
   state: Lane1CustomizerState;
   patch: (p: Lane1StatePatch) => void;
+  useSecondary: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<BgTab>("base");
@@ -77,19 +79,19 @@ export function BackgroundManagerPanel({
         className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75"
       >
         <Layers2 className="h-4 w-4" />
-        Background
+        {useSecondary ? "ფონი" : "Background"}
       </button>
       {open ? (
         <div className="absolute bottom-full left-1/2 mb-2 w-[min(100%,320px)] -translate-x-1/2 rounded-xl border border-white/20 bg-black/85 p-2 text-white shadow-2xl backdrop-blur-md">
           <div className="mb-2 flex items-center justify-between gap-2 px-1">
-            <p className="text-xs font-bold uppercase tracking-wide text-white/80">Background</p>
+            <p className="text-xs font-bold uppercase tracking-wide text-white/80">{useSecondary ? "ფონი" : "Background"}</p>
             <div className="flex items-center gap-2">
               <span className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide text-white/70">
-                {savingStatus === "saving" ? <span className="animate-pulse">Saving...</span> : null}
+                {savingStatus === "saving" ? <span className="animate-pulse">{useSecondary ? "ინახება..." : "Saving..."}</span> : null}
                 {savingStatus === "saved" ? (
                   <>
                     <Check className="h-3 w-3 text-emerald-300" />
-                    <span className="text-emerald-200">Saved</span>
+                    <span className="text-emerald-200">{useSecondary ? "შენახულია" : "Saved"}</span>
                   </>
                 ) : null}
               </span>
@@ -104,26 +106,26 @@ export function BackgroundManagerPanel({
             </div>
           </div>
           <div className="mb-2 flex flex-wrap justify-center gap-1 rounded-full border border-white/15 bg-white/5 p-1">
-            {tabBtn("base", "Base")}
-            {tabBtn("overlay", "Overlay")}
-            {tabBtn("texture", "Texture")}
-            {tabBtn("motion", "Motion")}
+            {tabBtn("base", useSecondary ? "ბაზა" : "Base")}
+            {tabBtn("overlay", useSecondary ? "გადაფარვა" : "Overlay")}
+            {tabBtn("texture", useSecondary ? "ტექსტურა" : "Texture")}
+            {tabBtn("motion", useSecondary ? "მოძრაობა" : "Motion")}
           </div>
           <div className="max-h-[min(55vh,380px)] overflow-y-auto rounded-lg bg-white/95 p-3 text-slate-900 shadow-inner">
             {tab === "base" ? (
               <>
-                <BackgroundBaseControls state={state} onPatch={onStylePatch} />
+                <BackgroundBaseControls state={state} onPatch={onStylePatch} useSecondary={useSecondary} />
               </>
             ) : null}
-            {tab === "overlay" ? <BackgroundOverlayControls state={state} onPatch={onStylePatch} /> : null}
+            {tab === "overlay" ? <BackgroundOverlayControls state={state} onPatch={onStylePatch} useSecondary={useSecondary} /> : null}
             {tab === "texture" ? (
               <div className="[&_fieldset]:border-slate-200 [&_legend]:text-slate-700">
-                <TextureEffectControls state={state} onPatch={onStylePatch} />
+                <TextureEffectControls state={state} onPatch={onStylePatch} useSecondary={useSecondary} />
               </div>
             ) : null}
             {tab === "motion" ? (
               <div className="[&_fieldset]:border-slate-200 [&_legend]:text-slate-700">
-                <BackgroundMotionControls state={state} onPatch={onStylePatch} />
+                <BackgroundMotionControls state={state} onPatch={onStylePatch} useSecondary={useSecondary} />
               </div>
             ) : null}
           </div>

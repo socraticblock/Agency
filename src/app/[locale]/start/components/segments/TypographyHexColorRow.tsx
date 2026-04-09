@@ -4,10 +4,12 @@ export function TypographyHexColorRow({
   label,
   value,
   onChange,
+  useSecondary,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
+  useSecondary?: boolean;
 }) {
   const safe = /^#[0-9A-Fa-f]{6}$/.test(value.trim()) ? value.trim() : "#1a2744";
   return (
@@ -25,7 +27,7 @@ export function TypographyHexColorRow({
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          placeholder="Auto (from preset)"
+          placeholder={useSecondary ? "ავტო (პრესეტიდან)" : "Auto (from preset)"}
           className="h-9 min-w-[8rem] flex-1 rounded border border-slate-200 px-2 font-mono text-xs"
           spellCheck={false}
         />
@@ -35,7 +37,7 @@ export function TypographyHexColorRow({
             className="text-[10px] font-semibold uppercase text-slate-500 underline"
             onClick={() => onChange("")}
           >
-            Clear
+            {useSecondary ? "გასუფთავება" : "Clear"}
           </button>
         ) : null}
       </div>

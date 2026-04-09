@@ -17,16 +17,18 @@ function chipSelected(on: boolean) {
 export function TextureEffectControls({
   state,
   onPatch,
+  useSecondary,
 }: {
   state: Lane1CustomizerState;
   onPatch: (p: Partial<Lane1CustomizerState["style"]>) => void;
+  useSecondary?: boolean;
 }) {
   const { textureId, textureOpacity, bgEffectId } = state.style;
 
   return (
     <div className="mt-6 space-y-6 border-t border-black/10 pt-6">
       <fieldset>
-        <legend className={`${labelClass} mb-2 block`}>Texture overlay</legend>
+        <legend className={`${labelClass} mb-2 block`}>{useSecondary ? "ტექსტურის გადაფარვა" : "Texture overlay"}</legend>
         <div className="grid grid-cols-3 gap-2 sm:grid-cols-4" role="radiogroup" aria-label="Texture">
           {TEXTURE_OPTION_META.map((o) => {
             const onSel = textureId === o.id;
@@ -51,7 +53,7 @@ export function TextureEffectControls({
         </div>
         {textureId !== "none" ? (
           <label className={`${labelClass} mt-3 block`}>
-            Texture strength ({textureOpacity}%)
+            {useSecondary ? "ტექსტურის სიძლიერე" : "Texture strength"} ({textureOpacity}%)
             <input
               type="range"
               min={0}
@@ -62,7 +64,7 @@ export function TextureEffectControls({
             />
           </label>
         ) : (
-          <p className="start-caption mt-3">Choose a texture first to adjust strength.</p>
+          <p className="start-caption mt-3">{useSecondary ? "ჯერ აირჩიე ტექსტურა, შემდეგ სიძლიერე." : "Choose a texture first to adjust strength."}</p>
         )}
       </fieldset>
     </div>

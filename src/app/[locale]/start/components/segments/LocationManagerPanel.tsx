@@ -17,10 +17,12 @@ export function LocationManagerPanel({
   editable,
   state,
   patch,
+  useSecondary,
 }: {
   editable: boolean;
   state: Lane1CustomizerState;
   patch: (p: Partial<Lane1CustomizerState>) => void;
+  useSecondary: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement | null>(null);
@@ -57,12 +59,12 @@ export function LocationManagerPanel({
         className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75"
       >
         <MapPinned className="h-4 w-4" />
-        Location
+        {useSecondary ? "მდებარეობა" : "Location"}
       </button>
       {open ? (
         <div className="absolute right-4 top-full mt-2 w-[280px] rounded-xl border border-white/20 bg-black/85 p-3 text-white shadow-2xl backdrop-blur-md">
           <div className="mb-2 flex items-center justify-between">
-            <p className="text-xs font-bold uppercase tracking-wide text-white/80">Location UI</p>
+            <p className="text-xs font-bold uppercase tracking-wide text-white/80">{useSecondary ? "მდებარეობის UI" : "Location UI"}</p>
             <button type="button" onClick={() => setOpen(false)} className="rounded p-1 text-white/70 transition hover:bg-white/10 hover:text-white" aria-label="Close location manager">
               <X className="h-4 w-4" />
             </button>
@@ -70,7 +72,9 @@ export function LocationManagerPanel({
           {order.map((id, index) => {
             const isMap = id === "map-preview";
             const checked = isMap ? state.showMapPreview : state.showGetDirectionsButton;
-            const title = isMap ? "Show map preview" : 'Show "Get Directions"';
+            const title = isMap
+              ? useSecondary ? "რუკის გადახედვის ჩვენება" : "Show map preview"
+              : useSecondary ? '„მიმართულების მიღება“ ღილაკის ჩვენება' : 'Show "Get Directions"';
             return (
               <div key={id} className={`flex items-center justify-between rounded-md border border-white/20 bg-white/10 px-2 py-1.5 ${index === 0 ? "mb-1.5" : ""}`}>
                 <span className="text-xs">{title}</span>

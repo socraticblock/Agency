@@ -20,7 +20,7 @@ const LEGACY_SAMPLE_VALUES = new Set([
   "123 Professional Ave, Tbilisi",
 ]);
 
-export function ProfileSetupManagerPanel({ editable, state, patch }: Props) {
+export function ProfileSetupManagerPanel({ editable, state, patch, useSecondary }: Props & { useSecondary: boolean }) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement | null>(null);
   const autoOpenedRef = useRef(false);
@@ -83,27 +83,27 @@ export function ProfileSetupManagerPanel({ editable, state, patch }: Props) {
           className="mx-auto flex min-h-10 items-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75"
         >
           <UserRound className="h-3.5 w-3.5" />
-          Profile setup
+          {useSecondary ? "პროფილის დაყენება" : "Profile setup"}
         </button>
         {open ? (
           <div className="mt-2 rounded-2xl border border-white/20 bg-black/75 p-3 text-white shadow-2xl backdrop-blur-md">
             <div className="grid gap-2 md:grid-cols-2">
-              <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={displayValue(state.company)} placeholder="Company Name" onFocus={selectAllOnFocus} onChange={(e) => patch({ company: e.target.value })} />
-              <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={displayValue(state.name)} placeholder="Your Name" onFocus={selectAllOnFocus} onChange={(e) => patch({ name: e.target.value })} />
-              <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={displayValue(state.title)} placeholder="Job title" onFocus={selectAllOnFocus} onChange={(e) => patch({ title: e.target.value })} />
-              <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={displayValue(state.tagline)} placeholder="Your tagline here" onFocus={selectAllOnFocus} onChange={(e) => patch({ tagline: e.target.value })} />
+              <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={displayValue(state.company)} placeholder={useSecondary ? "კომპანიის სახელი" : "Company Name"} onFocus={selectAllOnFocus} onChange={(e) => patch({ company: e.target.value })} />
+              <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={displayValue(state.name)} placeholder={useSecondary ? "შენი სახელი" : "Your Name"} onFocus={selectAllOnFocus} onChange={(e) => patch({ name: e.target.value })} />
+              <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={displayValue(state.title)} placeholder={useSecondary ? "სამუშაოს დასახელება" : "Job title"} onFocus={selectAllOnFocus} onChange={(e) => patch({ title: e.target.value })} />
+              <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={displayValue(state.tagline)} placeholder={useSecondary ? "თქვენი სლოგანი აქ" : "Your tagline here"} onFocus={selectAllOnFocus} onChange={(e) => patch({ tagline: e.target.value })} />
               <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={displayValue(state.phone)} placeholder="+995 5XX XX XX XX" onFocus={selectAllOnFocus} onChange={(e) => patch({ phone: e.target.value })} />
               <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={displayValue(state.email)} placeholder="your@email.com" onFocus={selectAllOnFocus} onChange={(e) => patch({ email: e.target.value })} />
             </div>
             <input className="mt-2 w-full rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={displayValue(state.address)} placeholder="123 Professional Ave, Tbilisi" onFocus={selectAllOnFocus} onChange={(e) => patch({ address: e.target.value })} />
 
             <div className="mt-3">
-              <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-white/80">Language</p>
+              <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-white/80">{useSecondary ? "ენა" : "Language"}</p>
               <div className="flex flex-wrap gap-2">
                 {[
-                  ["en_only", "Only English"],
-                  ["ka_only", "Only Georgian"],
-                  ["both", "Both languages"],
+                  ["en_only", useSecondary ? "მხოლოდ ინგლისური" : "Only English"],
+                  ["ka_only", useSecondary ? "მხოლოდ ქართული" : "Only Georgian"],
+                  ["both", useSecondary ? "ორივე ენა" : "Both languages"],
                 ].map(([id, label]) => (
                   <button key={id} type="button" onClick={() => setLangMode(id as Lane1CustomizerState["profileLanguageMode"])} className={`rounded-full px-3 py-1 text-xs ${state.profileLanguageMode === id ? "bg-white text-slate-900" : "bg-white/10 text-white"}`}>
                     {label}
@@ -115,8 +115,8 @@ export function ProfileSetupManagerPanel({ editable, state, patch }: Props) {
             {state.profileLanguageMode === "both" ? (
               <div className="mt-2 space-y-2">
                 <div className="flex gap-2">
-                  <button type="button" onClick={() => setTranslationMethod("self")} className={`rounded-full px-3 py-1 text-xs ${state.translationMethod === "self" ? "bg-white text-slate-900" : "bg-white/10 text-white"}`}>Self-translate</button>
-                  <button type="button" onClick={() => setTranslationMethod("professional")} className={`rounded-full px-3 py-1 text-xs ${state.translationMethod === "professional" ? "bg-white text-slate-900" : "bg-white/10 text-white"}`}>Professional (+150 ₾)</button>
+                  <button type="button" onClick={() => setTranslationMethod("self")} className={`rounded-full px-3 py-1 text-xs ${state.translationMethod === "self" ? "bg-white text-slate-900" : "bg-white/10 text-white"}`}>{useSecondary ? "თვითთარგმნა" : "Self-translate"}</button>
+                  <button type="button" onClick={() => setTranslationMethod("professional")} className={`rounded-full px-3 py-1 text-xs ${state.translationMethod === "professional" ? "bg-white text-slate-900" : "bg-white/10 text-white"}`}>{useSecondary ? "პროფესიონალი (+150 ₾)" : "Professional (+150 ₾)"}</button>
                 </div>
                 {state.translationMethod === "professional" ? (
                   <div className="flex gap-2">
@@ -126,7 +126,7 @@ export function ProfileSetupManagerPanel({ editable, state, patch }: Props) {
                 ) : null}
               </div>
             ) : null}
-            <p className="mt-2 text-[11px] text-white/70">This information is used only to fill your card content.</p>
+            <p className="mt-2 text-[11px] text-white/70">{useSecondary ? "ეს ინფორმაცია გამოიყენება მხოლოდ თქვენი ბარათის შინაარსის შესავსებად." : "This information is used only to fill your card content."}</p>
           </div>
         ) : null}
       </div>

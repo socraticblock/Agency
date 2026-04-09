@@ -20,9 +20,11 @@ const MOTION_DISCLAIMER =
 export function BackgroundMotionControls({
   state,
   onPatch,
+  useSecondary,
 }: {
   state: Lane1CustomizerState;
   onPatch: (p: Partial<Lane1CustomizerState["style"]>) => void;
+  useSecondary?: boolean;
 }) {
   const { bgEffectId, bgEffectOpacity, bgEffectSpeed, bgEffectIntensity } = state.style;
   const speed = bgEffectSpeed ?? 100;
@@ -30,8 +32,8 @@ export function BackgroundMotionControls({
 
   return (
     <fieldset className="border-0 p-0">
-      <legend className={`${labelClass} mb-2 block`}>Background motion</legend>
-      <p className="start-caption mb-2">Animated layer behind your content.</p>
+      <legend className={`${labelClass} mb-2 block`}>{useSecondary ? "ფონის მოძრაობა" : "Background motion"}</legend>
+      <p className="start-caption mb-2">{useSecondary ? "ანიმაციური ფენა თქვენი შინაარსის უკან." : "Animated layer behind your content."}</p>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3" role="radiogroup" aria-label="Background motion effect">
         {BG_EFFECT_OPTION_META.map((o) => {
           const onSel = bgEffectId === o.id;
@@ -57,7 +59,7 @@ export function BackgroundMotionControls({
       {bgEffectId !== "none" ? (
         <div className="mt-3 space-y-3">
           <label className={`${labelClass} block`}>
-            Motion opacity ({bgEffectOpacity}%)
+            {useSecondary ? "მოძრაობის გამჭვირვალობა" : "Motion opacity"} ({bgEffectOpacity}%)
             <input
               type="range"
               min={0}
@@ -68,8 +70,18 @@ export function BackgroundMotionControls({
             />
           </label>
           <label className={`${labelClass} block`}>
-            Motion timing ({speed}
-            {speed < 85 ? " · slower" : speed > 115 ? " · faster" : " · default"})
+            {useSecondary ? "მოძრაობის სიჩქარე" : "Motion timing"} ({speed}
+            {speed < 85
+              ? useSecondary
+                ? " · ნელი"
+                : " · slower"
+              : speed > 115
+                ? useSecondary
+                  ? " · სწრაფი"
+                  : " · faster"
+                : useSecondary
+                  ? " · ნაგულისხმევი"
+                  : " · default"})
             <input
               type="range"
               min={50}
@@ -80,8 +92,18 @@ export function BackgroundMotionControls({
             />
           </label>
           <label className={`${labelClass} block`}>
-            Motion intensity ({intensity}
-            {intensity < 85 ? " · subtle" : intensity > 115 ? " · bold" : " · balanced"})
+            {useSecondary ? "მოძრაობის ინტენსივობა" : "Motion intensity"} ({intensity}
+            {intensity < 85
+              ? useSecondary
+                ? " · მსუბუქი"
+                : " · subtle"
+              : intensity > 115
+                ? useSecondary
+                  ? " · ძლიერი"
+                  : " · bold"
+                : useSecondary
+                  ? " · დაბალანსებული"
+                  : " · balanced"})
             <input
               type="range"
               min={50}
@@ -94,7 +116,7 @@ export function BackgroundMotionControls({
           <p className="start-caption text-slate-600">{MOTION_DISCLAIMER}</p>
         </div>
       ) : (
-        <p className="start-caption mt-3">Choose an effect to adjust motion.</p>
+        <p className="start-caption mt-3">{useSecondary ? "აირჩიე ეფექტი მოძრაობის სამართავად." : "Choose an effect to adjust motion."}</p>
       )}
     </fieldset>
   );

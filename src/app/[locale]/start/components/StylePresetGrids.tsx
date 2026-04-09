@@ -75,9 +75,11 @@ function hexColorEqual(a: string, b: string): boolean {
 const BackgroundBaseControls = memo(function BackgroundBaseControls({
   state,
   onPatch,
+  useSecondary,
 }: {
   state: Lane1CustomizerState;
   onPatch: (p: Partial<Lane1CustomizerState["style"]>) => void;
+  useSecondary?: boolean;
 }) {
   const { bgBaseId, bgBaseColor, bgBaseImageDataUrl, bgBaseBlur } = state.style;
 
@@ -94,14 +96,14 @@ const BackgroundBaseControls = memo(function BackgroundBaseControls({
               bgBaseId === t ? "bg-white shadow-sm text-[#1A2744]" : "text-slate-500 hover:bg-slate-50"
             }`}
           >
-            {t === "solid" ? "Color" : "Photo"}
+            {t === "solid" ? (useSecondary ? "ფერი" : "Color") : useSecondary ? "ფოტო" : "Photo"}
           </button>
         ))}
       </div>
 
       {bgBaseId === "solid" ? (
         <div className="space-y-4 animate-in fade-in slide-in-from-top-2">
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Base Color</span>
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">{useSecondary ? "ბაზის ფერი" : "Base Color"}</span>
           <div className="grid grid-cols-4 gap-2">
             {BACKGROUND_SOLID_PRESETS.map((p) => {
               const onSel = hexColorEqual(bgBaseColor, p.cssValue);
@@ -144,13 +146,13 @@ const BackgroundBaseControls = memo(function BackgroundBaseControls({
       ) : (
         <div className="space-y-5 animate-in fade-in slide-in-from-top-2">
           <div className="flex items-center justify-between px-1">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Background Photo</span>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{useSecondary ? "ფონის ფოტო" : "Background Photo"}</span>
             {bgBaseImageDataUrl && (
               <button 
                 onClick={() => onPatch({ bgBaseImageDataUrl: null })}
                 className="text-[10px] font-bold text-red-400 hover:text-red-600 transition-colors uppercase tracking-tight flex items-center gap-1"
               >
-                <Trash2 className="h-3 w-3" /> Clear
+                <Trash2 className="h-3 w-3" /> {useSecondary ? "გასუფთავება" : "Clear"}
               </button>
             )}
           </div>
@@ -164,8 +166,8 @@ const BackgroundBaseControls = memo(function BackgroundBaseControls({
                 <ImageIcon className="h-6 w-6 text-slate-400" />
               </div>
               <div className="text-center">
-                <div className="text-xs font-bold text-slate-600">Upload backdrop</div>
-                <div className="text-[10px] text-slate-400">JPG or PNG (max 5MB)</div>
+                <div className="text-xs font-bold text-slate-600">{useSecondary ? "ატვირთეთ ფონი" : "Upload backdrop"}</div>
+                <div className="text-[10px] text-slate-400">{useSecondary ? "JPG ან PNG (max 5MB)" : "JPG or PNG (max 5MB)"}</div>
               </div>
             </button>
           ) : (
@@ -180,7 +182,7 @@ const BackgroundBaseControls = memo(function BackgroundBaseControls({
                     onClick={() => document.getElementById("bg-image-upload")?.click()}
                     className="bg-white/90 backdrop-blur text-[#1A2744] px-4 py-2 rounded-xl text-xs font-bold shadow-lg flex items-center gap-2"
                   >
-                    <Maximize2 className="h-3 w-3" /> Change Photo
+                    <Maximize2 className="h-3 w-3" /> {useSecondary ? "შეცვლა" : "Change Photo"}
                   </button>
                </div>
             </div>
@@ -207,7 +209,7 @@ const BackgroundBaseControls = memo(function BackgroundBaseControls({
           {/* Blur Control */}
           <div className="p-3 bg-slate-50/50 rounded-2xl border border-slate-100 space-y-3">
             <div className="flex justify-between text-[11px] font-bold text-slate-500 uppercase tracking-tighter">
-              <span className="flex items-center gap-1.5"><Maximize2 className="h-3 w-3 rotate-45" /> Depth Blur</span>
+              <span className="flex items-center gap-1.5"><Maximize2 className="h-3 w-3 rotate-45" /> {useSecondary ? "სიღრმის დაბინდვა" : "Depth Blur"}</span>
               <span>{bgBaseBlur}px</span>
             </div>
             <input 
@@ -226,17 +228,19 @@ const BackgroundBaseControls = memo(function BackgroundBaseControls({
 const BackgroundOverlayControls = memo(function BackgroundOverlayControls({
   state,
   onPatch,
+  useSecondary,
 }: {
   state: Lane1CustomizerState;
   onPatch: (p: Partial<Lane1CustomizerState["style"]>) => void;
+  useSecondary?: boolean;
 }) {
   const { bgOverlayId, bgOverlayColor1, bgOverlayColor2, bgOverlayColor3, bgOverlayAngle, bgOverlayOpacity } = state.style;
 
   return (
     <div className="space-y-6 pt-4 border-t border-slate-100 mt-6">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Overlay Decor</span>
-        <span className="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded font-mono">Optional</span>
+        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">{useSecondary ? "გადაფარვა" : "Overlay Decor"}</span>
+        <span className="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded font-mono">{useSecondary ? "არასავალდებულო" : "Optional"}</span>
       </div>
 
       {/* Overlay Type Selector */}
@@ -260,7 +264,9 @@ const BackgroundOverlayControls = memo(function BackgroundOverlayControls({
         {bgOverlayId === "none" ? (
           <div className="flex min-h-[220px] flex-col justify-center rounded-xl border border-dashed border-slate-200/90 bg-slate-50/80 px-4 py-6 text-center">
             <p className="text-xs font-medium text-slate-500">
-              Choose Solid, Linear, Radial, or Mesh to set colors and opacity. None keeps the overlay off.
+              {useSecondary
+                ? "აირჩიე Solid, Linear, Radial ან Mesh ფერებისა და გამჭვირვალობის სამართავად."
+                : "Choose Solid, Linear, Radial, or Mesh to set colors and opacity. None keeps the overlay off."}
             </p>
           </div>
         ) : (
@@ -268,7 +274,7 @@ const BackgroundOverlayControls = memo(function BackgroundOverlayControls({
             {/* Color Pickers */}
             <div className="flex items-center gap-3">
               <div className="space-y-1.5 flex-1">
-                <span className="text-[10px] font-bold text-slate-400 uppercase ml-1">Colors</span>
+                <span className="text-[10px] font-bold text-slate-400 uppercase ml-1">{useSecondary ? "ფერები" : "Colors"}</span>
                 <div className="flex gap-2">
                   <input 
                     type="color" 
@@ -297,7 +303,7 @@ const BackgroundOverlayControls = memo(function BackgroundOverlayControls({
 
               {bgOverlayId === "linear" && (
                 <div className="space-y-1.5 w-1/3">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase ml-1">Angle</span>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase ml-1">{useSecondary ? "კუთხე" : "Angle"}</span>
                   <input 
                     type="number" min="0" max="360" 
                     value={bgOverlayAngle} 
@@ -311,7 +317,7 @@ const BackgroundOverlayControls = memo(function BackgroundOverlayControls({
             {/* Opacity Slider */}
             <div className="p-3 bg-slate-50/50 rounded-xl border border-slate-100 space-y-3">
               <div className="flex justify-between text-[11px] font-bold text-slate-500 uppercase tracking-tighter">
-                <span>Effect Opacity</span>
+                <span>{useSecondary ? "ეფექტის გამჭვირვალობა" : "Effect Opacity"}</span>
                 <span>{Math.round(bgOverlayOpacity * 100)}%</span>
               </div>
               <input 

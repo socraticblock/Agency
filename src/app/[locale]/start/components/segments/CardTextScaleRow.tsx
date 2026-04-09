@@ -6,13 +6,15 @@ import { CARD_TEXT_SCALE_PRESETS } from "../../lib/presets";
 export function CardTextScaleRow({
   value,
   onChange,
+  useSecondary,
 }: {
   value: CardTextScaleId;
   onChange: (id: CardTextScaleId) => void;
+  useSecondary: boolean;
 }) {
   return (
     <div className="mb-2 rounded-lg border border-white/10 bg-white/5 p-2">
-      <p className="mb-1.5 px-0.5 text-[10px] font-bold uppercase tracking-wide text-white/60">Text size</p>
+      <p className="mb-1.5 px-0.5 text-[10px] font-bold uppercase tracking-wide text-white/60">{useSecondary ? "ტექსტის ზომა" : "Text size"}</p>
       <div className="grid grid-cols-4 gap-1" role="radiogroup" aria-label="Card text size">
         {CARD_TEXT_SCALE_PRESETS.map((p) => {
           const onSel = value === p.id;

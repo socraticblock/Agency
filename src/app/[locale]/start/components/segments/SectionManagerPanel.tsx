@@ -13,6 +13,15 @@ const SECTION_LABELS: Record<SectionId, string> = {
   video: "Video",
   booking: "Booking",
 };
+const SECTION_LABELS_KA: Record<SectionId, string> = {
+  about: "შესახებ",
+  services: "მომსახურება",
+  testimonials: "ჩვენებები",
+  gallery: "გალერეა",
+  awards: "ჯილდოები",
+  video: "ვიდეო",
+  booking: "დაჯავშნა",
+};
 
 function swapInOrder(order: SectionId[], a: SectionId, b: SectionId): SectionId[] {
   const next = [...order];
@@ -30,7 +39,7 @@ interface SectionManagerPanelProps {
   onStructureChange?: (sectionId: SectionId) => void;
 }
 
-export function SectionManagerPanel({ editable, state, patch, onStructureChange }: SectionManagerPanelProps) {
+export function SectionManagerPanel({ editable, state, patch, onStructureChange, useSecondary }: SectionManagerPanelProps & { useSecondary: boolean }) {
   const [open, setOpen] = useState(false);
   const [savingStatus, setSavingStatus] = useState<"idle" | "saving" | "saved">("idle");
   const rootRef = useRef<HTMLDivElement | null>(null);
@@ -104,20 +113,22 @@ export function SectionManagerPanel({ editable, state, patch, onStructureChange 
         className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75"
       >
         <ListTree className="h-4 w-4" />
-        Sections
+        {useSecondary ? "სექციები" : "Sections"}
       </button>
 
       {open ? (
         <div className="absolute right-4 top-full mt-2 w-[280px] rounded-xl border border-white/20 bg-black/85 p-3 text-white shadow-2xl backdrop-blur-md">
           <div className="mb-2 flex items-center justify-between">
-            <p className="text-xs font-bold uppercase tracking-wide text-white/80">Visible sections</p>
+            <p className="text-xs font-bold uppercase tracking-wide text-white/80">
+              {useSecondary ? "ხილული სექციები" : "Visible sections"}
+            </p>
             <div className="flex items-center gap-2">
               <span className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide text-white/70">
-                {savingStatus === "saving" ? <span className="animate-pulse">Saving...</span> : null}
+                {savingStatus === "saving" ? <span className="animate-pulse">{useSecondary ? "ინახება..." : "Saving..."}</span> : null}
                 {savingStatus === "saved" ? (
                   <>
                     <Check className="h-3 w-3 text-emerald-300" />
-                    <span className="text-emerald-200">Saved</span>
+                    <span className="text-emerald-200">{useSecondary ? "შენახულია" : "Saved"}</span>
                   </>
                 ) : null}
               </span>
@@ -135,6 +146,7 @@ export function SectionManagerPanel({ editable, state, patch, onStructureChange 
           <div className="space-y-1.5">
             {state.sectionOrder.map((id) => {
               const on = state.activeSections.includes(id);
+              const sectionLabel = useSecondary ? SECTION_LABELS_KA[id] : SECTION_LABELS[id];
               return (
                 <label
                   key={id}
@@ -148,25 +160,27 @@ export function SectionManagerPanel({ editable, state, patch, onStructureChange 
                     onChange={() => toggle(id)}
                     className="h-3.5 w-3.5"
                   />
-                  <span>{SECTION_LABELS[id]}</span>
+                  <span>{sectionLabel}</span>
                 </label>
               );
             })}
           </div>
 
           <div className="mt-3 border-t border-white/10 pt-2">
-            <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wide text-white/60">Order (active)</p>
+            <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wide text-white/60">
+              {useSecondary ? "მიმდევრობა (აქტიური)" : "Order (active)"}
+            </p>
             <div className="space-y-1.5">
               {orderedActive.map((id, i) => (
                 <div key={id} className="flex items-center justify-between rounded-lg bg-white/[0.04] px-2.5 py-1.5 text-xs">
-                  <span>{SECTION_LABELS[id]}</span>
+                  <span>{useSecondary ? SECTION_LABELS_KA[id] : SECTION_LABELS[id]}</span>
                   <div className="flex gap-1">
                     <button
                       type="button"
                       disabled={i === 0}
                       onClick={() => move(id, -1)}
                       className="rounded p-1 text-white/70 transition hover:bg-white/10 hover:text-white disabled:opacity-30"
-                      aria-label={`Move ${SECTION_LABELS[id]} up`}
+                      aria-label={`Move ${useSecondary ? SECTION_LABELS_KA[id] : SECTION_LABELS[id]} up`}
                     >
                       <ChevronUp className="h-3.5 w-3.5" />
                     </button>
@@ -175,7 +189,7 @@ export function SectionManagerPanel({ editable, state, patch, onStructureChange 
                       disabled={i === orderedActive.length - 1}
                       onClick={() => move(id, 1)}
                       className="rounded p-1 text-white/70 transition hover:bg-white/10 hover:text-white disabled:opacity-30"
-                      aria-label={`Move ${SECTION_LABELS[id]} down`}
+                      aria-label={`Move ${useSecondary ? SECTION_LABELS_KA[id] : SECTION_LABELS[id]} down`}
                     >
                       <ChevronDown className="h-3.5 w-3.5" />
                     </button>

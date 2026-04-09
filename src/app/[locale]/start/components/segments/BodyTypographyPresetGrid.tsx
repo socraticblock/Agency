@@ -27,13 +27,15 @@ function SwatchCheck({ show }: { show: boolean }) {
 export function BodyTypographyPresetGrid({
   value,
   onChange,
+  useSecondary,
 }: {
   value: BodyTypographyPackId;
   onChange: (id: BodyTypographyPackId) => void;
+  useSecondary?: boolean;
 }) {
   return (
     <fieldset className="space-y-2">
-      <legend className="start-label mb-1 block">Body font</legend>
+      <legend className="start-label mb-1 block">{useSecondary ? "სხეულის ფონტი" : "Body font"}</legend>
       <div
         className="grid grid-cols-2 gap-2 sm:grid-cols-3"
         role="radiogroup"

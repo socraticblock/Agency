@@ -34,6 +34,7 @@ export function SocialManagerRow({
   onToggle,
   onMove,
   onChangeUrl,
+  useSecondary,
 }: {
   id: SocialPlatformId;
   checked: boolean;
@@ -43,6 +44,7 @@ export function SocialManagerRow({
   onToggle: () => void;
   onMove: (dir: -1 | 1) => void;
   onChangeUrl: (id: SocialPlatformId, value: string) => void;
+  useSecondary: boolean;
 }) {
   const urlOk = isLikelyUrl(value);
   return (
@@ -68,7 +70,7 @@ export function SocialManagerRow({
             onChange={(e) => onChangeUrl(id, e.target.value)}
             className={`w-full rounded-md border bg-white/10 px-2 py-1.5 text-xs text-white placeholder:text-white/35 focus:outline-none ${urlOk ? "border-white/20 focus:border-white/40" : "border-amber-300/70 focus:border-amber-200"}`}
           />
-          {!urlOk ? <p className="mt-1 text-[10px] text-amber-200">Use full URL starting with https://</p> : null}
+          {!urlOk ? <p className="mt-1 text-[10px] text-amber-200">{useSecondary ? "გამოიყენე სრული URL https://-ით" : "Use full URL starting with https://"}</p> : null}
         </div>
       ) : null}
     </div>
