@@ -39,6 +39,7 @@
 - **041** — Georgian-aware pill localization: manager labels/controls follow card language mode (`useSecondary`) across on-card pill surfaces
 - **042** — Hero layout locked to centered alignment for all cards (new + migrated states)
 - **043** — Removed right sidebar editor; start page is now centered card-only with on-card pills and cleaned sidebar dead code
+- **044** — Added mobile photo toolbelt pill under hero photo (all desktop actions + visible labels) and removed unused photo modal
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -243,6 +244,11 @@
 - **Context:** The remaining right sidebar (`Content`, `Add-ons`, `Quick themes`, `Identity Kit`) duplicated controls now living in on-card pills, creating maintenance overhead and desktop/mobile mismatch.
 - **Decision:** Removed `StartCustomizer` from `StartPageClient`, deleted obsolete sidebar modules (`StartCustomizer.tsx`, `ContentSection.tsx`, `AddonsSection.tsx`, `ThemePresetsSection.tsx`, `IdentitySection.tsx`, `index.ts`), and switched the page layout to a centered card-first flow with a single WhatsApp order block under the card.
 - **Impact:** `/start` now has one editing surface (the card pills), less dead code, and a more mobile-friendly centered layout without split UI responsibilities.
+
+### 044
+- **Context:** Mobile had no hover, so the desktop `PhotoToolbelt` actions were not discoverable; users needed the same controls with explicit labels.
+- **Decision:** Added a mobile-only pill row beneath the hero photo in `HeroSegment` exposing all desktop actions (Shape, Filter, Border, Layers, Center, Replace, Reset) with always-visible text labels; removed `PhotoEditModal` as dead code.
+- **Impact:** Photo editing parity now exists across desktop and mobile without hover dependency, and the mobile path is clearer and faster for touch users.
 
 ## Architecture Decisions
 - Zero backend for card features

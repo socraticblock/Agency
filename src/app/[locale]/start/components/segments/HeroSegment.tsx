@@ -3,12 +3,11 @@
 import { useState, useRef, useEffect, useCallback, type CSSProperties, type RefObject } from "react";
 import { motion, AnimatePresence, type MotionValue } from "framer-motion";
 import Image from "next/image";
-import { Camera } from "lucide-react";
+import { Camera, Crosshair, FrameIcon, Layers, RefreshCw, RotateCcw, Shapes, Wand2 } from "lucide-react";
 import type { Lane1CustomizerState } from "../../lib/types";
 import { InlineEditable } from "../InlineEditable";
 import { PhotoToolbelt } from "./PhotoToolbelt";
-import { PhotoEditModal } from "./PhotoEditModal";
-import { PHOTO_EFFECT_PRESETS } from "../../lib/presets";
+import { PHOTO_BORDER_PRESETS, PHOTO_EFFECT_PRESETS, PHOTO_OVERLAY_PRESETS, PHOTO_SHAPE_PRESETS } from "../../lib/presets";
 
 interface HeroSegmentProps {
   state: Lane1CustomizerState;
@@ -61,8 +60,6 @@ export function HeroSegment({
     photoOverlay = "none",
     photoBorder = "none",
   } = style as any;
-
-  const [mobileModalOpen, setMobileModalOpen] = useState(false);
 
   // ─── Desktop: non-passive wheel for zoom ────────────────────────────────
   const photoContainerRef = useRef<HTMLDivElement>(null);
@@ -168,6 +165,54 @@ export function HeroSegment({
   const imageFitClass = photoShape === "wide-cinematic" ? "object-contain" : "object-cover";
 
   const effectFilter = PHOTO_EFFECT_PRESETS.find(p => p.id === photoEffect)?.filter || "none";
+  const currentShape = photoShape;
+  const currentEffect = photoEffect;
+  const currentBorder = photoBorder;
+  const currentOverlay = photoOverlay;
+  const cycleMobileShape = () => {
+    const idx = PHOTO_SHAPE_PRESETS.findIndex((p) => p.id === currentShape);
+    const nextIdx = (idx + 1) % PHOTO_SHAPE_PRESETS.length;
+    const nextShape = PHOTO_SHAPE_PRESETS[nextIdx];
+    patch({ style: { ...styleRef.current, photoShape: nextShape.id as any } });
+  };
+  const cycleMobileEffect = () => {
+    const idx = PHOTO_EFFECT_PRESETS.findIndex((p) => p.id === currentEffect);
+    const nextIdx = (idx + 1) % PHOTO_EFFECT_PRESETS.length;
+    const nextEffect = PHOTO_EFFECT_PRESETS[nextIdx];
+    patch({ style: { ...styleRef.current, photoEffect: nextEffect.id as any } });
+  };
+  const cycleMobileBorder = () => {
+    const idx = PHOTO_BORDER_PRESETS.findIndex((p) => p.id === currentBorder);
+    const nextIdx = (idx + 1) % PHOTO_BORDER_PRESETS.length;
+    const nextBorder = PHOTO_BORDER_PRESETS[nextIdx];
+    patch({ style: { ...styleRef.current, photoBorder: nextBorder.id as any } });
+  };
+  const cycleMobileOverlay = () => {
+    const idx = PHOTO_OVERLAY_PRESETS.findIndex((p) => p.id === currentOverlay);
+    const nextIdx = (idx + 1) % PHOTO_OVERLAY_PRESETS.length;
+    const nextOverlay = PHOTO_OVERLAY_PRESETS[nextIdx];
+    patch({ style: { ...styleRef.current, photoOverlay: nextOverlay.id as any } });
+  };
+  const centerMobilePhoto = () => {
+    patch({
+      style: { ...styleRef.current, photoPositionX: 50, photoPositionY: 50, photoZoom: 100 },
+    });
+  };
+  const resetMobilePhoto = () => {
+    const ok = window.confirm(useSecondary ? "გაანულდეს ფოტო რედაქტირება?" : "Reset photo edits?");
+    if (!ok) return;
+    patch({
+      style: {
+        ...styleRef.current,
+        photoPositionX: 50,
+        photoPositionY: 50,
+        photoZoom: 100,
+        photoEffect: "none" as any,
+        photoBorder: "none" as any,
+        photoOverlay: "none" as any,
+      },
+    });
+  };
 
   const getBorderStyle = (): CSSProperties => {
     const accentColor = "var(--accent)";
@@ -195,19 +240,6 @@ export function HeroSegment({
 
   return (
     <>
-      {/* Sovereign Mobile Modal */}
-      {mobileModalOpen && editable && (
-        <PhotoEditModal
-          state={state}
-          patch={patch}
-          onClose={() => setMobileModalOpen(false)}
-          onReplace={() => {
-            setMobileModalOpen(false);
-            fileRef.current?.click();
-          }}
-        />
-      )}
-
       <motion.section
         variants={itemVariants}
         style={{
@@ -347,6 +379,19 @@ export function HeroSegment({
               )}
             </AnimatePresence>
           </div>
+          {editable && state.photoDataUrl ? (
+            <div className="w-full md:hidden">
+              <div className="mx-auto flex w-full max-w-[520px] flex-wrap justify-center gap-1.5 rounded-2xl border border-white/20 bg-black/75 p-2 text-white shadow-lg backdrop-blur-md">
+                <MobilePhotoToolButton icon={<Shapes className="h-3.5 w-3.5" />} label={useSecondary ? "ფორმა" : "Shape"} onClick={cycleMobileShape} />
+                <MobilePhotoToolButton icon={<Wand2 className="h-3.5 w-3.5" />} label={useSecondary ? "ფილტრი" : "Filter"} onClick={cycleMobileEffect} />
+                <MobilePhotoToolButton icon={<FrameIcon className="h-3.5 w-3.5" />} label={useSecondary ? "ჩარჩო" : "Border"} onClick={cycleMobileBorder} />
+                <MobilePhotoToolButton icon={<Layers className="h-3.5 w-3.5" />} label={useSecondary ? "ეფექტი" : "Layers"} onClick={cycleMobileOverlay} />
+                <MobilePhotoToolButton icon={<Crosshair className="h-3.5 w-3.5" />} label={useSecondary ? "ცენტრი" : "Center"} onClick={centerMobilePhoto} />
+                <MobilePhotoToolButton icon={<RefreshCw className="h-3.5 w-3.5" />} label={useSecondary ? "შეცვლა" : "Replace"} onClick={() => fileRef.current?.click()} />
+                <MobilePhotoToolButton icon={<RotateCcw className="h-3.5 w-3.5" />} label={useSecondary ? "გაანულება" : "Reset"} onClick={resetMobilePhoto} />
+              </div>
+            </div>
+          ) : null}
 
           {/* ── Identity Text ───────────────────────────────────── */}
           <div ref={heroActiveZoneRef} className="relative z-10 w-full space-y-1 bg-transparent pt-4 text-center transition-all">
@@ -407,5 +452,26 @@ export function HeroSegment({
         </div>
       </motion.section>
     </>
+  );
+}
+
+function MobilePhotoToolButton({
+  icon,
+  label,
+  onClick,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wide text-white transition hover:bg-white/20 active:scale-95"
+    >
+      {icon}
+      <span>{label}</span>
+    </button>
   );
 }

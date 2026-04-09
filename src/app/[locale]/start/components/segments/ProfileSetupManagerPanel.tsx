@@ -118,7 +118,7 @@ export function ProfileSetupManagerPanel({ editable, state, patch, useSecondary 
               <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={displayValue(state.phone)} placeholder="+995 5XX XX XX XX" onFocus={selectAllOnFocus} onChange={(e) => patch({ phone: e.target.value })} />
               <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={displayValue(state.email)} placeholder="your@email.com" onFocus={selectAllOnFocus} onChange={(e) => patch({ email: e.target.value })} />
             </div>
-            <input className="mt-2 w-full rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={displayValue(state.address)} placeholder="123 Professional Ave, Tbilisi" onFocus={selectAllOnFocus} onChange={(e) => patch({ address: e.target.value })} />
+            <input className="mt-2 w-full rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={displayValue(state.address)} placeholder={useSecondary ? "მისამართი" : "Address"} onFocus={selectAllOnFocus} onChange={(e) => patch({ address: e.target.value })} />
 
             <p className="mt-2 text-[11px] text-white/70">{useSecondary ? "ეს ინფორმაცია გამოიყენება მხოლოდ თქვენი ბარათის შინაარსის შესავსებად." : "This information is used only to fill your card content."}</p>
             <div className="mt-3">
