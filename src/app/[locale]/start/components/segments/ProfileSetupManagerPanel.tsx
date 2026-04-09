@@ -1,0 +1,122 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import { UserRound } from "lucide-react";
+import type { Lane1CustomizerState, Lane1StatePatch } from "../../lib/types";
+
+type Props = {
+  editable: boolean;
+  state: Lane1CustomizerState;
+  patch: (p: Lane1StatePatch) => void;
+};
+
+export function ProfileSetupManagerPanel({ editable, state, patch }: Props) {
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const autoOpenedRef = useRef(false);
+
+  useEffect(() => {
+    if (!editable || state.profileSetupCompleted || autoOpenedRef.current) return;
+    autoOpenedRef.current = true;
+    setOpen(true);
+    patch({ profileSetupCompleted: true });
+  }, [editable, patch, state.profileSetupCompleted]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: MouseEvent | TouchEvent) => {
+      if (!rootRef.current?.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("touchstart", onDown, { passive: true });
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("touchstart", onDown);
+    };
+  }, [open]);
+
+  if (!editable) return null;
+
+  const setLangMode = (mode: Lane1CustomizerState["profileLanguageMode"]) => {
+    if (mode === "both") {
+      patch({
+        profileLanguageMode: "both",
+        translationMethod: state.translationMethod === "none" ? "self" : state.translationMethod,
+        secondaryMode: state.translationMethod === "professional" ? "pro" : "self",
+      });
+      return;
+    }
+    patch({
+      profileLanguageMode: mode,
+      translationMethod: "none",
+      secondaryMode: "none",
+    });
+  };
+
+  const setTranslationMethod = (method: Lane1CustomizerState["translationMethod"]) => {
+    patch({
+      translationMethod: method,
+      secondaryMode: method === "self" ? "self" : method === "professional" ? "pro" : "none",
+      proTranslationAcknowledged: method === "professional",
+    });
+  };
+
+  return (
+    <div ref={rootRef} className="business-card-template-print-skip pointer-events-none absolute inset-x-0 top-2 z-40 flex justify-center px-3">
+      <div className="pointer-events-auto w-full max-w-[min(96%,620px)]">
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          className="mx-auto flex min-h-10 items-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75"
+        >
+          <UserRound className="h-3.5 w-3.5" />
+          Profile setup
+        </button>
+        {open ? (
+          <div className="mt-2 rounded-2xl border border-white/20 bg-black/75 p-3 text-white shadow-2xl backdrop-blur-md">
+            <div className="grid gap-2 md:grid-cols-2">
+              <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={state.company} placeholder="Company" onChange={(e) => patch({ company: e.target.value })} />
+              <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={state.name} placeholder="Name" onChange={(e) => patch({ name: e.target.value })} />
+              <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={state.title} placeholder="Title" onChange={(e) => patch({ title: e.target.value })} />
+              <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={state.tagline} placeholder="Tagline" onChange={(e) => patch({ tagline: e.target.value })} />
+              <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={state.phone} placeholder="Phone" onChange={(e) => patch({ phone: e.target.value })} />
+              <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={state.email} placeholder="E-mail" onChange={(e) => patch({ email: e.target.value })} />
+            </div>
+            <input className="mt-2 w-full rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={state.address} placeholder="Address" onChange={(e) => patch({ address: e.target.value })} />
+
+            <div className="mt-3">
+              <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-white/80">Language</p>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  ["en_only", "Only English"],
+                  ["ka_only", "Only Georgian"],
+                  ["both", "Both languages"],
+                ].map(([id, label]) => (
+                  <button key={id} type="button" onClick={() => setLangMode(id as Lane1CustomizerState["profileLanguageMode"])} className={`rounded-full px-3 py-1 text-xs ${state.profileLanguageMode === id ? "bg-white text-slate-900" : "bg-white/10 text-white"}`}>
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {state.profileLanguageMode === "both" ? (
+              <div className="mt-2 space-y-2">
+                <div className="flex gap-2">
+                  <button type="button" onClick={() => setTranslationMethod("self")} className={`rounded-full px-3 py-1 text-xs ${state.translationMethod === "self" ? "bg-white text-slate-900" : "bg-white/10 text-white"}`}>Self-translate</button>
+                  <button type="button" onClick={() => setTranslationMethod("professional")} className={`rounded-full px-3 py-1 text-xs ${state.translationMethod === "professional" ? "bg-white text-slate-900" : "bg-white/10 text-white"}`}>Professional (+150 ₾)</button>
+                </div>
+                {state.translationMethod === "professional" ? (
+                  <div className="flex gap-2">
+                    <button type="button" onClick={() => patch({ translationSourceLang: "en" })} className={`rounded-full px-3 py-1 text-xs ${state.translationSourceLang === "en" ? "bg-white text-slate-900" : "bg-white/10 text-white"}`}>EN to KA</button>
+                    <button type="button" onClick={() => patch({ translationSourceLang: "ka" })} className={`rounded-full px-3 py-1 text-xs ${state.translationSourceLang === "ka" ? "bg-white text-slate-900" : "bg-white/10 text-white"}`}>KA to EN</button>
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+            <p className="mt-2 text-[11px] text-white/70">This information is used only to fill your card content.</p>
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
+}

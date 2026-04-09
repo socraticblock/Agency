@@ -49,7 +49,8 @@ function enGeBlock(label: string, en: string, ge: string): string[] {
 
 export function buildLane1WhatsAppUrl(state: Lane1CustomizerState): string {
   const total = computeLane1Total({
-    secondaryMode: state.secondaryMode,
+    profileLanguageMode: state.profileLanguageMode,
+    translationMethod: state.translationMethod,
     addGoogleMap: state.addGoogleMap,
   });
 
@@ -91,7 +92,7 @@ export function buildLane1WhatsAppUrl(state: Lane1CustomizerState): string {
     } else if (state.secondaryMode === "pro") {
       lines.push("მეორე ენა: პროფესიონალი მთარგმნელი (+150 ₾)");
     }
-    lines.push(`Google Maps: ${state.addGoogleMap ? "კი (+75 ₾)" : "არა"}`);
+    lines.push(`Google Maps: ${state.addGoogleMap ? "კი (უფასო)" : "არა"}`);
     lines.push("");
     lines.push(`სულ: ${total} ₾ (ერთჯერადი)`);
     lines.push("");
@@ -128,7 +129,7 @@ export function buildLane1WhatsAppUrl(state: Lane1CustomizerState): string {
     lines.push("");
     lines.push(styleSummary(state, "en"));
     lines.push("Second language: self-translated (+50 GEL)");
-    lines.push(`Google Map add-on: ${state.addGoogleMap ? "Yes (+75 GEL)" : "No"}`);
+    lines.push(`Google Maps: ${state.addGoogleMap ? "Yes (free)" : "No"}`);
     lines.push("");
     lines.push(`Total: ${total} GEL (one-time)`);
     lines.push("");
@@ -161,7 +162,7 @@ export function buildLane1WhatsAppUrl(state: Lane1CustomizerState): string {
     lines.push("");
     lines.push(styleSummary(state, "en"));
     lines.push("Second language: professional translation (+150 GEL)");
-    lines.push(`Google Map add-on: ${state.addGoogleMap ? "Yes (+75 GEL)" : "No"}`);
+    lines.push(`Google Maps: ${state.addGoogleMap ? "Yes (free)" : "No"}`);
     lines.push("");
     lines.push(`Total: ${total} GEL (one-time)`);
     lines.push("");
@@ -198,7 +199,7 @@ export function buildLane1WhatsAppUrl(state: Lane1CustomizerState): string {
     lines.push("");
     lines.push(styleSummary(state, "en"));
     lines.push("Primary language: English");
-    lines.push(`Google Map add-on: ${state.addGoogleMap ? "Yes (+75 GEL)" : "No"}`);
+    lines.push(`Google Maps: ${state.addGoogleMap ? "Yes (free)" : "No"}`);
     lines.push("");
     lines.push(`Total: ${total} GEL (one-time)`);
     lines.push("");

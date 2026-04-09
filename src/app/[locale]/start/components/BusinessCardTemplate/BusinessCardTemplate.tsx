@@ -19,12 +19,14 @@ import { ExperienceManagerPanel } from "../segments/ExperienceManagerPanel";
 import { LookManagerPanel } from "../segments/LookManagerPanel";
 import { CardSurfaceManagerPanel } from "../segments/CardSurfaceManagerPanel";
 import { QrManagerPanel } from "../segments/QrManagerPanel";
+import { ProfileSetupManagerPanel } from "../segments/ProfileSetupManagerPanel";
 import { buildItemVariants, containerVariants } from "../../lib/animations";
 import { usePwaMetadata } from "../../lib/usePwaMetadata";
 import { useCardTilt } from "../../lib/useCardTilt";
 import { Scale, Briefcase, Building2, Sparkles } from "lucide-react";
 import type { Lane1CustomizerState, Lane1StatePatch, SectionId } from "../../lib/types";
 import { ANIMATION_PRESETS, resolveStyleVariables } from "../../lib/presets";
+import { getLanguagePreviewMode } from "../../lib/language-profile";
 import { compressImageForLane1Storage } from "../../lib/image-compress";
 import "../business-card-template.css";
 import { BackgroundEngine } from "./BackgroundEngine";
@@ -53,7 +55,8 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   const editable = Boolean(onPatch);
   const isResponsive = layoutMode === "responsive";
   const vars = resolveStyleVariables(state.style) as any;
-  const useSecondary = previewLang === "secondary" && state.secondaryMode === "self";
+  const languageMode = getLanguagePreviewMode(state);
+  const useSecondary = previewLang === "secondary";
   const { rotateX, rotateY, handleMouseMove, handleMouseLeave } = useCardTilt(isResponsive, {
     enabled: state.cardTiltEnabled,
     maxDeg: state.cardTiltMaxDeg,
@@ -189,9 +192,11 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
         <div className="business-card-noise opacity-[0.04] mix-blend-overlay absolute inset-0 -z-5" aria-hidden />
       </div>
 
-      {state.secondaryMode === "pro" && (
+      {languageMode.showProfessionalNote && (
         <div className="business-card-template-print-skip border-b px-4 py-2.5 text-center text-xs opacity-70 relative z-20" style={{ borderColor: "var(--accent-secondary)", background: "color-mix(in srgb, var(--accent) 7%, transparent)" }}>
-          English will be used for professional translation in this preview.
+          {state.translationSourceLang === "ka"
+            ? "Georgian will be used for professional translation in this preview."
+            : "English will be used for professional translation in this preview."}
         </div>
       )}
 
@@ -208,6 +213,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
           custom={animPreset.stagger / speed}
         >
         <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onPhotoPicked} />
+        <ProfileSetupManagerPanel editable={editable} state={state} patch={patch} />
 
         <HeroSegment
           state={state}

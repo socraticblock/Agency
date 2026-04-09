@@ -51,6 +51,9 @@ export type MobileButtonId = "map-preview" | "get-directions";
 
 export type QrStyle = "square" | "rounded" | "dots";
 export type QrDisplayMode = "static" | "dropdown";
+export type ProfileLanguageMode = "en_only" | "ka_only" | "both";
+export type TranslationMethod = "none" | "self" | "professional";
+export type TranslationSourceLang = "en" | "ka";
 
 export type CardHoverEffectId = "none" | "lift" | "glow" | "scale";
 
@@ -147,13 +150,17 @@ export interface StylePresetSelection {
   cardShadowId: CardShadowId;
 }
 
-export const CUSTOMIZER_VERSION = 15 as const;
+export const CUSTOMIZER_VERSION = 16 as const;
 
 export interface Lane1CustomizerState {
   version: typeof CUSTOMIZER_VERSION;
   sectorId: SectorId | null;
   primaryLang: PrimaryLang;
   secondaryMode: SecondaryLangMode;
+  profileLanguageMode: ProfileLanguageMode;
+  translationMethod: TranslationMethod;
+  translationSourceLang: TranslationSourceLang;
+  profileSetupCompleted: boolean;
   name: string;
   nameSecondary: string;
   title: string;
@@ -248,6 +255,10 @@ export function defaultLane1State(): Lane1CustomizerState {
     sectorId: null,
     primaryLang: "en",
     secondaryMode: "none",
+    profileLanguageMode: "en_only",
+    translationMethod: "none",
+    translationSourceLang: "en",
+    profileSetupCompleted: false,
 
     // User requested placeholders
     name: "Your Name",

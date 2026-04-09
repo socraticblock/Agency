@@ -44,7 +44,7 @@ export function ContentSection({
           />
         </label>
 
-        {state.secondaryMode === "self" && (
+        {state.profileLanguageMode === "both" && state.translationMethod === "self" && (
           <label className={labelClass}>
             Business Address (GE)
             <textarea

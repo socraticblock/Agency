@@ -35,6 +35,7 @@
 - **037** — Moved Card surface controls on-card (`CardSurfaceManagerPanel`); removed sidebar `CardChromeSection`
 - **038** — Dead-code sweep: removed orphaned StartCustomizer sections-content files, legacy preset-grid/preset split modules, and unused exports
 - **039** — Added on-card `QrManagerPanel` (colors + style + static/dropdown mode + logo toggle); moved QR styling controls out of `IdentitySection`; v15
+- **040** — Profile setup flow added (top on-card pill + first-load auto-open) with language/translation source-of-truth, pricing remap (maps free), and v16 migration
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -219,6 +220,11 @@
 - **Context:** QR customization (foreground/background/style/show-on-card) lived in sidebar `IdentitySection`, while visual editing moved on-card; users wanted QR display mode (static vs dropdown).
 - **Decision:** Added `qrDisplayMode` (`static | dropdown`) to state + defaults and v15 migration; created on-card `QrManagerPanel` with show toggle, display mode, shape, foreground/background inputs, and logo toggle; inserted panel above `QrOnCardSegment`; updated `QrOnCardSegment` to render either static QR block or dropdown-reveal variant.
 - **Impact:** QR look/behavior now edited on-card; sidebar `IdentitySection` keeps download/print identity kit actions only; live QR behavior updates immediately in preview.
+
+### 040
+- **Context:** Profile identity + language/translation decisions were split between sidebar add-ons and implicit preview behavior, causing mismatch with the new on-card workflow.
+- **Decision:** Added `profileLanguageMode` / `translationMethod` / `translationSourceLang` / `profileSetupCompleted` to state with v16 migration and legacy mapping; created `ProfileSetupManagerPanel` as a top on-card pill that auto-opens once on first load; derived preview rules to enforce EN-only, KA-only, both-self toggle, and both-professional source-language-only behavior; updated pricing to make Google Maps free and charge translation based on profile setup.
+- **Impact:** Profile setup is now the source-of-truth for card identity/language decisions, pricing reflects business rules (maps free, pro translation +150₾ only when both languages + professional), and backward compatibility is preserved through migration syncing with legacy fields.
 
 ## Architecture Decisions
 - Zero backend for card features

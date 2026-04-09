@@ -16,6 +16,7 @@ import { loadLane1State, saveLane1State } from "../lib/customizer-store";
 import { getSectorPlaceholder } from "../lib/placeholders";
 import { buildLane1WhatsAppUrl } from "../lib/whatsapp";
 import { LANE1_BASE_GEL, computeLane1Total } from "../lib/lane1-pricing";
+import { getLanguagePreviewMode } from "../lib/language-profile";
 import { BusinessCardTemplate } from "./BusinessCardTemplate";
 import { StartCustomizer } from "./StartCustomizer";
 import { resolveStyleVariables } from "../lib/presets";
@@ -26,9 +27,11 @@ export function StartPageClient({ locale }: { locale: Locale }) {
   const [previewLang, setPreviewLang] = useState<"primary" | "secondary">("primary");
   const [mobileEditorOpen, setMobileEditorOpen] = useState(false);
   const [fabPulse, setFabPulse] = useState(true);
+  const languageMode = getLanguagePreviewMode(state);
 
   const total = computeLane1Total({
-    secondaryMode: state.secondaryMode,
+    profileLanguageMode: state.profileLanguageMode,
+    translationMethod: state.translationMethod,
     addGoogleMap: state.addGoogleMap,
   });
   const waUrl = buildLane1WhatsAppUrl(state);
@@ -55,6 +58,10 @@ export function StartPageClient({ locale }: { locale: Locale }) {
     const t = window.setTimeout(() => setFabPulse(false), 2000);
     return () => window.clearTimeout(t);
   }, []);
+
+  useEffect(() => {
+    if (languageMode.fixedPreview) setPreviewLang(languageMode.fixedPreview);
+  }, [languageMode.fixedPreview]);
 
   const homeHref = `/${locale}`;
 
@@ -98,7 +105,7 @@ export function StartPageClient({ locale }: { locale: Locale }) {
       </header>
 
       <div className="mb-4 flex flex-wrap items-center gap-3 lg:hidden">
-        {state.secondaryMode === "self" ? (
+        {languageMode.canToggle ? (
           <div className="start-glass-heavy flex rounded-full p-1 text-xs font-semibold">
             <button
               type="button"
@@ -129,7 +136,7 @@ export function StartPageClient({ locale }: { locale: Locale }) {
       <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
         <div className="space-y-4">
           <div className="hidden flex-wrap items-center gap-3 lg:flex">
-            {state.secondaryMode === "self" ? (
+            {languageMode.canToggle ? (
               <div className="start-glass-heavy flex rounded-full p-1 text-xs font-semibold">
                 <button
                   type="button"
@@ -160,17 +167,11 @@ export function StartPageClient({ locale }: { locale: Locale }) {
             {/* No motion/key here: remounting was closing bottom float panels (Typography, Background) and replaying blur on every font/color tweak. */}
             <BusinessCardTemplate
               state={state}
-              previewLang={
-                state.secondaryMode === "self" ? previewLang : "primary"
-              }
+              previewLang={languageMode.fixedPreview ?? previewLang}
               homeHref={homeHref}
               ownerName={state.name}
               onPatch={onPatch}
-              onPreviewLangChange={
-                state.secondaryMode === "self"
-                  ? handlePreviewLangChange
-                  : undefined
-              }
+              onPreviewLangChange={languageMode.canToggle ? handlePreviewLangChange : undefined}
             />
           </div>
         </div>

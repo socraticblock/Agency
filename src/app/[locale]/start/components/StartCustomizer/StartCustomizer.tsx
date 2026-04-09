@@ -27,7 +27,8 @@ export function StartCustomizer({
 }) {
   const params = useParams();
   const total = computeLane1Total({
-    secondaryMode: state.secondaryMode,
+    profileLanguageMode: state.profileLanguageMode,
+    translationMethod: state.translationMethod,
     addGoogleMap: state.addGoogleMap,
   });
 

@@ -23,8 +23,8 @@ function safeParse(raw: string | null): Lane1CustomizerState | null {
   try {
     const data = JSON.parse(raw) as Record<string, unknown>;
     const v = typeof data.version === "number" ? data.version : 1;
-    // Allow migration from v1–v15
-    if (v < 1 || v > 15) return null;
+    // Allow migration from v1–v16
+    if (v < 1 || v > 16) return null;
     return migrateLane1State(data as unknown as Lane1CustomizerState);
   } catch {
     return null;
@@ -67,6 +67,37 @@ function migrateLane1State(
   // Cleanup/validation
   if (typeof merged.proTranslationAcknowledged !== "boolean") {
     merged.proTranslationAcknowledged = false;
+  }
+
+  if (merged.profileLanguageMode === undefined) {
+    if (merged.secondaryMode === "self" || merged.secondaryMode === "pro") {
+      merged.profileLanguageMode = "both";
+    } else if (merged.primaryLang === "ka") {
+      merged.profileLanguageMode = "ka_only";
+    } else {
+      merged.profileLanguageMode = "en_only";
+    }
+  }
+  if (merged.translationMethod === undefined) {
+    if (merged.secondaryMode === "self") merged.translationMethod = "self";
+    else if (merged.secondaryMode === "pro") merged.translationMethod = "professional";
+    else merged.translationMethod = "none";
+  }
+  if (merged.translationSourceLang === undefined) {
+    merged.translationSourceLang = merged.primaryLang === "ka" ? "ka" : "en";
+  }
+  if (typeof merged.profileSetupCompleted !== "boolean") {
+    merged.profileSetupCompleted = true;
+  }
+
+  if (merged.profileLanguageMode === "both") {
+    merged.secondaryMode = merged.translationMethod === "self" ? "self" : "pro";
+    if (merged.translationMethod === "professional") {
+      merged.proTranslationAcknowledged = true;
+    }
+  } else {
+    merged.secondaryMode = "none";
+    merged.translationMethod = "none";
   }
 
   if (merged.style.textColorId === "black") {
