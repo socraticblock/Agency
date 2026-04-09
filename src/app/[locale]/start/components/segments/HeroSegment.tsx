@@ -60,6 +60,7 @@ export function HeroSegment({
     photoOverlay = "none",
     photoBorder = "none",
   } = style as any;
+  const [mobileFloatingLabel, setMobileFloatingLabel] = useState<{ label: string; key: number } | null>(null);
 
   // ─── Desktop: non-passive wheel for zoom ────────────────────────────────
   const photoContainerRef = useRef<HTMLDivElement>(null);
@@ -103,6 +104,8 @@ export function HeroSegment({
   // ─── Desktop: raw pointer events for drag/pan ───────────────────────────
   const dragState = useRef<{ x: number; y: number } | null>(null);
   const didDragRef = useRef(false);
+  const lastTouchRef = useRef<{ x: number; y: number } | null>(null);
+  const lastPinchDistRef = useRef<number | null>(null);
   const posXRef = useRef(photoPositionX);
   const posYRef = useRef(photoPositionY);
   posXRef.current = photoPositionX;
@@ -139,6 +142,64 @@ export function HeroSegment({
     dragState.current = null;
   }, []);
 
+  const onTouchStart = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+    if (!editable || !state.photoDataUrl || window.innerWidth >= 768) return;
+    if (e.touches.length === 1) {
+      lastTouchRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      lastPinchDistRef.current = null;
+      return;
+    }
+    if (e.touches.length === 2) {
+      const [t1, t2] = [e.touches[0], e.touches[1]];
+      lastPinchDistRef.current = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+      lastTouchRef.current = null;
+    }
+  }, [editable, state.photoDataUrl]);
+
+  const onTouchMove = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+    if (!editable || !state.photoDataUrl || window.innerWidth >= 768) return;
+
+    if (e.touches.length === 1 && lastTouchRef.current) {
+      didDragRef.current = true;
+      e.preventDefault();
+      const dx = (e.touches[0].clientX - lastTouchRef.current.x) / 2.5;
+      const dy = (e.touches[0].clientY - lastTouchRef.current.y) / 2.5;
+      lastTouchRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      patch({
+        style: {
+          ...styleRef.current,
+          photoPositionX: Math.max(-50, Math.min(150, posXRef.current + dx)),
+          photoPositionY: Math.max(-50, Math.min(150, posYRef.current + dy)),
+        },
+      });
+      return;
+    }
+
+    if (e.touches.length === 2 && lastPinchDistRef.current !== null) {
+      didDragRef.current = true;
+      e.preventDefault();
+      const [t1, t2] = [e.touches[0], e.touches[1]];
+      const nextDist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+      const ratio = nextDist / lastPinchDistRef.current;
+      lastPinchDistRef.current = nextDist;
+      const nextZoom = Math.max(80, Math.min(400, zoomRef.current * ratio));
+      patch({ style: { ...styleRef.current, photoZoom: Math.round(nextZoom) } });
+    }
+  }, [editable, patch, state.photoDataUrl]);
+
+  const onTouchEnd = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+    if (window.innerWidth >= 768) return;
+    if (e.touches.length === 0) {
+      lastTouchRef.current = null;
+      lastPinchDistRef.current = null;
+      return;
+    }
+    if (e.touches.length === 1) {
+      lastTouchRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      lastPinchDistRef.current = null;
+    }
+  }, []);
+
   // ─── Click handler: mobile opens modal, desktop is no-op ────────────────
   const onPhotoClick = useCallback((e: React.MouseEvent) => {
     if (!editable || photoBusy) return;
@@ -165,6 +226,16 @@ export function HeroSegment({
   const imageFitClass = photoShape === "wide-cinematic" ? "object-contain" : "object-cover";
 
   const effectFilter = PHOTO_EFFECT_PRESETS.find(p => p.id === photoEffect)?.filter || "none";
+  const showMobileLabel = (label: string) => {
+    setMobileFloatingLabel({ label, key: Date.now() });
+  };
+
+  useEffect(() => {
+    if (!mobileFloatingLabel) return;
+    const timer = window.setTimeout(() => setMobileFloatingLabel(null), 850);
+    return () => window.clearTimeout(timer);
+  }, [mobileFloatingLabel]);
+
   const currentShape = photoShape;
   const currentEffect = photoEffect;
   const currentBorder = photoBorder;
@@ -174,29 +245,34 @@ export function HeroSegment({
     const nextIdx = (idx + 1) % PHOTO_SHAPE_PRESETS.length;
     const nextShape = PHOTO_SHAPE_PRESETS[nextIdx];
     patch({ style: { ...styleRef.current, photoShape: nextShape.id as any } });
+    showMobileLabel(nextShape.labelEn);
   };
   const cycleMobileEffect = () => {
     const idx = PHOTO_EFFECT_PRESETS.findIndex((p) => p.id === currentEffect);
     const nextIdx = (idx + 1) % PHOTO_EFFECT_PRESETS.length;
     const nextEffect = PHOTO_EFFECT_PRESETS[nextIdx];
     patch({ style: { ...styleRef.current, photoEffect: nextEffect.id as any } });
+    showMobileLabel(nextEffect.labelEn);
   };
   const cycleMobileBorder = () => {
     const idx = PHOTO_BORDER_PRESETS.findIndex((p) => p.id === currentBorder);
     const nextIdx = (idx + 1) % PHOTO_BORDER_PRESETS.length;
     const nextBorder = PHOTO_BORDER_PRESETS[nextIdx];
     patch({ style: { ...styleRef.current, photoBorder: nextBorder.id as any } });
+    showMobileLabel(nextBorder.labelEn);
   };
   const cycleMobileOverlay = () => {
     const idx = PHOTO_OVERLAY_PRESETS.findIndex((p) => p.id === currentOverlay);
     const nextIdx = (idx + 1) % PHOTO_OVERLAY_PRESETS.length;
     const nextOverlay = PHOTO_OVERLAY_PRESETS[nextIdx];
     patch({ style: { ...styleRef.current, photoOverlay: nextOverlay.id as any } });
+    showMobileLabel(nextOverlay.labelEn);
   };
   const centerMobilePhoto = () => {
     patch({
       style: { ...styleRef.current, photoPositionX: 50, photoPositionY: 50, photoZoom: 100 },
     });
+    showMobileLabel(useSecondary ? "ცენტრშია" : "Centered");
   };
   const resetMobilePhoto = () => {
     const ok = window.confirm(useSecondary ? "გაანულდეს ფოტო რედაქტირება?" : "Reset photo edits?");
@@ -212,6 +288,7 @@ export function HeroSegment({
         photoOverlay: "none" as any,
       },
     });
+    showMobileLabel(useSecondary ? "ფოტო განულდა" : "Photo reset");
   };
 
   const getBorderStyle = (): CSSProperties => {
@@ -290,6 +367,9 @@ export function HeroSegment({
               onPointerMove={onPointerMove}
               onPointerUp={onPointerUp}
               onPointerCancel={onPointerUp}
+              onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
+              onTouchEnd={onTouchEnd}
               onClick={onPhotoClick}
             >
             {state.photoDataUrl ? (
@@ -381,14 +461,30 @@ export function HeroSegment({
           </div>
           {editable && state.photoDataUrl ? (
             <div className="w-full md:hidden">
-              <div className="mx-auto flex w-full max-w-[520px] flex-wrap justify-center gap-1.5 rounded-2xl border border-white/20 bg-black/75 p-2 text-white shadow-lg backdrop-blur-md">
-                <MobilePhotoToolButton icon={<Shapes className="h-3.5 w-3.5" />} label={useSecondary ? "ფორმა" : "Shape"} onClick={cycleMobileShape} />
-                <MobilePhotoToolButton icon={<Wand2 className="h-3.5 w-3.5" />} label={useSecondary ? "ფილტრი" : "Filter"} onClick={cycleMobileEffect} />
-                <MobilePhotoToolButton icon={<FrameIcon className="h-3.5 w-3.5" />} label={useSecondary ? "ჩარჩო" : "Border"} onClick={cycleMobileBorder} />
-                <MobilePhotoToolButton icon={<Layers className="h-3.5 w-3.5" />} label={useSecondary ? "ეფექტი" : "Layers"} onClick={cycleMobileOverlay} />
-                <MobilePhotoToolButton icon={<Crosshair className="h-3.5 w-3.5" />} label={useSecondary ? "ცენტრი" : "Center"} onClick={centerMobilePhoto} />
-                <MobilePhotoToolButton icon={<RefreshCw className="h-3.5 w-3.5" />} label={useSecondary ? "შეცვლა" : "Replace"} onClick={() => fileRef.current?.click()} />
-                <MobilePhotoToolButton icon={<RotateCcw className="h-3.5 w-3.5" />} label={useSecondary ? "გაანულება" : "Reset"} onClick={resetMobilePhoto} />
+              <div className="relative mx-auto w-full max-w-[520px]">
+                <AnimatePresence>
+                  {mobileFloatingLabel ? (
+                    <motion.div
+                      key={mobileFloatingLabel.key}
+                      initial={{ opacity: 0, y: 2 }}
+                      animate={{ opacity: 1, y: -8 }}
+                      exit={{ opacity: 0, y: -18 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
+                      className="pointer-events-none absolute left-1/2 top-0 z-20 -translate-x-1/2 whitespace-nowrap rounded-lg bg-white px-3 py-1 text-[11px] font-semibold text-black shadow"
+                    >
+                      {mobileFloatingLabel.label}
+                    </motion.div>
+                  ) : null}
+                </AnimatePresence>
+                <div className="flex w-full flex-wrap justify-center gap-1.5 rounded-2xl border border-white/20 bg-black/75 p-2 text-white shadow-lg backdrop-blur-md">
+                  <MobilePhotoToolButton icon={<Shapes className="h-3.5 w-3.5" />} label={useSecondary ? "ფორმა" : "Shape"} onClick={cycleMobileShape} />
+                  <MobilePhotoToolButton icon={<Wand2 className="h-3.5 w-3.5" />} label={useSecondary ? "ფილტრი" : "Filter"} onClick={cycleMobileEffect} />
+                  <MobilePhotoToolButton icon={<FrameIcon className="h-3.5 w-3.5" />} label={useSecondary ? "ჩარჩო" : "Border"} onClick={cycleMobileBorder} />
+                  <MobilePhotoToolButton icon={<Layers className="h-3.5 w-3.5" />} label={useSecondary ? "ეფექტი" : "Layers"} onClick={cycleMobileOverlay} />
+                  <MobilePhotoToolButton icon={<Crosshair className="h-3.5 w-3.5" />} label={useSecondary ? "ცენტრი" : "Center"} onClick={centerMobilePhoto} />
+                  <MobilePhotoToolButton icon={<RefreshCw className="h-3.5 w-3.5" />} label={useSecondary ? "შეცვლა" : "Replace"} onClick={() => fileRef.current?.click()} />
+                  <MobilePhotoToolButton icon={<RotateCcw className="h-3.5 w-3.5" />} label={useSecondary ? "გაანულება" : "Reset"} onClick={resetMobilePhoto} />
+                </div>
               </div>
             </div>
           ) : null}
