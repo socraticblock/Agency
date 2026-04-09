@@ -10,6 +10,16 @@ type Props = {
   patch: (p: Lane1StatePatch) => void;
 };
 
+const LEGACY_SAMPLE_VALUES = new Set([
+  "Company Name",
+  "Your Name",
+  "Job title",
+  "Your tagline here",
+  "+995 5XX XX XX XX",
+  "your@email.com",
+  "123 Professional Ave, Tbilisi",
+]);
+
 export function ProfileSetupManagerPanel({ editable, state, patch }: Props) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement | null>(null);
@@ -36,6 +46,9 @@ export function ProfileSetupManagerPanel({ editable, state, patch }: Props) {
   }, [open]);
 
   if (!editable) return null;
+
+  const displayValue = (value: string) => (LEGACY_SAMPLE_VALUES.has(value.trim()) ? "" : value);
+  const selectAllOnFocus = (e: React.FocusEvent<HTMLInputElement>) => e.currentTarget.select();
 
   const setLangMode = (mode: Lane1CustomizerState["profileLanguageMode"]) => {
     if (mode === "both") {
@@ -75,14 +88,14 @@ export function ProfileSetupManagerPanel({ editable, state, patch }: Props) {
         {open ? (
           <div className="mt-2 rounded-2xl border border-white/20 bg-black/75 p-3 text-white shadow-2xl backdrop-blur-md">
             <div className="grid gap-2 md:grid-cols-2">
-              <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={state.company} placeholder="Company" onChange={(e) => patch({ company: e.target.value })} />
-              <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={state.name} placeholder="Name" onChange={(e) => patch({ name: e.target.value })} />
-              <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={state.title} placeholder="Title" onChange={(e) => patch({ title: e.target.value })} />
-              <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={state.tagline} placeholder="Tagline" onChange={(e) => patch({ tagline: e.target.value })} />
-              <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={state.phone} placeholder="Phone" onChange={(e) => patch({ phone: e.target.value })} />
-              <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={state.email} placeholder="E-mail" onChange={(e) => patch({ email: e.target.value })} />
+              <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={displayValue(state.company)} placeholder="Company Name" onFocus={selectAllOnFocus} onChange={(e) => patch({ company: e.target.value })} />
+              <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={displayValue(state.name)} placeholder="Your Name" onFocus={selectAllOnFocus} onChange={(e) => patch({ name: e.target.value })} />
+              <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={displayValue(state.title)} placeholder="Job title" onFocus={selectAllOnFocus} onChange={(e) => patch({ title: e.target.value })} />
+              <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={displayValue(state.tagline)} placeholder="Your tagline here" onFocus={selectAllOnFocus} onChange={(e) => patch({ tagline: e.target.value })} />
+              <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={displayValue(state.phone)} placeholder="+995 5XX XX XX XX" onFocus={selectAllOnFocus} onChange={(e) => patch({ phone: e.target.value })} />
+              <input className="rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={displayValue(state.email)} placeholder="your@email.com" onFocus={selectAllOnFocus} onChange={(e) => patch({ email: e.target.value })} />
             </div>
-            <input className="mt-2 w-full rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={state.address} placeholder="Address" onChange={(e) => patch({ address: e.target.value })} />
+            <input className="mt-2 w-full rounded-lg bg-white/10 px-2 py-1.5 text-sm" value={displayValue(state.address)} placeholder="123 Professional Ave, Tbilisi" onFocus={selectAllOnFocus} onChange={(e) => patch({ address: e.target.value })} />
 
             <div className="mt-3">
               <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-white/80">Language</p>
