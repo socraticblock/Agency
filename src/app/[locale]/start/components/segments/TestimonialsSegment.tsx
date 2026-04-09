@@ -8,6 +8,7 @@ import { InlineEditable } from "../InlineEditable";
 interface TestimonialsSegmentProps {
   state: Lane1CustomizerState;
   editable: boolean;
+  useSecondary: boolean;
   isResponsive: boolean;
   patch: (p: Partial<Lane1CustomizerState>) => void;
   headingStyle: CSSProperties;
@@ -30,6 +31,7 @@ function patchTestimonial(
 export function TestimonialsSegment({
   state,
   editable,
+  useSecondary,
   isResponsive,
   patch,
   headingStyle,
@@ -48,7 +50,7 @@ export function TestimonialsSegment({
       style={{ borderColor: "var(--accent-secondary)", ...glassStyle }}
     >
       <h2 className="mb-4 text-lg font-bold" style={headingStyle}>
-        Testimonials
+        {useSecondary ? "ჩვენებები" : "Testimonials"}
       </h2>
       <ul className="flex flex-col gap-4">
         {state.testimonials.slice(0, state.testimonialCount).map((t, i) => {
@@ -63,7 +65,7 @@ export function TestimonialsSegment({
                 <InlineEditable
                   value={t.quote}
                   onChange={(v) => patch(patchTestimonial(state.testimonials, i, "quote", v))}
-                  placeholder={`Client quote ${i + 1}…`}
+                  placeholder={useSecondary ? "ციტატის დამატება" : `Client quote ${i + 1}…`}
                   editable={editable}
                   multiline
                   className="block w-full whitespace-pre-wrap"
@@ -74,7 +76,7 @@ export function TestimonialsSegment({
                 <InlineEditable
                   value={t.name}
                   onChange={(v) => patch(patchTestimonial(state.testimonials, i, "name", v))}
-                  placeholder="Name"
+                  placeholder={useSecondary ? "კლიენტის სახელი" : "Name"}
                   editable={editable}
                   className="inline-block min-w-0"
                 />
@@ -84,7 +86,7 @@ export function TestimonialsSegment({
                     <InlineEditable
                       value={t.title}
                       onChange={(v) => patch(patchTestimonial(state.testimonials, i, "title", v))}
-                      placeholder="Job title / company"
+                      placeholder={useSecondary ? "კლიენტის დასახელება" : "Job title / company"}
                       editable={editable}
                       className="inline-block min-w-0"
                     />

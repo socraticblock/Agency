@@ -14,6 +14,7 @@ interface UtilitySegmentsProps {
   handleShare: () => void;
   referHref: string;
   ctaLabelStyle: CSSProperties;
+  useSecondary: boolean;
 }
 
 export function UtilitySegments({
@@ -24,6 +25,7 @@ export function UtilitySegments({
   handleShare,
   referHref,
   ctaLabelStyle,
+  useSecondary,
 }: UtilitySegmentsProps) {
   const id = state.style.buttonStyleId;
   const shareFilled = id !== "outlined";
@@ -47,7 +49,7 @@ export function UtilitySegments({
           style={utilitySurfaceStyle}
         >
           <Share2 className="h-4 w-4" />
-          {shareFeedback || "Share Card"}
+          {shareFeedback || (useSecondary ? "ბარათის გაზიარება" : "Share Card")}
         </MagneticButton>
 
         <MagneticButton
@@ -60,7 +62,7 @@ export function UtilitySegments({
           aria-label={`Refer ${state.name.split(" ")[0] || "me"} via WhatsApp`}
         >
           <Send className="h-4 w-4" />
-          Refer {state.name.split(" ")[0] || "Me"}
+          {useSecondary ? `რეფერალი ${state.name.split(" ")[0] || "მე"}` : `Refer ${state.name.split(" ")[0] || "Me"}`}
         </MagneticButton>
       </div>
 

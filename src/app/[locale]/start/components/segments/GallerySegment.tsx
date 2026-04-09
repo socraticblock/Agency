@@ -11,6 +11,7 @@ type GalleryTuple = Lane1CustomizerState["galleryImageDataUrls"];
 interface GallerySegmentProps {
   state: Lane1CustomizerState;
   editable: boolean;
+  useSecondary: boolean;
   patch: (p: Partial<Lane1CustomizerState>) => void;
   isResponsive: boolean;
   headingStyle: CSSProperties;
@@ -21,6 +22,7 @@ interface GallerySegmentProps {
 export function GallerySegment({
   state,
   editable,
+  useSecondary,
   patch,
   isResponsive,
   headingStyle,
@@ -63,7 +65,7 @@ export function GallerySegment({
       style={{ borderColor: "var(--accent-secondary)", ...glassStyle }}
     >
       <h2 className="mb-4 text-lg font-bold" style={headingStyle}>
-        Gallery
+        {useSecondary ? "გალერეა" : "Gallery"}
       </h2>
       
       <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -81,14 +83,14 @@ export function GallerySegment({
                         className="rounded bg-white/90 px-2 py-1 text-[10px] font-bold text-black"
                         onClick={() => inputs.current[i]?.click()}
                       >
-                        Change
+                        {useSecondary ? "შეცვლა" : "Change"}
                       </button>
                       <button
                         type="button"
                         className="rounded bg-red-500/90 px-2 py-1 text-[10px] font-bold text-white"
                         onClick={() => clearSlot(i)}
                       >
-                        Remove
+                        {useSecondary ? "წაშლა" : "Remove"}
                       </button>
                     </div>
                   )}
@@ -99,7 +101,7 @@ export function GallerySegment({
                   className="flex h-full w-full items-center justify-center text-xs font-medium text-black/40 hover:bg-black/10 transition-colors"
                   onClick={() => inputs.current[i]?.click()}
                 >
-                  {busy === i ? "..." : `+ Photos`}
+                  {busy === i ? "..." : useSecondary ? "+ ფოტოები" : "+ Photos"}
                 </button>
               ) : null}
               

@@ -12,9 +12,10 @@ interface CtaSegmentProps {
   editable: boolean;
   patch: (p: Partial<Lane1CustomizerState>) => void;
   ctaLabelStyle: CSSProperties;
+  useSecondary: boolean;
 }
 
-export function CtaSegment({ state, editable, patch, ctaLabelStyle }: CtaSegmentProps) {
+export function CtaSegment({ state, editable, patch, ctaLabelStyle, useSecondary }: CtaSegmentProps) {
   function telHref(phone: string): string {
     const digits = phone.replace(/\D/g, "");
     return digits ? `tel:+${digits}` : "tel:";
@@ -50,7 +51,7 @@ export function CtaSegment({ state, editable, patch, ctaLabelStyle }: CtaSegment
         <InlineEditable
           value={state.ctaTextCall}
           onChange={(v) => patch({ ctaTextCall: v })}
-          placeholder="Call Me"
+          placeholder={useSecondary ? "დამირეკე" : "Call Me"}
           editable={editable}
           className="inline-block"
         />

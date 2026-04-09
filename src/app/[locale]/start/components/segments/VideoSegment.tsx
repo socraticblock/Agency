@@ -8,6 +8,7 @@ import { videoUrlToEmbedSrc } from "../../lib/video-embed";
 interface VideoSegmentProps {
   state: Lane1CustomizerState;
   editable: boolean;
+  useSecondary: boolean;
   patch: (p: Partial<Lane1CustomizerState>) => void;
   isResponsive: boolean;
   headingStyle: CSSProperties;
@@ -19,6 +20,7 @@ interface VideoSegmentProps {
 export function VideoSegment({
   state,
   editable,
+  useSecondary,
   patch,
   isResponsive,
   headingStyle,
@@ -37,19 +39,19 @@ export function VideoSegment({
     >
       <div className="flex items-center justify-between gap-4 mb-3">
         <h2 className="text-lg font-bold" style={headingStyle}>
-          Video
+          {useSecondary ? "ვიდეო" : "Video"}
         </h2>
       </div>
 
       {editable && (
         <div className="mb-4">
           <label className="block text-[10px] uppercase font-bold tracking-wider opacity-50 mb-1">
-            YouTube or Vimeo Link
+            {useSecondary ? "ვიდეო URL" : "YouTube or Vimeo Link"}
           </label>
           <input
             type="text"
             className="w-full rounded-lg border border-black/10 bg-black/5 px-3 py-2 text-sm focus:border-[var(--accent)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)] transition-colors"
-            placeholder="https://www.youtube.com/watch?v=..."
+            placeholder={useSecondary ? "ვიდეო URL" : "https://www.youtube.com/watch?v=..."}
             value={state.videoUrl}
             onChange={(e) => patch({ videoUrl: e.target.value })}
           />
@@ -59,7 +61,7 @@ export function VideoSegment({
       {embed ? (
         <div className="aspect-video w-full overflow-hidden rounded-xl border border-black/10 bg-black/5">
           <iframe
-            title="Video"
+            title={useSecondary ? "ვიდეო" : "Video"}
             src={embed}
             className="h-full w-full"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -70,7 +72,7 @@ export function VideoSegment({
         null
       ) : (
         <div className="aspect-video w-full flex items-center justify-center rounded-xl border border-dashed border-black/20 bg-black/5 text-sm opacity-40">
-          Enter a valid link above to preview video
+          {useSecondary ? "ჩასვით სწორი ბმული ვიდეოს სანახავად" : "Enter a valid link above to preview video"}
         </div>
       )}
     </motion.section>

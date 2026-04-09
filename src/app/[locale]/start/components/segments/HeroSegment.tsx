@@ -190,6 +190,8 @@ export function HeroSegment({
   };
 
   const borderStyle = getBorderStyle();
+  const companyValue =
+    useSecondary && state.company.trim() === "Company Name" ? "" : state.company;
 
   return (
     <>
@@ -313,7 +315,7 @@ export function HeroSegment({
                 {editable && (
                   <div className="absolute inset-0 flex items-center justify-center md:hidden pointer-events-none">
                     <span className="rounded-full bg-black/40 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white opacity-0 transition group-hover:opacity-100 group-active:opacity-100">
-                      Tap to edit
+                      {useSecondary ? "შეეხეთ რედაქტირებას" : "Tap to edit"}
                     </span>
                   </div>
                 )}
@@ -324,7 +326,7 @@ export function HeroSegment({
                 style={{ ...borderStyle, borderRadius: shapeRadius }}
               >
                 <Camera className="h-10 w-10 opacity-30" />
-                <span>Identity Profile</span>
+                <span>{useSecondary ? "პირადობის პროფილი" : "Identity Profile"}</span>
               </div>
             )}
             </div>
@@ -356,7 +358,7 @@ export function HeroSegment({
               <InlineEditable
                 value={useSecondary ? state.nameSecondary : state.name}
                 onChange={(v) => patch(useSecondary ? { nameSecondary: v } : { name: v })}
-                placeholder="Name"
+                placeholder={useSecondary ? "შენი სახელი" : "Your Name"}
                 editable={editable}
                 className="block w-full"
                 style={{ ...headingStyle, textAlign: photoAlignment === "center" ? "center" : "inherit" }}
@@ -367,7 +369,7 @@ export function HeroSegment({
               <InlineEditable
                 value={useSecondary ? state.titleSecondary : state.title}
                 onChange={(v) => patch(useSecondary ? { titleSecondary: v } : { title: v })}
-                placeholder="Job title"
+                placeholder={useSecondary ? "სამუშაოს დასახელება" : "Job title"}
                 editable={editable}
                 className="block w-full"
                 style={{ ...bodyStyle, textAlign: photoAlignment === "center" ? "center" : "inherit" }}
@@ -379,9 +381,9 @@ export function HeroSegment({
               style={{ ...bodyStyle, color: "var(--accent)" }}
             >
               <InlineEditable
-                value={state.company}
+                value={companyValue}
                 onChange={(v) => patch({ company: v })}
-                placeholder="Company Name"
+                placeholder={useSecondary ? "კომპანიის სახელი" : "Company Name"}
                 editable={editable}
                 className="block w-full"
                 style={{ ...bodyStyle, textAlign: photoAlignment === "center" ? "center" : "inherit" }}
@@ -399,7 +401,7 @@ export function HeroSegment({
                   <InlineEditable
                     value={useSecondary ? state.taglineSecondary : state.tagline}
                     onChange={(v) => patch(useSecondary ? { taglineSecondary: v } : { tagline: v })}
-                    placeholder="add professional tagline"
+                    placeholder={useSecondary ? "დაამატეთ პროფესიონალური სლოგანი" : "add professional tagline"}
                     editable={editable}
                     className="block w-full"
                     style={{ ...bodyStyle, textAlign: photoAlignment === "center" ? "center" : "inherit" }}

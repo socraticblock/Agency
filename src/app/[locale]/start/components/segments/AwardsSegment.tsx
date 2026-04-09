@@ -8,6 +8,7 @@ import { InlineEditable } from "../InlineEditable";
 interface AwardsSegmentProps {
   state: Lane1CustomizerState;
   editable: boolean;
+  useSecondary: boolean;
   isResponsive: boolean;
   patch: (p: Partial<Lane1CustomizerState>) => void;
   headingStyle: CSSProperties;
@@ -30,6 +31,7 @@ function patchAward(
 export function AwardsSegment({
   state,
   editable,
+  useSecondary,
   isResponsive,
   patch,
   headingStyle,
@@ -48,7 +50,7 @@ export function AwardsSegment({
       style={{ borderColor: "var(--accent-secondary)", ...glassStyle }}
     >
       <h2 className="mb-4 text-lg font-bold" style={headingStyle}>
-        Awards & recognition
+        {useSecondary ? "ჯილდოები" : "Awards & recognition"}
       </h2>
       <ul className="flex flex-col gap-3">
         {state.awards.slice(0, state.awardCount).map((a, i) => {
@@ -63,7 +65,7 @@ export function AwardsSegment({
                 <InlineEditable
                   value={a.title}
                   onChange={(v) => patch(patchAward(state.awards, i, "title", v))}
-                  placeholder="Award or certification"
+                  placeholder={useSecondary ? "ჯილდოს დასახელება" : "Award or certification"}
                   editable={editable}
                   className="block w-full"
                 />
@@ -72,7 +74,7 @@ export function AwardsSegment({
                 <InlineEditable
                   value={a.issuer}
                   onChange={(v) => patch(patchAward(state.awards, i, "issuer", v))}
-                  placeholder="Issuer / year"
+                  placeholder={useSecondary ? "ემიტენტი" : "Issuer / year"}
                   editable={editable}
                   className="block w-full"
                 />

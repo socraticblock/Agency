@@ -139,6 +139,7 @@ export function SectionDispatcher({
               <TestimonialsSegment
                 state={state}
                 editable={editable}
+                useSecondary={useSecondary}
                 isResponsive={isResponsive}
                 patch={patch}
                 headingStyle={headingStyle}
@@ -153,6 +154,7 @@ export function SectionDispatcher({
               <GallerySegment
                 state={state}
                 editable={editable}
+                useSecondary={useSecondary}
                 patch={patch}
                 isResponsive={isResponsive}
                 headingStyle={headingStyle}
@@ -166,6 +168,7 @@ export function SectionDispatcher({
               <AwardsSegment
                 state={state}
                 editable={editable}
+                useSecondary={useSecondary}
                 isResponsive={isResponsive}
                 patch={patch}
                 headingStyle={headingStyle}
@@ -180,6 +183,7 @@ export function SectionDispatcher({
               <VideoSegment
                 state={state}
                 editable={editable}
+                useSecondary={useSecondary}
                 patch={patch}
                 isResponsive={isResponsive}
                 headingStyle={headingStyle}
@@ -194,6 +198,7 @@ export function SectionDispatcher({
               <BookingSegment
                 state={state}
                 editable={editable}
+                useSecondary={useSecondary}
                 patch={patch}
                 isResponsive={isResponsive}
                 headingStyle={headingStyle}

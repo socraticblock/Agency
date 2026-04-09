@@ -279,7 +279,7 @@ export function defaultLane1State(): Lane1CustomizerState {
     serviceAreas: ["Service One", "Service Two", "Service Three", "Service Four"],
     serviceDescriptions: ["", "", "", ""],
     serviceCount: 2,
-    serviceAreasSecondary: ["", "", "", ""],
+    serviceAreasSecondary: ["სერვისი ერთი", "სერვისი ორი", "სამსახურის სამი", "სერვისი ოთხი"],
     serviceDescriptionsSecondary: ["", "", "", ""],
     social: defaultSocial(),
     practiceHeading: "Professional Services",

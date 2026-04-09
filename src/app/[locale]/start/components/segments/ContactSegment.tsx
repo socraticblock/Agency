@@ -52,7 +52,7 @@ export function ContactSegment({
           <InlineEditable
             value={state.phone}
             onChange={(v) => patch({ phone: v })}
-            placeholder="Phone"
+            placeholder={useSecondary ? "ტელეფონი" : "Phone"}
             editable={editable}
             inputMode="tel"
             className="min-w-0 flex-1"
@@ -66,7 +66,7 @@ export function ContactSegment({
             <InlineEditable
               value={state.email}
               onChange={(v) => patch({ email: v })}
-              placeholder="Email"
+              placeholder={useSecondary ? "ელ-ფოსტა" : "Email"}
               editable={editable}
               inputMode="email"
               className="block w-full"
@@ -81,7 +81,7 @@ export function ContactSegment({
             <InlineEditable
               value={useSecondary ? state.addressSecondary : state.address}
               onChange={(v) => patch(useSecondary ? { addressSecondary: v } : { address: v })}
-              placeholder="Address"
+              placeholder={useSecondary ? "მისამართი" : "Address"}
               multiline
               editable={editable}
               className="block w-full"
@@ -94,7 +94,7 @@ export function ContactSegment({
           <InlineEditable
             value={useSecondary ? state.hoursSecondary : state.hours}
             onChange={(v) => patch(useSecondary ? { hoursSecondary: v } : { hours: v })}
-            placeholder="Operating Hours"
+            placeholder={useSecondary ? "სამუშაო საათები" : "Operating hours"}
             editable={editable}
             className="block w-full text-xs opacity-70"
             style={bodyStyle}
@@ -140,7 +140,7 @@ export function ContactSegment({
                   }}
                 >
                   <Map className="h-4 w-4 opacity-70" />
-                  Get Directions
+                  {useSecondary ? "მიიღეთ მიმართულებები" : "Get Directions"}
                 </MagneticButton>
               </div>
             );

@@ -10,11 +10,13 @@ export function QrOnCardSegment({
   qrDataUrl,
   itemVariants,
   isResponsive,
+  useSecondary,
 }: {
   state: Lane1CustomizerState;
   qrDataUrl: string;
   itemVariants: Variants;
   isResponsive: boolean;
+  useSecondary: boolean;
 }) {
   if (!state.showQrOnCard || !qrDataUrl) return null;
 
@@ -42,7 +44,7 @@ export function QrOnCardSegment({
             className="flex w-full items-center justify-between rounded-xl border border-[color:var(--accent-secondary)]/50 px-3 py-2 text-xs font-semibold uppercase tracking-wider"
             style={{ color: "var(--text-primary)", background: "color-mix(in srgb, var(--accent) 8%, transparent)" }}
           >
-            <span>Scan to connect</span>
+            <span>{useSecondary ? "სკანირების დაკავშირება" : "Scan to connect"}</span>
             <span aria-hidden>{open ? "−" : "+"}</span>
           </button>
           {open ? (
@@ -60,7 +62,7 @@ export function QrOnCardSegment({
       ) : (
         <>
           <p className="text-center text-xs font-semibold uppercase tracking-widest opacity-60" style={{ color: "var(--text-primary)" }}>
-            Scan to connect
+            {useSecondary ? "სკანირების დაკავშირება" : "Scan to connect"}
           </p>
           <div
             className={`overflow-hidden border border-black/10 p-2 shadow-sm ${radius}`}

@@ -67,7 +67,7 @@ export function ServicesSegment({
           }
           fallbackIfEmpty={useSecondary ? state.practiceHeading : ""}
           showFallbackIndicator={useSecondary}
-          placeholder="Practice areas"
+          placeholder={useSecondary ? "პროფესიული მომსახურება" : "Professional Services"}
           editable={editable}
           className="block w-full"
           style={headingStyle}
@@ -120,7 +120,7 @@ export function ServicesSegment({
                         onChange={(v) => setServiceLine(i, v)}
                         fallbackIfEmpty={useSecondary ? enTitle : ""}
                         showFallbackIndicator={useSecondary}
-                        placeholder={`Service ${i + 1}`}
+                        placeholder={useSecondary ? `სერვისი ${i + 1}` : `Service ${i + 1}`}
                         editable={editable}
                         className="block w-full"
                       />
@@ -150,7 +150,11 @@ export function ServicesSegment({
                         onChange={(v) => setServiceDescriptionLine(i, v)}
                         fallbackIfEmpty={useSecondary ? enDesc : ""}
                         showFallbackIndicator={useSecondary}
-                        placeholder="Add a detailed description of your expertise in this area..."
+                        placeholder={
+                          useSecondary
+                            ? "დაამატეთ ამ მიმართულებაში თქვენი გამოცდილების აღწერა..."
+                            : "Add a detailed description of your expertise in this area..."
+                        }
                         editable={editable}
                         className="block w-full"
                         style={bodyStyle}

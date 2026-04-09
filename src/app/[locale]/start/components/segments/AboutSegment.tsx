@@ -42,7 +42,7 @@ export function AboutSegment({
       style={{ borderColor: "var(--accent-secondary)", ...glassStyle }}
     >
       <h2 className="mb-3 text-lg font-bold" style={headingStyle}>
-        About
+        {useSecondary ? "შესახებ" : "About"}
       </h2>
       <div className="text-sm leading-relaxed opacity-90" style={bodyStyle}>
         <InlineEditable
@@ -52,7 +52,11 @@ export function AboutSegment({
           }
           fallbackIfEmpty={fallback}
           showFallbackIndicator={useSecondary}
-          placeholder="Tell visitors who you are and what you do…"
+          placeholder={
+            useSecondary
+              ? "მოუყევით სტუმრებს ვინ ხართ და რას აკეთებთ…"
+              : "Tell visitors who you are and what you do…"
+          }
           editable={editable}
           multiline
           className="block w-full whitespace-pre-wrap"

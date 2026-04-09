@@ -11,6 +11,7 @@ import { InlineEditable } from "../InlineEditable";
 interface BookingSegmentProps {
   state: Lane1CustomizerState;
   editable: boolean;
+  useSecondary: boolean;
   patch: (p: Partial<Lane1CustomizerState>) => void;
   isResponsive: boolean;
   headingStyle: CSSProperties;
@@ -34,6 +35,7 @@ function safeHttpUrl(raw: string): string | null {
 export function BookingSegment({
   state,
   editable,
+  useSecondary,
   patch,
   isResponsive,
   headingStyle,
@@ -55,18 +57,18 @@ export function BookingSegment({
       style={{ borderColor: "var(--accent-secondary)", ...glassStyle }}
     >
       <h2 className="mb-4 text-lg font-bold" style={headingStyle}>
-        Book time
+        {useSecondary ? "დაჯავშნა" : "Book time"}
       </h2>
 
       {editable && (
         <div className="mb-6">
           <label className="block text-[10px] uppercase font-bold tracking-wider opacity-50 mb-1">
-            Booking / Calendar Link
+            {useSecondary ? "დაჯავშნა URL" : "Booking / Calendar Link"}
           </label>
           <input
             type="text"
             className="w-full rounded-lg border border-black/10 bg-black/5 px-3 py-2 text-sm focus:border-[var(--accent)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)] transition-colors"
-            placeholder="https://calendly.com/your-link"
+            placeholder={useSecondary ? "დაჯავშნა URL" : "https://calendly.com/your-link"}
             value={state.bookingUrl}
             onChange={(e) => patch({ bookingUrl: e.target.value })}
           />
@@ -100,7 +102,7 @@ export function BookingSegment({
           <InlineEditable
             value={state.bookingLabel}
             onChange={(v) => patch({ bookingLabel: v })}
-            placeholder="Book"
+            placeholder={useSecondary ? "დაჯავშნის ეტიკეტი" : "Book"}
             editable={editable}
           />
         </MagneticButton>

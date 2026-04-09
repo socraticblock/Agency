@@ -138,8 +138,14 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
     const url = onPatch ? "https://genezisi.com" : window.location.href;
     if (navigator.share) {
       try { await navigator.share({ title: state.name, url }); }
-      catch { navigator.clipboard.writeText(url); setShareFeedback("Link copied!"); }
-    } else { navigator.clipboard.writeText(url); setShareFeedback("Link copied!"); }
+      catch {
+        navigator.clipboard.writeText(url);
+        setShareFeedback(useSecondary ? "ბმული გადაწერა!" : "Link copied!");
+      }
+    } else {
+      navigator.clipboard.writeText(url);
+      setShareFeedback(useSecondary ? "ბმული გადაწერა!" : "Link copied!");
+    }
     setTimeout(() => setShareFeedback(""), 2500);
   };
 
@@ -195,8 +201,12 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
       {languageMode.showProfessionalNote && (
         <div className="business-card-template-print-skip border-b px-4 py-2.5 text-center text-xs opacity-70 relative z-20" style={{ borderColor: "var(--accent-secondary)", background: "color-mix(in srgb, var(--accent) 7%, transparent)" }}>
           {state.translationSourceLang === "ka"
-            ? "Georgian will be used for professional translation in this preview."
-            : "English will be used for professional translation in this preview."}
+            ? useSecondary
+              ? "ქართული იქნება გამოყენებული პროფესიული თარგმანი ამ გადახედვისას."
+              : "Georgian will be used for professional translation in this preview."
+            : useSecondary
+              ? "ინგლისური იქნება გამოყენებული პროფესიული თარგმანი ამ გადახედვისას."
+              : "English will be used for professional translation in this preview."}
         </div>
       )}
 
@@ -236,7 +246,13 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
           glassStyle={glassStyle}
         />
 
-        <CtaSegment state={state} editable={editable} patch={patch} ctaLabelStyle={ctaLabelStyle} />
+        <CtaSegment
+          state={state}
+          editable={editable}
+          patch={patch}
+          ctaLabelStyle={ctaLabelStyle}
+          useSecondary={useSecondary}
+        />
         <SectionManagerPanel
           editable={editable}
           state={state}
@@ -281,7 +297,13 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
         <SocialManagerPanel editable={editable} state={state} patch={patch} />
         <SocialSegment state={state} isResponsive={isResponsive} itemVariants={customItemVariants} />
         <QrManagerPanel editable={editable} state={state} patch={patch} />
-        <QrOnCardSegment state={state} qrDataUrl={qrDataUrl} itemVariants={customItemVariants} isResponsive={isResponsive} />
+        <QrOnCardSegment
+          state={state}
+          qrDataUrl={qrDataUrl}
+          itemVariants={customItemVariants}
+          isResponsive={isResponsive}
+          useSecondary={useSecondary}
+        />
 
         <UtilitySegments
           state={state}
@@ -290,10 +312,16 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
           shareFeedback={shareFeedback}
           handleShare={handleShare}
           ctaLabelStyle={ctaLabelStyle}
+          useSecondary={useSecondary}
           referHref={`https://wa.me/?text=${encodeURIComponent(`I highly recommend ${state.name} — ${state.title}. View their card: ${typeof window !== "undefined" ? window.location.href : ""}`)}`}
         />
 
-        <BrandingFooter ownerName={ownerName} hideBranding={hideBranding} homeHref={homeHref} />
+        <BrandingFooter
+          ownerName={ownerName}
+          hideBranding={hideBranding}
+          homeHref={homeHref}
+          useSecondary={useSecondary}
+        />
         </motion.div>
         <BackgroundManagerPanel editable={editable} state={state} patch={patch} />
         <CardSurfaceManagerPanel editable={editable} state={state} patch={patch} />
