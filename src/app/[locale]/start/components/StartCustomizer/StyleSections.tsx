@@ -23,19 +23,15 @@ export function AccentSection({ state, onPatch, isOpen, onToggle }: SectionProps
       isOpen={isOpen}
       onToggle={onToggle}
     >
+      <p className="start-caption mb-2">
+        One accent preset: bold UI uses the main swatch; section borders and gradients use its paired tone.
+      </p>
       <AccentPresetGrid
         options={ACCENT_PRESETS}
         value={state.style.accentId}
-        onChange={(id: string) => onPatch({ accentId: id })}
-        legend="Primary accent"
-        groupAriaLabel="Primary accent color"
-      />
-      <AccentPresetGrid
-        options={ACCENT_PRESETS}
-        value={state.style.secondaryAccentId}
-        onChange={(id: string) => onPatch({ secondaryAccentId: id })}
-        legend="Secondary accent"
-        groupAriaLabel="Secondary accent color"
+        onChange={(id: string) => onPatch({ accentId: id, secondaryAccentId: id })}
+        legend="Accent color"
+        groupAriaLabel="Accent color"
       />
     </CollapsibleSection>
   );

@@ -70,6 +70,7 @@ export interface StylePresetSelection {
   fontId: string;
   vibeId: string;
   animationId: string;
+  /** Mirrored from `accentId` for legacy JSON; CSS ignores this for accent resolution. */
   secondaryAccentId: string;
 
   // Phase 2: Photo
@@ -129,7 +130,7 @@ export interface StylePresetSelection {
   cardShadowId: CardShadowId;
 }
 
-export const CUSTOMIZER_VERSION = 10 as const;
+export const CUSTOMIZER_VERSION = 11 as const;
 
 export interface Lane1CustomizerState {
   version: typeof CUSTOMIZER_VERSION;
@@ -259,7 +260,7 @@ export function defaultLane1State(): Lane1CustomizerState {
       backgroundId: "purewhite",
       textColorId: "ink",
       accentId: "indigo",
-      secondaryAccentId: "slate",
+      secondaryAccentId: "indigo",
       fontId: "modern",
       vibeId: "minimal",
       animationId: "fade",

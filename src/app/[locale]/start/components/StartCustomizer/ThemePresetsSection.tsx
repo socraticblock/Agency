@@ -11,6 +11,9 @@ function mergeThemeStyle(
   patch: Partial<StylePresetSelection>,
 ): StylePresetSelection {
   const next = { ...prev, ...patch };
+  if (patch.accentId != null) {
+    next.secondaryAccentId = patch.accentId;
+  }
   if (patch.typographyPackId) {
     const pack = patch.typographyPackId as TypographyPackId;
     next.fontId = TYPOGRAPHY_TO_LEGACY_FONT[pack];

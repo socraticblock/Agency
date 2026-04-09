@@ -24,6 +24,7 @@
 - **026** — On-card Background manager (standalone bottom pill, Base/Overlay/Texture tabs, reuses sidebar control components)
 - **027** — Split body typography from display packs (eight distinct body stacks, grouped UI, CSS line-height/letter-spacing, customizer v9 migration)
 - **028** — Card text size presets (S/M/L/XL) via `--card-text-zoom` + CSS `zoom` on font layer; print resets zoom to 1
+- **029** — Single user-facing accent: `resolveStyleVariables` uses one preset row; `secondaryAccentId` synced to `accentId`; v11 migration
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -153,6 +154,11 @@
 - **Context:** Clients needed larger/smaller card text without retuning every Tailwind `text-*` class; `rem` ignores parent `font-size`.
 - **Decision:** Added `cardTextScaleId` (`compact`→0.9, `default`→1, `comfortable`→1.08, `large`→1.15), `CARD_TEXT_SCALE_PRESETS`, `--card-text-zoom` in `resolveStyleVariables`, and `zoom: var(--card-text-zoom)` on `.business-card-template-font-layer` so all subtree typography scales together; `CardTextScaleRow` in Typography panel; `@media print` forces `zoom: 1` on that layer for 3.5×2in output; customizer v10 migration defaults invalid/missing ids to `default`.
 - **Impact:** One bounded control scales headings, body, and buttons consistently; print layout stays physically correct; no new dependencies.
+
+### 029
+- **Context:** Two accent pickers confused clients; `--accent-secondary` was driven by a second preset’s `accentSecondary`, not its main swatch.
+- **Decision:** `resolveStyleVariables` always takes `--accent` and `--accent-secondary` from the **`accentId`** preset row only; removed secondary UI from `AccentManagerPanel` and sidebar `AccentSection`; any `accentId` patch sets `secondaryAccentId = accentId`; `migrateLane1State` forces that sync; elite themes drop separate `secondaryAccentId`; `CUSTOMIZER_VERSION` 11.
+- **Impact:** Same CSS variables and components keep working; old saves normalize on load; cross-preset accent mixing is no longer possible.
 
 ## Architecture Decisions
 - Zero backend for card features

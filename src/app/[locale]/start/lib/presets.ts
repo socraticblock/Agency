@@ -728,9 +728,8 @@ export function isBackgroundLockingTextColor(backgroundId: string): boolean {
 export function resolveStyleVariables(selection: StylePresetSelection): CSSProperties {
   const bg = BACKGROUND_PRESETS.find((p) => p.id === selection.backgroundId) ?? BACKGROUND_SOLID_PRESETS[0];
   const txt = TEXT_COLOR_PRESETS.find((p) => p.id === selection.textColorId) ?? TEXT_COLOR_PRESETS[0];
+  /* One accent preset: `--accent` + `--accent-secondary` both come from this row. */
   const acc = ACCENT_PRESETS.find((p) => p.id === selection.accentId) ?? ACCENT_PRESETS[0];
-  const secondaryFamily =
-    ACCENT_PRESETS.find((p) => p.id === selection.secondaryAccentId) ?? acc;
   const displayPackId = selection.buttonTypographyPackId ?? selection.typographyPackId ?? "minimal";
   const bodyResolved = resolveBodyTypographyPack(selection);
   const displayFont =
@@ -817,7 +816,7 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
     "--text-body": textBody,
     "--text-heading": textHeading,
     "--accent": acc.accent,
-    "--accent-secondary": secondaryFamily.accentSecondary,
+    "--accent-secondary": acc.accentSecondary,
     "--texture-pattern": textureBackgroundImage(selection.textureId, selection.cardDarkSurface),
     "--texture-bg-size": textureBackgroundSize(selection.textureId),
     "--texture-opacity": String(texOp),
@@ -833,7 +832,7 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
     "--bg-effect-int-norm": String(bgEffectIntNorm),
     "--bg-gradient": selection.bgOverlayId !== "none"
       ? overlayGradientValue
-      : `linear-gradient(135deg, ${acc.accent}, ${secondaryFamily.accentSecondary})`,
+      : `linear-gradient(135deg, ${acc.accent}, ${acc.accentSecondary})`,
     "--font-heading": displayFont.fontHeading,
     "--font-body": bodyResolved.fontBody,
     "--font-heading-weight": String(displayFont.headingWeight),

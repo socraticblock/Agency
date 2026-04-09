@@ -22,8 +22,8 @@ function safeParse(raw: string | null): Lane1CustomizerState | null {
   try {
     const data = JSON.parse(raw) as Record<string, unknown>;
     const v = typeof data.version === "number" ? data.version : 1;
-    // Allow migration from v1–v10
-    if (v < 1 || v > 10) return null;
+    // Allow migration from v1–v11
+    if (v < 1 || v > 11) return null;
     return migrateLane1State(data as unknown as Lane1CustomizerState);
   } catch {
     return null;
@@ -90,6 +90,8 @@ function migrateLane1State(
   ) {
     merged.style.cardTextScaleId = "default";
   }
+
+  merged.style.secondaryAccentId = merged.style.accentId;
 
   if (merged.style.bodyTextHex === undefined) merged.style.bodyTextHex = "";
   if (merged.style.buttonTextHex === undefined) merged.style.buttonTextHex = "";

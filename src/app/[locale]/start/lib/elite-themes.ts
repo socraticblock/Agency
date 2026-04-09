@@ -17,7 +17,6 @@ export const ELITE_THEME_PRESETS: EliteThemePreset[] = [
       bgBaseColor: "#ffffff",
       bgOverlayId: "none",
       accentId: "navy",
-      secondaryAccentId: "slate",
       typographyPackId: "minimal",
       vibeId: "minimal",
       animationId: "fade",
@@ -33,7 +32,6 @@ export const ELITE_THEME_PRESETS: EliteThemePreset[] = [
       bgBaseColor: "#FAF8F5",
       bgOverlayId: "none",
       accentId: "copper",
-      secondaryAccentId: "gold",
       typographyPackId: "editorial",
       vibeId: "glass",
       animationId: "slide-up",
@@ -49,7 +47,6 @@ export const ELITE_THEME_PRESETS: EliteThemePreset[] = [
     stylePatch: {
       bgBaseColor: "#EFF6FF",
       accentId: "navy",
-      secondaryAccentId: "slate",
       typographyPackId: "modern",
       vibeId: "minimal",
       animationId: "spring",
@@ -65,7 +62,6 @@ export const ELITE_THEME_PRESETS: EliteThemePreset[] = [
     stylePatch: {
       bgBaseColor: "#0f172a",
       accentId: "teal",
-      secondaryAccentId: "slate",
       typographyPackId: "bold",
       vibeId: "neon",
       animationId: "cinematic",
@@ -81,7 +77,6 @@ export const ELITE_THEME_PRESETS: EliteThemePreset[] = [
     stylePatch: {
       bgBaseColor: "#FFFDF8",
       accentId: "gold",
-      secondaryAccentId: "burgundy",
       typographyPackId: "elegant",
       vibeId: "glass",
       animationId: "stagger",
@@ -97,7 +92,6 @@ export const ELITE_THEME_PRESETS: EliteThemePreset[] = [
     stylePatch: {
       bgBaseColor: "#111827",
       accentId: "gold",
-      secondaryAccentId: "slate",
       typographyPackId: "noir",
       vibeId: "neon",
       animationId: "cinematic",
@@ -113,7 +107,6 @@ export const ELITE_THEME_PRESETS: EliteThemePreset[] = [
     stylePatch: {
       bgBaseColor: "#F0F5F0",
       accentId: "forest",
-      secondaryAccentId: "teal",
       typographyPackId: "warm",
       vibeId: "minimal",
       animationId: "scale-in",
@@ -133,7 +126,6 @@ export const ELITE_THEME_PRESETS: EliteThemePreset[] = [
       bgOverlayColor2: "#1A2744",
       bgOverlayOpacity: 0.12,
       accentId: "indigo",
-      secondaryAccentId: "slate",
       typographyPackId: "modern",
       vibeId: "glass",
       animationId: "slide-up",
