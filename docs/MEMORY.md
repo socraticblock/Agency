@@ -40,6 +40,7 @@
 - **042** — Hero layout locked to centered alignment for all cards (new + migrated states)
 - **043** — Removed right sidebar editor; start page is now centered card-only with on-card pills and cleaned sidebar dead code
 - **044** — Added mobile photo toolbelt pill under hero photo (all desktop actions + visible labels) and removed unused photo modal
+- **045** — Added 1–4 item count controls for Services/Gallery/Testimonials/Awards in on-card Sections manager with thumb-friendly +/- buttons
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -249,6 +250,11 @@
 - **Context:** Mobile had no hover, so the desktop `PhotoToolbelt` actions were not discoverable; users needed the same controls with explicit labels.
 - **Decision:** Added a mobile-only pill row beneath the hero photo in `HeroSegment` exposing all desktop actions (Shape, Filter, Border, Layers, Center, Replace, Reset) with always-visible text labels; removed `PhotoEditModal` as dead code.
 - **Impact:** Photo editing parity now exists across desktop and mobile without hover dependency, and the mobile path is clearer and faster for touch users.
+
+### 045
+- **Context:** Clients could edit section content but could not easily add/remove repeated items per section; Services, Gallery, Testimonials, and Awards needed bounded item counts.
+- **Decision:** Extended `SectionManagerPanel` with explicit count controls (1–4) for those four sections, using large touch targets and existing state fields (`serviceCount`, `galleryCount`, `testimonialCount`, `awardCount`) with shared save feedback.
+- **Impact:** Clients can now add/remove section items directly from the on-card Sections pill with mobile-friendly controls, and card rendering updates immediately through existing segment count wiring.
 
 ## Architecture Decisions
 - Zero backend for card features

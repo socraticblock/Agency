@@ -22,6 +22,7 @@ const SECTION_LABELS_KA: Record<SectionId, string> = {
   video: "ვიდეო",
   booking: "დაჯავშნა",
 };
+const COUNT_CONTROL_SECTIONS: SectionId[] = ["services", "gallery", "testimonials", "awards"];
 
 function swapInOrder(order: SectionId[], a: SectionId, b: SectionId): SectionId[] {
   const next = [...order];
@@ -48,6 +49,8 @@ export function SectionManagerPanel({ editable, state, patch, onStructureChange,
   if (!editable) return null;
 
   const orderedActive = state.sectionOrder.filter((id) => state.activeSections.includes(id));
+  const orderedInactive = state.sectionOrder.filter((id) => !state.activeSections.includes(id));
+  const orderedVisibleRows = [...orderedActive, ...orderedInactive];
 
   useEffect(() => {
     if (!open) return;
@@ -89,10 +92,23 @@ export function SectionManagerPanel({ editable, state, patch, onStructureChange,
 
   const toggle = (id: SectionId) => {
     if (state.activeSections.includes(id)) {
-      runPatchedUpdate({ activeSections: state.activeSections.filter((x) => x !== id) }, true, id);
+      const nextActive = state.activeSections.filter((x) => x !== id);
+      const orderWithout = state.sectionOrder.filter((x) => x !== id);
+      const nextOrder = [...orderWithout, id];
+      runPatchedUpdate({ activeSections: nextActive, sectionOrder: nextOrder }, true, id);
       return;
     }
-    runPatchedUpdate({ activeSections: [...state.activeSections, id] }, true, id);
+    const nextActive = [...state.activeSections, id];
+    const orderWithout = state.sectionOrder.filter((x) => x !== id);
+    const activeCountBeforeInsert = orderWithout.filter((x) =>
+      state.activeSections.includes(x),
+    ).length;
+    const nextOrder = [
+      ...orderWithout.slice(0, activeCountBeforeInsert),
+      id,
+      ...orderWithout.slice(activeCountBeforeInsert),
+    ];
+    runPatchedUpdate({ activeSections: nextActive, sectionOrder: nextOrder }, true, id);
   };
 
   const move = (id: SectionId, dir: -1 | 1) => {
@@ -103,6 +119,33 @@ export function SectionManagerPanel({ editable, state, patch, onStructureChange,
     const nextOrder = swapInOrder(state.sectionOrder, id, other);
     const changed = nextOrder.some((value, index) => value !== state.sectionOrder[index]);
     runPatchedUpdate({ sectionOrder: nextOrder }, changed, id);
+  };
+
+  const getSectionCount = (id: SectionId): number => {
+    if (id === "services") return state.serviceCount;
+    if (id === "gallery") return state.galleryCount;
+    if (id === "testimonials") return state.testimonialCount;
+    if (id === "awards") return state.awardCount;
+    return 1;
+  };
+
+  const setSectionCount = (id: SectionId, nextValue: number) => {
+    const nextCount = Math.max(1, Math.min(4, nextValue));
+    if (id === "services") {
+      runPatchedUpdate({ serviceCount: nextCount }, nextCount !== state.serviceCount, id);
+      return;
+    }
+    if (id === "gallery") {
+      runPatchedUpdate({ galleryCount: nextCount }, nextCount !== state.galleryCount, id);
+      return;
+    }
+    if (id === "testimonials") {
+      runPatchedUpdate({ testimonialCount: nextCount }, nextCount !== state.testimonialCount, id);
+      return;
+    }
+    if (id === "awards") {
+      runPatchedUpdate({ awardCount: nextCount }, nextCount !== state.awardCount, id);
+    }
   };
 
   return (
@@ -117,7 +160,7 @@ export function SectionManagerPanel({ editable, state, patch, onStructureChange,
       </button>
 
       {open ? (
-        <div className="absolute right-4 top-full mt-2 w-[280px] rounded-xl border border-white/20 bg-black/85 p-3 text-white shadow-2xl backdrop-blur-md">
+        <div className="absolute right-4 top-full mt-2 w-[min(92vw,380px)] rounded-xl border border-white/20 bg-black/85 p-3 text-white shadow-2xl backdrop-blur-md">
           <div className="mb-2 flex items-center justify-between">
             <p className="text-xs font-bold uppercase tracking-wide text-white/80">
               {useSecondary ? "ხილული სექციები" : "Visible sections"}
@@ -144,9 +187,12 @@ export function SectionManagerPanel({ editable, state, patch, onStructureChange,
           </div>
 
           <div className="space-y-1.5">
-            {state.sectionOrder.map((id) => {
+            {orderedVisibleRows.map((id) => {
               const on = state.activeSections.includes(id);
               const sectionLabel = useSecondary ? SECTION_LABELS_KA[id] : SECTION_LABELS[id];
+              const hasCountControl = on && COUNT_CONTROL_SECTIONS.includes(id);
+              const count = hasCountControl ? getSectionCount(id) : null;
+              const activeIndex = orderedActive.indexOf(id);
               return (
                 <label
                   key={id}
@@ -161,42 +207,70 @@ export function SectionManagerPanel({ editable, state, patch, onStructureChange,
                     className="h-3.5 w-3.5"
                   />
                   <span>{sectionLabel}</span>
+                  {on ? (
+                    <div className="ml-auto flex items-center gap-1">
+                      {hasCountControl ? (
+                        <>
+                          <button
+                            type="button"
+                            disabled={(count ?? 1) <= 1}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              setSectionCount(id, (count ?? 1) - 1);
+                            }}
+                            className="flex h-7 w-7 items-center justify-center rounded-md bg-white/10 text-sm font-bold text-white transition hover:bg-white/20 disabled:opacity-40"
+                            aria-label={`Decrease ${sectionLabel} count`}
+                          >
+                            -
+                          </button>
+                          <span className="inline-flex min-w-5 justify-center text-sm font-semibold">{count}</span>
+                          <button
+                            type="button"
+                            disabled={(count ?? 1) >= 4}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              setSectionCount(id, (count ?? 1) + 1);
+                            }}
+                            className="flex h-7 w-7 items-center justify-center rounded-md bg-white/10 text-sm font-bold text-white transition hover:bg-white/20 disabled:opacity-40"
+                            aria-label={`Increase ${sectionLabel} count`}
+                          >
+                            +
+                          </button>
+                        </>
+                      ) : null}
+                      <button
+                        type="button"
+                        disabled={activeIndex <= 0}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          move(id, -1);
+                        }}
+                        className="rounded p-1 text-white/70 transition hover:bg-white/10 hover:text-white disabled:opacity-30"
+                        aria-label={`Move ${sectionLabel} up`}
+                      >
+                        <ChevronUp className="h-3.5 w-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        disabled={activeIndex === -1 || activeIndex >= orderedActive.length - 1}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          move(id, 1);
+                        }}
+                        className="rounded p-1 text-white/70 transition hover:bg-white/10 hover:text-white disabled:opacity-30"
+                        aria-label={`Move ${sectionLabel} down`}
+                      >
+                        <ChevronDown className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  ) : null}
                 </label>
               );
             })}
-          </div>
-
-          <div className="mt-3 border-t border-white/10 pt-2">
-            <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wide text-white/60">
-              {useSecondary ? "მიმდევრობა (აქტიური)" : "Order (active)"}
-            </p>
-            <div className="space-y-1.5">
-              {orderedActive.map((id, i) => (
-                <div key={id} className="flex items-center justify-between rounded-lg bg-white/[0.04] px-2.5 py-1.5 text-xs">
-                  <span>{useSecondary ? SECTION_LABELS_KA[id] : SECTION_LABELS[id]}</span>
-                  <div className="flex gap-1">
-                    <button
-                      type="button"
-                      disabled={i === 0}
-                      onClick={() => move(id, -1)}
-                      className="rounded p-1 text-white/70 transition hover:bg-white/10 hover:text-white disabled:opacity-30"
-                      aria-label={`Move ${useSecondary ? SECTION_LABELS_KA[id] : SECTION_LABELS[id]} up`}
-                    >
-                      <ChevronUp className="h-3.5 w-3.5" />
-                    </button>
-                    <button
-                      type="button"
-                      disabled={i === orderedActive.length - 1}
-                      onClick={() => move(id, 1)}
-                      className="rounded p-1 text-white/70 transition hover:bg-white/10 hover:text-white disabled:opacity-30"
-                      aria-label={`Move ${useSecondary ? SECTION_LABELS_KA[id] : SECTION_LABELS[id]} down`}
-                    >
-                      <ChevronDown className="h-3.5 w-3.5" />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       ) : null}
