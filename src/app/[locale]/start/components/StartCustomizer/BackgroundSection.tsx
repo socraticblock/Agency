@@ -1,13 +1,10 @@
 import { CollapsibleSection } from "../CollapsibleSection";
-import { BackgroundBaseControls, BackgroundOverlayControls, TextColorPresetGrid } from "../StylePresetGrids";
-import { TEXT_COLOR_PRESETS, isBackgroundLockingTextColor } from "../../lib/presets";
+import { BackgroundBaseControls, BackgroundOverlayControls } from "../StylePresetGrids";
 import { TextureEffectControls } from "./TextureEffectControls";
 import { BackgroundMotionControls } from "../segments/BackgroundMotionControls";
 import { type SectionProps } from "./types";
 
 export function BackgroundSection({ state, onPatch, isOpen, onToggle }: SectionProps & { onPatch: any }) {
-  const textLocked = isBackgroundLockingTextColor(state.style.backgroundId);
-
   return (
     <CollapsibleSection
       id="background"
@@ -32,17 +29,6 @@ export function BackgroundSection({ state, onPatch, isOpen, onToggle }: SectionP
         <BackgroundMotionControls state={state} onPatch={onPatch} />
       </div>
 
-      {!textLocked ? (
-        <TextColorPresetGrid
-          options={TEXT_COLOR_PRESETS}
-          value={state.style.textColorId}
-          onChange={(id: string) => onPatch({ textColorId: id })}
-        />
-      ) : (
-        <p className="start-caption">
-          Text color is set automatically for this background (dark or gradient preset).
-        </p>
-      )}
     </CollapsibleSection>
   );
 }

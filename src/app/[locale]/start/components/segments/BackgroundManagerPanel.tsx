@@ -3,10 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Check, Layers2, X } from "lucide-react";
 import type { Lane1CustomizerState, Lane1StatePatch } from "../../lib/types";
-import { BackgroundBaseControls, BackgroundOverlayControls, TextColorPresetGrid } from "../StylePresetGrids";
+import { BackgroundBaseControls, BackgroundOverlayControls } from "../StylePresetGrids";
 import { TextureEffectControls } from "../StartCustomizer/TextureEffectControls";
 import { BackgroundMotionControls } from "./BackgroundMotionControls";
-import { TEXT_COLOR_PRESETS, isBackgroundLockingTextColor } from "../../lib/presets";
 
 type BgTab = "base" | "overlay" | "texture" | "motion";
 
@@ -25,8 +24,6 @@ export function BackgroundManagerPanel({
   const rootRef = useRef<HTMLDivElement | null>(null);
   const savingDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const savedToIdleRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const textLocked = isBackgroundLockingTextColor(state.style.backgroundId);
 
   const onStylePatch = (p: Partial<Lane1CustomizerState["style"]>) => {
     if (savingDebounceRef.current) clearTimeout(savingDebounceRef.current);
@@ -116,19 +113,6 @@ export function BackgroundManagerPanel({
             {tab === "base" ? (
               <>
                 <BackgroundBaseControls state={state} onPatch={onStylePatch} />
-                {!textLocked ? (
-                  <div className="mt-4 border-t border-slate-200 pt-4">
-                    <TextColorPresetGrid
-                      options={TEXT_COLOR_PRESETS}
-                      value={state.style.textColorId}
-                      onChange={(id: string) => onStylePatch({ textColorId: id })}
-                    />
-                  </div>
-                ) : (
-                  <p className="start-caption mt-4 border-t border-slate-200 pt-4">
-                    Text color follows this background preset.
-                  </p>
-                )}
               </>
             ) : null}
             {tab === "overlay" ? <BackgroundOverlayControls state={state} onPatch={onStylePatch} /> : null}
