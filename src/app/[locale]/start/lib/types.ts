@@ -240,7 +240,7 @@ export function defaultLane1State(): Lane1CustomizerState {
     practiceHeadingSecondary: "პროფესიული სერვისები",
 
     style: {
-      backgroundId: "minimal-white",
+      backgroundId: "purewhite",
       textColorId: "ink",
       accentId: "indigo",
       secondaryAccentId: "slate",

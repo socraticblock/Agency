@@ -38,6 +38,10 @@ function SwatchCheck({ show }: { show: boolean }) {
   );
 }
 
+function hexColorEqual(a: string, b: string): boolean {
+  return a.trim().toLowerCase() === b.trim().toLowerCase();
+}
+
 const BackgroundBaseControls = memo(function BackgroundBaseControls({
   state,
   onPatch,
@@ -54,6 +58,7 @@ const BackgroundBaseControls = memo(function BackgroundBaseControls({
         {(["solid", "image"] as const).map((t) => (
           <button
             key={t}
+            type="button"
             onClick={() => onPatch({ bgBaseId: t })}
             className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all capitalize ${
               bgBaseId === t ? "bg-white shadow-sm text-[#1A2744]" : "text-slate-500 hover:bg-slate-50"
@@ -69,10 +74,11 @@ const BackgroundBaseControls = memo(function BackgroundBaseControls({
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Base Color</span>
           <div className="grid grid-cols-4 gap-2">
             {BACKGROUND_SOLID_PRESETS.map((p) => {
-              const onSel = bgBaseColor === p.cssValue;
+              const onSel = hexColorEqual(bgBaseColor, p.cssValue);
               return (
                 <button
                   key={p.id}
+                  type="button"
                   onClick={() => onPatch({ bgBaseColor: p.cssValue, backgroundId: p.id })}
                   className={`${chipBase} ${chipSelected(onSel)} min-h-0 !p-1.5`}
                   title={p.labelEn}
@@ -84,6 +90,7 @@ const BackgroundBaseControls = memo(function BackgroundBaseControls({
             {/* Custom Hex Picker */}
             <div className="relative">
               <button
+                type="button"
                 onClick={() => document.getElementById("bg-base-hex")?.click()}
                 className={`${chipBase} ${chipSelected(false)} min-h-0 !p-1.5 w-full`}
               >
@@ -207,6 +214,7 @@ const BackgroundOverlayControls = memo(function BackgroundOverlayControls({
         {(["none", "solid", "linear", "radial", "mesh"] as const).map((t) => (
           <button
             key={t}
+            type="button"
             onClick={() => onPatch({ bgOverlayId: t })}
             className={`py-1.5 text-[10px] font-bold rounded-lg transition-all capitalize ${
               bgOverlayId === t ? "bg-white shadow-sm text-[#1A2744]" : "text-slate-500 hover:bg-slate-50"

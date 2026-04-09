@@ -4,6 +4,7 @@
  */
 
 .business-card-template {
+  isolation: isolate;
   transition: background 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), color 0.3s ease-out;
 }
 

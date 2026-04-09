@@ -2,6 +2,8 @@ import type { CSSProperties } from "react";
 import type { ButtonStyleId, CardShadowId, StylePresetSelection, TypographyPackId } from "./types";
 import { textureBackgroundImage, textureBackgroundSize } from "./texture-presets";
 
+const SOLID_HEX_RE = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+
 /**
  * Calculates the relative luminance of a color for accessibility (WCAG 2.0).
  * Range: 0.0 (Black) to 1.0 (White).
@@ -242,6 +244,46 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   ...BACKGROUND_SOLID_PRESETS,
   ...BACKGROUND_GRADIENT_PRESETS,
 ];
+
+export function isValidSolidHex(s: string | undefined): boolean {
+  return typeof s === "string" && SOLID_HEX_RE.test(s.trim());
+}
+
+/**
+ * Resolves `--bg-base-color` from `bgBaseColor` + `backgroundId`.
+ * Invalid or legacy values fall back to a known solid preset so `backgroundColor` is never invalid CSS.
+ */
+export function resolveSolidBgBaseColor(selection: StylePresetSelection): string {
+  const id =
+    selection.backgroundId === "minimal-white" ? "purewhite" : selection.backgroundId;
+  if (isValidSolidHex(selection.bgBaseColor)) {
+    return selection.bgBaseColor.trim();
+  }
+  const preset = BACKGROUND_PRESETS.find((p) => p.id === id);
+  if (preset?.category === "solid" && isValidSolidHex(preset.cssValue)) return preset.cssValue;
+  const solid = BACKGROUND_SOLID_PRESETS.find((p) => p.id === id);
+  if (solid && isValidSolidHex(solid.cssValue)) return solid.cssValue;
+  return "#ffffff";
+}
+
+/** Persist-time cleanup: fix legacy `minimal-white` id and invalid hex in localStorage. */
+export function coerceSolidBgBaseInStyle(style: StylePresetSelection): StylePresetSelection {
+  const next = { ...style };
+  if (next.backgroundId === "minimal-white") next.backgroundId = "purewhite";
+  if (next.bgBaseId === "solid" && !isValidSolidHex(next.bgBaseColor)) {
+    next.bgBaseColor = resolveSolidBgBaseColor(next);
+  } else if (isValidSolidHex(next.bgBaseColor)) {
+    next.bgBaseColor = next.bgBaseColor.trim();
+  }
+  return next;
+}
+
+const CARD_CHROME_SHADOW: Record<CardShadowId, string> = {
+  none: "none",
+  soft: "0 4px 24px rgba(15, 23, 42, 0.08)",
+  elevated: "0 12px 40px rgba(15, 23, 42, 0.12)",
+  luxury: "0 20px 50px rgba(15, 23, 42, 0.18)",
+};
 
 /** Dark text on light backgrounds — §8.1 subset when client can pick */
 export const TEXT_COLOR_PRESETS: TextColorPreset[] = [
@@ -541,8 +583,8 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
     TYPOGRAPHY_PACK_PRESETS.find((p) => p.id === "minimal")!;
   const vibe = VIBE_PRESETS.find((p) => p.id === selection.vibeId) ?? VIBE_PRESETS[0];
 
-  // 1. Resolve Base Layer
-  const baseColorValue = selection.bgBaseColor;
+  // 1. Resolve Base Layer (never pass invalid hex into --bg-base-color)
+  const baseColorValue = resolveSolidBgBaseColor(selection);
 
   // 2. Resolve Overlay Layer
   let overlayGradientValue = "transparent";
@@ -643,11 +685,14 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
     "--card-shadow": vibe.shadow,
     "--border-opacity": String(vibe.borderOpacity),
     "--card-radius": `${cardRadius}px`,
+    "--card-chrome-shadow":
+      CARD_CHROME_SHADOW[selection.cardShadowId] ?? CARD_CHROME_SHADOW.soft,
   } as CSSProperties;
 }
 
 /** Migrate legacy preset ids (pre–refinement brief §8) */
 export const LEGACY_BACKGROUND_ID_MAP: Record<string, string> = {
+  "minimal-white": "purewhite",
   cream: "warmcream",
   white: "purewhite",
   lightgray: "coolgray",

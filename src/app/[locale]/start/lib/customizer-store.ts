@@ -5,6 +5,7 @@ import { CUSTOMIZER_VERSION, defaultLane1State } from "./types";
 import {
   ACCENT_PRESETS,
   BACKGROUND_PRESETS,
+  coerceSolidBgBaseInStyle,
   FONT_PRESETS,
   LEGACY_BACKGROUND_ID_MAP,
   TEXT_COLOR_PRESETS,
@@ -57,6 +58,8 @@ function migrateLane1State(
   // Legacy background ID mapping logic
   const bgMap = LEGACY_BACKGROUND_ID_MAP[merged.style.backgroundId];
   if (bgMap) merged.style.backgroundId = bgMap;
+
+  merged.style = coerceSolidBgBaseInStyle(merged.style);
 
   // Cleanup/validation
   if (typeof merged.proTranslationAcknowledged !== "boolean") {
