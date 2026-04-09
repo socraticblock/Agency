@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import type { Dispatch, SetStateAction } from "react";
-import type { Lane1CustomizerState } from "../../lib/types";
+import type { Lane1CustomizerState, Lane1StatePatch, StylePresetSelection } from "../../lib/types";
 import { buildLane1WhatsAppUrl } from "../../lib/whatsapp";
 import { LANE1_BASE_GEL, computeLane1Total } from "../../lib/lane1-pricing";
 import { clearLane1State } from "../../lib/customizer-store";
@@ -50,8 +50,18 @@ export function StartCustomizer({
     };
   }, []);
 
-  function patch(p: Partial<Lane1CustomizerState>) {
-    setState((s) => ({ ...s, ...p }));
+  function patch(p: Lane1StatePatch) {
+    setState((s) => {
+      if (p.style) {
+        const { style: stylePatch, ...rest } = p;
+        return {
+          ...s,
+          ...rest,
+          style: { ...s.style, ...stylePatch } as StylePresetSelection,
+        } as Lane1CustomizerState;
+      }
+      return { ...s, ...p } as Lane1CustomizerState;
+    });
   }
 
   function toggleSection(sectionId: string) {

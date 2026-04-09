@@ -5,7 +5,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import { MessageCircle, Pencil } from "lucide-react";
 import { acquireBodyScrollLock } from "@/lib/bodyScrollLock";
 import type { Locale } from "@/lib/i18n";
-import type { Lane1CustomizerState, SectorId } from "../lib/types";
+import type {
+  Lane1CustomizerState,
+  Lane1StatePatch,
+  SectorId,
+  StylePresetSelection,
+} from "../lib/types";
 import { defaultLane1State } from "../lib/types";
 import { loadLane1State, saveLane1State } from "../lib/customizer-store";
 import { getSectorPlaceholder } from "../lib/placeholders";
@@ -53,8 +58,18 @@ export function StartPageClient({ locale }: { locale: Locale }) {
 
   const homeHref = `/${locale}`;
 
-  const onPatch = useCallback((p: Partial<Lane1CustomizerState>) => {
-    setState((s) => ({ ...s, ...p }));
+  const onPatch = useCallback((p: Lane1StatePatch) => {
+    setState((s) => {
+      if (p.style) {
+        const { style: stylePatch, ...rest } = p;
+        return {
+          ...s,
+          ...rest,
+          style: { ...s.style, ...stylePatch } as StylePresetSelection,
+        } as Lane1CustomizerState;
+      }
+      return { ...s, ...p } as Lane1CustomizerState;
+    });
   }, []);
 
   const handlePreviewLangChange = useCallback((v: "primary" | "secondary") => {

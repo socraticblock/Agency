@@ -191,6 +191,11 @@ export interface Lane1CustomizerState {
   cardHoverEffectId: CardHoverEffectId;
 }
 
+/** `onPatch` merges top-level keys and deep-merges `style` into the previous snapshot. */
+export type Lane1StatePatch = Partial<Omit<Lane1CustomizerState, "style">> & {
+  style?: Partial<StylePresetSelection>;
+};
+
 export function defaultSocial(): SocialLinksState {
   return {
     facebook: "",

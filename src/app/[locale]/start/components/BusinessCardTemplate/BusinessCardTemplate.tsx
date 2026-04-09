@@ -19,7 +19,7 @@ import { buildItemVariants, containerVariants } from "../../lib/animations";
 import { usePwaMetadata } from "../../lib/usePwaMetadata";
 import { useCardTilt } from "../../lib/useCardTilt";
 import { Scale, Briefcase, Building2, Sparkles } from "lucide-react";
-import type { Lane1CustomizerState, SectionId } from "../../lib/types";
+import type { Lane1CustomizerState, Lane1StatePatch, SectionId } from "../../lib/types";
 import { ANIMATION_PRESETS, resolveStyleVariables } from "../../lib/presets";
 import { compressImageForLane1Storage } from "../../lib/image-compress";
 import "../business-card-template.css";
@@ -41,7 +41,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   previewLang: "primary" | "secondary";
   homeHref: string;
   ownerName: string;
-  onPatch?: (p: Partial<Lane1CustomizerState>) => void;
+  onPatch?: (p: Lane1StatePatch) => void;
   onPreviewLangChange?: (lang: "primary" | "secondary") => void;
   hideBranding?: boolean;
   layoutMode?: "mobile" | "responsive";
@@ -79,7 +79,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
     };
   }, []);
 
-  const patch = (p: Partial<Lane1CustomizerState>) => onPatch?.(p);
+  const patch = (p: Lane1StatePatch) => onPatch?.(p);
   const triggerSectionPulse = (sectionId: SectionId) => {
     if (pulseTimerRef.current) clearTimeout(pulseTimerRef.current);
     setPulseSectionId(sectionId);

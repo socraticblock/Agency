@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Check, Type, X } from "lucide-react";
-import type { Lane1CustomizerState, TypographyPackId } from "../../lib/types";
+import type { Lane1CustomizerState, Lane1StatePatch, TypographyPackId } from "../../lib/types";
 import { FontPresetGrid } from "../StylePresetGrids";
 import { TYPOGRAPHY_PACK_PRESETS, TYPOGRAPHY_TO_LEGACY_FONT } from "../../lib/presets";
 import { TypographyHexColorRow } from "./TypographyHexColorRow";
@@ -16,7 +16,7 @@ export function TypographyManagerPanel({
 }: {
   editable: boolean;
   state: Lane1CustomizerState;
-  patch: (p: Partial<Lane1CustomizerState>) => void;
+  patch: (p: Lane1StatePatch) => void;
 }) {
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<TypoTab>("body");
@@ -34,7 +34,7 @@ export function TypographyManagerPanel({
       merged.typographyPackId = p.bodyTypographyPackId;
       merged.fontId = TYPOGRAPHY_TO_LEGACY_FONT[p.bodyTypographyPackId];
     }
-    patch({ style: { ...state.style, ...merged } });
+    patch({ style: merged });
     savingDebounceRef.current = setTimeout(() => {
       setSavingStatus("saved");
       savedToIdleRef.current = setTimeout(() => setSavingStatus("idle"), 900);

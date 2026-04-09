@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Check, Layers2, X } from "lucide-react";
-import type { Lane1CustomizerState } from "../../lib/types";
+import type { Lane1CustomizerState, Lane1StatePatch } from "../../lib/types";
 import { BackgroundBaseControls, BackgroundOverlayControls, TextColorPresetGrid } from "../StylePresetGrids";
 import { TextureEffectControls } from "../StartCustomizer/TextureEffectControls";
 import { BackgroundMotionControls } from "./BackgroundMotionControls";
@@ -17,7 +17,7 @@ export function BackgroundManagerPanel({
 }: {
   editable: boolean;
   state: Lane1CustomizerState;
-  patch: (p: Partial<Lane1CustomizerState>) => void;
+  patch: (p: Lane1StatePatch) => void;
 }) {
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<BgTab>("base");
@@ -32,7 +32,7 @@ export function BackgroundManagerPanel({
     if (savingDebounceRef.current) clearTimeout(savingDebounceRef.current);
     if (savedToIdleRef.current) clearTimeout(savedToIdleRef.current);
     setSavingStatus("saving");
-    patch({ style: { ...state.style, ...p } });
+    patch({ style: p });
     savingDebounceRef.current = setTimeout(() => {
       setSavingStatus("saved");
       savedToIdleRef.current = setTimeout(() => setSavingStatus("idle"), 900);
