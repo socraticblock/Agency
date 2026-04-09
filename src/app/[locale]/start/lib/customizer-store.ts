@@ -63,6 +63,8 @@ function migrateLane1State(
   if (bgMap) merged.style.backgroundId = bgMap;
 
   merged.style = coerceSolidBgBaseInStyle(merged.style);
+  // Hero alignment is now fixed to centered (no user-facing toggle).
+  merged.style.photoAlignment = "center";
 
   // Cleanup/validation
   if (typeof merged.proTranslationAcknowledged !== "boolean") {

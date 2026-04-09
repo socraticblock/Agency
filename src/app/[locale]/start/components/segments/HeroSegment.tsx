@@ -60,7 +60,6 @@ export function HeroSegment({
     photoEffect = "none",
     photoOverlay = "none",
     photoBorder = "none",
-    photoAlignment = "left",
   } = style as any;
 
   const [mobileModalOpen, setMobileModalOpen] = useState(false);
@@ -106,6 +105,7 @@ export function HeroSegment({
 
   // ─── Desktop: raw pointer events for drag/pan ───────────────────────────
   const dragState = useRef<{ x: number; y: number } | null>(null);
+  const didDragRef = useRef(false);
   const posXRef = useRef(photoPositionX);
   const posYRef = useRef(photoPositionY);
   posXRef.current = photoPositionX;
@@ -113,6 +113,7 @@ export function HeroSegment({
 
   const onPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     if (!editable || !state.photoDataUrl) return;
+    didDragRef.current = false;
     // On mobile (<768), open modal instead
     if (window.innerWidth < 768) return;
     e.preventDefault();
@@ -123,6 +124,7 @@ export function HeroSegment({
 
   const onPointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     if (!dragState.current || !editable) return;
+    didDragRef.current = true;
     e.preventDefault();
     const dx = (e.clientX - dragState.current.x) / 1.8;
     const dy = (e.clientY - dragState.current.y) / 1.8;
@@ -143,15 +145,13 @@ export function HeroSegment({
   // ─── Click handler: mobile opens modal, desktop is no-op ────────────────
   const onPhotoClick = useCallback((e: React.MouseEvent) => {
     if (!editable || photoBusy) return;
-    if (!state.photoDataUrl) {
-      fileRef.current?.click();
+    if (didDragRef.current) {
+      didDragRef.current = false;
       return;
     }
-    if (window.innerWidth < 768) {
-      e.stopPropagation();
-      setMobileModalOpen(true);
-    }
-  }, [editable, photoBusy, state.photoDataUrl, fileRef]);
+    e.stopPropagation();
+    fileRef.current?.click();
+  }, [editable, photoBusy, fileRef]);
 
   // ─── Visual helpers ──────────────────────────────────────────────────────
   const cssGrainDataUrl = `url("data:image/svg+xml,${encodeURIComponent(
@@ -221,9 +221,7 @@ export function HeroSegment({
           isResponsive ? "md:rounded-3xl md:border hover:shadow-2xl" : ""
         }`}
       >
-        <div className={`flex w-full flex-col gap-5 ${
-          photoAlignment === "center" ? "items-center text-center" : "items-start text-left"
-        }`}>
+        <div className="flex w-full flex-col items-center gap-5 text-center">
 
           {/* ── Photo Zone with fixed toolbar anchor ───────────────────── */}
           <div
@@ -351,9 +349,7 @@ export function HeroSegment({
           </div>
 
           {/* ── Identity Text ───────────────────────────────────── */}
-          <div ref={heroActiveZoneRef} className={`w-full space-y-1 transition-all bg-transparent relative z-10 pt-4 ${
-            photoAlignment === "center" ? "text-center" : "text-left"
-          }`}>
+          <div ref={heroActiveZoneRef} className="relative z-10 w-full space-y-1 bg-transparent pt-4 text-center transition-all">
             <h1 className="text-2xl md:text-3xl font-bold leading-tight" style={headingStyle}>
               <InlineEditable
                 value={useSecondary ? state.nameSecondary : state.name}
@@ -361,7 +357,7 @@ export function HeroSegment({
                 placeholder={useSecondary ? "შენი სახელი" : "Your Name"}
                 editable={editable}
                 className="block w-full"
-                style={{ ...headingStyle, textAlign: photoAlignment === "center" ? "center" : "inherit" }}
+                style={{ ...headingStyle, textAlign: "center" }}
               />
             </h1>
 
@@ -372,7 +368,7 @@ export function HeroSegment({
                 placeholder={useSecondary ? "სამუშაოს დასახელება" : "Job title"}
                 editable={editable}
                 className="block w-full"
-                style={{ ...bodyStyle, textAlign: photoAlignment === "center" ? "center" : "inherit" }}
+                style={{ ...bodyStyle, textAlign: "center" }}
               />
             </p>
 
@@ -386,16 +382,14 @@ export function HeroSegment({
                 placeholder={useSecondary ? "კომპანიის სახელი" : "Company Name"}
                 editable={editable}
                 className="block w-full"
-                style={{ ...bodyStyle, textAlign: photoAlignment === "center" ? "center" : "inherit" }}
+                style={{ ...bodyStyle, textAlign: "center" }}
               />
             </p>
 
             {(editable || (useSecondary ? state.taglineSecondary : state.tagline)?.trim()) && (
               <div className="pt-2">
                 <p
-                  className={`text-xs italic opacity-70 leading-relaxed max-w-[90%] ${
-                    photoAlignment === "center" ? "mx-auto" : ""
-                  }`}
+                  className="mx-auto max-w-[90%] text-xs italic leading-relaxed opacity-70"
                   style={bodyStyle}
                 >
                   <InlineEditable
@@ -404,7 +398,7 @@ export function HeroSegment({
                     placeholder={useSecondary ? "დაამატეთ პროფესიონალური სლოგანი" : "add professional tagline"}
                     editable={editable}
                     className="block w-full"
-                    style={{ ...bodyStyle, textAlign: photoAlignment === "center" ? "center" : "inherit" }}
+                    style={{ ...bodyStyle, textAlign: "center" }}
                   />
                 </p>
               </div>
