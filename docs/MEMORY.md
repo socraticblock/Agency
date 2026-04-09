@@ -30,6 +30,7 @@
 - **032** — Removed `ghost` from `ButtonStyleId` / `BUTTON_STYLE_PRESETS`; migration maps `ghost` → `outlined`; Noir theme uses `outlined`; `CUSTOMIZER_VERSION` 13
 - **033** — Seven button looks: `brutalist`, `stripe`, `tint`, `clay`, `metal`, `mesh`, `glassmorph`; `accentBackground` + `lane1PrimaryAccentBackground` for tint/mesh/glass; v14
 - **034** — Removed sidebar `AccentSection` and `ButtonStyleSection` from `StartCustomizer` (on-card Look + Type only)
+- **035** — `ExperienceManagerPanel` on-card; deleted `StyleSections.tsx`; vibe/motion/tilt/hover only on card
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -187,8 +188,13 @@
 
 ### 034
 - **Context:** Sidebar “Accent color” and “Buttons” duplicated on-card **Look** (accent + button shape) after sovereign pills shipped.
-- **Decision:** Removed `AccentSection` and `ButtonStyleSection` from `StartCustomizer.tsx`; `StyleSections.tsx` now exports only `ExperienceSection`.
-- **Impact:** Single path for accent + button chrome on the card; quick themes and `ThemePresetsSection` still apply accent + `buttonStyleId`.
+- **Decision:** Removed `AccentSection` and `ButtonStyleSection` from `StartCustomizer.tsx`.
+- **Impact:** Accent + button chrome edited only via on-card **Look**; quick themes still apply accent + `buttonStyleId`.
+
+### 035
+- **Context:** Experience (vibe, animation, tilt, hover) duplicated sidebar vs on-card mental model.
+- **Decision:** Added `ExperienceManagerPanel` (Waves icon, “Experience” pill) on `BusinessCardTemplate`; reuses `VibePresetGrid`, `AnimationPresetGrid`, `Phase5ExperienceControls`; removed `ExperienceSection` from `StartCustomizer` and deleted `StyleSections.tsx`.
+- **Impact:** All card “feel” controls live on the card with Background / Look / Type / Experience pills; sidebar no longer lists Experience.
 
 ## Architecture Decisions
 - Zero backend for card features

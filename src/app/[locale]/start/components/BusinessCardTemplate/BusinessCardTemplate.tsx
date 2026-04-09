@@ -15,6 +15,7 @@ import { SocialManagerPanel } from "../segments/SocialManagerPanel";
 import { LocationManagerPanel } from "../segments/LocationManagerPanel";
 import { BackgroundManagerPanel } from "../segments/BackgroundManagerPanel";
 import { TypographyManagerPanel } from "../segments/TypographyManagerPanel";
+import { ExperienceManagerPanel } from "../segments/ExperienceManagerPanel";
 import { LookManagerPanel } from "../segments/LookManagerPanel";
 import { buildItemVariants, containerVariants } from "../../lib/animations";
 import { usePwaMetadata } from "../../lib/usePwaMetadata";
@@ -282,6 +283,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
         <BackgroundManagerPanel editable={editable} state={state} patch={patch} />
         <LookManagerPanel editable={editable} state={state} patch={patch} />
         <TypographyManagerPanel editable={editable} state={state} patch={patch} />
+        <ExperienceManagerPanel editable={editable} state={state} patch={patch} />
       </motion.div>
 
     </div>
