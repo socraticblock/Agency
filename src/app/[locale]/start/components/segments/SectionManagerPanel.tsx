@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ListTree, ChevronUp, ChevronDown, X, Check } from "lucide-react";
 import type { Lane1CustomizerState, SectionId } from "../../lib/types";
+import { usePillOnboardingGlow } from "./usePillOnboardingGlow";
 
 const SECTION_LABELS: Record<SectionId, string> = {
   about: "About",
@@ -43,6 +44,7 @@ interface SectionManagerPanelProps {
 export function SectionManagerPanel({ editable, state, patch, onStructureChange, useSecondary }: SectionManagerPanelProps & { useSecondary: boolean }) {
   const [open, setOpen] = useState(false);
   const [savingStatus, setSavingStatus] = useState<"idle" | "saving" | "saved">("idle");
+  const shouldGlow = usePillOnboardingGlow("sections", open);
   const rootRef = useRef<HTMLDivElement | null>(null);
   const savingDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const savedToIdleRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -153,7 +155,9 @@ export function SectionManagerPanel({ editable, state, patch, onStructureChange,
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75"
+        className={`inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75 ${
+          shouldGlow ? "business-card-pill-attention" : ""
+        }`}
       >
         <ListTree className="h-4 w-4" />
         {useSecondary ? "სექციები" : "Sections"}

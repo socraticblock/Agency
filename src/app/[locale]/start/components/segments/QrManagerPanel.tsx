@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Check, QrCode, X } from "lucide-react";
 import type { Lane1CustomizerState, Lane1StatePatch, QrStyle } from "../../lib/types";
+import { usePillOnboardingGlow } from "./usePillOnboardingGlow";
 
 export function QrManagerPanel({
   editable,
@@ -17,6 +18,7 @@ export function QrManagerPanel({
 }) {
   const [open, setOpen] = useState(false);
   const [savingStatus, setSavingStatus] = useState<"idle" | "saving" | "saved">("idle");
+  const shouldGlow = usePillOnboardingGlow("qr", open);
   const rootRef = useRef<HTMLDivElement | null>(null);
   const savingDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const savedToIdleRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -58,7 +60,9 @@ export function QrManagerPanel({
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75"
+        className={`inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75 ${
+          shouldGlow ? "business-card-pill-attention" : ""
+        }`}
       >
         <QrCode className="h-4 w-4" />
         QR

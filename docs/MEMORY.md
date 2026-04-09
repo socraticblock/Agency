@@ -43,6 +43,7 @@
 - **045** — Added 1–4 item count controls for Services/Gallery/Testimonials/Awards in on-card Sections manager with thumb-friendly +/- buttons
 - **046** — Removed on-card Card Surface pill and deleted `CardSurfaceManagerPanel` (radius/shadow still theme-driven only)
 - **047** — Navbar behavior update: fully hidden on `/start/preview`, auto-hide on scroll-down and show on scroll-up across the site
+- **048** — Added “unopened pill” onboarding pulse (orange glow) with persistent open-state tracking across manager pills
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -267,6 +268,11 @@
 - **Context:** Live preview should be distraction-free (no navbar), while normal site pages need a modern scroll-aware navbar behavior.
 - **Decision:** Updated shared `Navbar` to return `null` on `/start/preview`; added scroll-direction logic to hide navbar on downward scroll and reveal it on upward scroll with a movement threshold and top-of-page reset.
 - **Impact:** Preview page now renders without navigation chrome, and the rest of the site gains cleaner reading space with responsive nav visibility on mobile and desktop.
+
+### 048
+- **Context:** First-time users needed a clearer visual cue for which on-card pills are interactive before opening them.
+- **Decision:** Added a shared `usePillOnboardingGlow` hook with `localStorage` persistence and a reusable CSS pulse class (`business-card-pill-attention`) to highlight unopened pills; glow disables after first open per pill.
+- **Impact:** Pill discoverability improves without permanent noise, onboarding cue respects reduced-motion fallback, and repeat users see a cleaner steady UI.
 
 ## Architecture Decisions
 - Zero backend for card features

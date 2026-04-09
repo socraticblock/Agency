@@ -5,6 +5,7 @@ import { UserRound } from "lucide-react";
 import { ELITE_THEME_PRESETS } from "../../lib/elite-themes";
 import { LEGACY_DISPLAY_TO_BODY_PACK, TYPOGRAPHY_TO_LEGACY_FONT } from "../../lib/presets";
 import type { Lane1CustomizerState, Lane1StatePatch, StylePresetSelection, TypographyPackId } from "../../lib/types";
+import { usePillOnboardingGlow } from "./usePillOnboardingGlow";
 
 type Props = {
   editable: boolean;
@@ -41,6 +42,7 @@ export function ProfileSetupManagerPanel({ editable, state, patch, useSecondary 
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement | null>(null);
   const autoOpenedRef = useRef(false);
+  const shouldGlow = usePillOnboardingGlow("profile-setup", open);
 
   useEffect(() => {
     if (!editable || state.profileSetupCompleted || autoOpenedRef.current) return;
@@ -103,7 +105,9 @@ export function ProfileSetupManagerPanel({ editable, state, patch, useSecondary 
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="mx-auto flex min-h-10 items-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75"
+          className={`mx-auto flex min-h-10 items-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75 ${
+            shouldGlow ? "business-card-pill-attention" : ""
+          }`}
         >
           <UserRound className="h-3.5 w-3.5" />
           {useSecondary ? "პროფილის დაყენება" : "Profile setup"}

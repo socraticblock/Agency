@@ -11,6 +11,7 @@ import type {
 } from "../../lib/types";
 import { SocialManagerRow } from "./SocialManagerRow";
 import { SocialSelect } from "./SocialSelect";
+import { usePillOnboardingGlow } from "./usePillOnboardingGlow";
 
 function swapInOrder(order: SocialPlatformId[], a: SocialPlatformId, b: SocialPlatformId): SocialPlatformId[] {
   const next = [...order];
@@ -34,6 +35,7 @@ export function SocialManagerPanel({
 }) {
   const [open, setOpen] = useState(false);
   const [savingStatus, setSavingStatus] = useState<"idle" | "saving" | "saved">("idle");
+  const shouldGlow = usePillOnboardingGlow("social", open);
   const rootRef = useRef<HTMLDivElement | null>(null);
   const savingDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const savedToIdleRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -115,7 +117,9 @@ export function SocialManagerPanel({
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75"
+        className={`inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75 ${
+          shouldGlow ? "business-card-pill-attention" : ""
+        }`}
       >
         <Share2 className="h-4 w-4" />
         {useSecondary ? "სოციალური" : "Social"}

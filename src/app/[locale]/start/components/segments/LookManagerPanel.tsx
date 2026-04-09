@@ -5,6 +5,7 @@ import { Check, Sparkles, X } from "lucide-react";
 import type { ButtonStyleId, Lane1CustomizerState, Lane1StatePatch } from "../../lib/types";
 import { AccentPresetGrid, ButtonStyleGrid } from "../StylePresetGrids";
 import { ACCENT_PRESETS, BUTTON_STYLE_PRESETS } from "../../lib/presets";
+import { usePillOnboardingGlow } from "./usePillOnboardingGlow";
 
 /** Accent + action-button chrome — one surface (“how actions look”). */
 export function LookManagerPanel({
@@ -20,6 +21,7 @@ export function LookManagerPanel({
 }) {
   const [open, setOpen] = useState(false);
   const [savingStatus, setSavingStatus] = useState<"idle" | "saving" | "saved">("idle");
+  const shouldGlow = usePillOnboardingGlow("look", open);
   const rootRef = useRef<HTMLDivElement | null>(null);
   const savingDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const savedToIdleRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -61,17 +63,19 @@ export function LookManagerPanel({
   if (!editable) return null;
 
   return (
-    <div ref={rootRef} className="business-card-template-print-skip relative z-[120] flex w-full justify-center px-4 pb-3 pt-1 font-sans">
+    <div ref={rootRef} className="relative z-[120] flex justify-center font-sans">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75"
+        className={`inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75 ${
+          shouldGlow ? "business-card-pill-attention" : ""
+        }`}
       >
         <Sparkles className="h-4 w-4" />
         {useSecondary ? "სტილი" : "Look"}
       </button>
       {open ? (
-        <div className="absolute bottom-full left-1/2 mb-2 w-[min(100%,320px)] -translate-x-1/2 rounded-xl border border-white/20 bg-black/85 p-2 text-white shadow-2xl backdrop-blur-md">
+        <div className="absolute bottom-full left-1/2 mb-2 w-[min(92vw,320px)] -translate-x-1/2 rounded-xl border border-white/20 bg-black/85 p-2 text-white shadow-2xl backdrop-blur-md">
           <div className="mb-2 flex items-center justify-between gap-2 px-1">
             <p className="text-xs font-bold uppercase tracking-wide text-white/80">{useSecondary ? "აქცენტი და ღილაკები" : "Brand &amp; actions"}</p>
             <div className="flex items-center gap-2">

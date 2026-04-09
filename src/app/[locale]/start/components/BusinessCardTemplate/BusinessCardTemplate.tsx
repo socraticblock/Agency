@@ -323,16 +323,18 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
           useSecondary={useSecondary}
         />
         </motion.div>
-        <BackgroundManagerPanel editable={editable} state={state} patch={patch} useSecondary={useSecondary} />
-        <LookManagerPanel editable={editable} state={state} patch={patch} useSecondary={useSecondary} />
-        <TypographyManagerPanel editable={editable} state={state} patch={patch} useSecondary={useSecondary} />
-        <ExperienceManagerPanel
-          editable={editable}
-          state={state}
-          patch={patch}
-          useSecondary={useSecondary}
-          onAnimationPreviewReplay={triggerAnimationReplay}
-        />
+        <div className="business-card-template-print-skip grid grid-cols-2 gap-2 px-4 pb-3 pt-1">
+          <BackgroundManagerPanel editable={editable} state={state} patch={patch} useSecondary={useSecondary} />
+          <LookManagerPanel editable={editable} state={state} patch={patch} useSecondary={useSecondary} />
+          <TypographyManagerPanel editable={editable} state={state} patch={patch} useSecondary={useSecondary} />
+          <ExperienceManagerPanel
+            editable={editable}
+            state={state}
+            patch={patch}
+            useSecondary={useSecondary}
+            onAnimationPreviewReplay={triggerAnimationReplay}
+          />
+        </div>
       </div>
 
     </div>

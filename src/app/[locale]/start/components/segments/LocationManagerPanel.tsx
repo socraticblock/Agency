@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, ChevronUp, MapPinned, X } from "lucide-react";
 import type { Lane1CustomizerState, MobileButtonId } from "../../lib/types";
+import { usePillOnboardingGlow } from "./usePillOnboardingGlow";
 
 function swapOrder(order: MobileButtonId[], a: MobileButtonId, b: MobileButtonId): MobileButtonId[] {
   const next = [...order];
@@ -26,6 +27,7 @@ export function LocationManagerPanel({
 }) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement | null>(null);
+  const shouldGlow = usePillOnboardingGlow("location", open);
   if (!editable) return null;
 
   const order = state.mobileButtonOrder?.length
@@ -56,7 +58,9 @@ export function LocationManagerPanel({
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75"
+        className={`inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75 ${
+          shouldGlow ? "business-card-pill-attention" : ""
+        }`}
       >
         <MapPinned className="h-4 w-4" />
         {useSecondary ? "მდებარეობა" : "Location"}

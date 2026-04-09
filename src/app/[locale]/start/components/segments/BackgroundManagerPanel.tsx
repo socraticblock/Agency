@@ -6,6 +6,7 @@ import type { Lane1CustomizerState, Lane1StatePatch } from "../../lib/types";
 import { BackgroundBaseControls, BackgroundOverlayControls } from "../StylePresetGrids";
 import { TextureEffectControls } from "../StartCustomizer/TextureEffectControls";
 import { BackgroundMotionControls } from "./BackgroundMotionControls";
+import { usePillOnboardingGlow } from "./usePillOnboardingGlow";
 
 type BgTab = "base" | "overlay" | "texture" | "motion";
 
@@ -23,6 +24,7 @@ export function BackgroundManagerPanel({
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<BgTab>("base");
   const [savingStatus, setSavingStatus] = useState<"idle" | "saving" | "saved">("idle");
+  const shouldGlow = usePillOnboardingGlow("background", open);
   const rootRef = useRef<HTMLDivElement | null>(null);
   const savingDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const savedToIdleRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -72,17 +74,19 @@ export function BackgroundManagerPanel({
   );
 
   return (
-    <div ref={rootRef} className="business-card-template-print-skip relative z-[120] flex w-full justify-center px-4 pb-3 pt-1 font-sans">
+    <div ref={rootRef} className="relative z-[120] flex justify-center font-sans">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75"
+        className={`inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75 ${
+          shouldGlow ? "business-card-pill-attention" : ""
+        }`}
       >
         <Layers2 className="h-4 w-4" />
         {useSecondary ? "ფონი" : "Background"}
       </button>
       {open ? (
-        <div className="absolute bottom-full left-1/2 mb-2 w-[min(100%,320px)] -translate-x-1/2 rounded-xl border border-white/20 bg-black/85 p-2 text-white shadow-2xl backdrop-blur-md">
+        <div className="absolute bottom-full left-1/2 mb-2 w-[min(92vw,320px)] -translate-x-1/2 rounded-xl border border-white/20 bg-black/85 p-2 text-white shadow-2xl backdrop-blur-md">
           <div className="mb-2 flex items-center justify-between gap-2 px-1">
             <p className="text-xs font-bold uppercase tracking-wide text-white/80">{useSecondary ? "ფონი" : "Background"}</p>
             <div className="flex items-center gap-2">
