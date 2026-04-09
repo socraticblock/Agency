@@ -107,6 +107,7 @@ function migrateLane1State(
     merged.style.ctaTextHex = merged.style.buttonTextHex ?? "";
   }
   if (merged.qrDisplayMode === undefined) merged.qrDisplayMode = "static";
+  merged.showQrLogo = false;
 
   if ((merged.style.buttonStyleId as string) === "ghost") {
     merged.style.buttonStyleId = "outlined";

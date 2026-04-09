@@ -370,7 +370,7 @@ export function defaultLane1State(): Lane1CustomizerState {
     showQrOnCard: true,
     qrForegroundColor: "#000000",
     qrBackgroundColor: "#ffffff",
-    showQrLogo: true,
+    showQrLogo: false,
     cardTiltEnabled: true,
     cardTiltMaxDeg: 7,
     cardHoverEffectId: "lift",

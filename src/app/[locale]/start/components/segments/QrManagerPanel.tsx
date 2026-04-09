@@ -52,7 +52,7 @@ export function QrManagerPanel({
   if (!editable) return null;
 
   return (
-    <div ref={rootRef} className="business-card-template-print-skip relative z-[120] flex w-full justify-center px-4 pb-2 pt-1">
+    <div ref={rootRef} className="business-card-template-print-skip relative z-[120] flex justify-end px-4 pb-2">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
@@ -62,7 +62,7 @@ export function QrManagerPanel({
         QR
       </button>
       {open ? (
-        <div className="absolute bottom-full left-1/2 mb-2 w-[min(100%,320px)] -translate-x-1/2 rounded-xl border border-white/20 bg-black/85 p-2 text-white shadow-2xl backdrop-blur-md">
+        <div className="absolute bottom-full right-4 mb-2 w-[300px] rounded-xl border border-white/20 bg-black/85 p-2 text-white shadow-2xl backdrop-blur-md">
           <div className="mb-2 flex items-center justify-between gap-2 px-1">
             <p className="text-xs font-bold uppercase tracking-wide text-white/80">QR card</p>
             <div className="flex items-center gap-2">
@@ -86,28 +86,63 @@ export function QrManagerPanel({
             </div>
           </div>
           <div className="max-h-[min(58vh,420px)] overflow-y-auto rounded-lg bg-white/95 p-3 text-slate-900 shadow-inner">
-            <label className="mb-3 flex cursor-pointer items-center gap-3 text-sm font-medium text-[#1e293b]">
-              <input
-                type="checkbox"
-                className="h-4 w-4"
-                style={{ accentColor: "var(--accent)" }}
-                checked={state.showQrOnCard}
-                onChange={(e) => onPatch({ showQrOnCard: e.target.checked })}
-              />
-              Show QR on card
-            </label>
+            <div className="mb-3">
+              <p className="start-label mb-1.5">Show QR on card?</p>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => onPatch({ showQrOnCard: true })}
+                  className={`rounded-lg border px-3 py-2 text-sm font-semibold transition ${
+                    state.showQrOnCard
+                      ? "border-[#1A2744] bg-[#1A2744] text-white"
+                      : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                  }`}
+                >
+                  Yes
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onPatch({ showQrOnCard: false })}
+                  className={`rounded-lg border px-3 py-2 text-sm font-semibold transition ${
+                    !state.showQrOnCard
+                      ? "border-[#1A2744] bg-[#1A2744] text-white"
+                      : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                  }`}
+                >
+                  No
+                </button>
+              </div>
+            </div>
 
-            <label className="start-label mb-1.5 block">
-              Display mode
-              <select
-                className="start-field mt-1.5 w-full"
-                value={state.qrDisplayMode}
-                onChange={(e) => onPatch({ qrDisplayMode: e.target.value as "static" | "dropdown" })}
-              >
-                <option value="static">Static</option>
-                <option value="dropdown">Dropdown</option>
-              </select>
-            </label>
+            <div className={`mb-2 ${!state.showQrOnCard ? "opacity-60" : ""}`}>
+              <p className="start-label mb-1.5">Display mode</p>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  disabled={!state.showQrOnCard}
+                  onClick={() => onPatch({ qrDisplayMode: "static" })}
+                  className={`rounded-lg border px-3 py-2 text-sm font-semibold transition ${
+                    state.qrDisplayMode === "static"
+                      ? "border-[#1A2744] bg-[#1A2744] text-white"
+                      : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                  } disabled:cursor-not-allowed disabled:opacity-70`}
+                >
+                  Static
+                </button>
+                <button
+                  type="button"
+                  disabled={!state.showQrOnCard}
+                  onClick={() => onPatch({ qrDisplayMode: "dropdown" })}
+                  className={`rounded-lg border px-3 py-2 text-sm font-semibold transition ${
+                    state.qrDisplayMode === "dropdown"
+                      ? "border-[#1A2744] bg-[#1A2744] text-white"
+                      : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                  } disabled:cursor-not-allowed disabled:opacity-70`}
+                >
+                  Dropdown
+                </button>
+              </div>
+            </div>
 
             <label className="start-label mb-1.5 block">
               QR shape
@@ -158,16 +193,6 @@ export function QrManagerPanel({
               </div>
             </label>
 
-            <label className="mt-3 flex cursor-pointer items-center gap-3 text-sm font-medium text-[#1e293b]">
-              <input
-                type="checkbox"
-                className="h-4 w-4"
-                style={{ accentColor: "var(--accent)" }}
-                checked={state.showQrLogo}
-                onChange={(e) => onPatch({ showQrLogo: e.target.checked })}
-              />
-              Show QR logo
-            </label>
           </div>
         </div>
       ) : null}

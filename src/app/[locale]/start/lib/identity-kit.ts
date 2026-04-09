@@ -14,7 +14,7 @@ export async function generateBrandedQR(state: Lane1CustomizerState, url: string
       dark: fg,
       light,
     },
-    errorCorrectionLevel: state.showQrLogo ? "H" : "M",
+    errorCorrectionLevel: "M",
     width: 1024,
     margin: 2,
   });
