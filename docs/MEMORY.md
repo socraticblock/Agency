@@ -33,6 +33,7 @@
 - **035** — `ExperienceManagerPanel` on-card; deleted `StyleSections.tsx`; vibe/motion/tilt/hover only on card
 - **036** — Removed `Dark card surface` control/effect; Card surface now radius + shadow only (legacy flag ignored + migrated false)
 - **037** — Moved Card surface controls on-card (`CardSurfaceManagerPanel`); removed sidebar `CardChromeSection`
+- **038** — Dead-code sweep: removed orphaned StartCustomizer sections-content files, legacy preset-grid/preset split modules, and unused exports
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -207,6 +208,11 @@
 - **Context:** `Card surface` still lived in the sidebar after other visual controls moved on-card, creating a split control path.
 - **Decision:** Added `CardSurfaceManagerPanel` bottom pill (Surface icon) to `BusinessCardTemplate` with corner radius + shadow controls and save feedback; removed `CardChromeSection` usage from `StartCustomizer` and deleted `CardChromeSection.tsx`.
 - **Impact:** All visual customization surfaces now live on-card (Background, Surface, Look, Type, Experience); sidebar flow is reduced to content/add-ons/themes/identity only.
+
+### 038
+- **Context:** Sidebar migration left several orphaned files/exports from prior accordion-era structures and split preset modules.
+- **Decision:** Deleted unreferenced files under `StartCustomizer/sections-content/`, removed dead `StartCustomizer/SectionsContentSection.tsx` and `ServiceCountStepper.tsx`, removed unused `components/preset-grids/*` and `lib/presets/*` split tree plus `lib/presets-temp.ts` and `lib/vcf-utils.ts`, and removed unused exports `lane1CtaSecondarySurface`, `lane1UtilitySecondaryClasses`, `saveLane1StyleToDisk`, `loadLane1StyleFromDisk`.
+- **Impact:** Smaller code surface with no known runtime loss; `rg` found no remaining references and `npm run build` passes.
 
 ## Architecture Decisions
 - Zero backend for card features

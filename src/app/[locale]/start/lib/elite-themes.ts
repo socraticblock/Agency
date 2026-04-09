@@ -137,22 +137,3 @@ export const ELITE_THEME_PRESETS: EliteThemePreset[] = [
   },
 ];
 
-const SAVED_THEME_KEY = "genezisi_lane1_saved_style_v1";
-
-export function saveLane1StyleToDisk(style: StylePresetSelection) {
-  try {
-    localStorage.setItem(SAVED_THEME_KEY, JSON.stringify(style));
-  } catch {
-    /* ignore */
-  }
-}
-
-export function loadLane1StyleFromDisk(): StylePresetSelection | null {
-  try {
-    const raw = localStorage.getItem(SAVED_THEME_KEY);
-    if (!raw) return null;
-    return JSON.parse(raw) as StylePresetSelection;
-  } catch {
-    return null;
-  }
-}

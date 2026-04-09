@@ -85,52 +85,6 @@ export function lane1PrimaryAccentBackground(id: ButtonStyleId): string | undefi
   return lane1CtaPrimarySurface(id).accentBackground;
 }
 
-export function lane1CtaSecondarySurface(id: ButtonStyleId): Lane1CtaSurface {
-  switch (id) {
-    case "sharp":
-      return {
-        className: `${ctaBase} rounded-none border-2 hover:bg-black/[0.04]`,
-        filledAccent: false,
-      };
-    case "luxury":
-      return {
-        className: `${ctaBase} rounded-2xl border-2 shadow-md hover:bg-black/[0.04]`,
-        filledAccent: false,
-      };
-    case "minimal":
-      return {
-        className: `${ctaBase} rounded-lg border hover:bg-black/[0.04]`,
-        filledAccent: false,
-      };
-    case "brutalist":
-      return {
-        className: `${ctaBase} rounded-md border-[3px] border-slate-950 shadow-[3px_3px_0_0_rgb(15,23,42)] hover:bg-black/[0.04]`,
-        filledAccent: false,
-      };
-    case "stripe":
-      return {
-        className: `${ctaBase} rounded-none border-y-2 py-3 hover:bg-black/[0.04]`,
-        filledAccent: false,
-      };
-    case "clay":
-      return {
-        className: `${ctaBase} rounded-[1.75rem] border-2 shadow-md hover:bg-black/[0.04]`,
-        filledAccent: false,
-      };
-    case "outlined":
-      return {
-        className: `${ctaBase} rounded-xl border bg-white/80 hover:bg-black/[0.04]`,
-        filledAccent: false,
-      };
-    case "classic":
-    default:
-      return {
-        className: `${ctaBase} rounded-xl border-2 hover:bg-black/[0.04]`,
-        filledAccent: false,
-      };
-  }
-}
-
 const utilBase = "flex w-full items-center justify-center gap-2 font-semibold transition-transform";
 
 export function lane1UtilityPrimaryClasses(id: ButtonStyleId): string {
@@ -160,28 +114,6 @@ export function lane1UtilityPrimaryClasses(id: ButtonStyleId): string {
     case "classic":
     default:
       return `${utilBase} rounded-xl py-3.5 text-[0.875rem] text-white shadow-lg`;
-  }
-}
-
-export function lane1UtilitySecondaryClasses(id: ButtonStyleId): string {
-  switch (id) {
-    case "sharp":
-      return `${utilBase} rounded-none border-2 py-3 text-[0.875rem] shadow-sm`;
-    case "luxury":
-      return `${utilBase} rounded-2xl border-2 py-3 text-[0.875rem] shadow-md`;
-    case "minimal":
-      return `${utilBase} rounded-lg border py-3 text-[0.875rem] shadow-sm`;
-    case "brutalist":
-      return `${utilBase} rounded-md border-[3px] border-slate-950 py-3 text-[0.875rem] shadow-sm`;
-    case "stripe":
-      return `${utilBase} rounded-none border-y-2 py-2.5 text-[0.875rem]`;
-    case "clay":
-      return `${utilBase} rounded-[1.75rem] border-2 py-3 text-[0.875rem] shadow-sm`;
-    case "outlined":
-      return `${utilBase} rounded-xl border-2 py-3 text-[0.875rem] bg-transparent`;
-    case "classic":
-    default:
-      return `${utilBase} rounded-xl border-2 py-3 text-[0.875rem] shadow-sm`;
   }
 }
 
