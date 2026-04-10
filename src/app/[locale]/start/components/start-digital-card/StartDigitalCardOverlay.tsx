@@ -56,9 +56,10 @@ export function StartDigitalCardOverlay({
 
   if (!domReady || !mounted) return null;
 
+  const useMobileVisualStyle = isMobileLayout || view === "pricing" || view === "faq";
   const rootClass = [
     "start-dc-overlay-root",
-    isMobileLayout ? "start-dc-overlay-root--mobile" : "",
+    useMobileVisualStyle ? "start-dc-overlay-root--mobile" : "",
     visible ? "start-dc-overlay-root--open" : "start-dc-overlay-root--exit",
   ]
     .filter(Boolean)
@@ -69,9 +70,9 @@ export function StartDigitalCardOverlay({
   return createPortal(
     <div className={rootClass} role="dialog" aria-modal="true" aria-label="Genezisi Digital Card">
       <div
-        className={isMobileLayout ? "" : "start-dc-overlay-backdrop"}
+        className={useMobileVisualStyle ? "" : "start-dc-overlay-backdrop"}
         onClick={backdropClick}
-        aria-hidden={!isMobileLayout}
+        aria-hidden={!useMobileVisualStyle}
       />
       <div
         className="start-dc-overlay-card"
@@ -105,7 +106,7 @@ export function StartDigitalCardOverlay({
               onSelectTier={onSelectTier}
               onBack={() => onViewChange("welcome")}
               onStartBuilding={onStartBuilding}
-              isMobileStack={isMobileLayout}
+              isMobileStack={useMobileVisualStyle}
             />
           ) : null}
           {view === "faq" ? (

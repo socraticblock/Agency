@@ -17,9 +17,10 @@ import {
   writeWelcomeToastShownThisSession,
 } from "../lib/start-overlay-storage";
 import { StartDigitalCardOverlay } from "./start-digital-card/StartDigitalCardOverlay";
-import { StartChromeBar } from "./start-digital-card/StartChromeBar";
 import { ReturningToast } from "./start-digital-card/ReturningToast";
 import { StartPageEditorColumn } from "./StartPageEditorColumn";
+
+const START_OVERLAY_OPEN_EVENT = "genezisi:start-overlay-open";
 
 export function StartPageClient({ locale }: { locale: Locale }) {
   const [state, setState] = useState<Lane1CustomizerState>(defaultLane1State);
@@ -105,6 +106,27 @@ export function StartPageClient({ locale }: { locale: Locale }) {
     setOverlayClosable(false);
   }, []);
 
+  useEffect(() => {
+    const onOpen = (ev: Event) => {
+      const ce = ev as CustomEvent<{ view?: StartDigitalCardOverlayView }>;
+      const view = ce.detail?.view;
+      if (view !== "pricing" && view !== "faq" && view !== "welcome") return;
+      openOverlayFromChrome(view);
+    };
+    window.addEventListener(START_OVERLAY_OPEN_EVENT, onOpen as EventListener);
+    return () => window.removeEventListener(START_OVERLAY_OPEN_EVENT, onOpen as EventListener);
+  }, [openOverlayFromChrome]);
+
+  useEffect(() => {
+    const lockScroll = overlayOpen && (overlayView === "pricing" || overlayView === "faq");
+    if (!lockScroll) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [overlayOpen, overlayView]);
+
   const dismissToast = useCallback(() => {
     setShowReturningToast(false);
   }, []);
@@ -128,13 +150,6 @@ export function StartPageClient({ locale }: { locale: Locale }) {
         onSelectTier={(t) => onPatch({ selectedTier: t })}
         isMobileLayout={!isMdUp}
       />
-      {chromeVisible ? (
-        <StartChromeBar
-          onLogo={() => openOverlayFromChrome("welcome")}
-          onPricing={() => openOverlayFromChrome("pricing")}
-          onFaq={() => openOverlayFromChrome("faq")}
-        />
-      ) : null}
       <ReturningToast show={showReturningToast} onDismiss={dismissToast} />
       <div
         style={

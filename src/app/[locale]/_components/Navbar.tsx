@@ -3,30 +3,16 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
-import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
-import { MagneticButton } from "./MagneticButton";
-import { motion, AnimatePresence } from "framer-motion";
-import { acquireBodyScrollLock } from "@/lib/bodyScrollLock";
+
+const START_OVERLAY_OPEN_EVENT = "genezisi:start-overlay-open";
 
 export function Navbar({ locale }: { locale: Locale }) {
-  const t = getMessages(locale);
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
   const [isNavVisible, setIsNavVisible] = useState(true);
   const lastScrollYRef = useRef(0);
-  const panelRef = useRef<HTMLDivElement>(null);
   const hideForRoute = pathname?.endsWith("/start/preview") ?? false;
-
-  useEffect(() => {
-    if (!open) return;
-    return acquireBodyScrollLock("default");
-  }, [open]);
-
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
+  const isStartRoute = pathname?.endsWith("/start") ?? false;
 
   useEffect(() => {
     if (hideForRoute) return;
@@ -34,7 +20,6 @@ export function Navbar({ locale }: { locale: Locale }) {
     setIsNavVisible(true);
 
     const onScroll = () => {
-      if (open) return;
       const currentY = window.scrollY;
       const delta = currentY - lastScrollYRef.current;
 
@@ -50,18 +35,7 @@ export function Navbar({ locale }: { locale: Locale }) {
 
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [hideForRoute, open, pathname]);
-
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
-
-  const close = () => setOpen(false);
+  }, [hideForRoute, pathname]);
 
   const navLinks = [
     { href: `/${locale}/pricing`, label: "Pricing", highlight: false },
@@ -69,31 +43,52 @@ export function Navbar({ locale }: { locale: Locale }) {
     { href: `/${locale}/architect`, label: "Start Building", highlight: true },
   ];
 
+  const openStartOverlay = (view: "pricing" | "faq") => {
+    if (!isStartRoute || typeof window === "undefined") return;
+    window.dispatchEvent(
+      new CustomEvent(START_OVERLAY_OPEN_EVENT, {
+        detail: { view },
+      }),
+    );
+  };
+
   if (hideForRoute) return null;
 
   return (
-    <>
-      <header 
-        className={`sticky top-0 z-[100] border-b border-white/5 bg-slate-950/80 backdrop-blur-xl pt-[env(safe-area-inset-top,0px)] transition-transform duration-300 ${
-          open
-            ? "opacity-0 pointer-events-none"
-            : isNavVisible
-              ? "translate-y-0"
-              : "-translate-y-[115%]"
-        }`}
-      >
-        <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-          <Link
-            href={`/${locale}`}
-            className="group flex items-center gap-2 text-xl font-black tracking-tighter text-white"
-            onClick={close}
-          >
-            <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent group-hover:from-emerald-300 group-hover:to-cyan-300 transition-all">
-              GENEZISI
-            </span>
-          </Link>
+    <header
+      className={`sticky top-0 z-[100] border-b border-white/5 bg-slate-950/80 backdrop-blur-xl pt-[env(safe-area-inset-top,0px)] transition-transform duration-300 ${
+        isNavVisible ? "translate-y-0" : "-translate-y-[115%]"
+      }`}
+    >
+      <nav className="relative mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
+        <Link
+          href={`/${locale}`}
+          className="group flex shrink-0 items-center gap-2 text-xl font-black tracking-tighter text-white"
+        >
+          <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent transition-all group-hover:from-emerald-300 group-hover:to-cyan-300">
+            GENEZISI
+          </span>
+        </Link>
 
-          <div className="hidden items-center gap-8 lg:flex">
+        {isStartRoute ? (
+          <div className="absolute left-1/2 flex -translate-x-1/2 items-center gap-4 sm:gap-6">
+            <button
+              type="button"
+              onClick={() => openStartOverlay("pricing")}
+              className="text-xs font-bold text-white/70 transition-colors hover:text-white sm:text-sm"
+            >
+              Pricing card
+            </button>
+            <button
+              type="button"
+              onClick={() => openStartOverlay("faq")}
+              className="text-xs font-bold text-white/70 transition-colors hover:text-white sm:text-sm"
+            >
+              Questions?
+            </button>
+          </div>
+        ) : (
+          <div className="flex max-w-[min(100%,28rem)] flex-wrap items-center justify-end gap-x-3 gap-y-1 sm:gap-x-6">
             {navLinks.map((link) => {
               const active = pathname === link.href;
               return (
@@ -101,7 +96,7 @@ export function Navbar({ locale }: { locale: Locale }) {
                   key={link.href}
                   href={link.href}
                   aria-current={active ? "page" : undefined}
-                  className={`text-sm font-bold transition-colors ${
+                  className={`whitespace-nowrap text-xs font-bold transition-colors sm:text-sm ${
                     active
                       ? "text-emerald-400 underline decoration-emerald-500/60 underline-offset-4"
                       : link.highlight
@@ -114,88 +109,8 @@ export function Navbar({ locale }: { locale: Locale }) {
               );
             })}
           </div>
-
-          <button
-            type="button"
-            onClick={() => setOpen(true)}
-            className="relative flex h-11 w-11 items-center justify-center rounded-full bg-white/5 text-white lg:hidden border border-white/10"
-            aria-label="Open navigation menu"
-            aria-expanded={open}
-            aria-controls="mobile-nav-panel"
-          >
-            <Menu size={22} className="stroke-[2.5]" />
-          </button>
-        </nav>
-      </header>
-
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            id="mobile-nav-panel"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[150] flex flex-col bg-slate-950 pt-[env(safe-area-inset-top,0px)] lg:hidden"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Mobile navigation"
-          >
-            {/* Overlay Header with its own Logo & Close Trigger */}
-            <div className="flex h-16 items-center justify-between px-6 border-b border-white/5">
-              <span className="text-xl font-black tracking-tighter text-white/20">GENEZISI</span>
-              <button
-                type="button"
-                onClick={close}
-                className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white border border-white/20"
-                aria-label="Close navigation menu"
-              >
-                <X size={22} className="stroke-[2.5]" />
-              </button>
-            </div>
-
-            {/* Links area - Generous padding-top (32) to clear the header area completely */}
-            <div className="flex-1 overflow-y-auto px-10 pt-24 pb-20">
-              <div className="flex flex-col gap-10">
-                {navLinks.map((link, i) => {
-                  const active = pathname === link.href;
-                  return (
-                    <motion.div
-                      key={link.href}
-                      initial={{ opacity: 0, y: 30 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.1 + i * 0.1 }}
-                    >
-                      <Link
-                        href={link.href}
-                        onClick={close}
-                        aria-current={active ? "page" : undefined}
-                        className={`block text-5xl font-black tracking-tight transition-all active:scale-95 ${
-                          active
-                            ? "text-emerald-400"
-                            : link.highlight
-                              ? "text-emerald-400 shadow-emerald-500/10"
-                              : "text-white/80"
-                        }`}
-                      >
-                        {link.label}
-                      </Link>
-                    </motion.div>
-                  );
-                })}
-
-              </div>
-            </div>
-
-            <div className="p-10 text-center opacity-40">
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">
-                © {new Date().getFullYear()} Genezisi Digital
-              </p>
-            </div>
-          </motion.div>
         )}
-      </AnimatePresence>
-    </>
+      </nav>
+    </header>
   );
 }
-
-
