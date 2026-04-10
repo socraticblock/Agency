@@ -1,5 +1,10 @@
 import { WHATSAPP_INTAKE } from "@/constants/content";
-import { computeLane1Total } from "./lane1-pricing";
+import {
+  DIGITAL_CARD_ORDER_SCHEMA_VERSION,
+  digitalCardTierLabelEn,
+  digitalCardTierLabelKa,
+} from "./digital-card-product";
+import { getDigitalCardPricingSummary } from "./lane1-pricing";
 import type { Lane1CustomizerState, SectorId } from "./types";
 import { SECTOR_LABELS } from "./placeholders";
 
@@ -42,24 +47,51 @@ function servicesBlockSecondary(state: Lane1CustomizerState): string {
   return lines.join("\n");
 }
 
-/** §2.5 — bilingual field lines for self-translate verification */
 function enGeBlock(label: string, en: string, ge: string): string[] {
   return [`${label}`, `EN: ${en.trim() || "—"}`, `GE: ${ge.trim() || "—"}`, ""];
 }
 
-export function buildLane1WhatsAppUrl(state: Lane1CustomizerState): string {
-  const total = computeLane1Total({
-    profileLanguageMode: state.profileLanguageMode,
-    translationMethod: state.translationMethod,
-    addGoogleMap: state.addGoogleMap,
-  });
+function pushDigitalCardOrderHeader(lines: string[], state: Lane1CustomizerState, lang: "ka" | "en") {
+  const { setupGel, hostingAnnualGel } = getDigitalCardPricingSummary(state.selectedTier);
+  const tierLabel =
+    lang === "ka" ? digitalCardTierLabelKa(state.selectedTier) : digitalCardTierLabelEn(state.selectedTier);
+  if (lang === "ka") {
+    lines.push("---");
+    lines.push(`შეკვეთა · სქემა v${DIGITAL_CARD_ORDER_SCHEMA_VERSION}`);
+    lines.push(`ტარიფი: ${tierLabel}`);
+    lines.push(`დაყენება: ${setupGel} ₾`);
+    lines.push(`წლიური ჰოსტინგი: ${hostingAnnualGel} ₾/წელი`);
+  } else {
+    lines.push("---");
+    lines.push(`ORDER · schema v${DIGITAL_CARD_ORDER_SCHEMA_VERSION}`);
+    lines.push(`Tier: ${tierLabel}`);
+    lines.push(`Setup: ${setupGel} GEL`);
+    lines.push(`Annual hosting: ${hostingAnnualGel} GEL/year`);
+  }
+  if (state.digitalCardUrlHint.trim()) {
+    lines.push(
+      lang === "ka"
+        ? `სურვილი URL / სლაგი: ${state.digitalCardUrlHint.trim()}`
+        : `URL / domain preference: ${state.digitalCardUrlHint.trim()}`,
+    );
+  }
+  lines.push(
+    lang === "ka"
+      ? `სნაპშოტი · customizer v${state.version}`
+      : `Snapshot · customizer v${state.version}`,
+  );
+  lines.push("---");
+  lines.push("");
+}
 
+export function buildLane1WhatsAppUrl(state: Lane1CustomizerState): string {
   const lines: string[] = [];
   const lang = state.primaryLang;
 
   if (lang === "ka") {
     lines.push("გამარჯობა Genezisi! მინდა ციფრული ვიზიტკის შეკვეთა.");
     lines.push("");
+    pushDigitalCardOrderHeader(lines, state, "ka");
     lines.push(`სექტორი: ${sectorLabel(state.sectorId, "ka")}`);
     lines.push(`სახელი / ფირმა: ${state.name || "—"}`);
     lines.push(`თანამდებობა: ${state.title || "—"}`);
@@ -87,19 +119,18 @@ export function buildLane1WhatsAppUrl(state: Lane1CustomizerState): string {
       `ენა: ძირითადი — ${state.primaryLang === "ka" ? "ქართული" : "ინგლისური"}`,
     );
     if (state.secondaryMode === "self") {
-      lines.push("მეორე ენა: კლიენტის თარგმანი (+50 ₾)");
+      lines.push("მეორე ენა: კლიენტის თარგმანი (+50 ₾) — ცალკე ხარჯი, დაადასტურეთ Genezisi-თან");
       lines.push(`სახელი (მე-2 ენა): ${state.nameSecondary || "—"}`);
     } else if (state.secondaryMode === "pro") {
-      lines.push("მეორე ენა: პროფესიონალი მთარგმნელი (+150 ₾)");
+      lines.push("მეორე ენა: პროფესიონალი მთარგმნელი (+150 ₾) — ცალკე ხარჯი, დაადასტურეთ Genezisi-თან");
     }
     lines.push(`Google Maps: ${state.addGoogleMap ? "კი (უფასო)" : "არა"}`);
-    lines.push("");
-    lines.push(`სულ: ${total} ₾ (ერთჯერადი)`);
     lines.push("");
     lines.push("My photo is ready to send!");
   } else if (state.secondaryMode === "self") {
     lines.push("Hi Genezisi! I'd like to order a Digital Business Card.");
     lines.push("");
+    pushDigitalCardOrderHeader(lines, state, "en");
     lines.push("(Self-translated Georgian — EN + GE for each field per your checklist)");
     lines.push("");
     lines.push(`Sector: ${sectorLabel(state.sectorId, "en")}`);
@@ -128,15 +159,16 @@ export function buildLane1WhatsAppUrl(state: Lane1CustomizerState): string {
     });
     lines.push("");
     lines.push(styleSummary(state, "en"));
-    lines.push("Second language: self-translated (+50 GEL)");
+    lines.push(
+      "Second language: self-translated (+50 GEL) — separate from Digital Card setup/hosting; confirm with Genezisi.",
+    );
     lines.push(`Google Maps: ${state.addGoogleMap ? "Yes (free)" : "No"}`);
-    lines.push("");
-    lines.push(`Total: ${total} GEL (one-time)`);
     lines.push("");
     lines.push("My photo is ready to send!");
   } else if (state.secondaryMode === "pro") {
     lines.push("Hi Genezisi! I'd like to order a Digital Business Card.");
     lines.push("");
+    pushDigitalCardOrderHeader(lines, state, "en");
     lines.push(`Sector: ${sectorLabel(state.sectorId, "en")}`);
     lines.push(`Name / firm: ${state.name || "—"}`);
     lines.push(`Title: ${state.title || "—"}`);
@@ -161,10 +193,10 @@ export function buildLane1WhatsAppUrl(state: Lane1CustomizerState): string {
     });
     lines.push("");
     lines.push(styleSummary(state, "en"));
-    lines.push("Second language: professional translation (+150 GEL)");
+    lines.push(
+      "Second language: professional translation (+150 GEL) — separate from Digital Card setup/hosting; confirm with Genezisi.",
+    );
     lines.push(`Google Maps: ${state.addGoogleMap ? "Yes (free)" : "No"}`);
-    lines.push("");
-    lines.push(`Total: ${total} GEL (one-time)`);
     lines.push("");
     lines.push(
       "Professional Georgian translation requested (+150 GEL). Please translate the following content into Georgian.",
@@ -174,6 +206,7 @@ export function buildLane1WhatsAppUrl(state: Lane1CustomizerState): string {
   } else {
     lines.push("Hi Genezisi! I'd like to order a Digital Business Card.");
     lines.push("");
+    pushDigitalCardOrderHeader(lines, state, "en");
     lines.push(`Sector: ${sectorLabel(state.sectorId, "en")}`);
     lines.push(`Name / firm: ${state.name || "—"}`);
     lines.push(`Title: ${state.title || "—"}`);
@@ -200,8 +233,6 @@ export function buildLane1WhatsAppUrl(state: Lane1CustomizerState): string {
     lines.push(styleSummary(state, "en"));
     lines.push("Primary language: English");
     lines.push(`Google Maps: ${state.addGoogleMap ? "Yes (free)" : "No"}`);
-    lines.push("");
-    lines.push(`Total: ${total} GEL (one-time)`);
     lines.push("");
     lines.push("My photo is ready to send!");
   }

@@ -2,6 +2,7 @@
 
 import type { Lane1CustomizerState } from "./types";
 import { CUSTOMIZER_VERSION, defaultLane1State } from "./types";
+import { isDigitalCardTierId } from "./digital-card-product";
 import {
   ACCENT_PRESETS,
   BACKGROUND_PRESETS,
@@ -23,8 +24,8 @@ function safeParse(raw: string | null): Lane1CustomizerState | null {
   try {
     const data = JSON.parse(raw) as Record<string, unknown>;
     const v = typeof data.version === "number" ? data.version : 1;
-    // Allow migration from v1–v16
-    if (v < 1 || v > 16) return null;
+    // Allow migration from v1–v17
+    if (v < 1 || v > 17) return null;
     return migrateLane1State(data as unknown as Lane1CustomizerState);
   } catch {
     return null;
@@ -147,6 +148,13 @@ function migrateLane1State(
   }
   if (!BUTTON_STYLE_PRESETS.some((p) => p.id === merged.style.buttonStyleId)) {
     merged.style.buttonStyleId = "minimal";
+  }
+
+  if (!isDigitalCardTierId(merged.selectedTier)) {
+    merged.selectedTier = "subdomain";
+  }
+  if (typeof merged.digitalCardUrlHint !== "string") {
+    merged.digitalCardUrlHint = "";
   }
 
   merged.version = CUSTOMIZER_VERSION;

@@ -198,3 +198,177 @@
     min-height: 48px;
   }
 }
+
+/* ——— Digital Card `/start` sales overlay ——— */
+
+.start-dc-blur-target {
+  transition: filter 0.4s ease-out;
+}
+
+.start-dc-blur-target--locked {
+  filter: blur(12px);
+  pointer-events: none;
+  user-select: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .start-dc-blur-target {
+    transition: none;
+  }
+
+  .start-dc-blur-target--locked {
+    filter: none;
+  }
+}
+
+.start-dc-overlay-root {
+  position: fixed;
+  inset: 0;
+  z-index: 160;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  opacity: 0;
+  transition: opacity 0.4s ease-out;
+}
+
+.start-dc-overlay-root--open {
+  opacity: 1;
+}
+
+.start-dc-overlay-root--exit {
+  opacity: 0;
+  transition: opacity 0.3s ease-in;
+}
+
+.start-dc-overlay-root--mobile {
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0;
+  background-color: #020617;
+}
+
+.start-dc-overlay-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .start-dc-overlay-backdrop {
+    background: rgba(2, 6, 23, 0.92);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+.start-dc-overlay-root--mobile .start-dc-overlay-backdrop {
+  display: none;
+}
+
+.start-dc-overlay-card {
+  position: relative;
+  z-index: 1;
+  width: 90%;
+  max-width: 32rem;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 16px;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  transform: scale(0.95);
+  transition:
+    transform 0.4s ease-out,
+    opacity 0.4s ease-out;
+  opacity: 0;
+}
+
+.start-dc-overlay-root--open .start-dc-overlay-card {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.start-dc-overlay-root--exit .start-dc-overlay-card {
+  transform: scale(0.98);
+  opacity: 0;
+  transition:
+    transform 0.3s ease-in,
+    opacity 0.3s ease-in;
+}
+
+.start-dc-overlay-root--mobile .start-dc-overlay-card {
+  width: 100%;
+  max-width: none;
+  max-height: none;
+  min-height: 100vh;
+  height: 100vh;
+  border-radius: 0;
+  border: none;
+  background: #0f172a;
+  padding: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .start-dc-overlay-card {
+    padding: 3rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .start-dc-overlay-root,
+  .start-dc-overlay-card {
+    transition: none;
+  }
+
+  .start-dc-overlay-root--open .start-dc-overlay-card {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes startDcViewSwap {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.start-dc-overlay-view {
+  animation: startDcViewSwap 0.2s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .start-dc-overlay-view {
+    animation: none;
+  }
+}
+
+@keyframes startDcToastIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.start-dc-toast {
+  animation: startDcToastIn 0.35s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .start-dc-toast {
+    animation: none;
+  }
+}

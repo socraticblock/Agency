@@ -17,7 +17,7 @@ export async function generateMetadata({
   const lang = normalizeLocale(locale);
   const name = "Digital Business Card | Genezisi";
   const description =
-    "Create a premium digital business card: customize a live preview, save your look in the browser, and order via WhatsApp.";
+    "Premium digital business card: live customizer, from 150₾ setup + 120₾/year hosting. Order via WhatsApp — WYSIWYG.";
   const { metadata } = createLocalBusinessSeo({
     name,
     description,

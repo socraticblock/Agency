@@ -44,6 +44,7 @@
 - **046** — Removed on-card Card Surface pill and deleted `CardSurfaceManagerPanel` (radius/shadow still theme-driven only)
 - **047** — Navbar behavior update: fully hidden on `/start/preview`, auto-hide on scroll-down and show on scroll-up across the site
 - **048** — Added “unopened pill” onboarding pulse (orange glow) with persistent open-state tracking across manager pills
+- **049** — Digital Card tiered pricing + `/start` sales overlay (welcome/pricing/FAQ), v17 state, WhatsApp order schema, chrome bar
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -273,6 +274,11 @@
 - **Context:** First-time users needed a clearer visual cue for which on-card pills are interactive before opening them.
 - **Decision:** Added a shared `usePillOnboardingGlow` hook with `localStorage` persistence and a reusable CSS pulse class (`business-card-pill-attention`) to highlight unopened pills; glow disables after first open per pill.
 - **Impact:** Pill discoverability improves without permanent noise, onboarding cue respects reduced-motion fallback, and repeat users see a cleaner steady UI.
+
+### 049
+- **Context:** `/start` still used legacy 450₾ + add-on totals and had no first-visit sales layer for the new Subdomain / Professional / Executive Digital Card product.
+- **Decision:** Added `selectedTier` + `digitalCardUrlHint`, `CUSTOMIZER_VERSION` 17, tier-based pricing helpers + WhatsApp `ORDER · schema v1` header; built glass/solid overlay (welcome/pricing/FAQ), post-dismiss chrome bar under site navbar, blur-lock on customizer while overlay is open, separate `start-overlay-storage` keys, customer copy in `src/constants/start-digital-card-*.ts`, internal summary in `docs/digital-card-product-internal.md`.
+- **Impact:** Card features remain client-only; bilingual profile UI stays but no longer drives the public card price line; fulfillment gets explicit tier + hosting lines in WhatsApp; `npm run build` verified.
 
 ## Architecture Decisions
 - Zero backend for card features

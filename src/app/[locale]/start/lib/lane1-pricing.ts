@@ -1,21 +1,33 @@
-export const LANE1_BASE_GEL = 450;
-export const LANE1_RENEWAL_COPY_GEL = 120;
+import type { DigitalCardTierId } from "./digital-card-product";
+import {
+  DIGITAL_CARD_HOSTING_ANNUAL_GEL,
+  DIGITAL_CARD_TIER_SETUP_GEL,
+} from "./digital-card-product";
+
+/** @deprecated Legacy add-on amounts — not used for Digital Card tier display; kept for reference / imports. */
 export const ADDON_EXTRA_LANG_SELF_GEL = 50;
 export const ADDON_EXTRA_LANG_PRO_GEL = 150;
 export const ADDON_GOOGLE_MAP_GEL = 0;
 
-export function computeLane1Total(params: {
-  profileLanguageMode: "en_only" | "ka_only" | "both";
-  translationMethod: "none" | "self" | "professional";
-  addGoogleMap: boolean;
-}): number {
-  let total = LANE1_BASE_GEL;
-  if (params.profileLanguageMode === "both" && params.translationMethod === "self") {
-    total += ADDON_EXTRA_LANG_SELF_GEL;
-  }
-  if (params.profileLanguageMode === "both" && params.translationMethod === "professional") {
-    total += ADDON_EXTRA_LANG_PRO_GEL;
-  }
-  if (params.addGoogleMap) total += ADDON_GOOGLE_MAP_GEL;
-  return total;
+export const LANE1_RENEWAL_COPY_GEL = DIGITAL_CARD_HOSTING_ANNUAL_GEL;
+
+/** @deprecated Use tier setup fees; kept to avoid breaking unknown imports. */
+export const LANE1_BASE_GEL = 450;
+
+export function getDigitalCardSetupFeeGel(tier: DigitalCardTierId): number {
+  return DIGITAL_CARD_TIER_SETUP_GEL[tier];
+}
+
+export function getDigitalCardHostingAnnualGel(): number {
+  return DIGITAL_CARD_HOSTING_ANNUAL_GEL;
+}
+
+export function getDigitalCardPricingSummary(tier: DigitalCardTierId): {
+  setupGel: number;
+  hostingAnnualGel: number;
+} {
+  return {
+    setupGel: getDigitalCardSetupFeeGel(tier),
+    hostingAnnualGel: getDigitalCardHostingAnnualGel(),
+  };
 }

@@ -1,3 +1,5 @@
+import type { DigitalCardTierId } from "./digital-card-product";
+
 export type PrimaryLang = "ka" | "en";
 export type SecondaryLangMode = "none" | "self" | "pro";
 export type SectorId = "lawyers" | "realestate" | "consultants" | "restaurants";
@@ -150,7 +152,7 @@ export interface StylePresetSelection {
   cardShadowId: CardShadowId;
 }
 
-export const CUSTOMIZER_VERSION = 16 as const;
+export const CUSTOMIZER_VERSION = 17 as const;
 
 export interface Lane1CustomizerState {
   version: typeof CUSTOMIZER_VERSION;
@@ -231,7 +233,15 @@ export interface Lane1CustomizerState {
   /** Max tilt in degrees (3–12). */
   cardTiltMaxDeg: number;
   cardHoverEffectId: CardHoverEffectId;
+
+  /** Digital Card tier — setup fee + order copy (v17+). */
+  selectedTier: DigitalCardTierId;
+  /** Desired subdomain slug or custom domain note for fulfillment (optional). */
+  digitalCardUrlHint: string;
 }
+
+/** Re-export for modules that import card types from `types.ts`. */
+export type { DigitalCardTierId } from "./digital-card-product";
 
 /** `onPatch` merges top-level keys and deep-merges `style` into the previous snapshot. */
 export type Lane1StatePatch = Partial<Omit<Lane1CustomizerState, "style">> & {
@@ -385,5 +395,8 @@ export function defaultLane1State(): Lane1CustomizerState {
     cardTiltEnabled: true,
     cardTiltMaxDeg: 7,
     cardHoverEffectId: "lift",
+
+    selectedTier: "subdomain",
+    digitalCardUrlHint: "",
   };
 }
