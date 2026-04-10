@@ -25,10 +25,7 @@ export function OverlayWelcomeBody({ onViewPricing, onViewFaq, onStartBuilding, 
           { Icon: MessageCircle, title: v.stepOrderTitle, desc: v.stepOrderBody },
           { Icon: Rocket, title: v.stepLiveTitle, desc: v.stepLiveBody },
         ].map(({ Icon, title, desc }) => (
-          <div
-            key={title}
-            className="rounded-lg border border-white/10 p-2 md:p-4"
-          >
+          <div key={title} className="start-dc-info-panel rounded-lg p-2 md:p-4">
             <Icon className="mx-auto mb-1 h-5 w-5 text-emerald-400/90 md:mb-2 md:h-6 md:w-6" aria-hidden />
             <p className="text-[10px] font-medium text-white md:text-sm">{title}</p>
             <p className="mt-0.5 text-[9px] leading-snug text-white/80 md:text-xs">{desc}</p>
@@ -54,14 +51,14 @@ export function OverlayWelcomeBody({ onViewPricing, onViewFaq, onStartBuilding, 
         <button
           type="button"
           onClick={onViewPricing}
-          className="rounded-lg border border-white/20 px-4 py-2 text-sm text-white/70 transition-colors hover:border-white/40 hover:text-white"
+          className="start-dc-info-panel rounded-lg px-4 py-2 text-sm text-white/80 transition-colors hover:text-white"
         >
           {v.viewPricing}
         </button>
         <button
           type="button"
           onClick={onViewFaq}
-          className="rounded-lg border border-white/20 px-4 py-2 text-sm text-white/70 transition-colors hover:border-white/40 hover:text-white"
+          className="start-dc-info-panel rounded-lg px-4 py-2 text-sm text-white/80 transition-colors hover:text-white"
         >
           {v.viewFaq}
         </button>

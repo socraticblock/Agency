@@ -42,9 +42,9 @@ function TierCard({
     <button
       type="button"
       onClick={onSelect}
-      className={`w-full rounded-xl border p-4 text-left transition-colors ${
-        execBorder ? "border-emerald-500/30" : "border-white/[0.08]"
-      } ${selected ? "bg-white/[0.06]" : "bg-white/[0.02]"} hover:bg-white/[0.05]`}
+      className={`start-dc-info-panel w-full rounded-xl p-4 text-left transition-colors ${
+        execBorder ? "border-emerald-500/30" : ""
+      } ${selected ? "ring-1 ring-emerald-300/35" : ""}`}
     >
       <div className="flex items-start justify-between gap-2">
         <span className="font-semibold text-white">{name}</span>

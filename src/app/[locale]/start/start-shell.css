@@ -246,7 +246,9 @@
   align-items: flex-start;
   justify-content: center;
   padding: 0;
-  background-color: #020617;
+  background:
+    radial-gradient(120% 90% at 50% -10%, rgba(246, 222, 176, 0.16), transparent 55%),
+    linear-gradient(180deg, #0b1324 0%, #0a1220 100%);
 }
 
 .start-dc-overlay-backdrop {
@@ -278,14 +280,26 @@
   overflow-y: auto;
   border-radius: 16px;
   padding: 2rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  background:
+    linear-gradient(180deg, rgba(246, 238, 224, 0.14) 0%, rgba(236, 223, 200, 0.1) 100%),
+    rgba(14, 23, 39, 0.46);
+  border: 1px solid rgba(246, 228, 192, 0.22);
+  box-shadow:
+    0 25px 50px -12px rgba(0, 0, 0, 0.52),
+    inset 0 1px 0 rgba(255, 248, 234, 0.2);
+  backdrop-filter: blur(22px) saturate(145%);
+  -webkit-backdrop-filter: blur(22px) saturate(145%);
   transform: scale(0.95);
   transition:
     transform 0.4s ease-out,
     opacity 0.4s ease-out;
   opacity: 0;
+}
+
+.start-dc-info-panel {
+  background: linear-gradient(180deg, rgba(15, 28, 52, 0.9) 0%, rgba(10, 20, 38, 0.86) 100%);
+  border: 1px solid rgba(130, 162, 214, 0.2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .start-dc-overlay-root--open .start-dc-overlay-card {
@@ -308,8 +322,10 @@
   min-height: 100vh;
   height: 100vh;
   border-radius: 0;
-  border: none;
-  background: #0f172a;
+  border: 1px solid rgba(246, 228, 192, 0.16);
+  background:
+    linear-gradient(180deg, rgba(246, 238, 224, 0.1) 0%, rgba(236, 223, 200, 0.08) 100%),
+    rgba(11, 20, 36, 0.82);
   padding: 1.5rem;
 }
 

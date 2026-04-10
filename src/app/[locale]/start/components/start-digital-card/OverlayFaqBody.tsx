@@ -35,7 +35,7 @@ export function OverlayFaqBody({ onBack, onStartBuilding }: Props) {
         {f.back}
       </button>
       <h2 className="mb-6 text-xl font-bold">{f.title}</h2>
-      <div>
+      <div className="start-dc-info-panel rounded-xl px-3 md:px-4">
         {visible.map((item) => {
           const expanded = openId === item.id;
           return (
@@ -76,7 +76,7 @@ export function OverlayFaqBody({ onBack, onStartBuilding }: Props) {
         href={startDigitalCardFaqWhatsAppHref()}
         target="_blank"
         rel="noopener noreferrer"
-        className="mt-2 flex justify-center rounded-lg bg-white/10 px-6 py-2 text-center text-sm text-white transition-colors hover:bg-white/20"
+        className="start-dc-info-panel mt-2 flex justify-center rounded-lg px-6 py-2 text-center text-sm text-white transition-colors hover:text-white"
       >
         {f.whatsappCta}
       </a>
