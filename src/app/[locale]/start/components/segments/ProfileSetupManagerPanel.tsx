@@ -41,15 +41,7 @@ function mergeThemeStyle(prev: StylePresetSelection, patch: Partial<StylePresetS
 export function ProfileSetupManagerPanel({ editable, state, patch, useSecondary }: Props & { useSecondary: boolean }) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement | null>(null);
-  const autoOpenedRef = useRef(false);
   const shouldGlow = usePillOnboardingGlow("profile-setup-v2", open);
-
-  useEffect(() => {
-    if (!editable || state.profileSetupCompleted || autoOpenedRef.current) return;
-    autoOpenedRef.current = true;
-    setOpen(true);
-    patch({ profileSetupCompleted: true });
-  }, [editable, patch, state.profileSetupCompleted]);
 
   useEffect(() => {
     if (!open) return;

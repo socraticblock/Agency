@@ -65,9 +65,9 @@ export function OverlayWelcomeBody({ onViewPricing, onViewFaq, onStartBuilding, 
     <div className="mx-auto w-full max-w-3xl text-center text-white">
       <p className="mb-3 text-lg font-black tracking-tight text-emerald-400">{START_DC_BRAND}</p>
       <h2 className="mb-2 text-2xl font-bold md:text-3xl">{v.headline}</h2>
-      <p className="mb-2 min-h-6 text-sm text-emerald-400 md:text-base">
-        {subtitle}
-        {!prefersReducedMotion ? <span className="ml-0.5 inline-block text-emerald-400/90">|</span> : null}
+      <p className="mb-2 min-h-6 text-sm !text-emerald-400 md:text-base" style={{ color: "#34d399" }}>
+        <span className="!text-emerald-400" style={{ color: "#34d399" }}>{subtitle}</span>
+        {!prefersReducedMotion ? <span className="ml-0.5 inline-block !text-emerald-400/90" style={{ color: "rgba(52, 211, 153, 0.9)" }}>|</span> : null}
       </p>
       <p className="mb-6 text-lg font-semibold text-emerald-400">{v.priceLine}</p>
 
