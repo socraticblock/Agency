@@ -56,7 +56,7 @@ export function StartDigitalCardOverlay({
 
   if (!domReady || !mounted) return null;
 
-  const useMobileVisualStyle = isMobileLayout || view === "pricing" || view === "faq";
+  const useMobileVisualStyle = isMobileLayout || view === "pricing" || view === "faq" || view === "welcome";
   const rootClass = [
     "start-dc-overlay-root",
     useMobileVisualStyle ? "start-dc-overlay-root--mobile" : "",

@@ -26,7 +26,7 @@ export function OverlayFaqBody({ onBack, onStartBuilding }: Props) {
   };
 
   return (
-    <div className="text-white">
+    <div className="mx-auto w-full max-w-3xl text-left text-white">
       <button
         type="button"
         onClick={onBack}

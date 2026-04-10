@@ -13,7 +13,7 @@ type Props = {
 export function OverlayWelcomeBody({ onViewPricing, onViewFaq, onStartBuilding, onSkip }: Props) {
   const v = START_DC_WELCOME;
   return (
-    <div className="text-center text-white">
+    <div className="mx-auto w-full max-w-3xl text-center text-white">
       <p className="mb-3 text-lg font-black tracking-tight text-emerald-400">{START_DC_BRAND}</p>
       <h2 className="mb-2 text-2xl font-bold md:text-3xl">{v.headline}</h2>
       <p className="mb-2 text-sm text-white/60 md:text-base">{v.subtitle}</p>

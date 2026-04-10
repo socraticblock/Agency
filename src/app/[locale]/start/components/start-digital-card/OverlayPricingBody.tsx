@@ -84,7 +84,7 @@ export function OverlayPricingBody({
   const order = isMobileStack ? TIERS : (["subdomain", "professional", "executive"] as const);
 
   return (
-    <div className="text-white">
+    <div className="mx-auto w-full max-w-4xl text-left text-white">
       <button
         type="button"
         onClick={onBack}
