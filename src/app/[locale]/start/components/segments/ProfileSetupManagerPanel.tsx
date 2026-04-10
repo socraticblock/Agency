@@ -42,7 +42,7 @@ export function ProfileSetupManagerPanel({ editable, state, patch, useSecondary 
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement | null>(null);
   const autoOpenedRef = useRef(false);
-  const shouldGlow = usePillOnboardingGlow("profile-setup", open);
+  const shouldGlow = usePillOnboardingGlow("profile-setup-v2", open);
 
   useEffect(() => {
     if (!editable || state.profileSetupCompleted || autoOpenedRef.current) return;
@@ -100,17 +100,17 @@ export function ProfileSetupManagerPanel({ editable, state, patch, useSecondary 
   };
 
   return (
-    <div ref={rootRef} className="business-card-template-print-skip pointer-events-none absolute inset-x-0 top-2 z-40 flex justify-center px-3 font-sans">
+    <div ref={rootRef} className="business-card-template-print-skip pointer-events-none absolute inset-x-0 top-0 z-40 flex justify-center px-3 font-sans">
       <div className="pointer-events-auto w-full max-w-[min(96%,620px)]">
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className={`mx-auto flex min-h-10 items-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75 ${
+          className={`mx-auto flex min-h-10 w-40 items-center justify-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-center text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75 ${
             shouldGlow ? "business-card-pill-attention" : ""
           }`}
         >
           <UserRound className="h-3.5 w-3.5" />
-          {useSecondary ? "პროფილის დაყენება" : "Profile setup"}
+          <span className="text-center">{useSecondary ? "პროფილის დაყენება" : "Profile setup"}</span>
         </button>
         {open ? (
           <div className="mt-2 rounded-2xl border border-white/20 bg-black/75 p-3 text-white shadow-2xl backdrop-blur-md">

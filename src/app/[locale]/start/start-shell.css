@@ -17,7 +17,7 @@
 
 .start-shell {
   /* Editor chrome: fixed contrast — never follow card `--text-primary` (dark cards use light text). */
-  --start-bg: #f8fafc;
+  --start-bg: #faf8f5;
   --start-text: #0f172a;
   --start-text-muted: #475569;
   --start-caption: #64748b;

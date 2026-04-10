@@ -8,6 +8,7 @@ import type { Lane1CustomizerState } from "../../lib/types";
 import { InlineEditable } from "../InlineEditable";
 import { PhotoToolbelt } from "./PhotoToolbelt";
 import { PHOTO_BORDER_PRESETS, PHOTO_EFFECT_PRESETS, PHOTO_OVERLAY_PRESETS, PHOTO_SHAPE_PRESETS } from "../../lib/presets";
+import { usePillOnboardingGlow } from "./usePillOnboardingGlow";
 
 interface HeroSegmentProps {
   state: Lane1CustomizerState;
@@ -62,6 +63,7 @@ export function HeroSegment({
   } = style as any;
   const [mobileFloatingLabel, setMobileFloatingLabel] = useState<{ label: string; key: number } | null>(null);
   const [mobilePhotoToolsOpen, setMobilePhotoToolsOpen] = useState(false);
+  const shouldGlowEditPhoto = usePillOnboardingGlow("edit-photo-mobile", mobilePhotoToolsOpen);
   const mobileToolsRef = useRef<HTMLDivElement | null>(null);
 
   // ─── Desktop: non-passive wheel for zoom ────────────────────────────────
@@ -473,7 +475,7 @@ export function HeroSegment({
               )}
             </AnimatePresence>
           </div>
-          {editable && state.photoDataUrl ? (
+          {editable ? (
             <div className="w-full md:hidden">
               <div ref={mobileToolsRef} className="relative mx-auto w-full max-w-[520px]">
                 <AnimatePresence>
@@ -490,7 +492,7 @@ export function HeroSegment({
                     </motion.div>
                   ) : null}
                 </AnimatePresence>
-                {mobilePhotoToolsOpen ? (
+                {mobilePhotoToolsOpen && state.photoDataUrl ? (
                   <div className="flex w-full flex-wrap justify-center gap-1.5 rounded-2xl border border-white/20 bg-black/75 p-2 text-white shadow-lg backdrop-blur-md">
                     <MobilePhotoToolButton icon={<Shapes className="h-3.5 w-3.5" />} label={useSecondary ? "ფორმა" : "Shape"} onClick={cycleMobileShape} />
                     <MobilePhotoToolButton icon={<Wand2 className="h-3.5 w-3.5" />} label={useSecondary ? "ფილტრი" : "Filter"} onClick={cycleMobileEffect} />
@@ -503,8 +505,16 @@ export function HeroSegment({
                 ) : (
                   <button
                     type="button"
-                    onClick={() => setMobilePhotoToolsOpen(true)}
-                    className="mx-auto inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/75 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-white shadow-lg backdrop-blur-md"
+                    onClick={() => {
+                      if (!state.photoDataUrl) {
+                        fileRef.current?.click();
+                        return;
+                      }
+                      setMobilePhotoToolsOpen(true);
+                    }}
+                    className={`mx-auto inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/75 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-white shadow-lg backdrop-blur-md ${
+                      shouldGlowEditPhoto ? "business-card-pill-attention" : ""
+                    }`}
                   >
                     <Camera className="h-3.5 w-3.5" />
                     {useSecondary ? "ფოტოს რედაქტირება" : "Edit photo"}
