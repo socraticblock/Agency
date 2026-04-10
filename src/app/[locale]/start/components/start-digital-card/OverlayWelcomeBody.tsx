@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 import { Globe, MessageCircle, PenTool, RefreshCw, Rocket, Shield, Smartphone } from "lucide-react";
 import { START_DC_BRAND, START_DC_WELCOME } from "@/constants/start-digital-card-copy";
 
@@ -12,11 +13,62 @@ type Props = {
 
 export function OverlayWelcomeBody({ onViewPricing, onViewFaq, onStartBuilding, onSkip }: Props) {
   const v = START_DC_WELCOME;
+  const typingPhrases = useMemo(
+    () => ["Premium design.", "Zero friction.", "Stand out from your peers.", "Fast launch."],
+    [],
+  );
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const [typed, setTyped] = useState("");
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const onChange = () => setPrefersReducedMotion(mq.matches);
+    onChange();
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+    const current = typingPhrases[phraseIndex] ?? "";
+    let delay = deleting ? 55 : 95;
+
+    if (!deleting && typed === current) {
+      delay = 1700;
+    } else if (deleting && typed === "") {
+      delay = 380;
+    }
+
+    const timer = window.setTimeout(() => {
+      if (!deleting && typed === current) {
+        setDeleting(true);
+        return;
+      }
+      if (deleting && typed === "") {
+        setDeleting(false);
+        setPhraseIndex((i) => (i + 1) % typingPhrases.length);
+        return;
+      }
+      setTyped(current.slice(0, deleting ? typed.length - 1 : typed.length + 1));
+    }, delay);
+
+    return () => window.clearTimeout(timer);
+  }, [deleting, phraseIndex, prefersReducedMotion, typed, typingPhrases]);
+
+  const subtitle = prefersReducedMotion
+    ? "Premium design. Zero friction. Stand out from your peers. Fast launch."
+    : typed;
+
   return (
     <div className="mx-auto w-full max-w-3xl text-center text-white">
       <p className="mb-3 text-lg font-black tracking-tight text-emerald-400">{START_DC_BRAND}</p>
       <h2 className="mb-2 text-2xl font-bold md:text-3xl">{v.headline}</h2>
-      <p className="mb-2 text-sm text-white/60 md:text-base">{v.subtitle}</p>
+      <p className="mb-2 min-h-6 text-sm text-emerald-400 md:text-base">
+        {subtitle}
+        {!prefersReducedMotion ? <span className="ml-0.5 inline-block text-emerald-400/90">|</span> : null}
+      </p>
       <p className="mb-6 text-lg font-semibold text-emerald-400">{v.priceLine}</p>
 
       <div className="mb-6 grid grid-cols-3 gap-2 md:gap-3">
