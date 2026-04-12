@@ -50,6 +50,7 @@
 - **052** — Order review: red on-card field rings from blocking issue ids + “Continue without checklist” bypass (WhatsApp note) + sticky highlight prune on state; dialog lifted to `StartPageEditorColumn`
 - **053** — Lean handoff JSON (strip hero/gallery/bg image blobs) + `handoffMedia` meta + WhatsApp schema v3 checklist + Share-first step 2 copy
 - **054** — Email-first architect brief in review step 2 + direct-WhatsApp alternative + WhatsApp schema v4 summary; JSON retained as internal fallback only
+- **055** — WhatsApp handoff: copy full `buildWhatsAppOrderPasteText` brief + short `buildLane1WhatsAppOpenerUrl`; email optional; `StartOrderSendStep2`
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -309,6 +310,11 @@
 - **Context:** Clients should not have to download files; the handoff needed a smoother primary path that operators can paste into a database quickly, while keeping WhatsApp as the human-first fallback.
 - **Decision:** Added `ARCHITECT_INTAKE_EMAIL` plus `order-email.ts` to build a structured `mailto:` brief from `Lane1CustomizerState`; step 2 now recommends **Send My Custom Build to the Architect** and offers **I Prefer Communication Directly via WhatsApp** as the alternative; `buildLane1WhatsAppUrl` / summary lines now describe direct chat instead of JSON attachment and `DIGITAL_CARD_ORDER_SCHEMA_VERSION` moved to 4.
 - **Impact:** Customer flow is email-first without downloads; ops gets a stable copy/paste brief for manual fulfillment; lean JSON stays available only for internal replay/import work.
+
+### 055
+- **Context:** Long WhatsApp URLs and email-only flows were still friction; clients wanted one full message to paste after a simple opener.
+- **Decision:** `buildArchitectHandoffDataLines` shared core; `buildWhatsAppOrderPasteText` for clipboard; `buildLane1WhatsAppOpenerUrl` replaces long `wa.me` payloads; step 2 UI in `StartOrderSendStep2` is copy → open WhatsApp → paste, with email as optional.
+- **Impact:** Primary path matches mobile habits; operators receive the same structured block as email without forcing a mail client.
 
 ## Architecture Decisions
 - Zero backend for card features

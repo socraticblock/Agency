@@ -106,14 +106,11 @@ export function buildArchitectEmailSubject(state: Lane1CustomizerState, orderId:
   return `Digital Card Build Brief - ${owner} - ${orderId}`;
 }
 
-export function buildArchitectBriefLines(state: Lane1CustomizerState, orderId: string): string[] {
+/** Key-value operator block (shared by email body and WhatsApp paste). */
+export function buildArchitectHandoffDataLines(state: Lane1CustomizerState, orderId: string): string[] {
   const { setupGel, hostingAnnualGel } = getDigitalCardPricingSummary(state.selectedTier);
   const sections = activeSectionIds(state);
   const lines: string[] = [
-    "Hi Genezisi,",
-    "",
-    "Please find my custom Digital Business Card build brief below.",
-    "",
     `ORDER_ID: ${orderId}`,
     `ORDER_SCHEMA: v${DIGITAL_CARD_ORDER_SCHEMA_VERSION}`,
     `TIER: ${digitalCardTierLabelEn(state.selectedTier)}`,
@@ -193,6 +190,25 @@ export function buildArchitectBriefLines(state: Lane1CustomizerState, orderId: s
   lines.push("");
   lines.push("If easier, I can continue photo delivery or clarification by WhatsApp.");
   return lines;
+}
+
+export function buildArchitectBriefLines(state: Lane1CustomizerState, orderId: string): string[] {
+  return [
+    "Hi Genezisi,",
+    "",
+    "Please find my custom Digital Business Card build brief below.",
+    "",
+    ...buildArchitectHandoffDataLines(state, orderId),
+  ];
+}
+
+/** Full message to copy-paste into WhatsApp (after the short opener message). */
+export function buildWhatsAppOrderPasteText(state: Lane1CustomizerState, orderId: string): string {
+  const core = buildArchitectHandoffDataLines(state, orderId).join("\n");
+  if (state.primaryLang === "ka") {
+    return `გამარჯობა Genezisi — აი ციფრული ვიზიტკა, რომელიც მინდა:\n\n${core}`;
+  }
+  return `Hi Genezisi — here is the Digital Business Card I want:\n\n${core}`;
 }
 
 export function buildArchitectEmailBody(state: Lane1CustomizerState, orderId: string): string {

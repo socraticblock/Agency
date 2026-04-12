@@ -5,7 +5,7 @@ import type { Locale } from "@/lib/i18n";
 import { normalizeLane1StateFromUnknown } from "../lib/customizer-store";
 import { parseImportedOrderFile } from "../lib/order-payload";
 import { validateOrderState } from "../lib/order-validation";
-import { buildLane1WhatsAppUrl } from "../lib/whatsapp";
+import { buildLane1WhatsAppOpenerUrl } from "../lib/whatsapp";
 import type { Lane1CustomizerState, Lane1StatePatch } from "../lib/types";
 import { getLanguagePreviewMode } from "../lib/language-profile";
 import { BusinessCardTemplate } from "./BusinessCardTemplate";
@@ -56,7 +56,7 @@ export function StartPageEditorColumn({
 
   const buildWhatsAppUrl = useCallback(
     (orderId: string) =>
-      buildLane1WhatsAppUrl(state, orderId, { incompleteChecklist: waIncompleteChecklist }),
+      buildLane1WhatsAppOpenerUrl(state, orderId, { incompleteChecklist: waIncompleteChecklist }),
     [state, waIncompleteChecklist],
   );
 

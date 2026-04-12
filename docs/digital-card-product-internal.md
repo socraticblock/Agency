@@ -20,7 +20,7 @@ Hosting (120₾/yr) is always required for a live card.
 ## Fulfillment
 
 - WhatsApp order → bank transfer → go live in 3–5 working days (Executive: priority queue).
-- **Primary handoff:** client sends a prefilled **architect email brief** from `/start` (stable copy/paste text block for manual ops / DB entry). **Alternative:** direct WhatsApp reference message for clients who prefer chat-first communication.
+- **Primary handoff:** client **copies** the full structured brief from `/start` and **pastes** it into WhatsApp after a short opener message; **optional** prefilled email to the architect with the same text. Avoids long `wa.me` URLs and awkward file attach.
 - **Internal fallback:** lean `genezisi-order-{id}.json` still exists for replay/import (`handoffMedia` records stripped hero/gallery/background images), but the customer flow no longer asks clients to download it.
 - See [digital-card-order-handoff.md](./digital-card-order-handoff.md) for replay and optional DB storage notes.
 
