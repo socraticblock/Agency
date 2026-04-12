@@ -2,7 +2,8 @@
 
 export type DigitalCardTierId = "subdomain" | "professional" | "executive";
 
-export const DIGITAL_CARD_ORDER_SCHEMA_VERSION = 1 as const;
+/** WhatsApp order text + order file metadata; bump when the operator-facing summary contract changes. */
+export const DIGITAL_CARD_ORDER_SCHEMA_VERSION = 4 as const;
 
 export const DIGITAL_CARD_HOSTING_ANNUAL_GEL = 120;
 

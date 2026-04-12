@@ -1,10 +1,16 @@
 "use client";
 
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Locale } from "@/lib/i18n";
+import { normalizeLane1StateFromUnknown } from "../lib/customizer-store";
+import { parseImportedOrderFile } from "../lib/order-payload";
+import { validateOrderState } from "../lib/order-validation";
+import { buildLane1WhatsAppUrl } from "../lib/whatsapp";
 import type { Lane1CustomizerState, Lane1StatePatch } from "../lib/types";
 import { getLanguagePreviewMode } from "../lib/language-profile";
 import { BusinessCardTemplate } from "./BusinessCardTemplate";
 import { StartOrderCheckoutBlock } from "./StartOrderCheckoutBlock";
+import { StartOrderReviewDialog } from "./StartOrderReviewDialog";
 
 type Props = {
   locale: Locale;
@@ -16,8 +22,8 @@ type Props = {
   chromeVisible: boolean;
   setupGel: number;
   hostingGel: number;
-  waUrl: string;
   onOrderClick: () => void;
+  onImportOrderState?: (next: Lane1CustomizerState) => void;
 };
 
 export function StartPageEditorColumn({
@@ -30,11 +36,60 @@ export function StartPageEditorColumn({
   chromeVisible,
   setupGel,
   hostingGel,
-  waUrl,
   onOrderClick,
+  onImportOrderState,
 }: Props) {
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [importError, setImportError] = useState<string | null>(null);
+  const [reviewOpen, setReviewOpenState] = useState(false);
+  const [orderHighlightIssueIds, setOrderHighlightIssueIds] = useState<string[]>([]);
+  const [waIncompleteChecklist, setWaIncompleteChecklist] = useState(false);
+
+  const setReviewOpen = useCallback((open: boolean) => {
+    setReviewOpenState(open);
+    if (!open) setWaIncompleteChecklist(false);
+  }, []);
   const languageMode = getLanguagePreviewMode(state);
   const homeHref = `/${locale}`;
+
+  const orderHighlightSet = useMemo(() => new Set(orderHighlightIssueIds), [orderHighlightIssueIds]);
+
+  const buildWhatsAppUrl = useCallback(
+    (orderId: string) =>
+      buildLane1WhatsAppUrl(state, orderId, { incompleteChecklist: waIncompleteChecklist }),
+    [state, waIncompleteChecklist],
+  );
+
+  const handleReviewCloseAttempt = useCallback(
+    (detail: { step: 1 | 2; bypassed: boolean }) => {
+      if (detail.bypassed) {
+        setOrderHighlightIssueIds([]);
+        setWaIncompleteChecklist(true);
+        return;
+      }
+      if (detail.step === 2) {
+        setOrderHighlightIssueIds([]);
+        return;
+      }
+      const { blocking } = validateOrderState(state);
+      if (blocking.length > 0) {
+        setOrderHighlightIssueIds(blocking.map((b) => b.id));
+      } else {
+        setOrderHighlightIssueIds([]);
+      }
+    },
+    [state],
+  );
+
+  useEffect(() => {
+    setOrderHighlightIssueIds((prev) => {
+      if (prev.length === 0) return prev;
+      const { blocking } = validateOrderState(state);
+      const allowed = new Set(blocking.map((b) => b.id));
+      const next = prev.filter((id) => allowed.has(id));
+      return next.length === prev.length ? prev : next;
+    });
+  }, [state]);
 
   const onPatchInner = (p: Lane1StatePatch) => {
     onPatch(p);
@@ -46,6 +101,14 @@ export function StartPageEditorColumn({
         chromeVisible ? "pt-3 pb-10 md:pb-14" : "py-10 md:py-14"
       }`}
     >
+      <StartOrderReviewDialog
+        open={reviewOpen}
+        onOpenChange={setReviewOpen}
+        onCloseAttempt={handleReviewCloseAttempt}
+        state={state}
+        buildWhatsAppUrl={buildWhatsAppUrl}
+        onOrderClick={onOrderClick}
+      />
       <header className="mb-10 text-center">
         <p className="mb-2 text-[0.75rem] font-bold uppercase tracking-[0.2em] text-[#64748b]">
           Genezisi
@@ -54,6 +117,43 @@ export function StartPageEditorColumn({
         <p className="start-body text-[#64748b]">
           Preview updates as you edit. Order via WhatsApp.
         </p>
+        {onImportOrderState ? (
+          <div className="mt-3 text-center">
+            <input
+              ref={fileRef}
+              type="file"
+              accept="application/json,.json"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                e.target.value = "";
+                if (!f) return;
+                setImportError(null);
+                const reader = new FileReader();
+                reader.onload = () => {
+                  try {
+                    const parsed = JSON.parse(String(reader.result)) as unknown;
+                    const raw = parseImportedOrderFile(parsed) ?? parsed;
+                    const next = normalizeLane1StateFromUnknown(raw);
+                    if (next) onImportOrderState(next);
+                    else setImportError("Could not read this file. Use a Genezisi order export (.json).");
+                  } catch {
+                    setImportError("Invalid JSON file.");
+                  }
+                };
+                reader.readAsText(f);
+              }}
+            />
+            <button
+              type="button"
+              onClick={() => fileRef.current?.click()}
+              className="text-xs font-semibold text-[#64748b] underline decoration-[#64748b]/35 underline-offset-4 hover:decoration-[#64748b]"
+            >
+              Import saved order (.json)
+            </button>
+            {importError ? <p className="mt-2 text-xs text-amber-800">{importError}</p> : null}
+          </div>
+        ) : null}
       </header>
 
       <div className="mb-4 flex flex-wrap items-center gap-3 lg:hidden">
@@ -118,16 +218,16 @@ export function StartPageEditorColumn({
                 ? (v) => setPreviewLang(v)
                 : undefined
             }
+            orderHighlightIssueIds={orderHighlightSet}
           />
         </div>
         <StartOrderCheckoutBlock
-          selectedTier={state.selectedTier}
-          digitalCardUrlHint={state.digitalCardUrlHint}
+          state={state}
           setupGel={setupGel}
           hostingGel={hostingGel}
-          waUrl={waUrl}
           onPatch={onPatch}
-          onOrderClick={onOrderClick}
+          onReviewOrderClick={() => setReviewOpen(true)}
+          orderHighlightIssueIds={orderHighlightSet}
         />
       </div>
 

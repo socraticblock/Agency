@@ -19,6 +19,7 @@ interface ContactSegmentProps {
   ctaLabelStyle: CSSProperties;
   itemVariants: any;
   glassStyle: CSSProperties;
+  orderHighlightIssueIds?: ReadonlySet<string>;
 }
 
 export function ContactSegment({
@@ -31,9 +32,12 @@ export function ContactSegment({
   ctaLabelStyle,
   itemVariants,
   glassStyle,
+  orderHighlightIssueIds,
 }: ContactSegmentProps) {
+  const hl = orderHighlightIssueIds;
   const address = useSecondary ? state.addressSecondary || state.address : state.address;
   const validAddress = hasValidAddress(address);
+  const orderRing = "rounded-xl ring-2 ring-red-600 ring-offset-2 ring-offset-white/10";
   const mobileButtonOrder = state.mobileButtonOrder?.length
     ? state.mobileButtonOrder
     : (["map-preview", "get-directions"] as MobileButtonId[]);
@@ -47,7 +51,7 @@ export function ContactSegment({
       style={{ borderColor: "var(--accent-secondary)", ...glassStyle }}
     >
       <div className={`space-y-4 text-sm ${isResponsive ? "md:text-base" : ""}`}>
-        <div className="flex items-center gap-3 font-semibold">
+        <div className={`flex items-center gap-3 font-semibold ${hl?.has("phone") ? orderRing : ""} p-0.5`}>
           <Phone className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
           <InlineEditable
             value={state.phone}
@@ -60,7 +64,7 @@ export function ContactSegment({
           />
         </div>
 
-        <div className="flex items-start gap-3">
+        <div className={`flex items-start gap-3 ${hl?.has("email") ? orderRing : ""} p-0.5`}>
           <Mail className="mt-1 h-4 w-4 shrink-0 opacity-70" aria-hidden />
           <span className="min-w-0 flex-1 underline">
             <InlineEditable
@@ -75,7 +79,11 @@ export function ContactSegment({
           </span>
         </div>
 
-        <div className="flex items-start gap-3">
+        <div
+          className={`flex items-start gap-3 ${
+            hl?.has("map-address") || hl?.has("directions-address") ? orderRing : ""
+          } p-0.5`}
+        >
           <Map className="mt-1 h-4 w-4 shrink-0 opacity-70" aria-hidden />
           <div className="min-w-0 flex-1" style={bodyStyle}>
             <InlineEditable

@@ -31,6 +31,7 @@ import "../business-card-template.css";
 import { BackgroundEngine } from "./BackgroundEngine";
 
 const ICONS = [Scale, Briefcase, Building2, Sparkles];
+const EMPTY_ORDER_HIGHLIGHTS = new Set<string>();
 
 export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   state,
@@ -41,6 +42,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   onPreviewLangChange,
   hideBranding = false,
   layoutMode = "mobile",
+  orderHighlightIssueIds,
 }: {
   state: Lane1CustomizerState;
   previewLang: "primary" | "secondary";
@@ -50,9 +52,11 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   onPreviewLangChange?: (lang: "primary" | "secondary") => void;
   hideBranding?: boolean;
   layoutMode?: "mobile" | "responsive";
+  orderHighlightIssueIds?: ReadonlySet<string>;
 }) {
   const editable = Boolean(onPatch);
   const isResponsive = layoutMode === "responsive";
+  const orderHl = orderHighlightIssueIds ?? EMPTY_ORDER_HIGHLIGHTS;
   const vars = resolveStyleVariables(state.style) as any;
   const languageMode = getLanguagePreviewMode(state);
   const useSecondary = previewLang === "secondary";
@@ -243,6 +247,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
           bodyStyle={bodyStyle}
           itemVariants={customItemVariants}
           glassStyle={glassStyle}
+          orderHighlightIssueIds={orderHl}
         />
 
         <CtaSegment
@@ -279,6 +284,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
             setActiveSection={setActiveSection}
             pulseSectionId={pulseSectionId}
             pulseToken={pulseToken}
+            orderHighlightIssueIds={orderHl}
           />
         </div>
 
@@ -293,6 +299,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
           ctaLabelStyle={ctaLabelStyle}
           itemVariants={customItemVariants}
           glassStyle={glassStyle}
+          orderHighlightIssueIds={orderHl}
         />
         <SocialManagerPanel editable={editable} state={state} patch={patch} useSecondary={useSecondary} />
         <SocialSegment state={state} isResponsive={isResponsive} itemVariants={customItemVariants} />

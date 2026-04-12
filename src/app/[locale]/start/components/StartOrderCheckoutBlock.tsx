@@ -3,7 +3,9 @@
 import { MessageCircle } from "lucide-react";
 import { START_DC_ORDER_BLOCK, START_DC_PRICING } from "@/constants/start-digital-card-copy";
 import type { DigitalCardTierId } from "../lib/digital-card-product";
-import type { Lane1StatePatch } from "../lib/types";
+import type { Lane1CustomizerState, Lane1StatePatch } from "../lib/types";
+
+const EMPTY_HIGHLIGHT_SET = new Set<string>();
 
 const TIER_ORDER: DigitalCardTierId[] = ["subdomain", "professional", "executive"];
 
@@ -17,25 +19,28 @@ function tierPricingName(tier: DigitalCardTierId): string {
 }
 
 type Props = {
-  selectedTier: DigitalCardTierId;
-  digitalCardUrlHint: string;
+  state: Lane1CustomizerState;
   setupGel: number;
   hostingGel: number;
-  waUrl: string;
   onPatch: (p: Lane1StatePatch) => void;
-  onOrderClick: () => void;
+  onReviewOrderClick: () => void;
+  orderHighlightIssueIds?: ReadonlySet<string>;
 };
 
+const orderFieldRing = "ring-2 ring-red-600 ring-offset-2 ring-offset-white rounded-xl";
+
 export function StartOrderCheckoutBlock({
-  selectedTier,
-  digitalCardUrlHint,
+  state,
   setupGel,
   hostingGel,
-  waUrl,
   onPatch,
-  onOrderClick,
+  onReviewOrderClick,
+  orderHighlightIssueIds,
 }: Props) {
+  const selectedTier = state.selectedTier;
+  const digitalCardUrlHint = state.digitalCardUrlHint;
   const copy = START_DC_ORDER_BLOCK;
+  const hl = orderHighlightIssueIds ?? EMPTY_HIGHLIGHT_SET;
 
   const selectTier = (t: DigitalCardTierId) => {
     if (t === "professional") {
@@ -80,7 +85,7 @@ export function StartOrderCheckoutBlock({
       ) : null}
 
       {selectedTier === "subdomain" ? (
-        <div className="space-y-2">
+        <div className={`space-y-2 ${hl.has("subdomain-hint") ? orderFieldRing : ""} p-1`}>
           <label className="start-body block text-center text-[#64748b]">
             <span className="mb-1 block text-xs">{copy.subdomainUrlLabel}</span>
             <input
@@ -97,7 +102,7 @@ export function StartOrderCheckoutBlock({
       ) : null}
 
       {selectedTier === "executive" ? (
-        <div className="space-y-2">
+        <div className={`space-y-2 ${hl.has("executive-domain") ? orderFieldRing : ""} p-1`}>
           <label className="start-body block text-center text-[#64748b]">
             <span className="mb-1 block text-xs">{copy.executiveUrlLabel}</span>
             <input
@@ -113,16 +118,14 @@ export function StartOrderCheckoutBlock({
         </div>
       ) : null}
 
-      <a
-        href={waUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={onOrderClick}
-        className="start-wa-cta mt-2 inline-flex w-full items-center justify-center gap-2"
+      <button
+        type="button"
+        onClick={onReviewOrderClick}
+        className="start-wa-cta mt-2 inline-flex w-full cursor-pointer items-center justify-center gap-2 border-0"
       >
         <MessageCircle className="h-5 w-5 shrink-0" aria-hidden />
-        Order on WhatsApp
-      </a>
+        Review order
+      </button>
     </div>
   );
 }

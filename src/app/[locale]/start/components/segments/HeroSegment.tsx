@@ -29,6 +29,7 @@ interface HeroSegmentProps {
   bodyStyle: CSSProperties;
   itemVariants: any;
   glassStyle: CSSProperties;
+  orderHighlightIssueIds?: ReadonlySet<string>;
 }
 
 export function HeroSegment({
@@ -50,6 +51,7 @@ export function HeroSegment({
   bodyStyle,
   itemVariants,
   glassStyle,
+  orderHighlightIssueIds,
 }: HeroSegmentProps) {
   const style = state.style || {};
   const {
@@ -525,7 +527,14 @@ export function HeroSegment({
           ) : null}
 
           {/* ── Identity Text ───────────────────────────────────── */}
-          <div ref={heroActiveZoneRef} className="relative z-10 w-full space-y-1 bg-transparent pt-4 text-center transition-all">
+          <div
+            ref={heroActiveZoneRef}
+            className={`relative z-10 w-full space-y-1 bg-transparent pt-4 text-center transition-all ${
+              orderHighlightIssueIds?.has("name") || orderHighlightIssueIds?.has("title")
+                ? "rounded-xl ring-2 ring-red-600 ring-offset-2 ring-offset-transparent"
+                : ""
+            }`}
+          >
             <h1 className="text-2xl md:text-3xl font-bold leading-tight" style={headingStyle}>
               <InlineEditable
                 value={useSecondary ? state.nameSecondary : state.name}

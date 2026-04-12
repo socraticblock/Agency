@@ -46,6 +46,10 @@
 - **048** — Added “unopened pill” onboarding pulse (orange glow) with persistent open-state tracking across manager pills
 - **049** — Digital Card tiered pricing + `/start` sales overlay (welcome/pricing/FAQ), v17 state, WhatsApp order schema, chrome bar
 - **050** — `/start` order block: inline plan picker + tier-specific URL/domain copy and WhatsApp hint labels
+- **051** — Order handoff hardening: `order.json` envelope + review/validation gate + download/share + compact WhatsApp (schema v2) + import on `/start` and preview; ops notes in `docs/digital-card-order-handoff.md`
+- **052** — Order review: red on-card field rings from blocking issue ids + “Continue without checklist” bypass (WhatsApp note) + sticky highlight prune on state; dialog lifted to `StartPageEditorColumn`
+- **053** — Lean handoff JSON (strip hero/gallery/bg image blobs) + `handoffMedia` meta + WhatsApp schema v3 checklist + Share-first step 2 copy
+- **054** — Email-first architect brief in review step 2 + direct-WhatsApp alternative + WhatsApp schema v4 summary; JSON retained as internal fallback only
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -285,6 +289,26 @@
 - **Context:** Bottom checkout showed a single generic “preferred URL” field while tier choice lived mainly in the first-visit overlay; clients needed clearer guidance per plan (subdomain vs own domain vs executive domain check).
 - **Decision:** Added `StartOrderCheckoutBlock` with three tier pills (reusing pricing tier names), conditional helper copy + optional inputs for Subdomain/Executive, Professional note only; clearing `digitalCardUrlHint` when switching to Professional; WhatsApp header uses tier-specific lines for trimmed hint; touch-safe tier hover via `start-shell.css`.
 - **Impact:** Order UX matches fulfillment story without new state fields; operators see labeled preferences in WhatsApp; same `digitalCardUrlHint` field serves subdomain slug or executive domain.
+
+### 051
+- **Context:** WhatsApp-only handoff was lossy (style/sections/assets missing) and long `wa.me` URLs were fragile; operators need a replayable snapshot without making the card depend on a backend.
+- **Decision:** Added `GenezisiOrderFileV1` (`order-payload.ts`), `validateOrderState` (`order-validation.ts`), download + optional Web Share (`order-share.ts`), `StartOrderReviewDialog` gate before WhatsApp, `DIGITAL_CARD_ORDER_SCHEMA_VERSION` 2 compact messages (`whatsapp.ts`), import on `/start` and `preview` via `parseImportedOrderFile` + `normalizeLane1StateFromUnknown`; documented optional DB/storage in `docs/digital-card-order-handoff.md`.
+- **Impact:** Fulfillment can trust `order.json`; clients get guided blocking vs advisory copy; card runtime stays client-only; onboarding API limits remain documented for future ops storage.
+
+### 052
+- **Context:** After the review modal, clients needed to see which card fields blocked Continue, and an escape hatch when they still want to message Genezisi without fixing the checklist.
+- **Decision:** `StartPageEditorColumn` owns sticky `orderHighlightIssueIds` (set on dismiss from step 1 with blockers, pruned as `validateOrderState` blocking ids clear; cleared on bypass or step-2 dismiss). Red rings on hero name/title block, contact phone/email/address, booking URL editor, subdomain/executive inputs; bypass adds EN/KA line via `buildLane1WhatsAppUrl` `incompleteChecklist` until dialog closes.
+- **Impact:** Faster self-serve fixes; fewer stuck users; operators get an explicit “skipped checklist” signal in WhatsApp when bypass is used.
+
+### 053
+- **Context:** Full `order.json` with base64 images was heavy and awkward to attach; operators still need a lossless-enough spec plus photos.
+- **Decision:** `buildLeanHandoffState` + `handoffMedia` on `GenezisiOrderFileV1`; `buildGenezisiOrderFile` always exports lean state; `buildOrderSummaryLines`/`Ka` and step-2 UI emphasize Share-to-WhatsApp, small JSON, and follow-up messages for headshot/gallery/background; `DIGITAL_CARD_ORDER_SCHEMA_VERSION` 3.
+- **Impact:** Smaller files and clearer client steps; import/replay still works with placeholder hero until images arrive in chat.
+
+### 054
+- **Context:** Clients should not have to download files; the handoff needed a smoother primary path that operators can paste into a database quickly, while keeping WhatsApp as the human-first fallback.
+- **Decision:** Added `ARCHITECT_INTAKE_EMAIL` plus `order-email.ts` to build a structured `mailto:` brief from `Lane1CustomizerState`; step 2 now recommends **Send My Custom Build to the Architect** and offers **I Prefer Communication Directly via WhatsApp** as the alternative; `buildLane1WhatsAppUrl` / summary lines now describe direct chat instead of JSON attachment and `DIGITAL_CARD_ORDER_SCHEMA_VERSION` moved to 4.
+- **Impact:** Customer flow is email-first without downloads; ops gets a stable copy/paste brief for manual fulfillment; lean JSON stays available only for internal replay/import work.
 
 ## Architecture Decisions
 - Zero backend for card features

@@ -30,6 +30,7 @@ interface SectionDispatcherProps {
   setActiveSection: (sectionId: SectionId | null) => void;
   pulseSectionId: SectionId | null;
   pulseToken: number;
+  orderHighlightIssueIds?: ReadonlySet<string>;
 }
 
 export function SectionDispatcher({
@@ -50,6 +51,7 @@ export function SectionDispatcher({
   setActiveSection,
   pulseSectionId,
   pulseToken,
+  orderHighlightIssueIds,
 }: SectionDispatcherProps) {
   const activeSections = state.sectionOrder.filter((id) => state.activeSections.includes(id));
 
@@ -205,6 +207,7 @@ export function SectionDispatcher({
                 ctaLabelStyle={ctaLabelStyle}
                 itemVariants={itemVariants}
                 glassStyle={glassStyle}
+                orderHighlightIssueIds={orderHighlightIssueIds}
               />
             );
           default:

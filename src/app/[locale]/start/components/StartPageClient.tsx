@@ -6,7 +6,6 @@ import type { StartDigitalCardOverlayView } from "@/constants/start-digital-card
 import type { Lane1CustomizerState, Lane1StatePatch, StylePresetSelection } from "../lib/types";
 import { defaultLane1State } from "../lib/types";
 import { loadLane1State, saveLane1State } from "../lib/customizer-store";
-import { buildLane1WhatsAppUrl } from "../lib/whatsapp";
 import { getDigitalCardPricingSummary } from "../lib/lane1-pricing";
 import { getLanguagePreviewMode } from "../lib/language-profile";
 import { resolveStyleVariables } from "../lib/presets";
@@ -34,7 +33,6 @@ export function StartPageClient({ locale }: { locale: Locale }) {
   const [showReturningToast, setShowReturningToast] = useState(false);
 
   const languageMode = getLanguagePreviewMode(state);
-  const waUrl = buildLane1WhatsAppUrl(state);
   const vars = useMemo(() => resolveStyleVariables(state.style), [state.style]);
   const { setupGel, hostingAnnualGel } = getDigitalCardPricingSummary(state.selectedTier);
 
@@ -136,6 +134,11 @@ export function StartPageClient({ locale }: { locale: Locale }) {
     setChromeVisible(true);
   }, []);
 
+  const onImportOrderState = useCallback((next: Lane1CustomizerState) => {
+    setState(next);
+    saveLane1State(next);
+  }, []);
+
   return (
     <>
       <StartDigitalCardOverlay
@@ -169,8 +172,8 @@ export function StartPageClient({ locale }: { locale: Locale }) {
           chromeVisible={chromeVisible}
           setupGel={setupGel}
           hostingGel={hostingAnnualGel}
-          waUrl={waUrl}
           onOrderClick={onOrderClick}
+          onImportOrderState={onImportOrderState}
         />
       </div>
     </>

@@ -28,6 +28,9 @@ export const ANIMATION_OVERRIDES: Record<string, { whatItIs: string; howItHelps:
 /** WhatsApp intake number used across bespoke components */
 export const WHATSAPP_INTAKE = "995579723564";
 
+/** Architect email used for structured project and card briefs */
+export const ARCHITECT_INTAKE_EMAIL = "architect@genezisi.com";
+
 /** Default message for WhatsApp links */
 export const WHATSAPP_DEFAULT_MESSAGE = "Hi Genezisi! I'm interested in discussing an architectural blueprint for my project. Can we talk?";
 

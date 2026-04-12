@@ -18,6 +18,7 @@ interface BookingSegmentProps {
   ctaLabelStyle: CSSProperties;
   itemVariants: import("framer-motion").Variants;
   glassStyle: CSSProperties;
+  orderHighlightIssueIds?: ReadonlySet<string>;
 }
 
 function safeHttpUrl(raw: string): string | null {
@@ -42,6 +43,7 @@ export function BookingSegment({
   ctaLabelStyle,
   itemVariants,
   glassStyle,
+  orderHighlightIssueIds,
 }: BookingSegmentProps) {
   const href = safeHttpUrl(state.bookingUrl);
 
@@ -61,7 +63,13 @@ export function BookingSegment({
       </h2>
 
       {editable && (
-        <div className="mb-6">
+        <div
+          className={`mb-6 ${
+            orderHighlightIssueIds?.has("booking-url")
+              ? "rounded-xl ring-2 ring-red-600 ring-offset-2 ring-offset-white/10 p-1"
+              : ""
+          }`}
+        >
           <label className="block text-[10px] uppercase font-bold tracking-wider opacity-50 mb-1">
             {useSecondary ? "დაჯავშნა URL" : "Booking / Calendar Link"}
           </label>
