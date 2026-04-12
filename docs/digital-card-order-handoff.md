@@ -4,7 +4,7 @@ Customer-facing flow lives in `/start`. Technical details for fulfillment and op
 
 ## Source of truth
 
-1. **WhatsApp copy-paste (recommended)** — `/start` step 2: client taps **Copy full order message** (same structured block as email: `buildWhatsAppOrderPasteText` / `buildArchitectHandoffDataLines` in `order-email.ts`), then **Open WhatsApp** with a short opener (`buildLane1WhatsAppOpenerUrl` in `whatsapp.ts`), then pastes the full text as the **next** message.
+1. **WhatsApp copy-paste (recommended)** — `/start` step 2: client taps **Copy full order message** (same structured block as email: `buildWhatsAppOrderPasteText` / `buildArchitectHandoffDataLines` in `order-email.ts`), then **Open WhatsApp** with a short opener (`buildLane1WhatsAppOpenerUrl` in `whatsapp.ts`), then pastes the full text as the **next** message. Schema **v5** briefs use explicit `*_EN` / `*_KA` content keys (primary language block first), plus grouped design lines (background layers, type packs, look, experience, hero photo, QR, social chrome, CTA labels); image blobs are never inlined—only presence flags where relevant.
 2. **Architect email (optional)** — Prefilled `mailto:` to `ARCHITECT_INTAKE_EMAIL` with the same brief (`buildArchitectMailtoUrl`).
 3. **`genezisi-order-{orderId}.json`** — Internal fallback / import path. `GenezisiOrderFileV1` (`orderFileSchemaVersion: 1`) with **lean** `state`; **hero, gallery, and background image blobs are omitted** (see `handoffMedia`). Parse: unwrap `state`, then `normalizeLane1StateFromUnknown` from `customizer-store.ts`.
 

@@ -51,6 +51,7 @@
 - **053** — Lean handoff JSON (strip hero/gallery/bg image blobs) + `handoffMedia` meta + WhatsApp schema v3 checklist + Share-first step 2 copy
 - **054** — Email-first architect brief in review step 2 + direct-WhatsApp alternative + WhatsApp schema v4 summary; JSON retained as internal fallback only
 - **055** — WhatsApp handoff: copy full `buildWhatsAppOrderPasteText` brief + short `buildLane1WhatsAppOpenerUrl`; email optional; `StartOrderSendStep2`
+- **056** — Architect paste brief v5: explicit `*_EN`/`*_KA` content keys + full design/QR/social spec in `buildArchitectHandoffDataLines`
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -315,6 +316,11 @@
 - **Context:** Long WhatsApp URLs and email-only flows were still friction; clients wanted one full message to paste after a simple opener.
 - **Decision:** `buildArchitectHandoffDataLines` shared core; `buildWhatsAppOrderPasteText` for clipboard; `buildLane1WhatsAppOpenerUrl` replaces long `wa.me` payloads; step 2 UI in `StartOrderSendStep2` is copy → open WhatsApp → paste, with email as optional.
 - **Impact:** Primary path matches mobile habits; operators receive the same structured block as email without forcing a mail client.
+
+### 056
+- **Context:** Operator paste text mixed primary/secondary fields (`ADDRESS` vs `ADDRESS_SECONDARY`) and omitted layered background, typography packs, motion, QR, and social chrome details that the builder already stores.
+- **Decision:** Rewrote `buildArchitectHandoffDataLines` to emit `CONTENT_EN`/`CONTENT_KA` sections ordered by `primaryLang` + `profileLanguageMode`, preset `id (labelEn)` pairs from `presets.ts` / `texture-presets.ts`, and grouped `BACKGROUND` / `TYPE` / `LOOK` / `EXPERIENCE` / `HERO_PHOTO_STYLE` / `CARD_SURFACE` / `QR` / `SOCIAL_CHROME` / `CTA_LABELS` lines; bumped `DIGITAL_CARD_ORDER_SCHEMA_VERSION` to 5.
+- **Impact:** Fulfillment can match the on-card managers without opening JSON; paste is longer but machine- and human-readable; email and WhatsApp share the same contract.
 
 ## Architecture Decisions
 - Zero backend for card features
