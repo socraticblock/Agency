@@ -1,12 +1,10 @@
 "use client";
 
-import { MessageCircle } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import type { Lane1CustomizerState, Lane1StatePatch } from "../lib/types";
 import { getLanguagePreviewMode } from "../lib/language-profile";
 import { BusinessCardTemplate } from "./BusinessCardTemplate";
-import { START_DC_ORDER_BLOCK } from "@/constants/start-digital-card-copy";
-import { digitalCardTierLabelEn } from "../lib/digital-card-product";
+import { StartOrderCheckoutBlock } from "./StartOrderCheckoutBlock";
 
 type Props = {
   locale: Locale;
@@ -122,36 +120,15 @@ export function StartPageEditorColumn({
             }
           />
         </div>
-        <div className="start-glass-heavy space-y-4 p-4 md:p-6">
-          <p className="start-body text-center">
-            <span className="text-[#64748b]">Plan: </span>
-            <span className="start-cta-price">{digitalCardTierLabelEn(state.selectedTier)}</span>
-            <span className="text-[#64748b]">
-              {" "}
-              · {setupGel} ₾ setup + {hostingGel} ₾/yr hosting
-            </span>
-          </p>
-          <label className="start-body block text-center text-[#64748b]">
-            <span className="mb-1 block text-xs">{START_DC_ORDER_BLOCK.urlHintLabel}</span>
-            <input
-              type="text"
-              value={state.digitalCardUrlHint}
-              onChange={(e) => onPatch({ digitalCardUrlHint: e.target.value })}
-              placeholder={START_DC_ORDER_BLOCK.urlHintPlaceholder}
-              className="start-field mx-auto max-w-md text-center"
-            />
-          </label>
-          <a
-            href={waUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={onOrderClick}
-            className="start-wa-cta mt-2 inline-flex w-full items-center justify-center gap-2"
-          >
-            <MessageCircle className="h-5 w-5 shrink-0" aria-hidden />
-            Order on WhatsApp
-          </a>
-        </div>
+        <StartOrderCheckoutBlock
+          selectedTier={state.selectedTier}
+          digitalCardUrlHint={state.digitalCardUrlHint}
+          setupGel={setupGel}
+          hostingGel={hostingGel}
+          waUrl={waUrl}
+          onPatch={onPatch}
+          onOrderClick={onOrderClick}
+        />
       </div>
 
       <div className="business-card-template-print-skip fixed bottom-[max(0.75rem,env(safe-area-inset-bottom))] left-1/2 z-[115] -translate-x-1/2">

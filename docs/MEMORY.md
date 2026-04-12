@@ -45,6 +45,7 @@
 - **047** — Navbar behavior update: fully hidden on `/start/preview`, auto-hide on scroll-down and show on scroll-up across the site
 - **048** — Added “unopened pill” onboarding pulse (orange glow) with persistent open-state tracking across manager pills
 - **049** — Digital Card tiered pricing + `/start` sales overlay (welcome/pricing/FAQ), v17 state, WhatsApp order schema, chrome bar
+- **050** — `/start` order block: inline plan picker + tier-specific URL/domain copy and WhatsApp hint labels
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -279,6 +280,11 @@
 - **Context:** `/start` still used legacy 450₾ + add-on totals and had no first-visit sales layer for the new Subdomain / Professional / Executive Digital Card product.
 - **Decision:** Added `selectedTier` + `digitalCardUrlHint`, `CUSTOMIZER_VERSION` 17, tier-based pricing helpers + WhatsApp `ORDER · schema v1` header; built glass/solid overlay (welcome/pricing/FAQ), post-dismiss chrome bar under site navbar, blur-lock on customizer while overlay is open, separate `start-overlay-storage` keys, customer copy in `src/constants/start-digital-card-*.ts`, internal summary in `docs/digital-card-product-internal.md`.
 - **Impact:** Card features remain client-only; bilingual profile UI stays but no longer drives the public card price line; fulfillment gets explicit tier + hosting lines in WhatsApp; `npm run build` verified.
+
+### 050
+- **Context:** Bottom checkout showed a single generic “preferred URL” field while tier choice lived mainly in the first-visit overlay; clients needed clearer guidance per plan (subdomain vs own domain vs executive domain check).
+- **Decision:** Added `StartOrderCheckoutBlock` with three tier pills (reusing pricing tier names), conditional helper copy + optional inputs for Subdomain/Executive, Professional note only; clearing `digitalCardUrlHint` when switching to Professional; WhatsApp header uses tier-specific lines for trimmed hint; touch-safe tier hover via `start-shell.css`.
+- **Impact:** Order UX matches fulfillment story without new state fields; operators see labeled preferences in WhatsApp; same `digitalCardUrlHint` field serves subdomain slug or executive domain.
 
 ## Architecture Decisions
 - Zero backend for card features

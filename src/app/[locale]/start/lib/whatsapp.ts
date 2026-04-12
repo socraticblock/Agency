@@ -1,6 +1,7 @@
 import { WHATSAPP_INTAKE } from "@/constants/content";
 import {
   DIGITAL_CARD_ORDER_SCHEMA_VERSION,
+  type DigitalCardTierId,
   digitalCardTierLabelEn,
   digitalCardTierLabelKa,
 } from "./digital-card-product";
@@ -51,10 +52,26 @@ function enGeBlock(label: string, en: string, ge: string): string[] {
   return [`${label}`, `EN: ${en.trim() || "—"}`, `GE: ${ge.trim() || "—"}`, ""];
 }
 
+function digitalCardUrlPreferenceLine(
+  tier: DigitalCardTierId,
+  trimmedHint: string,
+  lang: "ka" | "en",
+): string {
+  if (lang === "ka") {
+    if (tier === "subdomain") return `სურვილი სუბდომენი / სლაგი: ${trimmedHint}`;
+    if (tier === "executive") return `სურვილი დომენი: ${trimmedHint}`;
+    return `სურვილი URL / სლაგი: ${trimmedHint}`;
+  }
+  if (tier === "subdomain") return `Preferred subdomain: ${trimmedHint}`;
+  if (tier === "executive") return `Preferred domain: ${trimmedHint}`;
+  return `URL / domain preference: ${trimmedHint}`;
+}
+
 function pushDigitalCardOrderHeader(lines: string[], state: Lane1CustomizerState, lang: "ka" | "en") {
   const { setupGel, hostingAnnualGel } = getDigitalCardPricingSummary(state.selectedTier);
   const tierLabel =
     lang === "ka" ? digitalCardTierLabelKa(state.selectedTier) : digitalCardTierLabelEn(state.selectedTier);
+  const hint = state.digitalCardUrlHint.trim();
   if (lang === "ka") {
     lines.push("---");
     lines.push(`შეკვეთა · სქემა v${DIGITAL_CARD_ORDER_SCHEMA_VERSION}`);
@@ -68,12 +85,8 @@ function pushDigitalCardOrderHeader(lines: string[], state: Lane1CustomizerState
     lines.push(`Setup: ${setupGel} GEL`);
     lines.push(`Annual hosting: ${hostingAnnualGel} GEL/year`);
   }
-  if (state.digitalCardUrlHint.trim()) {
-    lines.push(
-      lang === "ka"
-        ? `სურვილი URL / სლაგი: ${state.digitalCardUrlHint.trim()}`
-        : `URL / domain preference: ${state.digitalCardUrlHint.trim()}`,
-    );
+  if (hint) {
+    lines.push(digitalCardUrlPreferenceLine(state.selectedTier, hint, lang));
   }
   lines.push(
     lang === "ka"
