@@ -63,12 +63,12 @@ function getAuthToken(): string {
 }
 
 /** Convert a JS value to a Turso Hrana-typed value object */
-function toTursoValue(val: unknown): { type: string; value: unknown } {
-  if (val === null) return { type: "null", value: null };
-  if (typeof val === "number" && Number.isInteger(val)) return { type: "integer", value: val };
-  if (typeof val === "number") return { type: "float", value: val };
+function toTursoValue(val: unknown): { type: string; value: string } {
+  if (val === null) return { type: "null", value: "null" };
+  if (typeof val === "number" && Number.isInteger(val)) return { type: "integer", value: String(val) };
+  if (typeof val === "number") return { type: "float", value: String(val) };
+  if (typeof val === "boolean") return { type: "integer", value: val ? "1" : "0" };
   if (typeof val === "string") return { type: "text", value: val };
-  if (typeof val === "boolean") return { type: "integer", value: val ? 1 : 0 };
   return { type: "text", value: String(val) };
 }
 
