@@ -29,7 +29,7 @@ export async function GET() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          statements: [{ sql: "SELECT count(*) as cnt FROM cards", params: [] }],
+          requests: [{ type: "execute", stmt: { sql: "SELECT count(*) as cnt FROM cards", params: [] } }],
         }),
       });
 
