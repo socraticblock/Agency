@@ -1,6 +1,8 @@
 name = "genezisi-agency"
 compatibility_date = "2025-01-01"
 
+migrations_dir = "d1/migrations"
+
 [[d1_databases]]
 binding = "CARDS_DB"
 database_name = "genezisi-cards"
