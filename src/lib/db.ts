@@ -71,7 +71,7 @@ function getApiToken(): string {
 }
 
 function baseUrl(): string {
-  return `https://api.cloudflare.com/client/v4/accounts/${getAccountId()}/d1/databases/${getDatabaseId()}`;
+  return `https://api.cloudflare.com/client/v4/accounts/${getAccountId()}/d1/database/${getDatabaseId()}`;
 }
 
 /** Execute a SQL query against D1 via the REST API */
