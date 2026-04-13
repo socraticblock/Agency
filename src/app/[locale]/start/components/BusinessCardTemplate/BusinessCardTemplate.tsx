@@ -44,6 +44,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   hideBranding = false,
   layoutMode = "mobile",
   orderHighlightIssueIds,
+  qrUrl,
 }: {
   state: Lane1CustomizerState;
   previewLang: "primary" | "secondary";
