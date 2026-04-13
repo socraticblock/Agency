@@ -3,6 +3,8 @@ import type { Lane1CustomizerState } from "@/app/[locale]/start/lib/types";
 import { BusinessCardTemplate } from "@/app/[locale]/start/components/BusinessCardTemplate";
 import { getPublishedCardBySlug } from "@/lib/db";
 
+export const revalidate = 60; // cache for 60 seconds
+
 interface CardData {
   id: string;
   slug: string;
