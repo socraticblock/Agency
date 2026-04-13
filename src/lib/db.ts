@@ -1,37 +1,14 @@
 /**
- * D1 database wrapper for genezisi.com card orders.
+ * Cloudflare D1 REST API client for genezisi.com card orders.
  *
- * Uses Cloudflare D1 via process.env.CARDS_DB — injected by Vercel Edge
- * Runtime from the [[d1_databases]] binding in wrangler.toml.
+ * Vercel doesn't support wrangler.toml D1 bindings — we call the Cloudflare D1
+ * REST API directly using the API token stored in CLOUDFLARE_API_TOKEN env var.
  *
- * Usage:
- *   // @ts-expect-error CARDS_DB bound via Vercel Edge config
- *   const db = process.env.CARDS_DB as D1Database;
+ * Env vars required in Vercel dashboard:
+ *   CLOUDFLARE_API_TOKEN   — your Cloudflare API token (with D1 edit permission)
+ *   CLOUDFLARE_D1_DATABASE_ID — the D1 database ID (e.g. f49d592e-...)
+ *   CLOUDFLARE_ACCOUNT_ID  — your Cloudflare account ID
  */
-
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-
-// D1Database is the Cloudflare Workers D1 API type. We cast to this type
-// at runtime when using process.env.CARDS_DB, but define a local interface
-// so TypeScript is happy during Next.js build (which doesn't have @cloudflare/workers-types)
-export interface D1Database {
-  prepare(sql: string): D1PreparedStatement;
-}
-
-export interface D1PreparedStatement {
-  bind(...args: unknown[]): D1PreparedStatement;
-  run(): Promise<D1Result>;
-  first<T = Record<string, unknown>>(): Promise<T | null>;
-  all<T = Record<string, unknown>>(): Promise<D1Result<T>>;
-}
-
-export interface D1Result<T = Record<string, unknown>> {
-  results: T[];
-  success: boolean;
-  meta: { changes?: number };
-}
 
 export interface CardRow {
   id: string;
@@ -72,32 +49,83 @@ export interface CreateCardInput {
 }
 
 // ---------------------------------------------------------------------------
+// D1 REST API client
+// ---------------------------------------------------------------------------
+
+function getAccountId(): string {
+  const id = process.env.CLOUDFLARE_ACCOUNT_ID;
+  if (!id) throw new Error("CLOUDFLARE_ACCOUNT_ID env var not set in Vercel");
+  return id;
+}
+
+function getDatabaseId(): string {
+  const id = process.env.CLOUDFLARE_D1_DATABASE_ID;
+  if (!id) throw new Error("CLOUDFLARE_D1_DATABASE_ID env var not set in Vercel");
+  return id;
+}
+
+function getApiToken(): string {
+  const token = process.env.CLOUDFLARE_API_TOKEN;
+  if (!token) throw new Error("CLOUDFLARE_API_TOKEN env var not set in Vercel");
+  return token;
+}
+
+function baseUrl(): string {
+  return `https://api.cloudflare.com/client/v4/accounts/${getAccountId()}/d1/databases/${getDatabaseId()}`;
+}
+
+/** Execute a SQL query against D1 via the REST API */
+async function d1Exec(sql: string, params?: unknown[]): Promise<void> {
+  const url = `${baseUrl()}/query`;
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${getApiToken()}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ sql, params: params ?? [] }),
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`D1 API error: ${res.status} ${err}`);
+  }
+}
+
+/** Execute a SQL query and return the results */
+async function d1Query<T = Record<string, unknown>>(sql: string, params?: unknown[]): Promise<T[]> {
+  const url = `${baseUrl()}/query`;
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${getApiToken()}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ sql, params: params ?? [] }),
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`D1 API error: ${res.status} ${err}`);
+  }
+  const data = await res.json();
+  // D1 REST API returns { results: [{ result: [...] }] }
+  return (data.results?.[0]?.result as T[]) ?? [];
+}
+
+// ---------------------------------------------------------------------------
 // Card CRUD helpers
 // ---------------------------------------------------------------------------
 
 /** Insert a new pending card order. */
 export async function createCard(
-  db: D1Database,
   input: CreateCardInput
 ): Promise<{ ok: true } | { ok: false; error: string }> {
   try {
     const now = Date.now();
-    await db
-      .prepare(
-        `INSERT INTO cards (id, tier, name, company, phone, email, state_json, status, created_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?)`
-      )
-      .bind(
-        input.id,
-        input.tier,
-        input.name,
-        input.company,
-        input.phone,
-        input.email,
-        input.stateJson,
-        now
-      )
-      .run();
+    await d1Exec(
+      `INSERT INTO cards (id, tier, name, company, phone, email, state_json, status, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?)`,
+      [input.id, input.tier, input.name, input.company, input.phone, input.email, input.stateJson, now]
+    );
     return { ok: true };
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err);
@@ -106,58 +134,46 @@ export async function createCard(
 }
 
 /** Get a card by its order ID (gc-...). */
-export async function getCardById(
-  db: D1Database,
-  id: string
-): Promise<Card | null> {
-  const row = await db
-    .prepare("SELECT * FROM cards WHERE id = ?")
-    .bind(id)
-    .first<CardRow>();
-  return row ? toCard(row) : null;
+export async function getCardById(id: string): Promise<Card | null> {
+  const rows = await d1Query<CardRow>(
+    "SELECT * FROM cards WHERE id = ?",
+    [id]
+  );
+  return rows[0] ? toCard(rows[0]) : null;
 }
 
 /** Get a published card by its public slug. */
-export async function getPublishedCardBySlug(
-  db: D1Database,
-  slug: string
-): Promise<Card | null> {
-  const row = await db
-    .prepare(
-      "SELECT * FROM cards WHERE slug = ? AND status = 'published'"
-    )
-    .bind(slug)
-    .first<CardRow>();
-  return row ? toCard(row) : null;
+export async function getPublishedCardBySlug(slug: string): Promise<Card | null> {
+  const rows = await d1Query<CardRow>(
+    "SELECT * FROM cards WHERE slug = ? AND status = 'published'",
+    [slug]
+  );
+  return rows[0] ? toCard(rows[0]) : null;
 }
 
 /** Get all cards, newest first. admin=true includes unpublished. */
 export async function listCards(
-  db: D1Database,
   opts: { admin?: boolean } = {}
 ): Promise<Card[]> {
   const sql = opts.admin
     ? "SELECT * FROM cards ORDER BY created_at DESC"
     : "SELECT * FROM cards WHERE status = 'published' ORDER BY published_at DESC";
 
-  const result = await db.prepare(sql).all<CardRow>();
-  return (result.results as CardRow[]).map(toCard);
+  const rows = await d1Query<CardRow>(sql);
+  return rows.map(toCard);
 }
 
 /** Assign a slug and publish a card. */
 export async function publishCard(
-  db: D1Database,
   id: string,
   slug: string
 ): Promise<{ ok: true } | { ok: false; error: string }> {
   try {
     const now = Date.now();
-    await db
-      .prepare(
-        `UPDATE cards SET slug = ?, status = 'published', published_at = ? WHERE id = ?`
-      )
-      .bind(slug, now, id)
-      .run();
+    await d1Exec(
+      "UPDATE cards SET slug = ?, status = 'published', published_at = ? WHERE id = ?",
+      [slug, now, id]
+    );
     return { ok: true };
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err);
@@ -166,15 +182,9 @@ export async function publishCard(
 }
 
 /** Check if a slug is already taken. */
-export async function slugTaken(
-  db: D1Database,
-  slug: string
-): Promise<boolean> {
-  const row = await db
-    .prepare("SELECT 1 FROM cards WHERE slug = ?")
-    .bind(slug)
-    .first();
-  return row !== null;
+export async function slugTaken(slug: string): Promise<boolean> {
+  const rows = await d1Query("SELECT 1 FROM cards WHERE slug = ?", [slug]);
+  return rows.length > 0;
 }
 
 // ---------------------------------------------------------------------------

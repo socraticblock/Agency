@@ -7,7 +7,6 @@
 
 import { NextResponse } from "next/server";
 import { createCard, getCardById, listCards } from "@/lib/db";
-import type { D1Database } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
@@ -32,17 +31,6 @@ function makeSlug(name: string, company: string): string {
 // ---------------------------------------------------------------------------
 
 export async function POST(request: Request) {
-  // CARDS_DB is bound via wrangler.toml [[d1_databases]] — injected by Vercel Edge Runtime
-  // @ts-expect-error Vercel Edge injects D1 bindings into process.env
-  const db: D1Database = process.env.CARDS_DB;
-
-  if (!db) {
-    return NextResponse.json(
-      { error: "Database not configured. Set CLOUDFLARE_D1_DATABASE_ID in Vercel env vars." },
-      { status: 500 }
-    );
-  }
-
   let body: {
     id: string;
     state: unknown;
@@ -80,7 +68,7 @@ export async function POST(request: Request) {
   }
 
   // Idempotency: if order already exists, return existing data
-  const existing = await getCardById(db, id);
+  const existing = await getCardById(id);
   if (existing) {
     return NextResponse.json({ ok: true, id, status: existing.status });
   }
@@ -99,7 +87,7 @@ export async function POST(request: Request) {
           (stateObj.company as string) ?? ""
         );
 
-  const result = await createCard(db, {
+  const result = await createCard({
     id,
     tier,
     name: (stateObj.name as string) ?? null,
@@ -129,27 +117,25 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // @ts-expect-error Vercel Edge injects D1 bindings into process.env
-  const db: D1Database = process.env.CARDS_DB;
+  try {
+    const cards = await listCards({ admin: true });
 
-  if (!db) {
-    return NextResponse.json({ error: "Database not configured" }, { status: 500 });
+    return NextResponse.json({
+      cards: cards.map((c) => ({
+        id: c.id,
+        slug: c.slug,
+        tier: c.tier,
+        status: c.status,
+        name: c.name,
+        company: c.company,
+        phone: c.phone,
+        email: c.email,
+        createdAt: c.createdAt,
+        publishedAt: c.publishedAt,
+      })),
+    });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({ error: "Database error", detail: message }, { status: 500 });
   }
-
-  const cards = await listCards(db, { admin: true });
-
-  return NextResponse.json({
-    cards: cards.map((c) => ({
-      id: c.id,
-      slug: c.slug,
-      tier: c.tier,
-      status: c.status,
-      name: c.name,
-      company: c.company,
-      phone: c.phone,
-      email: c.email,
-      createdAt: c.createdAt,
-      publishedAt: c.publishedAt,
-    })),
-  });
 }
