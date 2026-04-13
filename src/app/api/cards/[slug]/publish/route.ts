@@ -7,15 +7,12 @@
 
 import { NextResponse } from "next/server";
 import { getCardById, publishCard, slugTaken } from "@/lib/db";
-import { createDb } from "@/lib/db";
-
-export const runtime = "edge";
 
 export async function POST(
   request: Request,
-  { params, env }: { params: { slug: string }; env: { CARDS_DB?: D1Database } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
-  const { slug } = params;
+  const { slug } = await params;
 
   if (!slug || !/^[a-z0-9-]+$/.test(slug)) {
     return NextResponse.json({ error: "Invalid slug" }, { status: 400 });
@@ -35,7 +32,12 @@ export async function POST(
     );
   }
 
-  const db = createDb(env.CARDS_DB);
+  // @ts-expect-error CARDS_DB is bound via Vercel Edge config (wrangler.toml [[d1_databases]])
+  const db: D1Database = process.env.CARDS_DB;
+
+  if (!db) {
+    return NextResponse.json({ error: "Database not configured" }, { status: 500 });
+  }
 
   // Verify the order exists
   const card = await getCardById(db, body.id);

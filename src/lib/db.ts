@@ -1,19 +1,14 @@
 /**
  * D1 database wrapper for genezisi.com card orders.
  *
- * Uses Cloudflare D1 via the D1 binding (env.CARDS_DB) — works natively
- * in Cloudflare Workers, Vercel Edge Functions, and Next.js App Router
- * with the wrangler.toml [[d1_databases]] binding.
+ * Uses Cloudflare D1 via the D1 binding (process.env.CARDS_DB) — injected
+ * by Vercel Edge Runtime from the [[d1_databases]] binding in wrangler.toml.
  *
  * Usage in API routes:
- *   export const runtime = 'edge';
- *   export async function GET(_req: Request, { env }: { env: Env }) {
- *     const db = createDb(env.CARDS_DB);
- *     ...
- *   }
+ *   // @ts-expect-error Vercel Edge injects D1 bindings into process.env
+ *   const db: D1Database = process.env.CARDS_DB;
+ *   const { createCard, getCardById } = await import("@/lib/db");
  */
-
-import type { Env } from "~/lib/db-types";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -55,34 +50,6 @@ export interface CreateCardInput {
   phone: string | null;
   email: string | null;
   stateJson: string;
-}
-
-// Re-export Env for convenience
-export type { Env };
-
-// ---------------------------------------------------------------------------
-// DB factory
-// ---------------------------------------------------------------------------
-
-/**
- * Returns the D1 database client.
- * Pass env.CARDS_DB from your Next.js route handler's `env` parameter.
- *
- * In production (Vercel Edge / Cloudflare Workers): env.CARDS_DB is a D1Database
- * In local dev with `wrangler dev --remote`: also a D1Database
- *
- * The D1 binding is Cloudflare's D1Database API which is directly compatible
- * with the prepare().bind().run() interface used throughout this file.
- */
-export function createDb(d1: D1Database | undefined): D1Database {
-  if (!d1) {
-    throw new Error(
-      "CARDS_DB binding is not defined. " +
-        "Make sure wrangler.toml has the [[d1_databases]] binding, " +
-        "and your Vercel project has CLOUDFLARE_D1_DATABASE_ID set."
-    );
-  }
-  return d1;
 }
 
 // ---------------------------------------------------------------------------

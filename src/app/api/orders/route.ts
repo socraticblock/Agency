@@ -7,18 +7,14 @@
 
 import { NextResponse } from "next/server";
 import { createCard, getCardById, listCards } from "@/lib/db";
-import { createDb } from "@/lib/db";
-import type { Lane1CustomizerState } from "@/app/[locale]/start/lib/types";
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
+export const dynamic = "force-dynamic";
 
 const ADMIN_PASSWORD = "Jeftax12!";
 
-function adminAuth(request: Request, env: { ADMIN_PASSWORD?: string }): boolean {
+function adminAuth(request: Request): boolean {
   const sent = request.headers.get("x-admin-password") ?? "";
-  return sent === (env.ADMIN_PASSWORD ?? ADMIN_PASSWORD);
+  return sent === (process.env.ADMIN_PASSWORD ?? ADMIN_PASSWORD);
 }
 
 function makeSlug(name: string, company: string): string {
@@ -34,10 +30,21 @@ function makeSlug(name: string, company: string): string {
 // POST — Create a new card order
 // ---------------------------------------------------------------------------
 
-export async function POST(request: Request, { env }: { env: { CARDS_DB?: D1Database; ADMIN_PASSWORD?: string } }) {
+export async function POST(request: Request) {
+  // CARDS_DB is bound via wrangler.toml [[d1_databases]] — injected by Vercel Edge Runtime
+  // @ts-expect-error Vercel Edge injects D1 bindings into process.env
+  const db: D1Database = process.env.CARDS_DB;
+
+  if (!db) {
+    return NextResponse.json(
+      { error: "Database not configured. Set CLOUDFLARE_D1_DATABASE_ID in Vercel env vars." },
+      { status: 500 }
+    );
+  }
+
   let body: {
     id: string;
-    state: Lane1CustomizerState;
+    state: unknown;
     tier: string;
     digitalCardUrlHint?: string;
   };
@@ -71,13 +78,13 @@ export async function POST(request: Request, { env }: { env: { CARDS_DB?: D1Data
     );
   }
 
-  const db = createDb(env.CARDS_DB);
-
   // Idempotency: if order already exists, return existing data
   const existing = await getCardById(db, id);
   if (existing) {
     return NextResponse.json({ ok: true, id, status: existing.status });
   }
+
+  const stateObj = state as Record<string, unknown>;
 
   // Determine slug at order time
   const slug =
@@ -86,15 +93,18 @@ export async function POST(request: Request, { env }: { env: { CARDS_DB?: D1Data
           .toLowerCase()
           .replace(/[^a-z0-9-]/g, "-")
           .replace(/^-|-$/g, "")
-      : makeSlug(state.name ?? "", state.company ?? "");
+      : makeSlug(
+          (stateObj.name as string) ?? "",
+          (stateObj.company as string) ?? ""
+        );
 
   const result = await createCard(db, {
     id,
     tier,
-    name: state.name ?? null,
-    company: state.company ?? null,
-    phone: state.phone ?? null,
-    email: state.email ?? null,
+    name: (stateObj.name as string) ?? null,
+    company: (stateObj.company as string) ?? null,
+    phone: (stateObj.phone as string) ?? null,
+    email: (stateObj.email as string) ?? null,
     stateJson: JSON.stringify(state),
   });
 
@@ -106,23 +116,25 @@ export async function POST(request: Request, { env }: { env: { CARDS_DB?: D1Data
     );
   }
 
-  return NextResponse.json({
-    ok: true,
-    id,
-    slug,
-  });
+  return NextResponse.json({ ok: true, id, slug });
 }
 
 // ---------------------------------------------------------------------------
 // GET — List all orders (admin)
 // ---------------------------------------------------------------------------
 
-export async function GET(request: Request, { env }: { env: { CARDS_DB?: D1Database; ADMIN_PASSWORD?: string } }) {
-  if (!adminAuth(request, env)) {
+export async function GET(request: Request) {
+  if (!adminAuth(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const db = createDb(env.CARDS_DB);
+  // @ts-expect-error Vercel Edge injects D1 bindings into process.env
+  const db: D1Database = process.env.CARDS_DB;
+
+  if (!db) {
+    return NextResponse.json({ error: "Database not configured" }, { status: 500 });
+  }
+
   const cards = await listCards(db, { admin: true });
 
   return NextResponse.json({
