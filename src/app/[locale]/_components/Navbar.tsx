@@ -43,7 +43,7 @@ export function Navbar({ locale }: { locale: Locale }) {
     { href: `/${locale}/architect`, label: "Start Building", highlight: true },
   ];
 
-  const openStartOverlay = (view: "pricing" | "faq") => {
+  const openStartOverlay = (view: "welcome" | "pricing" | "faq") => {
     if (!isStartRoute || typeof window === "undefined") return;
     window.dispatchEvent(
       new CustomEvent(START_OVERLAY_OPEN_EVENT, {
@@ -71,18 +71,25 @@ export function Navbar({ locale }: { locale: Locale }) {
         </Link>
 
         {isStartRoute ? (
-          <div className="absolute left-1/2 flex -translate-x-1/2 items-center gap-4 sm:gap-6">
+          <div className="absolute left-1/2 flex max-w-[min(100vw-5rem,28rem)] -translate-x-1/2 flex-wrap items-center justify-center gap-x-3 gap-y-1 sm:gap-x-6">
+            <button
+              type="button"
+              onClick={() => openStartOverlay("welcome")}
+              className="text-xs font-bold text-emerald-400 transition-colors hover:text-emerald-300 sm:text-sm"
+            >
+              Card welcome
+            </button>
             <button
               type="button"
               onClick={() => openStartOverlay("pricing")}
-              className="text-xs font-bold text-white/70 transition-colors hover:text-white sm:text-sm"
+              className="text-xs font-bold text-emerald-400 transition-colors hover:text-emerald-300 sm:text-sm"
             >
               Pricing card
             </button>
             <button
               type="button"
               onClick={() => openStartOverlay("faq")}
-              className="text-xs font-bold text-white/70 transition-colors hover:text-white sm:text-sm"
+              className="text-xs font-bold text-emerald-400 transition-colors hover:text-emerald-300 sm:text-sm"
             >
               Questions?
             </button>
