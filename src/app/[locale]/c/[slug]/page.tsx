@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { notFound } from "next/navigation";
 import type { Lane1CustomizerState } from "@/app/[locale]/start/lib/types";
 import { BusinessCardTemplate } from "@/app/[locale]/start/components/BusinessCardTemplate";
@@ -18,9 +18,9 @@ interface CardApiResponse {
 export default function PublicCardPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const { slug } = params;
+  const { slug } = use(params);
   const [card, setCard] = useState<CardApiResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
