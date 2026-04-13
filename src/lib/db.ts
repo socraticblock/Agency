@@ -1,18 +1,37 @@
 /**
  * D1 database wrapper for genezisi.com card orders.
  *
- * Uses Cloudflare D1 via the D1 binding (process.env.CARDS_DB) — injected
- * by Vercel Edge Runtime from the [[d1_databases]] binding in wrangler.toml.
+ * Uses Cloudflare D1 via process.env.CARDS_DB — injected by Vercel Edge
+ * Runtime from the [[d1_databases]] binding in wrangler.toml.
  *
- * Usage in API routes:
- *   // @ts-expect-error Vercel Edge injects D1 bindings into process.env
- *   const db: D1Database = process.env.CARDS_DB;
- *   const { createCard, getCardById } = await import("@/lib/db");
+ * Usage:
+ *   // @ts-expect-error CARDS_DB bound via Vercel Edge config
+ *   const db = process.env.CARDS_DB as D1Database;
  */
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
+
+// D1Database is the Cloudflare Workers D1 API type. We cast to this type
+// at runtime when using process.env.CARDS_DB, but define a local interface
+// so TypeScript is happy during Next.js build (which doesn't have @cloudflare/workers-types)
+export interface D1Database {
+  prepare(sql: string): D1PreparedStatement;
+}
+
+export interface D1PreparedStatement {
+  bind(...args: unknown[]): D1PreparedStatement;
+  run(): Promise<D1Result>;
+  first<T = Record<string, unknown>>(): Promise<T | null>;
+  all<T = Record<string, unknown>>(): Promise<D1Result<T>>;
+}
+
+export interface D1Result<T = Record<string, unknown>> {
+  results: T[];
+  success: boolean;
+  meta: { changes?: number };
+}
 
 export interface CardRow {
   id: string;

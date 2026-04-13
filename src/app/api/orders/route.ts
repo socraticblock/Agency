@@ -7,6 +7,7 @@
 
 import { NextResponse } from "next/server";
 import { createCard, getCardById, listCards } from "@/lib/db";
+import type { D1Database } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 

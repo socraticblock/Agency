@@ -7,6 +7,7 @@
 
 import { NextResponse } from "next/server";
 import { getCardById, publishCard, slugTaken } from "@/lib/db";
+import type { D1Database } from "@/lib/db";
 
 export async function POST(
   request: Request,
