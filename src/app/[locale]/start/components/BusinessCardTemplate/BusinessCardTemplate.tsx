@@ -54,6 +54,8 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   hideBranding?: boolean;
   layoutMode?: "mobile" | "responsive";
   orderHighlightIssueIds?: ReadonlySet<string>;
+  /** Override the URL encoded in the QR code. Use for /c/[slug] pages where the slug != name-derived slug. */
+  qrUrl?: string;
 }) {
   const editable = Boolean(onPatch);
   const isResponsive = layoutMode === "responsive";
@@ -78,12 +80,11 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   const pulseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    const nameSlug = state.name.toLowerCase().replace(/\s+/g, "-") || "business-card";
-    const url = `https://genezisi.com/c/${nameSlug}`;
+    const url = qrUrl ?? `https://genezisi.com/c/${state.name.toLowerCase().replace(/\s+/g, "-") || "business-card"}`;
     import("../../lib/identity-kit").then(({ generateBrandedQR }) => {
       generateBrandedQR(state, url).then(setQrDataUrl);
     });
-  }, [state.style.accentId, state.name, state]);
+  }, [state.style.accentId, state.name, state, qrUrl]);
 
   useEffect(() => {
     return () => {
