@@ -1,13 +1,12 @@
 /**
- * Cloudflare D1 REST API client for genezisi.com card orders.
+ * Turso (libSQL) database client for genezisi.com card orders.
  *
- * Vercel doesn't support wrangler.toml D1 bindings — we call the Cloudflare D1
- * REST API directly using the API token stored in CLOUDFLARE_API_TOKEN env var.
+ * Uses the Turso SQL-over-HTTP API — works from anywhere (Vercel, local, etc.)
+ * unlike Cloudflare D1 which only works from Cloudflare Workers.
  *
- * Env vars required in Vercel dashboard:
- *   CLOUDFLARE_API_TOKEN   — your Cloudflare API token (with D1 edit permission)
- *   CLOUDFLARE_D1_DATABASE_ID — the D1 database ID (e.g. f49d592e-...)
- *   CLOUDFLARE_ACCOUNT_ID  — your Cloudflare account ID
+ * Env vars required in Vercel:
+ *   TURSO_DATABASE_URL   — e.g. https://genezisi-cards-socratic-block.aws-eu-west-1.turso.io
+ *   TURSO_AUTH_TOKEN     — from: turso db tokens genezisi-cards
  */
 
 export interface CardRow {
@@ -49,79 +48,79 @@ export interface CreateCardInput {
 }
 
 // ---------------------------------------------------------------------------
-// D1 REST API client
+// Turso HTTP client
 // ---------------------------------------------------------------------------
 
-function getAccountId(): string {
-  const id = process.env.CLOUDFLARE_ACCOUNT_ID;
-  if (!id) throw new Error("CLOUDFLARE_ACCOUNT_ID env var not set in Vercel");
-  return id;
+function getDatabaseUrl(): string {
+  const url = process.env.TURSO_DATABASE_URL;
+  if (!url) throw new Error("TURSO_DATABASE_URL env var not set in Vercel");
+  return url;
 }
 
-function getDatabaseId(): string {
-  const id = process.env.CLOUDFLARE_D1_DATABASE_ID;
-  if (!id) throw new Error("CLOUDFLARE_D1_DATABASE_ID env var not set in Vercel");
-  return id;
-}
-
-function getApiToken(): string {
-  const token = process.env.CLOUDFLARE_API_TOKEN;
-  if (!token) throw new Error("CLOUDFLARE_API_TOKEN env var not set in Vercel");
+function getAuthToken(): string {
+  const token = process.env.TURSO_AUTH_TOKEN;
+  if (!token) throw new Error("TURSO_AUTH_TOKEN env var not set in Vercel");
   return token;
 }
 
-function baseUrl(): string {
-  return `https://api.cloudflare.com/client/v4/accounts/${getAccountId()}/d1/database/${getDatabaseId()}`;
-}
-
-/** Execute a SQL query against D1 via the REST API */
-async function d1Exec(sql: string, params?: unknown[]): Promise<void> {
-  const url = `${baseUrl()}/query`;
+/** Execute a SQL statement that doesn't return rows (INSERT, UPDATE, etc.) */
+async function tursoExec(sql: string, params: unknown[] = []): Promise<void> {
+  const url = `${getDatabaseUrl()}/v2/pipeline`;
   const res = await fetch(url, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${getApiToken()}`,
+      Authorization: `Bearer ${getAuthToken()}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ sql, params: params ?? [] }),
+    body: JSON.stringify({
+      statements: [{ sql, params }],
+    }),
   });
   if (!res.ok) {
     const err = await res.text();
-    throw new Error(`D1 API error: ${res.status} ${err}`);
-  }
-}
-
-/** Execute a SQL query and return the results */
-async function d1Query<T = Record<string, unknown>>(sql: string, params?: unknown[]): Promise<T[]> {
-  const url = `${baseUrl()}/query`;
-  const res = await fetch(url, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${getApiToken()}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ sql, params: params ?? [] }),
-  });
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`D1 API error: ${res.status} ${err}`);
+    throw new Error(`Turso API error: ${res.status} ${err}`);
   }
   const data = await res.json();
-  // D1 REST API returns { results: [{ result: [...] }] }
-  return (data.results?.[0]?.result as T[]) ?? [];
+  if (data.error) {
+    throw new Error(`Turso error: ${JSON.stringify(data.error)}`);
+  }
+}
+
+/** Execute a SQL query and return the rows */
+async function tursoQuery<T = Record<string, unknown>>(sql: string, params: unknown[] = []): Promise<T[]> {
+  const url = `${getDatabaseUrl()}/v2/pipeline`;
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${getAuthToken()}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      statements: [{ sql, params }],
+    }),
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Turso API error: ${res.status} ${err}`);
+  }
+  const data = await res.json();
+  if (data.error) {
+    throw new Error(`Turso error: ${JSON.stringify(data.error)}`);
+  }
+  // Results are in data.results[0].rows
+  return (data.results?.[0]?.rows as T[]) ?? [];
 }
 
 // ---------------------------------------------------------------------------
-// Card CRUD helpers
+// Card CRUD
 // ---------------------------------------------------------------------------
 
-/** Insert a new pending card order. */
 export async function createCard(
   input: CreateCardInput
 ): Promise<{ ok: true } | { ok: false; error: string }> {
   try {
     const now = Date.now();
-    await d1Exec(
+    await tursoExec(
       `INSERT INTO cards (id, tier, name, company, phone, email, state_json, status, created_at)
        VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?)`,
       [input.id, input.tier, input.name, input.company, input.phone, input.email, input.stateJson, now]
@@ -133,44 +132,37 @@ export async function createCard(
   }
 }
 
-/** Get a card by its order ID (gc-...). */
 export async function getCardById(id: string): Promise<Card | null> {
-  const rows = await d1Query<CardRow>(
+  const rows = await tursoQuery<CardRow>(
     "SELECT * FROM cards WHERE id = ?",
     [id]
   );
   return rows[0] ? toCard(rows[0]) : null;
 }
 
-/** Get a published card by its public slug. */
 export async function getPublishedCardBySlug(slug: string): Promise<Card | null> {
-  const rows = await d1Query<CardRow>(
+  const rows = await tursoQuery<CardRow>(
     "SELECT * FROM cards WHERE slug = ? AND status = 'published'",
     [slug]
   );
   return rows[0] ? toCard(rows[0]) : null;
 }
 
-/** Get all cards, newest first. admin=true includes unpublished. */
-export async function listCards(
-  opts: { admin?: boolean } = {}
-): Promise<Card[]> {
+export async function listCards(opts: { admin?: boolean } = {}): Promise<Card[]> {
   const sql = opts.admin
     ? "SELECT * FROM cards ORDER BY created_at DESC"
     : "SELECT * FROM cards WHERE status = 'published' ORDER BY published_at DESC";
-
-  const rows = await d1Query<CardRow>(sql);
+  const rows = await tursoQuery<CardRow>(sql);
   return rows.map(toCard);
 }
 
-/** Assign a slug and publish a card. */
 export async function publishCard(
   id: string,
   slug: string
 ): Promise<{ ok: true } | { ok: false; error: string }> {
   try {
     const now = Date.now();
-    await d1Exec(
+    await tursoExec(
       "UPDATE cards SET slug = ?, status = 'published', published_at = ? WHERE id = ?",
       [slug, now, id]
     );
@@ -181,9 +173,8 @@ export async function publishCard(
   }
 }
 
-/** Check if a slug is already taken. */
 export async function slugTaken(slug: string): Promise<boolean> {
-  const rows = await d1Query("SELECT 1 FROM cards WHERE slug = ?", [slug]);
+  const rows = await tursoQuery("SELECT 1 FROM cards WHERE slug = ?", [slug]);
   return rows.length > 0;
 }
 
