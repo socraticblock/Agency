@@ -1,11 +1,10 @@
 /**
  * Turso (libSQL) database client for genezisi.com card orders.
  *
- * Uses the Turso SQL-over-HTTP API — works from anywhere (Vercel, local, etc.)
- * unlike Cloudflare D1 which only works from Cloudflare Workers.
+ * Uses the Turso SQL-over-HTTP API v2 — works from anywhere (Vercel, local, etc.)
  *
  * Env vars required in Vercel:
- *   TURSO_DATABASE_URL   — e.g. https://genezisi-cards-socratic-block.aws-eu-west-1.turso.io
+ *   TURSO_DATABASE_URL   — e.g. https://genezisi-cards-xxx.turso.io
  *   TURSO_AUTH_TOKEN     — from: turso db tokens genezisi-cards
  */
 
@@ -63,6 +62,16 @@ function getAuthToken(): string {
   return token;
 }
 
+/** Convert a JS value to a Turso Hrana-typed value object */
+function toTursoValue(val: unknown): { type: string; value: unknown } {
+  if (val === null) return { type: "null", value: null };
+  if (typeof val === "number" && Number.isInteger(val)) return { type: "integer", value: val };
+  if (typeof val === "number") return { type: "float", value: val };
+  if (typeof val === "string") return { type: "text", value: val };
+  if (typeof val === "boolean") return { type: "integer", value: val ? 1 : 0 };
+  return { type: "text", value: String(val) };
+}
+
 /** Execute a SQL statement that doesn't return rows (INSERT, UPDATE, etc.) */
 async function tursoExec(sql: string, params: unknown[] = []): Promise<void> {
   const url = `${getDatabaseUrl()}/v2/pipeline`;
@@ -73,7 +82,15 @@ async function tursoExec(sql: string, params: unknown[] = []): Promise<void> {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      requests: [{ type: "execute", stmt: { sql, params } }],
+      requests: [
+        {
+          type: "execute",
+          stmt: {
+            sql,
+            args: params.map(toTursoValue),
+          },
+        },
+      ],
     }),
   });
   if (!res.ok) {
@@ -83,6 +100,10 @@ async function tursoExec(sql: string, params: unknown[] = []): Promise<void> {
   const data = await res.json();
   if (data.error) {
     throw new Error(`Turso error: ${JSON.stringify(data.error)}`);
+  }
+  const result = data.results?.[0];
+  if (result?.type === "error") {
+    throw new Error(`Turso error: ${result.error?.message ?? JSON.stringify(result.error)}`);
   }
 }
 
@@ -96,7 +117,15 @@ async function tursoQuery<T = Record<string, unknown>>(sql: string, params: unkn
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      requests: [{ type: "execute", stmt: { sql, params } }],
+      requests: [
+        {
+          type: "execute",
+          stmt: {
+            sql,
+            args: params.map(toTursoValue),
+          },
+        },
+      ],
     }),
   });
   if (!res.ok) {
@@ -107,8 +136,30 @@ async function tursoQuery<T = Record<string, unknown>>(sql: string, params: unkn
   if (data.error) {
     throw new Error(`Turso error: ${JSON.stringify(data.error)}`);
   }
-  // Results are in data.results[0].rows
-  return (data.results?.[0]?.rows as T[]) ?? [];
+  const result = data.results?.[0];
+  if (result?.type === "error") {
+    throw new Error(`Turso error: ${result.error?.message ?? JSON.stringify(result.error)}`);
+  }
+  // Rows are nested inside result.response.result.rows
+  const rows = result?.response?.result?.rows ?? [];
+  // Convert Turso typed values to JS values
+  return rows.map((row: Record<string, { type: string; value: unknown }>) =>
+    Object.fromEntries(
+      Object.entries(row).map(([k, v]) => [k, convertTursoValue(v)])
+    )
+  ) as T[];
+}
+
+/** Convert a Turso Hrana typed value to a JS value */
+function convertTursoValue(val: { type: string; value: unknown }): unknown {
+  switch (val.type) {
+    case "null": return null;
+    case "integer": return Number(val.value);
+    case "float": return Number(val.value);
+    case "text": return String(val.value);
+    case "blob": return val.value; // base64 string in JSON
+    default: return val.value;
+  }
 }
 
 // ---------------------------------------------------------------------------
