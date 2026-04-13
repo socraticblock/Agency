@@ -142,12 +142,15 @@ async function tursoQuery<T = Record<string, unknown>>(sql: string, params: unkn
   }
   // Rows are nested inside result.response.result.rows
   const rows = result?.response?.result?.rows ?? [];
-  // Convert Turso typed values to JS values
-  return rows.map((row: Record<string, { type: string; value: unknown }>) =>
-    Object.fromEntries(
-      Object.entries(row).map(([k, v]) => [k, convertTursoValue(v)])
-    )
-  ) as T[];
+  if (!rows.length) return [];
+  const cols = result?.response?.result?.cols ?? [];
+  return rows.map((row: Record<string, { type: string; value: unknown }> | unknown[]) => {
+    const entryPairs = (Array.isArray(row) ? row : Object.values(row)).map((cell, i) => [
+      cols[i]?.name ?? String(i),
+      convertTursoValue(cell as { type: string; value: unknown }),
+    ]);
+    return Object.fromEntries(entryPairs);
+  }) as T[];
 }
 
 /** Convert a Turso Hrana typed value to a JS value */
