@@ -49,6 +49,8 @@ export type SocialIconStyle = "filled" | "outlined" | "rounded" | "minimal";
 export type SocialIconSize = "small" | "medium" | "large";
 export type SocialIconColorMode = "accent" | "text" | "custom";
 export type SocialPlatformId = "facebook" | "instagram" | "linkedin" | "tiktok" | "youtube";
+/** Primary card actions under the hero (tel + WhatsApp). */
+export type CtaChannelId = "call" | "whatsapp";
 export type MobileButtonId = "map-preview" | "get-directions";
 
 export type QrStyle = "square" | "rounded" | "dots";
@@ -152,7 +154,7 @@ export interface StylePresetSelection {
   cardShadowId: CardShadowId;
 }
 
-export const CUSTOMIZER_VERSION = 17 as const;
+export const CUSTOMIZER_VERSION = 18 as const;
 
 export interface Lane1CustomizerState {
   version: typeof CUSTOMIZER_VERSION;
@@ -195,6 +197,10 @@ export interface Lane1CustomizerState {
   // Phase 4.4: Custom CTA Text
   ctaTextCall: string;
   ctaTextWhatsApp: string;
+  /** Subset of `ctaChannelOrder` — which primary buttons are shown. */
+  activeCtaChannels: CtaChannelId[];
+  /** Display order for Call vs WhatsApp slots (both ids, each once). */
+  ctaChannelOrder: CtaChannelId[];
 
   // Phase 6: Sections
   activeSections: SectionId[];
@@ -357,6 +363,8 @@ export function defaultLane1State(): Lane1CustomizerState {
     proTranslationAcknowledged: false,
     ctaTextCall: "Call Me",
     ctaTextWhatsApp: "WhatsApp Me",
+    activeCtaChannels: ["call", "whatsapp"],
+    ctaChannelOrder: ["call", "whatsapp"],
     activeSections: ["services"],
     sectionOrder: ["about", "services", "testimonials", "gallery", "awards", "video", "booking"],
     aboutBio: "",
@@ -399,4 +407,10 @@ export function defaultLane1State(): Lane1CustomizerState {
     selectedTier: "subdomain",
     digitalCardUrlHint: "",
   };
+}
+
+/** Active primary CTAs in card display order (top to bottom). */
+export function orderedActiveCtaChannels(state: Lane1CustomizerState): CtaChannelId[] {
+  const ordered = state.ctaChannelOrder.filter((id) => state.activeCtaChannels.includes(id));
+  return ordered.length > 0 ? ordered : state.activeCtaChannels;
 }

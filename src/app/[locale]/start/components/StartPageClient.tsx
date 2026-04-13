@@ -134,11 +134,6 @@ export function StartPageClient({ locale }: { locale: Locale }) {
     setChromeVisible(true);
   }, []);
 
-  const onImportOrderState = useCallback((next: Lane1CustomizerState) => {
-    setState(next);
-    saveLane1State(next);
-  }, []);
-
   return (
     <>
       <StartDigitalCardOverlay
@@ -173,7 +168,6 @@ export function StartPageClient({ locale }: { locale: Locale }) {
           setupGel={setupGel}
           hostingGel={hostingAnnualGel}
           onOrderClick={onOrderClick}
-          onImportOrderState={onImportOrderState}
         />
       </div>
     </>

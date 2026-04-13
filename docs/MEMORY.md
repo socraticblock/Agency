@@ -52,6 +52,7 @@
 - **054** — Email-first architect brief in review step 2 + direct-WhatsApp alternative + WhatsApp schema v4 summary; JSON retained as internal fallback only
 - **055** — WhatsApp handoff: copy full `buildWhatsAppOrderPasteText` brief + short `buildLane1WhatsAppOpenerUrl`; email optional; `StartOrderSendStep2`
 - **056** — Architect paste brief v5: explicit `*_EN`/`*_KA` content keys + full design/QR/social spec in `buildArchitectHandoffDataLines`
+- **057** — Primary CTA (Call/WhatsApp) toggle + reorder (`activeCtaChannels`, `ctaChannelOrder`), on-card `CtaManagerPanel`, handoff lines + schema v6
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -321,6 +322,11 @@
 - **Context:** Operator paste text mixed primary/secondary fields (`ADDRESS` vs `ADDRESS_SECONDARY`) and omitted layered background, typography packs, motion, QR, and social chrome details that the builder already stores.
 - **Decision:** Rewrote `buildArchitectHandoffDataLines` to emit `CONTENT_EN`/`CONTENT_KA` sections ordered by `primaryLang` + `profileLanguageMode`, preset `id (labelEn)` pairs from `presets.ts` / `texture-presets.ts`, and grouped `BACKGROUND` / `TYPE` / `LOOK` / `EXPERIENCE` / `HERO_PHOTO_STYLE` / `CARD_SURFACE` / `QR` / `SOCIAL_CHROME` / `CTA_LABELS` lines; bumped `DIGITAL_CARD_ORDER_SCHEMA_VERSION` to 5.
 - **Impact:** Fulfillment can match the on-card managers without opening JSON; paste is longer but machine- and human-readable; email and WhatsApp share the same contract.
+
+### 057
+- **Context:** Call and WhatsApp were always stacked in a fixed order; operators had no explicit handoff line when a client hid one or swapped order.
+- **Decision:** Added `CtaChannelId`, `activeCtaChannels`, `ctaChannelOrder`, `orderedActiveCtaChannels()`, v18 migration in `customizer-store`, on-card `CtaManagerPanel` (Social-style toggle/reorder), `CtaSegment` renders ordered active channels; `buildArchitectHandoffDataLines` + `appendDesignSpec` + compact `buildOrderSummaryLines`/`Ka` emit CTA order; `DIGITAL_CARD_ORDER_SCHEMA_VERSION` 6; advisory `cta-buttons` when both off.
+- **Impact:** Card matches client intent; WhatsApp/email paste documents primary button layout; slight paste length increase.
 
 ## Architecture Decisions
 - Zero backend for card features

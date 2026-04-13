@@ -22,6 +22,7 @@ import type {
   AwardItem,
   CardHoverEffectId,
   CardShadowId,
+  CtaChannelId,
   Lane1CustomizerState,
   SectionId,
   SocialLinksState,
@@ -29,6 +30,7 @@ import type {
   StylePresetSelection,
   TestimonialItem,
 } from "./types";
+import { orderedActiveCtaChannels } from "./types";
 
 const EMPTY = "—";
 
@@ -140,6 +142,10 @@ function languageModeLabel(state: Lane1CustomizerState): string {
 function activeSocialIds(state: Lane1CustomizerState): SocialPlatformId[] {
   const ordered = state.socialPlatformOrder.filter((id) => state.activeSocialPlatforms.includes(id));
   return ordered.length > 0 ? ordered : state.activeSocialPlatforms;
+}
+
+function primaryCtaHandoffLabel(id: CtaChannelId): string {
+  return id === "call" ? "Call (tel)" : "WhatsApp";
 }
 
 function socialValue(social: SocialLinksState, id: SocialPlatformId): string {
@@ -344,6 +350,8 @@ function appendDesignSpec(lines: string[], state: Lane1CustomizerState): void {
 
   lines.push("");
   lines.push("### CTA_LABELS");
+  pushLine(lines, "ACTIVE_CTA_ORDER", orderedActiveCtaChannels(state).join(", ") || "(none)");
+  pushLine(lines, "CTA_SLOT_ORDER", state.ctaChannelOrder.join(", "));
   pushLine(lines, "CTA_TEXT_CALL", state.ctaTextCall);
   pushLine(lines, "CTA_TEXT_WHATSAPP", state.ctaTextWhatsApp);
 }
@@ -381,6 +389,10 @@ export function buildArchitectHandoffDataLines(state: Lane1CustomizerState, orde
     `MAPS: ${state.addGoogleMap ? "on" : "off"} | preview=${state.showMapPreview ? "on" : "off"} | directions=${state.showGetDirectionsButton ? "on" : "off"}`,
   );
   lines.push(`MOBILE_BUTTON_ORDER: ${state.mobileButtonOrder.join(", ") || EMPTY}`);
+  lines.push(
+    `ACTIVE_PRIMARY_CTAS: ${orderedActiveCtaChannels(state).map(primaryCtaHandoffLabel).join(" → ") || EMPTY}`,
+  );
+  lines.push(`CTA_CHANNEL_SLOTS_ORDER: ${state.ctaChannelOrder.join(", ")}`);
 
   lines.push("");
   lines.push("### CONTENT (primary language block first)");

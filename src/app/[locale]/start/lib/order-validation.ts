@@ -1,5 +1,6 @@
 import { hasValidAddress } from "./location";
 import type { Lane1CustomizerState, SectionId, SocialPlatformId } from "./types";
+import { orderedActiveCtaChannels } from "./types";
 import { defaultLane1State } from "./types";
 
 export type OrderValidationIssue = {
@@ -110,9 +111,19 @@ export function validateOrderState(state: Lane1CustomizerState): {
     blocking.push({
       id: "phone",
       title: "Phone number",
-      why: "Call and WhatsApp buttons use this number.",
+      why: "Call and WhatsApp buttons use this number when those actions are shown.",
       action: "Replace the sample phone with your real number (with country code).",
       blocking: true,
+    });
+  }
+
+  if (orderedActiveCtaChannels(state).length === 0) {
+    advisory.push({
+      id: "cta-buttons",
+      title: "Primary contact buttons",
+      why: "Both Call and WhatsApp are hidden — visitors have no main tap-to-contact actions.",
+      action: "Open the CTAs pill and turn on Call and/or WhatsApp, or confirm you only want email/social.",
+      blocking: false,
     });
   }
 

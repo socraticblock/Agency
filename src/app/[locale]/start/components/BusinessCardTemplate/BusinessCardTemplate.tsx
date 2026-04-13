@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, memo, type CSSProperties } from "react";
 import { motion } from "framer-motion";
 import { HeroSegment } from "../segments/HeroSegment";
 import { CtaSegment } from "../segments/CtaSegment";
+import { CtaManagerPanel } from "../segments/CtaManagerPanel";
 import { SectionDispatcher } from "../segments/SectionDispatcher";
 import { ContactSegment } from "../segments/ContactSegment";
 import { SocialSegment } from "../segments/SocialSegment";
@@ -256,6 +257,13 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
           patch={patch}
           ctaLabelStyle={ctaLabelStyle}
           useSecondary={useSecondary}
+        />
+        <CtaManagerPanel
+          editable={editable}
+          state={state}
+          patch={patch}
+          useSecondary={useSecondary}
+          orderHighlightIssueIds={orderHl}
         />
         <SectionManagerPanel
           editable={editable}

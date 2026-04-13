@@ -1,6 +1,6 @@
 "use client";
 
-import type { Lane1CustomizerState } from "./types";
+import type { CtaChannelId, Lane1CustomizerState } from "./types";
 import { CUSTOMIZER_VERSION, defaultLane1State } from "./types";
 import { isDigitalCardTierId } from "./digital-card-product";
 import {
@@ -25,7 +25,7 @@ function safeParse(raw: string | null): Lane1CustomizerState | null {
     const data = JSON.parse(raw) as Record<string, unknown>;
     const v = typeof data.version === "number" ? data.version : 1;
     // Allow migration from v1–v17
-    if (v < 1 || v > 17) return null;
+    if (v < 1 || v > 18) return null;
     return migrateLane1State(data as unknown as Lane1CustomizerState);
   } catch {
     return null;
@@ -156,6 +156,30 @@ function migrateLane1State(
   if (typeof merged.digitalCardUrlHint !== "string") {
     merged.digitalCardUrlHint = "";
   }
+
+  const ctaAll: CtaChannelId[] = ["call", "whatsapp"];
+  const rawOrder = merged.ctaChannelOrder;
+  const orderOk =
+    Array.isArray(rawOrder) &&
+    rawOrder.length === 2 &&
+    new Set(rawOrder).size === 2 &&
+    rawOrder.every((id) => id === "call" || id === "whatsapp");
+  merged.ctaChannelOrder = orderOk ? ([...rawOrder] as CtaChannelId[]) : [...ctaAll];
+
+  if (!Array.isArray(merged.activeCtaChannels)) {
+    merged.activeCtaChannels = [...ctaAll];
+  } else {
+    const seen = new Set<CtaChannelId>();
+    const next: CtaChannelId[] = [];
+    for (const id of merged.activeCtaChannels) {
+      if ((id === "call" || id === "whatsapp") && !seen.has(id)) {
+        seen.add(id);
+        next.push(id);
+      }
+    }
+    merged.activeCtaChannels = next;
+  }
+  merged.activeCtaChannels = merged.ctaChannelOrder.filter((id) => merged.activeCtaChannels.includes(id));
 
   merged.version = CUSTOMIZER_VERSION;
   return merged;

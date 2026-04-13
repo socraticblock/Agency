@@ -6,7 +6,7 @@ import {
 } from "./digital-card-product";
 import { getDigitalCardPricingSummary } from "./lane1-pricing";
 import type { Lane1CustomizerState, SectionId } from "./types";
-import { CUSTOMIZER_VERSION } from "./types";
+import { CUSTOMIZER_VERSION, orderedActiveCtaChannels } from "./types";
 
 /** Version of the `order.json` envelope shape (not the WhatsApp text schema). */
 export const ORDER_FILE_SCHEMA_VERSION = 1 as const;
@@ -94,6 +94,18 @@ export function buildGenezisiOrderFile(state: Lane1CustomizerState, orderId: str
   };
 }
 
+function primaryCtaSummaryEn(state: Lane1CustomizerState): string {
+  const ids = orderedActiveCtaChannels(state);
+  if (ids.length === 0) return "—";
+  return ids.map((id) => (id === "call" ? "Call" : "WhatsApp")).join(" → ");
+}
+
+function primaryCtaSummaryKa(state: Lane1CustomizerState): string {
+  const ids = orderedActiveCtaChannels(state);
+  if (ids.length === 0) return "—";
+  return ids.map((id) => (id === "call" ? "ზარი" : "WhatsApp")).join(" → ");
+}
+
 function sectionLabel(id: SectionId): string {
   switch (id) {
     case "about":
@@ -168,6 +180,7 @@ export function buildOrderSummaryLines(state: Lane1CustomizerState, orderId: str
   lines.push(`Email: ${state.email.trim() || "—"}`);
   lines.push(langLine);
   lines.push(`Sections: ${sections}`);
+  lines.push(`Primary CTAs (top → bottom): ${primaryCtaSummaryEn(state)}`);
   lines.push(
     `Media: headshot ${assets.heroPhoto === "custom" ? "selected in builder" : "not uploaded yet"}, gallery ${assets.galleryImages}, bg photo ${assets.backgroundImage ? "yes" : "no"}`,
   );
@@ -220,6 +233,7 @@ export function buildOrderSummaryLinesKa(state: Lane1CustomizerState, orderId: s
   lines.push(`ელფოსტა: ${state.email.trim() || "—"}`);
   lines.push(langNote);
   lines.push(`სექციები: ${sections}`);
+  lines.push(`მთავარი CTA (ზემოდან ქვემოთ): ${primaryCtaSummaryKa(state)}`);
   lines.push(
     `მედია: პროფილის ფოტო ${assets.heroPhoto === "custom" ? "არჩეულია ბილდერში" : "ჯერ არ არის ატვირთული"}, გალერეა ${assets.galleryImages}, ფონის სურათი ${assets.backgroundImage ? "კი" : "არა"}`,
   );

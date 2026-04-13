@@ -1,9 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Locale } from "@/lib/i18n";
-import { normalizeLane1StateFromUnknown } from "../lib/customizer-store";
-import { parseImportedOrderFile } from "../lib/order-payload";
 import { validateOrderState } from "../lib/order-validation";
 import { buildLane1WhatsAppOpenerUrl } from "../lib/whatsapp";
 import type { Lane1CustomizerState, Lane1StatePatch } from "../lib/types";
@@ -23,7 +21,6 @@ type Props = {
   setupGel: number;
   hostingGel: number;
   onOrderClick: () => void;
-  onImportOrderState?: (next: Lane1CustomizerState) => void;
 };
 
 export function StartPageEditorColumn({
@@ -37,10 +34,7 @@ export function StartPageEditorColumn({
   setupGel,
   hostingGel,
   onOrderClick,
-  onImportOrderState,
 }: Props) {
-  const fileRef = useRef<HTMLInputElement>(null);
-  const [importError, setImportError] = useState<string | null>(null);
   const [reviewOpen, setReviewOpenState] = useState(false);
   const [orderHighlightIssueIds, setOrderHighlightIssueIds] = useState<string[]>([]);
   const [waIncompleteChecklist, setWaIncompleteChecklist] = useState(false);
@@ -117,43 +111,6 @@ export function StartPageEditorColumn({
         <p className="start-body text-[#64748b]">
           Preview updates as you edit. Order via WhatsApp.
         </p>
-        {onImportOrderState ? (
-          <div className="mt-3 text-center">
-            <input
-              ref={fileRef}
-              type="file"
-              accept="application/json,.json"
-              className="hidden"
-              onChange={(e) => {
-                const f = e.target.files?.[0];
-                e.target.value = "";
-                if (!f) return;
-                setImportError(null);
-                const reader = new FileReader();
-                reader.onload = () => {
-                  try {
-                    const parsed = JSON.parse(String(reader.result)) as unknown;
-                    const raw = parseImportedOrderFile(parsed) ?? parsed;
-                    const next = normalizeLane1StateFromUnknown(raw);
-                    if (next) onImportOrderState(next);
-                    else setImportError("Could not read this file. Use a Genezisi order export (.json).");
-                  } catch {
-                    setImportError("Invalid JSON file.");
-                  }
-                };
-                reader.readAsText(f);
-              }}
-            />
-            <button
-              type="button"
-              onClick={() => fileRef.current?.click()}
-              className="text-xs font-semibold text-[#64748b] underline decoration-[#64748b]/35 underline-offset-4 hover:decoration-[#64748b]"
-            >
-              Import saved order (.json)
-            </button>
-            {importError ? <p className="mt-2 text-xs text-amber-800">{importError}</p> : null}
-          </div>
-        ) : null}
       </header>
 
       <div className="mb-4 flex flex-wrap items-center gap-3 lg:hidden">

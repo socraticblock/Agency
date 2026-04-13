@@ -21,7 +21,7 @@ If you persist orders in Supabase or another DB:
   - **`jsonb` column** large enough for the full export (watch row size and backup costs), or
   - **Object storage** (e.g. Supabase Storage) for the file + a small table row with `order_id`, `created_at`, `storage_path`, `tier`, `client_phone`, etc.
 
-Re-import in-house by loading the JSON into `/start` via **Import saved order (.json)** or opening `/start/preview` and **Load order file**.
+Re-import in-house by opening `/start/preview` and **Load order file**, or parse the envelope in tooling with `parseImportedOrderFile` + `normalizeLane1StateFromUnknown`.
 
 ## Files
 
