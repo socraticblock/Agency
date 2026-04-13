@@ -73,7 +73,7 @@ async function tursoExec(sql: string, params: unknown[] = []): Promise<void> {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      statements: [{ sql, params }],
+      requests: [{ type: "execute", stmt: { sql, params } }],
     }),
   });
   if (!res.ok) {
@@ -96,7 +96,7 @@ async function tursoQuery<T = Record<string, unknown>>(sql: string, params: unkn
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      statements: [{ sql, params }],
+      requests: [{ type: "execute", stmt: { sql, params } }],
     }),
   });
   if (!res.ok) {
