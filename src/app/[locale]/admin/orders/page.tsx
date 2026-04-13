@@ -129,7 +129,7 @@ export default function AdminOrdersPage() {
       order.slug ??
       (order.name ?? "card").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") ??
       "card";
-    if (!window.confirm(`Publish card for "${order.name ?? order.id}" as /c/${slug}?`)) return;
+    if (!window.confirm(`Publish card for "${order.name ?? order.id}" as /en/c/${slug}?`)) return;
     setPublishing(order.id);
     try {
       const res = await fetch(`/api/cards/${slug}/publish`, {
@@ -294,7 +294,7 @@ export default function AdminOrdersPage() {
                         )}
                         {order.status === "published" && order.slug && (
                           <a
-                            href={`/c/${order.slug}`}
+                            href={`/en/c/${order.slug}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="rounded-lg bg-[#1A2744] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#243552]"
