@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { X } from "lucide-react";
+import { X, Loader2 } from "lucide-react";
 import { generateOrderId } from "../lib/order-payload";
 import { validateOrderState } from "../lib/order-validation";
 import type { Lane1CustomizerState } from "../lib/types";
@@ -11,12 +11,33 @@ import { StartOrderSendStep2 } from "./StartOrderSendStep2";
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  /** Fired when the dialog is dismissed (X / backdrop) or when the user bypasses checklist to step 2. */
   onCloseAttempt?: (detail: { step: 1 | 2; bypassed: boolean }) => void;
   state: Lane1CustomizerState;
   buildWhatsAppUrl: (orderId: string) => string;
   onOrderClick: () => void;
 };
+
+async function submitOrderToApi(state: Lane1CustomizerState, orderId: string): Promise<{ ok: boolean; error?: string }> {
+  try {
+    const res = await fetch("/api/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: orderId,
+        state,
+        tier: state.selectedTier,
+        digitalCardUrlHint: state.digitalCardUrlHint,
+      }),
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      return { ok: false, error: data.error ?? `Request failed (${res.status})` };
+    }
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: "Could not connect. Your order ID is still valid — you can still send via WhatsApp." };
+  }
+}
 
 export function StartOrderReviewDialog({
   open,
@@ -28,16 +49,33 @@ export function StartOrderReviewDialog({
 }: Props) {
   const [orderId, setOrderId] = useState("");
   const [step, setStep] = useState<1 | 2>(1);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const { blocking, advisory } = useMemo(() => validateOrderState(state), [state]);
 
   useEffect(() => {
     if (open) {
       setOrderId(generateOrderId());
       setStep(1);
+      setSubmitting(false);
+      setSubmitError(null);
     }
   }, [open]);
 
   if (!open) return null;
+
+  const goToStep2 = async (bypassed: boolean) => {
+    setSubmitting(true);
+    setSubmitError(null);
+    const result = await submitOrderToApi(state, orderId);
+    setSubmitting(false);
+    if (!result.ok) {
+      setSubmitError(result.error ?? "Something went wrong.");
+      // Still proceed — graceful degradation, WhatsApp still works with just the order ID
+    }
+    onCloseAttempt?.({ step: 1, bypassed });
+    setStep(2);
+  };
 
   const dismiss = (fromStep: 1 | 2) => {
     onCloseAttempt?.({ step: fromStep, bypassed: false });
@@ -88,15 +126,19 @@ export function StartOrderReviewDialog({
                   Everything essential looks ready. Continue to copy your order and send it on WhatsApp.
                 </p>
               ) : null}
+              {submitError ? (
+                <p className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-center text-sm text-amber-800">
+                  {submitError}
+                </p>
+              ) : null}
               {blocking.length > 0 ? (
                 <button
                   type="button"
-                  onClick={() => {
-                    onCloseAttempt?.({ step: 1, bypassed: true });
-                    setStep(2);
-                  }}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 text-center text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
+                  disabled={submitting}
+                  onClick={() => goToStep2(true)}
+                  className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 py-3 text-center text-sm font-semibold text-slate-700 transition hover:bg-slate-100 disabled:opacity-60"
                 >
+                  {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
                   Continue without checklist — talk to Genezisi
                 </button>
               ) : null}
@@ -110,14 +152,12 @@ export function StartOrderReviewDialog({
           {step === 1 ? (
             <button
               type="button"
-              disabled={blocking.length > 0}
-              onClick={() => {
-                onCloseAttempt?.({ step: 1, bypassed: false });
-                setStep(2);
-              }}
-              className="w-full rounded-xl bg-[#1A2744] py-3 text-sm font-semibold text-white shadow-md transition hover:bg-[#243552] disabled:cursor-not-allowed disabled:opacity-45"
+              disabled={blocking.length > 0 || submitting}
+              onClick={() => goToStep2(false)}
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#1A2744] py-3 text-sm font-semibold text-white shadow-md transition hover:bg-[#243552] disabled:cursor-not-allowed disabled:opacity-45"
             >
-              Continue
+              {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+              {submitting ? "Saving your order..." : "Continue"}
             </button>
           ) : (
             <button

@@ -1,0 +1,7 @@
+name = "genezisi-agency"
+compatibility_date = "2025-01-01"
+
+[[d1_databases]]
+binding = "CARDS_DB"
+database_name = "genezisi-cards"
+database_id = "f49d592e-fa32-4487-8521-5163f2eeb736"
