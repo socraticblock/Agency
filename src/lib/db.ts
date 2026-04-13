@@ -1,14 +1,19 @@
 /**
  * D1 database wrapper for genezisi.com card orders.
  *
- * Runtime support:
- * - Cloudflare Workers / Edge (Vercel Edge Functions):
- *     pass `env.CARDS_DB` (D1Database binding from wrangler.toml)
- * - Local dev:
- *     pass undefined — uses @libsql/client with TURSO_DATABASE_URL or local file
+ * Uses Cloudflare D1 via the D1 binding (env.CARDS_DB) — works natively
+ * in Cloudflare Workers, Vercel Edge Functions, and Next.js App Router
+ * with the wrangler.toml [[d1_databases]] binding.
+ *
+ * Usage in API routes:
+ *   export const runtime = 'edge';
+ *   export async function GET(_req: Request, { env }: { env: Env }) {
+ *     const db = createDb(env.CARDS_DB);
+ *     ...
+ *   }
  */
 
-import { createClient, type Client } from "@libsql/client";
+import type { Env } from "~/lib/db-types";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -52,84 +57,32 @@ export interface CreateCardInput {
   stateJson: string;
 }
 
-/** Env type for Next.js 15 App Router — use in route handlers */
-export interface Env {
-  CARDS_DB?: D1Database;
-  ADMIN_PASSWORD?: string;
-}
+// Re-export Env for convenience
+export type { Env };
 
 // ---------------------------------------------------------------------------
 // DB factory
 // ---------------------------------------------------------------------------
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type D1Like = any;
-
-let _localClient: Client | null = null;
-
 /**
- * Returns a DB client compatible with D1's prepare().bind().run() API.
+ * Returns the D1 database client.
+ * Pass env.CARDS_DB from your Next.js route handler's `env` parameter.
  *
- * - In Cloudflare Workers / Vercel Edge: pass env.CARDS_DB (the D1 binding)
- * - In local dev: pass undefined to use @libsql/client with TURSO_DATABASE_URL
- *   or a local file at ./local_cards.db
+ * In production (Vercel Edge / Cloudflare Workers): env.CARDS_DB is a D1Database
+ * In local dev with `wrangler dev --remote`: also a D1Database
+ *
+ * The D1 binding is Cloudflare's D1Database API which is directly compatible
+ * with the prepare().bind().run() interface used throughout this file.
  */
-export function createDb(d1: D1Like | undefined): D1Like {
-  if (d1) {
-    return d1;
+export function createDb(d1: D1Database | undefined): D1Database {
+  if (!d1) {
+    throw new Error(
+      "CARDS_DB binding is not defined. " +
+        "Make sure wrangler.toml has the [[d1_databases]] binding, " +
+        "and your Vercel project has CLOUDFLARE_D1_DATABASE_ID set."
+    );
   }
-
-  if (!_localClient) {
-    const url =
-      process.env.TURSO_DATABASE_URL ??
-      `file:${process.cwd()}/local_cards.db`;
-    _localClient = createClient({ url });
-  }
-
-  return d1Shim(_localClient);
-}
-
-// ---------------------------------------------------------------------------
-// D1-compatible shim for local @libsql/client
-// ---------------------------------------------------------------------------
-
-function d1Shim(client: Client): D1Like {
-  return {
-    prepare(sql: string) {
-      return {
-        bind: (...args: unknown[]) => ({
-          async run() {
-            const result = await client.execute({
-              sql,
-              args: args as unknown[],
-            });
-            return {
-              results: result.rows ?? [],
-              success: true,
-              meta: { changes: result.rowsAffected },
-            };
-          },
-          async first<T = Record<string, unknown>>() {
-            const result = await client.execute({
-              sql,
-              args: args as unknown[],
-            });
-            return (result.rows[0] as T) ?? null;
-          },
-          async all<T = Record<string, unknown>>() {
-            const result = await client.execute({
-              sql,
-              args: args as unknown[],
-            });
-            return {
-              results: (result.rows as T[]) ?? [],
-              success: true,
-            };
-          },
-        }),
-      };
-    },
-  };
+  return d1;
 }
 
 // ---------------------------------------------------------------------------
@@ -138,7 +91,7 @@ function d1Shim(client: Client): D1Like {
 
 /** Insert a new pending card order. */
 export async function createCard(
-  db: D1Like,
+  db: D1Database,
   input: CreateCardInput
 ): Promise<{ ok: true } | { ok: false; error: string }> {
   try {
@@ -168,7 +121,7 @@ export async function createCard(
 
 /** Get a card by its order ID (gc-...). */
 export async function getCardById(
-  db: D1Like,
+  db: D1Database,
   id: string
 ): Promise<Card | null> {
   const row = await db
@@ -180,7 +133,7 @@ export async function getCardById(
 
 /** Get a published card by its public slug. */
 export async function getPublishedCardBySlug(
-  db: D1Like,
+  db: D1Database,
   slug: string
 ): Promise<Card | null> {
   const row = await db
@@ -194,7 +147,7 @@ export async function getPublishedCardBySlug(
 
 /** Get all cards, newest first. admin=true includes unpublished. */
 export async function listCards(
-  db: D1Like,
+  db: D1Database,
   opts: { admin?: boolean } = {}
 ): Promise<Card[]> {
   const sql = opts.admin
@@ -207,7 +160,7 @@ export async function listCards(
 
 /** Assign a slug and publish a card. */
 export async function publishCard(
-  db: D1Like,
+  db: D1Database,
   id: string,
   slug: string
 ): Promise<{ ok: true } | { ok: false; error: string }> {
@@ -227,7 +180,10 @@ export async function publishCard(
 }
 
 /** Check if a slug is already taken. */
-export async function slugTaken(db: D1Like, slug: string): Promise<boolean> {
+export async function slugTaken(
+  db: D1Database,
+  slug: string
+): Promise<boolean> {
   const row = await db
     .prepare("SELECT 1 FROM cards WHERE slug = ?")
     .bind(slug)
