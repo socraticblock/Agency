@@ -229,7 +229,7 @@ export function HeroSegment({
   } as Record<string, string>)[photoShape as string] || "w-[250px]";
   const shapeRadius =
     photoShape === "circle" ? "50%" : photoShape === "rounded-square" ? "16px" : "12px";
-  const imageFitClass = photoShape === "wide-cinematic" ? "object-contain" : "object-cover";
+  const imageFitClass = "object-contain";
 
   const effectFilter = PHOTO_EFFECT_PRESETS.find(p => p.id === photoEffect)?.filter || "none";
   const showMobileLabel = (label: string) => {

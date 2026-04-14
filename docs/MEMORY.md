@@ -58,6 +58,7 @@
 - **060** — Pill section `<select>` → `PillSectionAccordion`; base solid + Look accent use single `TypographyHexColorRow`; `accentCustomPrimary` + `accentId: "custom"` + `resolveAccentPair`; `CUSTOMIZER_VERSION` 19
 - **061** — Texture tint: `textureTintHex` + `textureBackgroundImage` third arg; `TextureEffectControls` color row; paste `TEXTURE_TINT_HEX`; v20
 - **062** — Background motion tint: `bgEffectTintHex` + `--bg-effect-color` / secondary; CSS uses them instead of `--accent`; `BackgroundMotionControls` picker; v21
+- **063** — Hero profile image default fit: `object-contain` for all photo shapes (letterbox); zoom/pan still reach edge-to-edge
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -357,6 +358,11 @@
 - **Context:** Motion layer (ambient glow, orbs, gradient shift, light leak) read `var(--accent)` so motion always matched accent; product wanted an independent motion color.
 - **Decision:** `bgEffectTintHex` (empty = use resolved accent pair); `resolveStyleVariables` emits `--bg-effect-color` / `--bg-effect-color-secondary`; `business-card-template.css` motion selectors use those vars; `BackgroundMotionControls` adds `TypographyHexColorRow`; paste `BG_MOTION_TINT_HEX`; `CUSTOMIZER_VERSION` 21 + migration default empty string.
 - **Impact:** Vignette stays neutral (unchanged); other motion effects can diverge from UI accent without breaking existing cards (empty → same as before).
+
+### 063
+- **Context:** Hero photo used `object-cover` for circle and rounded-square, so non-square uploads looked unintentionally cropped; wide-cinematic already used `object-contain`.
+- **Decision:** `HeroSegment` sets `imageFitClass` to `object-contain` for all shapes; existing `photoZoom` / `photoPositionX` / `photoPositionY` still allow users to scale and pan toward a full-bleed look inside the mask.
+- **Impact:** New and existing cards show the full image in-frame by default (letterboxing on `bg-slate-100`); no schema or version bump.
 
 ## Architecture Decisions
 - Zero backend for card features
