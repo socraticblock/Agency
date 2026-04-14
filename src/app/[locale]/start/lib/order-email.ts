@@ -284,10 +284,12 @@ function appendDesignSpec(lines: string[], state: Lane1CustomizerState): void {
   pushLine(lines, "BG_OVERLAY_OPACITY", String(s.bgOverlayOpacity));
   pushLine(lines, "TEXTURE_ID", idWithLabel(s.textureId, texLabel));
   pushLine(lines, "TEXTURE_OPACITY_PCT", String(s.textureOpacity));
+  pushLine(lines, "TEXTURE_TINT_HEX", (s.textureTintHex ?? "").trim() || "(auto)");
   pushLine(lines, "BG_MOTION_EFFECT_ID", idWithLabel(s.bgEffectId, motionLabel));
   pushLine(lines, "BG_MOTION_OPACITY_PCT", String(s.bgEffectOpacity));
   pushLine(lines, "BG_MOTION_SPEED", String(s.bgEffectSpeed));
   pushLine(lines, "BG_MOTION_INTENSITY", String(s.bgEffectIntensity));
+  pushLine(lines, "BG_MOTION_TINT_HEX", (s.bgEffectTintHex ?? "").trim() || "(accent)");
 
   lines.push("");
   lines.push("### TYPE");

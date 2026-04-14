@@ -25,7 +25,7 @@ function safeParse(raw: string | null): Lane1CustomizerState | null {
     const data = JSON.parse(raw) as Record<string, unknown>;
     const v = typeof data.version === "number" ? data.version : 1;
     // Allow migration from v1–v17
-    if (v < 1 || v > 18) return null;
+    if (v < 1 || v > 21) return null;
     return migrateLane1State(data as unknown as Lane1CustomizerState);
   } catch {
     return null;
@@ -127,6 +127,9 @@ function migrateLane1State(
   }
 
   merged.style.secondaryAccentId = merged.style.accentId;
+  if (merged.style.accentCustomPrimary === undefined) merged.style.accentCustomPrimary = "";
+  if (merged.style.textureTintHex === undefined) merged.style.textureTintHex = "";
+  if (merged.style.bgEffectTintHex === undefined) merged.style.bgEffectTintHex = "";
   // Deprecated: dark card override removed; background presets handle dark looks.
   merged.style.cardDarkSurface = false;
 

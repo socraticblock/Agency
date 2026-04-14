@@ -3,6 +3,7 @@
 import { Check } from "lucide-react";
 import type { Lane1CustomizerState } from "../../lib/types";
 import { TEXTURE_OPTION_META } from "../../lib/texture-presets";
+import { TypographyHexColorRow } from "../segments/TypographyHexColorRow";
 import { labelClass } from "./types";
 
 const chipBase =
@@ -23,7 +24,7 @@ export function TextureEffectControls({
   onPatch: (p: Partial<Lane1CustomizerState["style"]>) => void;
   useSecondary?: boolean;
 }) {
-  const { textureId, textureOpacity, bgEffectId } = state.style;
+  const { textureId, textureOpacity, textureTintHex, bgEffectId } = state.style;
 
   return (
     <div className="mt-6 space-y-6 border-t border-black/10 pt-6">
@@ -52,17 +53,32 @@ export function TextureEffectControls({
           })}
         </div>
         {textureId !== "none" ? (
-          <label className={`${labelClass} mt-3 block`}>
-            {useSecondary ? "ტექსტურის სიძლიერე" : "Texture strength"} ({textureOpacity}%)
-            <input
-              type="range"
-              min={0}
-              max={100}
-              value={textureOpacity}
-              onChange={(e) => onPatch({ textureOpacity: Number(e.target.value) })}
-              className="mt-1 w-full accent-[#1A2744]"
-            />
-          </label>
+          <>
+            <div className="mt-3">
+              <TypographyHexColorRow
+                label={useSecondary ? "ტექსტურის ფერი" : "Texture tint"}
+                value={textureTintHex ?? ""}
+                onChange={(v) => onPatch({ textureTintHex: v })}
+                useSecondary={useSecondary}
+              />
+              <p className="start-caption mt-1">
+                {useSecondary
+                  ? "დატოვე ცარიელი ავტომატური კონტრასტისთვის; შეავსე ტექსტურის ფერის შესაცვლელად."
+                  : "Leave empty for automatic contrast ink. Set a hex to tint dots, lines, waves, and grain."}
+              </p>
+            </div>
+            <label className={`${labelClass} mt-4 block`}>
+              {useSecondary ? "ტექსტურის სიძლიერე" : "Texture strength"} ({textureOpacity}%)
+              <input
+                type="range"
+                min={0}
+                max={100}
+                value={textureOpacity}
+                onChange={(e) => onPatch({ textureOpacity: Number(e.target.value) })}
+                className="mt-1 w-full accent-[#1A2744]"
+              />
+            </label>
+          </>
         ) : (
           <p className="start-caption mt-3">{useSecondary ? "ჯერ აირჩიე ტექსტურა, შემდეგ სიძლიერე." : "Choose a texture first to adjust strength."}</p>
         )}

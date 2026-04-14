@@ -53,6 +53,11 @@
 - **055** — WhatsApp handoff: copy full `buildWhatsAppOrderPasteText` brief + short `buildLane1WhatsAppOpenerUrl`; email optional; `StartOrderSendStep2`
 - **056** — Architect paste brief v5: explicit `*_EN`/`*_KA` content keys + full design/QR/social spec in `buildArchitectHandoffDataLines`
 - **057** — Primary CTA (Call/WhatsApp) toggle + reorder (`activeCtaChannels`, `ctaChannelOrder`), on-card `CtaManagerPanel`, handoff lines + schema v6
+- **058** — Mobile-only portaled overlays for bottom card pills (Background/Look/Type/Experience): escapes preview `overflow-hidden`; desktop keeps anchored popovers
+- **059** — Bottom pills: exclusive open state in `BusinessCardTemplate`; Background/Type section `<select>`; unified overlay colors + single Type hex picker
+- **060** — Pill section `<select>` → `PillSectionAccordion`; base solid + Look accent use single `TypographyHexColorRow`; `accentCustomPrimary` + `accentId: "custom"` + `resolveAccentPair`; `CUSTOMIZER_VERSION` 19
+- **061** — Texture tint: `textureTintHex` + `textureBackgroundImage` third arg; `TextureEffectControls` color row; paste `TEXTURE_TINT_HEX`; v20
+- **062** — Background motion tint: `bgEffectTintHex` + `--bg-effect-color` / secondary; CSS uses them instead of `--accent`; `BackgroundMotionControls` picker; v21
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -327,6 +332,31 @@
 - **Context:** Call and WhatsApp were always stacked in a fixed order; operators had no explicit handoff line when a client hid one or swapped order.
 - **Decision:** Added `CtaChannelId`, `activeCtaChannels`, `ctaChannelOrder`, `orderedActiveCtaChannels()`, v18 migration in `customizer-store`, on-card `CtaManagerPanel` (Social-style toggle/reorder), `CtaSegment` renders ordered active channels; `buildArchitectHandoffDataLines` + `appendDesignSpec` + compact `buildOrderSummaryLines`/`Ka` emit CTA order; `DIGITAL_CARD_ORDER_SCHEMA_VERSION` 6; advisory `cta-buttons` when both off.
 - **Impact:** Card matches client intent; WhatsApp/email paste documents primary button layout; slight paste length increase.
+
+### 058
+- **Context:** Bottom pill popovers (`absolute bottom-full`) lived inside `StartPageEditorColumn`’s `overflow-hidden` preview shell; on small viewports content was clipped and outside-click handling treated portaled UI as “outside” the pill root.
+- **Decision:** `useMediaMinMd` (768px) gates behavior: `md+` unchanged anchored popovers + window outside-click only when `mdUp`; below `md`, `CardEditorMobileOverlay` uses `createPortal` to `document.body`, centered panel with backdrop, Escape, and body scroll lock; shared surface builders in Background/Look/Type/Experience panels.
+- **Impact:** Mobile editors are fully visible above the chrome bar; desktop UX untouched; one extra paint after mount until `matchMedia` resolves (initial hook state assumes desktop).
+
+### 059
+- **Context:** Clients needed more visible card while editing; multiple bottom pills and multiple color inputs competed for space (especially Background overlay stops and Type body/display/CTA hex rows).
+- **Decision:** `openBottomPill` + `BottomPillPanelProps` (`isOpen` / `onToggle` / `onClose`) lifted to `BusinessCardTemplate` so only one of Background/Look/Type/Experience is open; Background and Type replace pill tab chip rows with native `<select>`; `BackgroundOverlayUnifiedColors` + `TypographyHexColorRow` consolidate overlay gradient stops and typography hex into one picker surface (stop / section selector + single row).
+- **Impact:** Clearer mobile/desktop editor chrome; `StylePresetGrids` overlay block delegates colors to the new component; pill panels require parent pill props wherever `BusinessCardTemplate` is composed with `editable`.
+
+### 060
+- **Context:** Product direction preferred accordion headers over dropdowns for pill sections; Background base and Look accent still used large preset grids instead of one color control.
+- **Decision:** Added `PillSectionAccordion` (chevron headers, one active id) for Background and Type pills; `BackgroundBaseControls` solid mode uses `TypographyHexColorRow` only (`backgroundId: "custom"` on edit); Look uses the same row with `ACCENT_PRESETS` exact-match → named `accentId`, else `accentId: "custom"` + `accentCustomPrimary`; `resolveAccentPair` in `presets.ts` drives CSS (invalid custom hex → indigo fallback); `CUSTOMIZER_VERSION` 19 + migration default `accentCustomPrimary`.
+- **Impact:** Smaller UI footprint; handoff/email accent line shows `custom` id when applicable; `AccentPresetGrid` unused in Look but kept exported for potential reuse.
+
+### 061
+- **Context:** Texture overlay had only pattern + strength; clients wanted a tint color like other pill surfaces.
+- **Decision:** Added `textureTintHex` on `StylePresetSelection` (empty = legacy `ink()` contrast); `textureBackgroundImage(id, dark, tintHex)` uses `hexToRgba` for lines/dots/waves and a light wash under SVG grain when set; `TextureEffectControls` adds `TypographyHexColorRow`; `resolveStyleVariables` passes tint; email paste adds `TEXTURE_TINT_HEX`; `CUSTOMIZER_VERSION` 20.
+- **Impact:** One more optional style field in JSON; grain+tint is a subtle wash layered under noise.
+
+### 062
+- **Context:** Motion layer (ambient glow, orbs, gradient shift, light leak) read `var(--accent)` so motion always matched accent; product wanted an independent motion color.
+- **Decision:** `bgEffectTintHex` (empty = use resolved accent pair); `resolveStyleVariables` emits `--bg-effect-color` / `--bg-effect-color-secondary`; `business-card-template.css` motion selectors use those vars; `BackgroundMotionControls` adds `TypographyHexColorRow`; paste `BG_MOTION_TINT_HEX`; `CUSTOMIZER_VERSION` 21 + migration default empty string.
+- **Impact:** Vignette stays neutral (unchanged); other motion effects can diverge from UI accent without breaking existing cards (empty → same as before).
 
 ## Architecture Decisions
 - Zero backend for card features

@@ -52,7 +52,7 @@
 .business-card-bg-effect-layer[data-effect="ambient-glow"] {
   background: radial-gradient(
     ellipse 120% 80% at 25% 15%,
-    color-mix(in srgb, var(--accent) 52%, transparent),
+    color-mix(in srgb, var(--bg-effect-color) 52%, transparent),
     transparent 56%
   );
   animation: business-card-bg-ambient calc(7s * 100 / var(--bg-effect-speed, 100)) ease-in-out infinite;
@@ -60,16 +60,16 @@
 
 .business-card-bg-effect-layer[data-effect="floating-orbs"] {
   background:
-    radial-gradient(circle at 15% 75%, color-mix(in srgb, var(--accent) 40%, transparent) 0, transparent 44%),
-    radial-gradient(circle at 85% 30%, color-mix(in srgb, var(--accent-secondary) 34%, transparent) 0, transparent 40%);
+    radial-gradient(circle at 15% 75%, color-mix(in srgb, var(--bg-effect-color) 40%, transparent) 0, transparent 44%),
+    radial-gradient(circle at 85% 30%, color-mix(in srgb, var(--bg-effect-color-secondary) 34%, transparent) 0, transparent 40%);
   animation: business-card-bg-orbs calc(9s * 100 / var(--bg-effect-speed, 100)) ease-in-out infinite;
 }
 
 .business-card-bg-effect-layer[data-effect="gradient-shift"] {
   background: linear-gradient(
     120deg,
-    color-mix(in srgb, var(--accent) 30%, transparent),
-    color-mix(in srgb, var(--accent-secondary) 24%, transparent),
+    color-mix(in srgb, var(--bg-effect-color) 30%, transparent),
+    color-mix(in srgb, var(--bg-effect-color-secondary) 24%, transparent),
     transparent 62%
   );
   background-size: 240% 240%;
@@ -85,7 +85,7 @@
   background: conic-gradient(
     from 200deg at 90% 0%,
     transparent 0deg,
-    color-mix(in srgb, var(--accent) 58%, transparent) 62deg,
+    color-mix(in srgb, var(--bg-effect-color) 58%, transparent) 62deg,
     transparent 115deg
   );
   opacity: 0.62;

@@ -3,6 +3,7 @@
 import { Check } from "lucide-react";
 import type { Lane1CustomizerState } from "../../lib/types";
 import { BG_EFFECT_OPTION_META } from "../../lib/texture-presets";
+import { TypographyHexColorRow } from "./TypographyHexColorRow";
 import { labelClass } from "../StartCustomizer/types";
 
 const chipBase =
@@ -26,7 +27,7 @@ export function BackgroundMotionControls({
   onPatch: (p: Partial<Lane1CustomizerState["style"]>) => void;
   useSecondary?: boolean;
 }) {
-  const { bgEffectId, bgEffectOpacity, bgEffectSpeed, bgEffectIntensity } = state.style;
+  const { bgEffectId, bgEffectOpacity, bgEffectSpeed, bgEffectIntensity, bgEffectTintHex } = state.style;
   const speed = bgEffectSpeed ?? 100;
   const intensity = bgEffectIntensity ?? 100;
 
@@ -58,6 +59,19 @@ export function BackgroundMotionControls({
       </div>
       {bgEffectId !== "none" ? (
         <div className="mt-3 space-y-3">
+          <div>
+            <TypographyHexColorRow
+              label={useSecondary ? "მოძრაობის ფერი" : "Motion color"}
+              value={bgEffectTintHex ?? ""}
+              onChange={(v) => onPatch({ bgEffectTintHex: v })}
+              useSecondary={useSecondary}
+            />
+            <p className="start-caption mt-1">
+              {useSecondary
+                ? "დატოვე ცარიელი აქცენტის ფერის გამოსაყენებლად."
+                : "Leave empty to follow the card accent; set a hex to tint ambient glow, orbs, gradient shift, and light leak."}
+            </p>
+          </div>
           <label className={`${labelClass} block`}>
             {useSecondary ? "მოძრაობის გამჭვირვალობა" : "Motion opacity"} ({bgEffectOpacity}%)
             <input

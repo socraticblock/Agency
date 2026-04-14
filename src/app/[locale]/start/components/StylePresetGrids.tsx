@@ -2,7 +2,8 @@
 
 import { memo } from "react";
 
-import { Check, Plus, Image as ImageIcon, Trash2, Maximize2 } from "lucide-react";
+import { BackgroundOverlayUnifiedColors } from "./BackgroundOverlayUnifiedColors";
+import { Check, Image as ImageIcon, Trash2, Maximize2 } from "lucide-react";
 import type { Lane1CustomizerState } from "../lib/types";
 import type {
   AccentPreset,
@@ -17,7 +18,7 @@ import type {
   PhotoBorderPreset,
   PhotoOverlayPreset,
 } from "../lib/presets";
-import { BACKGROUND_SOLID_PRESETS } from "../lib/presets";
+import { TypographyHexColorRow } from "./segments/TypographyHexColorRow";
 import { Circle } from "lucide-react";
 
 const chipBase =
@@ -68,10 +69,6 @@ function buttonStylePreviewChipClass(id: string): string {
   }
 }
 
-function hexColorEqual(a: string, b: string): boolean {
-  return a.trim().toLowerCase() === b.trim().toLowerCase();
-}
-
 const BackgroundBaseControls = memo(function BackgroundBaseControls({
   state,
   onPatch,
@@ -102,46 +99,13 @@ const BackgroundBaseControls = memo(function BackgroundBaseControls({
       </div>
 
       {bgBaseId === "solid" ? (
-        <div className="space-y-4 animate-in fade-in slide-in-from-top-2">
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">{useSecondary ? "ბაზის ფერი" : "Base Color"}</span>
-          <div className="grid grid-cols-4 gap-2">
-            {BACKGROUND_SOLID_PRESETS.map((p) => {
-              const onSel = hexColorEqual(bgBaseColor, p.cssValue);
-              return (
-                <button
-                  key={p.id}
-                  type="button"
-                  onClick={() => onPatch({ bgBaseColor: p.cssValue, backgroundId: p.id })}
-                  className={`${chipBase} ${chipSelected(onSel)} min-h-0 !p-1.5`}
-                  title={p.labelEn}
-                >
-                  <div className="h-8 w-full rounded-md border border-black/5" style={{ background: p.cssValue }} />
-                </button>
-              );
-            })}
-            {/* Custom Hex Picker */}
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => document.getElementById("bg-base-hex")?.click()}
-                className={`${chipBase} ${chipSelected(false)} min-h-0 !p-1.5 w-full`}
-              >
-                <div 
-                  className="flex h-8 w-full items-center justify-center rounded-md border border-dashed border-slate-300" 
-                  style={{ background: bgBaseColor }}
-                >
-                  <Plus className="h-3 w-3 text-slate-400" />
-                </div>
-              </button>
-              <input 
-                id="bg-base-hex" 
-                type="color" 
-                className="sr-only" 
-                value={bgBaseColor} 
-                onChange={(e) => onPatch({ bgBaseColor: e.target.value, backgroundId: "custom" })} 
-              />
-            </div>
-          </div>
+        <div className="space-y-3 animate-in fade-in slide-in-from-top-2">
+          <TypographyHexColorRow
+            label={useSecondary ? "ბაზის ფერი" : "Base color"}
+            value={bgBaseColor}
+            onChange={(v) => onPatch({ bgBaseColor: v, backgroundId: "custom" })}
+            useSecondary={useSecondary}
+          />
         </div>
       ) : (
         <div className="space-y-5 animate-in fade-in slide-in-from-top-2">
@@ -234,7 +198,7 @@ const BackgroundOverlayControls = memo(function BackgroundOverlayControls({
   onPatch: (p: Partial<Lane1CustomizerState["style"]>) => void;
   useSecondary?: boolean;
 }) {
-  const { bgOverlayId, bgOverlayColor1, bgOverlayColor2, bgOverlayColor3, bgOverlayAngle, bgOverlayOpacity } = state.style;
+  const { bgOverlayId, bgOverlayAngle, bgOverlayOpacity } = state.style;
 
   return (
     <div className="space-y-6 pt-4 border-t border-slate-100 mt-6">
@@ -271,48 +235,21 @@ const BackgroundOverlayControls = memo(function BackgroundOverlayControls({
           </div>
         ) : (
           <div className="space-y-5 animate-in fade-in slide-in-from-top-2">
-            {/* Color Pickers */}
-            <div className="flex items-center gap-3">
-              <div className="space-y-1.5 flex-1">
-                <span className="text-[10px] font-bold text-slate-400 uppercase ml-1">{useSecondary ? "ფერები" : "Colors"}</span>
-                <div className="flex gap-2">
-                  <input 
-                    type="color" 
-                    value={bgOverlayColor1} 
-                    onChange={(e) => onPatch({ bgOverlayColor1: e.target.value })}
-                    className="h-8 w-12 rounded-md border border-white shadow-sm cursor-pointer"
-                  />
-                  {bgOverlayId !== "solid" && (
-                    <input 
-                      type="color" 
-                      value={bgOverlayColor2} 
-                      onChange={(e) => onPatch({ bgOverlayColor2: e.target.value })}
-                      className="h-8 w-12 rounded-md border border-white shadow-sm cursor-pointer"
-                    />
-                  )}
-                  {bgOverlayId === "mesh" && (
-                    <input 
-                      type="color" 
-                      value={bgOverlayColor3} 
-                      onChange={(e) => onPatch({ bgOverlayColor3: e.target.value })}
-                      className="h-8 w-12 rounded-md border border-white shadow-sm cursor-pointer"
-                    />
-                  )}
-                </div>
-              </div>
+            <BackgroundOverlayUnifiedColors state={state} onPatch={onPatch} useSecondary={useSecondary} />
 
-              {bgOverlayId === "linear" && (
-                <div className="space-y-1.5 w-1/3">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase ml-1">{useSecondary ? "კუთხე" : "Angle"}</span>
-                  <input 
-                    type="number" min="0" max="360" 
-                    value={bgOverlayAngle} 
-                    onChange={(e) => onPatch({ bgOverlayAngle: parseInt(e.target.value) })}
-                    className="h-8 w-full rounded-md border border-slate-200 bg-white text-xs font-bold text-center"
-                  />
-                </div>
-              )}
-            </div>
+            {bgOverlayId === "linear" ? (
+              <div className="space-y-1.5 max-w-[11rem]">
+                <span className="text-[10px] font-bold text-slate-400 uppercase ml-1">{useSecondary ? "კუთხე" : "Angle"}</span>
+                <input
+                  type="number"
+                  min={0}
+                  max={360}
+                  value={bgOverlayAngle}
+                  onChange={(e) => onPatch({ bgOverlayAngle: parseInt(e.target.value, 10) })}
+                  className="h-8 w-full rounded-md border border-slate-200 bg-white text-xs font-bold text-center"
+                />
+              </div>
+            ) : null}
 
             {/* Opacity Slider */}
             <div className="p-3 bg-slate-50/50 rounded-xl border border-slate-100 space-y-3">

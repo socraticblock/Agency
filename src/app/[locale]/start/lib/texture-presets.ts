@@ -5,38 +5,72 @@ function ink(darkSurface: boolean, a: number): string {
   return darkSurface ? `rgba(248,250,252,${a})` : `rgba(15,23,42,${a})`;
 }
 
+function isValidHex6(s: string): boolean {
+  return /^#[0-9A-Fa-f]{6}$/.test(s.trim());
+}
+
+function hexToRgba(hex: string, alpha: number): string {
+  const h = hex.trim().replace("#", "");
+  if (h.length !== 6) return ink(false, alpha);
+  const n = parseInt(h, 16);
+  if (Number.isNaN(n)) return ink(false, alpha);
+  const r = (n >> 16) & 255;
+  const g = (n >> 8) & 255;
+  const b = n & 255;
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+function lineInk(darkSurface: boolean, a: number, tintHex: string | undefined): string {
+  const t = (tintHex ?? "").trim();
+  if (isValidHex6(t)) return hexToRgba(t, a);
+  return ink(darkSurface, a);
+}
+
 const noiseSvg = (freq: string, op: number) =>
   `url("data:image/svg+xml,${encodeURIComponent(
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="${freq}" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#n)" opacity="${op}"/></svg>`,
   )}")`;
 
 /** Repeating CSS backgrounds for the texture layer (no external assets). */
-export function textureBackgroundImage(id: TextureId, darkSurface = false): string {
+export function textureBackgroundImage(
+  id: TextureId,
+  darkSurface = false,
+  tintHex?: string | null,
+): string {
+  const t = (tintHex ?? "").trim();
+  const useTint = isValidHex6(t);
+
   switch (id) {
-    case "fine-grain":
-      return noiseSvg("0.9", darkSurface ? 0.58 : 0.55);
-    case "coarse-grain":
-      return noiseSvg("0.35", darkSurface ? 0.65 : 0.62);
+    case "fine-grain": {
+      const base = noiseSvg("0.9", darkSurface ? 0.58 : 0.55);
+      if (!useTint) return base;
+      return `linear-gradient(${hexToRgba(t, 0.16)}, ${hexToRgba(t, 0.16)}), ${base}`;
+    }
+    case "coarse-grain": {
+      const base = noiseSvg("0.35", darkSurface ? 0.65 : 0.62);
+      if (!useTint) return base;
+      return `linear-gradient(${hexToRgba(t, 0.18)}, ${hexToRgba(t, 0.18)}), ${base}`;
+    }
     case "dot-grid":
-      return `radial-gradient(circle, ${ink(darkSurface, 0.16)} 1px, transparent 1px)`;
+      return `radial-gradient(circle, ${lineInk(darkSurface, 0.16, t)} 1px, transparent 1px)`;
     case "diagonal-lines":
       return `repeating-linear-gradient(
         -45deg,
         transparent,
         transparent 3px,
-        ${ink(darkSurface, 0.14)} 3px,
-        ${ink(darkSurface, 0.14)} 4px
+        ${lineInk(darkSurface, 0.14, t)} 3px,
+        ${lineInk(darkSurface, 0.14, t)} 4px
       )`;
     case "cross-hatch":
-      return `repeating-linear-gradient(0deg, transparent, transparent 5px, ${ink(darkSurface, 0.12)} 5px, ${ink(darkSurface, 0.12)} 6px), repeating-linear-gradient(90deg, transparent, transparent 5px, ${ink(darkSurface, 0.12)} 5px, ${ink(darkSurface, 0.12)} 6px)`;
+      return `repeating-linear-gradient(0deg, transparent, transparent 5px, ${lineInk(darkSurface, 0.12, t)} 5px, ${lineInk(darkSurface, 0.12, t)} 6px), repeating-linear-gradient(90deg, transparent, transparent 5px, ${lineInk(darkSurface, 0.12, t)} 5px, ${lineInk(darkSurface, 0.12, t)} 6px)`;
     case "waves": {
-      const w = darkSurface ? "rgba(226,232,240,0.12)" : "rgba(30,58,95,0.11)";
+      const w = useTint ? hexToRgba(t, 0.14) : darkSurface ? "rgba(226,232,240,0.12)" : "rgba(30,58,95,0.11)";
       return `repeating-radial-gradient(circle at 50% 120%, transparent 0 18px, ${w} 18px 19px)`;
     }
     case "geometric":
-      return `linear-gradient(135deg, ${ink(darkSurface, 0.09)} 25%, transparent 25%), linear-gradient(225deg, ${ink(darkSurface, 0.09)} 25%, transparent 25%)`;
+      return `linear-gradient(135deg, ${lineInk(darkSurface, 0.09, t)} 25%, transparent 25%), linear-gradient(225deg, ${lineInk(darkSurface, 0.09, t)} 25%, transparent 25%)`;
     case "topographic":
-      return `repeating-radial-gradient(circle at 40% 40%, transparent 0, transparent 12px, ${ink(darkSurface, 0.1)} 12px 13px)`;
+      return `repeating-radial-gradient(circle at 40% 40%, transparent 0, transparent 12px, ${lineInk(darkSurface, 0.1, t)} 12px 13px)`;
     case "none":
     default:
       return "none";

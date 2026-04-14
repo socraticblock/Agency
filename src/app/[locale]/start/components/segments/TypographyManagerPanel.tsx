@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState, type CSSProperties } from "react";
 import { Check, Type, X } from "lucide-react";
+import type { BottomPillPanelProps } from "../../lib/bottom-card-pill";
 import type {
   BodyTypographyPackId,
   CardTextScaleId,
@@ -22,6 +23,7 @@ import { TypographyHexColorRow } from "./TypographyHexColorRow";
 import { usePillOnboardingGlow } from "./usePillOnboardingGlow";
 import { useMediaMinMd } from "../../lib/useMediaMinMd";
 import { CardEditorMobileOverlay } from "../CardEditorMobileOverlay";
+import { PillSectionAccordion } from "../PillSectionAccordion";
 
 type TypoTab = "body" | "display" | "buttons";
 
@@ -30,16 +32,18 @@ export function TypographyManagerPanel({
   state,
   patch,
   useSecondary,
+  isOpen,
+  onToggle,
+  onClose,
 }: {
   editable: boolean;
   state: Lane1CustomizerState;
   patch: (p: Lane1StatePatch) => void;
   useSecondary: boolean;
-}) {
-  const [open, setOpen] = useState(false);
+} & BottomPillPanelProps) {
   const [tab, setTab] = useState<TypoTab>("body");
   const [savingStatus, setSavingStatus] = useState<"idle" | "saving" | "saved">("idle");
-  const shouldGlow = usePillOnboardingGlow("type", open);
+  const shouldGlow = usePillOnboardingGlow("type", isOpen);
   const mdUp = useMediaMinMd();
   const titleId = useId();
   const rootRef = useRef<HTMLDivElement | null>(null);
@@ -59,7 +63,6 @@ export function TypographyManagerPanel({
     } else if (p.buttonTypographyPackId) {
       merged.fontId = TYPOGRAPHY_TO_LEGACY_FONT[p.buttonTypographyPackId];
     }
-    /* ctaTypographyPackId: isolated — do not sync typographyPackId / legacy fontId */
     patch({ style: merged });
     savingDebounceRef.current = setTimeout(() => {
       setSavingStatus("saved");
@@ -68,16 +71,16 @@ export function TypographyManagerPanel({
   };
 
   useEffect(() => {
-    if (!open || !mdUp) return;
+    if (!isOpen || !mdUp) return;
     const handleOutsidePointerDown = (e: PointerEvent) => {
       const target = e.target as Node | null;
       if (!target) return;
       if (rootRef.current?.contains(target)) return;
-      setOpen(false);
+      onClose();
     };
     window.addEventListener("pointerdown", handleOutsidePointerDown);
     return () => window.removeEventListener("pointerdown", handleOutsidePointerDown);
-  }, [open, mdUp]);
+  }, [isOpen, mdUp, onClose]);
 
   useEffect(() => {
     return () => {
@@ -106,17 +109,25 @@ export function TypographyManagerPanel({
     letterSpacing: bodyResolved.letterSpacing,
   };
 
-  const tabBtn = (id: TypoTab, label: string) => (
-    <button
-      type="button"
-      onClick={() => setTab(id)}
-      className={`rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide transition ${
-        tab === id ? "bg-white/15 text-white" : "text-white/60 hover:bg-white/10 hover:text-white"
-      }`}
-    >
-      {label}
-    </button>
-  );
+  const colorLabel =
+    tab === "body"
+      ? useSecondary
+        ? "სხეულის ტექსტის ფერი"
+        : "Body text color"
+      : tab === "display"
+        ? useSecondary
+          ? "სათაურის ტექსტის ფერი"
+          : "Display text color"
+        : useSecondary
+          ? "ღილაკის ტექსტის ფერი"
+          : "Button label color";
+
+  const colorValue = tab === "body" ? (bodyTextHex ?? "") : tab === "display" ? (buttonTextHex ?? "") : (ctaTextHex ?? "");
+  const onColorChange = (v: string) => {
+    if (tab === "body") onStylePatch({ bodyTextHex: v });
+    else if (tab === "display") onStylePatch({ buttonTextHex: v });
+    else onStylePatch({ ctaTextHex: v });
+  };
 
   const scrollAreaClass = (variant: "desktop" | "mobile") =>
     variant === "desktop"
@@ -141,7 +152,7 @@ export function TypographyManagerPanel({
           </span>
           <button
             type="button"
-            onClick={() => setOpen(false)}
+            onClick={onClose}
             className="rounded p-1 text-white/70 transition hover:bg-white/10 hover:text-white"
             aria-label="Close type panel"
           >
@@ -154,11 +165,23 @@ export function TypographyManagerPanel({
         onChange={(id: CardTextScaleId) => onStylePatch({ cardTextScaleId: id })}
         useSecondary={useSecondary}
       />
-      <div className="mb-2 flex flex-wrap justify-center gap-1 rounded-full border border-white/15 bg-white/5 p-1">
-        {tabBtn("body", useSecondary ? "სხეული" : "Body")}
-        {tabBtn("display", useSecondary ? "ჩვენება" : "Display")}
-        {tabBtn("buttons", useSecondary ? "ღილაკები" : "Buttons")}
-      </div>
+      <PillSectionAccordion
+        openId={tab}
+        onOpenChange={(id) => setTab(id as TypoTab)}
+        sections={
+          useSecondary
+            ? [
+                { id: "body", label: "სხეული" },
+                { id: "display", label: "ჩვენება" },
+                { id: "buttons", label: "ღილაკები" },
+              ]
+            : [
+                { id: "body", label: "Body" },
+                { id: "display", label: "Display" },
+                { id: "buttons", label: "Buttons" },
+              ]
+        }
+      />
       <div className={scrollAreaClass(variant)}>
         {tab === "body" ? (
           <div className="[&_fieldset]:border-slate-200 [&_legend]:text-slate-700">
@@ -170,14 +193,6 @@ export function TypographyManagerPanel({
               onChange={(id: BodyTypographyPackId) => onStylePatch({ bodyTypographyPackId: id })}
               useSecondary={useSecondary}
             />
-            <div className="mt-3">
-              <TypographyHexColorRow
-                label={useSecondary ? "ტექსტის ფერი (hex)" : "Text color (hex)"}
-                value={bodyTextHex ?? ""}
-                onChange={(v) => onStylePatch({ bodyTextHex: v })}
-                useSecondary={useSecondary}
-              />
-            </div>
           </div>
         ) : null}
         {tab === "display" ? (
@@ -195,14 +210,6 @@ export function TypographyManagerPanel({
                 onStylePatch({ buttonTypographyPackId: id as TypographyPackId })
               }
             />
-            <div className="mt-3">
-              <TypographyHexColorRow
-                label={useSecondary ? "ტექსტის ფერი (hex)" : "Text color (hex)"}
-                value={buttonTextHex ?? ""}
-                onChange={(v) => onStylePatch({ buttonTextHex: v })}
-                useSecondary={useSecondary}
-              />
-            </div>
           </div>
         ) : null}
         {tab === "buttons" ? (
@@ -222,16 +229,16 @@ export function TypographyManagerPanel({
                 onStylePatch({ ctaTypographyPackId: id as TypographyPackId })
               }
             />
-            <div className="mt-3">
-              <TypographyHexColorRow
-                label={useSecondary ? "ტექსტის ფერი (hex)" : "Text color (hex)"}
-                value={ctaTextHex ?? ""}
-                onChange={(v) => onStylePatch({ ctaTextHex: v })}
-                useSecondary={useSecondary}
-              />
-            </div>
           </div>
         ) : null}
+        <div className="mt-4 border-t border-slate-200 pt-3">
+          <TypographyHexColorRow
+            label={colorLabel}
+            value={colorValue}
+            onChange={onColorChange}
+            useSecondary={useSecondary}
+          />
+        </div>
       </div>
     </>
   );
@@ -240,7 +247,7 @@ export function TypographyManagerPanel({
     <div ref={rootRef} className="relative z-[120] flex justify-center font-sans">
       <button
         type="button"
-        onClick={() => setOpen((v) => !v)}
+        onClick={onToggle}
         className={`inline-flex min-w-40 items-center justify-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-center text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75 ${
           shouldGlow ? "business-card-pill-attention" : ""
         }`}
@@ -248,13 +255,13 @@ export function TypographyManagerPanel({
         <Type className="h-4 w-4" />
         {useSecondary ? "ტიპოგრაფია" : "Type"}
       </button>
-      {open && mdUp ? (
+      {isOpen && mdUp ? (
         <div className="absolute bottom-full left-1/2 mb-2 w-[min(92vw,320px)] -translate-x-1/2 rounded-xl border border-white/20 bg-black/85 p-2 text-white shadow-2xl backdrop-blur-md">
           {panelSurface("desktop")}
         </div>
       ) : null}
-      {open && !mdUp ? (
-        <CardEditorMobileOverlay onClose={() => setOpen(false)} titleId={titleId}>
+      {isOpen && !mdUp ? (
+        <CardEditorMobileOverlay onClose={onClose} titleId={titleId}>
           {panelSurface("mobile")}
         </CardEditorMobileOverlay>
       ) : null}

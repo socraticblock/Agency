@@ -92,6 +92,8 @@ export interface StylePresetSelection {
   animationId: string;
   /** Mirrored from `accentId` for legacy JSON; CSS ignores this for accent resolution. */
   secondaryAccentId: string;
+  /** Primary accent hex when `accentId` is `"custom"`; empty when using a named preset. */
+  accentCustomPrimary: string;
 
   // Phase 2: Photo
   photoShape: PhotoShape;
@@ -118,6 +120,8 @@ export interface StylePresetSelection {
   bgOverlayOpacity: number;
   textureId: TextureId;
   textureOpacity: number;
+  /** Empty = automatic ink (contrast); set to tint patterned textures. */
+  textureTintHex: string;
   bgEffectId: BackgroundEffectId;
   /** 0–100; scales animated background layer (motion tab). */
   bgEffectOpacity: number;
@@ -125,6 +129,8 @@ export interface StylePresetSelection {
   bgEffectSpeed: number;
   /** 50 = subtle … 150 = bold (saturation/brightness on motion layer). */
   bgEffectIntensity: number;
+  /** Empty = motion uses accent colors; set to override motion layer tint. */
+  bgEffectTintHex: string;
 
   // Phase 4: Typography & Buttons
   /** Legacy single pack; kept in sync with body pack for imports / themes. */
@@ -154,7 +160,7 @@ export interface StylePresetSelection {
   cardShadowId: CardShadowId;
 }
 
-export const CUSTOMIZER_VERSION = 18 as const;
+export const CUSTOMIZER_VERSION = 21 as const;
 
 export interface Lane1CustomizerState {
   version: typeof CUSTOMIZER_VERSION;
@@ -306,6 +312,7 @@ export function defaultLane1State(): Lane1CustomizerState {
       textColorId: "ink",
       accentId: "indigo",
       secondaryAccentId: "indigo",
+      accentCustomPrimary: "",
       fontId: "modern",
       vibeId: "minimal",
       animationId: "fade",
@@ -334,10 +341,12 @@ export function defaultLane1State(): Lane1CustomizerState {
       bgOverlayOpacity: 0.5,
       textureId: "none",
       textureOpacity: 5,
+      textureTintHex: "",
       bgEffectId: "none",
       bgEffectOpacity: 100,
       bgEffectSpeed: 100,
       bgEffectIntensity: 100,
+      bgEffectTintHex: "",
 
       // Phase 4 Defaults
       typographyPackId: "minimal",

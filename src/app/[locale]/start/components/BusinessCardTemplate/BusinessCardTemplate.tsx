@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, memo, type CSSProperties } from "react";
+import { useCallback, useEffect, useRef, useState, memo, type CSSProperties } from "react";
 import { motion } from "framer-motion";
 import { HeroSegment } from "../segments/HeroSegment";
 import { CtaSegment } from "../segments/CtaSegment";
@@ -28,6 +28,7 @@ import type { Lane1CustomizerState, Lane1StatePatch, SectionId } from "../../lib
 import { ANIMATION_PRESETS, resolveStyleVariables } from "../../lib/presets";
 import { getLanguagePreviewMode } from "../../lib/language-profile";
 import { compressImageForLane1Storage } from "../../lib/image-compress";
+import type { BottomCardPillId } from "../../lib/bottom-card-pill";
 import "../business-card-template.css";
 import { BackgroundEngine } from "./BackgroundEngine";
 
@@ -77,6 +78,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   const [pulseSectionId, setPulseSectionId] = useState<SectionId | null>(null);
   const [pulseToken, setPulseToken] = useState(0);
   const [animationReplayKey, setAnimationReplayKey] = useState(0);
+  const [openBottomPill, setOpenBottomPill] = useState<BottomCardPillId | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const pulseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -94,6 +96,10 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
   }, []);
 
   const patch = (p: Lane1StatePatch) => onPatch?.(p);
+  const closeBottomPill = useCallback(() => setOpenBottomPill(null), []);
+  const toggleBottomPill = useCallback((id: BottomCardPillId) => {
+    setOpenBottomPill((cur) => (cur === id ? null : id));
+  }, []);
   const triggerSectionPulse = (sectionId: SectionId) => {
     if (pulseTimerRef.current) clearTimeout(pulseTimerRef.current);
     setPulseSectionId(sectionId);
@@ -341,15 +347,42 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
         />
         </motion.div>
         <div className="business-card-template-print-skip grid grid-cols-2 gap-2 px-4 pb-3 pt-1">
-          <BackgroundManagerPanel editable={editable} state={state} patch={patch} useSecondary={useSecondary} />
-          <LookManagerPanel editable={editable} state={state} patch={patch} useSecondary={useSecondary} />
-          <TypographyManagerPanel editable={editable} state={state} patch={patch} useSecondary={useSecondary} />
+          <BackgroundManagerPanel
+            editable={editable}
+            state={state}
+            patch={patch}
+            useSecondary={useSecondary}
+            isOpen={openBottomPill === "background"}
+            onToggle={() => toggleBottomPill("background")}
+            onClose={closeBottomPill}
+          />
+          <LookManagerPanel
+            editable={editable}
+            state={state}
+            patch={patch}
+            useSecondary={useSecondary}
+            isOpen={openBottomPill === "look"}
+            onToggle={() => toggleBottomPill("look")}
+            onClose={closeBottomPill}
+          />
+          <TypographyManagerPanel
+            editable={editable}
+            state={state}
+            patch={patch}
+            useSecondary={useSecondary}
+            isOpen={openBottomPill === "type"}
+            onToggle={() => toggleBottomPill("type")}
+            onClose={closeBottomPill}
+          />
           <ExperienceManagerPanel
             editable={editable}
             state={state}
             patch={patch}
             useSecondary={useSecondary}
             onAnimationPreviewReplay={triggerAnimationReplay}
+            isOpen={openBottomPill === "experience"}
+            onToggle={() => toggleBottomPill("experience")}
+            onClose={closeBottomPill}
           />
         </div>
       </div>

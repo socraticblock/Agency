@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { Check, Layers2, X } from "lucide-react";
+import type { BottomPillPanelProps } from "../../lib/bottom-card-pill";
 import type { Lane1CustomizerState, Lane1StatePatch } from "../../lib/types";
 import { BackgroundBaseControls, BackgroundOverlayControls } from "../StylePresetGrids";
 import { TextureEffectControls } from "../StartCustomizer/TextureEffectControls";
@@ -9,6 +10,7 @@ import { BackgroundMotionControls } from "./BackgroundMotionControls";
 import { usePillOnboardingGlow } from "./usePillOnboardingGlow";
 import { useMediaMinMd } from "../../lib/useMediaMinMd";
 import { CardEditorMobileOverlay } from "../CardEditorMobileOverlay";
+import { PillSectionAccordion } from "../PillSectionAccordion";
 
 type BgTab = "base" | "overlay" | "texture" | "motion";
 
@@ -17,16 +19,18 @@ export function BackgroundManagerPanel({
   state,
   patch,
   useSecondary,
+  isOpen,
+  onToggle,
+  onClose,
 }: {
   editable: boolean;
   state: Lane1CustomizerState;
   patch: (p: Lane1StatePatch) => void;
   useSecondary: boolean;
-}) {
-  const [open, setOpen] = useState(false);
+} & BottomPillPanelProps) {
   const [tab, setTab] = useState<BgTab>("base");
   const [savingStatus, setSavingStatus] = useState<"idle" | "saving" | "saved">("idle");
-  const shouldGlow = usePillOnboardingGlow("background", open);
+  const shouldGlow = usePillOnboardingGlow("background", isOpen);
   const mdUp = useMediaMinMd();
   const titleId = useId();
   const rootRef = useRef<HTMLDivElement | null>(null);
@@ -45,16 +49,16 @@ export function BackgroundManagerPanel({
   };
 
   useEffect(() => {
-    if (!open || !mdUp) return;
+    if (!isOpen || !mdUp) return;
     const handleOutsidePointerDown = (e: PointerEvent) => {
       const target = e.target as Node | null;
       if (!target) return;
       if (rootRef.current?.contains(target)) return;
-      setOpen(false);
+      onClose();
     };
     window.addEventListener("pointerdown", handleOutsidePointerDown);
     return () => window.removeEventListener("pointerdown", handleOutsidePointerDown);
-  }, [open, mdUp]);
+  }, [isOpen, mdUp, onClose]);
 
   useEffect(() => {
     return () => {
@@ -64,18 +68,6 @@ export function BackgroundManagerPanel({
   }, []);
 
   if (!editable) return null;
-
-  const tabBtn = (id: BgTab, label: string) => (
-    <button
-      type="button"
-      onClick={() => setTab(id)}
-      className={`rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide transition ${
-        tab === id ? "bg-white/15 text-white" : "text-white/60 hover:bg-white/10 hover:text-white"
-      }`}
-    >
-      {label}
-    </button>
-  );
 
   const scrollAreaClass = (variant: "desktop" | "mobile") =>
     variant === "desktop"
@@ -100,7 +92,7 @@ export function BackgroundManagerPanel({
           </span>
           <button
             type="button"
-            onClick={() => setOpen(false)}
+            onClick={onClose}
             className="rounded p-1 text-white/70 transition hover:bg-white/10 hover:text-white"
             aria-label="Close background panel"
           >
@@ -108,12 +100,25 @@ export function BackgroundManagerPanel({
           </button>
         </div>
       </div>
-      <div className="mb-2 flex flex-wrap justify-center gap-1 rounded-full border border-white/15 bg-white/5 p-1">
-        {tabBtn("base", useSecondary ? "ბაზა" : "Base")}
-        {tabBtn("overlay", useSecondary ? "გადაფარვა" : "Overlay")}
-        {tabBtn("texture", useSecondary ? "ტექსტურა" : "Texture")}
-        {tabBtn("motion", useSecondary ? "მოძრაობა" : "Motion")}
-      </div>
+      <PillSectionAccordion
+        openId={tab}
+        onOpenChange={(id) => setTab(id as BgTab)}
+        sections={
+          useSecondary
+            ? [
+                { id: "base", label: "ბაზა" },
+                { id: "overlay", label: "გადაფარვა" },
+                { id: "texture", label: "ტექსტურა" },
+                { id: "motion", label: "მოძრაობა" },
+              ]
+            : [
+                { id: "base", label: "Base" },
+                { id: "overlay", label: "Overlay" },
+                { id: "texture", label: "Texture" },
+                { id: "motion", label: "Motion" },
+              ]
+        }
+      />
       <div className={scrollAreaClass(variant)}>
         {tab === "base" ? (
           <>
@@ -139,7 +144,7 @@ export function BackgroundManagerPanel({
     <div ref={rootRef} className="relative z-[120] flex justify-center font-sans">
       <button
         type="button"
-        onClick={() => setOpen((v) => !v)}
+        onClick={onToggle}
         className={`inline-flex min-w-40 items-center justify-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-center text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75 ${
           shouldGlow ? "business-card-pill-attention" : ""
         }`}
@@ -147,13 +152,13 @@ export function BackgroundManagerPanel({
         <Layers2 className="h-4 w-4" />
         {useSecondary ? "ფონი" : "Background"}
       </button>
-      {open && mdUp ? (
+      {isOpen && mdUp ? (
         <div className="absolute bottom-full left-1/2 mb-2 w-[min(92vw,320px)] -translate-x-1/2 rounded-xl border border-white/20 bg-black/85 p-2 text-white shadow-2xl backdrop-blur-md">
           {panelSurface("desktop")}
         </div>
       ) : null}
-      {open && !mdUp ? (
-        <CardEditorMobileOverlay onClose={() => setOpen(false)} titleId={titleId}>
+      {isOpen && !mdUp ? (
+        <CardEditorMobileOverlay onClose={onClose} titleId={titleId}>
           {panelSurface("mobile")}
         </CardEditorMobileOverlay>
       ) : null}

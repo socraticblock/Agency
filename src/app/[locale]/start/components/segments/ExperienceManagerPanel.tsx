@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { Check, Waves, X } from "lucide-react";
+import type { BottomPillPanelProps } from "../../lib/bottom-card-pill";
 import type { Lane1CustomizerState, Lane1StatePatch } from "../../lib/types";
 import { VibePresetGrid, AnimationPresetGrid } from "../StylePresetGrids";
 import { VIBE_PRESETS, ANIMATION_PRESETS } from "../../lib/presets";
@@ -17,16 +18,18 @@ export function ExperienceManagerPanel({
   patch,
   useSecondary,
   onAnimationPreviewReplay,
+  isOpen,
+  onToggle,
+  onClose,
 }: {
   editable: boolean;
   state: Lane1CustomizerState;
   patch: (p: Lane1StatePatch) => void;
   useSecondary: boolean;
   onAnimationPreviewReplay?: () => void;
-}) {
-  const [open, setOpen] = useState(false);
+} & BottomPillPanelProps) {
   const [savingStatus, setSavingStatus] = useState<"idle" | "saving" | "saved">("idle");
-  const shouldGlow = usePillOnboardingGlow("experience", open);
+  const shouldGlow = usePillOnboardingGlow("experience", isOpen);
   const mdUp = useMediaMinMd();
   const titleId = useId();
   const rootRef = useRef<HTMLDivElement | null>(null);
@@ -50,16 +53,16 @@ export function ExperienceManagerPanel({
   };
 
   useEffect(() => {
-    if (!open || !mdUp) return;
+    if (!isOpen || !mdUp) return;
     const handleOutsidePointerDown = (e: PointerEvent) => {
       const target = e.target as Node | null;
       if (!target) return;
       if (rootRef.current?.contains(target)) return;
-      setOpen(false);
+      onClose();
     };
     window.addEventListener("pointerdown", handleOutsidePointerDown);
     return () => window.removeEventListener("pointerdown", handleOutsidePointerDown);
-  }, [open, mdUp]);
+  }, [isOpen, mdUp, onClose]);
 
   useEffect(() => {
     return () => {
@@ -94,7 +97,7 @@ export function ExperienceManagerPanel({
           </span>
           <button
             type="button"
-            onClick={() => setOpen(false)}
+            onClick={onClose}
             className="rounded p-1 text-white/70 transition hover:bg-white/10 hover:text-white"
             aria-label="Close experience panel"
           >
@@ -131,7 +134,7 @@ export function ExperienceManagerPanel({
     <div ref={rootRef} className="relative z-[120] flex justify-center font-sans">
       <button
         type="button"
-        onClick={() => setOpen((v) => !v)}
+        onClick={onToggle}
         className={`inline-flex min-w-40 items-center justify-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-center text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75 ${
           shouldGlow ? "business-card-pill-attention" : ""
         }`}
@@ -139,13 +142,13 @@ export function ExperienceManagerPanel({
         <Waves className="h-4 w-4" />
         {useSecondary ? "გამოცდილება" : "Experience"}
       </button>
-      {open && mdUp ? (
+      {isOpen && mdUp ? (
         <div className="absolute bottom-full left-1/2 mb-2 w-[min(92vw,320px)] -translate-x-1/2 rounded-xl border border-white/20 bg-black/85 p-2 text-white shadow-2xl backdrop-blur-md">
           {panelSurface("desktop")}
         </div>
       ) : null}
-      {open && !mdUp ? (
-        <CardEditorMobileOverlay onClose={() => setOpen(false)} titleId={titleId}>
+      {isOpen && !mdUp ? (
+        <CardEditorMobileOverlay onClose={onClose} titleId={titleId}>
           {panelSurface("mobile")}
         </CardEditorMobileOverlay>
       ) : null}

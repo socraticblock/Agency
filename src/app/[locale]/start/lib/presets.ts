@@ -731,11 +731,27 @@ export function isBackgroundLockingTextColor(backgroundId: string): boolean {
   return Boolean(bg?.locksTextColor);
 }
 
+/** Resolves `--accent` / `--accent-secondary` from named presets or `accentId === "custom"`. */
+export function resolveAccentPair(selection: StylePresetSelection): { accent: string; accentSecondary: string } {
+  const custom = (selection.accentCustomPrimary ?? "").trim();
+  if (selection.accentId === "custom") {
+    if (/^#[0-9A-Fa-f]{6}$/.test(custom)) {
+      return {
+        accent: custom,
+        accentSecondary: `color-mix(in srgb, ${custom} 68%, #0f172a)`,
+      };
+    }
+    const fb = ACCENT_PRESETS.find((p) => p.id === "indigo") ?? ACCENT_PRESETS[0];
+    return { accent: fb.accent, accentSecondary: fb.accentSecondary };
+  }
+  const row = ACCENT_PRESETS.find((p) => p.id === selection.accentId) ?? ACCENT_PRESETS[0];
+  return { accent: row.accent, accentSecondary: row.accentSecondary };
+}
+
 export function resolveStyleVariables(selection: StylePresetSelection): CSSProperties {
   const bg = BACKGROUND_PRESETS.find((p) => p.id === selection.backgroundId) ?? BACKGROUND_SOLID_PRESETS[0];
   const txt = TEXT_COLOR_PRESETS.find((p) => p.id === selection.textColorId) ?? TEXT_COLOR_PRESETS[0];
-  /* One accent preset: `--accent` + `--accent-secondary` both come from this row. */
-  const acc = ACCENT_PRESETS.find((p) => p.id === selection.accentId) ?? ACCENT_PRESETS[0];
+  const acc = resolveAccentPair(selection);
   const displayPackId = selection.buttonTypographyPackId ?? selection.typographyPackId ?? "minimal";
   const ctaPackId =
     selection.ctaTypographyPackId ?? selection.buttonTypographyPackId ?? selection.typographyPackId ?? "minimal";
@@ -815,6 +831,14 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
   const bgEffectIntNorm = (bgEffectIntensity - 50) / 100;
   const cardTextZoom = resolveCardTextZoomScale(selection);
 
+  const motionTint = (selection.bgEffectTintHex ?? "").trim();
+  const motionColors = /^#[0-9A-Fa-f]{6}$/.test(motionTint)
+    ? {
+        primary: motionTint,
+        secondary: `color-mix(in srgb, ${motionTint} 68%, #0f172a)`,
+      }
+    : { primary: acc.accent, secondary: acc.accentSecondary };
+
   return {
     "--bg-base-color": baseColorValue,
     "--overlay-gradient": overlayGradientValue,
@@ -827,7 +851,11 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
     "--text-cta": textCta,
     "--accent": acc.accent,
     "--accent-secondary": acc.accentSecondary,
-    "--texture-pattern": textureBackgroundImage(selection.textureId, backgroundIsDark),
+    "--texture-pattern": textureBackgroundImage(
+      selection.textureId,
+      backgroundIsDark,
+      selection.textureTintHex,
+    ),
     "--texture-bg-size": textureBackgroundSize(selection.textureId),
     "--texture-opacity": String(texOp),
     // multiply / screen keeps grain readable on light vs dark surfaces (overlay mutes mid-tones)
@@ -840,6 +868,8 @@ export function resolveStyleVariables(selection: StylePresetSelection): CSSPrope
     "--bg-effect-opacity": String(bgEffectOp),
     "--bg-effect-speed": String(bgEffectSpeed),
     "--bg-effect-int-norm": String(bgEffectIntNorm),
+    "--bg-effect-color": motionColors.primary,
+    "--bg-effect-color-secondary": motionColors.secondary,
     "--bg-gradient": selection.bgOverlayId !== "none"
       ? overlayGradientValue
       : `linear-gradient(135deg, ${acc.accent}, ${acc.accentSecondary})`,

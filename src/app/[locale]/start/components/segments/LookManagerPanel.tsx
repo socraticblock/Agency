@@ -2,9 +2,11 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { Check, Sparkles, X } from "lucide-react";
+import type { BottomPillPanelProps } from "../../lib/bottom-card-pill";
 import type { ButtonStyleId, Lane1CustomizerState, Lane1StatePatch } from "../../lib/types";
-import { AccentPresetGrid, ButtonStyleGrid } from "../StylePresetGrids";
+import { ButtonStyleGrid } from "../StylePresetGrids";
 import { ACCENT_PRESETS, BUTTON_STYLE_PRESETS } from "../../lib/presets";
+import { TypographyHexColorRow } from "./TypographyHexColorRow";
 import { usePillOnboardingGlow } from "./usePillOnboardingGlow";
 import { useMediaMinMd } from "../../lib/useMediaMinMd";
 import { CardEditorMobileOverlay } from "../CardEditorMobileOverlay";
@@ -15,15 +17,17 @@ export function LookManagerPanel({
   state,
   patch,
   useSecondary,
+  isOpen,
+  onToggle,
+  onClose,
 }: {
   editable: boolean;
   state: Lane1CustomizerState;
   patch: (p: Lane1StatePatch) => void;
   useSecondary: boolean;
-}) {
-  const [open, setOpen] = useState(false);
+} & BottomPillPanelProps) {
   const [savingStatus, setSavingStatus] = useState<"idle" | "saving" | "saved">("idle");
-  const shouldGlow = usePillOnboardingGlow("look", open);
+  const shouldGlow = usePillOnboardingGlow("look", isOpen);
   const mdUp = useMediaMinMd();
   const titleId = useId();
   const rootRef = useRef<HTMLDivElement | null>(null);
@@ -46,16 +50,16 @@ export function LookManagerPanel({
   };
 
   useEffect(() => {
-    if (!open || !mdUp) return;
+    if (!isOpen || !mdUp) return;
     const handleOutsidePointerDown = (e: PointerEvent) => {
       const target = e.target as Node | null;
       if (!target) return;
       if (rootRef.current?.contains(target)) return;
-      setOpen(false);
+      onClose();
     };
     window.addEventListener("pointerdown", handleOutsidePointerDown);
     return () => window.removeEventListener("pointerdown", handleOutsidePointerDown);
-  }, [open, mdUp]);
+  }, [isOpen, mdUp, onClose]);
 
   useEffect(() => {
     return () => {
@@ -65,6 +69,30 @@ export function LookManagerPanel({
   }, []);
 
   if (!editable) return null;
+
+  const presetAccentHex =
+    ACCENT_PRESETS.find((p) => p.id === state.style.accentId)?.accent ??
+    ACCENT_PRESETS.find((p) => p.id === "indigo")!.accent;
+  const accentPickerValue =
+    state.style.accentId === "custom" && (state.style.accentCustomPrimary ?? "").trim()
+      ? (state.style.accentCustomPrimary ?? "").trim()
+      : presetAccentHex;
+
+  const onAccentColorChange = (v: string) => {
+    const t = v.trim();
+    if (!t) {
+      onStylePatch({ accentId: "indigo", accentCustomPrimary: "", secondaryAccentId: "indigo" });
+      return;
+    }
+    const match = ACCENT_PRESETS.find((p) => p.accent.toLowerCase() === t.toLowerCase());
+    if (match) {
+      onStylePatch({ accentId: match.id, accentCustomPrimary: "", secondaryAccentId: match.id });
+      return;
+    }
+    if (/^#[0-9A-Fa-f]{6}$/i.test(t)) {
+      onStylePatch({ accentId: "custom", accentCustomPrimary: t, secondaryAccentId: "custom" });
+    }
+  };
 
   const scrollAreaClass = (variant: "desktop" | "mobile") =>
     variant === "desktop"
@@ -89,7 +117,7 @@ export function LookManagerPanel({
           </span>
           <button
             type="button"
-            onClick={() => setOpen(false)}
+            onClick={onClose}
             className="rounded p-1 text-white/70 transition hover:bg-white/10 hover:text-white"
             aria-label="Close look panel"
           >
@@ -104,13 +132,17 @@ export function LookManagerPanel({
               ? "აქცენტი მართავს შევსებულ ღილაკებს და მონიშვნებს."
               : "Accent drives filled buttons and highlights; borders and gradients use the paired tone from the same preset."}
           </p>
-          <AccentPresetGrid
-            options={ACCENT_PRESETS}
-            value={state.style.accentId}
-            onChange={(id: string) => onStylePatch({ accentId: id })}
-            legend={useSecondary ? "აქცენტი" : "Accent"}
-            groupAriaLabel={useSecondary ? "აქცენტის ფერი" : "Accent color"}
+          <TypographyHexColorRow
+            label={useSecondary ? "აქცენტის ფერი" : "Accent color"}
+            value={accentPickerValue}
+            onChange={onAccentColorChange}
+            useSecondary={useSecondary}
           />
+          <p className="start-caption mt-2">
+            {useSecondary
+              ? "ზუსტი ფერი პრესეტზე გადართავს; სხვა hex ინახება როგორც მორგებული."
+              : "Matching a preset swatch switches to that preset; any other hex is saved as a custom accent."}
+          </p>
         </div>
         <div className="my-4 border-t border-slate-200" aria-hidden />
         <div className="[&_fieldset]:border-slate-200 [&_legend]:text-slate-700">
@@ -133,7 +165,7 @@ export function LookManagerPanel({
     <div ref={rootRef} className="relative z-[120] flex justify-center font-sans">
       <button
         type="button"
-        onClick={() => setOpen((v) => !v)}
+        onClick={onToggle}
         className={`inline-flex min-w-40 items-center justify-center gap-2 rounded-full border border-white/25 bg-black/65 px-3 py-1.5 text-center text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75 ${
           shouldGlow ? "business-card-pill-attention" : ""
         }`}
@@ -141,13 +173,13 @@ export function LookManagerPanel({
         <Sparkles className="h-4 w-4" />
         {useSecondary ? "სტილი" : "Look"}
       </button>
-      {open && mdUp ? (
+      {isOpen && mdUp ? (
         <div className="absolute bottom-full left-1/2 mb-2 w-[min(92vw,320px)] -translate-x-1/2 rounded-xl border border-white/20 bg-black/85 p-2 text-white shadow-2xl backdrop-blur-md">
           {panelSurface("desktop")}
         </div>
       ) : null}
-      {open && !mdUp ? (
-        <CardEditorMobileOverlay onClose={() => setOpen(false)} titleId={titleId}>
+      {isOpen && !mdUp ? (
+        <CardEditorMobileOverlay onClose={onClose} titleId={titleId}>
           {panelSurface("mobile")}
         </CardEditorMobileOverlay>
       ) : null}
