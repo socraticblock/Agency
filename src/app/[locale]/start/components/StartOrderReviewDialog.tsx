@@ -71,7 +71,7 @@ export function StartOrderReviewDialog({
     setSubmitting(false);
     if (!result.ok) {
       setSubmitError(result.error ?? "Something went wrong.");
-      // Still proceed — graceful degradation, WhatsApp still works with just the order ID
+      return;
     }
     onCloseAttempt?.({ step: 1, bypassed });
     setStep(2);

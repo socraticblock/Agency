@@ -170,6 +170,7 @@ export function buildOrderSummaryLines(state: Lane1CustomizerState, orderId: str
   const hint = state.digitalCardUrlHint.trim();
   if (hint) {
     if (state.selectedTier === "subdomain") lines.push(`Preferred subdomain: ${hint}`);
+    else if (state.selectedTier === "professional") lines.push(`Domain: ${hint}`);
     else if (state.selectedTier === "executive") lines.push(`Preferred domain: ${hint}`);
     else lines.push(`URL note: ${hint}`);
   }
@@ -223,6 +224,7 @@ export function buildOrderSummaryLinesKa(state: Lane1CustomizerState, orderId: s
   const hint = state.digitalCardUrlHint.trim();
   if (hint) {
     if (state.selectedTier === "subdomain") lines.push(`სურვილი სუბდომენი: ${hint}`);
+    else if (state.selectedTier === "professional") lines.push(`დომენი: ${hint}`);
     else if (state.selectedTier === "executive") lines.push(`სურვილი დომენი: ${hint}`);
     else lines.push(`URL შენიშვნა: ${hint}`);
   }

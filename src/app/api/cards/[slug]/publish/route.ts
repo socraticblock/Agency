@@ -1,17 +1,22 @@
 /**
  * API: /api/cards/[slug]/publish
  *
- * POST — Assign slug + publish a card order
+ * POST — Assign slug + publish a card order (admin)
  * Body: { id: string }   (the gc-... order ID)
  */
 
 import { NextResponse } from "next/server";
-import { getCardById, publishCard, slugTaken } from "@/lib/db";
+import { getCardById, publishCard, slugTakenByOther } from "@/lib/db";
+import { verifyAdminPassword } from "@/lib/admin-auth";
 
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ slug: string }> }
 ) {
+  if (!verifyAdminPassword(request)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const { slug } = await params;
 
   if (!slug || !/^[a-z0-9-]+$/.test(slug)) {
@@ -33,13 +38,11 @@ export async function POST(
   }
 
   try {
-    // Verify the order exists
     const card = await getCardById(body.id);
     if (!card) {
       return NextResponse.json({ error: "Order not found" }, { status: 404 });
     }
 
-    // If the card already has a different slug, reject
     if (card.slug && card.slug !== slug) {
       return NextResponse.json(
         {
@@ -49,15 +52,22 @@ export async function POST(
       );
     }
 
-    // Check slug is not taken by a different card
-    if (await slugTaken(slug)) {
+    if (card.publishSlug && card.publishSlug !== slug) {
+      return NextResponse.json(
+        {
+          error: `URL slug must match saved publish slug "${card.publishSlug}".`,
+        },
+        { status: 400 }
+      );
+    }
+
+    if (await slugTakenByOther(slug, body.id)) {
       return NextResponse.json(
         { error: `Slug "${slug}" is already taken. Choose a different one.` },
         { status: 409 }
       );
     }
 
-    // Publish
     const result = await publishCard(body.id, slug);
 
     if (!result.ok) {

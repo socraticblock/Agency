@@ -8,9 +8,14 @@
  *   TURSO_AUTH_TOKEN     — from: turso db tokens genezisi-cards
  */
 
+import type { DomainStatus } from "@/lib/order-publish-intent";
+
 export interface CardRow {
   id: string;
   slug: string | null;
+  publish_slug?: string | null;
+  requested_domain?: string | null;
+  domain_status?: string | null;
   tier: string;
   status: "pending" | "published";
   name: string | null;
@@ -25,6 +30,9 @@ export interface CardRow {
 export interface Card {
   id: string;
   slug: string | null;
+  publishSlug: string | null;
+  requestedDomain: string | null;
+  domainStatus: DomainStatus;
   tier: string;
   status: "pending" | "published";
   name: string | null;
@@ -44,6 +52,9 @@ export interface CreateCardInput {
   phone: string | null;
   email: string | null;
   stateJson: string;
+  publishSlug: string;
+  requestedDomain: string | null;
+  domainStatus: DomainStatus;
 }
 
 // ---------------------------------------------------------------------------
@@ -175,9 +186,22 @@ export async function createCard(
   try {
     const now = Date.now();
     await tursoExec(
-      `INSERT INTO cards (id, tier, name, company, phone, email, state_json, status, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?)`,
-      [input.id, input.tier, input.name, input.company, input.phone, input.email, input.stateJson, now]
+      `INSERT INTO cards (id, tier, name, company, phone, email, state_json, status, created_at,
+         publish_slug, requested_domain, domain_status)
+       VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?, ?, ?)`,
+      [
+        input.id,
+        input.tier,
+        input.name,
+        input.company,
+        input.phone,
+        input.email,
+        input.stateJson,
+        now,
+        input.publishSlug,
+        input.requestedDomain,
+        input.domainStatus,
+      ]
     );
     return { ok: true };
   } catch (err: unknown) {
@@ -232,6 +256,72 @@ export async function slugTaken(slug: string): Promise<boolean> {
   return rows.length > 0;
 }
 
+/** True if another card (not `excludeId`) already uses this slug as `cards.slug`. */
+export async function slugTakenByOther(slug: string, excludeId: string): Promise<boolean> {
+  const rows = await tursoQuery("SELECT 1 FROM cards WHERE slug = ? AND id != ?", [slug, excludeId]);
+  return rows.length > 0;
+}
+
+function parseDomainStatus(raw: string | null | undefined): DomainStatus {
+  const v = (raw ?? "none").toLowerCase();
+  if (v === "requested" || v === "awaiting_dns" || v === "connected" || v === "live") return v;
+  return "none";
+}
+
+export async function updateCardDomainStatus(
+  id: string,
+  domainStatus: DomainStatus
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  try {
+    await tursoExec("UPDATE cards SET domain_status = ? WHERE id = ?", [domainStatus, id]);
+    return { ok: true };
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    return { ok: false, error: message };
+  }
+}
+
+/** Normalize host: lowercase, no port, trim. */
+export function normalizeHostHeader(host: string): string {
+  return host.split(":")[0].trim().toLowerCase();
+}
+
+/**
+ * Returns published `cards.slug` for a custom host mapped in `card_domains`, or null.
+ */
+export async function getPublishedSlugByMappedHost(host: string): Promise<string | null> {
+  const h = normalizeHostHeader(host);
+  if (!h) return null;
+  const rows = await tursoQuery<{ slug: string | null }>(
+    `SELECT c.slug AS slug
+     FROM card_domains d
+     INNER JOIN cards c ON c.id = d.card_id
+     WHERE d.host = ? AND c.status = 'published' AND c.slug IS NOT NULL`,
+    [h]
+  );
+  const slug = rows[0]?.slug;
+  return typeof slug === "string" && slug.length > 0 ? slug : null;
+}
+
+export async function upsertCardDomainHost(
+  cardId: string,
+  host: string
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const h = normalizeHostHeader(host);
+  if (!h || !/^[a-z0-9.-]+$/.test(h)) {
+    return { ok: false, error: "Invalid host" };
+  }
+  try {
+    await tursoExec("INSERT OR REPLACE INTO card_domains (host, card_id) VALUES (?, ?)", [h, cardId]);
+    return { ok: true };
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    return { ok: false, error: message };
+  }
+}
+
+/** SQLite upsert: ON CONFLICT requires UNIQUE on host - we have PRIMARY KEY. */
+
 // ---------------------------------------------------------------------------
 // Mappers
 // ---------------------------------------------------------------------------
@@ -240,6 +330,9 @@ function toCard(row: CardRow): Card {
   return {
     id: row.id,
     slug: row.slug,
+    publishSlug: row.publish_slug ?? null,
+    requestedDomain: row.requested_domain ?? null,
+    domainStatus: parseDomainStatus(row.domain_status ?? null),
     tier: row.tier,
     status: row.status,
     name: row.name,

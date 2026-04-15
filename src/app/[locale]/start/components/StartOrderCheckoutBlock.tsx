@@ -81,7 +81,23 @@ export function StartOrderCheckoutBlock({
       </p>
 
       {selectedTier === "professional" ? (
-        <p className="start-body mx-auto max-w-md text-center text-sm text-[#64748b]">{copy.professionalNote}</p>
+        <>
+          <p className="start-body mx-auto max-w-md text-center text-sm text-[#64748b]">{copy.professionalNote}</p>
+          <div className="space-y-2 p-1">
+            <label className="start-body block text-center text-[#64748b]">
+              <span className="mb-1 block text-xs">{copy.professionalUrlLabel}</span>
+              <input
+                type="text"
+                value={digitalCardUrlHint}
+                onChange={(e) => onPatch({ digitalCardUrlHint: e.target.value })}
+                placeholder={copy.professionalUrlPlaceholder}
+                className="start-field mx-auto max-w-md text-center"
+                autoComplete="off"
+              />
+            </label>
+            <p className="start-body text-center text-xs text-[#64748b]">{copy.professionalHelper}</p>
+          </div>
+        </>
       ) : null}
 
       {selectedTier === "subdomain" ? (

@@ -2,29 +2,15 @@
  * API: /api/orders
  *
  * POST — Create a new card order (client-facing)
- * GET  — List all orders (admin only — password protected)
+ * GET — List all orders (admin only — password protected)
  */
 
 import { NextResponse } from "next/server";
 import { createCard, getCardById, listCards } from "@/lib/db";
+import { verifyAdminPassword } from "@/lib/admin-auth";
+import { computeOrderPublishIntent } from "@/lib/order-publish-intent";
 
 export const dynamic = "force-dynamic";
-
-const ADMIN_PASSWORD = "Jeftax12!";
-
-function adminAuth(request: Request): boolean {
-  const sent = request.headers.get("x-admin-password") ?? "";
-  return sent === (process.env.ADMIN_PASSWORD ?? ADMIN_PASSWORD);
-}
-
-function makeSlug(name: string, company: string): string {
-  const base = name
-    ? name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
-    : company
-      ? company.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
-      : "card";
-  return base || "card";
-}
 
 // ---------------------------------------------------------------------------
 // POST — Create a new card order
@@ -67,34 +53,41 @@ export async function POST(request: Request) {
     );
   }
 
-  // Idempotency: if order already exists, return existing data
   const existing = await getCardById(id);
   if (existing) {
-    return NextResponse.json({ ok: true, id, status: existing.status });
+    return NextResponse.json({
+      ok: true,
+      id,
+      status: existing.status,
+      slug: existing.publishSlug ?? existing.slug ?? undefined,
+      publishSlug: existing.publishSlug ?? existing.slug ?? undefined,
+    });
   }
 
   const stateObj = state as Record<string, unknown>;
+  const name = String(stateObj.name ?? "");
+  const company = String(stateObj.company ?? "");
+  const hint = typeof body.digitalCardUrlHint === "string" ? body.digitalCardUrlHint : "";
 
-  // Determine slug at order time
-  const slug =
-    tier === "subdomain" && body.digitalCardUrlHint
-      ? body.digitalCardUrlHint
-          .toLowerCase()
-          .replace(/[^a-z0-9-]/g, "-")
-          .replace(/^-|-$/g, "")
-      : makeSlug(
-          (stateObj.name as string) ?? "",
-          (stateObj.company as string) ?? ""
-        );
+  const intent = computeOrderPublishIntent(
+    tier as "subdomain" | "professional" | "executive",
+    id,
+    hint,
+    name,
+    company
+  );
 
   const result = await createCard({
     id,
     tier,
-    name: (stateObj.name as string) ?? null,
-    company: (stateObj.company as string) ?? null,
+    name: name || null,
+    company: company || null,
     phone: (stateObj.phone as string) ?? null,
     email: (stateObj.email as string) ?? null,
     stateJson: JSON.stringify(state),
+    publishSlug: intent.publishSlug,
+    requestedDomain: intent.requestedDomain,
+    domainStatus: intent.domainStatus,
   });
 
   if (!result.ok) {
@@ -105,7 +98,7 @@ export async function POST(request: Request) {
     );
   }
 
-  return NextResponse.json({ ok: true, id, slug });
+  return NextResponse.json({ ok: true, id, slug: intent.publishSlug });
 }
 
 // ---------------------------------------------------------------------------
@@ -113,7 +106,7 @@ export async function POST(request: Request) {
 // ---------------------------------------------------------------------------
 
 export async function GET(request: Request) {
-  if (!adminAuth(request)) {
+  if (!verifyAdminPassword(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -124,6 +117,9 @@ export async function GET(request: Request) {
       cards: cards.map((c) => ({
         id: c.id,
         slug: c.slug,
+        publishSlug: c.publishSlug,
+        requestedDomain: c.requestedDomain,
+        domainStatus: c.domainStatus,
         tier: c.tier,
         status: c.status,
         name: c.name,

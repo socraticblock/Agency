@@ -59,6 +59,8 @@
 - **061** — Texture tint: `textureTintHex` + `textureBackgroundImage` third arg; `TextureEffectControls` color row; paste `TEXTURE_TINT_HEX`; v20
 - **062** — Background motion tint: `bgEffectTintHex` + `--bg-effect-color` / secondary; CSS uses them instead of `--accent`; `BackgroundMotionControls` picker; v21
 - **063** — Hero profile image default fit: `object-contain` for all photo shapes (letterbox); zoom/pan still reach edge-to-edge
+- **064** — Order pipeline: `publish_slug` / `requested_domain` / `domain_status` + `card_domains`; tier rules in `order-publish-intent.ts`; admin auth on publish; review dialog blocks on failed save; custom-domain middleware rewrite
+- **065** — Professional domain optional at checkout (advisory); `AdminOrdersRunbook` on admin orders; copy updated
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -363,6 +365,16 @@
 - **Context:** Hero photo used `object-cover` for circle and rounded-square, so non-square uploads looked unintentionally cropped; wide-cinematic already used `object-contain`.
 - **Decision:** `HeroSegment` sets `imageFitClass` to `object-contain` for all shapes; existing `photoZoom` / `photoPositionX` / `photoPositionY` still allow users to scale and pan toward a full-bleed look inside the mask.
 - **Impact:** New and existing cards show the full image in-frame by default (letterboxing on `bg-slate-100`); no schema or version bump.
+
+### 064
+- **Context:** Orders computed a publish slug but did not persist it; admin preview used published-only API; publish route was unauthenticated; WhatsApp step 2 continued after failed DB insert; professional/executive needed a stable internal slug + domain handoff.
+- **Decision:** Added `publish_slug`, `requested_domain`, `domain_status` on `cards` + `card_domains` table; `computeOrderPublishIntent` (subdomain = hint or name slug; pro/exec = order id); `POST /api/orders` persists intent; `GET/PATCH /api/orders/[id]` for admin; publish requires `x-admin-password` + slug match; admin UI uses `NEXT_PUBLIC_ADMIN_PASSWORD`; `StartOrderReviewDialog` blocks step 2 on save failure; middleware rewrites mapped custom hosts to `/en/c/[slug]`.
+- **Impact:** Turso migration `0002_order_intent_and_domains.sql` required before deploy; ops map `card_domains` via admin PATCH or SQL after DNS.
+
+### 065
+- **Context:** Professional tier blocked checkout without a domain field; ops wanted clients to order first and receive a buy/DNS guide on WhatsApp.
+- **Decision:** `validateOrderState` treats empty professional domain as **advisory** only; `START_DC_ORDER_BLOCK` labels domain optional; checkout copy clarifies guide-after-order; `AdminOrdersRunbook` documents subdomain vs professional vs executive steps (single app/DB, Vercel + Cloudflare + map host).
+- **Impact:** No schema change; admin page shows fixed operator instructions above the orders table.
 
 ## Architecture Decisions
 - Zero backend for card features

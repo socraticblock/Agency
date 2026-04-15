@@ -83,7 +83,10 @@ export const START_DC_TOAST = {
 export const START_DC_ORDER_BLOCK = {
   choosePlan: "Choose your plan",
   professionalNote:
-    "You’ll use your own domain. After you order, Genezisi will WhatsApp you a full guide to buy it and connect it to your card.",
+    "You’ll use your own domain. After you order, Genezisi will WhatsApp you a full guide to buy it and connect it to your card — you can order first and send your domain later.",
+  professionalUrlLabel: "Your domain (optional)",
+  professionalUrlPlaceholder: "e.g. yourname.ge",
+  professionalHelper: "Add it if you already know it. Otherwise we’ll confirm on WhatsApp after you order.",
   subdomainUrlLabel: "Preferred subdomain (optional)",
   subdomainUrlPlaceholder: "e.g. your-name",
   subdomainHelper: "We’ll use this for your card path on genezisi.com (e.g. genezisi.com/your-name).",

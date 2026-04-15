@@ -67,23 +67,23 @@ export function validateOrderState(state: Lane1CustomizerState): {
   const addr = state.address.trim();
   const addrOk = hasValidAddress(addr);
 
-  if (state.selectedTier === "subdomain" && !state.digitalCardUrlHint.trim()) {
-    blocking.push({
-      id: "subdomain-hint",
-      title: "Preferred subdomain",
-      why: "We need a subdomain slug to reserve your card URL on genezisi.com.",
-      action: "Enter a short name (letters, numbers, hyphen), e.g. mycompany.",
-      blocking: true,
+  if (state.selectedTier === "professional" && !state.digitalCardUrlHint.trim()) {
+    advisory.push({
+      id: "professional-domain",
+      title: "Your domain",
+      why: "Optional before checkout — Genezisi will WhatsApp a guide to buy your domain and DNS settings.",
+      action: "Add your domain now if you know it, or send it after you order.",
+      blocking: false,
     });
   }
 
   if (state.selectedTier === "executive" && !state.digitalCardUrlHint.trim()) {
-    blocking.push({
+    advisory.push({
       id: "executive-domain",
       title: "Preferred domain",
-      why: "Executive tier includes domain handling — tell us which domain you want so we can check availability.",
-      action: "Enter your preferred domain, e.g. yourname.ge.",
-      blocking: true,
+      why: "Executive includes domain handling — a preferred domain helps us plan.",
+      action: "Optional: enter your preferred domain, e.g. yourname.ge.",
+      blocking: false,
     });
   }
 
