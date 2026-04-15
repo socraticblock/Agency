@@ -61,6 +61,7 @@
 - **063** — Hero profile image default fit: `object-contain` for all photo shapes (letterbox); zoom/pan still reach edge-to-edge
 - **064** — Order pipeline: `publish_slug` / `requested_domain` / `domain_status` + `card_domains`; tier rules in `order-publish-intent.ts`; admin auth on publish; review dialog blocks on failed save; custom-domain middleware rewrite
 - **065** — Professional domain optional at checkout (advisory); `AdminOrdersRunbook` on admin orders; copy updated
+- **066** — Admin auth: HttpOnly signed session cookie (`ADMIN_PASSWORD` secret); `/api/admin/login|logout|session`; orders/publish APIs use `verifyAdminRequest()`; removed `NEXT_PUBLIC_ADMIN_PASSWORD`
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -368,13 +369,18 @@
 
 ### 064
 - **Context:** Orders computed a publish slug but did not persist it; admin preview used published-only API; publish route was unauthenticated; WhatsApp step 2 continued after failed DB insert; professional/executive needed a stable internal slug + domain handoff.
-- **Decision:** Added `publish_slug`, `requested_domain`, `domain_status` on `cards` + `card_domains` table; `computeOrderPublishIntent` (subdomain = hint or name slug; pro/exec = order id); `POST /api/orders` persists intent; `GET/PATCH /api/orders/[id]` for admin; publish requires `x-admin-password` + slug match; admin UI uses `NEXT_PUBLIC_ADMIN_PASSWORD`; `StartOrderReviewDialog` blocks step 2 on save failure; middleware rewrites mapped custom hosts to `/en/c/[slug]`.
+- **Decision:** Added `publish_slug`, `requested_domain`, `domain_status` on `cards` + `card_domains` table; `computeOrderPublishIntent` (subdomain = hint or name slug; pro/exec = order id); `POST /api/orders` persists intent; `GET/PATCH /api/orders/[id]` for admin; publish requires admin session + slug match (see **066**); `StartOrderReviewDialog` blocks step 2 on save failure; middleware rewrites mapped custom hosts to `/en/c/[slug]`.
 - **Impact:** Turso migration `0002_order_intent_and_domains.sql` required before deploy; ops map `card_domains` via admin PATCH or SQL after DNS.
 
 ### 065
 - **Context:** Professional tier blocked checkout without a domain field; ops wanted clients to order first and receive a buy/DNS guide on WhatsApp.
 - **Decision:** `validateOrderState` treats empty professional domain as **advisory** only; `START_DC_ORDER_BLOCK` labels domain optional; checkout copy clarifies guide-after-order; `AdminOrdersRunbook` documents subdomain vs professional vs executive steps (single app/DB, Vercel + Cloudflare + map host).
 - **Impact:** No schema change; admin page shows fixed operator instructions above the orders table.
+
+### 066
+- **Context:** `NEXT_PUBLIC_ADMIN_PASSWORD` embedded the admin secret in the client bundle; header-based checks duplicated that risk.
+- **Decision:** Server-only `ADMIN_PASSWORD`; HMAC-signed payload in HttpOnly cookie (`admin-auth.ts`); `POST /api/admin/login` sets cookie, `POST /api/admin/logout` clears, `GET /api/admin/session` bootstraps UI; `verifyAdminRequest()` guards `GET /api/orders`, `GET/PATCH /api/orders/[id]`, `POST /api/cards/[slug]/publish`; admin page uses `credentials: "include"` and `useAdminOrdersAuth` (no public env var).
+- **Impact:** Password never ships to browsers; ops must set `ADMIN_PASSWORD` on Vercel and sign in once per browser session.
 
 ## Architecture Decisions
 - Zero backend for card features

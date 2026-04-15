@@ -21,9 +21,9 @@ type Props = {
   order: AdminOrderRow | null;
   state: Lane1CustomizerState | undefined;
   loading: boolean;
-  adminPassword: string;
   onClose: () => void;
   onSaved: () => void;
+  onSessionExpired: () => void;
   showToast: (msg: string, ok?: boolean) => void;
 };
 
@@ -33,9 +33,9 @@ export function AdminOrderPreviewModal({
   order,
   state,
   loading,
-  adminPassword,
   onClose,
   onSaved,
+  onSessionExpired,
   showToast,
 }: Props) {
   const [mapHost, setMapHost] = useState("");
@@ -48,21 +48,20 @@ export function AdminOrderPreviewModal({
   if (order === null) return null;
 
   const patchDomain = async (body: { domainStatus?: string; mapHost?: string }) => {
-    if (!adminPassword) {
-      showToast("Admin password not configured", false);
-      return;
-    }
     setSaving(true);
     try {
       const res = await fetch(`/api/orders/${order.id}`, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          "x-admin-password": adminPassword,
-        },
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(body),
       });
       const data = await res.json().catch(() => ({}));
+      if (res.status === 401) {
+        onSessionExpired();
+        showToast("Session expired — sign in again", false);
+        return;
+      }
       if (!res.ok) {
         showToast(data.error ?? "Update failed", false);
       } else {

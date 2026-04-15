@@ -7,9 +7,10 @@ type Props = {
   filter: Filter;
   onFilter: (f: Filter) => void;
   onRefresh: () => void;
+  onLogout: () => void;
 };
 
-export function AdminOrdersHeader({ ordersCount, filter, onFilter, onRefresh }: Props) {
+export function AdminOrdersHeader({ ordersCount, filter, onFilter, onRefresh, onLogout }: Props) {
   return (
     <div className="border-b border-slate-200 bg-white px-6 py-4">
       <div className="mx-auto max-w-5xl">
@@ -18,13 +19,22 @@ export function AdminOrdersHeader({ ordersCount, filter, onFilter, onRefresh }: 
             <h1 className="text-lg font-bold text-slate-900">Genezisi Orders</h1>
             <p className="text-sm text-slate-500">{ordersCount} total orders</p>
           </div>
-          <button
-            type="button"
-            onClick={onRefresh}
-            className="rounded-lg border border-slate-300 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
-          >
-            Refresh
-          </button>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={onRefresh}
+              className="rounded-lg border border-slate-300 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+            >
+              Refresh
+            </button>
+            <button
+              type="button"
+              onClick={onLogout}
+              className="rounded-lg border border-slate-300 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+            >
+              Sign out
+            </button>
+          </div>
         </div>
 
         <div className="mt-4 flex gap-2">

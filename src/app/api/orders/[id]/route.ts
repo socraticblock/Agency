@@ -5,7 +5,7 @@
 
 import { NextResponse } from "next/server";
 import { getCardById, updateCardDomainStatus, upsertCardDomainHost } from "@/lib/db";
-import { verifyAdminPassword } from "@/lib/admin-auth";
+import { verifyAdminRequest } from "@/lib/admin-auth";
 import type { DomainStatus } from "@/lib/order-publish-intent";
 import type { Lane1CustomizerState } from "@/app/[locale]/start/lib/types";
 
@@ -22,10 +22,10 @@ function unauthorized(): NextResponse {
 }
 
 export async function GET(
-  request: Request,
+  _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  if (!verifyAdminPassword(request)) {
+  if (!(await verifyAdminRequest())) {
     return unauthorized();
   }
 
@@ -68,7 +68,7 @@ export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  if (!verifyAdminPassword(request)) {
+  if (!(await verifyAdminRequest())) {
     return unauthorized();
   }
 

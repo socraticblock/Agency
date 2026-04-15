@@ -7,13 +7,13 @@
 
 import { NextResponse } from "next/server";
 import { getCardById, publishCard, slugTakenByOther } from "@/lib/db";
-import { verifyAdminPassword } from "@/lib/admin-auth";
+import { verifyAdminRequest } from "@/lib/admin-auth";
 
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ slug: string }> }
 ) {
-  if (!verifyAdminPassword(request)) {
+  if (!(await verifyAdminRequest())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

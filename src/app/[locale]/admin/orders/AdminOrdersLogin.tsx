@@ -21,7 +21,7 @@ export function AdminOrdersLogin({ passwordInput, authError, onPasswordChange, o
             placeholder="Admin password"
             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-[#1A2744] focus:outline-none focus:ring-1 focus:ring-[#1A2744]"
           />
-          {authError && <p className="text-sm text-red-600">Incorrect password or env not configured</p>}
+          {authError && <p className="text-sm text-red-600">Incorrect password</p>}
           <button
             type="submit"
             className="w-full rounded-lg bg-[#1A2744] py-2 text-sm font-semibold text-white hover:bg-[#243552]"
@@ -38,9 +38,9 @@ export function AdminOrdersEnvMissing() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-100 p-6">
       <p className="max-w-md text-center text-sm text-slate-600">
-        Set <code className="rounded bg-slate-200 px-1">ADMIN_PASSWORD</code> and matching{" "}
-        <code className="rounded bg-slate-200 px-1">NEXT_PUBLIC_ADMIN_PASSWORD</code> in your environment, then
-        redeploy.
+        Set <code className="rounded bg-slate-200 px-1">ADMIN_PASSWORD</code> on the server (e.g. Vercel project
+        environment), then redeploy. The admin UI signs in with that password; it is never exposed to the browser
+        bundle.
       </p>
     </div>
   );

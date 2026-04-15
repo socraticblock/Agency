@@ -7,7 +7,7 @@
 
 import { NextResponse } from "next/server";
 import { createCard, getCardById, listCards } from "@/lib/db";
-import { verifyAdminPassword } from "@/lib/admin-auth";
+import { verifyAdminRequest } from "@/lib/admin-auth";
 import { computeOrderPublishIntent } from "@/lib/order-publish-intent";
 
 export const dynamic = "force-dynamic";
@@ -105,8 +105,8 @@ export async function POST(request: Request) {
 // GET — List all orders (admin)
 // ---------------------------------------------------------------------------
 
-export async function GET(request: Request) {
-  if (!verifyAdminPassword(request)) {
+export async function GET() {
+  if (!(await verifyAdminRequest())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

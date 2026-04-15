@@ -7,20 +7,23 @@ import { AdminOrdersTable } from "./AdminOrdersTable";
 import { AdminOrdersEnvMissing, AdminOrdersLogin } from "./AdminOrdersLogin";
 import { AdminOrdersHeader } from "./AdminOrdersHeader";
 import { AdminOrdersRunbook } from "./AdminOrdersRunbook";
-
-const SESSION_KEY = "genezisi_admin_auth";
-
-function adminPassword(): string {
-  return process.env.NEXT_PUBLIC_ADMIN_PASSWORD ?? "";
-}
+import { useAdminOrdersAuth } from "./useAdminOrdersAuth";
 
 type Filter = "all" | "pending" | "published";
 
 export default function AdminOrdersPage() {
-  const pwd = adminPassword();
-  const [authed, setAuthed] = useState(false);
-  const [passwordInput, setPasswordInput] = useState("");
-  const [authError, setAuthError] = useState(false);
+  const {
+    sessionLoading,
+    serverConfigured,
+    authed,
+    setAuthed,
+    passwordInput,
+    setPasswordInput,
+    authError,
+    handleLogin,
+    handleLogout,
+  } = useAdminOrdersAuth();
+
   const [orders, setOrders] = useState<AdminOrderRow[]>([]);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState<Filter>("all");
@@ -32,26 +35,16 @@ export default function AdminOrdersPage() {
 
   const previewOrder = previewId ? orders.find((o) => o.id === previewId) ?? null : null;
 
-  useEffect(() => {
-    if (pwd && sessionStorage.getItem(SESSION_KEY) === pwd) {
-      setAuthed(true);
-    }
-  }, [pwd]);
-
   const showToast = useCallback((msg: string, ok = true) => {
     setToast({ msg, ok });
     setTimeout(() => setToast(null), 4000);
   }, []);
 
   const fetchOrders = useCallback(() => {
-    if (!pwd) return;
     setLoading(true);
-    fetch("/api/orders", {
-      headers: { "x-admin-password": pwd },
-    })
+    fetch("/api/orders", { credentials: "include" })
       .then((r) => {
         if (r.status === 401) {
-          sessionStorage.removeItem(SESSION_KEY);
           setAuthed(false);
           return null;
         }
@@ -62,35 +55,23 @@ export default function AdminOrdersPage() {
       })
       .catch(() => showToast("Failed to load orders", false))
       .finally(() => setLoading(false));
-  }, [pwd, showToast]);
+  }, [showToast, setAuthed]);
 
   useEffect(() => {
     if (authed) fetchOrders();
   }, [authed, fetchOrders]);
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!pwd) {
-      setAuthError(true);
-      return;
-    }
-    if (passwordInput === pwd) {
-      sessionStorage.setItem(SESSION_KEY, pwd);
-      setAuthed(true);
-      setAuthError(false);
-    } else {
-      setAuthError(true);
-    }
-  };
 
   const openPreview = async (order: AdminOrderRow) => {
     setPreviewId(order.id);
     setPreviewState(undefined);
     setPreviewLoading(true);
     try {
-      const res = await fetch(`/api/orders/${order.id}`, {
-        headers: { "x-admin-password": pwd },
-      });
+      const res = await fetch(`/api/orders/${order.id}`, { credentials: "include" });
+      if (res.status === 401) {
+        setAuthed(false);
+        setPreviewState(undefined);
+        return;
+      }
       if (res.ok) {
         const data = await res.json();
         setPreviewState(data.state as Lane1CustomizerState);
@@ -115,13 +96,16 @@ export default function AdminOrdersPage() {
     try {
       const res = await fetch(`/api/cards/${slug}/publish`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-admin-password": pwd,
-        },
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ id: order.id }),
       });
       const data = await res.json();
+      if (res.status === 401) {
+        setAuthed(false);
+        showToast("Session expired — sign in again", false);
+        return;
+      }
       if (!res.ok) {
         showToast(data.error ?? "Publish failed", false);
       } else {
@@ -141,7 +125,15 @@ export default function AdminOrdersPage() {
     return true;
   });
 
-  if (!pwd) {
+  if (sessionLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-50">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-200 border-t-[#1A2744]" />
+      </div>
+    );
+  }
+
+  if (!serverConfigured) {
     return <AdminOrdersEnvMissing />;
   }
 
@@ -173,6 +165,7 @@ export default function AdminOrdersPage() {
         filter={filter}
         onFilter={setFilter}
         onRefresh={fetchOrders}
+        onLogout={handleLogout}
       />
 
       <AdminOrdersRunbook />
@@ -192,12 +185,12 @@ export default function AdminOrdersPage() {
         order={previewOrder}
         state={previewState}
         loading={previewLoading}
-        adminPassword={pwd}
         onClose={() => {
           setPreviewId(null);
           setPreviewState(undefined);
         }}
         onSaved={fetchOrders}
+        onSessionExpired={() => setAuthed(false)}
         showToast={showToast}
       />
     </div>
