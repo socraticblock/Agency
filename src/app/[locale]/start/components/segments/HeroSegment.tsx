@@ -93,7 +93,7 @@ export function HeroSegment({
 
     el.addEventListener("wheel", handleWheel, { passive: false });
     return () => el.removeEventListener("wheel", handleWheel);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editable, state.photoDataUrl]);
 
   // Prevent document scroll while interacting with the photo zone.
@@ -333,6 +333,14 @@ export function HeroSegment({
   const companyValue =
     useSecondary && state.company.trim() === "Company Name" ? "" : state.company;
 
+  // ─── Video Control ──────────────────────────────────────────────────────
+  const videoRef = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 0.05;
+    }
+  }, []);
+
   return (
     <>
       <motion.section
@@ -344,25 +352,37 @@ export function HeroSegment({
           rotateY: isResponsive ? rotateY : 0,
           transformStyle: "preserve-3d",
         }}
-        className={`business-card-print-hero relative border-t px-4 pb-8 pt-8 transition-all duration-500 ${
-          isResponsive ? "md:rounded-3xl md:border hover:shadow-2xl" : ""
-        }`}
+        className={`business-card-print-hero relative border-t px-4 pb-8 pt-8 transition-all duration-500 ${isResponsive ? "md:rounded-3xl md:border hover:shadow-2xl" : ""
+          }`}
       >
-        <div className="flex w-full flex-col items-center gap-5 text-center">
+        {/* HERO BACKGROUND VIDEO - SHARP IMPLEMENTATION */}
+        <div className="absolute inset-0 -z-10 overflow-hidden">
+          <video
+            ref={videoRef}
+            autoPlay
+            muted
+            loop
+            playsInline
+            src="/hero-bg-animation.mp4"
+            className="h-full w-full object-cover opacity-70"
+          />
+          {/* Bottom Gradient Overlay */}
+          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/40 to-transparent" />
+        </div>
+
+        <div className="relative z-10 flex w-full flex-col items-center gap-5 text-center">
 
           {/* ── Photo Zone with fixed toolbar anchor ───────────────────── */}
           <div
             ref={photoToolbeltWrapperRef}
-            className={`relative flex min-h-[200px] w-full flex-shrink-0 justify-center ${
-              photoShape === "wide-cinematic" ? "max-w-[520px]" : "max-w-[250px]"
-            }`}
+            className={`relative flex min-h-[200px] w-full flex-shrink-0 justify-center ${photoShape === "wide-cinematic" ? "max-w-[520px]" : "max-w-[250px]"
+              }`}
           >
             {/* ── Photo Zone ─────────────────────────────────────── */}
             <div
               ref={photoContainerRef}
-              className={`group relative ${shapeClass} ${
-                isResponsive ? "md:sticky md:top-4 md:z-20" : "z-20"
-              }`}
+              className={`group relative ${shapeClass} ${isResponsive ? "md:sticky md:top-4 md:z-20" : "z-20"
+                }`}
               style={{
                 cursor: editable
                   ? state.photoDataUrl
@@ -390,73 +410,73 @@ export function HeroSegment({
               onTouchEnd={onTouchEnd}
               onClick={onPhotoClick}
             >
-            {state.photoDataUrl ? (
-              <div className="h-full w-full relative">
-                {/* Masked Image Layer */}
+              {state.photoDataUrl ? (
+                <div className="h-full w-full relative">
+                  {/* Masked Image Layer */}
+                  <div
+                    className="absolute inset-0 overflow-hidden bg-slate-100"
+                    style={{ ...borderStyle, borderRadius: shapeRadius }}
+                  >
+                    <Image
+                      key={state.photoDataUrl?.slice(0, 64) || "empty"}
+                      src={state.photoDataUrl}
+                      alt=""
+                      width={400}
+                      height={400}
+                      className={`h-full w-full ${imageFitClass} pointer-events-none select-none`}
+                      style={{
+                        filter: effectFilter,
+                        transform: `scale(${(photoZoom || 100) / 100}) translate(${(photoPositionX || 50) - 50}%, ${(photoPositionY || 50) - 50}%)`,
+                        transformOrigin: "center center",
+                      }}
+                      unoptimized
+                      draggable={false}
+                    />
+
+                    {/* Overlay Layers (Masked) */}
+                    <div className="absolute inset-0 pointer-events-none z-10">
+                      {photoOverlay === "gradient-fade" && (
+                        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)] via-transparent to-transparent opacity-80" />
+                      )}
+                      {photoOverlay === "color-tint" && (
+                        <div className="absolute inset-0 bg-[var(--accent)] opacity-20" />
+                      )}
+                      {photoOverlay === "dark-vignette" && (
+                        <div className="absolute inset-0 shadow-[inset_0_0_80px_rgba(0,0,0,0.5)]" />
+                      )}
+                      {photoEffect === "duotone" && (
+                        <div className="absolute inset-0 bg-[var(--accent)] mix-blend-multiply opacity-60" />
+                      )}
+                      {photoEffect === "film-grain" && (
+                        <div
+                          className="absolute inset-0 opacity-[0.22] mix-blend-overlay"
+                          style={{ backgroundImage: cssGrainDataUrl, backgroundSize: "220px 220px" }}
+                        />
+                      )}
+                      {photoEffect === "fade-to-white" && (
+                        <div className="absolute inset-0 shadow-[inset_0_0_40px_var(--bg-primary)]" />
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Mobile tap hint */}
+                  {editable && (
+                    <div className="absolute inset-0 flex items-center justify-center md:hidden pointer-events-none">
+                      <span className="rounded-full bg-black/40 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white opacity-0 transition group-hover:opacity-100 group-active:opacity-100">
+                        {useSecondary ? "შეეხეთ რედაქტირებას" : "Tap to edit"}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              ) : (
                 <div
-                  className="absolute inset-0 overflow-hidden bg-slate-100"
+                  className="flex h-full w-full flex-col items-center justify-center gap-1 text-xs text-slate-500 transition-colors group-hover:bg-slate-200 bg-slate-100"
                   style={{ ...borderStyle, borderRadius: shapeRadius }}
                 >
-                  <Image
-                    key={state.photoDataUrl?.slice(0, 64) || "empty"}
-                    src={state.photoDataUrl}
-                    alt=""
-                    width={400}
-                    height={400}
-                    className={`h-full w-full ${imageFitClass} pointer-events-none select-none`}
-                    style={{
-                      filter: effectFilter,
-                      transform: `scale(${(photoZoom || 100) / 100}) translate(${(photoPositionX || 50) - 50}%, ${(photoPositionY || 50) - 50}%)`,
-                      transformOrigin: "center center",
-                    }}
-                    unoptimized
-                    draggable={false}
-                  />
-
-                  {/* Overlay Layers (Masked) */}
-                  <div className="absolute inset-0 pointer-events-none z-10">
-                    {photoOverlay === "gradient-fade" && (
-                      <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)] via-transparent to-transparent opacity-80" />
-                    )}
-                    {photoOverlay === "color-tint" && (
-                      <div className="absolute inset-0 bg-[var(--accent)] opacity-20" />
-                    )}
-                    {photoOverlay === "dark-vignette" && (
-                      <div className="absolute inset-0 shadow-[inset_0_0_80px_rgba(0,0,0,0.5)]" />
-                    )}
-                    {photoEffect === "duotone" && (
-                      <div className="absolute inset-0 bg-[var(--accent)] mix-blend-multiply opacity-60" />
-                    )}
-                    {photoEffect === "film-grain" && (
-                      <div
-                        className="absolute inset-0 opacity-[0.22] mix-blend-overlay"
-                        style={{ backgroundImage: cssGrainDataUrl, backgroundSize: "220px 220px" }}
-                      />
-                    )}
-                    {photoEffect === "fade-to-white" && (
-                      <div className="absolute inset-0 shadow-[inset_0_0_40px_var(--bg-primary)]" />
-                    )}
-                  </div>
+                  <Camera className="h-10 w-10 opacity-30" />
+                  <span>{useSecondary ? "პირადობის პროფილი" : "Identity Profile"}</span>
                 </div>
-
-                {/* Mobile tap hint */}
-                {editable && (
-                  <div className="absolute inset-0 flex items-center justify-center md:hidden pointer-events-none">
-                    <span className="rounded-full bg-black/40 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white opacity-0 transition group-hover:opacity-100 group-active:opacity-100">
-                      {useSecondary ? "შეეხეთ რედაქტირებას" : "Tap to edit"}
-                    </span>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div
-                className="flex h-full w-full flex-col items-center justify-center gap-1 text-xs text-slate-500 transition-colors group-hover:bg-slate-200 bg-slate-100"
-                style={{ ...borderStyle, borderRadius: shapeRadius }}
-              >
-                <Camera className="h-10 w-10 opacity-30" />
-                <span>{useSecondary ? "პირადობის პროფილი" : "Identity Profile"}</span>
-              </div>
-            )}
+              )}
             </div>
 
             {/* Desktop Toolbelt — anchored to shell bottom */}
@@ -514,9 +534,8 @@ export function HeroSegment({
                       }
                       setMobilePhotoToolsOpen(true);
                     }}
-                    className={`mx-auto inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/75 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-white shadow-lg backdrop-blur-md ${
-                      shouldGlowEditPhoto ? "business-card-pill-attention" : ""
-                    }`}
+                    className={`mx-auto inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/75 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-white shadow-lg backdrop-blur-md ${shouldGlowEditPhoto ? "business-card-pill-attention" : ""
+                      }`}
                   >
                     <Camera className="h-3.5 w-3.5" />
                     {useSecondary ? "ფოტოს რედაქტირება" : "Edit photo"}
@@ -529,11 +548,10 @@ export function HeroSegment({
           {/* ── Identity Text ───────────────────────────────────── */}
           <div
             ref={heroActiveZoneRef}
-            className={`relative z-10 w-full space-y-1 bg-transparent pt-4 text-center transition-all ${
-              orderHighlightIssueIds?.has("name") || orderHighlightIssueIds?.has("title")
+            className={`relative z-10 w-full space-y-1 bg-transparent pt-4 text-center transition-all ${orderHighlightIssueIds?.has("name") || orderHighlightIssueIds?.has("title")
                 ? "rounded-xl ring-2 ring-red-600 ring-offset-2 ring-offset-transparent"
                 : ""
-            }`}
+              }`}
           >
             <h1 className="text-2xl md:text-3xl font-bold leading-tight" style={headingStyle}>
               <InlineEditable

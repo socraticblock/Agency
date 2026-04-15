@@ -105,8 +105,8 @@ export const en = {
   },
   hero: {
     statusBadge: "A permanent, professional home for your brand.",
-    headline: "Graduate from DMs to a business that runs itself.",
-    h2: "You’ve built an amazing audience. Now, let’s build the digital headquarters you deserve.",
+    headline: "The Genesis of your digital footprint",
+    h2: "Your Brand. Your Rules. Your Platform. You imagine, we build.",
     subhead: "Most founders are the bottleneck of their own growth. We architect the systems that handle your operations, so you can scale a platform that runs without you.",
     cta: "Build your online headquarters →",
     ctaSecondary: "Chat on WhatsApp",

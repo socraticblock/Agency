@@ -10,7 +10,6 @@ import {
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 import { MagneticButton } from "./MagneticButton";
-import { NanoBananaBackground } from "./NanoBananaBackground";
 
 export function KineticHero({ locale }: { locale: Locale }) {
   const t = getMessages(locale);
@@ -39,7 +38,7 @@ export function KineticHero({ locale }: { locale: Locale }) {
     target: sectionRef,
     offset: ["start start", "end start"],
   });
-  const scrollOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const scrollOpacity = useTransform(scrollYProgress, [0, 0.45], [1, 0]);
   const scrollScale = useTransform(scrollYProgress, [0, 0.8], [1, 0.92]);
   const scrollY2 = useTransform(scrollYProgress, [0, 0.8], [0, 60]);
 
@@ -57,7 +56,50 @@ export function KineticHero({ locale }: { locale: Locale }) {
     mouseY.set(0);
   };
 
+  const videoRef = useRef<HTMLVideoElement>(null);
   const words: string[] = t.hero.headline.split(" ");
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 0.05;
+    }
+  }, []);
+
+  const phrases = t.hero.h2.split(". ").map((p: string) => p.endsWith(".") ? p : p + ".");
+  const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
+  const [currentText, setCurrentText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [typingSpeed, setTypingSpeed] = useState(100);
+
+  useEffect(() => {
+    const handleTyping = () => {
+      const fullPhrase = phrases[currentPhraseIndex];
+      
+      if (!isDeleting) {
+        // Typing
+        setCurrentText(fullPhrase.substring(0, currentText.length + 1));
+        if (currentText.length + 1 === fullPhrase.length) {
+          setIsDeleting(true);
+          setTypingSpeed(1500); // Long pause at full phrase
+        } else {
+          setTypingSpeed(80 + Math.random() * 40); // Natural variance
+        }
+      } else {
+        // Deleting
+        setCurrentText(fullPhrase.substring(0, currentText.length - 1));
+        if (currentText.length === 0) {
+          setIsDeleting(false);
+          setCurrentPhraseIndex((prev) => (prev + 1) % phrases.length);
+          setTypingSpeed(250); // Brief pause before next phrase
+        } else {
+          setTypingSpeed(40); // Deleting is usually faster
+        }
+      }
+    };
+
+    const timer = setTimeout(handleTyping, typingSpeed);
+    return () => clearTimeout(timer);
+  }, [currentText, isDeleting, currentPhraseIndex, phrases, typingSpeed]);
 
   return (
     <section
@@ -66,18 +108,29 @@ export function KineticHero({ locale }: { locale: Locale }) {
       onMouseLeave={handleSectionLeave}
       className="relative flex min-h-[70vh] flex-col items-center justify-center overflow-hidden px-4 py-20 text-center"
     >
-      <div className="pointer-events-none absolute inset-0 -z-20 overflow-hidden">
-        <div className="absolute -top-1/4 -left-1/4 h-[min(100vw,28rem)] w-[min(100vw,28rem)] rounded-full bg-emerald-900/30 blur-[100px] animate-pulse sm:h-[min(100vw,40rem)] sm:w-[min(100vw,40rem)] sm:blur-[120px] md:h-[800px] md:w-[800px] md:blur-[140px]" />
-        <div className="absolute -bottom-1/4 -right-1/4 h-[min(100vw,28rem)] w-[min(100vw,28rem)] rounded-full bg-slate-800/40 blur-[110px] animate-pulse delay-1000 sm:h-[min(100vw,40rem)] sm:w-[min(100vw,40rem)] sm:blur-[130px] md:h-[800px] md:w-[800px] md:blur-[160px]" />
+      <div className="pointer-events-none absolute inset-0 -z-20 overflow-hidden bg-[#030717]">
+        <div className="absolute -top-1/4 -left-1/4 h-[min(100vw,28rem)] w-[min(100vw,28rem)] rounded-full bg-emerald-900/40 blur-[100px] animate-pulse sm:h-[min(100vw,40rem)] sm:w-[min(100vw,40rem)] sm:blur-[120px] md:h-[800px] md:w-[800px] md:blur-[140px]" />
+        <div className="absolute -bottom-1/4 -right-1/4 h-[min(100vw,28rem)] w-[min(100vw,28rem)] rounded-full bg-slate-800/50 blur-[110px] animate-pulse delay-1000 sm:h-[min(100vw,40rem)] sm:w-[min(100vw,40rem)] sm:blur-[130px] md:h-[800px] md:w-[800px] md:blur-[160px]" />
       </div>
 
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-background to-transparent z-10" />
+      {/* HERO VIDEO BACKGROUND - REPLACES GRID */}
+      <div className="pointer-events-none absolute inset-0 z-[1] overflow-hidden opacity-80 brightness-15 mix-blend-screen">
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          loop
+          playsInline
+          src="/hero-bg-animation.mp4"
+          className="h-full w-full object-cover"
+        />
+      </div>
 
-      <NanoBananaBackground />
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-[#030717] via-[#030717]/60 to-transparent z-10" />
 
       <motion.div
         style={{ opacity: scrollOpacity, scale: scrollScale, y: scrollY2, willChange: 'transform, opacity' }}
-        className="flex flex-col items-center"
+        className="relative z-10 flex flex-col items-center"
       >
         <motion.div
           initial={false}
@@ -96,8 +149,13 @@ export function KineticHero({ locale }: { locale: Locale }) {
           ))}
         </motion.div>
 
-        <motion.h2 className="mt-2 max-w-xl text-base font-bold text-emerald-400 font-space leading-tight sm:text-lg text-center opacity-95">
-          {t.hero.h2}
+        <motion.h2 className="mt-2 min-h-[1.5em] max-w-xl text-base font-bold text-emerald-400 font-space leading-tight sm:text-lg text-center opacity-95">
+          <span>{currentText}</span>
+          <motion.span
+            animate={{ opacity: [1, 0, 1] }}
+            transition={{ duration: 0.8, repeat: Infinity }}
+            className="inline-block w-2 h-4 ml-1 bg-emerald-400/80 align-middle"
+          />
         </motion.h2>
 
         <motion.div className="mt-10 flex flex-wrap items-center justify-center gap-4">

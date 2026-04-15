@@ -190,7 +190,7 @@ function migrateLane1State(
 
 export function loadLane1State(): Lane1CustomizerState {
   if (typeof window === "undefined") return defaultLane1State();
-  
+
   // 1. Try v3 (Current)
   const parsedV3 = safeParse(localStorage.getItem(STORAGE_KEY));
   if (parsedV3) return parsedV3;
