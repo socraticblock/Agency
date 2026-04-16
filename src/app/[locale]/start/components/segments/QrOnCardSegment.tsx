@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import type { Variants } from "framer-motion";
 import { MagneticButton } from "../../../_components/MagneticButton";
+import type { Lane1CustomizerState } from "../../lib/types";
 import { lane1CtaPrimarySurface, lane1UtilityPrimaryClasses } from "../../lib/button-styles";
 
 export function QrOnCardSegment({
