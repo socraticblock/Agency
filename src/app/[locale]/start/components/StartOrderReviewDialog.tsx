@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { X, Loader2 } from "lucide-react";
-import { buildLeanHandoffState, generateOrderId } from "../lib/order-payload";
+import { generateOrderId } from "../lib/order-payload";
 import { validateOrderState } from "../lib/order-validation";
 import type { Lane1CustomizerState } from "../lib/types";
 import { StartOrderReviewIssues } from "./StartOrderReviewIssues";
@@ -19,9 +19,12 @@ type Props = {
 
 async function submitOrderToApi(state: Lane1CustomizerState, orderId: string): Promise<{ ok: boolean; error?: string; isConfigError?: boolean }> {
   try {
-    // Strip image blobs before sending to avoid request size limits.
-    // buildLeanHandoffState removes photoDataUrl, galleryImageDataUrls, and bgBaseImageDataUrl.
-    const { state: leanState } = buildLeanHandoffState(state);
+    // Only strip bgBaseImageDataUrl — hero and gallery must be preserved in state_json (DB has no separate photo field).
+    // bgBaseImageDataUrl is the payload bloat culprit (full base64, up to 2-5MB per image).
+    const leanState = {
+      ...state,
+      style: { ...state.style, bgBaseImageDataUrl: null },
+    };
     const res = await fetch("/api/orders", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
