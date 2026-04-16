@@ -9,7 +9,56 @@ import {
 } from "framer-motion";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
+import { memo, useMemo } from "react";
 import { MagneticButton } from "./MagneticButton";
+
+const Typewriter = memo(({ phrases }: { phrases: string[] }) => {
+  const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
+  const [currentText, setCurrentText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [typingSpeed, setTypingSpeed] = useState(100);
+
+  useEffect(() => {
+    const handleTyping = () => {
+      const fullPhrase = phrases[currentPhraseIndex];
+      
+      if (!isDeleting) {
+        setCurrentText(fullPhrase.substring(0, currentText.length + 1));
+        if (currentText.length + 1 === fullPhrase.length) {
+          setIsDeleting(true);
+          setTypingSpeed(1500);
+        } else {
+          setTypingSpeed(80 + Math.random() * 40);
+        }
+      } else {
+        setCurrentText(fullPhrase.substring(0, currentText.length - 1));
+        if (currentText.length === 0) {
+          setIsDeleting(false);
+          setCurrentPhraseIndex((prev) => (prev + 1) % phrases.length);
+          setTypingSpeed(250);
+        } else {
+          setTypingSpeed(40);
+        }
+      }
+    };
+
+    const timer = setTimeout(handleTyping, typingSpeed);
+    return () => clearTimeout(timer);
+  }, [currentText, isDeleting, currentPhraseIndex, phrases, typingSpeed]);
+
+  return (
+    <motion.h2 className="mt-2 min-h-[1.5em] max-w-xl text-base font-bold text-emerald-400 font-space leading-tight sm:text-lg text-center opacity-95">
+      <span>{currentText}</span>
+      <motion.span
+        animate={{ opacity: [1, 0, 1] }}
+        transition={{ duration: 0.8, repeat: Infinity }}
+        className="inline-block w-2 h-4 ml-1 bg-emerald-400/80 align-middle"
+      />
+    </motion.h2>
+  );
+});
+
+Typewriter.displayName = "Typewriter";
 
 export function KineticHero({ locale }: { locale: Locale }) {
   const t = getMessages(locale);
@@ -57,49 +106,14 @@ export function KineticHero({ locale }: { locale: Locale }) {
   };
 
   const videoRef = useRef<HTMLVideoElement>(null);
-  const words: string[] = t.hero.headline.split(" ");
+  const words = useMemo(() => t.hero.headline.split(" "), [t.hero.headline]);
+  const h2Phrases = useMemo(() => t.hero.h2.split(". ").map((p: string) => p.endsWith(".") ? p : p + "."), [t.hero.h2]);
 
   useEffect(() => {
     if (videoRef.current) {
-      videoRef.current.playbackRate = 0.05;
+      videoRef.current.playbackRate = 0.3;
     }
   }, []);
-
-  const phrases = t.hero.h2.split(". ").map((p: string) => p.endsWith(".") ? p : p + ".");
-  const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
-  const [currentText, setCurrentText] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [typingSpeed, setTypingSpeed] = useState(100);
-
-  useEffect(() => {
-    const handleTyping = () => {
-      const fullPhrase = phrases[currentPhraseIndex];
-      
-      if (!isDeleting) {
-        // Typing
-        setCurrentText(fullPhrase.substring(0, currentText.length + 1));
-        if (currentText.length + 1 === fullPhrase.length) {
-          setIsDeleting(true);
-          setTypingSpeed(1500); // Long pause at full phrase
-        } else {
-          setTypingSpeed(80 + Math.random() * 40); // Natural variance
-        }
-      } else {
-        // Deleting
-        setCurrentText(fullPhrase.substring(0, currentText.length - 1));
-        if (currentText.length === 0) {
-          setIsDeleting(false);
-          setCurrentPhraseIndex((prev) => (prev + 1) % phrases.length);
-          setTypingSpeed(250); // Brief pause before next phrase
-        } else {
-          setTypingSpeed(40); // Deleting is usually faster
-        }
-      }
-    };
-
-    const timer = setTimeout(handleTyping, typingSpeed);
-    return () => clearTimeout(timer);
-  }, [currentText, isDeleting, currentPhraseIndex, phrases, typingSpeed]);
 
   return (
     <section
@@ -113,8 +127,8 @@ export function KineticHero({ locale }: { locale: Locale }) {
         <div className="absolute -bottom-1/4 -right-1/4 h-[min(100vw,28rem)] w-[min(100vw,28rem)] rounded-full bg-slate-800/50 blur-[110px] animate-pulse delay-1000 sm:h-[min(100vw,40rem)] sm:w-[min(100vw,40rem)] sm:blur-[130px] md:h-[800px] md:w-[800px] md:blur-[160px]" />
       </div>
 
-      {/* HERO VIDEO BACKGROUND - REPLACES GRID */}
-      <div className="pointer-events-none absolute inset-0 z-[1] overflow-hidden opacity-80 brightness-15 mix-blend-screen">
+      {/* STRIPPED BACK VIDEO LAYER FOR MAXIMUM PERFORMANCE */}
+      <div className="pointer-events-none absolute inset-0 z-[1] overflow-hidden bg-black">
         <video
           ref={videoRef}
           autoPlay
@@ -122,7 +136,7 @@ export function KineticHero({ locale }: { locale: Locale }) {
           loop
           playsInline
           src="/hero-bg-animation.mp4"
-          className="h-full w-full object-cover"
+          className="h-full w-full object-cover opacity-50 brightness-20"
         />
       </div>
 
@@ -149,16 +163,21 @@ export function KineticHero({ locale }: { locale: Locale }) {
           ))}
         </motion.div>
 
-        <motion.h2 className="mt-2 min-h-[1.5em] max-w-xl text-base font-bold text-emerald-400 font-space leading-tight sm:text-lg text-center opacity-95">
-          <span>{currentText}</span>
-          <motion.span
-            animate={{ opacity: [1, 0, 1] }}
-            transition={{ duration: 0.8, repeat: Infinity }}
-            className="inline-block w-2 h-4 ml-1 bg-emerald-400/80 align-middle"
-          />
-        </motion.h2>
+        <Typewriter phrases={h2Phrases} />
 
         <motion.div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+          <MagneticButton
+            as="a"
+            href={`/${locale}/start`}
+            magneticStrength={24}
+            textStrength={12}
+            className="group relative flex min-h-12 items-center justify-center overflow-hidden rounded-full border border-emerald-400/40 bg-emerald-500/10 px-8 py-3 text-sm font-black text-white shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-[1.03] hover:bg-emerald-500/20 sm:px-10 sm:py-4"
+          >
+            <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.4),_transparent_60%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            <span className="relative z-10 block flex items-center gap-1.5 text-white font-black">
+              {t.hero.startCardCta}
+            </span>
+          </MagneticButton>
           <MagneticButton
             as="a"
             href={`/${locale}/architect`}
@@ -169,17 +188,6 @@ export function KineticHero({ locale }: { locale: Locale }) {
             <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.4),_transparent_60%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
             <span className="relative z-10 block flex items-center gap-1.5 text-white font-black">
               {t.hero.cta}
-            </span>
-          </MagneticButton>
-          <MagneticButton
-            as="a"
-            href={`/${locale}/start`}
-            magneticStrength={24}
-            textStrength={12}
-            className="group relative flex min-h-12 items-center justify-center overflow-hidden rounded-full border border-white/20 bg-white/5 px-8 py-3 text-sm font-bold text-white/90 shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-[1.03] hover:bg-white/10 sm:px-10 sm:py-4"
-          >
-            <span className="relative z-10 block flex items-center gap-1.5">
-              {t.hero.startCardCta}
             </span>
           </MagneticButton>
         </motion.div>

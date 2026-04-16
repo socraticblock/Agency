@@ -333,16 +333,7 @@ export function HeroSegment({
   const companyValue =
     useSecondary && state.company.trim() === "Company Name" ? "" : state.company;
 
-  // ─── Video Control ──────────────────────────────────────────────────────
-  const videoRef = useRef<HTMLVideoElement>(null);
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.playbackRate = 0.05;
-    }
-  }, []);
-
   return (
-    <>
       <motion.section
         variants={itemVariants}
         style={{
@@ -355,20 +346,6 @@ export function HeroSegment({
         className={`business-card-print-hero relative border-t px-4 pb-8 pt-8 transition-all duration-500 ${isResponsive ? "md:rounded-3xl md:border hover:shadow-2xl" : ""
           }`}
       >
-        {/* HERO BACKGROUND VIDEO - SHARP IMPLEMENTATION */}
-        <div className="absolute inset-0 -z-10 overflow-hidden">
-          <video
-            ref={videoRef}
-            autoPlay
-            muted
-            loop
-            playsInline
-            src="/hero-bg-animation.mp4"
-            className="h-full w-full object-cover opacity-70"
-          />
-          {/* Bottom Gradient Overlay */}
-          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/40 to-transparent" />
-        </div>
 
         <div className="relative z-10 flex w-full flex-col items-center gap-5 text-center">
 
@@ -549,8 +526,8 @@ export function HeroSegment({
           <div
             ref={heroActiveZoneRef}
             className={`relative z-10 w-full space-y-1 bg-transparent pt-4 text-center transition-all ${orderHighlightIssueIds?.has("name") || orderHighlightIssueIds?.has("title")
-                ? "rounded-xl ring-2 ring-red-600 ring-offset-2 ring-offset-transparent"
-                : ""
+              ? "rounded-xl ring-2 ring-red-600 ring-offset-2 ring-offset-transparent"
+              : ""
               }`}
           >
             <h1 className="text-2xl md:text-3xl font-bold leading-tight" style={headingStyle}>
@@ -609,7 +586,6 @@ export function HeroSegment({
           </div>
         </div>
       </motion.section>
-    </>
   );
 }
 
