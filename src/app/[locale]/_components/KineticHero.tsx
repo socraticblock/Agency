@@ -111,7 +111,7 @@ export function KineticHero({ locale }: { locale: Locale }) {
 
   useEffect(() => {
     if (videoRef.current) {
-      videoRef.current.playbackRate = 0.3;
+      videoRef.current.playbackRate = 0.6;
     }
   }, []);
 
