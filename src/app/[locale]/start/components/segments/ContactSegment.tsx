@@ -52,7 +52,7 @@ export function ContactSegment({
     >
       <div className={`space-y-4 text-sm ${isResponsive ? "md:text-base" : ""}`}>
         <div className={`flex items-center gap-3 font-semibold ${hl?.has("phone") ? orderRing : ""} p-0.5`}>
-          <Phone className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
+          <Phone className="h-4 w-4 shrink-0" style={{ color: "var(--accent)" }} aria-hidden />
           <InlineEditable
             value={state.phone}
             onChange={(v) => patch({ phone: v })}
@@ -65,7 +65,7 @@ export function ContactSegment({
         </div>
 
         <div className={`flex items-start gap-3 ${hl?.has("email") ? orderRing : ""} p-0.5`}>
-          <Mail className="mt-1 h-4 w-4 shrink-0 opacity-70" aria-hidden />
+          <Mail className="mt-1 h-4 w-4 shrink-0" style={{ color: "var(--accent)" }} aria-hidden />
           <span className="min-w-0 flex-1 underline">
             <InlineEditable
               value={state.email}
@@ -84,7 +84,7 @@ export function ContactSegment({
             hl?.has("map-address") || hl?.has("directions-address") ? orderRing : ""
           } p-0.5`}
         >
-          <Map className="mt-1 h-4 w-4 shrink-0 opacity-70" aria-hidden />
+          <Map className="mt-1 h-4 w-4 shrink-0" style={{ color: "var(--accent)" }} aria-hidden />
           <div className="min-w-0 flex-1" style={bodyStyle}>
             <InlineEditable
               value={useSecondary ? state.addressSecondary : state.address}

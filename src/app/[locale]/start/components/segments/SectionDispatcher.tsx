@@ -9,7 +9,6 @@ import { AwardsSegment } from "./AwardsSegment";
 import { VideoSegment } from "./VideoSegment";
 import { BookingSegment } from "./BookingSegment";
 import type { CSSProperties, ReactNode } from "react";
-import type { LucideIcon } from "lucide-react";
 import { motion, type Variants } from "framer-motion";
 
 interface SectionDispatcherProps {
@@ -25,7 +24,7 @@ interface SectionDispatcherProps {
   bodyStyle: CSSProperties;
   itemVariants: import("framer-motion").Variants;
   glassStyle: CSSProperties;
-  icons: LucideIcon[];
+  setServiceIcon: (i: number, name: string | null) => void;
   activeSection: SectionId | null;
   setActiveSection: (sectionId: SectionId | null) => void;
   pulseSectionId: SectionId | null;
@@ -46,7 +45,7 @@ export function SectionDispatcher({
   bodyStyle,
   itemVariants,
   glassStyle,
-  icons,
+  setServiceIcon,
   activeSection,
   setActiveSection,
   pulseSectionId,
@@ -117,7 +116,7 @@ export function SectionDispatcher({
                 bodyStyle={bodyStyle}
                 itemVariants={itemVariants}
                 glassStyle={glassStyle}
-                icons={icons}
+                setServiceIcon={setServiceIcon}
               />
             );
           case "about":

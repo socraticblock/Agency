@@ -183,6 +183,10 @@ function migrateLane1State(
     merged.activeCtaChannels = next;
   }
   merged.activeCtaChannels = merged.ctaChannelOrder.filter((id) => merged.activeCtaChannels.includes(id));
+  
+  if (!Array.isArray(merged.serviceIcons)) {
+    merged.serviceIcons = [...base.serviceIcons];
+  }
 
   merged.version = CUSTOMIZER_VERSION;
   return merged;

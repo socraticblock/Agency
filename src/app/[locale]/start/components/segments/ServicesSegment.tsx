@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, type LucideIcon } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import type { Lane1CustomizerState } from "../../lib/types";
 import { InlineEditable } from "../InlineEditable";
 import type { CSSProperties } from "react";
+import { getServiceIcon } from "../../lib/service-icons";
+import { ServiceIconPicker } from "../ServiceIconPicker";
 
 interface ServicesSegmentProps {
   state: Lane1CustomizerState;
@@ -19,7 +21,7 @@ interface ServicesSegmentProps {
   bodyStyle: CSSProperties;
   itemVariants: any;
   glassStyle: CSSProperties;
-  icons: LucideIcon[];
+  setServiceIcon: (i: number, name: string | null) => void;
 }
 
 export function ServicesSegment({
@@ -34,9 +36,10 @@ export function ServicesSegment({
   bodyStyle,
   itemVariants,
   glassStyle,
-  icons,
+  setServiceIcon,
 }: ServicesSegmentProps) {
   const [expandedService, setExpandedService] = useState<number | null>(null);
+  const [pickingIndex, setPickingIndex] = useState<number | null>(null);
 
   return (
     <motion.section
@@ -90,7 +93,8 @@ export function ServicesSegment({
           }
 
           const isExpanded = expandedService === i;
-          const Icon = icons[i % icons.length];
+          const iconName = state.serviceIcons[i];
+          const Icon = getServiceIcon(iconName);
 
           return (
             <li
@@ -107,11 +111,31 @@ export function ServicesSegment({
                 onClick={() => setExpandedService(isExpanded ? null : i)}
                 className="flex w-full items-start gap-3 p-3 text-left"
               >
-                <Icon
-                  className="mt-0.5 h-5 w-5 shrink-0"
-                  style={{ color: "var(--accent)" }}
-                  aria-hidden
-                />
+                <div className="relative group/icon">
+                  {Icon ? (
+                    <Icon
+                      className="mt-0.5 h-5 w-5 shrink-0"
+                      style={{ color: "var(--accent)" }}
+                      aria-hidden
+                    />
+                  ) : editable ? (
+                    <div className="mt-0.5 h-5 w-5 shrink-0 flex items-center justify-center rounded-md border border-dashed border-slate-600 text-[10px] text-slate-500">
+                      +
+                    </div>
+                  ) : null}
+
+                  {editable && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setPickingIndex(i);
+                      }}
+                      className="absolute -inset-1 z-10 rounded-lg bg-emerald-500/0 hover:bg-emerald-500/10 hover:ring-1 hover:ring-emerald-500/30 transition-all cursor-pointer"
+                      title="Change Icon"
+                    />
+                  )}
+                </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-sm font-bold leading-snug">
@@ -167,6 +191,17 @@ export function ServicesSegment({
           );
         })}
       </ul>
+
+      <ServiceIconPicker
+        isOpen={pickingIndex !== null}
+        onClose={() => setPickingIndex(null)}
+        onSelect={(name) => {
+          if (pickingIndex !== null) {
+            setServiceIcon(pickingIndex, name);
+          }
+        }}
+        currentIcon={pickingIndex !== null ? state.serviceIcons[pickingIndex] : null}
+      />
     </motion.section>
   );
 }

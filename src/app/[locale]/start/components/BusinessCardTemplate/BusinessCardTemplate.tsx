@@ -23,7 +23,6 @@ import { ProfileSetupManagerPanel } from "../segments/ProfileSetupManagerPanel";
 import { buildItemVariants, containerVariants } from "../../lib/animations";
 import { usePwaMetadata } from "../../lib/usePwaMetadata";
 import { useCardTilt } from "../../lib/useCardTilt";
-import { Scale, Briefcase, Building2, Sparkles } from "lucide-react";
 import type { Lane1CustomizerState, Lane1StatePatch, SectionId } from "../../lib/types";
 import { ANIMATION_PRESETS, resolveStyleVariables } from "../../lib/presets";
 import { getLanguagePreviewMode } from "../../lib/language-profile";
@@ -32,7 +31,6 @@ import type { BottomCardPillId } from "../../lib/bottom-card-pill";
 import "../business-card-template.css";
 import { BackgroundEngine } from "./BackgroundEngine";
 
-const ICONS = [Scale, Briefcase, Building2, Sparkles];
 const EMPTY_ORDER_HIGHLIGHTS = new Set<string>();
 
 export const BusinessCardTemplate = memo(function BusinessCardTemplate({
@@ -116,6 +114,11 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
     const next = useSecondary ? [...state.serviceDescriptionsSecondary] : [...state.serviceDescriptions];
     next[i] = v;
     patch(useSecondary ? { serviceDescriptionsSecondary: next as any } : { serviceDescriptions: next as any });
+  };
+  const setServiceIcon = (i: number, name: string | null) => {
+    const next = [...state.serviceIcons];
+    next[i] = name;
+    patch({ serviceIcons: next as any });
   };
 
   async function onPhotoPicked(e: React.ChangeEvent<HTMLInputElement>) {
@@ -295,7 +298,7 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
             bodyStyle={bodyStyle}
             itemVariants={customItemVariants}
             glassStyle={glassStyle}
-            icons={ICONS}
+            setServiceIcon={setServiceIcon}
             activeSection={activeSection}
             setActiveSection={setActiveSection}
             pulseSectionId={pulseSectionId}

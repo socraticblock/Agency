@@ -34,7 +34,7 @@ export function BrandingFooter({
           <span className="mx-2 opacity-50">|</span>
           Powered by{" "}
           <Link
-            href={homeHref}
+            href="https://www.genezisi.com/en/start"
             className="font-bold hover:underline"
             style={{ color: "var(--accent)" }}
           >

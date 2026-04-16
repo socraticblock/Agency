@@ -189,6 +189,7 @@ export interface Lane1CustomizerState {
   serviceCount: number;
   serviceAreasSecondary: [string, string, string, string];
   serviceDescriptionsSecondary: [string, string, string, string];
+  serviceIcons: [string | null, string | null, string | null, string | null];
   social: SocialLinksState;
   practiceHeading: string;
   practiceHeadingSecondary: string;
@@ -303,6 +304,7 @@ export function defaultLane1State(): Lane1CustomizerState {
     serviceCount: 2,
     serviceAreasSecondary: ["სერვისი ერთი", "სერვისი ორი", "სამსახურის სამი", "სერვისი ოთხი"],
     serviceDescriptionsSecondary: ["", "", "", ""],
+    serviceIcons: ["Scale", "Briefcase", "Building2", "Sparkles"],
     social: defaultSocial(),
     practiceHeading: "Professional Services",
     practiceHeadingSecondary: "პროფესიული სერვისები",
