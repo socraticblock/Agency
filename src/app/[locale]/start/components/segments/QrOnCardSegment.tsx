@@ -2,8 +2,9 @@
 
 import { motion } from "framer-motion";
 import { useState } from "react";
-import type { Lane1CustomizerState } from "../../lib/types";
 import type { Variants } from "framer-motion";
+import { MagneticButton } from "../../../_components/MagneticButton";
+import { lane1CtaPrimarySurface, lane1UtilityPrimaryClasses } from "../../lib/button-styles";
 
 export function QrOnCardSegment({
   state,
@@ -29,6 +30,15 @@ export function QrOnCardSegment({
   const bg = state.qrBackgroundColor?.trim() || "#ffffff";
   const [open, setOpen] = useState(false);
   const isDropdown = state.qrDisplayMode === "dropdown";
+  const btnStyleId = state.style.buttonStyleId;
+  const primary = lane1CtaPrimarySurface(btnStyleId);
+
+  const filledStyle = primary.filledAccent
+    ? {
+        background: primary.accentBackground ?? "var(--accent)",
+        color: state.style.ctaTextHex?.trim() ? "var(--text-cta)" : "var(--accent-contrast, #fff)",
+      }
+    : {};
 
   return (
     <motion.section
@@ -37,16 +47,18 @@ export function QrOnCardSegment({
       style={{ borderColor: "var(--accent-secondary)" }}
     >
       {isDropdown ? (
-        <div className="w-full max-w-[220px]">
-          <button
+        <div className="w-full max-w-[240px]">
+          <MagneticButton
             type="button"
             onClick={() => setOpen((v) => !v)}
-            className="flex w-full items-center justify-between rounded-xl border border-[color:var(--accent-secondary)]/50 px-3 py-2 text-xs font-semibold uppercase tracking-wider"
-            style={{ color: "var(--text-primary)", background: "color-mix(in srgb, var(--accent) 8%, transparent)" }}
+            className={`${primary.className} !justify-between px-5 tracking-wider uppercase active:scale-95`}
+            style={filledStyle}
           >
-            <span>{useSecondary ? "სკანირების დაკავშირება" : "Scan to connect"}</span>
-            <span aria-hidden>{open ? "−" : "+"}</span>
-          </button>
+            <span className="text-sm font-bold">{useSecondary ? "სკანირების დაკავშირება" : "Scan to connect"}</span>
+            <span className="text-base font-medium opacity-60" aria-hidden>
+              {open ? "−" : "+"}
+            </span>
+          </MagneticButton>
           {open ? (
             <div className="mt-2 flex justify-center">
               <div

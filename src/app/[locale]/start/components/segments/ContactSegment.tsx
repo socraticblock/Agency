@@ -7,7 +7,7 @@ import { InlineEditable } from "../InlineEditable";
 import { MagneticButton } from "../../../_components/MagneticButton";
 import type { CSSProperties } from "react";
 import { hasValidAddress, MAP_ADDRESS_HELPER_TEXT } from "../../lib/location";
-import { lane1DirectionsClasses, lane1PrimaryAccentBackground } from "../../lib/button-styles";
+import { lane1CtaPrimarySurface, lane1DirectionsClasses, lane1PrimaryAccentBackground } from "../../lib/button-styles";
 
 interface ContactSegmentProps {
   state: Lane1CustomizerState;
@@ -42,6 +42,7 @@ export function ContactSegment({
     ? state.mobileButtonOrder
     : (["map-preview", "get-directions"] as MobileButtonId[]);
   const btnId = state.style.buttonStyleId;
+  const primary = lane1CtaPrimarySurface(btnId);
   const directionsFill = lane1PrimaryAccentBackground(btnId);
 
   return (
@@ -139,13 +140,17 @@ export function ContactSegment({
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`${lane1DirectionsClasses(btnId)} shadow-lg active:scale-95`}
-                  style={{
-                    ...ctaLabelStyle,
-                    background: directionsFill ?? "var(--accent)",
-                    color: state.style.ctaTextHex?.trim()
-                      ? "var(--text-cta)"
-                      : "var(--accent-contrast, #fff)",
-                  }}
+                  style={
+                    primary.filledAccent
+                      ? {
+                          ...ctaLabelStyle,
+                          background: directionsFill ?? "var(--accent)",
+                          color: state.style.ctaTextHex?.trim()
+                            ? "var(--text-cta)"
+                            : "var(--accent-contrast, #fff)",
+                        }
+                      : { ...ctaLabelStyle }
+                  }
                 >
                   <Map className="h-4 w-4 opacity-70" />
                   {useSecondary ? "მიიღეთ მიმართულებები" : "Get Directions"}
