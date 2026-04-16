@@ -51,19 +51,6 @@ export function UtilitySegments({
           <Share2 className="h-4 w-4" />
           {shareFeedback || (useSecondary ? "ბარათის გაზიარება" : "Share Card")}
         </MagneticButton>
-
-        <MagneticButton
-          as="a"
-          href={referHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={lane1UtilityPrimaryClasses(id)}
-          style={utilitySurfaceStyle}
-          aria-label={`Refer ${state.name.split(" ")[0] || "me"} via WhatsApp`}
-        >
-          <Send className="h-4 w-4" />
-          {useSecondary ? `რეფერალი ${state.name.split(" ")[0] || "მე"}` : `Refer ${state.name.split(" ")[0] || "Me"}`}
-        </MagneticButton>
       </div>
 
       <div className="qr-code-print-view hidden p-8 text-center" aria-hidden>
