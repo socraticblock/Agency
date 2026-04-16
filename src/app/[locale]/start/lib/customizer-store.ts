@@ -146,6 +146,16 @@ function migrateLane1State(
   if (merged.qrDisplayMode === undefined) merged.qrDisplayMode = "static";
   merged.showQrLogo = false;
 
+  if (typeof merged.addGoogleMap !== "boolean") {
+    merged.addGoogleMap = true;
+  }
+  if (typeof merged.showMapPreview !== "boolean") {
+    merged.showMapPreview = true;
+  }
+  if (typeof merged.showGetDirectionsButton !== "boolean") {
+    merged.showGetDirectionsButton = true;
+  }
+
   if ((merged.style.buttonStyleId as string) === "ghost") {
     merged.style.buttonStyleId = "outlined";
   }
