@@ -43,7 +43,7 @@ export function QrOnCardSegment({
   return (
     <motion.section
       variants={itemVariants}
-      className={`business-card-template-print-skip flex flex-col items-center gap-2 border-t px-4 py-6 ${isResponsive ? "md:rounded-3xl md:border md:p-8" : ""}`}
+      className={`business-card-template-print-skip flex flex-col items-center gap-2 border-t px-4 py-3 ${isResponsive ? "md:rounded-3xl md:border md:p-8" : ""}`}
       style={{ borderColor: "var(--accent-secondary)" }}
     >
       {isDropdown ? (
@@ -54,7 +54,7 @@ export function QrOnCardSegment({
             className={`${primary.className} !justify-between px-5 tracking-wider uppercase active:scale-95`}
             style={filledStyle}
           >
-            <span className="text-sm font-bold">{useSecondary ? "სკანირების დაკავშირება" : "Scan to connect"}</span>
+            <span className="text-sm font-bold">{useSecondary ? "სკანირების დაკავშირება" : "Scan QR to connect"}</span>
             <span className="text-base font-medium opacity-60" aria-hidden>
               {open ? "−" : "+"}
             </span>

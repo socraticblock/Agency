@@ -48,8 +48,11 @@ export function ContactSegment({
   return (
     <motion.section
       variants={itemVariants}
-      className={`business-card-print-contact px-4 py-8 ${isResponsive ? "md:rounded-3xl md:border md:p-8" : "border-t"}`}
-      style={{ borderColor: "var(--accent-secondary)", ...glassStyle }}
+      className={`business-card-print-contact relative z-20 flex flex-col gap-4 px-4 py-5 ${isResponsive ? "md:rounded-3xl md:border md:p-8" : "border-t"}`}
+      style={{
+        ...glassStyle,
+        borderColor: "var(--accent-secondary)",
+      }}
     >
       <div className={`space-y-4 text-sm ${isResponsive ? "md:text-base" : ""}`}>
         <div className={`flex items-center gap-3 font-semibold ${hl?.has("phone") ? orderRing : ""} p-0.5`}>

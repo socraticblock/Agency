@@ -1,7 +1,7 @@
 import type { ButtonStyleId } from "./types";
 
 const ctaBase =
-  "inline-flex min-h-[56px] w-full items-center justify-center px-6 py-4 text-base font-bold transition-all active:scale-[0.98]";
+  "inline-flex min-h-[50px] w-full items-center justify-center px-6 py-4 text-base font-bold transition-all active:scale-[0.98]";
 
 /** Layered or mixed accent fills (tint / glass / mesh) — applied inline instead of plain `var(--accent)`. */
 export interface Lane1CtaSurface {

@@ -86,7 +86,7 @@ export function CtaSegment({ state, editable, patch, ctaLabelStyle, useSecondary
   }
 
   return (
-    <section className="business-card-template-print-skip relative z-20 flex flex-col gap-3 bg-transparent px-4 py-6">
+    <section className="business-card-template-print-skip relative z-20 flex flex-col gap-3 bg-transparent px-4 py-4">
       {sequence.map((id) => renderChannel(id))}
     </section>
   );

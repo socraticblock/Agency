@@ -349,47 +349,46 @@ export const BusinessCardTemplate = memo(function BusinessCardTemplate({
           useSecondary={useSecondary}
         />
         </motion.div>
-        <div className="business-card-template-print-skip grid grid-cols-2 gap-2 px-4 pb-3 pt-1">
-          <BackgroundManagerPanel
-            editable={editable}
-            state={state}
-            patch={patch}
-            useSecondary={useSecondary}
-            isOpen={openBottomPill === "background"}
-            onToggle={() => toggleBottomPill("background")}
-            onClose={closeBottomPill}
-          />
-          <LookManagerPanel
-            editable={editable}
-            state={state}
-            patch={patch}
-            useSecondary={useSecondary}
-            isOpen={openBottomPill === "look"}
-            onToggle={() => toggleBottomPill("look")}
-            onClose={closeBottomPill}
-          />
-          <TypographyManagerPanel
-            editable={editable}
-            state={state}
-            patch={patch}
-            useSecondary={useSecondary}
-            isOpen={openBottomPill === "type"}
-            onToggle={() => toggleBottomPill("type")}
-            onClose={closeBottomPill}
-          />
-          <ExperienceManagerPanel
-            editable={editable}
-            state={state}
-            patch={patch}
-            useSecondary={useSecondary}
-            onAnimationPreviewReplay={triggerAnimationReplay}
-            isOpen={openBottomPill === "experience"}
-            onToggle={() => toggleBottomPill("experience")}
-            onClose={closeBottomPill}
-          />
-        </div>
       </div>
-
+      <div className="business-card-template-print-skip grid grid-cols-2 gap-2 px-4 pb-3 pt-1">
+        <BackgroundManagerPanel
+          editable={editable}
+          state={state}
+          patch={patch}
+          useSecondary={useSecondary}
+          isOpen={openBottomPill === "background"}
+          onToggle={() => toggleBottomPill("background")}
+          onClose={closeBottomPill}
+        />
+        <LookManagerPanel
+          editable={editable}
+          state={state}
+          patch={patch}
+          useSecondary={useSecondary}
+          isOpen={openBottomPill === "look"}
+          onToggle={() => toggleBottomPill("look")}
+          onClose={closeBottomPill}
+        />
+        <TypographyManagerPanel
+          editable={editable}
+          state={state}
+          patch={patch}
+          useSecondary={useSecondary}
+          isOpen={openBottomPill === "type"}
+          onToggle={() => toggleBottomPill("type")}
+          onClose={closeBottomPill}
+        />
+        <ExperienceManagerPanel
+          editable={editable}
+          state={state}
+          patch={patch}
+          useSecondary={useSecondary}
+          onAnimationPreviewReplay={triggerAnimationReplay}
+          isOpen={openBottomPill === "experience"}
+          onToggle={() => toggleBottomPill("experience")}
+          onClose={closeBottomPill}
+        />
+      </div>
     </div>
   );
 });
