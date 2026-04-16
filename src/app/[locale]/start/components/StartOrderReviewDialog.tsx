@@ -285,7 +285,7 @@ export function StartOrderReviewDialog({
             <button
               type="button"
               onClick={() => setStep(1)}
-              className="w-full rounded-xl border border-slate-200 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+              className="w-full rounded-xl bg-emerald-600 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-500"
             >
               Back to review
             </button>
