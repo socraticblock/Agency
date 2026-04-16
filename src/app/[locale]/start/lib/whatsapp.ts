@@ -1,4 +1,5 @@
 import { WHATSAPP_INTAKE } from "@/constants/content";
+import { digitalCardTierLabelEn, digitalCardTierLabelKa } from "./digital-card-product";
 import type { Lane1CustomizerState } from "./types";
 
 function normalizeWaDigits(): string {
@@ -21,16 +22,14 @@ export function buildLane1WhatsAppOpenerUrl(
   const lines: string[] = [];
   if (state.primaryLang === "ka") {
     lines.push("გამარჯობა Genezisi!");
-    lines.push("ციფრული ვიზიტკა — სრული ტექსტი უკვე დავაკოპირე; ქვემოთ ჩავკოპირებ შემდეგ შეტყობინებაში.");
-    lines.push(`შეკვეთის ID: ${orderId}`);
+    lines.push(`მსურს შევიკვეთო ციფრული ვიზიტკა — ${digitalCardTierLabelKa(state.selectedTier)} · შეკვეთის ID: ${orderId}`);
     if (options?.incompleteChecklist) {
       lines.push("");
       lines.push("შენიშვნა: სავალდებულო ჩეკლისტი გამოვტოვე — გთხოვთ დამიდასტუროთ.");
     }
   } else {
     lines.push("Hi Genezisi!");
-    lines.push("Digital Business Card order — I copied my full build from your site; pasting it in my NEXT message.");
-    lines.push(`Order ID: ${orderId}`);
+    lines.push(`I would like to order the Digital Business Card — ${digitalCardTierLabelEn(state.selectedTier)} · ID: ${orderId}`);
     if (options?.incompleteChecklist) {
       lines.push("");
       lines.push("Note: I skipped some required checklist items — please confirm with me.");
