@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { X, Loader2 } from "lucide-react";
-import { generateOrderId } from "../lib/order-payload";
+import { buildLeanHandoffState, generateOrderId } from "../lib/order-payload";
 import { validateOrderState } from "../lib/order-validation";
 import type { Lane1CustomizerState } from "../lib/types";
 import { StartOrderReviewIssues } from "./StartOrderReviewIssues";
@@ -19,12 +19,15 @@ type Props = {
 
 async function submitOrderToApi(state: Lane1CustomizerState, orderId: string): Promise<{ ok: boolean; error?: string; isConfigError?: boolean }> {
   try {
+    // Strip image blobs before sending to avoid request size limits.
+    // buildLeanHandoffState removes photoDataUrl, galleryImageDataUrls, and bgBaseImageDataUrl.
+    const { state: leanState } = buildLeanHandoffState(state);
     const res = await fetch("/api/orders", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         id: orderId,
-        state,
+        state: leanState,
         tier: state.selectedTier,
         digitalCardUrlHint: state.digitalCardUrlHint,
       }),
