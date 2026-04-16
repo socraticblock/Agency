@@ -16,13 +16,13 @@
 }
 
 .start-shell {
-  /* Editor chrome: fixed contrast — never follow card `--text-primary` (dark cards use light text). */
-  --start-bg: #faf8f5;
-  --start-text: #0f172a;
-  --start-text-muted: #475569;
+  /* Editor chrome: Sovereign Dark Mode */
+  --start-bg: #030717;
+  --start-text: #f8fafc;
+  --start-text-muted: #94a3b8;
   --start-caption: #64748b;
-  /* Theming: accent may be overridden on a child wrapper for pickers / links */
-  --start-accent: var(--accent, #1a2744);
+  /* Theming: accent defaults to Emerald 500 */
+  --start-accent: var(--accent, #10b981);
   --start-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
   --start-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
   --start-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
@@ -35,19 +35,19 @@
 }
 
 .start-glass {
-  background: rgba(255, 255, 255, 0.65);
+  background: rgba(3, 7, 23, 0.65);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(16, 185, 129, 0.2);
   border-radius: 16px;
   box-shadow: var(--start-shadow-lg);
 }
 
 .start-glass-heavy {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(3, 7, 23, 0.85);
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(16, 185, 129, 0.35);
   border-radius: 16px;
   box-shadow: var(--start-shadow-md);
 }
@@ -70,13 +70,13 @@
 }
 
 .start-field::placeholder {
-  color: #cbd5e1;
+  color: #64748b;
 }
 
 .start-field:focus {
   outline: none;
   border-color: var(--start-accent);
-  box-shadow: 0 0 0 3px rgba(26, 39, 68, 0.1);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
 }
 
 .start-field-textarea {
@@ -247,8 +247,8 @@
   justify-content: center;
   padding: 0;
   background:
-    radial-gradient(120% 90% at 50% -10%, rgba(246, 222, 176, 0.16), transparent 55%),
-    linear-gradient(180deg, #0b1324 0%, #0a1220 100%);
+    radial-gradient(120% 90% at 50% -10%, rgba(16, 185, 129, 0.16), transparent 55%),
+    linear-gradient(180deg, #030717 0%, #02040a 100%);
 }
 
 .start-dc-overlay-backdrop {
@@ -281,12 +281,12 @@
   border-radius: 16px;
   padding: 2rem;
   background:
-    linear-gradient(180deg, rgba(246, 238, 224, 0.14) 0%, rgba(236, 223, 200, 0.1) 100%),
-    rgba(14, 23, 39, 0.46);
-  border: 1px solid rgba(246, 228, 192, 0.22);
+    linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, rgba(3, 7, 23, 0.1) 100%),
+    rgba(3, 7, 23, 0.85);
+  border: 1px solid rgba(16, 185, 129, 0.22);
   box-shadow:
     0 25px 50px -12px rgba(0, 0, 0, 0.52),
-    inset 0 1px 0 rgba(255, 248, 234, 0.2);
+    inset 0 1px 0 rgba(16, 185, 129, 0.1);
   backdrop-filter: blur(22px) saturate(145%);
   -webkit-backdrop-filter: blur(22px) saturate(145%);
   transform: scale(0.95);
@@ -322,10 +322,10 @@
   min-height: 100vh;
   height: 100vh;
   border-radius: 0;
-  border: 1px solid rgba(246, 228, 192, 0.16);
+  border: 1px solid rgba(16, 185, 129, 0.16);
   background:
-    linear-gradient(180deg, rgba(246, 238, 224, 0.1) 0%, rgba(236, 223, 200, 0.08) 100%),
-    rgba(11, 20, 36, 0.82);
+    linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, rgba(3, 7, 23, 0.08) 100%),
+    rgba(3, 7, 23, 0.95);
   padding: 1.5rem;
 }
 
@@ -393,7 +393,7 @@
 .start-order-tier-btn {
   border-radius: 9999px;
   border: 1px solid rgba(16, 185, 129, 0.35);
-  background: rgba(255, 255, 255, 0.65);
+  background: rgba(3, 7, 23, 0.65);
   padding: 0.375rem 0.75rem;
   font-size: 0.75rem;
   font-weight: 600;

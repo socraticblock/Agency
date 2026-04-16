@@ -104,11 +104,11 @@ export function StartPageEditorColumn({
         onOrderClick={onOrderClick}
       />
       <header className="mb-10 text-center">
-        <p className="mb-2 text-[0.75rem] font-bold uppercase tracking-[0.2em] text-[#64748b]">
+        <p className="mb-2 text-[0.75rem] font-bold uppercase tracking-[0.2em] text-emerald-400/80">
           Genezisi
         </p>
         <h1 className="start-page-title mb-2">Customize your card</h1>
-        <p className="start-body text-[#64748b]">
+        <p className="start-body text-slate-400">
           Preview updates as you edit. Order via WhatsApp.
         </p>
       </header>
@@ -119,7 +119,7 @@ export function StartPageEditorColumn({
             <button
               type="button"
               className={`rounded-full px-3 py-2 transition-colors duration-200 ${
-                previewLang === "primary" ? "bg-[#1A2744] text-white" : "text-[#64748b]"
+                previewLang === "primary" ? "bg-emerald-500/80 text-white" : "text-slate-400"
               }`}
               onClick={() => setPreviewLang("primary")}
             >
@@ -128,7 +128,7 @@ export function StartPageEditorColumn({
             <button
               type="button"
               className={`rounded-full px-3 py-2 transition-colors duration-200 ${
-                previewLang === "secondary" ? "bg-[#1A2744] text-white" : "text-[#64748b]"
+                previewLang === "secondary" ? "bg-emerald-500/80 text-white" : "text-slate-400"
               }`}
               onClick={() => setPreviewLang("secondary")}
             >
@@ -145,7 +145,7 @@ export function StartPageEditorColumn({
               <button
                 type="button"
                 className={`rounded-full px-3 py-2 transition-colors duration-200 ${
-                  previewLang === "primary" ? "bg-[#1A2744] text-white" : "text-[#64748b]"
+                  previewLang === "primary" ? "bg-emerald-500/80 text-white" : "text-slate-400"
                 }`}
                 onClick={() => setPreviewLang("primary")}
               >
@@ -154,7 +154,7 @@ export function StartPageEditorColumn({
               <button
                 type="button"
                 className={`rounded-full px-3 py-2 transition-colors duration-200 ${
-                  previewLang === "secondary" ? "bg-[#1A2744] text-white" : "text-[#64748b]"
+                  previewLang === "secondary" ? "bg-emerald-500/80 text-white" : "text-slate-400"
                 }`}
                 onClick={() => setPreviewLang("secondary")}
               >
@@ -163,7 +163,7 @@ export function StartPageEditorColumn({
             </div>
           ) : null}
         </div>
-        <div className="relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-[var(--start-shadow-md)]">
+        <div className="relative overflow-hidden rounded-2xl border border-emerald-500/20 bg-transparent shadow-[var(--start-shadow-lg)]">
           <BusinessCardTemplate
             state={state}
             previewLang={languageMode.fixedPreview ?? previewLang}
