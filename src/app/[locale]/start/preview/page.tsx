@@ -106,7 +106,7 @@ export default function PreviewPage() {
           previewLang="primary"
           homeHref={homeHref}
           ownerName={state.name}
-          hideBranding={true}
+          hideBranding={false}
           layoutMode="responsive"
         />
       </div>
