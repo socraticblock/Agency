@@ -120,35 +120,6 @@ export function QrManagerPanel({
               </div>
             </div>
 
-            <div className={`mb-2 ${!state.showQrOnCard ? "opacity-60" : ""}`}>
-              <p className="start-label mb-1.5">{useSecondary ? "QR ჩვენების რეჟიმი" : "Display mode"}</p>
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  disabled={!state.showQrOnCard}
-                  onClick={() => onPatch({ qrDisplayMode: "static" })}
-                  className={`rounded-lg border px-3 py-2 text-sm font-semibold transition ${
-                    state.qrDisplayMode === "static"
-                      ? "border-[#1A2744] bg-[#1A2744] text-white"
-                      : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
-                  } disabled:cursor-not-allowed disabled:opacity-70`}
-                >
-                  {useSecondary ? "სტატიკური" : "Static"}
-                </button>
-                <button
-                  type="button"
-                  disabled={!state.showQrOnCard}
-                  onClick={() => onPatch({ qrDisplayMode: "dropdown" })}
-                  className={`rounded-lg border px-3 py-2 text-sm font-semibold transition ${
-                    state.qrDisplayMode === "dropdown"
-                      ? "border-[#1A2744] bg-[#1A2744] text-white"
-                      : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
-                  } disabled:cursor-not-allowed disabled:opacity-70`}
-                >
-                  {useSecondary ? "ჩამოსაშლელი" : "Dropdown"}
-                </button>
-              </div>
-            </div>
 
             <label className="start-label mb-1.5 block">
               {useSecondary ? "QR ფორმა" : "QR shape"}
