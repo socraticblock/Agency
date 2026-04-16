@@ -17,7 +17,7 @@ type Props = {
   onOrderClick: () => void;
 };
 
-async function submitOrderToApi(state: Lane1CustomizerState, orderId: string): Promise<{ ok: boolean; error?: string }> {
+async function submitOrderToApi(state: Lane1CustomizerState, orderId: string): Promise<{ ok: boolean; error?: string; isConfigError?: boolean }> {
   try {
     const res = await fetch("/api/orders", {
       method: "POST",
@@ -31,11 +31,14 @@ async function submitOrderToApi(state: Lane1CustomizerState, orderId: string): P
     });
     if (!res.ok) {
       const data = await res.json().catch(() => ({}));
-      return { ok: false, error: data.error ?? `Request failed (${res.status})` };
+      const error = data.error ?? `Request failed (${res.status})`;
+      // If we get a 500 with "configuration" or "database" in the message/detail, mark it as a config error.
+      const isConfigError = res.status === 500 && (String(data.error).toLowerCase().includes("config") || String(data.detail).toLowerCase().includes("env var") || String(data.error).toLowerCase().includes("database"));
+      return { ok: false, error, isConfigError };
     }
     return { ok: true };
   } catch (err) {
-    return { ok: false, error: "Could not connect. Your order ID is still valid — you can still send via WhatsApp." };
+    return { ok: false, error: "Network error. Your order ID is still valid — you can still send via WhatsApp." };
   }
 }
 
@@ -127,9 +130,21 @@ export function StartOrderReviewDialog({
                 </p>
               ) : null}
               {submitError ? (
-                <p className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-center text-sm text-amber-800">
-                  {submitError}
-                </p>
+                <div className="space-y-3 rounded-lg border border-amber-200 bg-amber-50 p-4">
+                  <p className="text-center text-sm font-medium text-amber-900">
+                    {submitError}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onCloseAttempt?.({ step: 1, bypassed: false });
+                      setStep(2);
+                    }}
+                    className="flex w-full items-center justify-center gap-2 rounded-lg bg-amber-100 py-2.5 text-xs font-bold uppercase tracking-wider text-amber-900 transition hover:bg-amber-200"
+                  >
+                    Skip and continue to WhatsApp anyway
+                  </button>
+                </div>
               ) : null}
               {blocking.length > 0 ? (
                 <button
@@ -139,7 +154,7 @@ export function StartOrderReviewDialog({
                   className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 py-3 text-center text-sm font-semibold text-slate-700 transition hover:bg-slate-100 disabled:opacity-60"
                 >
                   {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-                  Continue without checklist — talk to Genezisi
+                  Talk to Genezisi anyway — bypass checklist
                 </button>
               ) : null}
             </div>

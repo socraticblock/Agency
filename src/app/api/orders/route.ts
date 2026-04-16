@@ -17,88 +17,97 @@ export const dynamic = "force-dynamic";
 // ---------------------------------------------------------------------------
 
 export async function POST(request: Request) {
-  let body: {
-    id: string;
-    state: unknown;
-    tier: string;
-    digitalCardUrlHint?: string;
-  };
-
   try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+    let body: {
+      id: string;
+      state: unknown;
+      tier: string;
+      digitalCardUrlHint?: string;
+    };
 
-  const { id, state, tier } = body;
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+    }
 
-  if (!id || typeof id !== "string" || !id.startsWith("gc-")) {
-    return NextResponse.json(
-      { error: "Valid order ID required (must start with gc-)" },
-      { status: 400 }
-    );
-  }
+    const { id, state, tier } = body;
 
-  if (!state || typeof state !== "object") {
-    return NextResponse.json(
-      { error: "state (Lane1CustomizerState) required" },
-      { status: 400 }
-    );
-  }
+    if (!id || typeof id !== "string" || !id.startsWith("gc-")) {
+      return NextResponse.json(
+        { error: "Valid order ID required (must start with gc-)" },
+        { status: 400 }
+      );
+    }
 
-  if (!tier || !["subdomain", "professional", "executive"].includes(tier)) {
-    return NextResponse.json(
-      { error: "Valid tier required: subdomain | professional | executive" },
-      { status: 400 }
-    );
-  }
+    if (!state || typeof state !== "object") {
+      return NextResponse.json(
+        { error: "state (Lane1CustomizerState) required" },
+        { status: 400 }
+      );
+    }
 
-  const existing = await getCardById(id);
-  if (existing) {
-    return NextResponse.json({
-      ok: true,
+    if (!tier || !["subdomain", "professional", "executive"].includes(tier)) {
+      return NextResponse.json(
+        { error: "Valid tier required: subdomain | professional | executive" },
+        { status: 400 }
+      );
+    }
+
+    const existing = await getCardById(id);
+    if (existing) {
+      return NextResponse.json({
+        ok: true,
+        id,
+        status: existing.status,
+        slug: existing.publishSlug ?? existing.slug ?? undefined,
+        publishSlug: existing.publishSlug ?? existing.slug ?? undefined,
+      });
+    }
+
+    const stateObj = state as Record<string, unknown>;
+    const name = String(stateObj.name ?? "");
+    const company = String(stateObj.company ?? "");
+    const hint = typeof body.digitalCardUrlHint === "string" ? body.digitalCardUrlHint : "";
+
+    const intent = computeOrderPublishIntent(
+      tier as "subdomain" | "professional" | "executive",
       id,
-      status: existing.status,
-      slug: existing.publishSlug ?? existing.slug ?? undefined,
-      publishSlug: existing.publishSlug ?? existing.slug ?? undefined,
+      hint,
+      name,
+      company
+    );
+
+    const result = await createCard({
+      id,
+      tier,
+      name: name || null,
+      company: company || null,
+      phone: (stateObj.phone as string) ?? null,
+      email: (stateObj.email as string) ?? null,
+      stateJson: JSON.stringify(state),
+      publishSlug: intent.publishSlug,
+      requestedDomain: intent.requestedDomain,
+      domainStatus: intent.domainStatus,
     });
-  }
 
-  const stateObj = state as Record<string, unknown>;
-  const name = String(stateObj.name ?? "");
-  const company = String(stateObj.company ?? "");
-  const hint = typeof body.digitalCardUrlHint === "string" ? body.digitalCardUrlHint : "";
+    if (!result.ok) {
+      console.error("Failed to create card order:", result.error);
+      return NextResponse.json(
+        { error: "Failed to save order", detail: result.error },
+        { status: 500 }
+      );
+    }
 
-  const intent = computeOrderPublishIntent(
-    tier as "subdomain" | "professional" | "executive",
-    id,
-    hint,
-    name,
-    company
-  );
-
-  const result = await createCard({
-    id,
-    tier,
-    name: name || null,
-    company: company || null,
-    phone: (stateObj.phone as string) ?? null,
-    email: (stateObj.email as string) ?? null,
-    stateJson: JSON.stringify(state),
-    publishSlug: intent.publishSlug,
-    requestedDomain: intent.requestedDomain,
-    domainStatus: intent.domainStatus,
-  });
-
-  if (!result.ok) {
-    console.error("Failed to create card order:", result.error);
+    return NextResponse.json({ ok: true, id, slug: intent.publishSlug });
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("Orders API Critical Crash:", msg);
     return NextResponse.json(
-      { error: "Failed to save order", detail: result.error },
+      { error: "Database or server configuration error.", detail: msg },
       { status: 500 }
     );
   }
-
-  return NextResponse.json({ ok: true, id, slug: intent.publishSlug });
 }
 
 // ---------------------------------------------------------------------------
