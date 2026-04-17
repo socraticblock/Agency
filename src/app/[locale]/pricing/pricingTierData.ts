@@ -1,18 +1,15 @@
-import { FOUNDATIONS, type Foundation } from "@/constants/pricing";
+import type { Locale } from "@/lib/i18n";
 
-/** Card order on `/pricing` (matches marketing story arc). */
-export const PRICING_TIER_ORDER = ["landing", "cms", "saas", "ecomm"] as const;
-
-export function getOrderedPricingFoundations(): Foundation[] {
-  return PRICING_TIER_ORDER.map((id) => FOUNDATIONS.find((f) => f.id === id)!);
+export interface TierDeckItem {
+  id: string;
+  label: string;
+  badge?: string;
 }
 
-export function tierPrimaryHref(locale: string, f: Foundation): string {
-  const path = f.ctaHref ?? `/architect?tier=professional`;
-  return `/${locale}${path.startsWith("/") ? path : `/${path}`}`;
-}
-
-export function priceDisplayLabel(f: Foundation): string {
-  if (f.isBespoke) return f.customPriceLabel ?? "Custom quote";
-  return `${f.priceGEL.toLocaleString("ka-GE")} ₾`;
+export function getPricingTierData(_locale: Locale): TierDeckItem[] {
+  return [
+    { id: "cms", label: "Professional", badge: undefined },
+    { id: "saas", label: "Command Center", badge: "Most Popular" },
+    { id: "ecomm", label: "E-Commerce HQ", badge: undefined },
+  ];
 }

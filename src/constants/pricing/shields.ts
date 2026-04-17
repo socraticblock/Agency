@@ -5,7 +5,7 @@ export const SHIELD_TIERS: ShieldTier[] = [
   {
     id: 0,
     name: 'Reputation Scout',
-    priceGEL: 0,
+    priceGEL: 120,
     level: 'Basic',
     risk: 'High',
     perks: [
@@ -18,7 +18,7 @@ export const SHIELD_TIERS: ShieldTier[] = [
   {
     id: 1,
     name: 'Micro Shield',
-    priceGEL: 50,
+    priceGEL: 500,
     level: 'Proactive',
     risk: 'Medium',
     isRecommended: true,
@@ -34,7 +34,7 @@ export const SHIELD_TIERS: ShieldTier[] = [
   {
     id: 2,
     name: 'Active Shield',
-    priceGEL: 150,
+    priceGEL: 1500,
     level: 'Guardian',
     risk: 'Low',
     perks: [
@@ -49,7 +49,7 @@ export const SHIELD_TIERS: ShieldTier[] = [
   {
     id: 3,
     name: 'Enterprise Shield',
-    priceGEL: 750,
+    priceGEL: 3000,
     level: 'Immune',
     risk: 'None',
     perks: [
@@ -67,11 +67,12 @@ export function getAccessibleModuleIdsByFoundation(
   foundationId: string | null | undefined
 ): string[] {
   if (!foundationId) return [];
-  if (foundationId === "landing") return [];
   if (foundationId === "ecomm") return MODULES.map((m) => m.id);
 
   if (foundationId === "cms") {
-    return MODULES.filter((m) => m.category === "Marketing" || m.category === "Creative").map((m) => m.id);
+    return MODULES.filter((m) =>
+      (m.category === "Marketing" || m.category === "Creative") && m.id !== "extra-page"
+    ).map((m) => m.id);
   }
 
   if (foundationId === "saas") {

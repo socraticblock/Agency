@@ -40,7 +40,7 @@ const articles: BlogArticle[] = [
     title:
       "Why 93% of Georgian Businesses Are Invisible Online (And How to Fix It in 2026)",
     metaDescription:
-      "Only 7% of Georgian SMEs have a website. Here's why your Tbilisi business is losing clients — and the fastest ways to build your digital presence starting from 150 GEL.",
+      "Only 7% of Georgian SMEs have a website. Here's why your Tbilisi business is losing clients — and the fastest ways to build your digital presence starting from 1,299 GEL.",
     readingTime: "6 min read",
     lastUpdated: "April 2026",
     primaryKeyword: "Georgian business website",
@@ -105,9 +105,9 @@ const articles: BlogArticle[] = [
             type: "list",
             items: [
               "<strong>Digital Business Card — from 150 ₾</strong> (+ 120 ₾/yr hosting) — A shareable, interactive digital card with your contact info, services, and social links. Perfect for professionals who need a polished online identity today. <a href='/en/start' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>Create yours →</a>",
-              "<strong>Essential One-Page Site — 999 ₾</strong> — A clean, professional single-page website that covers your services, about section, testimonials, and contact form. Ideal for lawyers, consultants, clinics, and freelancers. <a href='/en/pricing' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>See pricing →</a>",
-              "<strong>Professional Custom Site — 2,299 ₾</strong> — A multi-page, fully bespoke website with custom animations, advanced SEO, booking integrations, and a content management system. Built to compete with top-tier international firms. <a href='/en/architect?tier=professional' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>Start building →</a>",
-              "<strong>Command Center (4,999 ₾) & E-Commerce HQ (17,999 ₾)</strong> — For businesses ready to dominate. The Command Center adds advanced dashboards, CRM integration, and multi-language support. The E-Commerce HQ is a full online store with payment processing, inventory management, and Georgian bank integrations. <a href='/en/pricing' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>Explore tiers →</a>",
+              "<strong>Professional Site — 1,299 ₾</strong> — A clean, professional custom website that covers your services, about section, testimonials, and contact form. Ideal for lawyers, consultants, clinics, and freelancers. <a href='/en/pricing' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>See pricing →</a>",
+              "<strong>Professional Custom Site — 1,299 ₾</strong> — A multi-page, fully bespoke website with custom animations, advanced SEO, booking integrations, and a content management system. Built to compete with top-tier international firms. <a href='/en/architect?tier=professional' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>Start building →</a>",
+              "<strong>Command Center (1,999 ₾) & E-Commerce HQ (starting 3,999 ₾)</strong> — For businesses ready to dominate. The Command Center adds advanced dashboards, CRM integration, and multi-language support. The E-Commerce HQ is a full online store with payment processing, inventory management, and Georgian bank integrations. <a href='/en/pricing' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>Explore tiers →</a>",
             ],
           },
           {
@@ -216,7 +216,7 @@ const articles: BlogArticle[] = [
             type: "list",
             items: [
               "<strong>Need something today?</strong> — Create your <a href='/en/start' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>Digital Business Card in 5 minutes</a>. From 150 ₾.",
-              "<strong>Ready for a real website?</strong> — Explore our <a href='/en/pricing' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>transparent pricing in GEL</a>. One-page sites from 999 ₾.",
+              "<strong>Ready for a real website?</strong> — Explore our <a href='/en/pricing' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>transparent pricing in GEL</a>. Professional sites from 1,299 ₾.",
               "<strong>Want a custom build?</strong> — Use our <a href='/en/architect?tier=professional' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>Architect Studio</a> to design your perfect site.",
               "<strong>Prefer to talk?</strong> — Message us on <a href='https://wa.me/995579723564' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2' target='_blank'>WhatsApp</a>. We respond within the hour.",
             ],

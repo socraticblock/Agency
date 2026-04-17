@@ -63,9 +63,6 @@ export function GlobalFooter({ locale }: { locale: Locale }) {
         <Link href={`/${locale}/architect`} className="transition hover:text-emerald-300">
           Architect
         </Link>
-        <Link href={`/${locale}/book-strategy`} className="transition hover:text-emerald-300">
-          Book strategy
-        </Link>
       </nav>
 
       <motion.div

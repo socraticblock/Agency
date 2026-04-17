@@ -102,7 +102,6 @@ export default function Configurator() {
       professional: "cms",
       "command-center": "saas",
       "ecommerce-hq": "ecomm",
-      essential: "landing",
     };
 
     const mappedFoundation = tierMap[requestedTier.toLowerCase()];

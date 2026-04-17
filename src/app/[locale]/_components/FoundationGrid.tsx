@@ -34,7 +34,7 @@ export default function FoundationGrid({
   const locale = (params.locale as string) || "en";
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const primaryFoundationIds = new Set(["landing", "cms", "saas", "ecomm"]);
+  const primaryFoundationIds = new Set(["cms", "saas", "ecomm"]);
   const primaryFoundations = FOUNDATIONS.filter((f) => primaryFoundationIds.has(f.id));
 
   useEffect(() => {
@@ -219,15 +219,19 @@ export default function FoundationGrid({
       {!activeFoundation ? (
         <div className="grid gap-3 md:grid-cols-2">
           <a
-            href={`/${locale}/book-strategy`}
+            href={`https://wa.me/995579723564?text=${encodeURIComponent("Hi Genezisi! I'm interested in custom software architecture. Can we discuss my requirements?")}`}
+            target="_blank"
+            rel="noopener noreferrer"
             className="rounded-xl border border-emerald-400/35 bg-emerald-500/10 p-4 text-left transition hover:bg-emerald-500/15"
           >
             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-300">Custom Build</p>
             <h4 className="mt-1 text-sm font-black text-white">Need Customized Software Architecture?</h4>
-            <p className="mt-1 text-xs text-slate-300">Discuss unique logic, automations, or enterprise scope with an architect.</p>
+            <p className="mt-1 text-xs text-slate-300">Discuss unique logic, automations, or enterprise scope with an architect on WhatsApp.</p>
           </a>
           <a
-            href={`/${locale}/book-strategy`}
+            href={`https://wa.me/995579723564?text=${encodeURIComponent("Hi Genezisi! I have an existing site that needs modernization. Can we discuss a legacy upgrade?")}`}
+            target="_blank"
+            rel="noopener noreferrer"
             className="rounded-xl border border-amber-400/35 bg-amber-500/10 p-4 text-left transition hover:bg-amber-500/15"
           >
             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-300">Legacy Upgrade</p>

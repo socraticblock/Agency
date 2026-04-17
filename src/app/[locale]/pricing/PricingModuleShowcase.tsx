@@ -64,7 +64,7 @@ const MODULE_SHOWCASE: ModuleCategory[] = [
     icon: "🛡️",
     name: "Operations",
     moduleCount: 5,
-    fromPriceGEL: 500,
+    fromPriceGEL: 0,
     description:
       "Reliability, monitoring, and ongoing hardening beyond the launch window.",
     examples: ["Performance checks", "Security posture", "Backup paths"],
@@ -105,7 +105,7 @@ export function PricingModuleShowcase() {
                 ))}
               </ul>
               <p className="mt-2 text-sm font-bold text-emerald-700">
-                From {category.fromPriceGEL} ₾ · {category.moduleCount} modules in family
+                {category.fromPriceGEL === 0 ? "FREE" : `From ${category.fromPriceGEL} ₾`} · {category.moduleCount} modules in family
               </p>
               <div className="mt-4 border-t border-slate-200 pt-3 text-center">
                 <span className="inline-block rounded-full bg-slate-100 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-slate-600">

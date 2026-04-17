@@ -22,23 +22,18 @@ export default function ShieldGrid({
   foundationId,
 }: ShieldGridProps) {
   const emphasisByFoundation: Record<string, { tierId: number; badge: string; reason: string }> = {
-    landing: {
-      tierId: 1,
-      badge: "Popular with Essential",
-      reason: "Extend your coverage beyond 30 days.",
-    },
     cms: {
-      tierId: 2,
-      badge: "Great with Professional",
-      reason: "Balanced support + ongoing optimization.",
+      tierId: 0,
+      badge: "Popular with Professional",
+      reason: "Essential protection for your digital asset.",
     },
     saas: {
-      tierId: 3,
+      tierId: 1,
       badge: "Recommended for Command Center",
-      reason: "Protect operational continuity as complexity grows.",
+      reason: "Balanced support + ongoing optimization.",
     },
     ecomm: {
-      tierId: 3,
+      tierId: 2,
       badge: "Best for E-Commerce",
       reason: "Protect your revenue stream with maximum coverage.",
     },
@@ -109,7 +104,7 @@ export default function ShieldGrid({
                   </div>
                 </div>
                 <span className="text-sm font-black font-space text-emerald-400">
-                  {tier.priceGEL === 0 ? "Included" : `${formatPrice(tier.priceGEL)}/mo`}
+                  {tier.priceGEL === 0 ? "Included" : `${formatPrice(tier.priceGEL)}/yr`}
                 </span>
               </div>
 

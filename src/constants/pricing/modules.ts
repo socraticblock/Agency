@@ -16,11 +16,20 @@ export const MODULES: Module[] = [
   {
     id: 'pay-gateway',
     category: 'Georgian Advantage',
-    name: 'Merchant API & Gateway Integration',
+    name: 'Merchant API — Client Has Key',
     priceGEL: 800,
-    whatItIs: 'We handle the Code. Connecting your Merchant ID to your site with custom HMAC security and Bank-Audit compliance. (For businesses who already have a bank-approved Merchant ID but need the technical bridge).',
+    whatItIs: 'Connecting your existing bank-approved Merchant ID to your site with custom HMAC security and Bank-Audit compliance. For businesses who already have a bank-approved Merchant ID but need the technical bridge.',
     howItHelps: 'Allows you to accept GEL/USD/EUR directly into your local account with 0.1s transaction latency.',
     lawyerRole: 'Oversees merchant processing compliance, verifying corporate data structure aligns with local anti-money-laundering (AML) banking settlements.'
+  },
+  {
+    id: 'pay-gateway-full',
+    category: 'Georgian Advantage',
+    name: 'Merchant API — We Handle Bank',
+    priceGEL: 1500,
+    whatItIs: 'Full merchant onboarding + integration. We handle the bank visits, KYC clearance, merchant approval, and the technical bridge — end to end.',
+    howItHelps: 'Turnkey payment setup. You don\'t visit a branch or fill out bank forms — we handle everything from application to live transactions.',
+    lawyerRole: 'Oversees merchant processing compliance, verifies corporate data structure aligns with local anti-money-laundering (AML) banking settlements.'
   },
   {
     id: 'gita-grant',
@@ -170,7 +179,7 @@ export const MODULES: Module[] = [
     id: 'multi-filter',
     category: 'Business Engines',
     name: 'Multi-Criteria Filtering',
-    priceGEL: 4500,
+    priceGEL: 1500,
     whatItIs: "A heavy-duty 'Smart Search' engine for your products. It allows customers to filter through your inventory by price, size, color, brand, and technical specs all at once—without ever having to wait for a page to reload.",
     howItHelps: "It kills 'Search Frustration.' If a customer has to click through 10 pages to find a 'Blue XL Shirt,' they will leave. This is the 0.1% architecture used by giants like Amazon and Farfetch. It makes your entire catalog easy to browse in seconds, which directly increases your sales and keeps people on your site longer."
   },
@@ -194,7 +203,7 @@ export const MODULES: Module[] = [
     id: 'course-tracking',
     category: 'Business Engines',
     name: 'Course Tracking Logic',
-    priceGEL: 8000,
+    priceGEL: 5000,
     timeSaved: 20,
     whatItIs: 'Gated content system with student progress bars and quizzes.',
     howItHelps: 'The core of a Digital Academy. Automates your education business so it runs without you.'
@@ -331,9 +340,9 @@ export const MODULES: Module[] = [
     id: 'knowledge-transfer',
     category: 'Operational',
     name: 'Knowledge Transfer',
-    priceGEL: 400,
-    whatItIs: '1-on-1 staff training session.',
-    howItHelps: 'Empowerment. We teach your team how to manage the new infrastructure so you don\'t need a developer for every tiny change.'
+    priceGEL: 0,
+    whatItIs: 'PDF/video training materials for your team.',
+    howItHelps: 'Delivered as comprehensive documentation and video walkthroughs — included free with every build.'
   },
   {
     id: 'tech-doc',
@@ -347,8 +356,8 @@ export const MODULES: Module[] = [
     id: 'staff-aug',
     category: 'Operational',
     name: 'Staff Augmentation',
-    priceGEL: 120,
-    whatItIs: 'Renting a developer hourly bank.',
+    priceGEL: 150,
+    whatItIs: 'Hourly developer support — add a pro to your team on demand.',
     howItHelps: 'Elastic scaling. Add a pro developer to your team only when you need them, without the overhead of a full-time hire.'
   },
   {

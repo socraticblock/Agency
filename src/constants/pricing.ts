@@ -55,6 +55,7 @@ export interface Foundation extends ServiceItem {
   recommendedModules?: string[];
   inheritedValue?: { id: string, name: string, priceGEL: number };
   strategyLabel?: string;
+  includedPages?: number;
 }
 
 export interface Module extends ServiceItem {

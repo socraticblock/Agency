@@ -81,7 +81,7 @@ export function ApplyForm({ locale }: { locale: Locale }) {
     }
     setSubmitted(true);
     setTimeout(() => {
-      router.push(`/${locale}/book-strategy`);
+      router.push(`/${locale}/pricing`);
     }, 2000);
   };
 

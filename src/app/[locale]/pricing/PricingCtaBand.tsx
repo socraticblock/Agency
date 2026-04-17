@@ -37,13 +37,6 @@ export function PricingCtaBand({ locale, placement, className = "" }: PricingCta
       >
         Open Architect Studio
       </Link>
-      <Link
-        href={`/${locale}/book-strategy`}
-        onClick={() => trackPricingEvent("pricing_cta_click", { placement, target: "book_strategy" })}
-        className="inline-flex min-h-[48px] items-center justify-center rounded-xl border border-white/15 bg-white/5 px-6 py-3 text-center text-sm font-bold text-white transition hover:bg-white/10"
-      >
-        Book a strategy call
-      </Link>
       <a
         href={wa}
         target="_blank"

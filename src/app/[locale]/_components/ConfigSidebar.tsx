@@ -328,7 +328,7 @@ export default memo(function ConfigSidebar({
             {[
               "Total Legal Ownership: You legally own every pixel and line of code under Georgian Law.",
               "Source Code Ownership: Full GitHub transfer. No 'vendor lock-in'—you are never trapped with one developer.",
-              "Tier Warranty: Essential 30 days; Professional/Command Center/E-Commerce HQ 90 days.",
+              "Tier Warranty: Professional 45 days; Command Center 75 days; E-Commerce HQ 100 days.",
               "Project & QA Management: We handle the architecture and testing so you stay in your 'creative zone.'"
             ].map((text, idx) => (
               <div key={idx} className="text-[10px] text-slate-400 leading-relaxed flex items-start gap-1">
@@ -348,7 +348,7 @@ export default memo(function ConfigSidebar({
                         <span className="font-black text-slate-100">Revision Policy</span>{" "}
                         <span className="text-slate-500 font-medium">— Built into every foundation:</span>{" "}
                         <span className="text-slate-400">
-                          Essential: <span className="font-black text-slate-200">1</span> • Professional:{" "}
+                          Professional:{" "}
                           <span className="font-black text-slate-200">2</span> • Command:{" "}
                           <span className="font-black text-slate-200">3</span> • E-commerce:{" "}
                           <span className="font-black text-slate-200">4</span> rounds

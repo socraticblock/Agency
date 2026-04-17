@@ -1,83 +1,92 @@
-export type ComparisonRow = {
-  feature: string;
-  essential: string;
-  professional: string;
-  commandCenter: string;
-  ecommerce: string;
-  /** Which column gets subtle highlight (optional) */
-  highlightCol?: "essential" | "professional" | "command" | "ecommerce";
-};
+import { FOUNDATIONS } from "@/constants/pricing";
+import type { Locale } from "@/lib/i18n";
 
-/** Feature rows (excluding Price — that row is built from `FOUNDATIONS` in the UI). */
-export const PRICING_COMPARISON_DETAIL_ROWS: ComparisonRow[] = [
-  {
-    feature: "Design approach",
-    essential: "Template-based",
-    professional: "100% custom",
-    commandCenter: "100% custom",
-    ecommerce: "100% custom",
-  },
-  {
-    feature: "Pages included (typical)",
-    essential: "1 landing",
-    professional: "1 conversion site",
-    commandCenter: "4+",
-    ecommerce: "Store + templates",
-  },
-  {
-    feature: "Blog / CMS",
-    essential: "—",
-    professional: "—",
-    commandCenter: "Yes",
-    ecommerce: "Yes",
-  },
-  {
-    feature: "E-commerce",
-    essential: "—",
-    professional: "—",
-    commandCenter: "Optional add-on path",
-    ecommerce: "Full store build",
-  },
-  {
-    feature: "Georgian payments (TBC / BOG)",
-    essential: "—",
-    professional: "—",
-    commandCenter: "—",
-    ecommerce: "Yes",
-  },
-  {
-    feature: "RS.ge / e-receipt path",
-    essential: "—",
-    professional: "—",
-    commandCenter: "—",
-    ecommerce: "Yes (where applicable)",
-  },
-  {
-    feature: "Revision rounds",
-    essential: "1",
-    professional: "2",
-    commandCenter: "3",
-    ecommerce: "4",
-  },
-  {
-    feature: "Warranty",
-    essential: "30 days",
-    professional: "90 days",
-    commandCenter: "90 days",
-    ecommerce: "90 days",
-  },
-  {
-    feature: "Delivery (typical)",
-    essential: "7–10 business days",
-    professional: "10–15 business days",
-    commandCenter: "25–35 business days",
-    ecommerce: "8–10 weeks",
-  },
-  {
-    feature: "Source code ownership",
-    essential: "Yes",
-    professional: "Yes",
-    commandCenter: "Yes",
-    ecommerce: "Yes",
-  },
-];
+export interface ComparisonRow {
+  label: string;
+  values: string[];
+}
+
+export function getComparisonData(_locale: Locale): ComparisonRow[] {
+  const pro = FOUNDATIONS.find((f) => f.id === "cms")!;
+  const cc = FOUNDATIONS.find((f) => f.id === "saas")!;
+  const ec = FOUNDATIONS.find((f) => f.id === "ecomm")!;
+
+  return [
+    {
+      label: "Starting Price",
+      values: [
+        `${pro.priceGEL.toLocaleString()} ₾`,
+        `${cc.priceGEL.toLocaleString()} ₾`,
+        `from ${ec.priceGEL.toLocaleString()} ₾`,
+      ],
+    },
+    {
+      label: "Warranty",
+      values: [`${pro.warrantyDays}d`, `${cc.warrantyDays}d`, `${ec.warrantyDays}d`],
+    },
+    {
+      label: "Delivery",
+      values: [pro.deliveryTimeline ?? "7-10 days", cc.deliveryTimeline ?? "10-15 days", ec.deliveryTimeline ?? "20+ days"],
+    },
+    {
+      label: "Pages",
+      values: [
+        "Unlimited sections",
+        "Unlimited sections",
+        "5 pages included",
+      ],
+    },
+    {
+      label: "Hosting (Card)",
+      values: ["50 ₾/yr", "50 ₾/yr", "120 ₾/yr"],
+    },
+    {
+      label: "SSL",
+      values: ["✓", "✓", "✓"],
+    },
+    {
+      label: "Responsive",
+      values: ["✓", "✓", "✓"],
+    },
+    {
+      label: "Custom Animations",
+      values: ["✓", "✓", "✓"],
+    },
+    {
+      label: "CMS",
+      values: ["—", "✓", "✓"],
+    },
+    {
+      label: "Dashboard",
+      values: ["—", "✓", "✓"],
+    },
+    {
+      label: "Multi-Language",
+      values: ["—", "✓", "✓"],
+    },
+    {
+      label: "E-Commerce",
+      values: ["—", "—", "✓"],
+    },
+    {
+      label: "Payment Processing",
+      values: ["—", "—", "✓"],
+    },
+    {
+      label: "Inventory Mgmt",
+      values: ["—", "—", "✓"],
+    },
+    {
+      label: "Priority Support",
+      values: ["—", "✓", "✓"],
+    },
+    {
+      label: "Shield (Yearly)",
+      values: [
+        "120 ₾/yr",
+        "500 ₾/yr",
+        "1,500 ₾/yr",
+      ],
+    },
+  ];
+}

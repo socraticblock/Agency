@@ -1,73 +1,74 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown } from "lucide-react";
-import { trackPricingEvent } from "@/lib/pricingAnalytics";
 
-const ITEMS: { q: string; a: string }[] = [
+interface FaqItem {
+  q: string;
+  a: string;
+}
+
+const FAQ: FaqItem[] = [
   {
-    q: "Do I own the source code?",
-    a: "Yes. Packages include source ownership transfer (e.g. GitHub) so your site is your asset — not a locked-in subscription.",
+    q: "What's the difference between Professional, Command Center, and E-Commerce HQ?",
+    a: "Professional is a fully custom multi-page website — perfect for professionals and service businesses. Command Center adds a dashboard, CMS, multi-language support, and priority support. E-Commerce HQ is a complete online store with payment processing, inventory management, and Georgian bank integrations.",
   },
   {
-    q: "Can I upgrade later?",
-    a: "Absolutely. Many clients start with Essential or Professional and expand when they need more pages, modules, or commerce.",
+    q: "What does 'starting from' mean for E-Commerce HQ?",
+    a: "E-Commerce HQ starts at 3,999 ₾ for a 5-page online store with full payment and inventory capabilities. The final price depends on the number of products, custom integrations, and additional modules you choose.",
   },
   {
-    q: "How long until launch?",
-    a: "Each card lists a delivery window. E-commerce and larger builds take longer because of bank approvals, integrations, and QA.",
+    q: "What is a Shield plan?",
+    a: "Shields are yearly support and maintenance plans. They include bug fixes, security patches, content updates, uptime monitoring, and performance optimization. There are four tiers: Guardian (120 ₾/yr), Sentinel (500 ₾/yr), Fortress (1,500 ₾/yr), and Citadel (3,000 ₾/yr).",
   },
   {
-    q: "What about payments and RS.ge?",
-    a: "E-Commerce HQ includes Georgian gateway integration (TBC/BOG) and the RS.ge fiscal flow as part of the storefront scope.",
+    q: "How does the warranty work?",
+    a: "Every foundation comes with a built-in warranty: Professional (45 days), Command Center (75 days), and E-Commerce HQ (100 days). During this period, any bugs or issues are fixed at no extra cost.",
   },
   {
-    q: "What if I need something custom?",
-    a: "Use Command Center for structured multi-page systems, or talk to us on WhatsApp for bespoke software — we scope before we build.",
+    q: "Can I add more pages later?",
+    a: "Additional pages are available for Command Center and E-Commerce HQ plans. Each additional page can be added as a module through the Architect Studio.",
+  },
+  {
+    q: "What payment methods do you accept?",
+    a: "We accept bank transfer (GEL), card payment, and PayPal for international clients. Payment terms are discussed during the consultation on WhatsApp.",
+  },
+  {
+    q: "How long does delivery take?",
+    a: "Professional sites take 7-10 business days. Command Center takes 10-15 business days. E-Commerce HQ takes 20+ business days depending on scope. All timelines are confirmed during the planning phase.",
+  },
+  {
+    q: "Do you offer payment plans?",
+    a: "We keep pricing simple — one-time payment per project. For larger projects like E-Commerce HQ, we can discuss milestones during the WhatsApp consultation.",
   },
 ];
 
 export function PricingFaq() {
-  const [open, setOpen] = useState<number | null>(0);
+  const [open, setOpen] = useState<number | null>(null);
 
   return (
-    <section id="pricing-faq" aria-labelledby="pricing-faq-title" className="scroll-mt-24">
-      <h2 id="pricing-faq-title" className="text-2xl font-black text-white sm:text-3xl">
-        FAQ
+    <section className="mx-auto max-w-3xl px-4 py-16">
+      <h2 className="mb-8 text-center text-2xl font-black text-white">
+        Frequently Asked Questions
       </h2>
-      <p className="mt-2 max-w-prose text-sm font-medium text-slate-400">
-        Short answers — ask us anything on WhatsApp for your specific case.
-      </p>
-      <ul className="mt-6 space-y-2">
-        {ITEMS.map((item, i) => {
-          const isOpen = open === i;
-          return (
-            <li key={item.q} className="rounded-xl border border-white/10 bg-white/[0.02]">
-              <button
-                type="button"
-                className="flex w-full items-center justify-between gap-4 px-4 py-4 text-left"
-                onClick={() => {
-                  setOpen(isOpen ? null : i);
-                  if (!isOpen) {
-                    trackPricingEvent("pricing_faq_open", { index: String(i) });
-                  }
-                }}
-                aria-expanded={isOpen}
-              >
-                <span className="font-bold text-white">{item.q}</span>
-                <ChevronDown
-                  className={`h-5 w-5 shrink-0 text-slate-500 transition ${isOpen ? "rotate-180" : ""}`}
-                />
-              </button>
-              {isOpen && (
-                <p className="max-w-prose border-t border-white/5 px-4 pb-4 pt-2 text-sm leading-relaxed text-slate-400">
-                  {item.a}
-                </p>
-              )}
-            </li>
-          );
-        })}
-      </ul>
+      <div className="flex flex-col gap-2">
+        {FAQ.map((item, i) => (
+          <div
+            key={i}
+            className="rounded-xl border border-white/10 bg-white/[0.02] transition"
+          >
+            <button
+              onClick={() => setOpen(open === i ? null : i)}
+              className="flex w-full items-center justify-between px-5 py-4 text-left"
+            >
+              <span className="text-sm font-bold text-white">{item.q}</span>
+              <span className="text-lg text-slate-400">{open === i ? "−" : "+"}</span>
+            </button>
+            {open === i && (
+              <div className="px-5 pb-4 text-sm text-slate-300">{item.a}</div>
+            )}
+          </div>
+        ))}
+      </div>
     </section>
   );
 }

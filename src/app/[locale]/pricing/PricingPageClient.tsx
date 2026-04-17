@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import type { Locale } from "@/lib/i18n";
 import { trackPricingEvent } from "@/lib/pricingAnalytics";
-import { getOrderedPricingFoundations } from "./pricingTierData";
+import { getPricingTierData } from "./pricingTierData";
 import { PricingCtaBand } from "./PricingCtaBand";
 import { PricingProofStrip } from "./PricingProofStrip";
 import { PricingTierDeck } from "./PricingTierDeck";
@@ -16,7 +16,7 @@ interface PricingPageClientProps {
 }
 
 export function PricingPageClient({ locale }: PricingPageClientProps) {
-  const tiers = getOrderedPricingFoundations();
+  const tiers = getPricingTierData(locale);
   const faqSeen = useRef(false);
 
   useEffect(() => {
@@ -65,15 +65,15 @@ export function PricingPageClient({ locale }: PricingPageClientProps) {
           <div>
             <h2 className="text-2xl font-black text-white sm:text-3xl">Packages</h2>
             <p className="mt-1 text-sm font-medium text-slate-400">
-              Four foundations. Expand any card for the full scope.
+              Three foundations. Expand any card for the full scope.
             </p>
           </div>
         </div>
-        <PricingTierDeck locale={locale} tiers={tiers} />
+        <PricingTierDeck tiers={tiers} />
       </div>
 
       <div className="mt-16">
-        <PricingComparisonSection />
+        <PricingComparisonSection locale={locale} />
         <div className="mt-10 flex justify-center">
           <PricingCtaBand locale={locale} placement="mid" />
         </div>
