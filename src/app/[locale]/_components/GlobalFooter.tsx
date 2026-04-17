@@ -57,6 +57,9 @@ export function GlobalFooter({ locale }: { locale: Locale }) {
         <Link href={`/${locale}/pricing`} className="transition hover:text-emerald-300">
           Pricing
         </Link>
+        <Link href={`/${locale}/blog`} className="transition hover:text-emerald-300">
+          Blog
+        </Link>
         <Link href={`/${locale}/architect`} className="transition hover:text-emerald-300">
           Architect
         </Link>
