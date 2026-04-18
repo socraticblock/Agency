@@ -9,9 +9,10 @@ export const SHIELD_TIERS: ShieldTier[] = [
     level: 'Basic',
     risk: 'High',
     perks: [
-      { title: 'SSL Oversight', desc: 'Prevents "Not Secure" browser lockouts.' },
-      { title: 'Blacklist Monitoring', desc: 'Stops your site/emails going to spam.' },
-      { title: 'AWS Backup Node', desc: 'Basic off-site recovery points saving cycles.' }
+      { title: 'SSL monitoring', desc: 'Your site always shows the secure padlock — visitors never see "Not Secure".' },
+      { title: 'Blacklist monitoring', desc: 'Daily checks to keep your domain out of email spam lists.' },
+      { title: 'Backup with every change', desc: 'We back up your site whenever we make changes — your site is never lost.' },
+      { title: 'Domain included', desc: 'We buy your .ge domain for you. It is always yours — if you leave us, we transfer it to your name.' },
     ],
     description: 'The bare minimum to exist safely on the web.'
   },
@@ -23,11 +24,11 @@ export const SHIELD_TIERS: ShieldTier[] = [
     risk: 'Medium',
     isRecommended: true,
     perks: [
-      { title: 'CDN Configuration', desc: 'Global image edge caching frame routing.' },
-      { title: 'Kinetic Uptime Pings', desc: 'Global pings every 60s to check fixes.' },
-      { title: 'Time-Machine Backups', desc: 'Daily database restores if anything breaks.' },
-      { title: 'Security Patching', desc: 'Critical software lock downs against bots.' },
-      { title: 'Database Cleanup', desc: 'Remove clean index junk tables bloating speed.' }
+      { title: 'Global content delivery', desc: 'Instant loading for visitors anywhere in Georgia.' },
+      { title: '60-second uptime checks', desc: 'We know within a minute if your site goes down.' },
+      { title: 'Daily backups (30-day rollback)', desc: 'Restore any version of your site from the last 30 days.' },
+      { title: 'Database speed optimisation', desc: 'Keeps your site fast over time.' },
+      { title: 'Security patching', desc: 'Critical software lock downs against bots.' },
     ],
     description: 'Protects 100/100 speeds from natural performance decay.'
   },
@@ -38,13 +39,12 @@ export const SHIELD_TIERS: ShieldTier[] = [
     level: 'Guardian',
     risk: 'Low',
     perks: [
-      { title: 'Includes Micro Shield+', desc: 'All Tier 2 advantages included.' },
-      { title: 'Malware Shield Pro', desc: 'Real-time brute force armor hardening defenses.' },
-      { title: 'Enterprise Speed Turbo', desc: 'Hits 90+ Pagespeeds server-side rendering.' },
-      { title: 'Priority Support Queue', desc: 'Guaranteed support queue placement.' },
-      { title: 'Conversion Audits', desc: 'Bi-weekly suggests to increase sales.' }
+      { title: 'Malware Shield Pro', desc: 'Real-time brute force armour hardening for login surfaces.' },
+      { title: 'Enterprise Speed Turbo', desc: 'Advanced server-side tuning to maintain 90+ PageSpeed scores.' },
+      { title: 'Priority Support', desc: 'VIP placement in the development and modification queue.' },
+      { title: 'Conversion Audits', desc: 'Bi-weekly traffic insights to suggest sales improvements.' },
     ],
-    description: 'A developer on-call to optimize your layout as your audience grows.'
+    description: 'A developer on-call to optimise your layout as your audience grows.'
   },
   {
     id: 3,
@@ -53,11 +53,10 @@ export const SHIELD_TIERS: ShieldTier[] = [
     level: 'Immune',
     risk: 'None',
     perks: [
-      { title: 'Includes Active Shield+', desc: 'All Tier 3 advantages included.' },
-      { title: '4-Hour SLA Guarantee', desc: 'Critical failure response inside 4 hours.' },
-      { title: 'AI-Sentinel Triage', desc: 'Website auto-resolves soft load errors.' },
-      { title: 'Algorithm Immunity', desc: 'Bypasses broken Instagram or bank APIs.' },
-      { title: '1% Threshold Tracker', desc: 'Trigger alerts preserving tax status limits.' }
+      { title: '4-Hour SLA', desc: 'Critical failure response guarantee within 4 hours.' },
+      { title: 'AI-Sentinel Triage', desc: 'Automated error-resolution for soft timeouts and API lags.' },
+      { title: 'Algorithm Immunity', desc: 'Shielding for Instagram/Bank APIs against platform shifts.' },
+      { title: '1% Threshold Tracker', desc: 'Automated alerts to protect your Micro-Business tax status.' },
     ],
     description: 'Defenders of revenue against bank outages, algorithm shifts, and tax penalties.'
   }
