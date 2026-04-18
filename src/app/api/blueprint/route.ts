@@ -104,7 +104,7 @@ export async function POST(req: Request) {
       moduleQuantities,
       shieldTier,
       oneTimeTotal,
-      monthlyTotal,
+      annualShieldTotal,
       blueprintId: blueprintIdRaw,
       leadName: leadNameRaw,
       leadCompany: leadCompanyRaw,
@@ -193,9 +193,9 @@ export async function POST(req: Request) {
       typeof oneTimeTotal === "number" && Number.isFinite(oneTimeTotal)
         ? escapeHtml(String(oneTimeTotal))
         : "—";
-    const monthlyStr =
-      typeof monthlyTotal === "number" && Number.isFinite(monthlyTotal)
-        ? escapeHtml(String(monthlyTotal))
+    const annualShieldStr =
+      typeof annualShieldTotal === "number" && Number.isFinite(annualShieldTotal)
+        ? escapeHtml(String(annualShieldTotal))
         : "—";
 
     const answerRows = Object.entries(answersRecord || {})
@@ -264,7 +264,7 @@ export async function POST(req: Request) {
             <div style="font-size: 12px; color: #e4e4e7; margin-bottom: 12px;"><strong>Modules:</strong> ${modulesStr || "Standard Frame"}</div>
             <div style="background-color: #09090b; border: 1px solid #27272a; border-radius: 8px; padding: 12px; font-family: monospace;">
                 <div style="color: #10b981; font-size: 16px; font-weight: bold;">${oneTimeStr} ₾ <span style="font-size: 10px; color: #a1a1aa;">ONE-TIME</span></div>
-                <div style="color: #34d399; font-size: 14px; font-weight: bold; margin-top: 4px;">+ ${monthlyStr} ₾/mo <span style="font-size: 10px; color: #a1a1aa;">RECURRING</span></div>
+                <div style="color: #34d399; font-size: 14px; font-weight: bold; margin-top: 4px;">+ ${annualShieldStr} ₾/yr <span style="font-size: 10px; color: #a1a1aa;">RECURRING</span></div>
             </div>
         </div>
 

@@ -35,7 +35,7 @@ interface ReviewPhaseProps {
   answers: Record<string, unknown>;
   shieldTier: number;
   oneTimeTotal: number;
-  monthlyTotal: number;
+  annualShieldTotal: number;
   handleEdit: (stepNum: 1 | 2 | 3 | 4 | 5, questionIndex?: number) => void;
   openVipCheckIn: () => void;
   submitError: string | null;
@@ -47,7 +47,7 @@ export default function ReviewPhase({
   answers,
   shieldTier,
   oneTimeTotal,
-  monthlyTotal,
+  annualShieldTotal,
   handleEdit,
   openVipCheckIn,
   submitError,
@@ -361,9 +361,9 @@ export default function ReviewPhase({
             <p className="text-xl font-black font-mono text-emerald-400 whitespace-nowrap">
               {oneTimeTotal.toLocaleString()} ₾ One-Time
             </p>
-            {monthlyTotal > 0 && (
+            {annualShieldTotal > 0 && (
               <p className="text-xs font-bold font-mono text-emerald-300 whitespace-nowrap">
-                +{monthlyTotal.toLocaleString()} ₾/mo Recurring
+                +{annualShieldTotal.toLocaleString()} ₾/yr Recurring
               </p>
             )}
           </div>

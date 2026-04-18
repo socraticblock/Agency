@@ -28,7 +28,7 @@ interface HandoverFlowProps {
   moduleQuantities: Record<string, number>;
   shieldTier: number;
   oneTimeTotal: number;
-  monthlyTotal: number;
+  annualShieldTotal: number;
 }
 
 export default function HandoverFlow({
@@ -53,7 +53,7 @@ export default function HandoverFlow({
   moduleQuantities,
   shieldTier,
   oneTimeTotal,
-  monthlyTotal,
+  annualShieldTotal,
 }: HandoverFlowProps) {
   return (
     <m.div
@@ -239,7 +239,7 @@ export default function HandoverFlow({
                               moduleQuantities,
                               shieldTier,
                               oneTimeTotal,
-                              monthlyTotal,
+                              annualShieldTotal,
                               blueprintId,
                               leadName: lead.name.trim(),
                               leadCompany: lead.company.trim(),

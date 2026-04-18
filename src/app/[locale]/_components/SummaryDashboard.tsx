@@ -27,7 +27,7 @@ export type SummaryDashboardProps = {
   moduleQuantities: Record<string, number>;
   shieldTier: number;
   oneTimeTotal: number;
-  monthlyTotal: number;
+  annualShieldTotal: number;
 };
 
 export default function SummaryDashboard({
@@ -40,7 +40,7 @@ export default function SummaryDashboard({
   moduleQuantities,
   shieldTier,
   oneTimeTotal,
-  monthlyTotal,
+  annualShieldTotal,
 }: SummaryDashboardProps) {
   // ── Stage Machine ──
   const [stages, setStage] = useState<"review" | "analyzing" | "handover">("review");
@@ -193,7 +193,7 @@ export default function SummaryDashboard({
           moduleQuantities,
           shieldTier,
           oneTimeTotal,
-          monthlyTotal,
+          annualShieldTotal,
           blueprintId,
           leadName: lead.name.trim(),
           leadCompany: lead.company.trim(),
@@ -229,7 +229,7 @@ export default function SummaryDashboard({
             answers={answers}
             shieldTier={shieldTier}
             oneTimeTotal={oneTimeTotal}
-            monthlyTotal={monthlyTotal}
+            annualShieldTotal={annualShieldTotal}
             handleEdit={handleEdit}
             openVipCheckIn={openVipCheckIn}
             submitError={submitError}
@@ -259,7 +259,7 @@ export default function SummaryDashboard({
             moduleQuantities={moduleQuantities}
             shieldTier={shieldTier}
             oneTimeTotal={oneTimeTotal}
-            monthlyTotal={monthlyTotal}
+            annualShieldTotal={annualShieldTotal}
           />
         )}
       </AnimatePresence>

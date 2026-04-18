@@ -65,7 +65,7 @@ export default function Configurator() {
     selectFoundationAndAdvance,
     activeFoundation,
     oneTimeTotal,
-    monthlyTotal,
+    annualShieldTotal,
     savingsUSD,
     hasGita,
     formatPrice,
@@ -269,7 +269,7 @@ export default function Configurator() {
                 setIsEditing={setIsEditing}
                 moduleQuantities={moduleQuantities}
                 oneTimeTotal={oneTimeTotal}
-                monthlyTotal={monthlyTotal}
+                annualShieldTotal={annualShieldTotal}
               />
             )}
           </div>
@@ -286,7 +286,7 @@ export default function Configurator() {
             selectedModules={selectedModules}
             moduleQuantities={moduleQuantities}
             oneTimeTotal={oneTimeTotal}
-            monthlyTotal={monthlyTotal}
+            annualShieldTotal={annualShieldTotal}
             isUSD={isUSD}
             setIsUSD={setIsUSD}
             formatPrice={formatPrice}

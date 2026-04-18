@@ -22,7 +22,7 @@ const countUpVariants = {
 
 interface ConfigSidebarProps {
   oneTimeTotal: number;
-  monthlyTotal: number;
+  annualShieldTotal: number;
   isUSD: boolean;
   setIsUSD: (val: boolean) => void;
   formatPrice: (price: number) => string;
@@ -40,7 +40,7 @@ interface ConfigSidebarProps {
 
 export default memo(function ConfigSidebar({
   oneTimeTotal,
-  monthlyTotal,
+  annualShieldTotal,
   isUSD,
   setIsUSD,
   formatPrice,
@@ -183,14 +183,14 @@ export default memo(function ConfigSidebar({
 
           {!activeFoundation?.isBespoke && (
             <div className="flex justify-between items-center">
-              <span className="text-base text-slate-400 font-medium font-space">Monthly Recurring:</span>
+              <span className="text-base text-slate-400 font-medium font-space">Annual Shield:</span>
               <motion.span
-                key={monthlyTotal}
+                key={annualShieldTotal}
                 variants={countUpVariants} initial="hidden" animate="visible"
                 className="text-base font-black font-mono text-emerald-300 tracking-tight whitespace-nowrap"
               >
-                {formatPrice(monthlyTotal)}
-                {monthlyTotal > 0 && "/mo"}
+                {formatPrice(annualShieldTotal)}
+                {annualShieldTotal > 0 && "/yr"}
               </motion.span>
             </div>
           )}
