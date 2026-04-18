@@ -127,16 +127,16 @@ export function ProfessionalPageClient() {
         <h2 className="text-2xl font-black text-red-400 sm:text-3xl">What's Not Included (Important)</h2>
         <div className="mt-6 grid gap-4">
           <div className="rounded-xl border border-red-500/10 bg-red-500/5 p-5">
-            <h4 className="font-bold text-white">Additional Pages</h4>
-            <p className="text-sm text-slate-400 mt-1">This is a single landing page. Need Home + About + Services + Contact? Check <Link href="/en/pricing#command-center" className="text-red-300 underline">Command Center</Link>.</p>
+            <h4 className="font-bold text-white">Additional pages</h4>
+            <p className="text-sm text-slate-400 mt-1">Professional is one landing page. Need Home + About + Contact as separate pages? That's Command Center (₾1,999)</p>
           </div>
           <div className="rounded-xl border border-red-500/10 bg-red-500/5 p-5">
-            <h4 className="font-bold text-white">CMS / Dashboard</h4>
-            <p className="text-sm text-slate-400 mt-1">You cannot update content yourself on Professional. Content changes require a request to us.</p>
+            <h4 className="font-bold text-white">CMS / content management</h4>
+            <p className="text-sm text-slate-400 mt-1">You cannot update content yourself. Changes go through us. Want to manage your own content? See Command Center</p>
           </div>
           <div className="rounded-xl border border-red-500/10 bg-red-500/5 p-5">
-            <h4 className="font-bold text-white">Multi-language &amp; Blog</h4>
-            <p className="text-sm text-slate-400 mt-1">Professional is one language only and does not include a blog section. Professional translation is available as an add-on.</p>
+            <h4 className="font-bold text-white">Blog / News section</h4>
+            <p className="text-sm text-slate-400 mt-1">Not available on Professional. See Command Center</p>
           </div>
         </div>
       </section>
@@ -147,20 +147,20 @@ export function ProfessionalPageClient() {
          <p className="mt-2 text-slate-400 mb-6">Tell us during the onboarding brief if you'd like any of these.</p>
          <div className="grid gap-6 md:grid-cols-2">
            <div className="rounded-2xl border border-white/10 p-6">
-             <h4 className="font-bold text-white mb-1">Lead Capture Exit Pop-ups — ₾300</h4>
-             <p className="text-sm text-slate-400">Offer visitors a special deal right before they leave.</p>
+             <h4 className="font-bold text-white mb-1">Multi-Language Setup — ₾200</h4>
+             <p className="text-sm text-slate-400">Your site, in two languages. We handle the technical setup — the language switcher, routing visitors to the right version, and implementing both sets of content. For the actual translation: use our in-house translator (₾100/hour), hire your own, or translate it yourself using Google Docs and we'll implement both versions.</p>
            </div>
            <div className="rounded-2xl border border-white/10 p-6">
              <h4 className="font-bold text-white mb-1">Professional Copywriting — ₾600</h4>
-             <p className="text-sm text-slate-400">AIDA framework copy. We write the page for you.</p>
+             <p className="text-sm text-slate-400">We write your page copy using AIDA framework (Attention, Interest, Desire, Action). Give us your brief, we write all the text for your 6 sections. Ideal if you want professional, persuasive copy but don't have time to write it yourself.</p>
            </div>
            <div className="rounded-2xl border border-white/10 p-6">
-             <h4 className="font-bold text-white mb-1">Professional Translation</h4>
-             <p className="text-sm text-slate-400">Price on request based on volume.</p>
+             <h4 className="font-bold text-white mb-1">Lead Capture Exit Pop-ups — ₾300</h4>
+             <p className="text-sm text-slate-400">When a visitor is about to leave your page, a subtle pop-up appears with a special offer or a reminder to book a call. Captures leads who would otherwise bounce without taking action.</p>
            </div>
            <div className="rounded-2xl border border-white/10 p-6 bg-white/[0.02]">
              <h4 className="font-bold text-white mb-1">Anything else? Just ask</h4>
-             <p className="text-sm text-slate-400">If it's not on this list, we'll scope it for you.</p>
+             <p className="text-sm text-slate-400">If you need something not listed — tell us what you have in mind and we'll scope it for you.</p>
            </div>
          </div>
       </section>
