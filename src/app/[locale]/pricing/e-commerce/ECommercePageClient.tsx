@@ -32,6 +32,9 @@ export function ECommercePageClient() {
         <p className="mt-4 text-xl font-medium text-slate-300">
           The base price of ₾3,999 covers everything you need to launch. Add bank integration or RS.ge when you're ready. Built in 20-30 business days.
         </p>
+        <p className="mt-2 text-sm font-bold text-emerald-400">
+          Base package: English only. Multi-language setup available for ₾500.
+        </p>
       </header>
 
       {/* CORE FEATURES GRID */}
@@ -45,7 +48,7 @@ export function ECommercePageClient() {
           <FeatureCard 
             icon={<Settings2 className="h-6 w-6 text-emerald-400" />}
             title="5 Pages Built for Selling"
-            body="Home, Shop, Products, About, Contact. All core pages included and fully CMS-editable. Set up for scaling your organic reach."
+            body="Home, Shop, Products, About, Contact — all five pages included. Each page is fully editable through your CMS dashboard. No developer needed for content changes."
           />
           <FeatureCard 
             icon={<Smartphone className="h-6 w-6 text-emerald-400" />}
@@ -75,24 +78,7 @@ export function ECommercePageClient() {
         </div>
       </section>
 
-      {/* WHAT'S NOT INCLUDED */}
-      <section className="mb-16 border-t border-red-500/20 pt-12">
-        <h2 className="text-2xl font-black text-red-400 sm:text-3xl">What's Not Included (Important)</h2>
-        <div className="mt-6 grid gap-4">
-          <div className="rounded-xl border border-red-500/10 bg-red-500/5 p-5">
-             <h4 className="font-bold text-white">Blog / News Section</h4>
-             <p className="text-sm text-slate-400 mt-1">E-Commerce HQ is built for selling products. A dedicated CMS for content marketing and blog publishing is not included in this base.</p>
-          </div>
-          <div className="rounded-xl border border-red-500/10 bg-red-500/5 p-5">
-             <h4 className="font-bold text-white">HubSpot / CRM</h4>
-             <p className="text-sm text-slate-400 mt-1">External CRM integrations are complex and handled as separate add-ons or custom scopes.</p>
-          </div>
-          <div className="rounded-xl border border-red-500/10 bg-red-500/5 p-5">
-             <h4 className="font-bold text-white">CMS for Content Marketing</h4>
-             <p className="text-sm text-slate-400 mt-1">Your CMS manages products, inventory, orders, and shop-related data, not general blog/news content marketing flows.</p>
-          </div>
-        </div>
-      </section>
+
 
       {/* ADD ONS */}
       <section className="mb-16">
@@ -113,11 +99,23 @@ export function ECommercePageClient() {
            </div>
            <div className="rounded-2xl border border-white/10 p-6">
              <h4 className="font-bold text-white mb-1">Multi-Language Setup — ₾500</h4>
-             <p className="text-sm text-slate-400">Technical indexation structure for dual-language (Georgian/English) display. Translation costs are separate.</p>
+             <p className="text-sm text-slate-400">Technical setup for dual-language (Georgian/English). We handle the language switcher, routing visitors to the right version, and implementing both. For the actual translation: use our in-house translator (₾100/hour), hire your own, or translate it yourself and we'll implement both versions.</p>
+           </div>
+           <div className="rounded-2xl border border-white/10 p-6">
+             <h4 className="font-bold text-white mb-1">Blog / News CMS — ₾800</h4>
+             <p className="text-sm text-slate-400">Add a full blog or news section to your store. Publish articles, updates, and content marketing — all managed through your CMS dashboard.</p>
+           </div>
+           <div className="rounded-2xl border border-white/10 p-6">
+             <h4 className="font-bold text-white mb-1">SMS Hub — ₾650</h4>
+             <p className="text-sm text-slate-400">Automated text messages for order updates or shipping confirmations. In Georgia, everyone reads their SMS immediately — it builds trust and cuts "where is my order?" calls.</p>
+           </div>
+           <div className="rounded-2xl border border-white/10 p-6">
+             <h4 className="font-bold text-white mb-1">Recurring Billing System — ₾2,500</h4>
+             <p className="text-sm text-slate-400">Technical infrastructure to charge clients automatically on a monthly basis. Perfect for physical subscriptions or ongoing retainers (TBC/BOG tokenization).</p>
            </div>
            <div className="rounded-2xl border border-white/10 p-6">
              <h4 className="font-bold text-white mb-1">Additional Pages — ₾450/page</h4>
-             <p className="text-sm text-slate-400">Expand your storefront with dedicated shipping, return policy, or "Our Story" informational pages.</p>
+             <p className="text-sm text-slate-400">FAQ page, Shipping page, Returns page — any page beyond your 5 included: ₾450/page.</p>
            </div>
            <div className="rounded-2xl border border-white/10 p-6 bg-white/[0.02]">
              <h4 className="font-bold text-white mb-1">Anything else? Just ask</h4>
