@@ -23,7 +23,7 @@ export function PricingTierDeck({ tiers }: { tiers: PricingTierDeckType[] }) {
         if (!foundation) return null;
 
         const waText = encodeURIComponent(
-          `Hi Genezisi! I'm interested in the ${tier.label} tier (${formatPrice(foundation.priceGEL)}). Can we discuss next steps?`
+          `Hi Genezisi! I'm interested in the ${tier.label} package. Can we discuss next steps?`
         );
 
         const isPopular = tier.badge === "Most Popular";
@@ -88,12 +88,22 @@ export function PricingTierDeck({ tiers }: { tiers: PricingTierDeckType[] }) {
 
               {/* CTA */}
               {foundation.id === 'cms' ? (
-                <Link
-                  href={`/${locale}/pricing/professional`}
-                  className={`mt-2 inline-flex min-h-[48px] items-center justify-center rounded-xl text-center text-sm font-bold transition border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20`}
-                >
-                  More information →
-                </Link>
+                <div className="flex flex-col gap-2 mt-2">
+                  <Link
+                    href={`/${locale}/pricing/professional`}
+                    className={`inline-flex min-h-[48px] items-center justify-center rounded-xl text-center text-sm font-bold transition border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20`}
+                  >
+                    More information →
+                  </Link>
+                  <a
+                    href={`${WA_BASE}?text=${waText}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex min-h-[48px] items-center justify-center rounded-xl bg-emerald-500 text-center text-sm font-bold text-slate-950 transition hover:bg-emerald-400"
+                  >
+                    Get started →
+                  </a>
+                </div>
               ) : (
                 <a
                   href={`${WA_BASE}?text=${waText}`}

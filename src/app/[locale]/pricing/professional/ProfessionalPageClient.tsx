@@ -32,16 +32,6 @@ export function ProfessionalPageClient() {
         <p className="mt-4 text-xl font-medium text-slate-300">
           One-page custom landing website. Built in 7–10 days.
         </p>
-        <div className="mt-8">
-          <a
-            href={waLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex min-h-[56px] items-center justify-center rounded-xl bg-emerald-500 px-8 text-center text-base font-bold text-slate-950 transition hover:bg-emerald-400"
-          >
-            Get Started on WhatsApp →
-          </a>
-        </div>
       </header>
 
       {/* CORE FEATURES GRID */}
@@ -191,11 +181,35 @@ export function ProfessionalPageClient() {
           <div className="grid gap-6 md:grid-cols-2 lg:gap-10">
             <div className="rounded-2xl border border-white/10 bg-black/20 p-6">
                <h4 className="text-xl font-bold text-white">Reputation Scout — ₾120/yr</h4>
-               <ul className="mt-4 space-y-3 text-sm text-slate-300">
-                 <li className="flex gap-2"><Check className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" /> SSL monitoring</li>
-                 <li className="flex gap-2"><Check className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" /> Blacklist monitoring</li>
-                 <li className="flex gap-2"><Check className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" /> Backed up with every developer change</li>
-                 <li className="flex gap-2"><Check className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" /> Extends warranty to 1 full year</li>
+               <ul className="mt-4 space-y-4 text-sm text-slate-300">
+                 <li className="flex gap-2">
+                   <Check className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                   <div>
+                     <span className="font-bold text-white block">SSL monitoring</span>
+                     <span className="text-xs text-slate-400">Prevents "Not Secure" browser warnings</span>
+                   </div>
+                 </li>
+                 <li className="flex gap-2">
+                   <Check className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                   <div>
+                     <span className="font-bold text-white block">Blacklist monitoring</span>
+                     <span className="text-xs text-slate-400">Daily checks to keep your domain out of spam lists</span>
+                   </div>
+                 </li>
+                 <li className="flex gap-2">
+                   <Check className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                   <div>
+                     <span className="font-bold text-white block">Backed up with every developer change</span>
+                     <span className="text-xs text-slate-400">Your site is safe whenever we work on it</span>
+                   </div>
+                 </li>
+                 <li className="flex gap-2">
+                   <Check className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                   <div>
+                     <span className="font-bold text-white block">Domain included</span>
+                     <span className="text-xs text-slate-400">We buy your .ge domain for you (yours forever)</span>
+                   </div>
+                 </li>
                </ul>
             </div>
             
@@ -205,11 +219,42 @@ export function ProfessionalPageClient() {
                </span>
                <h4 className="text-xl font-bold text-white mt-2">Micro Shield — ₾500/yr</h4>
                <p className="mt-2 text-sm font-medium text-emerald-300">Everything in Reputation Scout, plus:</p>
-               <ul className="mt-4 space-y-3 text-sm text-slate-300">
-                 <li className="flex gap-2"><Check className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" /> Global CDN Edge content delivery</li>
-                 <li className="flex gap-2"><Check className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" /> 60-second automated uptime checks</li>
-                 <li className="flex gap-2"><Check className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" /> Daily backups (30-day "Time Machine" rollback)</li>
-                 <li className="flex gap-2"><Check className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" /> Database speed optimisation</li>
+               <ul className="mt-4 space-y-4 text-sm text-slate-300">
+                 <li className="flex gap-2">
+                   <Check className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                   <div>
+                     <span className="font-bold text-white block">Global content delivery</span>
+                     <span className="text-xs text-slate-400">For instant loading anywhere in Georgia</span>
+                   </div>
+                 </li>
+                 <li className="flex gap-2">
+                   <Check className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                   <div>
+                     <span className="font-bold text-white block">60-second automated uptime checks</span>
+                     <span className="text-xs text-slate-400">We know within a minute if your site goes down</span>
+                   </div>
+                 </li>
+                 <li className="flex gap-2">
+                   <Check className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                   <div>
+                     <span className="font-bold text-white block">Daily backups (30-day rollback)</span>
+                     <span className="text-xs text-slate-400">Roll back any change within 30 days</span>
+                   </div>
+                 </li>
+                 <li className="flex gap-2">
+                   <Check className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                   <div>
+                     <span className="font-bold text-white block">Database speed optimisation</span>
+                     <span className="text-xs text-slate-400">Keeps your site fast over time</span>
+                   </div>
+                 </li>
+                 <li className="flex gap-2">
+                   <Check className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                   <div>
+                     <span className="font-bold text-white block">Security patching</span>
+                     <span className="text-xs text-slate-400">Ongoing protection against new vulnerabilities</span>
+                   </div>
+                 </li>
                </ul>
             </div>
           </div>
