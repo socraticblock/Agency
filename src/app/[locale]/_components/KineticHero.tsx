@@ -47,7 +47,7 @@ const Typewriter = memo(({ phrases }: { phrases: string[] }) => {
   }, [currentText, isDeleting, currentPhraseIndex, phrases, typingSpeed]);
 
   return (
-    <motion.h2 className="mt-2 min-h-[1.5em] max-w-xl text-base font-bold text-emerald-400 font-space leading-tight sm:text-lg text-center opacity-95">
+    <motion.h2 className="mt-2 min-h-[1.5em] max-w-xl bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent font-space text-base font-black leading-tight text-center opacity-95 sm:text-lg">
       <span>{currentText}</span>
       <motion.span
         animate={{ opacity: [1, 0, 1] }}
@@ -123,7 +123,7 @@ export function KineticHero({ locale }: { locale: Locale }) {
       className="relative flex min-h-[70vh] flex-col items-center justify-center overflow-hidden px-4 py-20 text-center"
     >
       <div className="pointer-events-none absolute inset-0 -z-20 overflow-hidden bg-[#030717]">
-        <div className="absolute -top-1/4 -left-1/4 h-[min(100vw,28rem)] w-[min(100vw,28rem)] rounded-full bg-emerald-900/40 blur-[100px] animate-pulse sm:h-[min(100vw,40rem)] sm:w-[min(100vw,40rem)] sm:blur-[120px] md:h-[800px] md:w-[800px] md:blur-[140px]" />
+        <div className="absolute -top-1/4 -left-1/4 h-[min(100vw,28rem)] w-[min(100vw,28rem)] rounded-full bg-[#004d40]/40 blur-[100px] animate-pulse sm:h-[min(100vw,40rem)] sm:w-[min(100vw,40rem)] sm:blur-[120px] md:h-[800px] md:w-[800px] md:blur-[140px]" />
         <div className="absolute -bottom-1/4 -right-1/4 h-[min(100vw,28rem)] w-[min(100vw,28rem)] rounded-full bg-slate-800/50 blur-[110px] animate-pulse delay-1000 sm:h-[min(100vw,40rem)] sm:w-[min(100vw,40rem)] sm:blur-[130px] md:h-[800px] md:w-[800px] md:blur-[160px]" />
       </div>
 
@@ -153,14 +153,30 @@ export function KineticHero({ locale }: { locale: Locale }) {
             hidden: { opacity: 0 },
             visible: { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.2 } },
           }}
-          className="max-w-4xl text-balance pb-4 font-space text-4xl font-bold leading-[1.1] tracking-tight text-white sm:text-6xl md:text-7xl"
+          className="max-w-4xl text-balance pb-4 font-space text-4xl font-black leading-[1.1] tracking-tight text-white sm:text-6xl md:text-7xl"
           style={parallaxOff ? undefined : { x: offsetX, y: offsetY }}
         >
-          {words.map((word: string, index: number) => (
-            <motion.span key={index} className="inline-block mr-2">
-              {word}
-            </motion.span>
-          ))}
+          {words.map((word: string, index: number) => {
+            const normalized = word.toLowerCase().replace(/[.,!?;:]/g, "");
+            const isHighlight =
+              normalized === "digital" ||
+              normalized === "footprint" ||
+              normalized === "ციფრული" ||
+              normalized === "ნაკვალევის";
+
+            return (
+              <motion.span
+                key={index}
+                className={`inline-block mr-2 ${
+                  isHighlight
+                    ? "bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent"
+                    : "text-white"
+                }`}
+              >
+                {word}
+              </motion.span>
+            );
+          })}
         </motion.div>
 
         <Typewriter phrases={h2Phrases} />
@@ -171,9 +187,9 @@ export function KineticHero({ locale }: { locale: Locale }) {
             href={`/${locale}/start`}
             magneticStrength={24}
             textStrength={12}
-            className="group relative flex min-h-12 items-center justify-center overflow-hidden rounded-full border border-emerald-400/40 bg-emerald-500/10 px-8 py-3 text-sm font-black text-white shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-[1.03] hover:bg-emerald-500/20 sm:px-10 sm:py-4"
+            className="group relative flex min-h-12 items-center justify-center overflow-hidden rounded-full border border-[#00ead0]/40 bg-[#00ead0]/10 px-8 py-3 text-sm font-black text-white shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-[1.03] hover:bg-[#00ead0]/20 sm:px-10 sm:py-4"
           >
-            <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.4),_transparent_60%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(0,234,208,0.4),_transparent_60%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
             <span className="relative z-10 block flex items-center gap-1.5 text-white font-black">
               {t.hero.startCardCta}
             </span>
@@ -183,9 +199,9 @@ export function KineticHero({ locale }: { locale: Locale }) {
             href={`/${locale}/architect`}
             magneticStrength={24}
             textStrength={12}
-            className="group relative flex min-h-12 items-center justify-center overflow-hidden rounded-full border border-emerald-400/40 bg-emerald-500/10 px-8 py-3 text-sm font-black text-white shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-[1.03] hover:bg-emerald-500/20 sm:px-10 sm:py-4"
+            className="group relative flex min-h-12 items-center justify-center overflow-hidden rounded-full border border-[#00ead0]/40 bg-[#00ead0]/10 px-8 py-3 text-sm font-black text-white shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-[1.03] hover:bg-[#00ead0]/20 sm:px-10 sm:py-4"
           >
-            <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.4),_transparent_60%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(0,234,208,0.4),_transparent_60%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
             <span className="relative z-10 block flex items-center gap-1.5 text-white font-black">
               {t.hero.cta}
             </span>
