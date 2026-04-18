@@ -47,7 +47,7 @@ export function useConfiguratorPricing({
     () => foundationPrice + modulesPrice,
     [foundationPrice, modulesPrice]
   );
-  const monthlyTotal = shieldPrice;
+  const annualShieldTotal = shieldPrice;
 
   const currentTotalUSD = useMemo(
     () => oneTimeTotal / exchangeRate,
@@ -88,7 +88,7 @@ export function useConfiguratorPricing({
     foundationPrice,
     modulesPrice,
     oneTimeTotal,
-    monthlyTotal,
+    annualShieldTotal,
     savingsUSD,
     hasGita,
     totalHoursSaved,

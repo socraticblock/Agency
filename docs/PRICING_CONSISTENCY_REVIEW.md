@@ -67,7 +67,7 @@
 |-------|--------|
 | Shield source | [`PricingTierDeck.tsx`](../src/app/[locale]/pricing/PricingTierDeck.tsx) uses `SHIELD_TIERS` from `pricing.ts` only. |
 | Phone | [`pricingWhatsApp.ts`](../src/lib/pricingWhatsApp.ts) uses `WHATSAPP_INTAKE` from [`content.ts`](../src/constants/content.ts) — same family as footer/handover. |
-| **Continue** | Passes selected `ShieldTier`; paid tiers show `₾/mo` in message. |
+| **Continue** | Passes selected `ShieldTier`; paid tiers show `₾/yr` in message. |
 | **Skip** | Sets `skipShieldLine: true` — message says Shield will be confirmed on the call (no fake “none” tier). |
 | Custom bridge | [`PricingCustomBridge.tsx`](../src/app/[locale]/pricing/PricingCustomBridge.tsx) uses `projectType` `custom-software` / `legacy-upgrade` — separate copy path, no tier numbers. |
 

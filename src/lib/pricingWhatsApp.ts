@@ -49,7 +49,7 @@ export function buildPricingTierWhatsAppUrl(input: PricingTierWhatsAppInput): st
     if (input.skipShieldLine) {
       message += `PROTECTION PLAN: I'll confirm Shield on the call.\n\n`;
     } else if (input.shieldTier && input.shieldTier.priceGEL > 0) {
-      message += `PROTECTION PLAN: ${input.shieldTier.name} (${input.shieldTier.priceGEL} ₾/mo)\n\n`;
+      message += `PROTECTION PLAN: ${input.shieldTier.name} (${input.shieldTier.name === "Reputation Scout" ? "Included" : input.shieldTier.priceGEL + " ₾/yr"})\n\n`;
     } else if (input.shieldTier && input.shieldTier.priceGEL === 0) {
       message += `PROTECTION PLAN: ${input.shieldTier.name} (included)\n\n`;
     } else {

@@ -29,7 +29,7 @@ export function usePricingLogic({
   const shieldPrice = useMemo(() => SHIELD_TIERS.find(s => s.id === shieldTier)?.priceGEL || 0, [shieldTier]);
 
   const oneTimeTotal = useMemo(() => foundationPrice + modulesPrice, [foundationPrice, modulesPrice]);
-  const monthlyTotal = shieldPrice;
+  const annualShieldTotal = shieldPrice;
 
   const westernAgencyTotalUSD = 150 * 50;
   const currentTotalUSD = useMemo(() => oneTimeTotal / exchangeRate, [oneTimeTotal, exchangeRate]);
@@ -57,7 +57,7 @@ export function usePricingLogic({
     foundationPrice,
     modulesPrice,
     oneTimeTotal,
-    monthlyTotal,
+    annualShieldTotal,
     savingsUSD,
     hasGita,
     totalHoursSaved,

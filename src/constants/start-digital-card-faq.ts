@@ -40,7 +40,7 @@ export const START_DIGITAL_CARD_FAQ_ITEMS: readonly StartDigitalCardFaqItem[] = 
     id: "dc-faq-6",
     question: "What are the pricing tiers?",
     answer:
-      "Three tiers, same premium card: Subdomain (150₾ setup + 120₾/yr) at genezisi.com/your-name; Professional (250₾ + 120₾/yr) on your domain with a PDF setup guide; Executive (350₾ + 120₾/yr) with domain handled for you and VIP support.",
+      "Three tiers, same premium card: Subdomain (150₾ setup + 50₾/yr) at genezisi.com/your-name; Professional (250₾ + 50₾/yr) on your domain with a PDF setup guide; Executive (350₾ + 120₾/yr) with domain handled for you and VIP support.",
   },
   {
     id: "dc-faq-7",
