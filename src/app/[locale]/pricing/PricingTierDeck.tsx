@@ -3,6 +3,8 @@
 import { FOUNDATIONS } from "@/constants/pricing";
 import { WHATSAPP_INTAKE } from "@/constants/content";
 import { TierDeckItem as PricingTierDeckType } from "./pricingTierData";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 
 const WA_BASE = `https://wa.me/${WHATSAPP_INTAKE}`;
 
@@ -11,6 +13,9 @@ function formatPrice(gel: number) {
 }
 
 export function PricingTierDeck({ tiers }: { tiers: PricingTierDeckType[] }) {
+  const params = useParams();
+  const locale = params?.locale || "en";
+
   return (
     <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
       {tiers.map((tier, idx) => {
@@ -82,18 +87,27 @@ export function PricingTierDeck({ tiers }: { tiers: PricingTierDeckType[] }) {
               <div className="mt-auto" />
 
               {/* CTA */}
-              <a
-                href={`${WA_BASE}?text=${waText}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`mt-2 inline-flex min-h-[48px] items-center justify-center rounded-xl text-center text-sm font-bold transition ${
-                  isPopular
-                    ? "bg-emerald-500 text-slate-950 hover:bg-emerald-400"
-                    : "border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20"
-                }`}
-              >
-                Get Started on WhatsApp
-              </a>
+              {foundation.id === 'cms' ? (
+                <Link
+                  href={`/${locale}/pricing/professional`}
+                  className={`mt-2 inline-flex min-h-[48px] items-center justify-center rounded-xl text-center text-sm font-bold transition border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20`}
+                >
+                  More information →
+                </Link>
+              ) : (
+                <a
+                  href={`${WA_BASE}?text=${waText}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`mt-2 inline-flex min-h-[48px] items-center justify-center rounded-xl text-center text-sm font-bold transition ${
+                    isPopular
+                      ? "bg-emerald-500 text-slate-950 hover:bg-emerald-400"
+                      : "border border-white/10 bg-white/5 text-white hover:bg-white/10"
+                  }`}
+                >
+                  Get Started on WhatsApp
+                </a>
+              )}
             </div>
           </div>
         );

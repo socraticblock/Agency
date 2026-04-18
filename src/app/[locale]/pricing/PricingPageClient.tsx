@@ -9,6 +9,7 @@ import { PricingProofStrip } from "./PricingProofStrip";
 import { PricingTierDeck } from "./PricingTierDeck";
 import { PricingComparisonSection } from "./PricingComparisonSection";
 import { PricingFaq } from "./PricingFaq";
+import { SHIELD_TIERS } from "@/constants/pricing";
 
 interface PricingPageClientProps {
   locale: Locale;
@@ -71,7 +72,63 @@ export function PricingPageClient({ locale }: PricingPageClientProps) {
 
       <div className="mt-16">
         <PricingComparisonSection locale={locale} />
-        <div className="mt-10 flex justify-center">
+        
+        {/* FULL SHIELD SHOWCASE */}
+        <div id="shield-callout" className="mx-auto mt-24 max-w-7xl rounded-3xl border border-white/5 bg-white/[0.02] p-8 sm:p-12">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <h3 className="text-2xl font-black text-white sm:text-4xl">
+              🛡️ Shield — Infrastructure & Security
+            </h3>
+            <p className="mt-4 text-base text-slate-400">
+              Every package includes secure hosting, automated backups, and proactive monitoring via our Sentinel Protocol. Shield also extends your warranty period.
+            </p>
+          </div>
+          
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {SHIELD_TIERS.map((tier) => (
+              <div 
+                key={tier.id} 
+                className={`relative flex flex-col rounded-2xl border p-6 transition-colors ${
+                  tier.isRecommended
+                    ? "border-emerald-500/40 bg-emerald-500/5 shadow-[0_0_30px_rgba(16,185,129,0.1)]"
+                    : "border-white/10 bg-white/5"
+                }`}
+              >
+                {tier.isRecommended && (
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-emerald-500 px-3 py-0.5 text-[10px] font-black uppercase tracking-widest text-slate-950">
+                    Recommended
+                  </span>
+                )}
+                
+                <div className="mb-4">
+                  <h4 className="text-lg font-black text-white">{tier.name}</h4>
+                  <div className="mt-1 flex items-baseline gap-1">
+                    <span className="text-2xl font-black font-space text-emerald-400">
+                      {tier.priceGEL === 0 ? "Included" : `${tier.priceGEL} ₾/yr`}
+                    </span>
+                  </div>
+                  <p className="mt-2 text-xs text-slate-400 min-h-[32px]">{tier.description}</p>
+                </div>
+                
+                <hr className="my-4 border-white/10" />
+                
+                <ul className="flex flex-col gap-3">
+                  {tier.perks.map((perk, j) => (
+                    <li key={j} className="flex gap-3">
+                      <span className="mt-0.5 text-emerald-400">✓</span>
+                      <div>
+                        <p className="text-xs font-bold text-white leading-tight">{perk.title}</p>
+                        <p className="mt-0.5 text-[11px] text-slate-400 leading-tight">{perk.desc}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-12 flex justify-center">
           <PricingCtaBand locale={locale} placement="mid" />
         </div>
       </div>
