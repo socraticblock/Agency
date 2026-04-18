@@ -32,7 +32,7 @@ export function getComparisonData(_locale: Locale): ComparisonRow[] {
       label: "Pages",
       values: [
         "6 sections",
-        "4 pages",
+        "4 pages (Home, About, Contact, Blog)",
         "5 pages included",
       ],
     },
@@ -62,7 +62,7 @@ export function getComparisonData(_locale: Locale): ComparisonRow[] {
     },
     {
       label: "Multi-Language",
-      values: ["—", "✓", "✓"],
+      values: ["—", "—", "✓"],
     },
     {
       label: "E-Commerce",

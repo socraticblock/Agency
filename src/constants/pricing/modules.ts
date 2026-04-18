@@ -107,10 +107,10 @@ export const MODULES: Module[] = [
   {
     id: 'multilingual',
     category: 'Marketing',
-    name: 'Global Market Expansion (Multilingual)',
+    name: 'Professional Translation',
     priceGEL: 800,
-    whatItIs: `A professional-grade technical 'Hreflang' architecture that supports native sub-directories for different languages (GEO/EN/RU). We don't use 'auto-translate' widgets; we build a clean, multi-route system that allows Google to index each language version of your site separately.`,
-    howItHelps: `It triples your potential audience. In a globalized hub like Georgia, offering your service only in one language leaves 60% of the money on the table. By giving EN and RU speakers a native experience, you lower 'bounce rates' and massively increase international lead conversion while ranking on foreign-language search engines.`
+    whatItIs: `Technical setup (₾800): The code architecture that tells Google about your different language versions — so Georgian speakers see the Georgian page, Russian speakers see Russian, etc.`,
+    howItHelps: `Without this, Google shows the wrong language to the wrong visitors, killing your credibility and bounce rate. Note: We don't write translations. We connect you with a professional translator (price on request depending on page count and language).`
   },
   {
     id: 'ab-testing',

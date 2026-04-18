@@ -55,15 +55,19 @@ export const FOUNDATIONS: Foundation[] = [
     warrantyDays: 75,
     ctaLabel: 'Configure My Command Center',
     ctaHref: 'https://wa.me/995579723564?text=' + encodeURIComponent('Hi Genezisi! I\'m interested in the Command Center package (1,999 ₾). Can we discuss next steps?'),
-    description: "Multi-page website with blog, CMS, lead capture, and content engine. Moves you from 'one-person show' to 'global brand' with systems you control.",
+    description: "Multi-page website with blog, CMS, lead capture, and content engine. Home + About + Contact + Blog — you control everything.",
     concept: "Professional headquarters architecture for scaling operations.",
     strategy: "Structured multi-page systems, content operations, and lead visibility in one controllable stack.",
     howItWorks: 'Centralized architecture for automation, sales workflow clarity, and operational control.',
     scope: [
-      "Workflow Layer | Custom dashboard logic for pipeline visibility and operational focus.",
-      "Automation Hooks | Calendar, CRM, and routing structure for faster response and better conversion.",
-      "Scalable System Core | Built for growth phases without re-platforming every few months.",
-      "Ownership | Full legal ownership of your infrastructure under Georgian law."
+      "4 Pages | Home + About + Contact + 1 of your choice (Blog, Services, Portfolio, etc.)",
+      "CMS Dashboard | You publish updates, change prices, add photos — no developer needed",
+      "English Only | Professional translation available as an add-on (price on request)",
+      "Basic Analytics | Google Analytics 4 included — see who visits and what they click",
+      "Priority Support | Faster response times than Professional",
+      "75-Day Warranty | Full coverage on any bugs or breakages",
+      "3 Revision Rounds | More iterations than Professional for complex builds",
+      "Full Code Ownership | You own everything — no lock-in"
     ],
     bestFor: ["Service teams replacing manual DM operations", "Operators needing clear workflow orchestration", "Brands preparing to scale with structured systems"],
     roiNote: "Built to centralize and scale operations cleanly.",
@@ -93,7 +97,8 @@ export const FOUNDATIONS: Foundation[] = [
       "5 Pages Included | Up to 5 core pages (Home, Shop, Product, About, Contact). Extra pages at 450 ₾ each.",
       "Georgian Payments (add-on) | TBC/BOG merchant integration available. +800 ₾ if you have a key, +1,500 ₾ if we handle setup.",
       "RS.ge Fiscal Sync (add-on) | +1,200 ₾ for automated e-receipt compliance.",
-      "Business Cockpit | Private dashboard for revenue, orders, and document printing in seconds"
+      "Business Cockpit | Private dashboard for revenue, orders, and document printing in seconds",
+      "HubSpot / CRM Integration (add-on) | ₾2,500 — connects every lead from your site directly into your sales pipeline, automatically"
     ],
     bestFor: ["Boutique Owners wanting a premium home", "Wine & Jewelry Makers (Global/Local)", "Artisans looking to automate back-office flow"],
     roiNote: "Automates overheads to scale sales flawlessly.",

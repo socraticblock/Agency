@@ -87,10 +87,10 @@ export function PricingTierDeck({ tiers }: { tiers: PricingTierDeckType[] }) {
               <div className="mt-auto" />
 
               {/* CTA */}
-              {foundation.id === 'cms' ? (
+              {foundation.id === 'cms' || foundation.id === 'saas' ? (
                 <div className="flex flex-col gap-2 mt-2">
                   <Link
-                    href={`/${locale}/pricing/professional`}
+                    href={`/${locale}/pricing/${foundation.id === 'cms' ? 'professional' : 'command-center'}`}
                     className={`inline-flex min-h-[48px] items-center justify-center rounded-xl text-center text-sm font-bold transition border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20`}
                   >
                     More information →
