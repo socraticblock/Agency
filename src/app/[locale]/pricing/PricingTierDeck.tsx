@@ -23,7 +23,9 @@ export function PricingTierDeck({ tiers }: { tiers: PricingTierDeckType[] }) {
         if (!foundation) return null;
 
         const waText = encodeURIComponent(
-          `Hi Genezisi! I'm interested in the ${tier.label} package. Can we discuss next steps?`
+          tier.id === "ecomm" 
+            ? `Hi Genezisi! I'm interested in the E-Commerce HQ package (starting 3,999 ₾). Can we discuss next steps?`
+            : `Hi Genezisi! I'm interested in the ${tier.label} package. Can we discuss next steps?`
         );
 
         const isPopular = tier.badge === "Most Popular";
@@ -87,11 +89,15 @@ export function PricingTierDeck({ tiers }: { tiers: PricingTierDeckType[] }) {
               <div className="mt-auto" />
 
               {/* CTA */}
-              {foundation.id === 'cms' || foundation.id === 'saas' ? (
+              {foundation.id === 'cms' || foundation.id === 'saas' || foundation.id === 'ecomm' ? (
                 <div className="flex flex-col gap-2 mt-2">
                   <Link
-                    href={`/${locale}/pricing/${foundation.id === 'cms' ? 'professional' : 'command-center'}`}
-                    className={`inline-flex min-h-[48px] items-center justify-center rounded-xl text-center text-sm font-bold transition border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20`}
+                    href={`/${locale}/pricing/${
+                      foundation.id === 'cms' ? 'professional' : 
+                      foundation.id === 'saas' ? 'command-center' : 
+                      'e-commerce'
+                    }`}
+                    className="inline-flex min-h-[48px] items-center justify-center rounded-xl text-center text-sm font-bold transition border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20"
                   >
                     More information →
                   </Link>
