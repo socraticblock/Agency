@@ -8,7 +8,6 @@ import { PricingCtaBand } from "./PricingCtaBand";
 import { PricingProofStrip } from "./PricingProofStrip";
 import { PricingTierDeck } from "./PricingTierDeck";
 import { PricingComparisonSection } from "./PricingComparisonSection";
-import { TierPickerQuiz } from "./TierPickerQuiz";
 import { PricingFaq } from "./PricingFaq";
 
 interface PricingPageClientProps {
@@ -41,7 +40,9 @@ export function PricingPageClient({ locale }: PricingPageClientProps) {
         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-400/90">Pricing</p>
         <h1 className="mt-3 text-3xl font-black tracking-tight text-white sm:text-5xl sm:leading-tight">
           Choose your growth engine.
-          <span className="block text-emerald-400">Launch fast. Own it forever.</span>
+          <span className="block bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+            Launch fast. Own it forever.
+          </span>
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-base font-medium leading-relaxed text-slate-400 sm:text-lg">
           Transparent GEL pricing for Georgian businesses — full ownership, clear timelines, and no hidden
@@ -54,10 +55,6 @@ export function PricingPageClient({ locale }: PricingPageClientProps) {
 
       <div className="mt-16">
         <PricingProofStrip />
-      </div>
-
-      <div className="mt-16">
-        <TierPickerQuiz locale={locale} />
       </div>
 
       <div className="mt-16">
