@@ -108,9 +108,9 @@ export const MODULES: Module[] = [
     id: 'multilingual',
     category: 'Marketing',
     name: 'Professional Translation',
-    priceGEL: 800,
-    whatItIs: `Technical setup (₾800): The code architecture that tells Google about your different language versions — so Georgian speakers see the Georgian page, Russian speakers see Russian, etc.`,
-    howItHelps: `Without this, Google shows the wrong language to the wrong visitors, killing your credibility and bounce rate. Note: We don't write translations. We connect you with a professional translator (price on request depending on page count and language).`
+    priceGEL: 500,
+    whatItIs: `Technical setup (₾500): The code architecture that tells Google about your different language versions — so Georgian speakers see the Georgian page, Russian speakers see Russian, etc. We also offer in-house Georgian translation at ₾100/hour.`,
+    howItHelps: `Without this, Google shows the wrong language to the wrong visitors, killing your credibility and bounce rate. For Georgian translation, our in-house team handles it at ₾100/hour.`
   },
   {
     id: 'ab-testing',

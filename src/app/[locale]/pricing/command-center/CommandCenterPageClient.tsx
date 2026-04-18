@@ -136,13 +136,13 @@ export function CommandCenterPageClient() {
           </div>
           <div className="rounded-xl border border-red-500/10 bg-red-500/5 p-5">
             <h4 className="font-bold text-white">Multi-Language in Base</h4>
-            <p className="text-sm text-slate-400 mt-1">Command Center ships in English only. If you want a second language version (Georgian, Russian, etc.), you have three options:</p>
+            <p className="text-sm text-slate-400 mt-1">Command Center ships in English only. If you want a second language version (Georgian, Russian, etc.), you have options:</p>
             <ul className="mt-2 space-y-1 text-sm text-slate-300 list-disc ml-4">
-              <li><strong>Translate it yourself</strong> — we give you access to the CMS, you update the content in your language</li>
+              <li><strong>Translate it yourself</strong> — we give you CMS access, you update the content in your language</li>
+              <li><strong>Use our in-house translator</strong> — ₾100/hour for English to Georgian</li>
               <li><strong>Hire your own translator</strong> — give us the translated text, we upload it</li>
-              <li><strong>We connect you with a translator</strong> — we introduce you, you agree the price directly with them</li>
             </ul>
-            <p className="mt-3 text-sm text-slate-400">The ₾800 covers the technical setup only — the code that tells Google about your different language versions so the right language appears for the right visitors. No translation included.</p>
+            <p className="mt-3 text-sm text-slate-400">The ₾500 covers the technical setup only — the code that tells Google about your different language versions so the right language appears for the right visitors.</p>
           </div>
         </div>
       </section>
@@ -178,8 +178,8 @@ export function CommandCenterPageClient() {
              <p className="text-xs text-slate-500 mt-4 leading-relaxed">Note: HubSpot has a free tier. Paid plans start at $15/month depending on features needed.</p>
            </div>
            <div className="rounded-2xl border border-white/10 p-6">
-             <h4 className="font-bold text-white mb-1">Professional Translation — price on request</h4>
-             <p className="text-sm text-slate-400">What it actually is: We connect you with a professional translator. Cost depends on page count and language. You approve the translator directly — we handle the technical integration.</p>
+             <h4 className="font-bold text-white mb-1">Professional Translation — ₾500</h4>
+             <p className="text-sm text-slate-400">What it actually is: ₾500 covers the code architecture for multi-language indexation. We also offer in-house Georgian translation at ₾100/hour, or we can connect you with external translators for other languages.</p>
            </div>
            <div className="rounded-2xl border border-white/10 p-6 bg-white/[0.02]">
              <h4 className="font-bold text-white mb-1">Anything else? Just ask.</h4>
