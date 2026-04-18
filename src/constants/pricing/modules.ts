@@ -162,7 +162,7 @@ export const MODULES: Module[] = [
     id: 'calendar-sync',
     category: 'Business Engines',
     name: 'Real-Time Calendar Sync',
-    priceGEL: 1200,
+    priceGEL: 1000,
     timeSaved: 10,
     whatItIs: `A seamless, 2-way API bridge between your website and your professional calendar (Google or Outlook). We build a live availability interface that allows clients to book meetings with you based on your actual, real-time schedule.`,
     howItHelps: `It eliminates the 'Email Tag' friction that kills sales. When a lead is hot, they can book you in 3 clicks instead of waiting 4 hours for a reply. It ensures zero double-bookings and professional scheduling 'buffer zones,' transforming your site into an elite personal assistant that manages your time for you.`

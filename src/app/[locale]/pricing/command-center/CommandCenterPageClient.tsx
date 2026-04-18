@@ -124,7 +124,7 @@ export function CommandCenterPageClient() {
           </div>
           <div className="rounded-xl border border-red-500/10 bg-red-500/5 p-5">
             <h4 className="font-bold text-white">Calendar Booking System</h4>
-            <p className="text-sm text-slate-400 mt-1">Live appointment scheduling where clients pick a time slot from your real calendar. This requires a custom 2-way API integration — ₾1,200 as an add-on. Without it, clients message you and you reply manually.</p>
+            <p className="text-sm text-slate-400 mt-1">Live appointment scheduling where clients pick a time slot from your real calendar. This requires a custom 2-way API integration — ₾1,000 as an add-on. Without it, clients message you and you reply manually.</p>
           </div>
           <div className="rounded-xl border border-red-500/10 bg-red-500/5 p-5">
             <h4 className="font-bold text-white">CRM / HubSpot Integration</h4>
@@ -136,7 +136,13 @@ export function CommandCenterPageClient() {
           </div>
           <div className="rounded-xl border border-red-500/10 bg-red-500/5 p-5">
             <h4 className="font-bold text-white">Multi-Language in Base</h4>
-            <p className="text-sm text-slate-400 mt-1">Command Center ships in English only. If you need Georgian, Russian, or any other language — professional translation is available as an add-on. The ₾800 covers the technical setup (telling Google about the different language versions), plus we connect you with a translator whose cost depends on page count and language.</p>
+            <p className="text-sm text-slate-400 mt-1">Command Center ships in English only. If you want a second language version (Georgian, Russian, etc.), you have three options:</p>
+            <ul className="mt-2 space-y-1 text-sm text-slate-300 list-disc ml-4">
+              <li><strong>Translate it yourself</strong> — we give you access to the CMS, you update the content in your language</li>
+              <li><strong>Hire your own translator</strong> — give us the translated text, we upload it</li>
+              <li><strong>We connect you with a translator</strong> — we introduce you, you agree the price directly with them</li>
+            </ul>
+            <p className="mt-3 text-sm text-slate-400">The ₾800 covers the technical setup only — the code that tells Google about your different language versions so the right language appears for the right visitors. No translation included.</p>
           </div>
         </div>
       </section>
@@ -155,7 +161,7 @@ export function CommandCenterPageClient() {
              <p className="text-sm text-slate-400">What it actually is: A single extra page beyond your 4. Good for things like "Our Story," "Return Policy," or "Terms." Each additional page beyond the included 4 is ₾450.</p>
            </div>
            <div className="rounded-2xl border border-white/10 p-6">
-             <h4 className="font-bold text-white mb-1">Real-Time Calendar Sync — ₾1,200</h4>
+             <h4 className="font-bold text-white mb-1">Real-Time Calendar Sync — ₾1,000</h4>
              <p className="text-sm text-slate-400">What it actually is: Clients book meetings directly from your site — it connects to your Google or Outlook calendar so you never get double-booked. Eliminates the email tag that kills hot leads.</p>
            </div>
            <div className="rounded-2xl border border-white/10 p-6">
@@ -168,7 +174,8 @@ export function CommandCenterPageClient() {
            </div>
            <div className="rounded-2xl border border-white/10 p-6">
              <h4 className="font-bold text-white mb-1">HubSpot/CRM Integration — ₾2,500</h4>
-             <p className="text-sm text-slate-400">What it actually is: Every enquiry from your website goes straight into your CRM (HubSpot, Pipedrive, etc.) automatically — categorized, tagged, and ready for your sales team to follow up. No more lost leads in someone's Instagram DMs.</p>
+             <p className="text-sm text-slate-400">What it actually is: Every enquiry from your website goes straight into your CRM (HubSpot, Pipedrive, etc.) automatically — categorized, tagged, and assigned to the right person. No more lost leads in someone's Instagram DMs.</p>
+             <p className="text-xs text-slate-500 mt-4 leading-relaxed">Note: HubSpot has a free tier. Paid plans start at $15/month depending on features needed.</p>
            </div>
            <div className="rounded-2xl border border-white/10 p-6">
              <h4 className="font-bold text-white mb-1">Professional Translation — price on request</h4>
