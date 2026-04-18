@@ -31,8 +31,8 @@ export function getComparisonData(_locale: Locale): ComparisonRow[] {
     {
       label: "Pages",
       values: [
-        "Unlimited sections",
-        "Unlimited sections",
+        "6 sections",
+        "4 pages",
         "5 pages included",
       ],
     },
