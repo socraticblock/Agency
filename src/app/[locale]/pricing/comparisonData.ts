@@ -26,19 +26,15 @@ export function getComparisonData(_locale: Locale): ComparisonRow[] {
     },
     {
       label: "Delivery",
-      values: [pro.deliveryTimeline ?? "7-10 days", cc.deliveryTimeline ?? "10-15 days", ec.deliveryTimeline ?? "20+ days"],
+      values: ["7-10 days", "10-15 days", "20-30 days"],
     },
     {
       label: "Pages",
-      values: [
-        "6 sections",
-        "4 pages (Home, About, Contact, Blog)",
-        "5 pages included",
-      ],
+      values: ["6 sections", "4 pages", "5 pages"],
     },
     {
-      label: "Hosting (Card)",
-      values: ["50 ₾/yr", "50 ₾/yr", "120 ₾/yr"],
+      label: "Revision Rounds",
+      values: ["2", "3", "4"],
     },
     {
       label: "SSL",
@@ -53,6 +49,18 @@ export function getComparisonData(_locale: Locale): ComparisonRow[] {
       values: ["✓", "✓", "✓"],
     },
     {
+      label: "Source Code Ownership",
+      values: ["✓", "✓", "✓"],
+    },
+    {
+      label: "Analytics",
+      values: ["✓", "✓", "✓"],
+    },
+    {
+      label: "Advanced Contact Forms",
+      values: ["✓", "✓", "—"],
+    },
+    {
       label: "CMS",
       values: ["—", "✓", "✓"],
     },
@@ -61,7 +69,7 @@ export function getComparisonData(_locale: Locale): ComparisonRow[] {
       values: ["—", "✓", "✓"],
     },
     {
-      label: "Multi-Language",
+      label: "Business Cockpit",
       values: ["—", "—", "✓"],
     },
     {
@@ -70,23 +78,19 @@ export function getComparisonData(_locale: Locale): ComparisonRow[] {
     },
     {
       label: "Payment Processing",
-      values: ["—", "—", "✓"],
+      values: ["—", "—", "— (₾500+ add-on)"],
     },
     {
       label: "Inventory Mgmt",
       values: ["—", "—", "✓"],
     },
     {
-      label: "Priority Support",
-      values: ["—", "✓", "✓"],
+      label: "Multi-Language",
+      values: ["Add-on", "Add-on", "Add-on"],
     },
     {
-      label: "Shield (Yearly)",
-      values: [
-        "120 ₾/yr",
-        "500 ₾/yr",
-        "1,500 ₾/yr",
-      ],
+      label: "Priority Support",
+      values: ["—", "✓", "✓"],
     },
   ];
 }
