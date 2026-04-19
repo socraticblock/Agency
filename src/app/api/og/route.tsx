@@ -123,36 +123,31 @@ export async function GET(req: NextRequest) {
             <div style={{ display: "flex", flexDirection: "column", flex: 1, width: "100%" }}>
               <div
                 style={{
-                  fontSize: "80px",
+                  fontSize: "32px",
                   fontWeight: 800,
                   color: textPrimary,
                   letterSpacing: "0.3em",
-                  marginTop: "60px",
-                  marginBottom: "80px",
+                  marginBottom: "auto",
                 }}
               >
                 GENEZISI
               </div>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: "10px", flex: 1 }}>
+              <div style={{ display: "flex", flexDirection: "column", marginBottom: "40px", marginTop: "auto", maxWidth: "95%" }}>
                 <div style={{ fontSize: "32px", fontWeight: 400, color: textPrimary, lineHeight: 1.4 }}>
-                   "{tagline}"
+                  {tagline}
                 </div>
-                <div style={{ fontSize: "28px", fontWeight: 400, color: textDarker }}>
-                   "{subline}"
+                <div style={{ fontSize: "28px", fontWeight: 400, color: textDarker, marginTop: "10px" }}>
+                  {subline}
+                </div>
+                <div style={{ fontSize: "18px", fontWeight: 500, color: textMuted, letterSpacing: "0.05em", marginTop: "24px" }}>
+                  {services}
                 </div>
               </div>
 
-              <div style={{ display: "flex", flexDirection: "column", width: "100%", alignItems: "center", marginTop: "auto" }}>
-                <div style={{ width: "400px", height: "1px", backgroundColor: accent, opacity: 0.3, marginBottom: "30px" }} />
-                
-                <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "flex-end" }}>
-                  <div style={{ fontSize: "18px", fontWeight: 500, color: textMuted, letterSpacing: "0.05em" }}>
-                    {services}
-                  </div>
-                  <div style={{ fontSize: "16px", fontWeight: 500, color: textDarker }}>
-                    {urlAnchor}
-                  </div>
+              <div style={{ display: "flex", justifyContent: "flex-end", width: "100%", marginTop: "10px" }}>
+                <div style={{ fontSize: "16px", fontWeight: 500, color: textDarker }}>
+                  {urlAnchor}
                 </div>
               </div>
             </div>
