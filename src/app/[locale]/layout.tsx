@@ -31,7 +31,7 @@ export async function generateMetadata({
     locale: lang,
     path: "/",
     jobTitle: "Luxury Branding",
-    accentColor: "#fbbf24",
+    accentColor: "#10b981",
     theme: "dark",
   });
   
