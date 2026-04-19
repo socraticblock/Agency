@@ -34,10 +34,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     locale: "en",
     path: `/c/${slug}`,
     ogType: "card",
-    jobTitle: parsedState.identity.jobTitlePrimary,
-    accentColor: parsedState.identity.accentColor,
-    photoUrl: parsedState.identity.photoUrl,
-    theme: parsedState.identity.theme,
+    jobTitle: parsedState.title || "Professional",
+    accentColor: parsedState.style.accentCustomPrimary || "#10b981",
+    photoUrl: parsedState.photoDataUrl || undefined,
+    theme: "dark", // Default theme for Genezisi cards
   });
   return metadata;
 }
