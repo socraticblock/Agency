@@ -76,7 +76,7 @@ export const MODULES: Module[] = [
     id: 'ga4-analytics',
     category: 'Marketing',
     name: 'Advanced GA4 Analytics',
-    priceGEL: 1200,
+    priceGEL: 0,
     whatItIs: "A smart tracking system that records exactly how people use your site. We don't just count visitors; we measure how far they scroll, which buttons they actually click, and how much of your videos they truly watch.",
     howItHelps: "It stops the guessing game. You will see exactly where people get confused or leave your site, giving you the 'why' behind your sales. This allows you to stop wasting money on ads that don't work and focus on what actually turns visitors into customers."
   },

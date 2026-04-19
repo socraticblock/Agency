@@ -54,8 +54,8 @@ export function CommandCenterPageClient() {
           />
           <FeatureCard 
             icon={<Zap className="h-6 w-6 text-emerald-400" />}
-            title="English Only"
-            body="Professional translation features and multiple languages are available as an add-on."
+            title="Multi-Language (EN/GE)"
+            body="Georgian and English versions included. Technical setup, language routing, and indexation included in the base price."
           />
           <FeatureCard 
             icon={<Handshake className="h-6 w-6 text-emerald-400" />}
@@ -119,30 +119,8 @@ export function CommandCenterPageClient() {
         <h2 className="text-2xl font-black text-red-400 sm:text-3xl">What's Not Included (Important)</h2>
         <div className="mt-6 grid gap-4">
           <div className="rounded-xl border border-red-500/10 bg-red-500/5 p-5">
-            <h4 className="font-bold text-white">Additional Pages Beyond 4</h4>
-            <p className="text-sm text-slate-400 mt-1">Each extra page beyond your included 4 costs ₾450. Good for things like "Our Story," "Team," or "Case Studies."</p>
-          </div>
-          <div className="rounded-xl border border-red-500/10 bg-red-500/5 p-5">
-            <h4 className="font-bold text-white">Calendar Booking System</h4>
-            <p className="text-sm text-slate-400 mt-1">Live appointment scheduling where clients pick a time slot from your real calendar. This requires a custom 2-way API integration — ₾1,000 as an add-on. Without it, clients message you and you reply manually.</p>
-          </div>
-          <div className="rounded-xl border border-red-500/10 bg-red-500/5 p-5">
-            <h4 className="font-bold text-white">CRM / HubSpot Integration</h4>
-            <p className="text-sm text-slate-400 mt-1">A CRM (Customer Relationship Management system) automatically organizes every enquiry into your sales pipeline — categorized, tagged, and assigned to the right person. Without it, leads live in your WhatsApp or email until someone manually follows up. CRM setup + integration is ₾2,500 as an add-on.</p>
-          </div>
-          <div className="rounded-xl border border-red-500/10 bg-red-500/5 p-5">
             <h4 className="font-bold text-white">E-Commerce / Payment Processing</h4>
-            <p className="text-sm text-slate-400 mt-1">Command Center is for service businesses. If you sell products online and need TBC/BOG merchant integration, automated receipts, and inventory management — that's <Link href="/en/pricing" className="text-red-300 underline">E-Commerce HQ</Link> starting at ₾3,999.</p>
-          </div>
-          <div className="rounded-xl border border-red-500/10 bg-red-500/5 p-5">
-            <h4 className="font-bold text-white">Multi-Language in Base</h4>
-            <p className="text-sm text-slate-400 mt-1">Command Center ships in English only. If you want a second language version (Georgian, Russian, etc.), you have options:</p>
-            <ul className="mt-2 space-y-1 text-sm text-slate-300 list-disc ml-4">
-              <li><strong>Translate it yourself</strong> — we give you CMS access, you update the content in your language</li>
-              <li><strong>Use our in-house translator</strong> — ₾100/hour for English to Georgian</li>
-              <li><strong>Hire your own translator</strong> — give us the translated text, we upload it</li>
-            </ul>
-            <p className="mt-3 text-sm text-slate-400">The ₾500 covers the technical setup only — the code that tells Google about your different language versions so the right language appears for the right visitors.</p>
+            <p className="text-sm text-slate-400 mt-1">Command Center is for service businesses. If you sell products online and need TBC/BOG merchant integration, automated receipts, and inventory management — that's <Link href="/en/pricing/e-commerce" className="text-red-300 underline">E-Commerce HQ</Link> starting at ₾3,999.</p>
           </div>
         </div>
       </section>
@@ -152,34 +130,22 @@ export function CommandCenterPageClient() {
          <h2 className="text-2xl font-black text-white sm:text-3xl">Available Add-Ons</h2>
          <p className="mt-2 text-slate-400 mb-6">Tell us during the onboarding brief if you'd like any of these.</p>
          <div className="grid gap-6 md:grid-cols-2">
-           <div className="rounded-2xl border border-white/10 p-6">
-             <h4 className="font-bold text-white mb-1">GA4 + Conversion Tracking — ₾800</h4>
-             <p className="text-sm text-slate-400">What it actually is: We install Google Analytics 4 with event tracking. You see how far people scroll, which buttons they click, where they leave. Takes the guessing game out of marketing.</p>
-           </div>
+
            <div className="rounded-2xl border border-white/10 p-6">
              <h4 className="font-bold text-white mb-1">Additional Static Page — ₾450/page</h4>
-             <p className="text-sm text-slate-400">What it actually is: A single extra page beyond your 4. Good for things like "Our Story," "Return Policy," or "Terms." Each additional page beyond the included 4 is ₾450.</p>
+             <p className="text-sm text-slate-400">What it actually is: A single extra page beyond your included 4. Ideal for things like "Our Story," "Our Team," "Shipping Policy," or "Case Studies." Each additional page is ₾450.</p>
            </div>
            <div className="rounded-2xl border border-white/10 p-6">
-             <h4 className="font-bold text-white mb-1">Real-Time Calendar Sync — ₾1,000</h4>
-             <p className="text-sm text-slate-400">What it actually is: Clients book meetings directly from your site — it connects to your Google or Outlook calendar so you never get double-booked. Eliminates the email tag that kills hot leads.</p>
+             <h4 className="font-bold text-white mb-1">Calendar Booking System — ₾1,000</h4>
+             <p className="text-sm text-slate-400">What it actually is: Clients book meetings directly from your site — it connects to your Google or Outlook calendar so you never get double-booked. Eliminate the back-and-forth that kills leads.</p>
            </div>
            <div className="rounded-2xl border border-white/10 p-6">
              <h4 className="font-bold text-white mb-1">SMS Hub — ₾650</h4>
-             <p className="text-sm text-slate-400">What it actually is: Automated text messages for order updates or booking confirmations. In Georgia, everyone reads their SMS immediately — it builds trust and cuts "where is my order?" calls.</p>
+             <p className="text-sm text-slate-400">What it actually is: Automated text messages for booking confirmations. In Georgia, everyone reads their SMS immediately — it builds trust and cuts down on no-shows.</p>
            </div>
            <div className="rounded-2xl border border-white/10 p-6">
              <h4 className="font-bold text-white mb-1">Professional Copywriting — ₾600/page</h4>
-             <p className="text-sm text-slate-400">What it actually is: We write the page for you using a psychological sales framework (AIDA — Attention, Interest, Desire, Action). You give us your service details, we turn it into persuasive copy.</p>
-           </div>
-           <div className="rounded-2xl border border-white/10 p-6">
-             <h4 className="font-bold text-white mb-1">HubSpot/CRM Integration — ₾2,500</h4>
-             <p className="text-sm text-slate-400">What it actually is: Every enquiry from your website goes straight into your CRM (HubSpot, Pipedrive, etc.) automatically — categorized, tagged, and assigned to the right person. No more lost leads in someone's Instagram DMs.</p>
-             <p className="text-xs text-slate-500 mt-4 leading-relaxed">Note: HubSpot has a free tier. Paid plans start at $15/month depending on features needed.</p>
-           </div>
-           <div className="rounded-2xl border border-white/10 p-6">
-             <h4 className="font-bold text-white mb-1">Professional Translation — ₾500</h4>
-             <p className="text-sm text-slate-400">What it actually is: ₾500 covers the code architecture for multi-language indexation. We also offer in-house Georgian translation at ₾100/hour, or we can connect you with external translators for other languages.</p>
+             <p className="text-sm text-slate-400">What it actually is: We write your pages using a psychological sales framework (AIDA). You give us the details, we turn them into persuasive copy.</p>
            </div>
            <div className="rounded-2xl border border-white/10 p-6 bg-white/[0.02]">
              <h4 className="font-bold text-white mb-1">Anything else? Just ask.</h4>
