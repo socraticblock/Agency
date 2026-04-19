@@ -3,11 +3,12 @@ import { Navbar } from "../_components/Navbar";
 import Configurator from "../_components/Configurator";
 import { NanoBananaBackground } from "../_components/NanoBananaBackground";
 
-export const runtime = 'edge';
+// Use the default Node.js runtime instead of Edge to avoid size limits (1.55MB bundle)
+// export const runtime = 'edge';
 
 export const metadata = {
   title: "Genezisi Architect Studio — Build Your Infrastructure",
-  description: "Design your digital infrastructure with our consultative project builder. Choose your foundation, customize modules, and secure your asset.",
+  description: "Design your infrastructure with our consultative project builder. Choose your foundation, customize modules, and secure your asset.",
 };
 
 export default async function ArchitectPage({
