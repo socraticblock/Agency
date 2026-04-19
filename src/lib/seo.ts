@@ -15,6 +15,16 @@ interface LocalBusinessOptions {
   accentColor?: string;
   photoUrl?: string;
   theme?: "light" | "dark";
+  ogType?: "home" | "pricing" | "blog" | "card";
+  ogTier?: string;
+  ogPrice?: string;
+  ogFeatures?: string;
+  ogCta?: string;
+  ogCategory?: string;
+  ogReadTime?: string;
+  ogTagline?: string;
+  ogSubline?: string;
+  ogServices?: string;
 }
 
 interface SeoResult {
@@ -46,9 +56,19 @@ export function createLocalBusinessSeo(options: LocalBusinessOptions): SeoResult
     postalCode = "",
     addressCountry = "GE",
     jobTitle = "Expert",
-    accentColor = "#fbbf24",
+    accentColor = "#10b981", // Changed default to emerald
     photoUrl,
     theme = "dark",
+    ogType = "home",
+    ogTier,
+    ogPrice,
+    ogFeatures,
+    ogCta,
+    ogCategory,
+    ogReadTime,
+    ogTagline,
+    ogSubline,
+    ogServices,
   } = options;
 
   const baseUrl = getBaseUrl().replace(/\/$/, "");
@@ -57,19 +77,30 @@ export function createLocalBusinessSeo(options: LocalBusinessOptions): SeoResult
   const synchronizedPath = `/${pathLocale}${path.startsWith("/") ? path : `/${path}`}`;
   const url = `${baseUrl}${synchronizedPath}`;
 
-  const title = jobTitle ? `${name} | ${jobTitle}` : name;
+  const title = jobTitle && ogType === "card" ? `${name} | ${jobTitle}` : name;
   const localeTag = getLocaleTag(locale);
 
   // Construct High-Fidelity OG Image URL with parameters
   const ogParams = new URLSearchParams({
+    type: ogType,
     name,
     title: jobTitle,
     accent: accentColor,
     theme,
   });
 
-  if (photoUrl) {
-    ogParams.set("photo", photoUrl);
+  if (photoUrl) ogParams.set("photo", photoUrl);
+  if (ogCategory) ogParams.set("category", ogCategory);
+  if (ogReadTime) ogParams.set("readTime", ogReadTime);
+  if (ogTier) ogParams.set("tier", ogTier);
+  if (ogPrice) ogParams.set("price", ogPrice);
+  if (ogFeatures) ogParams.set("features", ogFeatures);
+  if (ogTagline) ogParams.set("tagline", ogTagline);
+  if (ogSubline) ogParams.set("subline", ogSubline);
+  if (ogServices) ogParams.set("services", ogServices);
+  if (ogCta) ogParams.set("cta", ogCta);
+  if (options.name === "Genezisi" && ogType === "card") {
+    // Edge case for existing card defaults
   }
   
   const ogImageUrl = `${baseUrl}/api/og?${ogParams.toString()}`;
