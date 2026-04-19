@@ -53,13 +53,6 @@ export async function GET(req: NextRequest) {
     if (titleLength > 60) titleFontSize = 36;
     if (titleLength > 80) titleFontSize = 32;
 
-    // Font weights
-    const [interRegular, interBold, interExtraBold] = await Promise.all([
-      fetch(new URL("https://rsms.me/inter/font-files/Inter-Regular.otf", req.url)).then((res) => res.arrayBuffer()),
-      fetch(new URL("https://rsms.me/inter/font-files/Inter-Bold.otf", req.url)).then((res) => res.arrayBuffer()),
-      fetch(new URL("https://rsms.me/inter/font-files/Inter-ExtraBold.otf", req.url)).then((res) => res.arrayBuffer()),
-    ]);
-
     return new ImageResponse(
       (
         <div
@@ -69,7 +62,7 @@ export async function GET(req: NextRequest) {
             display: "flex",
             flexDirection: "column",
             backgroundColor: bgPrimary,
-            fontFamily: "Inter",
+            fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
             position: "relative",
             overflow: "hidden",
             padding: type === "card" ? "60px" : "80px",
@@ -143,10 +136,10 @@ export async function GET(req: NextRequest) {
 
               <div style={{ display: "flex", flexDirection: "column", gap: "10px", flex: 1 }}>
                 <div style={{ fontSize: "32px", fontWeight: 400, color: textPrimary, lineHeight: 1.4 }}>
-                  "{tagline}"
+                   "{tagline}"
                 </div>
                 <div style={{ fontSize: "28px", fontWeight: 400, color: textDarker }}>
-                  "{subline}"
+                   "{subline}"
                 </div>
               </div>
 
@@ -320,7 +313,7 @@ export async function GET(req: NextRequest) {
                   Digital Profile
                 </div>
                 <div style={{ fontSize: "102px", fontWeight: 900, color: textPrimary, marginBottom: "8px", letterSpacing: "-0.06em", lineHeight: 0.9 }}>
-                  {name}
+                   {name}
                 </div>
                 <div style={{ fontSize: "42px", fontWeight: 400, color: textPrimary, opacity: 0.7, marginBottom: "40px", letterSpacing: "-0.02em", fontStyle: "italic" }}>
                   {jobTitle}
@@ -361,28 +354,9 @@ export async function GET(req: NextRequest) {
       {
         width: 1200,
         height: 630,
-        fonts: [
-          {
-            name: "Inter",
-            data: interRegular,
-            weight: 400,
-            style: "normal",
-          },
-          {
-            name: "Inter",
-            data: interBold,
-            weight: 700,
-            style: "normal",
-          },
-          {
-            name: "Inter",
-            data: interExtraBold,
-            weight: 800,
-            style: "normal",
-          },
-        ],
       }
     );
+
   } catch (e: any) {
     console.log(`${e.message}`);
     return new Response(`Failed to generate the image`, {

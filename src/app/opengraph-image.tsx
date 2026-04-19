@@ -22,7 +22,7 @@ export default function Image() {
           display: "flex",
           flexDirection: "column",
           backgroundColor: bgPrimary,
-          fontFamily: '"Inter", sans-serif',
+          fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
           position: "relative",
           overflow: "hidden",
           padding: "80px",
