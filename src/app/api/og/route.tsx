@@ -46,6 +46,20 @@ export async function GET(req: NextRequest) {
     if (type === "blog") urlAnchor = "genezisi.com/blog";
     if (type === "card") urlAnchor = `genezisi.com/c/${name.split(" ")[0].toLowerCase()}`;
 
+    // Dynamic font sizing for Blog Title
+    const titleLength = title.length;
+    let titleFontSize = 52;
+    if (titleLength > 40) titleFontSize = 44;
+    if (titleLength > 60) titleFontSize = 36;
+    if (titleLength > 80) titleFontSize = 32;
+
+    // Font weights
+    const [interRegular, interBold, interExtraBold] = await Promise.all([
+      fetch(new URL("https://rsms.me/inter/font-files/Inter-Regular.otf", req.url)).then((res) => res.arrayBuffer()),
+      fetch(new URL("https://rsms.me/inter/font-files/Inter-Bold.otf", req.url)).then((res) => res.arrayBuffer()),
+      fetch(new URL("https://rsms.me/inter/font-files/Inter-ExtraBold.otf", req.url)).then((res) => res.arrayBuffer()),
+    ]);
+
     return new ImageResponse(
       (
         <div
@@ -55,7 +69,7 @@ export async function GET(req: NextRequest) {
             display: "flex",
             flexDirection: "column",
             backgroundColor: bgPrimary,
-            fontFamily: '"Inter", sans-serif',
+            fontFamily: "Inter",
             position: "relative",
             overflow: "hidden",
             padding: type === "card" ? "60px" : "80px",
@@ -214,11 +228,11 @@ export async function GET(req: NextRequest) {
                 GENEZISI
               </div>
 
-              <div style={{ display: "flex", flexDirection: "column", marginBottom: "40px", marginTop: "auto", maxWidth: "90%" }}>
+              <div style={{ display: "flex", flexDirection: "column", marginBottom: "40px", marginTop: "auto", maxWidth: "95%" }}>
                 <div style={{ fontSize: "14px", fontWeight: 700, color: accent, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "20px" }}>
                   {category}
                 </div>
-                <div style={{ fontSize: "52px", fontWeight: 700, color: textPrimary, lineHeight: 1.2 }}>
+                <div style={{ fontSize: `${titleFontSize}px`, fontWeight: 700, color: textPrimary, lineHeight: 1.1 }}>
                   {title}
                 </div>
                 <div style={{ fontSize: "18px", fontWeight: 500, color: textMuted, marginTop: "30px" }}>
@@ -348,9 +362,25 @@ export async function GET(req: NextRequest) {
         width: 1200,
         height: 630,
         fonts: [
-          // If we had inter.ttf we'd pass it here. The prompt said pass it via @import in style tag. But vercel/og might not execute @imports. 
-          // Defaulting to "sans-serif" system fonts fallback since it works beautifully natively on Edge for standard weights, but usually we would fetch it.
-        ]
+          {
+            name: "Inter",
+            data: interRegular,
+            weight: 400,
+            style: "normal",
+          },
+          {
+            name: "Inter",
+            data: interBold,
+            weight: 700,
+            style: "normal",
+          },
+          {
+            name: "Inter",
+            data: interExtraBold,
+            weight: 800,
+            style: "normal",
+          },
+        ],
       }
     );
   } catch (e: any) {

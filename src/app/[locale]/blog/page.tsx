@@ -19,11 +19,13 @@ export async function generateMetadata({
   const { locale } = await params;
   const lang = normalizeLocale(locale);
   const { metadata } = createLocalBusinessSeo({
-    name: "Genezisi Blog — Insights for Georgian Businesses",
+    name: "Genezisi Blog",
     description:
       "Expert guides on web design, digital strategy, and online growth for Georgian businesses. Practical advice from Tbilisi's digital agency.",
     locale: lang,
     path: "/blog",
+    ogType: "blog",
+    ogCategory: "Guides",
   });
   return metadata;
 }

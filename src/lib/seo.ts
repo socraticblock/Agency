@@ -25,6 +25,7 @@ interface LocalBusinessOptions {
   ogTagline?: string;
   ogSubline?: string;
   ogServices?: string;
+  ogAlt?: string;
 }
 
 interface SeoResult {
@@ -63,12 +64,13 @@ export function createLocalBusinessSeo(options: LocalBusinessOptions): SeoResult
     ogTier,
     ogPrice,
     ogFeatures,
-    ogCta,
+  ogCta,
     ogCategory,
     ogReadTime,
     ogTagline,
     ogSubline,
     ogServices,
+    ogAlt,
   } = options;
 
   const baseUrl = getBaseUrl().replace(/\/$/, "");
@@ -84,7 +86,7 @@ export function createLocalBusinessSeo(options: LocalBusinessOptions): SeoResult
   const ogParams = new URLSearchParams({
     type: ogType,
     name,
-    title: jobTitle,
+    title: jobTitle || "Expert",
     accent: accentColor,
     theme,
   });
@@ -99,11 +101,24 @@ export function createLocalBusinessSeo(options: LocalBusinessOptions): SeoResult
   if (ogSubline) ogParams.set("subline", ogSubline);
   if (ogServices) ogParams.set("services", ogServices);
   if (ogCta) ogParams.set("cta", ogCta);
-  if (options.name === "Genezisi" && ogType === "card") {
-    // Edge case for existing card defaults
-  }
-  
+
   const ogImageUrl = `${baseUrl}/api/og?${ogParams.toString()}`;
+
+  // Generate descriptive Alt Text for the OG Image
+  let finalAlt = ogAlt;
+  if (!finalAlt) {
+    if (ogType === "home") {
+      finalAlt = `${name} — Professional Digital Foundations in Tbilisi`;
+    } else if (ogType === "pricing") {
+      finalAlt = `${name} — ${ogTier || "Professional"} Pricing Packages`;
+    } else if (ogType === "blog") {
+      finalAlt = `${name} Blog — Insights on ${ogCategory || "Web Design"}`;
+    } else if (ogType === "card") {
+      finalAlt = `${name} — ${jobTitle}`;
+    } else {
+      finalAlt = `${name} - ${jobTitle}`;
+    }
+  }
 
   const metadata: Metadata = {
     title,
@@ -128,7 +143,7 @@ export function createLocalBusinessSeo(options: LocalBusinessOptions): SeoResult
           url: ogImageUrl,
           width: 1200,
           height: 630,
-          alt: `${name} - ${jobTitle}`,
+          alt: finalAlt,
         },
       ],
     },

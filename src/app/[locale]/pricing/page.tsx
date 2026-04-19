@@ -24,6 +24,10 @@ export async function generateMetadata({
       "Transparent website and e-commerce packages in GEL for Georgian businesses. Full ownership, clear delivery windows, local payment integrations.",
     locale: lang,
     path: "/pricing",
+    ogType: "pricing",
+    ogTier: "Professional",
+    ogPrice: "999 ₾",
+    ogFeatures: "100% custom design · High-speed performance · 45-day warranty",
   });
   return metadata;
 }

@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import { createLocalBusinessSeo } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import type { Lane1CustomizerState } from "@/app/[locale]/start/lib/types";
 import { BusinessCardTemplate } from "@/app/[locale]/start/components/BusinessCardTemplate";
@@ -17,6 +19,27 @@ interface CardData {
 
 interface PageProps {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const card = await getPublishedCardBySlug(slug);
+  if (!card) return {};
+
+  const parsedState: Lane1CustomizerState = JSON.parse(card.state_json);
+  
+  const { metadata } = createLocalBusinessSeo({
+    name: card.name || card.company || "Digital Card",
+    description: `Connect with ${card.name || card.company} — Premium Digital Business Card by Genezisi.`,
+    locale: "en",
+    path: `/c/${slug}`,
+    ogType: "card",
+    jobTitle: parsedState.identity.jobTitlePrimary,
+    accentColor: parsedState.identity.accentColor,
+    photoUrl: parsedState.identity.photoUrl,
+    theme: parsedState.identity.theme,
+  });
+  return metadata;
 }
 
 export default async function PublicCardPage({ params }: PageProps) {
