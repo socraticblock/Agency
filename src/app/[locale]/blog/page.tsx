@@ -24,8 +24,6 @@ export async function generateMetadata({
       "Expert guides on web design, digital strategy, and online growth for Georgian businesses. Practical advice from Tbilisi's digital agency.",
     locale: lang,
     path: "/blog",
-    ogType: "blog",
-    ogCategory: "Guides",
   });
   return metadata;
 }

@@ -41,9 +41,6 @@ export async function generateMetadata({
     description: article.metaDescription,
     locale: lang,
     path: `/blog/${slug}`,
-    ogType: "blog",
-    ogCategory: article.primaryKeyword,
-    ogReadTime: article.readingTime,
   });
   return metadata;
 }

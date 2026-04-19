@@ -23,9 +23,6 @@ export async function generateMetadata({
     description,
     locale: lang,
     path: "/start",
-    ogType: "card",
-    jobTitle: "Elite Professional",
-    accentColor: "#10b981",
   });
   return metadata;
 }

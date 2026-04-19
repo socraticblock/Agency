@@ -33,10 +33,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description: `Connect with ${card.name || card.company} — Premium Digital Business Card by Genezisi.`,
     locale: "en",
     path: `/c/${slug}`,
-    ogType: "card",
     jobTitle: parsedState.title || "Professional",
     accentColor: parsedState.style.accentCustomPrimary || "#10b981",
-    photoUrl: parsedState.photoDataUrl || undefined,
     theme: "dark", // Default theme for Genezisi cards
   });
   return metadata;
