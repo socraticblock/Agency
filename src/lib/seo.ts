@@ -76,8 +76,8 @@ export function createLocalBusinessSeo(options: LocalBusinessOptions): SeoResult
   const baseUrl = getBaseUrl().replace(/\/$/, "");
   /** Public URLs only use routed locales (`/en` today; `/ka` redirects). */
   const pathLocale = locale === "ka" ? defaultLocale : locale;
-  const synchronizedPath = `/${pathLocale}${path.startsWith("/") ? path : `/${path}`}`;
-  const url = `${baseUrl}${synchronizedPath}`;
+  const synchronizedPath = `/${pathLocale}${path}`;
+  const url = `${baseUrl}${synchronizedPath}`.replace(/\/+$/, "");
 
   const title = jobTitle && ogType === "card" ? `${name} | ${jobTitle}` : name;
   const localeTag = getLocaleTag(locale);
