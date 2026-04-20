@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
         Authorization: `Bearer ${MINIMAX_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "MiniMax-M2-7",
+        model: "MiniMax-M2.7",
         messages,
         max_tokens: 500,
         temperature: 0.7,
