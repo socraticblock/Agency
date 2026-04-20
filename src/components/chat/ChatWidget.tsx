@@ -163,7 +163,7 @@ export function ChatWidget() {
                 className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
+                  className={`max-w-[85%] whitespace-pre-line rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
                     msg.role === "user"
                       ? "bg-emerald-500 text-slate-950"
                       : "bg-slate-800 text-slate-200"
