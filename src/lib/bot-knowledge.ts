@@ -1,8 +1,12 @@
 // Genezisi AI Support Bot — Knowledge Base
-// Single source of truth for all bot responses.
-// Rule: If it changes on the site, update this file FIRST.
+// SOURCE OF TRUTH: This file is derived from the canonical pricing constants.
+// foundations.ts → website tiers
+// modules.ts → add-on modules
+// shields.ts → shield plans
+// digital-card-product.ts → digital card tiers
+// Rule: If it changes in those files, update this file FIRST.
 
-export const knowledgeBaseVersion = "2026-04-20";
+export const knowledgeBaseVersion = "2026-04-20-v2";
 
 export const knowledgeBase = {
   version: knowledgeBaseVersion,
@@ -19,25 +23,35 @@ export const knowledgeBase = {
       revisionRounds: 2,
       warrantyDays: 45,
       description:
-        "Custom-designed one-page conversion machine for serious consultants.",
+        "A strategically crafted landing page optimized to turn visitors into leads. Built from scratch — no templates, no limitations.",
       features: [
         "100% custom design from scratch (no templates)",
-        "6 pre-built sections: Services, About, Testimonials, Gallery, Video, Booking",
+        "6 pre-built sections (Services, About, Testimonials, Gallery, Video, Booking)",
         "Mobile-first responsive approach",
+        "Conversion-optimized layout architecture",
+        "Subtle scroll animations and hover effects",
         "Advanced contact form (file uploads, dropdowns)",
+        "Social proof section (testimonials, logos, video)",
         "Google Analytics 4 + event tracking (included)",
         "Full SEO suite (schema, OG tags, sitemap)",
-        "45-day warranty",
+        "Performance optimization (<2.5s load target)",
+        "CRM-ready integration prep",
+        "Source code ownership + technical docs",
+        "45-day comprehensive warranty",
         "2 revision rounds",
-        "Full code ownership — no lock-in",
       ],
       notIncluded: [
-        "CMS/Dashboard — available on Command Center and above",
+        "CMS/Dashboard — not available. Content changes require a request to us.",
         "Multi-language — available as add-on (₾500 technical setup)",
-        "Blog — available on Command Center and above",
+        "Blog — not available. Available on Command Center and above.",
+        "Additional pages — not available. This is a single landing page.",
       ],
-      bestFor:
-        "B2B Consultants & Coaches, Creative & Marketing Agencies, High-Ticket Service Providers",
+      bestFor: [
+        "B2B Consultants & Coaches",
+        "Creative & Marketing Agencies",
+        "High-Ticket Service Providers",
+        "Professional Personal Brands",
+      ],
     },
     {
       name: "Command Center",
@@ -46,42 +60,52 @@ export const knowledgeBase = {
       revisionRounds: 3,
       warrantyDays: 75,
       description:
-        "Multi-page website: Home + About + Contact + 1 page of your choice (Blog, Services, Portfolio).",
+        "Multi-page website: Home + About + Contact + 1 page of your choice (Blog, Services, Portfolio, etc.).",
       features: [
         "4 pages: Home + About + Contact + 1 of your choice",
         "CMS Dashboard — you publish updates, change prices, add photos without a developer",
-        "Georgian and English included in base price",
-        "Google Analytics 4 included",
-        "Priority Support (faster than Professional)",
-        "75-day full warranty",
+        "Multi-Language (EN/GE) — Georgian and English included in base",
+        "Basic Analytics — Google Analytics 4 included",
+        "Priority Support — faster response times than Professional",
+        "75-Day Warranty — full coverage on any bugs or breakages",
         "3 revision rounds",
-        "Full code ownership — no lock-in",
+        "Full Code Ownership — no lock-in",
       ],
       recommendedShield: "Micro Shield (₾500/yr)",
-      bestFor:
-        "Service teams replacing manual DM operations, Operators needing workflow orchestration, Brands preparing to scale",
+      bestFor: [
+        "Service teams replacing manual DM operations",
+        "Operators needing clear workflow orchestration",
+        "Brands preparing to scale with structured systems",
+      ],
     },
     {
       name: "E-Commerce HQ",
-      price: "Starting at 3,999 ₾",
+      price: "starting 3,999 ₾",
       deliveryTimeline: "20-30 business days",
       revisionRounds: 4,
       warrantyDays: 100,
       description:
-        "Full online store with native Georgian payment integration (TBC/BOG), tax reporting to RS.ge, and inventory management.",
+        "Full online store with CMS dashboard, Business Cockpit, and everything you need to launch. Bank integration and RS.ge fiscal sync available as add-ons.",
       features: [
         "5 pages: Home + Shop + Products + About + Contact",
         "Full CMS Dashboard — you add products, update prices, manage stock",
-        "Business Cockpit: private dashboard for revenue, orders, invoice printing",
-        "TBC Checkout + Bank of Georgia iPay integration (add-on: ₾800–1,500)",
-        "Georgian fiscalization API (RS.ge)",
-        "GA4 + Advanced Conversion Tracking",
-        "English only — multilingual add-on available (₾500 technical setup)",
-        "Delivery integration",
-        "100-day warranty",
-        "4 revision rounds",
+        "Business Cockpit — private dashboard for revenue, orders, invoice printing",
+        "GA4 + Advanced Conversion Tracking (included)",
+        "English only — multi-language add-on available (₾500)",
+        "Source Code Ownership — no lock-in",
+        "100-Day Warranty",
+        "4 revision rounds (₾150/hour after)",
       ],
-      bestFor: "Product-based businesses ready to scale online",
+      addOnsForECommerce: [
+        "Bank Integration (you have merchant keys) — ₾500",
+        "Bank Integration + Lawyer (we handle everything) — ₾1,500",
+        "RS.ge Fiscal Sync — ₾1,200",
+      ],
+      bestFor: [
+        "Boutique Owners wanting a premium home",
+        "Wine & Jewelry Makers (Global/Local)",
+        "Artisans looking to automate back-office flow",
+      ],
     },
   ],
 
@@ -143,7 +167,7 @@ export const knowledgeBase = {
         "Global content delivery — instant loading for visitors anywhere in Georgia",
         "60-second uptime checks — we know within a minute if your site goes down",
         "Daily backups (30-day rollback) — restore any version from the last 30 days",
-        "Database speed optimisation",
+        "Database speed optimisation — keeps your site fast over time",
         "Security patching — critical software lock downs against bots",
       ],
     },
@@ -154,10 +178,10 @@ export const knowledgeBase = {
       description:
         "A developer on-call to optimise your layout as your audience grows.",
       perks: [
-        "Malware Shield Pro — real-time brute force armour hardening",
-        "Enterprise Speed Turbo — advanced server-side tuning for 90+ PageSpeed scores",
-        "Priority Support — VIP placement in the development queue",
-        "Conversion Audits — bi-weekly traffic insights",
+        "Malware Shield Pro — real-time brute force armour hardening for login surfaces",
+        "Enterprise Speed Turbo — advanced server-side tuning to maintain 90+ PageSpeed scores",
+        "Priority Support — VIP placement in the development and modification queue",
+        "Conversion Audits — bi-weekly traffic insights to suggest sales improvements",
       ],
     },
     {
@@ -168,48 +192,91 @@ export const knowledgeBase = {
         "Defenders of revenue against bank outages, algorithm shifts, and tax penalties.",
       perks: [
         "4-Hour SLA — critical failure response guarantee within 4 hours",
-        "AI-Sentinel Triage — automated error-resolution",
-        "Algorithm Immunity — shielding against platform shifts",
-        "1% Threshold Tracker — automated tax status alerts",
+        "AI-Sentinel Triage — automated error-resolution for soft timeouts and API lags",
+        "Algorithm Immunity — shielding for Instagram/Bank APIs against platform shifts",
+        "1% Threshold Tracker — automated alerts to protect your Micro-Business tax status",
       ],
     },
   ],
 
+  // Sourced from modules.ts — key add-ons visitors would ask about
   addOns: [
     {
       name: "Calendar Sync (Real-Time)",
       price: "1,000 ₾",
       description:
-        "2-way API bridge between your site and Google/Outlook Calendar.",
+        "2-way API bridge between your site and Google/Outlook Calendar. Clients book based on real-time availability.",
     },
     {
       name: "Multilingual Setup (Technical)",
       price: "500 ₾",
       description:
-        "Code architecture for multi-language SEO. Georgian translation available in-house at ₾100/hour by a Master's in Civil Law.",
+        "Code architecture for multi-language SEO. In-house Georgian translation available at ₾100/hour.",
     },
     {
-      name: "HubSpot / CRM Integration",
-      price: "2,500 ₾ (price on request)",
+      name: "HubSpot/CRM Integration",
+      price: "2,500 ₾",
       description:
-        "Full CRM integration with HubSpot free tier ($15/mo for paid features).",
+        "Bi-directional data pipeline connecting your lead forms to HubSpot, Salesforce, or Pipedrive.",
     },
     {
       name: "Lead Capture Exit Pop-ups",
-      price: "300 ₾",
-      description: "Exit-intent pop-ups to capture leaving visitors.",
+      price: "400 ₾",
+      description:
+        "Smart window that appears when visitors are about to leave, offering a reason to stay.",
     },
     {
       name: "Professional Copywriting",
-      price: "600 ₾",
+      price: "300 ₾",
       description:
-        "Professional content writing for your website sections.",
+        "High-performance sales messaging using AIDA framework (Attention, Interest, Desire, Action).",
     },
     {
       name: "Deposit Payment Logic",
       price: "1,500 ₾",
       description:
-        "Secure deposit collection via TBC/BOG merchant gateway.",
+        "Secure deposit collection via Georgian merchant gateways (TBC/BOG) before bookings are confirmed.",
+    },
+    {
+      name: "Bank Integration (you have merchant keys)",
+      price: "500 ₾",
+      description:
+        "Connecting your existing bank-approved Merchant ID to your site with custom HMAC security.",
+    },
+    {
+      name: "Bank Integration + Lawyer (we handle everything)",
+      price: "1,500 ₾",
+      description:
+        "Full merchant onboarding + integration. We handle the bank visits, KYC clearance, and technical bridge.",
+    },
+    {
+      name: "RS.ge Fiscal Sync",
+      price: "1,200 ₾",
+      description:
+        "Real-time API bridge between your checkout and RS.ge. Every sale generates an automated e-tax invoice.",
+    },
+    {
+      name: "Local SEO Pack & Map Dominance",
+      price: "1,500 ₾",
+      description:
+        "Strategic optimization for geographic search results. Get into the Google Map Pack.",
+    },
+    {
+      name: "SLA Priority Support",
+      price: "500 ₾",
+      description: "Guaranteed 4-hour emergency response times.",
+    },
+    {
+      name: "Micro-Animations",
+      price: "800 ₾",
+      description:
+        "High-end motion and magnetic triggers for premium feel.",
+    },
+    {
+      name: "Additional Static Page",
+      price: "450 ₾",
+      description:
+        "A single high-performance static page (e.g., Our Story, Return Policy).",
     },
   ],
 
@@ -234,7 +301,8 @@ export const knowledgeBase = {
     {
       step: 4,
       name: "Testing & Handover",
-      description: "Final review, training on the CMS, and launch.",
+      description:
+        "Final review, training on the CMS, and launch.",
     },
   ],
 
@@ -268,7 +336,7 @@ export const knowledgeBase = {
     },
     {
       q: "Can I accept TBC or Bank of Georgia payments?",
-      a: "Yes. Our E-Commerce HQ tier supports TBC Checkout and Bank of Georgia iPay as a paid add-on (₾800–1,500). We also offer separate merchant API integration add-ons for other tiers.",
+      a: "Yes, as a paid add-on. If you already have merchant keys, it's ₾500. If you need us to handle everything including bank visits and compliance, it's ₾1,500.",
     },
     {
       q: "Do you use templates?",
@@ -284,7 +352,7 @@ export const knowledgeBase = {
     },
     {
       q: "What's the difference between a website and a digital business card?",
-      a: "A digital business card (₾150-350 + ₾50-120/yr hosting) is a single-page profile for sharing contact info and social links. A website is a full digital home with multiple pages, CMS, analytics, and more.",
+      a: "A digital business card (₾150-350 setup + ₾50-120/yr hosting) is a single-page profile for sharing contact info and social links. A website is a full digital home with multiple pages, CMS, analytics, and more.",
     },
     {
       q: "Can I upgrade from Professional to Command Center?",
@@ -301,6 +369,14 @@ export const knowledgeBase = {
     {
       q: "What payment methods do you accept?",
       a: "Bank transfer (TBC or Bank of Georgia), and cryptocurrency (USDT) by prior arrangement.",
+    },
+    {
+      q: "What's RS.ge Fiscal Sync?",
+      a: "It's a ₾1,200 add-on that creates a real-time API bridge between your checkout and the Georgian Revenue Service. Every sale generates an automated electronic tax invoice.",
+    },
+    {
+      q: "Is E-Commerce HQ payment integration included?",
+      a: "No. Bank integration is a separate add-on: ₾500 if you already have merchant keys, or ₾1,500 if you need us to handle the full bank onboarding with legal compliance. RS.ge fiscal sync is an additional ₾1,200.",
     },
   ],
 };
@@ -330,6 +406,7 @@ FORMATTING RULES (CRITICAL):
   Command Center — 1,999 ₾ (10-15 days)
   E-Commerce HQ — from 3,999 ₾ (20-30 days)
 - Keep responses SHORT. Chat format, not essay format.
+- NEVER say payment integration is included in any tier. It is ALWAYS a paid add-on.
 
 KNOWLEDGE BASE:
 ${JSON.stringify(knowledgeBase, null, 2)}`;
