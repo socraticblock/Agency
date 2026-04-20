@@ -14,6 +14,17 @@ interface ChatRequest {
   history?: ChatMessage[];
 }
 
+/**
+ * Strip thinking/reasoning blocks that some models include in output.
+ * Handles <thinking>...</thinking> and <thinkthink>...</thinkthink> tags.
+ */
+function stripThinking(text: string): string {
+  return text
+    .replace(/<thinking>[\s\S]*?<\/thinking>/gi, "")
+    .replace(/<think[\s\S]*?<\/think>/gi, "")
+    .trim();
+}
+
 export async function POST(req: NextRequest) {
   try {
     if (!MINIMAX_API_KEY) {
@@ -68,9 +79,11 @@ export async function POST(req: NextRequest) {
     }
 
     const data = await response.json();
-    const reply =
+    let rawReply =
       data.choices?.[0]?.message?.content ??
       "I'm having trouble responding right now. Please try again or contact us on WhatsApp.";
+
+    const reply = stripThinking(rawReply);
 
     return NextResponse.json({ reply });
   } catch (err) {
