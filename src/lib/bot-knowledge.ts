@@ -73,7 +73,7 @@ export const knowledgeBase = {
         "5 pages: Home + Shop + Products + About + Contact",
         "Full CMS Dashboard — you add products, update prices, manage stock",
         "Business Cockpit: private dashboard for revenue, orders, invoice printing",
-        "TBC Checkout + Bank of Georgia iPay integration",
+        "TBC Checkout + Bank of Georgia iPay integration (add-on: ₾800–1,500)",
         "Georgian fiscalization API (RS.ge)",
         "GA4 + Advanced Conversion Tracking",
         "English only — multilingual add-on available (₾500 technical setup)",
@@ -268,7 +268,7 @@ export const knowledgeBase = {
     },
     {
       q: "Can I accept TBC or Bank of Georgia payments?",
-      a: "Yes. Our E-Commerce HQ tier natively integrates TBC Checkout and Bank of Georgia iPay. This is included in the base price.",
+      a: "Yes. Our E-Commerce HQ tier supports TBC Checkout and Bank of Georgia iPay as a paid add-on (₾800–1,500). We also offer separate merchant API integration add-ons for other tiers.",
     },
     {
       q: "Do you use templates?",
