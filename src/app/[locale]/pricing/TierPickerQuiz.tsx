@@ -37,7 +37,7 @@ const STEPS: Step[] = [
 ];
 
 const RESULT_MAP: Record<string, { tier: string; label: string; price: string }> = {
-  pro: { tier: "professional", label: "Professional", price: "1,299 ₾" },
+  pro: { tier: "professional", label: "Professional", price: "999 ₾" },
   cc: { tier: "command-center", label: "Command Center", price: "1,999 ₾" },
   ecomm: { tier: "ecommerce-hq", label: "E-Commerce HQ", price: "starting 3,999 ₾" },
 };

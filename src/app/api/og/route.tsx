@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
 
     // Type: pricing
     const tier = searchParams.get("tier") || "Professional";
-    const price = searchParams.get("price") || "1,299 ₾";
+    const price = searchParams.get("price") || "999 ₾";
     const features = searchParams.get("features") || "6 sections · CMS dashboard · 45-day warranty";
     const cta = searchParams.get("cta") || "Want more? → Command Center  ·  E-Commerce HQ";
 

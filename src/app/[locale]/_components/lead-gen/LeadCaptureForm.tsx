@@ -61,7 +61,7 @@ export function LeadCaptureForm({
 
   const goToBooking = () => {
     if (redirectTimer.current) clearTimeout(redirectTimer.current);
-    router.push(`/${locale}/architect`);
+    router.push(`/${locale}/pricing`);
   };
 
   if (isLeadCaptureSuccess(state)) {
