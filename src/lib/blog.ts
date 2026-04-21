@@ -147,7 +147,7 @@ const articles: BlogArticle[] = [
             headers: ["Product", "Price", "vs. Market"],
             rows: [
               ["Digital Business Card", "₾150–350 + ₾120/yr", "No direct competitor in Georgia"],
-              ["Professional Website", "₾1,299", "Below ₾1,500 agency floor"],
+              ["Professional Website", "₾999", "Below ₾1,500 agency floor"],
               ["Command Center", "₾1,999", "Below ₾1,500–5,000 agency range"],
               ["E-Commerce HQ", "From ₾3,999", "At the lower end of ₾3,000–15,000 range"],
             ],
@@ -165,7 +165,7 @@ const articles: BlogArticle[] = [
             type: "list",
             items: [
               "<strong>Just need to be findable?</strong> A Digital Business Card from ₾150 is the fastest path. Shareable via link, QR code, and WhatsApp. No maintenance needed.",
-              "<strong>Solicitors, doctors, consultants:</strong> Professional Website at ₾1,299 — multi-page, professional design, contact forms, SEO-optimized for Google.",
+              "<strong>Solicitors, doctors, consultants:</strong> Professional Website at ₾999 — multi-page, professional design, contact forms, SEO-optimized for Google.",
               "<strong>High-volume or e-commerce ready:</strong> Command Center (₾1,999) with CRM integrations, or E-Commerce HQ from ₾3,999 with full online store.",
               "<strong>Not sure?</strong> Message Genezisi on <a href='https://wa.me/995579723564' target='_blank' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>WhatsApp</a>. We respond within the hour and will tell you honestly what you need.",
             ],
@@ -380,7 +380,7 @@ const articles: BlogArticle[] = [
             headers: ["Product", "Price", "Best For"],
             rows: [
               ["Digital Business Card", "From ₾150 + ₾120/yr", "Instant, shareable professional identity"],
-              ["Professional Website", "₾1,299", "Multi-page, SEO-ready business site"],
+              ["Professional Website", "₾999", "Multi-page, SEO-ready business site"],
               ["Command Center", "₾1,999", "CRM, booking, multi-language"],
               ["E-Commerce HQ", "From ₾3,999", "Selling products online"],
             ],
@@ -391,7 +391,7 @@ const articles: BlogArticle[] = [
           },
           {
             type: "paragraph",
-            text: "From there, the upgrade path is clear: ₾1,299 for a full professional website when you're ready to compete on Google search.",
+            text: "From there, the upgrade path is clear: ₾999 for a full professional website when you're ready to compete on Google search.",
           },
           {
             type: "cta",
@@ -408,7 +408,7 @@ const articles: BlogArticle[] = [
     title:
       "Why 93% of Georgian Businesses Are Invisible Online (And How to Fix It in 2026)",
     metaDescription:
-      "Only 7% of Georgian SMEs have a website. Here's why your Tbilisi business is losing clients — and the fastest ways to build your digital presence starting from 1,299 GEL.",
+      "Only 7% of Georgian SMEs have a website. Here's why your Tbilisi business is losing clients — and the fastest ways to build your digital presence starting from 999 GEL.",
     readingTime: "6 min read",
     lastUpdated: "April 2026",
     primaryKeyword: "Georgian business website",
@@ -473,7 +473,7 @@ const articles: BlogArticle[] = [
             type: "list",
             items: [
               "<strong>Digital Business Card — from 150 ₾</strong> (+ 120 ₾/yr hosting) — A shareable, interactive digital card with your contact info, services, and social links. Perfect for professionals who need a polished online identity today. <a href='/en/start' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>Create yours →</a>",
-              "<strong>Professional Site — 1,299 ₾</strong> — A clean, professional custom website that covers your services, about section, testimonials, and contact form. Ideal for lawyers, consultants, clinics, and freelancers. <a href='/en/pricing' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>See pricing →</a>",
+              "<strong>Professional Site — 999 ₾</strong> — A clean, professional custom website that covers your services, about section, testimonials, and contact form. Ideal for lawyers, consultants, clinics, and freelancers. <a href='/en/pricing' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>See pricing →</a>",
               "<strong>Professional Custom Site — 999 ₾</strong> — A clean, professional custom website with advanced SEO, booking integrations, and conversion-optimized layout. <a href='/en/pricing' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>See pricing →</a>",
               "<strong>Command Center (1,999 ₾) & E-Commerce HQ (starting 3,999 ₾)</strong> — For businesses ready to dominate. The Command Center adds advanced dashboards, CRM integration, and multi-language support. The E-Commerce HQ is a full online store with payment processing, inventory management, and Georgian bank integrations. <a href='/en/pricing' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>Explore tiers →</a>",
             ],
@@ -584,7 +584,7 @@ const articles: BlogArticle[] = [
             type: "list",
             items: [
               "<strong>Need something today?</strong> — Create your <a href='/en/start' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>Digital Business Card in 5 minutes</a>. From 150 ₾.",
-              "<strong>Ready for a real website?</strong> — Explore our <a href='/en/pricing' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>transparent pricing in GEL</a>. Professional sites from 1,299 ₾.",
+              "<strong>Ready for a real website?</strong> — Explore our <a href='/en/pricing' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>transparent pricing in GEL</a>. Professional sites from 999 ₾.",
               "<strong>Want a custom build?</strong> — Explore our <a href='/en/pricing' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>pricing tiers</a> or message us on <a href='https://wa.me/995579723564' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2' target='_blank'>WhatsApp</a>.",
               "<strong>Prefer to talk?</strong> — Message us on <a href='https://wa.me/995579723564' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2' target='_blank'>WhatsApp</a>. We respond within the hour.",
             ],

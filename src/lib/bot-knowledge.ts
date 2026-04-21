@@ -1,12 +1,8 @@
 // Genezisi AI Support Bot — Knowledge Base
-// SOURCE OF TRUTH: This file is derived from the canonical pricing constants.
-// foundations.ts → website tiers
-// modules.ts → add-on modules
-// shields.ts → shield plans
-// digital-card-product.ts → digital card tiers
-// Rule: If it changes in those files, update this file FIRST.
+// SOURCE OF TRUTH: foundations.ts, shields.ts, digital-card-product.ts, modules.ts
+// Rule: If it changes in those files, update this file to match.
 
-export const knowledgeBaseVersion = "2026-04-20-v2";
+export const knowledgeBaseVersion = "2026-04-21-v3";
 
 export const knowledgeBase = {
   version: knowledgeBaseVersion,
@@ -85,7 +81,7 @@ export const knowledgeBase = {
       revisionRounds: 4,
       warrantyDays: 100,
       description:
-        "Full online store with CMS dashboard, Business Cockpit, and everything you need to launch. Bank integration and RS.ge fiscal sync available as add-ons.",
+        "Full online store with CMS dashboard, Business Cockpit, and everything you need to launch.",
       features: [
         "5 pages: Home + Shop + Products + About + Contact",
         "Full CMS Dashboard — you add products, update prices, manage stock",
@@ -94,7 +90,7 @@ export const knowledgeBase = {
         "English only — multi-language add-on available (₾500)",
         "Source Code Ownership — no lock-in",
         "100-Day Warranty",
-        "4 revision rounds (₾150/hour after)",
+        "4 revision rounds",
       ],
       addOnsForECommerce: [
         "Bank Integration (you have merchant keys) — ₾500",
@@ -115,7 +111,7 @@ export const knowledgeBase = {
         name: "Subdomain",
         setupFee: "150 ₾",
         hostingAnnual: "50 ₾/yr",
-        url: "name.genezisi.com",
+        url: "yourname.genezisi.com",
       },
       {
         name: "Professional",
@@ -199,43 +195,12 @@ export const knowledgeBase = {
     },
   ],
 
-  // Sourced from modules.ts — key add-ons visitors would ask about
   addOns: [
-    {
-      name: "Calendar Sync (Real-Time)",
-      price: "1,000 ₾",
-      description:
-        "2-way API bridge between your site and Google/Outlook Calendar. Clients book based on real-time availability.",
-    },
     {
       name: "Multilingual Setup (Technical)",
       price: "500 ₾",
       description:
         "Code architecture for multi-language SEO. In-house Georgian translation available at ₾100/hour.",
-    },
-    {
-      name: "HubSpot/CRM Integration",
-      price: "2,500 ₾",
-      description:
-        "Bi-directional data pipeline connecting your lead forms to HubSpot, Salesforce, or Pipedrive.",
-    },
-    {
-      name: "Lead Capture Exit Pop-ups",
-      price: "400 ₾",
-      description:
-        "Smart window that appears when visitors are about to leave, offering a reason to stay.",
-    },
-    {
-      name: "Professional Copywriting",
-      price: "300 ₾",
-      description:
-        "High-performance sales messaging using AIDA framework (Attention, Interest, Desire, Action).",
-    },
-    {
-      name: "Deposit Payment Logic",
-      price: "1,500 ₾",
-      description:
-        "Secure deposit collection via Georgian merchant gateways (TBC/BOG) before bookings are confirmed.",
     },
     {
       name: "Bank Integration (you have merchant keys)",
@@ -256,27 +221,16 @@ export const knowledgeBase = {
         "Real-time API bridge between your checkout and RS.ge. Every sale generates an automated e-tax invoice.",
     },
     {
-      name: "Local SEO Pack & Map Dominance",
-      price: "1,500 ₾",
-      description:
-        "Strategic optimization for geographic search results. Get into the Google Map Pack.",
-    },
-    {
-      name: "SLA Priority Support",
-      price: "500 ₾",
-      description: "Guaranteed 4-hour emergency response times.",
-    },
-    {
-      name: "Micro-Animations",
-      price: "800 ₾",
-      description:
-        "High-end motion and magnetic triggers for premium feel.",
-    },
-    {
       name: "Additional Static Page",
       price: "450 ₾",
       description:
         "A single high-performance static page (e.g., Our Story, Return Policy).",
+    },
+    {
+      name: "Professional Copywriting",
+      price: "300 ₾",
+      description:
+        "High-performance sales messaging using AIDA framework (Attention, Interest, Desire, Action).",
     },
   ],
 
