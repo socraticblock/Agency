@@ -154,7 +154,7 @@ const articles: BlogArticle[] = [
           },
           {
             type: "paragraph",
-            text: "All Genezisi websites include: custom design, bilingual EN/KA (plus Russian), TBC/BOG payment integration ready, 45-day warranty on Professional/Command Center, 100-day warranty on E-Commerce, and full code ownership — no monthly platform fees.",
+            text: "All Genezisi websites include: 100% custom design, full SEO suite, Google Analytics 4, source code ownership, and warranty coverage (45 days Professional, 75 days Command Center, 100 days E-Commerce). No monthly platform fees. Georgian/English included on Command Center; available as add-on on other tiers. TBC/BOG payment integration available as paid add-on.",
           },
         ],
       },
@@ -165,7 +165,7 @@ const articles: BlogArticle[] = [
             type: "list",
             items: [
               "<strong>Just need to be findable?</strong> A Digital Business Card from ₾150 is the fastest path. Shareable via link, QR code, and WhatsApp. No maintenance needed.",
-              "<strong>Solicitors, doctors, consultants:</strong> Professional Website at ₾999 — multi-page, professional design, contact forms, SEO-optimized for Google.",
+              "<strong>Solicitors, doctors, consultants:</strong> Professional Website at ₾999 — custom landing page, professional design, contact forms, SEO-optimized for Google.",
               "<strong>High-volume or e-commerce ready:</strong> Command Center (₾1,999) with CRM integrations, or E-Commerce HQ from ₾3,999 with full online store.",
               "<strong>Not sure?</strong> Message Genezisi on <a href='https://wa.me/995579723564' target='_blank' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>WhatsApp</a>. We respond within the hour and will tell you honestly what you need.",
             ],

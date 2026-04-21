@@ -10,7 +10,7 @@ interface FaqItem {
 const FAQ: FaqItem[] = [
   {
     q: "What's the difference between Professional, Command Center, and E-Commerce HQ?",
-    a: "Professional is a fully custom multi-page website — perfect for professionals and service businesses. Command Center adds a dashboard, CMS, multi-language support, and priority support. E-Commerce HQ is a complete online store with payment processing, inventory management, and Georgian bank integrations.",
+    a: "Professional is a fully custom landing page — one powerful page with 6 sections, optimized for conversions. Command Center adds multi-page structure (Home + About + Contact + 1 more), a dashboard, CMS, multi-language support, and priority support. E-Commerce HQ is a complete online store with payment processing, inventory management, and Georgian bank integrations.",
   },
   {
     q: "What does 'starting from' mean for E-Commerce HQ?",
