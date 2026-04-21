@@ -474,7 +474,7 @@ const articles: BlogArticle[] = [
             items: [
               "<strong>Digital Business Card — from 150 ₾</strong> (+ 120 ₾/yr hosting) — A shareable, interactive digital card with your contact info, services, and social links. Perfect for professionals who need a polished online identity today. <a href='/en/start' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>Create yours →</a>",
               "<strong>Professional Site — 1,299 ₾</strong> — A clean, professional custom website that covers your services, about section, testimonials, and contact form. Ideal for lawyers, consultants, clinics, and freelancers. <a href='/en/pricing' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>See pricing →</a>",
-              "<strong>Professional Custom Site — 1,299 ₾</strong> — A multi-page, fully bespoke website with custom animations, advanced SEO, booking integrations, and a content management system. Built to compete with top-tier international firms. <a href='/en/architect?tier=professional' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>Start building →</a>",
+              "<strong>Professional Custom Site — 999 ₾</strong> — A clean, professional custom website with advanced SEO, booking integrations, and conversion-optimized layout. <a href='/en/pricing' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>See pricing →</a>",
               "<strong>Command Center (1,999 ₾) & E-Commerce HQ (starting 3,999 ₾)</strong> — For businesses ready to dominate. The Command Center adds advanced dashboards, CRM integration, and multi-language support. The E-Commerce HQ is a full online store with payment processing, inventory management, and Georgian bank integrations. <a href='/en/pricing' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>Explore tiers →</a>",
             ],
           },
@@ -585,7 +585,7 @@ const articles: BlogArticle[] = [
             items: [
               "<strong>Need something today?</strong> — Create your <a href='/en/start' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>Digital Business Card in 5 minutes</a>. From 150 ₾.",
               "<strong>Ready for a real website?</strong> — Explore our <a href='/en/pricing' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>transparent pricing in GEL</a>. Professional sites from 1,299 ₾.",
-              "<strong>Want a custom build?</strong> — Use our <a href='/en/architect?tier=professional' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>Architect Studio</a> to design your perfect site.",
+              "<strong>Want a custom build?</strong> — Explore our <a href='/en/pricing' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>pricing tiers</a> or message us on <a href='https://wa.me/995579723564' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2' target='_blank'>WhatsApp</a>.",
               "<strong>Prefer to talk?</strong> — Message us on <a href='https://wa.me/995579723564' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2' target='_blank'>WhatsApp</a>. We respond within the hour.",
             ],
           },

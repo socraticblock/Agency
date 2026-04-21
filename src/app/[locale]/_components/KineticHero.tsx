@@ -196,7 +196,7 @@ export function KineticHero({ locale }: { locale: Locale }) {
           </MagneticButton>
           <MagneticButton
             as="a"
-            href={`/${locale}/architect`}
+            href={`/${locale}/pricing`}
             magneticStrength={24}
             textStrength={12}
             className="group relative flex min-h-12 items-center justify-center overflow-hidden rounded-full border border-[#00ead0]/40 bg-[#00ead0]/10 px-8 py-3 text-sm font-black text-white shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-[1.03] hover:bg-[#00ead0]/20 sm:px-10 sm:py-4"

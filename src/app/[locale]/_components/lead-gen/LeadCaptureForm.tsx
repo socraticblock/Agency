@@ -51,7 +51,7 @@ export function LeadCaptureForm({
     }
 
     redirectTimer.current = setTimeout(() => {
-      router.push(`/${locale}/architect`);
+      router.push(`/${locale}/pricing`);
     }, 2200);
 
     return () => {

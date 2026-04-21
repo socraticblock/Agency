@@ -17,7 +17,7 @@ export const MODULES: Module[] = [
     id: 'pay-gateway',
     category: 'Georgian Advantage',
     name: 'Merchant API — Client Has Key',
-    priceGEL: 800,
+    priceGEL: 500,
     whatItIs: 'Connecting your existing bank-approved Merchant ID to your site with custom HMAC security and Bank-Audit compliance. For businesses who already have a bank-approved Merchant ID but need the technical bridge.',
     howItHelps: 'Allows you to accept GEL/USD/EUR directly into your local account with 0.1s transaction latency.',
     lawyerRole: 'Oversees merchant processing compliance, verifying corporate data structure aligns with local anti-money-laundering (AML) banking settlements.'

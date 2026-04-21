@@ -22,10 +22,10 @@ export default function LocaleNotFound() {
           Pricing
         </Link>
         <Link
-          href="/en/architect"
+          href="/en/pricing"
           className="rounded-xl border border-white/15 px-5 py-2.5 text-sm font-semibold text-slate-200 hover:bg-white/5"
         >
-          Architect
+          Pricing
         </Link>
       </div>
     </div>
