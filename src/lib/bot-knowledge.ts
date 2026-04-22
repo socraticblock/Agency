@@ -11,11 +11,6 @@ export const knowledgeBase = {
   tagline:
     "Escape the social media trap. We build a permanent, high-speed digital home for your brand that sells 24/7.",
   location: "Tbilisi, Georgia",
-  contact: {
-    whatsapp: "+995579723564",
-    email: "architect@genezisi.com"
-  },
-
   websiteTiers: [
     {
       name: "Professional",
@@ -280,7 +275,7 @@ export const knowledgeBase = {
       "https://wa.me/995579723564?text=Hi%20Genezisi!%20I%27m%20interested%20in%20discussing%20a%20project.%20Can%20we%20talk%3F",
     whatsappEscalation:
       "https://wa.me/995579723564?text=Hi%20Genezisi!%20I%20have%20a%20question%20the%20bot%20couldn%27t%20answer.",
-    email: "hello@genezisi.com",
+    email: "architect@genezisi.com",
     website: "https://genezisi.com",
   },
 
