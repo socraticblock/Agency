@@ -151,7 +151,7 @@ export function ProfessionalPageClient() {
              <p className="text-sm text-slate-400">Need more than 4 sections? You can add any of the remaining sections from our library to your landing page at a flat rate. Custom section requests are always welcome.</p>
            </div>
            <div className="rounded-2xl border border-white/10 p-6">
-             <h4 className="font-bold text-white mb-1">Multi-Language Setup — ₾200</h4>
+             <h4 className="font-bold text-white mb-1">Multi-Language Setup — ₾150</h4>
              <p className="text-sm text-slate-400">Your site, in two languages. We handle the technical setup — the language switcher, routing visitors to the right version, and implementing both sets of content. For the actual translation: use our in-house translator (₾100/hour), hire your own, or translate it yourself using Google Docs and we'll implement both versions.</p>
            </div>
            <div className="rounded-2xl border border-white/10 p-6">

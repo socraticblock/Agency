@@ -98,7 +98,7 @@ export const FOUNDATIONS: Foundation[] = [
       "Full CMS Dashboard | You add products, update prices, manage stock — no developer needed",
       "Business Cockpit | Private dashboard: revenue, orders, invoice printing",
       "GA4 + Advanced Conversion Tracking | Included in base",
-      "English Only | Multi-language available as add-on (₾500)",
+      "English Only | Multi-language available as add-on (₾150)",
       "Source Code Ownership | No lock-in",
       "100-Day Warranty | Full coverage on any bugs",
       "4 Revision Rounds | ₾150/hour after"

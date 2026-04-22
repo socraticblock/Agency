@@ -39,7 +39,7 @@ export const knowledgeBase = {
       ],
       notIncluded: [
         "CMS/Dashboard — not available. Content changes require a request to us.",
-        "Multi-language — available as add-on (₾500 technical setup)",
+        "Multi-language — available as add-on (₾150 technical setup)",
         "Blog — not available. Available on Command Center and above.",
         "Additional pages — not available. This is a single landing page.",
       ],
@@ -88,7 +88,7 @@ export const knowledgeBase = {
         "Full CMS Dashboard — you add products, update prices, manage stock",
         "Business Cockpit — private dashboard for revenue, orders, invoice printing",
         "GA4 + Advanced Conversion Tracking (included)",
-        "English only — multi-language add-on available (₾500)",
+        "English only — multi-language add-on available (₾150)",
         "Source Code Ownership — no lock-in",
         "100-Day Warranty",
         "4 revision rounds",
@@ -199,7 +199,7 @@ export const knowledgeBase = {
   addOns: [
     {
       name: "Multilingual Setup (Technical)",
-      price: "500 ₾",
+      price: "150 ₾",
       description:
         "Code architecture for multi-language SEO. In-house Georgian translation available at ₾100/hour.",
     },
@@ -287,7 +287,7 @@ export const knowledgeBase = {
     },
     {
       q: "Do you do Georgian language websites?",
-      a: "Yes. Command Center includes Georgian and English by default. Professional and E-Commerce are English only, with multilingual available as a ₾500 add-on. In-house Georgian translation at ₾100/hour.",
+      a: "Yes. Command Center includes Georgian and English by default. Professional and E-Commerce are English only, with multilingual available as a ₾150 add-on. In-house Georgian translation at ₾100/hour.",
     },
     {
       q: "Can I accept TBC or Bank of Georgia payments?",
@@ -331,7 +331,7 @@ export const knowledgeBase = {
     },
     {
       q: "Is E-Commerce HQ payment integration included?",
-      a: "No. Bank integration is a separate add-on: ₾500 if you already have merchant keys, or ₾1,500 if you need us to handle the full bank onboarding with legal compliance. RS.ge fiscal sync is an additional ₾1,200.",
+      a: "No. Bank integration is a separate add-on: ₾500 if you already have merchant keys, or ₾1,500 if you need us to handle the full bank onboarding with legal compliance. RS.ge fiscal sync is an additional ₾1,200. Multi-language setup is ₾150.",
     },
   ],
 };

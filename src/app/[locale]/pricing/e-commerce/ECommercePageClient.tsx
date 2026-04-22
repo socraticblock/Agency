@@ -33,7 +33,7 @@ export function ECommercePageClient() {
           The base price of ₾3,999 covers everything you need to launch. Add bank integration or RS.ge when you're ready. Built in 20-30 business days.
         </p>
         <p className="mt-2 text-sm font-bold text-emerald-400">
-          Base package: English only. Multi-language setup available for ₾500.
+          Base package: English only. Multi-language setup available for ₾150.
         </p>
       </header>
 
@@ -98,7 +98,7 @@ export function ECommercePageClient() {
              <p className="text-sm text-slate-400">Automated e-receipt creation directly to the Georgian Revenue Service for every order placed.</p>
            </div>
            <div className="rounded-2xl border border-white/10 p-6">
-             <h4 className="font-bold text-white mb-1">Multi-Language Setup — ₾500</h4>
+             <h4 className="font-bold text-white mb-1">Multi-Language Setup — ₾150</h4>
              <p className="text-sm text-slate-400">Technical setup for dual-language (Georgian/English). We handle the language switcher, routing visitors to the right version, and implementing both. For the actual translation: use our in-house translator (₾100/hour), hire your own, or translate it yourself and we'll implement both versions.</p>
            </div>
            <div className="rounded-2xl border border-white/10 p-6">
