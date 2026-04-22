@@ -21,7 +21,7 @@ export const FOUNDATIONS: Foundation[] = [
     scope: [
       'Design & Structure | 100% custom design from scratch',
       'Design & Structure | 4 pre-built sections included (client chooses which 4 from: Services, About, Testimonials, Gallery, Video, Booking)',
-      'Design & Structure | Additional sections available as add-ons — ₾50 each',
+      'Design & Structure | Additional sections available as add-ons — ₾50 each (Custom ideas welcome)',
       'Design & Structure | Mobile-first responsive approach',
       'Design & Structure | Conversion-optimized layout architecture',
       'Design & Structure | Subtle scroll animations and hover effects',

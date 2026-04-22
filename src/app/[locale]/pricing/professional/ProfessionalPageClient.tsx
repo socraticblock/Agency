@@ -148,7 +148,7 @@ export function ProfessionalPageClient() {
          <div className="grid gap-6 md:grid-cols-2">
            <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-6">
              <h4 className="font-bold text-white mb-1">Additional Sections — ₾50 each</h4>
-             <p className="text-sm text-slate-400">Need more than 4 sections? You can add any of the remaining sections from our library to your landing page at a flat rate.</p>
+             <p className="text-sm text-slate-400">Need more than 4 sections? You can add any of the remaining sections from our library to your landing page at a flat rate. Custom section requests are always welcome.</p>
            </div>
            <div className="rounded-2xl border border-white/10 p-6">
              <h4 className="font-bold text-white mb-1">Multi-Language Setup — ₾200</h4>
@@ -180,8 +180,6 @@ export function ProfessionalPageClient() {
             Shield is required for all websites. We buy your .ge domain (yours forever), host it securely with SSL, and extend your warranty.
           </p>
 
-          <h4 className="font-bold text-emerald-400 uppercase tracking-widest text-sm mb-6">Recommended for Professional:</h4>
-          
           <div className="grid gap-6 md:grid-cols-2 lg:gap-10">
             <div className="rounded-2xl border border-white/10 bg-black/20 p-6">
                <h4 className="text-xl font-bold text-white">Reputation Scout — ₾120/yr</h4>
@@ -217,12 +215,9 @@ export function ProfessionalPageClient() {
                </ul>
             </div>
             
-            <div className="relative rounded-2xl border border-emerald-500/50 bg-emerald-500/10 p-6 shadow-[0_0_20px_rgba(16,185,129,0.1)]">
-               <span className="absolute -top-3 left-6 rounded-full bg-emerald-500 px-3 py-0.5 text-[10px] font-black uppercase tracking-widest text-slate-950">
-                 Recommended
-               </span>
-               <h4 className="text-xl font-bold text-white mt-2">Micro Shield — ₾500/yr</h4>
-               <p className="mt-2 text-sm font-medium text-emerald-300">Everything in Reputation Scout, plus:</p>
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-6">
+               <h4 className="text-xl font-bold text-white">Micro Shield — ₾500/yr</h4>
+               <p className="mt-2 text-sm font-medium text-slate-400">Everything in Reputation Scout, plus:</p>
                <ul className="mt-4 space-y-4 text-sm text-slate-300">
                  <li className="flex gap-2">
                    <Check className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />

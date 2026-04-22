@@ -147,7 +147,7 @@ export function ProfessionalExplainer() {
           <ul>
             <li>
               <strong>Additional Sections — ₾50 each</strong><br />
-              Need more than 4 sections? You can add any of the remaining sections from our library to your landing page at a flat rate.
+              Need more than 4 sections? You can add any of the remaining sections from our library to your landing page at a flat rate. Custom section requests are always welcome.
             </li>
             <li>
               <strong>Lead Capture Exit Pop-ups — ₾300</strong><br />
@@ -185,7 +185,7 @@ export function ProfessionalExplainer() {
           <p>
             Shield is required for all websites. It includes domain, hosting, security monitoring, and extends your warranty.
           </p>
-          <h5>For Professional, we recommend:</h5>
+          <h5>For Professional:</h5>
           <p>
             <strong>Reputation Scout — ₾120/yr</strong>
           </p>
@@ -197,7 +197,7 @@ export function ProfessionalExplainer() {
             <li>Extends warranty from 45 days to full year</li>
           </ul>
           <p>
-            <strong>Micro Shield — ₾500/yr (Recommended)</strong>
+            <strong>Micro Shield — ₾500/yr</strong>
           </p>
           <ul>
             <li>Everything in Reputation Scout, plus:</li>
