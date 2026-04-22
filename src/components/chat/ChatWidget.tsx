@@ -58,7 +58,7 @@ export function ChatWidget() {
         {
           role: "assistant",
           content:
-            "Hi! 👋 I'm GenezisiBot. Ask me anything about our websites, digital business cards, pricing, or Shield plans.",
+            "Hi! 👋 I'm Sophiko AI. Ask me anything about our websites, digital business cards, pricing, or Shield plans.",
         },
       ]);
     }
@@ -130,10 +130,10 @@ export function ChatWidget() {
           <div className="flex items-center justify-between rounded-t-2xl border-b border-slate-800 bg-slate-900 px-4 py-3">
             <div className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500 text-sm font-bold text-slate-950">
-                G
+                S
               </div>
               <div>
-                <p className="text-sm font-semibold text-white">Genezisi</p>
+                <p className="text-sm font-semibold text-white">Sophiko AI</p>
                 <p className="text-xs text-slate-400">Ask us anything</p>
               </div>
             </div>
