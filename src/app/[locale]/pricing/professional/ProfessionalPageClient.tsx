@@ -84,9 +84,9 @@ export function ProfessionalPageClient() {
 
       {/* 6 SECTIONS */}
       <section className="mb-16 rounded-3xl border border-white/5 bg-white/[0.02] p-6 sm:p-10">
-        <h2 className="text-2xl font-black text-white sm:text-3xl">6 Pre-Built Sections — Pick Any 6</h2>
+        <h2 className="text-2xl font-black text-white sm:text-3xl">6 Pre-Built Sections — Pick Any 4</h2>
         <p className="mt-2 text-slate-400 mb-6">
-          Your landing page is built from our section library. You choose any 6 of the following:
+          Your landing page is built from our section library. You choose any 4 of the following:
         </p>
         <div className="grid gap-4 md:grid-cols-2">
           {["Services", "About", "Testimonials", "Gallery", "Video", "Booking"].map((sec) => (
@@ -97,7 +97,7 @@ export function ProfessionalPageClient() {
           ))}
         </div>
         <p className="mt-6 text-sm text-slate-300">
-          <strong>Recommended:</strong> Services + About + Testimonials.<br/>
+          <strong>Recommended:</strong> Services + About + Testimonials + Gallery.<br/>
           Think something else would work better? No problem. This is a custom build — tell us what you have in mind and our architect will work with you.
         </p>
       </section>
@@ -146,13 +146,17 @@ export function ProfessionalPageClient() {
          <h2 className="text-2xl font-black text-white sm:text-3xl">Available Add-Ons</h2>
          <p className="mt-2 text-slate-400 mb-6">Tell us during the onboarding brief if you'd like any of these.</p>
          <div className="grid gap-6 md:grid-cols-2">
+           <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-6">
+             <h4 className="font-bold text-white mb-1">Additional Sections — ₾50 each</h4>
+             <p className="text-sm text-slate-400">Need more than 4 sections? You can add any of the remaining sections from our library to your landing page at a flat rate.</p>
+           </div>
            <div className="rounded-2xl border border-white/10 p-6">
              <h4 className="font-bold text-white mb-1">Multi-Language Setup — ₾200</h4>
              <p className="text-sm text-slate-400">Your site, in two languages. We handle the technical setup — the language switcher, routing visitors to the right version, and implementing both sets of content. For the actual translation: use our in-house translator (₾100/hour), hire your own, or translate it yourself using Google Docs and we'll implement both versions.</p>
            </div>
            <div className="rounded-2xl border border-white/10 p-6">
              <h4 className="font-bold text-white mb-1">Professional Copywriting — ₾600</h4>
-             <p className="text-sm text-slate-400">We write your page copy using AIDA framework (Attention, Interest, Desire, Action). Give us your brief, we write all the text for your 6 sections. Ideal if you want professional, persuasive copy but don't have time to write it yourself.</p>
+             <p className="text-sm text-slate-400">We write your page copy using AIDA framework (Attention, Interest, Desire, Action). Give us your brief, we write all the text for your 4 sections. Ideal if you want professional, persuasive copy but don't have time to write it yourself.</p>
            </div>
            <div className="rounded-2xl border border-white/10 p-6">
              <h4 className="font-bold text-white mb-1">Lead Capture Exit Pop-ups — ₾300</h4>

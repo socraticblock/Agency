@@ -30,7 +30,7 @@ export function getComparisonData(_locale: Locale): ComparisonRow[] {
     },
     {
       label: "Pages",
-      values: ["6 sections", "4 pages", "5 pages"],
+      values: ["4 sections", "4 pages", "5 pages"],
     },
     {
       label: "Revision Rounds",

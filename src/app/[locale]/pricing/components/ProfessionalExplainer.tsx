@@ -29,8 +29,8 @@ export function ProfessionalExplainer() {
 
           <hr className="border-white/10" />
 
-          <h4>6 Pre-Built Sections — Pick Any 6</h4>
-          <p>Your landing page is built from our section library. You choose any 6 of the following:</p>
+          <h4>6 Pre-Built Sections — Pick Any 4</h4>
+          <p>Your landing page is built from our section library. You choose any 4 of the following:</p>
           <ul>
             <li><strong>Services</strong> — What you offer. Ideal for lawyers listing practice areas, real estate agents listing property types, consultants listing service packages.</li>
             <li><strong>About</strong> — Your story, background, credentials. Builds trust with new potential clients.</li>
@@ -40,7 +40,7 @@ export function ProfessionalExplainer() {
             <li><strong>Booking</strong> — A direct booking button linking to your calendar. Clients can schedule immediately without leaving your page.</li>
           </ul>
           <p>
-            During onboarding, tell us which 6 sections you want and in what order. We recommend Services + About + Testimonials as a starting point for most professionals.
+            During onboarding, tell us which 4 sections you want and in what order. We recommend Services + About + Testimonials + Gallery as a starting point for most professionals.
           </p>
           <p>
             Think something else would work better for your specific business? No problem. This is a custom build — tell us what you have in mind and our architect will work with you.
@@ -145,6 +145,10 @@ export function ProfessionalExplainer() {
           <h4>Available Add-Ons</h4>
           <p>Tell us during the onboarding brief if you'd like any of these.</p>
           <ul>
+            <li>
+              <strong>Additional Sections — ₾50 each</strong><br />
+              Need more than 4 sections? You can add any of the remaining sections from our library to your landing page at a flat rate.
+            </li>
             <li>
               <strong>Lead Capture Exit Pop-ups — ₾300</strong><br />
               When a visitor is about to leave your page, a small pop-up appears with a special offer or a reminder to book a call. Increases conversions by capturing visitors who would otherwise bounce.
