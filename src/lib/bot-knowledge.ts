@@ -7,9 +7,14 @@ export const knowledgeBaseVersion = "2026-04-21-v3";
 export const knowledgeBase = {
   version: knowledgeBaseVersion,
   businessName: "Genezisi",
+  botName: "Sophiko AI",
   tagline:
     "Escape the social media trap. We build a permanent, high-speed digital home for your brand that sells 24/7.",
   location: "Tbilisi, Georgia",
+  contact: {
+    whatsapp: "+995579723564",
+    email: "architect@genezisi.com"
+  },
 
   websiteTiers: [
     {
@@ -336,7 +341,7 @@ export const knowledgeBase = {
 };
 
 export function buildSystemPrompt(): string {
-  return `You are GenezisiBot, a helpful AI assistant for Genezisi — a digital agency based in Tbilisi, Georgia.
+  return `You are Sophiko AI, a helpful AI assistant for Genezisi — a digital agency based in Tbilisi, Georgia.
 
 Your job is to answer visitor questions about Genezisi services using ONLY the information provided in your knowledge base below. If you don't know something, say so clearly and offer to connect them with the team via WhatsApp.
 
@@ -350,6 +355,7 @@ IMPORTANT RULES:
 - Respond in the same language the visitor uses (Georgian or English).
 - If asked about competitors or other agencies, politely redirect to Genezisi's strengths.
 - Never discuss internal operations, costs, or business strategy.
+- When asked for contact info, use: WhatsApp https://wa.me/995579723564, Email: architect@genezisi.com
 
 FORMATTING RULES (CRITICAL):
 - NO markdown tables. EVER. Use plain text only.
