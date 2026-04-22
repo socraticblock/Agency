@@ -22,7 +22,8 @@ export const knowledgeBase = {
         "A strategically crafted landing page optimized to turn visitors into leads. Built from scratch — no templates, no limitations.",
       features: [
         "100% custom design from scratch (no templates)",
-        "6 pre-built sections (Services, About, Testimonials, Gallery, Video, Booking)",
+        "4 pre-built sections included (choose any 4 from: Services, About, Testimonials, Gallery, Video, Booking)",
+        "Additional sections available as add-ons — ₾50 each",
         "Mobile-first responsive approach",
         "Conversion-optimized layout architecture",
         "Subtle scroll animations and hover effects",

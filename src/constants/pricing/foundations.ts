@@ -20,7 +20,8 @@ export const FOUNDATIONS: Foundation[] = [
     description: "A strategically crafted landing page optimized to turn visitors into leads. Built from scratch for your brand—no templates, no limitations.",
     scope: [
       'Design & Structure | 100% custom design from scratch',
-      'Design & Structure | 6 pre-built sections (Services, About, Testimonials, Gallery, Video, Booking)',
+      'Design & Structure | 4 pre-built sections included (client chooses which 4 from: Services, About, Testimonials, Gallery, Video, Booking)',
+      'Design & Structure | Additional sections available as add-ons — ₾50 each',
       'Design & Structure | Mobile-first responsive approach',
       'Design & Structure | Conversion-optimized layout architecture',
       'Design & Structure | Subtle scroll animations and hover effects',
