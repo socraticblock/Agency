@@ -11,6 +11,7 @@ import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 import { memo, useMemo } from "react";
 import { MagneticButton } from "./MagneticButton";
+import Script from "next/script";
 
 const Typewriter = memo(({ phrases }: { phrases: string[] }) => {
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
@@ -21,7 +22,7 @@ const Typewriter = memo(({ phrases }: { phrases: string[] }) => {
   useEffect(() => {
     const handleTyping = () => {
       const fullPhrase = phrases[currentPhraseIndex];
-      
+
       if (!isDeleting) {
         setCurrentText(fullPhrase.substring(0, currentText.length + 1));
         if (currentText.length + 1 === fullPhrase.length) {
@@ -105,40 +106,55 @@ export function KineticHero({ locale }: { locale: Locale }) {
     mouseY.set(0);
   };
 
-  const videoRef = useRef<HTMLVideoElement>(null);
   const words = useMemo(() => t.hero.headline.split(" "), [t.hero.headline]);
   const h2Phrases = useMemo(() => t.hero.h2.split(". ").map((p: string) => p.endsWith(".") ? p : p + "."), [t.hero.h2]);
 
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.playbackRate = 0.6;
-    }
-  }, []);
-
   return (
-    <section
-      ref={sectionRef}
-      onMouseMove={handleSectionMove}
-      onMouseLeave={handleSectionLeave}
-      className="relative flex min-h-[70vh] flex-col items-center justify-center overflow-hidden px-4 py-20 text-center"
-    >
-      <div className="pointer-events-none absolute inset-0 -z-20 overflow-hidden bg-[#030717]">
-        <div className="absolute -top-1/4 -left-1/4 h-[min(100vw,28rem)] w-[min(100vw,28rem)] rounded-full bg-[#004d40]/40 blur-[100px] animate-pulse sm:h-[min(100vw,40rem)] sm:w-[min(100vw,40rem)] sm:blur-[120px] md:h-[800px] md:w-[800px] md:blur-[140px]" />
-        <div className="absolute -bottom-1/4 -right-1/4 h-[min(100vw,28rem)] w-[min(100vw,28rem)] rounded-full bg-slate-800/50 blur-[110px] animate-pulse delay-1000 sm:h-[min(100vw,40rem)] sm:w-[min(100vw,40rem)] sm:blur-[130px] md:h-[800px] md:w-[800px] md:blur-[160px]" />
-      </div>
+    <>
+      <Script 
+        src="https://cdn.jsdelivr.net/npm/hls.js@latest" 
+        strategy="afterInteractive"
+        onLoad={() => {
+          const video = document.getElementById('hero-video') as HTMLVideoElement;
+          if (!video) return;
+          const hlsUrl = "https://stream.mux.com/tLkHO1qZoaaQOUeVWo8hEBeGQfySP02EPS02BmnNFyXys.m3u8";
+          // @ts-ignore
+          const Hls = window.Hls;
+          if (Hls && Hls.isSupported()) {
+            const hls = new Hls();
+            hls.loadSource(hlsUrl);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, () => {
+              video.play().catch(e => console.error("HLS Play error:", e));
+            });
+          }
+        }}
+      />
+      <section
+        ref={sectionRef}
+        onMouseMove={handleSectionMove}
+        onMouseLeave={handleSectionLeave}
+        className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 py-20 text-center"
+      >
+        <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden bg-black">
+          <video
+            id="hero-video"
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="h-full w-full object-cover opacity-90 brightness-75"
+          >
+            <source src="https://stream.mux.com/tLkHO1qZoaaQOUeVWo8hEBeGQfySP02EPS02BmnNFyXys/high.mp4" type="video/mp4" />
+            <source src="https://stream.mux.com/tLkHO1qZoaaQOUeVWo8hEBeGQfySP02EPS02BmnNFyXys/medium.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-black/60 z-10" />
+        </div>
 
-      {/* STRIPPED BACK VIDEO LAYER FOR MAXIMUM PERFORMANCE */}
-      <div className="pointer-events-none absolute inset-0 z-[1] overflow-hidden bg-black">
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          loop
-          playsInline
-          src="/hero-bg-animation.mp4"
-          className="h-full w-full object-cover opacity-50 brightness-20"
-        />
-      </div>
+        <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden bg-[#030717]">
+          <div className="absolute -top-1/4 -left-1/4 h-[min(100vw,28rem)] w-[min(100vw,28rem)] rounded-full bg-[#004d40]/40 blur-[100px] animate-pulse sm:h-[min(100vw,40rem)] sm:w-[min(100vw,40rem)] sm:blur-[120px] md:h-[800px] md:w-[800px] md:blur-[140px]" />
+          <div className="absolute -bottom-1/4 -right-1/4 h-[min(100vw,28rem)] w-[min(100vw,28rem)] rounded-full bg-slate-800/50 blur-[110px] animate-pulse delay-1000 sm:h-[min(100vw,40rem)] sm:w-[min(100vw,40rem)] sm:blur-[130px] md:h-[800px] md:w-[800px] md:blur-[160px]" />
+        </div>
 
       <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-[#030717] via-[#030717]/60 to-transparent z-10" />
 
@@ -167,11 +183,10 @@ export function KineticHero({ locale }: { locale: Locale }) {
             return (
               <motion.span
                 key={index}
-                className={`inline-block mr-2 ${
-                  isHighlight
+                className={`inline-block mr-2 ${isHighlight
                     ? "bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent"
                     : "text-white"
-                }`}
+                  }`}
               >
                 {word}
               </motion.span>
@@ -209,5 +224,6 @@ export function KineticHero({ locale }: { locale: Locale }) {
         </motion.div>
       </motion.div>
     </section>
+    </>
   );
 }
