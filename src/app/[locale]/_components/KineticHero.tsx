@@ -108,6 +108,10 @@ export function KineticHero({ locale }: { locale: Locale }) {
 
   const words = useMemo(() => t.hero.headline.split(" "), [t.hero.headline]);
   const h2Phrases = useMemo(() => t.hero.h2.split(". ").map((p: string) => p.endsWith(".") ? p : p + "."), [t.hero.h2]);
+  useEffect(() => {
+    const video = document.getElementById('hero-video') as HTMLVideoElement;
+    if (video) video.playbackRate = 0.8;
+  }, []);
 
   return (
     <>
@@ -117,13 +121,14 @@ export function KineticHero({ locale }: { locale: Locale }) {
         onLoad={() => {
           const video = document.getElementById('hero-video') as HTMLVideoElement;
           if (!video) return;
-          const hlsUrl = "https://stream.mux.com/tLkHO1qZoaaQOUeVWo8hEBeGQfySP02EPS02BmnNFyXys.m3u8";
+          const hlsUrl = "https://stream.mux.com/01yW6GoUz01OTXk5w1Rt1MHkJWlCGIwj46SUONJZ4DJUE.m3u8";
           // @ts-ignore
           const Hls = window.Hls;
           if (Hls && Hls.isSupported()) {
             const hls = new Hls();
             hls.loadSource(hlsUrl);
             hls.attachMedia(video);
+            video.playbackRate = 0.8;
             hls.on(Hls.Events.MANIFEST_PARSED, () => {
               video.play().catch(e => console.error("HLS Play error:", e));
             });
@@ -143,12 +148,12 @@ export function KineticHero({ locale }: { locale: Locale }) {
             muted
             loop
             playsInline
-            className="h-full w-full object-cover opacity-90 brightness-75"
+            className="h-full w-full object-cover opacity-90 brightness-85"
           >
-            <source src="https://stream.mux.com/tLkHO1qZoaaQOUeVWo8hEBeGQfySP02EPS02BmnNFyXys/high.mp4" type="video/mp4" />
-            <source src="https://stream.mux.com/tLkHO1qZoaaQOUeVWo8hEBeGQfySP02EPS02BmnNFyXys/medium.mp4" type="video/mp4" />
+            <source src="https://stream.mux.com/01yW6GoUz01OTXk5w1Rt1MHkJWlCGIwj46SUONJZ4DJUE/high.mp4" type="video/mp4" />
+            <source src="https://stream.mux.com/01yW6GoUz01OTXk5w1Rt1MHkJWlCGIwj46SUONJZ4DJUE/medium.mp4" type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-black/60 z-10" />
+          <div className="absolute inset-0 bg-black/20 z-10" />
         </div>
 
         <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden bg-[#030717]">
