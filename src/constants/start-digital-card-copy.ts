@@ -16,7 +16,7 @@ export const START_DC_WELCOME = {
   stepDesignTitle: "DESIGN",
   stepDesignBody: "Live-edit your card on this page",
   stepOrderTitle: "ORDER",
-  stepOrderBody: "Send your blueprint via WhatsApp",
+  stepOrderBody: "Send your details via WhatsApp",
   stepLiveTitle: "LIVE",
   stepLiveBody: "Go live within 3 working days",
   featureLiveUpdates: "Live Updates",

@@ -28,11 +28,8 @@ export const ANIMATION_OVERRIDES: Record<string, { whatItIs: string; howItHelps:
 /** WhatsApp intake number used across bespoke components */
 export const WHATSAPP_INTAKE = "995579723564";
 
-/** Architect email used for structured project and card briefs */
-export const ARCHITECT_INTAKE_EMAIL = "architect@genezisi.com";
-
 /** Default message for WhatsApp links */
-export const WHATSAPP_DEFAULT_MESSAGE = "Hi Genezisi! I'm interested in discussing an architectural blueprint for my project. Can we talk?";
+export const WHATSAPP_DEFAULT_MESSAGE = "Hi Genezisi! I'm interested in building a digital foundation for my brand. Can we talk?";
 
 /** Loading phrase templates for the analyzing overlay */
 export function buildLoadingPhrases(params: {
@@ -44,10 +41,10 @@ export function buildLoadingPhrases(params: {
   const { company, name, foundationName, dominantColor } = params;
   return [
     `Securing nodes for ${company || "your company"}...`,
-    `Linking blueprint to ${name || "you"}...`,
+    `Linking project to ${name || "you"}...`,
     `Analyzing ${foundationName || "Foundation"} infrastructure nodes...`,
     `Validating ${dominantColor} palette against conversion psychology...`,
     `Calculating server edge distribution for local nodes...`,
-    `Finalizing your architecture brief...`,
+    `Finalizing your digital strategy...`,
   ];
 }

@@ -1,4 +1,3 @@
-import { ARCHITECT_INTAKE_EMAIL } from "@/constants/content";
 import { digitalCardTierLabelEn, DIGITAL_CARD_ORDER_SCHEMA_VERSION } from "./digital-card-product";
 import { getDigitalCardPricingSummary } from "./lane1-pricing";
 import { buildOrderAssetSummary } from "./order-payload";
@@ -358,13 +357,13 @@ function appendDesignSpec(lines: string[], state: Lane1CustomizerState): void {
   pushLine(lines, "CTA_TEXT_WHATSAPP", state.ctaTextWhatsApp);
 }
 
-export function buildArchitectEmailSubject(state: Lane1CustomizerState, orderId: string): string {
+export function buildOrderEmailSubject(state: Lane1CustomizerState, orderId: string): string {
   const owner = oneLine(state.company) !== EMPTY ? oneLine(state.company) : oneLine(state.name);
   return `Digital Card Build Brief - ${owner} - ${orderId}`;
 }
 
 /** Key-value operator block (shared by email body and WhatsApp paste). */
-export function buildArchitectHandoffDataLines(state: Lane1CustomizerState, orderId: string): string[] {
+export function buildOrderHandoffDataLines(state: Lane1CustomizerState, orderId: string): string[] {
   const { setupGel, hostingAnnualGel } = getDigitalCardPricingSummary(state.selectedTier);
   const sections = activeSectionIds(state);
   const lines: string[] = [];
@@ -443,31 +442,31 @@ export function buildArchitectHandoffDataLines(state: Lane1CustomizerState, orde
   return lines;
 }
 
-export function buildArchitectBriefLines(state: Lane1CustomizerState, orderId: string): string[] {
+export function buildOrderBriefLines(state: Lane1CustomizerState, orderId: string): string[] {
   return [
     "Hi Genezisi,",
     "",
     "Please find my custom Digital Business Card build brief below.",
     "",
-    ...buildArchitectHandoffDataLines(state, orderId),
+    ...buildOrderHandoffDataLines(state, orderId),
   ];
 }
 
 /** Full message to copy-paste into WhatsApp (after the short opener message). */
 export function buildWhatsAppOrderPasteText(state: Lane1CustomizerState, orderId: string): string {
-  const core = buildArchitectHandoffDataLines(state, orderId).join("\n");
+  const core = buildOrderHandoffDataLines(state, orderId).join("\n");
   if (state.primaryLang === "ka") {
     return `გამარჯობა Genezisi — აი ციფრული ვიზიტკა, რომელიც მინდა:\n\n${core}`;
   }
   return `Hi Genezisi — here is the Digital Business Card I want:\n\n${core}`;
 }
 
-export function buildArchitectEmailBody(state: Lane1CustomizerState, orderId: string): string {
-  return buildArchitectBriefLines(state, orderId).join("\n");
+export function buildOrderEmailBody(state: Lane1CustomizerState, orderId: string): string {
+  return buildOrderBriefLines(state, orderId).join("\n");
 }
 
-export function buildArchitectMailtoUrl(state: Lane1CustomizerState, orderId: string): string {
-  const subject = buildArchitectEmailSubject(state, orderId);
-  const body = buildArchitectEmailBody(state, orderId);
-  return `mailto:${ARCHITECT_INTAKE_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+export function buildOrderMailtoUrl(state: Lane1CustomizerState, orderId: string): string {
+  const subject = buildOrderEmailSubject(state, orderId);
+  const body = buildOrderEmailBody(state, orderId);
+  return `mailto:hello@genezisi.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }

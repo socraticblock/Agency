@@ -244,7 +244,7 @@ export const knowledgeBase = {
     },
     {
       step: 2,
-      name: "Blueprint Design",
+      name: "Design Direction",
       description:
         "We create the wireframe and design direction. You review and approve.",
     },
@@ -276,7 +276,7 @@ export const knowledgeBase = {
       "https://wa.me/995579723564?text=Hi%20Genezisi!%20I%27m%20interested%20in%20discussing%20a%20project.%20Can%20we%20talk%3F",
     whatsappEscalation:
       "https://wa.me/995579723564?text=Hi%20Genezisi!%20I%20have%20a%20question%20the%20bot%20couldn%27t%20answer.",
-    email: "architect@genezisi.com",
+    email: "hello@genezisi.com",
     website: "https://genezisi.com",
   },
 
@@ -354,7 +354,7 @@ IMPORTANT RULES:
 - When asked for contact info, provide BOTH:
   WhatsApp link (must be raw URL, no markdown): https://wa.me/995579723564
   Phone number (for copy-paste): +995 579 723 564
-  Email: architect@genezisi.com
+  Email: hello@genezisi.com
 
 FORMATTING RULES (CRITICAL):
 - NO markdown links (like [text](url)). Use raw URLs only.

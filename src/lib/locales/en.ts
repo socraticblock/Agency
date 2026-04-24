@@ -108,7 +108,7 @@ export const en = {
     headline: "The Genesis of your digital footprint",
     h2: "Your Brand. Your Rules. Your Platform. You imagine, we build.",
     subhead: "Most founders are the bottleneck of their own growth. We architect the systems that handle your operations, so you can scale a platform that runs without you.",
-    cta: "Build your online headquarters →",
+    cta: "Contact us on WhatsApp",
     ctaSecondary: "Chat on WhatsApp",
     startCardCta: "Digital business card →",
   },
@@ -344,8 +344,8 @@ export const en = {
   },
   leadCapture: {
     successTitle: "Audit Successfully Compiled.",
-    successSub: "Your diagnostic data is indexed. Transitioning you to the Architect Studio to build your blueprint...",
-    continueBtn: "Build your online headquarters",
+    successSub: "Your diagnostic data is indexed. Transitioning you to explore our foundations...",
+    continueBtn: "Continue to WhatsApp",
     emailPlaceholder: "Your email address",
     phonePlaceholder: "Phone number (optional)",
     submitLabel: "Get Started",
@@ -484,7 +484,7 @@ export const en = {
   footer: {
     headline: "Ready to build your permanent home?",
     subheadline: "Let's create a beautiful, professional digital space that you completely control.",
-    cta: "Build your online headquarters",
+    cta: "Get Started",
     disclaimer: "No pressure, no aggressive sales. We'll just have a conversation about your goals and see if we're the right fit to help you reach them.",
   },
   auditResults: {

@@ -12,6 +12,7 @@ import type { Locale } from "@/lib/i18n";
 import { memo, useMemo } from "react";
 import { MagneticButton } from "./MagneticButton";
 import Script from "next/script";
+import { WHATSAPP_INTAKE, WHATSAPP_DEFAULT_MESSAGE } from "@/constants/content";
 
 const Typewriter = memo(({ phrases }: { phrases: string[] }) => {
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
@@ -215,26 +216,16 @@ export function KineticHero({ locale }: { locale: Locale }) {
         <motion.div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <MagneticButton
             as="a"
-            href={`/${locale}/start`}
+            href={`https://wa.me/${WHATSAPP_INTAKE}?text=${encodeURIComponent(WHATSAPP_DEFAULT_MESSAGE)}`}
+            target="_blank"
+            rel="noopener noreferrer"
             magneticStrength={24}
             textStrength={12}
             className="group relative flex min-h-12 items-center justify-center overflow-hidden rounded-full border border-[#00ead0]/40 bg-[#00ead0]/10 px-8 py-3 text-sm font-black text-white shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-[1.03] hover:bg-[#00ead0]/20 sm:px-10 sm:py-4"
           >
             <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(0,234,208,0.4),_transparent_60%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-            <span className="relative z-10 block flex items-center gap-1.5 text-white font-black">
-              {t.hero.startCardCta}
-            </span>
-          </MagneticButton>
-          <MagneticButton
-            as="a"
-            href={`/${locale}/pricing`}
-            magneticStrength={24}
-            textStrength={12}
-            className="group relative flex min-h-12 items-center justify-center overflow-hidden rounded-full border border-[#00ead0]/40 bg-[#00ead0]/10 px-8 py-3 text-sm font-black text-white shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-[1.03] hover:bg-[#00ead0]/20 sm:px-10 sm:py-4"
-          >
-            <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(0,234,208,0.4),_transparent_60%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-            <span className="relative z-10 block flex items-center gap-1.5 text-white font-black">
-              {t.hero.cta}
+            <span className="relative z-10 block flex items-center gap-1.5 text-white font-black uppercase tracking-widest">
+              Contact us on WhatsApp
             </span>
           </MagneticButton>
         </motion.div>

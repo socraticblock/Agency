@@ -1,7 +1,7 @@
 "use client";
 
 import { Mail, MessageCircle } from "lucide-react";
-import { buildArchitectMailtoUrl } from "../lib/order-email";
+import { buildOrderMailtoUrl } from "../lib/order-email";
 
 import type { Lane1CustomizerState } from "../lib/types";
 
@@ -13,7 +13,7 @@ type Props = {
 };
 
 export function StartOrderSendStep2({ orderId, state, waHref, onOrderClick }: Props) {
-  const architectHref = buildArchitectMailtoUrl(state, orderId);
+  const orderEmailHref = buildOrderMailtoUrl(state, orderId);
 
   return (
     <div className="space-y-6">
@@ -47,7 +47,7 @@ export function StartOrderSendStep2({ orderId, state, waHref, onOrderClick }: Pr
           <p className="mt-1 text-sm text-[#64748b]">Send us a message and we will get back to you.</p>
         </div>
         <a
-          href={architectHref}
+          href={orderEmailHref}
           onClick={onOrderClick}
           className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-800 shadow-sm transition hover:bg-slate-50"
         >

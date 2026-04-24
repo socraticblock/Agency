@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { createLocalBusinessSeo } from "@/lib/seo";
 import type { Locale } from "@/lib/i18n";
 import { LangSetter } from "@/components/providers/LangSetter";
-import { ChatWidgetWrapper } from "@/components/chat/ChatWidgetWrapper";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -72,7 +71,6 @@ export default async function LocaleLayout({
       <div id="main-content" className={`locale-${lang} outline-none`} tabIndex={-1}>
         {children}
       </div>
-      <ChatWidgetWrapper />
     </>
   );
 }

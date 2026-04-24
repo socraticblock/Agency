@@ -49,9 +49,6 @@ export function PricingPageClient({ locale }: PricingPageClientProps) {
           Transparent GEL pricing for Georgian businesses — full ownership, clear timelines, and no hidden
           platform rent.
         </p>
-        <div className="mt-8">
-          <PricingCtaBand locale={locale} placement="hero" />
-        </div>
       </header>
 
       <div className="mt-16">
@@ -141,7 +138,7 @@ export function PricingPageClient({ locale }: PricingPageClientProps) {
         <div className="mx-auto max-w-xl">
           <p className="text-lg font-black text-white sm:text-xl">Ready to scope your build?</p>
           <p className="mt-2 text-sm text-slate-400 font-medium">
-            Open the Architect Studio, book a call, or message us on WhatsApp — same team, same ownership
+            Book a call or message us on WhatsApp — same team, same ownership
             promise.
           </p>
           <div className="mt-6">

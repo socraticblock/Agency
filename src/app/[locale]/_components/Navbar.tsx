@@ -41,7 +41,6 @@ export function Navbar({ locale }: { locale: Locale }) {
     { href: `/${locale}/pricing`, label: "Pricing", highlight: false },
     { href: `/${locale}/blog`, label: "Blog", highlight: false },
     { href: `/${locale}/start`, label: "Digital card", highlight: false },
-    { href: `/${locale}/pricing`, label: "Start Building", highlight: true },
   ];
 
   const openStartOverlay = (view: "welcome" | "pricing" | "faq") => {
