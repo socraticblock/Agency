@@ -22,6 +22,10 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://stream.mux.com" />
+        <link rel="preconnect" href="https://image.mux.com" />
+      </head>
       <body
         className={`${inter.variable} ${notoGeorgian.variable} ${spaceGrotesk.variable} ${playfairDisplay.variable} ${merriweather.variable} ${sourceSans3.variable} font-sans antialiased bg-background text-foreground`}
       >

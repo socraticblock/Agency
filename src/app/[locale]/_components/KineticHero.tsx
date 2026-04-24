@@ -110,7 +110,7 @@ export function KineticHero({ locale }: { locale: Locale }) {
   const h2Phrases = useMemo(() => t.hero.h2.split(". ").map((p: string) => p.endsWith(".") ? p : p + "."), [t.hero.h2]);
   useEffect(() => {
     const video = document.getElementById('hero-video') as HTMLVideoElement;
-    if (video) video.playbackRate = 0.8;
+    if (video) video.playbackRate = 0.6;
   }, []);
 
   return (
@@ -128,7 +128,7 @@ export function KineticHero({ locale }: { locale: Locale }) {
             const hls = new Hls();
             hls.loadSource(hlsUrl);
             hls.attachMedia(video);
-            video.playbackRate = 0.8;
+            video.playbackRate = 0.6;
             hls.on(Hls.Events.MANIFEST_PARSED, () => {
               video.play().catch(e => console.error("HLS Play error:", e));
             });
@@ -141,25 +141,36 @@ export function KineticHero({ locale }: { locale: Locale }) {
         onMouseLeave={handleSectionLeave}
         className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 py-20 text-center"
       >
-        <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden bg-black">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 4, ease: "easeOut" }}
+          className="pointer-events-none absolute inset-0 z-0 overflow-hidden bg-black"
+        >
           <video
             id="hero-video"
             autoPlay
             muted
             loop
             playsInline
-            className="h-full w-full object-cover opacity-90 brightness-85"
+            poster="https://image.mux.com/01yW6GoUz01OTXk5w1Rt1MHkJWlCGIwj46SUONJZ4DJUE/thumbnail.jpg?time=0&width=1920"
+            className="h-full w-full object-cover opacity-30 brightness-100"
           >
             <source src="https://stream.mux.com/01yW6GoUz01OTXk5w1Rt1MHkJWlCGIwj46SUONJZ4DJUE/high.mp4" type="video/mp4" />
             <source src="https://stream.mux.com/01yW6GoUz01OTXk5w1Rt1MHkJWlCGIwj46SUONJZ4DJUE/medium.mp4" type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-black/20 z-10" />
-        </div>
+          <div className="absolute inset-0 bg-black/40 z-10" />
+        </motion.div>
 
-        <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden bg-[#030717]">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 4, ease: "easeOut", delay: 0.5 }}
+          className="pointer-events-none absolute inset-0 -z-10 overflow-hidden bg-[#030717]"
+        >
           <div className="absolute -top-1/4 -left-1/4 h-[min(100vw,28rem)] w-[min(100vw,28rem)] rounded-full bg-[#004d40]/40 blur-[100px] animate-pulse sm:h-[min(100vw,40rem)] sm:w-[min(100vw,40rem)] sm:blur-[120px] md:h-[800px] md:w-[800px] md:blur-[140px]" />
           <div className="absolute -bottom-1/4 -right-1/4 h-[min(100vw,28rem)] w-[min(100vw,28rem)] rounded-full bg-slate-800/50 blur-[110px] animate-pulse delay-1000 sm:h-[min(100vw,40rem)] sm:w-[min(100vw,40rem)] sm:blur-[130px] md:h-[800px] md:w-[800px] md:blur-[160px]" />
-        </div>
+        </motion.div>
 
       <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-[#030717] via-[#030717]/60 to-transparent z-10" />
 
