@@ -6,17 +6,17 @@ import {
 } from "./discoveryDefinitions";
 
 interface DiscoveryOptions {
-  foundation?: string;
-  selectedModules?: string[];
+  foundation?: string | null;
+  selectedModules?: string[] | null;
   isUpgrade?: boolean;
 }
 
 export function buildDiscoveryQuestions({
   foundation,
-  selectedModules = [],
+  selectedModules,
   isUpgrade = false
 }: DiscoveryOptions) {
-  let questions = [...STANDARD_QUESTIONS];
+  let questions: any[] = [...STANDARD_QUESTIONS];
 
   if (isUpgrade) {
     questions = [...questions, ...UPGRADE_QUESTIONS];
@@ -26,11 +26,13 @@ export function buildDiscoveryQuestions({
     questions = [...questions, ...FOUNDATION_SPECIFIC_MAP[foundation]];
   }
 
-  selectedModules.forEach(modId => {
-    if (MODULE_QUESTIONS_MAP[modId]) {
-      questions = [...questions, ...MODULE_QUESTIONS_MAP[modId]];
-    }
-  });
+  if (selectedModules) {
+    selectedModules.forEach(modId => {
+      if (MODULE_QUESTIONS_MAP[modId]) {
+        questions = [...questions, ...MODULE_QUESTIONS_MAP[modId]];
+      }
+    });
+  }
 
   return questions;
 }
