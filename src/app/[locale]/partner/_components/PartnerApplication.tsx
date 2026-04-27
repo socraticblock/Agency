@@ -249,7 +249,7 @@ export function PartnerApplication() {
               {/* Resume / LinkedIn */}
               <div>
                 <label htmlFor={`${id}-resume`} className={labelClass}>
-                  Resume / LinkedIn <span className="text-slate-500 text-xs">(optional)</span>
+                  LinkedIn or online profile <span className="text-slate-500 text-xs">(optional)</span>
                 </label>
                 <input
                   id={`${id}-resume`}
@@ -259,6 +259,9 @@ export function PartnerApplication() {
                   placeholder="https://linkedin.com/in/..."
                   className={inputClass}
                 />
+                <p className="mt-1 text-xs text-slate-500">
+                  No LinkedIn? Send your CV on WhatsApp after submitting.
+                </p>
               </div>
 
               {/* Referral source */}
@@ -321,8 +324,8 @@ export function PartnerApplication() {
                 We review every submission personally and will be in touch within 3 working days. Send us a quick WhatsApp so we know to look out for your application.
               </p>
               <a
-                href={`https://wa.me/995579723564?text=${encodeURIComponent(
-                  `Hi Genezisi! I just submitted my partner application. My name is ${savedName || "[your name]"}.`
+                href={`https://wa.me/32475608743?text=${encodeURIComponent(
+                  `Hi Genezisi! I just submitted my partner application. My name is ${savedName || "[your name]"}.${!resumeLink.trim() ? " I'll also send my CV here." : ""}`
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
