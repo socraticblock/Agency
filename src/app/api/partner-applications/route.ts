@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { turso } from "@/lib/db";
+import { createPartnerApplication } from "@/lib/db";
 
 const partnerApplicationSchema = z.object({
   fullName: z.string().min(1).max(200),
@@ -30,25 +30,27 @@ export async function POST(request: Request) {
     const id = `pa-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
     const now = Date.now();
 
-    await turso.execute({
-      sql: `INSERT INTO partner_applications
-        (id, full_name, phone, email, network_sectors, experience, why_genezisi, client_plan, resume_link, referral_source, status, created_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      args: [
-        id,
-        d.fullName,
-        d.phone,
-        d.email,
-        JSON.stringify(d.networkSectors),
-        d.experience,
-        d.whyGenezisi,
-        d.clientPlan,
-        d.resumeLink,
-        d.referralSource,
-        "pending",
-        now,
-      ],
+    const insertResult = await createPartnerApplication({
+      id,
+      fullName: d.fullName,
+      phone: d.phone,
+      email: d.email,
+      networkSectorsJson: JSON.stringify(d.networkSectors),
+      experience: d.experience,
+      whyGenezisi: d.whyGenezisi,
+      clientPlan: d.clientPlan,
+      resumeLink: d.resumeLink,
+      referralSource: d.referralSource,
+      createdAt: now,
     });
+
+    if (!insertResult.ok) {
+      console.error("Partner application insert error:", insertResult.error);
+      return NextResponse.json(
+        { error: "Unable to submit application right now." },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json({ success: true, id }, { status: 201 });
   } catch (error: any) {

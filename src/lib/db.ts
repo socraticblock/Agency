@@ -57,6 +57,20 @@ export interface CreateCardInput {
   domainStatus: DomainStatus;
 }
 
+export interface CreatePartnerApplicationInput {
+  id: string;
+  fullName: string;
+  phone: string;
+  email: string;
+  networkSectorsJson: string;
+  experience: string;
+  whyGenezisi: string;
+  clientPlan: string;
+  resumeLink: string;
+  referralSource: string;
+  createdAt: number;
+}
+
 // ---------------------------------------------------------------------------
 // Turso HTTP client
 // ---------------------------------------------------------------------------
@@ -179,6 +193,36 @@ function convertTursoValue(val: { type: string; value: unknown }): unknown {
 // ---------------------------------------------------------------------------
 // Card CRUD
 // ---------------------------------------------------------------------------
+
+export async function createPartnerApplication(
+  input: CreatePartnerApplicationInput
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  try {
+    await tursoExec(
+      `INSERT INTO partner_applications
+        (id, full_name, phone, email, network_sectors, experience, why_genezisi, client_plan, resume_link, referral_source, status, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        input.id,
+        input.fullName,
+        input.phone,
+        input.email,
+        input.networkSectorsJson,
+        input.experience,
+        input.whyGenezisi,
+        input.clientPlan,
+        input.resumeLink,
+        input.referralSource,
+        "pending",
+        input.createdAt,
+      ]
+    );
+    return { ok: true };
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    return { ok: false, error: message };
+  }
+}
 
 export async function createCard(
   input: CreateCardInput
