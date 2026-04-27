@@ -60,6 +60,9 @@ export function GlobalFooter({ locale }: { locale: Locale }) {
         <Link href={`/${locale}/blog`} className="transition hover:text-emerald-300">
           Blog
         </Link>
+        <Link href={`/${locale}/partner`} className="transition hover:text-emerald-300">
+          Partners
+        </Link>
       </nav>
       {/* Performance Widget */}
       <div className="absolute bottom-6 left-0 right-0 border-t border-white/5 pt-4 px-4 w-full">

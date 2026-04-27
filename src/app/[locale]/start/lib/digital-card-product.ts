@@ -6,9 +6,9 @@ export type DigitalCardTierId = "subdomain" | "professional" | "executive";
 export const DIGITAL_CARD_ORDER_SCHEMA_VERSION = 6 as const;
 
 export const DIGITAL_CARD_HOSTING_ANNUAL_GEL: Record<DigitalCardTierId, number> = {
-  subdomain: 50,
-  professional: 50,
-  executive: 120,
+  subdomain: 150,
+  professional: 150,
+  executive: 200,
 };
 
 export const DIGITAL_CARD_TIER_SETUP_GEL: Record<DigitalCardTierId, number> = {

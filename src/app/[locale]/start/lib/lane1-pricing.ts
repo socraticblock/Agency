@@ -10,7 +10,7 @@ export const ADDON_EXTRA_LANG_PRO_GEL = 150;
 export const ADDON_GOOGLE_MAP_GEL = 0;
 
 // RENEWAL COPY note: This is now context-dependent; 
-// defaulting to subdomain (50) for generic copy references.
+// defaulting to subdomain hosting value for generic copy references.
 export const LANE1_RENEWAL_COPY_GEL = DIGITAL_CARD_HOSTING_ANNUAL_GEL.subdomain;
 
 /** @deprecated Use tier setup fees; kept to avoid breaking unknown imports. */

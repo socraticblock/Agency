@@ -1,0 +1,1812 @@
+From 50d026720ec194ad33f070f6ac83beb1b952624a Mon Sep 17 00:00:00 2001
+From: Z User <z@container>
+Date: Mon, 27 Apr 2026 12:56:36 +0000
+Subject: [PATCH] =?UTF-8?q?feat:=20add=20/partner=20page=20=E2=80=94=20Gen?=
+ =?UTF-8?q?ezisi=20Partner=20recruitment=20program?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+- 12-section partner recruitment page at /partner
+- Partner application form with API route + Turso storage
+- Updated Shield pricing: 300₾ Reputation Scout, 600₾ Micro Shield
+- Updated Card hosting: 150₾/150₾/200₾ (subdomain/professional/executive)
+- Added Partners link to footer
+- DB migration for partner_applications table
+---
+ d1/migrations/0003_partner_applications.sql   |  18 +
+ src/app/[locale]/_components/GlobalFooter.tsx |   3 +
+ .../_components/PartnerApplication.tsx        | 327 ++++++++++++++++++
+ .../_components/PartnerCompetitiveEdge.tsx    |  43 +++
+ .../partner/_components/PartnerDayInLife.tsx  |  75 ++++
+ .../partner/_components/PartnerEarnings.tsx   | 189 ++++++++++
+ .../partner/_components/PartnerHero.tsx       |  67 ++++
+ .../partner/_components/PartnerOwnCard.tsx    |  64 ++++
+ .../partner/_components/PartnerPageClient.tsx |  37 ++
+ .../partner/_components/PartnerProducts.tsx   | 145 ++++++++
+ .../partner/_components/PartnerProfile.tsx    |  93 +++++
+ .../_components/PartnerQuestionnaire.tsx      |  83 +++++
+ .../partner/_components/PartnerShield.tsx     |  99 ++++++
+ .../partner/_components/PartnerSplit.tsx      | 109 ++++++
+ .../partner/_components/PartnerTrust.tsx      |  76 ++++
+ src/app/[locale]/partner/layout.tsx           |  29 ++
+ src/app/[locale]/partner/page.tsx             |  32 ++
+ .../start/lib/digital-card-product.ts         |   6 +-
+ src/app/[locale]/start/lib/lane1-pricing.ts   |   2 +-
+ src/app/api/partner-applications/route.ts     |  61 ++++
+ src/constants/pricing/shields.ts              |   4 +-
+ src/constants/start-digital-card-copy.ts      |   4 +-
+ 22 files changed, 1558 insertions(+), 8 deletions(-)
+ create mode 100644 d1/migrations/0003_partner_applications.sql
+ mode change 100644 => 100755 src/app/[locale]/_components/GlobalFooter.tsx
+ create mode 100644 src/app/[locale]/partner/_components/PartnerApplication.tsx
+ create mode 100644 src/app/[locale]/partner/_components/PartnerCompetitiveEdge.tsx
+ create mode 100644 src/app/[locale]/partner/_components/PartnerDayInLife.tsx
+ create mode 100644 src/app/[locale]/partner/_components/PartnerEarnings.tsx
+ create mode 100644 src/app/[locale]/partner/_components/PartnerHero.tsx
+ create mode 100644 src/app/[locale]/partner/_components/PartnerOwnCard.tsx
+ create mode 100644 src/app/[locale]/partner/_components/PartnerPageClient.tsx
+ create mode 100644 src/app/[locale]/partner/_components/PartnerProducts.tsx
+ create mode 100644 src/app/[locale]/partner/_components/PartnerProfile.tsx
+ create mode 100644 src/app/[locale]/partner/_components/PartnerQuestionnaire.tsx
+ create mode 100644 src/app/[locale]/partner/_components/PartnerShield.tsx
+ create mode 100644 src/app/[locale]/partner/_components/PartnerSplit.tsx
+ create mode 100644 src/app/[locale]/partner/_components/PartnerTrust.tsx
+ create mode 100644 src/app/[locale]/partner/layout.tsx
+ create mode 100644 src/app/[locale]/partner/page.tsx
+ mode change 100644 => 100755 src/app/[locale]/start/lib/digital-card-product.ts
+ mode change 100644 => 100755 src/app/[locale]/start/lib/lane1-pricing.ts
+ create mode 100644 src/app/api/partner-applications/route.ts
+ mode change 100644 => 100755 src/constants/pricing/shields.ts
+ mode change 100644 => 100755 src/constants/start-digital-card-copy.ts
+
+diff --git a/d1/migrations/0003_partner_applications.sql b/d1/migrations/0003_partner_applications.sql
+new file mode 100644
+index 0000000..fb20807
+--- /dev/null
++++ b/d1/migrations/0003_partner_applications.sql
+@@ -0,0 +1,18 @@
++-- Partner applications table
++CREATE TABLE IF NOT EXISTS partner_applications (
++  id TEXT PRIMARY KEY,
++  full_name TEXT NOT NULL,
++  phone TEXT NOT NULL,
++  email TEXT NOT NULL,
++  network_sectors TEXT NOT NULL DEFAULT '[]',
++  experience TEXT NOT NULL DEFAULT '',
++  why_genezisi TEXT NOT NULL,
++  client_plan TEXT NOT NULL,
++  resume_link TEXT NOT NULL DEFAULT '',
++  referral_source TEXT NOT NULL DEFAULT '',
++  status TEXT NOT NULL DEFAULT 'pending',
++  created_at INTEGER NOT NULL
++);
++
++CREATE INDEX IF NOT EXISTS idx_partner_applications_status ON partner_applications(status);
++CREATE INDEX IF NOT EXISTS idx_partner_applications_created_at ON partner_applications(created_at);
+diff --git a/src/app/[locale]/_components/GlobalFooter.tsx b/src/app/[locale]/_components/GlobalFooter.tsx
+old mode 100644
+new mode 100755
+index e04d3b3..8d07c67
+--- a/src/app/[locale]/_components/GlobalFooter.tsx
++++ b/src/app/[locale]/_components/GlobalFooter.tsx
+@@ -60,6 +60,9 @@ export function GlobalFooter({ locale }: { locale: Locale }) {
+         <Link href={`/${locale}/blog`} className="transition hover:text-emerald-300">
+           Blog
+         </Link>
++        <Link href={`/${locale}/partner`} className="transition hover:text-emerald-300">
++          Partners
++        </Link>
+       </nav>
+       {/* Performance Widget */}
+       <div className="absolute bottom-6 left-0 right-0 border-t border-white/5 pt-4 px-4 w-full">
+diff --git a/src/app/[locale]/partner/_components/PartnerApplication.tsx b/src/app/[locale]/partner/_components/PartnerApplication.tsx
+new file mode 100644
+index 0000000..1591385
+--- /dev/null
++++ b/src/app/[locale]/partner/_components/PartnerApplication.tsx
+@@ -0,0 +1,327 @@
++"use client";
++
++import { useState, useId } from "react";
++import { motion, AnimatePresence } from "framer-motion";
++import { Send, Loader2 } from "lucide-react";
++
++const NETWORK_OPTIONS = [
++  "Lawyers & Legal",
++  "Boutiques & Retail",
++  "Restaurants & Hospitality",
++  "Tech & Startups",
++  "Creative & Media",
++  "Medical & Wellness",
++  "Real Estate",
++  "Other",
++];
++
++export function PartnerApplication() {
++  const id = useId();
++  const [fullName, setFullName] = useState("");
++  const [phone, setPhone] = useState("");
++  const [email, setEmail] = useState("");
++  const [networkSectors, setNetworkSectors] = useState<string[]>([]);
++  const [otherSector, setOtherSector] = useState("");
++  const [experience, setExperience] = useState("");
++  const [whyGenezisi, setWhyGenezisi] = useState("");
++  const [clientPlan, setClientPlan] = useState("");
++  const [resumeLink, setResumeLink] = useState("");
++  const [referralSource, setReferralSource] = useState("");
++  const [isSubmitting, setIsSubmitting] = useState(false);
++  const [submitted, setSubmitted] = useState(false);
++  const [error, setError] = useState<string | null>(null);
++
++  const toggleSector = (sector: string) => {
++    setNetworkSectors((prev) =>
++      prev.includes(sector) ? prev.filter((s) => s !== sector) : [...prev, sector]
++    );
++  };
++
++  const handleSubmit = async (e: React.FormEvent) => {
++    e.preventDefault();
++    setError(null);
++
++    if (!fullName.trim() || !phone.trim() || !email.trim() || !whyGenezisi.trim() || !clientPlan.trim()) {
++      setError("Please fill in all required fields.");
++      return;
++    }
++
++    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
++    if (!emailRe.test(email.trim())) {
++      setError("Please enter a valid email address.");
++      return;
++    }
++
++    setIsSubmitting(true);
++    try {
++      const res = await fetch("/api/partner-applications", {
++        method: "POST",
++        headers: { "Content-Type": "application/json" },
++        body: JSON.stringify({
++          fullName: fullName.trim(),
++          phone: phone.trim(),
++          email: email.trim(),
++          networkSectors: networkSectors.includes("Other")
++            ? [...networkSectors.filter((s) => s !== "Other"), otherSector.trim()].filter(Boolean)
++            : networkSectors,
++          experience: experience.trim(),
++          whyGenezisi: whyGenezisi.trim(),
++          clientPlan: clientPlan.trim(),
++          resumeLink: resumeLink.trim(),
++          referralSource: referralSource.trim(),
++        }),
++      });
++
++      if (!res.ok) {
++        const data = await res.json().catch(() => ({}));
++        throw new Error(data.error || "Submission failed.");
++      }
++
++      setSubmitted(true);
++    } catch (err: any) {
++      setError(err.message || "Something went wrong. Please try again.");
++    } finally {
++      setIsSubmitting(false);
++    }
++  };
++
++  const inputClass =
++    "w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-base text-slate-100 placeholder-slate-500 backdrop-blur-xl focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 transition";
++
++  const labelClass = "block text-sm font-medium text-slate-300 mb-1.5";
++
++  return (
++    <section className="px-4 py-20 sm:py-28">
++      <div className="mx-auto max-w-xl">
++        <motion.div
++          initial={{ opacity: 0, y: 16 }}
++          whileInView={{ opacity: 1, y: 0 }}
++          viewport={{ once: true, margin: "-100px" }}
++          transition={{ duration: 0.5 }}
++          className="mb-10 text-center"
++        >
++          <p className="mb-2 text-xs font-bold uppercase tracking-[0.25em] text-emerald-400">
++            Apply Now
++          </p>
++          <h2 className="text-2xl font-bold text-white sm:text-4xl">
++            Become a Genezisi Partner
++          </h2>
++        </motion.div>
++
++        <AnimatePresence mode="wait">
++          {!submitted ? (
++            <motion.form
++              key="form"
++              initial={{ opacity: 0, y: 12 }}
++              animate={{ opacity: 1, y: 0 }}
++              exit={{ opacity: 0, y: -12 }}
++              transition={{ duration: 0.3 }}
++              onSubmit={handleSubmit}
++              className="space-y-5"
++            >
++              {/* Full name */}
++              <div>
++                <label htmlFor={`${id}-name`} className={labelClass}>
++                  Full name <span className="text-emerald-400">*</span>
++                </label>
++                <input
++                  id={`${id}-name`}
++                  type="text"
++                  value={fullName}
++                  onChange={(e) => { setFullName(e.target.value); setError(null); }}
++                  placeholder="Your full name"
++                  className={inputClass}
++                  required
++                />
++              </div>
++
++              {/* Phone */}
++              <div>
++                <label htmlFor={`${id}-phone`} className={labelClass}>
++                  Phone / WhatsApp <span className="text-emerald-400">*</span>
++                </label>
++                <input
++                  id={`${id}-phone`}
++                  type="tel"
++                  value={phone}
++                  onChange={(e) => { setPhone(e.target.value); setError(null); }}
++                  placeholder="+995 ..."
++                  className={inputClass}
++                  required
++                />
++              </div>
++
++              {/* Email */}
++              <div>
++                <label htmlFor={`${id}-email`} className={labelClass}>
++                  Email <span className="text-emerald-400">*</span>
++                </label>
++                <input
++                  id={`${id}-email`}
++                  type="email"
++                  value={email}
++                  onChange={(e) => { setEmail(e.target.value); setError(null); }}
++                  placeholder="you@example.com"
++                  className={inputClass}
++                  required
++                />
++              </div>
++
++              {/* Network sectors */}
++              <div>
++                <p className={labelClass}>Your professional network</p>
++                <div className="flex flex-wrap gap-2">
++                  {NETWORK_OPTIONS.map((sector) => (
++                    <button
++                      key={sector}
++                      type="button"
++                      onClick={() => toggleSector(sector)}
++                      className={`rounded-lg px-3 py-1.5 text-xs font-medium transition ${
++                        networkSectors.includes(sector)
++                          ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
++                          : "bg-white/[0.04] text-slate-400 border border-white/[0.08] hover:text-white"
++                      }`}
++                    >
++                      {sector}
++                    </button>
++                  ))}
++                </div>
++                {networkSectors.includes("Other") && (
++                  <input
++                    type="text"
++                    value={otherSector}
++                    onChange={(e) => setOtherSector(e.target.value)}
++                    placeholder="Specify..."
++                    className={`${inputClass} mt-2`}
++                  />
++                )}
++              </div>
++
++              {/* Experience */}
++              <div>
++                <label htmlFor={`${id}-exp`} className={labelClass}>
++                  Your experience
++                </label>
++                <textarea
++                  id={`${id}-exp`}
++                  value={experience}
++                  onChange={(e) => setExperience(e.target.value)}
++                  placeholder="Tell us about your sales, business development, or client management experience..."
++                  rows={3}
++                  className={`${inputClass} resize-none`}
++                />
++              </div>
++
++              {/* Why Genezisi */}
++              <div>
++                <label htmlFor={`${id}-why`} className={labelClass}>
++                  Why Genezisi? <span className="text-emerald-400">*</span>
++                </label>
++                <textarea
++                  id={`${id}-why`}
++                  value={whyGenezisi}
++                  onChange={(e) => { setWhyGenezisi(e.target.value); setError(null); }}
++                  placeholder="Why do you want to become a Genezisi Partner, and why should we choose you?"
++                  rows={3}
++                  className={`${inputClass} resize-none`}
++                  required
++                />
++              </div>
++
++              {/* Client plan */}
++              <div>
++                <label htmlFor={`${id}-plan`} className={labelClass}>
++                  Your plan <span className="text-emerald-400">*</span>
++                </label>
++                <textarea
++                  id={`${id}-plan`}
++                  value={clientPlan}
++                  onChange={(e) => { setClientPlan(e.target.value); setError(null); }}
++                  placeholder="How do you plan to find and close clients? Walk us through your approach."
++                  rows={3}
++                  className={`${inputClass} resize-none`}
++                  required
++                />
++              </div>
++
++              {/* Resume / LinkedIn */}
++              <div>
++                <label htmlFor={`${id}-resume`} className={labelClass}>
++                  Resume / LinkedIn <span className="text-slate-500 text-xs">(optional)</span>
++                </label>
++                <input
++                  id={`${id}-resume`}
++                  type="url"
++                  value={resumeLink}
++                  onChange={(e) => setResumeLink(e.target.value)}
++                  placeholder="https://linkedin.com/in/..."
++                  className={inputClass}
++                />
++              </div>
++
++              {/* Referral source */}
++              <div>
++                <label htmlFor={`${id}-ref`} className={labelClass}>
++                  How did you hear about us? <span className="text-slate-500 text-xs">(optional)</span>
++                </label>
++                <input
++                  id={`${id}-ref`}
++                  type="text"
++                  value={referralSource}
++                  onChange={(e) => setReferralSource(e.target.value)}
++                  placeholder="Friend, social media, etc."
++                  className={inputClass}
++                />
++              </div>
++
++              {/* Error */}
++              {error && (
++                <p className="text-sm text-red-400" role="alert">
++                  {error}
++                </p>
++              )}
++
++              {/* Submit */}
++              <motion.button
++                type="submit"
++                disabled={isSubmitting}
++                whileTap={{ scale: 0.98 }}
++                className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500/20 px-6 py-3.5 text-base font-semibold text-emerald-200 transition hover:bg-emerald-500/30 disabled:pointer-events-none disabled:opacity-50 border border-emerald-500/30"
++              >
++                {isSubmitting ? (
++                  <>
++                    <Loader2 className="h-4 w-4 animate-spin" />
++                    Submitting…
++                  </>
++                ) : (
++                  <>
++                    <Send className="h-4 w-4" />
++                    Apply to Become a Partner
++                  </>
++                )}
++              </motion.button>
++
++              <p className="text-center text-xs text-slate-500">
++                We review every application personally. If there&apos;s a fit, we&apos;ll reach out within 3 working days.
++              </p>
++            </motion.form>
++          ) : (
++            <motion.div
++              key="thanks"
++              initial={{ opacity: 0, y: 12 }}
++              animate={{ opacity: 1, y: 0 }}
++              className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-8 text-center"
++            >
++              <p className="text-lg font-semibold text-emerald-200">
++                Thank you for your application.
++              </p>
++              <p className="mt-2 text-sm text-slate-400">
++                We review every submission personally and will be in touch within 3 working days.
++              </p>
++            </motion.div>
++          )}
++        </AnimatePresence>
++      </div>
++    </section>
++  );
++}
+diff --git a/src/app/[locale]/partner/_components/PartnerCompetitiveEdge.tsx b/src/app/[locale]/partner/_components/PartnerCompetitiveEdge.tsx
+new file mode 100644
+index 0000000..dd2e11b
+--- /dev/null
++++ b/src/app/[locale]/partner/_components/PartnerCompetitiveEdge.tsx
+@@ -0,0 +1,43 @@
++"use client";
++
++import { motion } from "framer-motion";
++import { Zap } from "lucide-react";
++
++export function PartnerCompetitiveEdge() {
++  return (
++    <section className="px-4 py-20 sm:py-28">
++      <div className="mx-auto max-w-3xl">
++        <motion.div
++          initial={{ opacity: 0, y: 16 }}
++          whileInView={{ opacity: 1, y: 0 }}
++          viewport={{ once: true, margin: "-100px" }}
++          transition={{ duration: 0.5 }}
++          className="text-center"
++        >
++          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/20 text-emerald-400">
++            <Zap className="h-6 w-6" />
++          </div>
++
++          <h2 className="text-xl font-bold text-white sm:text-3xl">
++            Your price is your advantage.
++          </h2>
++
++          <div className="mt-6 space-y-4 text-base text-slate-300 leading-relaxed sm:text-lg">
++            <p>
++              Genezisi offers the most competitive pricing in the Georgian market for this level
++              of quality. That&apos;s not a disadvantage — <span className="text-emerald-300 font-semibold">it&apos;s your advantage</span>.
++            </p>
++            <p>
++              Lower prices mean faster decisions, fewer objections, and more closed deals.
++              You&apos;re not convincing someone to spend 5,000₾ on a website. You&apos;re showing them
++              they can have a premium digital presence for a fraction of what they&apos;d pay elsewhere.
++            </p>
++            <p className="text-emerald-300 font-semibold">
++              The product sells itself. You just open the door.
++            </p>
++          </div>
++        </motion.div>
++      </div>
++    </section>
++  );
++}
+diff --git a/src/app/[locale]/partner/_components/PartnerDayInLife.tsx b/src/app/[locale]/partner/_components/PartnerDayInLife.tsx
+new file mode 100644
+index 0000000..4faca33
+--- /dev/null
++++ b/src/app/[locale]/partner/_components/PartnerDayInLife.tsx
+@@ -0,0 +1,75 @@
++"use client";
++
++import { motion } from "framer-motion";
++import { Coffee, Smartphone, Bell } from "lucide-react";
++
++const MOMENTS = [
++  {
++    icon: Smartphone,
++    text: "You visit a law firm on Rustaveli. 15 minutes. You show them the card builder on your phone. They type their name. They watch it appear on a premium digital card. They say yes. You walk out with a 350₾ sale.",
++  },
++  {
++    icon: Coffee,
++    text: "Over coffee, you message a boutique owner you met last week. They've been thinking about it. You answer their one question. They say yes. Another 250₾.",
++  },
++  {
++    icon: Bell,
++    text: "In the evening, you get a notification: last month's client just renewed their Shield. You didn't do anything. The money just arrived.",
++  },
++];
++
++export function PartnerDayInLife() {
++  return (
++    <section className="px-4 py-20 sm:py-28">
++      <div className="mx-auto max-w-3xl">
++        <motion.div
++          initial={{ opacity: 0, y: 16 }}
++          whileInView={{ opacity: 1, y: 0 }}
++          viewport={{ once: true, margin: "-100px" }}
++          transition={{ duration: 0.5 }}
++          className="mb-12 text-center"
++        >
++          <p className="mb-2 text-xs font-bold uppercase tracking-[0.25em] text-emerald-400">
++            Not Abstract. Real.
++          </p>
++          <h2 className="text-2xl font-bold text-white sm:text-4xl">
++            A Tuesday in March
++          </h2>
++        </motion.div>
++
++        <div className="space-y-6">
++          {MOMENTS.map((moment, idx) => {
++            const Icon = moment.icon;
++            return (
++              <motion.div
++                key={idx}
++                initial={{ opacity: 0, x: -16 }}
++                whileInView={{ opacity: 1, x: 0 }}
++                viewport={{ once: true }}
++                transition={{ duration: 0.4, delay: idx * 0.15 }}
++                className="flex gap-4"
++              >
++                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-400">
++                  <Icon className="h-5 w-5" />
++                </div>
++                <p className="text-base text-slate-300 leading-relaxed pt-1.5 sm:text-lg">
++                  {moment.text}
++                </p>
++              </motion.div>
++            );
++          })}
++        </div>
++
++        <motion.p
++          initial={{ opacity: 0 }}
++          whileInView={{ opacity: 1 }}
++          viewport={{ once: true }}
++          transition={{ duration: 0.5, delay: 0.5 }}
++          className="mt-10 text-center text-lg font-semibold text-white sm:text-xl"
++        >
++          That&apos;s the model. <span className="text-emerald-400">You sell. We build. The income compounds.</span>
++        </motion.p>
++      </div>
++    </section>
++  );
++}
+diff --git a/src/app/[locale]/partner/_components/PartnerEarnings.tsx b/src/app/[locale]/partner/_components/PartnerEarnings.tsx
+new file mode 100644
+index 0000000..d3e8f3f
+--- /dev/null
++++ b/src/app/[locale]/partner/_components/PartnerEarnings.tsx
+@@ -0,0 +1,189 @@
++"use client";
++
++import { useState } from "react";
++import { motion, AnimatePresence } from "framer-motion";
++import { TrendingUp, BarChart3 } from "lucide-react";
++
++const SCENARIOS = [
++  {
++    label: "Part-Time",
++    desc: "2 card clients/month + 1 Studio every 3 months",
++    year1: "~8,000₾",
++  },
++  {
++    label: "Committed",
++    desc: "3 card clients/month + 1 Studio/month",
++    year1: "~20,000₾",
++  },
++  {
++    label: "Full-Time",
++    desc: "5 card clients/month + 2 Studios/month",
++    year1: "~30,000₾",
++  },
++];
++
++const YEARLY_TRAJECTORY = [
++  { year: "Year 1", setup: "~19,800₾", recurring: "~7,200₾", total: "~27,000₾" },
++  { year: "Year 2", setup: "~19,800₾", recurring: "~14,400₾", total: "~34,200₾" },
++  { year: "Year 3", setup: "~19,800₾", recurring: "~21,600₾", total: "~41,400₾" },
++];
++
++type View = "glance" | "full";
++
++export function PartnerEarnings() {
++  const [view, setView] = useState<View>("glance");
++
++  return (
++    <section className="px-4 py-20 sm:py-28">
++      <div className="mx-auto max-w-5xl">
++        <motion.div
++          initial={{ opacity: 0, y: 16 }}
++          whileInView={{ opacity: 1, y: 0 }}
++          viewport={{ once: true, margin: "-100px" }}
++          transition={{ duration: 0.5 }}
++          className="mb-10 text-center"
++        >
++          <p className="mb-2 text-xs font-bold uppercase tracking-[0.25em] text-emerald-400">
++            What You Could Earn
++          </p>
++          <h2 className="text-2xl font-bold text-white sm:text-4xl">
++            The harder you work, the more you earn.
++          </h2>
++          <p className="mx-auto mt-4 max-w-xl text-base text-slate-400">
++            Setup requires selling. Shield income is passive and compounds annually. There is no ceiling.
++          </p>
++        </motion.div>
++
++        {/* View toggle */}
++        <div className="mb-8 flex justify-center gap-2">
++          <button
++            onClick={() => setView("glance")}
++            className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition ${
++              view === "glance"
++                ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
++                : "bg-white/[0.03] text-slate-400 border border-white/[0.06] hover:text-white"
++            }`}
++          >
++            <TrendingUp className="h-4 w-4" />
++            At a Glance
++          </button>
++          <button
++            onClick={() => setView("full")}
++            className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition ${
++              view === "full"
++                ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
++                : "bg-white/[0.03] text-slate-400 border border-white/[0.06] hover:text-white"
++            }`}
++          >
++            <BarChart3 className="h-4 w-4" />
++            The Full Picture
++          </button>
++        </div>
++
++        <AnimatePresence mode="wait">
++          {view === "glance" ? (
++            <motion.div
++              key="glance"
++              initial={{ opacity: 0, y: 12 }}
++              animate={{ opacity: 1, y: 0 }}
++              exit={{ opacity: 0, y: -12 }}
++              transition={{ duration: 0.3 }}
++              className="grid gap-4 sm:grid-cols-3"
++            >
++              {SCENARIOS.map((s, idx) => (
++                <motion.div
++                  key={s.label}
++                  initial={{ opacity: 0, y: 16 }}
++                  whileInView={{ opacity: 1, y: 0 }}
++                  viewport={{ once: true }}
++                  transition={{ duration: 0.4, delay: idx * 0.1 }}
++                  className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 text-center backdrop-blur-sm"
++                >
++                  <p className="text-xs font-bold uppercase tracking-wider text-emerald-400">
++                    {s.label}
++                  </p>
++                  <p className="mt-3 text-3xl font-bold text-white sm:text-4xl">{s.year1}</p>
++                  <p className="text-xs text-slate-500 mt-1">Year 1</p>
++                  <p className="mt-4 text-xs text-slate-400 leading-relaxed">{s.desc}</p>
++                </motion.div>
++              ))}
++            </motion.div>
++          ) : (
++            <motion.div
++              key="full"
++              initial={{ opacity: 0, y: 12 }}
++              animate={{ opacity: 1, y: 0 }}
++              exit={{ opacity: 0, y: -12 }}
++              transition={{ duration: 0.3 }}
++            >
++              <div className="mb-6 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm">
++                <p className="text-sm text-slate-300 leading-relaxed">
++                  The numbers above are base products only. Most Studio clients add 2-3 modules —
++                  copywriting, booking systems, analytics. Every add-on earns you{" "}
++                  <span className="text-emerald-300 font-semibold">30%</span>. And every Shield renews every year.
++                </p>
++              </div>
++
++              {/* 3-year trajectory */}
++              <div className="overflow-x-auto rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm">
++                <table className="w-full text-sm">
++                  <thead>
++                    <tr className="border-b border-white/[0.06]">
++                      <th className="px-5 py-3 text-left text-xs font-bold uppercase tracking-wider text-slate-500">
++                        Full-Time Partner
++                      </th>
++                      <th className="px-5 py-3 text-right text-xs font-bold uppercase tracking-wider text-slate-500">
++                        Year 1
++                      </th>
++                      <th className="px-5 py-3 text-right text-xs font-bold uppercase tracking-wider text-slate-500">
++                        Year 2
++                      </th>
++                      <th className="px-5 py-3 text-right text-xs font-bold uppercase tracking-wider text-slate-500">
++                        Year 3
++                      </th>
++                    </tr>
++                  </thead>
++                  <tbody>
++                    <tr className="border-b border-white/[0.04]">
++                      <td className="px-5 py-3 text-slate-300">Setup commissions</td>
++                      {YEARLY_TRAJECTORY.map((y) => (
++                        <td key={y.year + "-setup"} className="px-5 py-3 text-right text-slate-300">
++                          {y.setup}
++                        </td>
++                      ))}
++                    </tr>
++                    <tr className="border-b border-white/[0.04]">
++                      <td className="px-5 py-3 text-slate-300">
++                        Shield recurring <span className="text-xs text-emerald-400">(cumulative)</span>
++                      </td>
++                      {YEARLY_TRAJECTORY.map((y) => (
++                        <td key={y.year + "-rec"} className="px-5 py-3 text-right text-emerald-400 font-semibold">
++                          {y.recurring}
++                        </td>
++                      ))}
++                    </tr>
++                    <tr>
++                      <td className="px-5 py-3 font-bold text-white">Total that year</td>
++                      {YEARLY_TRAJECTORY.map((y) => (
++                        <td key={y.year + "-total"} className="px-5 py-3 text-right font-bold text-white">
++                          {y.total}
++                        </td>
++                      ))}
++                    </tr>
++                  </tbody>
++                </table>
++              </div>
++
++              <p className="mt-4 text-xs text-slate-400 leading-relaxed text-center">
++                By Year 3, Shield income alone is ~1,800₾/month — and it required zero new sales to maintain.
++                Every new client you close adds to this pile permanently.
++                <br />
++                <span className="text-slate-500">Note: These are base-product conservative estimates. With add-ons, real numbers are higher.</span>
++              </p>
++            </motion.div>
++          )}
++        </AnimatePresence>
++      </div>
++    </section>
++  );
++}
+diff --git a/src/app/[locale]/partner/_components/PartnerHero.tsx b/src/app/[locale]/partner/_components/PartnerHero.tsx
+new file mode 100644
+index 0000000..0d04de9
+--- /dev/null
++++ b/src/app/[locale]/partner/_components/PartnerHero.tsx
+@@ -0,0 +1,67 @@
++"use client";
++
++import { motion } from "framer-motion";
++import { ChevronDown } from "lucide-react";
++
++export function PartnerHero() {
++  return (
++    <section className="relative flex min-h-[90vh] flex-col items-center justify-center px-4 py-20 text-center">
++      {/* Atmospheric glow */}
++      <div className="pointer-events-none absolute inset-0 overflow-hidden">
++        <div className="absolute left-1/2 top-1/3 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-emerald-500/[0.07] blur-[120px]" />
++        <div className="absolute right-1/4 bottom-1/4 h-[400px] w-[400px] rounded-full bg-emerald-600/[0.04] blur-[100px]" />
++      </div>
++
++      <motion.div
++        initial={{ opacity: 0, y: 24 }}
++        animate={{ opacity: 1, y: 0 }}
++        transition={{ duration: 0.8, ease: "easeOut" }}
++        className="relative z-10 max-w-3xl"
++      >
++        <p className="mb-4 text-xs font-bold uppercase tracking-[0.25em] text-emerald-400 sm:text-sm">
++          Genezisi Partner Program
++        </p>
++
++        <h1 className="text-3xl font-bold leading-tight tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
++          Your network is your most valuable asset.
++          <br />
++          <span className="text-emerald-400">You just haven&apos;t monetized it yet.</span>
++        </h1>
++
++        <motion.p
++          initial={{ opacity: 0 }}
++          animate={{ opacity: 1 }}
++          transition={{ delay: 0.4, duration: 0.6 }}
++          className="mt-6 text-lg text-slate-400 sm:text-xl"
++        >
++          Genezisi is accepting a limited number of Sales Partners in Georgia.
++        </motion.p>
++
++        <motion.div
++          initial={{ opacity: 0 }}
++          animate={{ opacity: 1 }}
++          transition={{ delay: 0.7, duration: 0.5 }}
++          className="mt-8 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-5 py-2 text-sm font-semibold text-emerald-300"
++        >
++          <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
++          Limited openings — 5 positions
++        </motion.div>
++      </motion.div>
++
++      {/* Scroll cue */}
++      <motion.div
++        initial={{ opacity: 0 }}
++        animate={{ opacity: 1 }}
++        transition={{ delay: 1.2, duration: 0.5 }}
++        className="absolute bottom-8 left-1/2 -translate-x-1/2"
++      >
++        <motion.div
++          animate={{ y: [0, 8, 0] }}
++          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
++        >
++          <ChevronDown className="h-6 w-6 text-slate-500" />
++        </motion.div>
++      </motion.div>
++    </section>
++  );
++}
+diff --git a/src/app/[locale]/partner/_components/PartnerOwnCard.tsx b/src/app/[locale]/partner/_components/PartnerOwnCard.tsx
+new file mode 100644
+index 0000000..f3c79b9
+--- /dev/null
++++ b/src/app/[locale]/partner/_components/PartnerOwnCard.tsx
+@@ -0,0 +1,64 @@
++"use client";
++
++import { motion } from "framer-motion";
++import { CreditCard, Award } from "lucide-react";
++
++export function PartnerOwnCard() {
++  return (
++    <section className="px-4 py-20 sm:py-28">
++      <div className="mx-auto max-w-4xl">
++        <motion.div
++          initial={{ opacity: 0, y: 16 }}
++          whileInView={{ opacity: 1, y: 0 }}
++          viewport={{ once: true, margin: "-100px" }}
++          transition={{ duration: 0.5 }}
++          className="rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/[0.06] to-transparent p-6 sm:p-10"
++        >
++          <div className="flex flex-col items-center gap-8 lg:flex-row lg:items-start lg:gap-10">
++            {/* Card mockup */}
++            <div className="shrink-0">
++              <div className="relative h-56 w-36 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 border border-emerald-500/30 shadow-xl shadow-emerald-500/10 p-4 flex flex-col items-center justify-center text-center">
++                <div className="h-12 w-12 rounded-full bg-emerald-500/30 border-2 border-emerald-400/50 mb-3 flex items-center justify-center text-emerald-300 font-bold text-sm">
++                  GP
++                </div>
++                <div className="h-2 w-16 rounded bg-white/30 mb-1.5" />
++                <div className="h-1.5 w-12 rounded bg-white/15 mb-1" />
++                <div className="h-1.5 w-20 rounded bg-white/10" />
++                <p className="mt-3 text-[8px] uppercase tracking-[0.2em] text-emerald-400/60 font-bold">
++                  Genezisi Partner
++                </p>
++              </div>
++              {/* Glow under card */}
++              <div className="mx-auto mt-2 h-4 w-24 rounded-full bg-emerald-500/20 blur-md" />
++            </div>
++
++            {/* Text */}
++            <div>
++              <div className="mb-4 flex items-center gap-2">
++                <CreditCard className="h-5 w-5 text-emerald-400" />
++                <h3 className="text-xl font-bold text-white sm:text-2xl">
++                  Your card is your demo.
++                </h3>
++              </div>
++
++              <p className="text-base text-slate-300 leading-relaxed mb-4">
++                Every Genezisi Partner receives their own digital business card. When you share your card,
++                you&apos;re not just giving your contact info — you&apos;re <span className="text-emerald-300 font-semibold">showing the product in action</span>.
++                Every WhatsApp message, every meeting, every introduction becomes a live demo.
++              </p>
++
++              <div className="flex items-start gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
++                <Award className="mt-0.5 h-5 w-5 shrink-0 text-emerald-400" />
++                <p className="text-sm text-slate-300 leading-relaxed">
++                  Partners who perform at a high level over time may earn a{" "}
++                  <span className="text-emerald-300 font-semibold">custom landing page</span> —
++                  a dedicated online presence that positions them as a premium digital consultant.
++                </p>
++              </div>
++            </div>
++          </div>
++        </motion.div>
++      </div>
++    </section>
++  );
++}
+diff --git a/src/app/[locale]/partner/_components/PartnerPageClient.tsx b/src/app/[locale]/partner/_components/PartnerPageClient.tsx
+new file mode 100644
+index 0000000..f3e9544
+--- /dev/null
++++ b/src/app/[locale]/partner/_components/PartnerPageClient.tsx
+@@ -0,0 +1,37 @@
++"use client";
++
++import { PartnerHero } from "./PartnerHero";
++import { PartnerProducts } from "./PartnerProducts";
++import { PartnerShield } from "./PartnerShield";
++import { PartnerEarnings } from "./PartnerEarnings";
++import { PartnerCompetitiveEdge } from "./PartnerCompetitiveEdge";
++import { PartnerDayInLife } from "./PartnerDayInLife";
++import { PartnerSplit } from "./PartnerSplit";
++import { PartnerOwnCard } from "./PartnerOwnCard";
++import { PartnerQuestionnaire } from "./PartnerQuestionnaire";
++import { PartnerProfile } from "./PartnerProfile";
++import { PartnerTrust } from "./PartnerTrust";
++import { PartnerApplication } from "./PartnerApplication";
++
++interface PartnerPageClientProps {
++  locale: string;
++}
++
++export function PartnerPageClient({ locale }: PartnerPageClientProps) {
++  return (
++    <div className="flex flex-col">
++      <PartnerHero />
++      <PartnerProducts />
++      <PartnerShield />
++      <PartnerEarnings />
++      <PartnerCompetitiveEdge />
++      <PartnerDayInLife />
++      <PartnerSplit />
++      <PartnerOwnCard />
++      <PartnerQuestionnaire />
++      <PartnerProfile />
++      <PartnerTrust />
++      <PartnerApplication />
++    </div>
++  );
++}
+diff --git a/src/app/[locale]/partner/_components/PartnerProducts.tsx b/src/app/[locale]/partner/_components/PartnerProducts.tsx
+new file mode 100644
+index 0000000..f5c87f3
+--- /dev/null
++++ b/src/app/[locale]/partner/_components/PartnerProducts.tsx
+@@ -0,0 +1,145 @@
++"use client";
++
++import { motion } from "framer-motion";
++import { CreditCard, Monitor } from "lucide-react";
++
++const CARD_TIERS = [
++  { name: "Subdomain", price: 150 },
++  { name: "Professional", price: 250 },
++  { name: "Executive", price: 350 },
++];
++
++const STUDIO_TIERS = [
++  { name: "Professional", price: 999 },
++  { name: "Command Center", price: 1999 },
++  { name: "E-Commerce HQ", price: 3999, plus: true },
++];
++
++export function PartnerProducts() {
++  return (
++    <section className="px-4 py-20 sm:py-28">
++      <div className="mx-auto max-w-6xl">
++        <motion.div
++          initial={{ opacity: 0, y: 16 }}
++          whileInView={{ opacity: 1, y: 0 }}
++          viewport={{ once: true, margin: "-100px" }}
++          transition={{ duration: 0.5 }}
++          className="mb-14 text-center"
++        >
++          <p className="mb-2 text-xs font-bold uppercase tracking-[0.25em] text-emerald-400">
++            What You&apos;ll Be Selling
++          </p>
++          <h2 className="text-2xl font-bold text-white sm:text-4xl">
++            Two products. One partnership.
++          </h2>
++        </motion.div>
++
++        <div className="grid gap-8 lg:grid-cols-2">
++          {/* Digital Card */}
++          <motion.div
++            initial={{ opacity: 0, x: -20 }}
++            whileInView={{ opacity: 1, x: 0 }}
++            viewport={{ once: true, margin: "-100px" }}
++            transition={{ duration: 0.5 }}
++            className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 sm:p-8 backdrop-blur-sm"
++          >
++            <div className="mb-6 flex items-center gap-3">
++              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400">
++                <CreditCard className="h-5 w-5" />
++              </div>
++              <div>
++                <h3 className="text-lg font-bold text-white">The Digital Business Card</h3>
++                <p className="text-sm text-slate-400">Premium. Instant. Shareable.</p>
++              </div>
++            </div>
++
++            {/* Card preview placeholder */}
++            <div className="mb-6 flex items-center justify-center rounded-xl border border-white/[0.06] bg-black/40 p-8">
++              <div className="h-48 w-28 rounded-xl bg-gradient-to-br from-emerald-900/40 to-slate-900/60 border border-emerald-500/20 shadow-lg shadow-emerald-500/10 flex items-center justify-center">
++                <div className="text-center">
++                  <div className="mx-auto mb-2 h-10 w-10 rounded-full bg-emerald-500/30 border border-emerald-500/40" />
++                  <div className="h-2 w-14 mx-auto rounded bg-white/20 mb-1" />
++                  <div className="h-1.5 w-10 mx-auto rounded bg-white/10" />
++                </div>
++              </div>
++            </div>
++
++            <p className="mb-5 text-sm text-slate-300 leading-relaxed">
++              A premium digital card that replaces paper, lives on a link, and costs less than a month of Facebook ads.
++            </p>
++
++            <div className="space-y-2">
++              {CARD_TIERS.map((tier) => (
++                <div key={tier.name} className="flex items-center justify-between rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-2.5">
++                  <span className="text-sm font-medium text-slate-300">{tier.name}</span>
++                  <span className="text-sm font-bold text-emerald-400">{tier.price}₾</span>
++                </div>
++              ))}
++            </div>
++
++            <p className="mt-4 text-xs font-semibold text-emerald-300/80">
++              A 10-minute sell. They see it, they want it.
++            </p>
++          </motion.div>
++
++          {/* Studio */}
++          <motion.div
++            initial={{ opacity: 0, x: 20 }}
++            whileInView={{ opacity: 1, x: 0 }}
++            viewport={{ once: true, margin: "-100px" }}
++            transition={{ duration: 0.5 }}
++            className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 sm:p-8 backdrop-blur-sm"
++          >
++            <div className="mb-6 flex items-center gap-3">
++              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400">
++                <Monitor className="h-5 w-5" />
++              </div>
++              <div>
++                <h3 className="text-lg font-bold text-white">The Studio</h3>
++                <p className="text-sm text-slate-400">Custom Online Headquarters</p>
++              </div>
++            </div>
++
++            {/* Studio preview placeholder */}
++            <div className="mb-6 flex items-center justify-center rounded-xl border border-white/[0.06] bg-black/40 p-6">
++              <div className="w-full max-w-xs rounded-lg border border-white/[0.08] bg-slate-900/60 overflow-hidden">
++                <div className="h-3 bg-slate-800/80 flex items-center px-2 gap-1">
++                  <div className="h-1 w-1 rounded-full bg-red-400/60" />
++                  <div className="h-1 w-1 rounded-full bg-yellow-400/60" />
++                  <div className="h-1 w-1 rounded-full bg-green-400/60" />
++                </div>
++                <div className="p-3 space-y-2">
++                  <div className="h-3 w-3/4 rounded bg-emerald-500/20" />
++                  <div className="h-2 w-full rounded bg-white/[0.06]" />
++                  <div className="h-2 w-5/6 rounded bg-white/[0.04]" />
++                  <div className="mt-3 grid grid-cols-3 gap-1.5">
++                    <div className="h-6 rounded bg-white/[0.04]" />
++                    <div className="h-6 rounded bg-white/[0.04]" />
++                    <div className="h-6 rounded bg-white/[0.04]" />
++                  </div>
++                </div>
++              </div>
++            </div>
++
++            <p className="mb-5 text-sm text-slate-300 leading-relaxed">
++              A full bespoke website — payments, bookings, CMS — built from scratch for businesses that have outgrown social media.
++            </p>
++
++            <div className="space-y-2">
++              {STUDIO_TIERS.map((tier) => (
++                <div key={tier.name} className="flex items-center justify-between rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-2.5">
++                  <span className="text-sm font-medium text-slate-300">{tier.name}</span>
++                  <span className="text-sm font-bold text-emerald-400">{tier.price.toLocaleString()}₾{tier.plus ? "+" : ""}</span>
++                </div>
++              ))}
++            </div>
++
++            <p className="mt-4 text-xs font-semibold text-emerald-300/80">
++              High-ticket. You qualify the client, we build everything.
++            </p>
++          </motion.div>
++        </div>
++      </div>
++    </section>
++  );
++}
+diff --git a/src/app/[locale]/partner/_components/PartnerProfile.tsx b/src/app/[locale]/partner/_components/PartnerProfile.tsx
+new file mode 100644
+index 0000000..4aa73b3
+--- /dev/null
++++ b/src/app/[locale]/partner/_components/PartnerProfile.tsx
+@@ -0,0 +1,93 @@
++"use client";
++
++import { motion } from "framer-motion";
++import { UserCheck, Globe2, Flame, MessageCircle, TrendingUp, Phone } from "lucide-react";
++
++const REQUIREMENTS = [
++  {
++    icon: Globe2,
++    text: "Are Georgian, fluent in English — you are the bridge between Georgian businesses and our English-language build process",
++  },
++  {
++    icon: UserCheck,
++    text: "Have a professional network in Georgia OR are willing to build one from scratch",
++  },
++  {
++    icon: Flame,
++    text: "Are motivated, driven, and willing to hustle — cold-call, visit stores, attend events, be creative",
++  },
++  {
++    icon: MessageCircle,
++    text: "Communicate with confidence and take pride in presenting premium products",
++  },
++  {
++    icon: TrendingUp,
++    text: "Want to build long-term recurring income, not quick one-off commissions",
++  },
++  {
++    icon: Phone,
++    text: "Are comfortable selling face-to-face and over the phone",
++  },
++];
++
++export function PartnerProfile() {
++  return (
++    <section className="px-4 py-20 sm:py-28">
++      <div className="mx-auto max-w-3xl">
++        <motion.div
++          initial={{ opacity: 0, y: 16 }}
++          whileInView={{ opacity: 1, y: 0 }}
++          viewport={{ once: true, margin: "-100px" }}
++          transition={{ duration: 0.5 }}
++          className="mb-10 text-center"
++        >
++          <p className="mb-2 text-xs font-bold uppercase tracking-[0.25em] text-emerald-400">
++            Who We&apos;re Looking For
++          </p>
++          <h2 className="text-2xl font-bold text-white sm:text-4xl">
++            This is not for everyone.
++          </h2>
++          <p className="mt-3 text-lg text-slate-400">
++            We deliberately keep our Partner network small.
++          </p>
++        </motion.div>
++
++        <div className="space-y-4">
++          {REQUIREMENTS.map((req, idx) => {
++            const Icon = req.icon;
++            return (
++              <motion.div
++                key={idx}
++                initial={{ opacity: 0, x: -12 }}
++                whileInView={{ opacity: 1, x: 0 }}
++                viewport={{ once: true }}
++                transition={{ duration: 0.3, delay: idx * 0.07 }}
++                className="flex gap-4 rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 sm:p-5"
++              >
++                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-400">
++                  <Icon className="h-4 w-4" />
++                </div>
++                <p className="text-sm text-slate-300 leading-relaxed pt-1">{req.text}</p>
++              </motion.div>
++            );
++          })}
++        </div>
++
++        <motion.div
++          initial={{ opacity: 0 }}
++          whileInView={{ opacity: 1 }}
++          viewport={{ once: true }}
++          transition={{ duration: 0.4, delay: 0.4 }}
++          className="mt-8 rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.04] p-6 text-center"
++        >
++          <p className="text-sm text-slate-300 leading-relaxed sm:text-base">
++            If you&apos;re selected, you&apos;ll receive a{" "}
++            <span className="text-emerald-300 font-semibold">complete onboarding kit</span> —
++            product guide, full price sheet, questionnaire template, and our direct support.
++            We invest in you because you invest in us.
++          </p>
++        </motion.div>
++      </div>
++    </section>
++  );
++}
+diff --git a/src/app/[locale]/partner/_components/PartnerQuestionnaire.tsx b/src/app/[locale]/partner/_components/PartnerQuestionnaire.tsx
+new file mode 100644
+index 0000000..942886c
+--- /dev/null
++++ b/src/app/[locale]/partner/_components/PartnerQuestionnaire.tsx
+@@ -0,0 +1,83 @@
++"use client";
++
++import { motion } from "framer-motion";
++import {
++  User,
++  Layout,
++  Image,
++  Briefcase,
++  Globe,
++  Settings,
++  Puzzle,
++} from "lucide-react";
++
++const SECTIONS = [
++  { icon: User, title: "Who they are", desc: "Name, company, industry, target audience" },
++  { icon: Layout, title: "What they want", desc: "Card or Studio? Which tier? Sites they admire? Specific features?" },
++  { icon: Image, title: "Their content", desc: "Photos, logo, existing copy. Do they need professional copywriting?" },
++  { icon: Briefcase, title: "Their business details", desc: "Services, testimonials, team, gallery, awards" },
++  { icon: Globe, title: "Language", desc: "English or Georgian included. Additional language: 150₾ + translation" },
++  { icon: Settings, title: "Technical needs", desc: "Payments? Booking? Multi-language? Custom domain?" },
++  { icon: Puzzle, title: "Add-ons", desc: "Any additional modules from the Genezisi catalog (Studio clients only)" },
++];
++
++export function PartnerQuestionnaire() {
++  return (
++    <section className="px-4 py-20 sm:py-28">
++      <div className="mx-auto max-w-4xl">
++        <motion.div
++          initial={{ opacity: 0, y: 16 }}
++          whileInView={{ opacity: 1, y: 0 }}
++          viewport={{ once: true, margin: "-100px" }}
++          transition={{ duration: 0.5 }}
++          className="mb-10 text-center"
++        >
++          <p className="mb-2 text-xs font-bold uppercase tracking-[0.25em] text-emerald-400">
++            Your Selling System
++          </p>
++          <h2 className="text-2xl font-bold text-white sm:text-4xl">
++            You&apos;re not guessing. You have a system.
++          </h2>
++          <p className="mx-auto mt-4 max-w-xl text-base text-slate-400">
++            When a client is interested, you walk them through our structured intake.
++            It captures everything we need to build — no back-and-forth, no missing information.
++          </p>
++        </motion.div>
++
++        <div className="grid gap-3 sm:grid-cols-2">
++          {SECTIONS.map((section, idx) => {
++            const Icon = section.icon;
++            return (
++              <motion.div
++                key={section.title}
++                initial={{ opacity: 0, y: 12 }}
++                whileInView={{ opacity: 1, y: 0 }}
++                viewport={{ once: true }}
++                transition={{ duration: 0.3, delay: idx * 0.06 }}
++                className="flex gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-4"
++              >
++                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-400">
++                  <Icon className="h-4 w-4" />
++                </div>
++                <div>
++                  <p className="text-sm font-semibold text-white">{section.title}</p>
++                  <p className="text-xs text-slate-400 leading-relaxed mt-0.5">{section.desc}</p>
++                </div>
++              </motion.div>
++            );
++          })}
++        </div>
++
++        <motion.p
++          initial={{ opacity: 0 }}
++          whileInView={{ opacity: 1 }}
++          viewport={{ once: true }}
++          transition={{ duration: 0.4, delay: 0.3 }}
++          className="mt-6 text-center text-sm text-emerald-300 font-semibold"
++        >
++          Fill in the fields, submit the Work Order in English, we build. Simple.
++        </motion.p>
++      </div>
++    </section>
++  );
++}
+diff --git a/src/app/[locale]/partner/_components/PartnerShield.tsx b/src/app/[locale]/partner/_components/PartnerShield.tsx
+new file mode 100644
+index 0000000..685fb86
+--- /dev/null
++++ b/src/app/[locale]/partner/_components/PartnerShield.tsx
+@@ -0,0 +1,99 @@
++"use client";
++
++import { motion } from "framer-motion";
++import { SHIELD_TIERS } from "@/constants/pricing";
++import { Shield, Check } from "lucide-react";
++
++export function PartnerShield() {
++  return (
++    <section className="px-4 py-20 sm:py-28">
++      <div className="mx-auto max-w-6xl">
++        <motion.div
++          initial={{ opacity: 0, y: 16 }}
++          whileInView={{ opacity: 1, y: 0 }}
++          viewport={{ once: true, margin: "-100px" }}
++          transition={{ duration: 0.5 }}
++          className="mb-10 text-center"
++        >
++          <p className="mb-2 text-xs font-bold uppercase tracking-[0.25em] text-emerald-400">
++            Where Passive Income Begins
++          </p>
++          <h2 className="text-2xl font-bold text-white sm:text-4xl">
++            The Sovereign Shield
++          </h2>
++          <p className="mx-auto mt-4 max-w-2xl text-base text-slate-400 leading-relaxed sm:text-lg">
++            Every website needs a Shield to stay online, secure, and fast. Shields renew yearly.
++            As a Partner, you earn <span className="text-emerald-300 font-semibold">30% on every renewal</span> —
++            for as long as your client stays with Genezisi.
++          </p>
++        </motion.div>
++
++        {/* Shield tier cards */}
++        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
++          {SHIELD_TIERS.map((tier, idx) => (
++            <motion.div
++              key={tier.id}
++              initial={{ opacity: 0, y: 20 }}
++              whileInView={{ opacity: 1, y: 0 }}
++              viewport={{ once: true, margin: "-50px" }}
++              transition={{ duration: 0.4, delay: idx * 0.1 }}
++              className={`relative flex flex-col rounded-2xl border p-5 ${
++                tier.isRecommended
++                  ? "border-emerald-500/40 bg-emerald-500/[0.06] shadow-[0_0_30px_rgba(16,185,129,0.08)]"
++                  : "border-white/[0.08] bg-white/[0.03]"
++              }`}
++            >
++              {tier.isRecommended && (
++                <span className="absolute -top-2.5 left-4 rounded-full bg-emerald-400 px-2.5 py-0.5 text-[10px] font-black text-black uppercase tracking-wider">
++                  Recommended
++                </span>
++              )}
++
++              <div className="mb-3 flex items-center gap-2">
++                <Shield className={`h-4 w-4 ${tier.isRecommended ? "text-emerald-400" : "text-slate-500"}`} />
++                <h3 className="text-sm font-bold text-white">{tier.name}</h3>
++              </div>
++
++              <p className="mb-3 text-xl font-bold text-emerald-400">
++                {tier.priceGEL.toLocaleString()}₾<span className="text-xs font-normal text-slate-500">/yr</span>
++              </p>
++
++              <p className="mb-3 text-xs text-slate-400 leading-relaxed">{tier.description}</p>
++
++              <div className="mt-auto space-y-1.5">
++                {tier.perks.slice(0, 3).map((perk, i) => (
++                  <div key={i} className="flex items-start gap-1.5">
++                    <Check className="mt-0.5 h-3 w-3 shrink-0 text-emerald-400" />
++                    <span className="text-[11px] text-slate-300 leading-snug">{perk.title}</span>
++                  </div>
++                ))}
++                {tier.perks.length > 3 && (
++                  <p className="text-[10px] text-slate-500 pl-4">+{tier.perks.length - 3} more features</p>
++                )}
++              </div>
++            </motion.div>
++          ))}
++        </div>
++
++        {/* Compounding message */}
++        <motion.div
++          initial={{ opacity: 0 }}
++          whileInView={{ opacity: 1 }}
++          viewport={{ once: true }}
++          transition={{ duration: 0.5, delay: 0.4 }}
++          className="mt-10 rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.04] p-6 sm:p-8"
++        >
++          <p className="text-sm text-slate-300 leading-relaxed sm:text-base">
++            The better you serve your clients, the more they grow. Growing businesses{" "}
++            <span className="text-emerald-300 font-semibold">upgrade their Shield</span>. Every upgrade increases your
++            recurring income — without selling anything new.
++          </p>
++          <p className="mt-3 text-sm text-slate-300 leading-relaxed sm:text-base">
++            When a client upgrades their website, adds features, or expands their platform — you earn{" "}
++            <span className="text-emerald-300 font-semibold">30% on every new investment</span>. Your relationship compounds.
++          </p>
++        </motion.div>
++      </div>
++    </section>
++  );
++}
+diff --git a/src/app/[locale]/partner/_components/PartnerSplit.tsx b/src/app/[locale]/partner/_components/PartnerSplit.tsx
+new file mode 100644
+index 0000000..20556e6
+--- /dev/null
++++ b/src/app/[locale]/partner/_components/PartnerSplit.tsx
+@@ -0,0 +1,109 @@
++"use client";
++
++import { motion } from "framer-motion";
++import { User, Wrench } from "lucide-react";
++
++const PARTNER_TASKS = [
++  "Find clients through your network and communication skills",
++  "Be their trusted point of contact — in person, in Georgian, English, or Russian",
++  "Walk them through our structured questionnaire to capture exactly what they need",
++  "Collect their assets (photos, logos, text, examples of sites they like)",
++  "Ask us anything technical — consult us, then relay the answer to your client",
++  "Over time, you'll learn the product deeply and answer more questions yourself",
++  "Keep them happy, informed, and subscribed — because your recurring income depends on it",
++];
++
++const GENESIS_TASKS = [
++  "Builds everything from scratch (no templates)",
++  "Hosts, secures, and maintains every site",
++  "Handles all technical issues — you never touch code",
++  "Pushes updates and improvements",
++  "Provides you with every tool, document, and answer you need to sell confidently",
++];
++
++export function PartnerSplit() {
++  return (
++    <section className="px-4 py-20 sm:py-28">
++      <div className="mx-auto max-w-6xl">
++        <motion.div
++          initial={{ opacity: 0, y: 16 }}
++          whileInView={{ opacity: 1, y: 0 }}
++          viewport={{ once: true, margin: "-100px" }}
++          transition={{ duration: 0.5 }}
++          className="mb-12 text-center"
++        >
++          <p className="mb-2 text-xs font-bold uppercase tracking-[0.25em] text-emerald-400">
++            Clear Boundaries
++          </p>
++          <h2 className="text-2xl font-bold text-white sm:text-4xl">
++            You own the relationship. We build the product.
++          </h2>
++        </motion.div>
++
++        <div className="grid gap-6 lg:grid-cols-2">
++          {/* Partner column */}
++          <motion.div
++            initial={{ opacity: 0, x: -16 }}
++            whileInView={{ opacity: 1, x: 0 }}
++            viewport={{ once: true }}
++            transition={{ duration: 0.4 }}
++            className="rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.04] p-6 sm:p-8"
++          >
++            <div className="mb-5 flex items-center gap-3">
++              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400">
++                <User className="h-5 w-5" />
++              </div>
++              <h3 className="text-lg font-bold text-white">You — The Partner</h3>
++            </div>
++
++            <ul className="space-y-3">
++              {PARTNER_TASKS.map((task, i) => (
++                <li key={i} className="flex items-start gap-2">
++                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
++                  <span className="text-sm text-slate-300 leading-relaxed">{task}</span>
++                </li>
++              ))}
++            </ul>
++          </motion.div>
++
++          {/* Genezisi column */}
++          <motion.div
++            initial={{ opacity: 0, x: 16 }}
++            whileInView={{ opacity: 1, x: 0 }}
++            viewport={{ once: true }}
++            transition={{ duration: 0.4 }}
++            className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 sm:p-8"
++          >
++            <div className="mb-5 flex items-center gap-3">
++              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.08] text-slate-300">
++                <Wrench className="h-5 w-5" />
++              </div>
++              <h3 className="text-lg font-bold text-white">Genezisi — The Builder</h3>
++            </div>
++
++            <ul className="space-y-3">
++              {GENESIS_TASKS.map((task, i) => (
++                <li key={i} className="flex items-start gap-2">
++                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-slate-500" />
++                  <span className="text-sm text-slate-300 leading-relaxed">{task}</span>
++                </li>
++              ))}
++            </ul>
++          </motion.div>
++        </div>
++
++        {/* Bottom statement */}
++        <motion.p
++          initial={{ opacity: 0 }}
++          whileInView={{ opacity: 1 }}
++          viewport={{ once: true }}
++          transition={{ duration: 0.5, delay: 0.3 }}
++          className="mt-8 text-center text-sm text-slate-400 leading-relaxed max-w-2xl mx-auto sm:text-base"
++        >
++          The client owns their business — and if they ever choose to leave, they take their code with them.
++          We want partners who keep clients because the service is exceptional, not because they&apos;re locked in.
++        </motion.p>
++      </div>
++    </section>
++  );
++}
+diff --git a/src/app/[locale]/partner/_components/PartnerTrust.tsx b/src/app/[locale]/partner/_components/PartnerTrust.tsx
+new file mode 100644
+index 0000000..d64bba1
+--- /dev/null
++++ b/src/app/[locale]/partner/_components/PartnerTrust.tsx
+@@ -0,0 +1,76 @@
++"use client";
++
++import { motion } from "framer-motion";
++import { ShieldCheck } from "lucide-react";
++
++const RULES = [
++  {
++    label: "30% commission on everything",
++    detail: "Setup fees, add-ons, upgrades, and Shield renewals",
++  },
++  {
++    label: "Commission is paid after the client accepts the build",
++    detail: "Simple, fair, no risk of refund issues",
++  },
++  {
++    label: "A client always stays with the same Partner",
++    detail: "No reassignment unless the partner leaves or is terminated",
++  },
++  {
++    label: "Every client has a direct line to Genezisi",
++    detail: "If a partner is unresponsive, the client contacts us directly",
++  },
++  {
++    label: "Smooth transitions",
++    detail: "If a partner leaves, clients are personally transitioned to a new partner — no client is ever left without support",
++  },
++  {
++    label: "Genezisi reserves the right to terminate partners",
++    detail: "Who misrepresent the product or damage client relationships",
++  },
++];
++
++export function PartnerTrust() {
++  return (
++    <section className="px-4 py-20 sm:py-28">
++      <div className="mx-auto max-w-3xl">
++        <motion.div
++          initial={{ opacity: 0, y: 16 }}
++          whileInView={{ opacity: 1, y: 0 }}
++          viewport={{ once: true, margin: "-100px" }}
++          transition={{ duration: 0.5 }}
++          className="mb-10 text-center"
++        >
++          <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400">
++            <ShieldCheck className="h-5 w-5" />
++          </div>
++          <h2 className="text-2xl font-bold text-white sm:text-4xl">
++            How it works, clearly.
++          </h2>
++          <p className="mt-3 text-base text-slate-400">
++            No fine print. No surprises. Just honest rules.
++          </p>
++        </motion.div>
++
++        <div className="space-y-3">
++          {RULES.map((rule, idx) => (
++            <motion.div
++              key={idx}
++              initial={{ opacity: 0, y: 8 }}
++              whileInView={{ opacity: 1, y: 0 }}
++              viewport={{ once: true }}
++              transition={{ duration: 0.3, delay: idx * 0.06 }}
++              className="flex items-start gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-4"
++            >
++              <span className="mt-0.5 h-2 w-2 shrink-0 rounded-full bg-emerald-400" />
++              <div>
++                <p className="text-sm font-semibold text-white">{rule.label}</p>
++                <p className="text-xs text-slate-400 mt-0.5">{rule.detail}</p>
++              </div>
++            </motion.div>
++          ))}
++        </div>
++      </div>
++    </section>
++  );
++}
+diff --git a/src/app/[locale]/partner/layout.tsx b/src/app/[locale]/partner/layout.tsx
+new file mode 100644
+index 0000000..9c3c2d4
+--- /dev/null
++++ b/src/app/[locale]/partner/layout.tsx
+@@ -0,0 +1,29 @@
++import type { Metadata } from "next";
++
++const PARTNER_TITLE = "Become a Genezisi Partner | Sales Partner Program in Georgia";
++const PARTNER_DESCRIPTION =
++  "Join a limited group of Georgian sales partners earning 30% commission and recurring income by connecting local businesses with premium digital solutions.";
++
++export async function generateMetadata(): Promise<Metadata> {
++  return {
++    title: PARTNER_TITLE,
++    description: PARTNER_DESCRIPTION,
++    openGraph: {
++      title: PARTNER_TITLE,
++      description: PARTNER_DESCRIPTION,
++    },
++    twitter: {
++      card: "summary_large_image",
++      title: PARTNER_TITLE,
++      description: PARTNER_DESCRIPTION,
++    },
++  };
++}
++
++export default function PartnerLayout({
++  children,
++}: {
++  children: React.ReactNode;
++}) {
++  return <>{children}</>;
++}
+diff --git a/src/app/[locale]/partner/page.tsx b/src/app/[locale]/partner/page.tsx
+new file mode 100644
+index 0000000..80c6a9d
+--- /dev/null
++++ b/src/app/[locale]/partner/page.tsx
+@@ -0,0 +1,32 @@
++import { Navbar } from "../_components/Navbar";
++import { GlobalFooter } from "../_components/GlobalFooter";
++import { NanoBananaBackground } from "../_components/NanoBananaBackground";
++import type { Locale } from "@/lib/i18n";
++import { PartnerPageClient } from "./_components/PartnerPageClient";
++
++function normalizeLocale(locale: string | undefined): Locale {
++  if (locale && (locale === "en" || locale === "ka")) return locale;
++  return "en";
++}
++
++export default async function PartnerPage({
++  params,
++}: {
++  params: Promise<{ locale: string }>;
++}) {
++  const { locale } = await params;
++  const lang = normalizeLocale(locale);
++
++  return (
++    <>
++      <Navbar locale={lang} />
++      <main className="relative min-h-screen overflow-hidden bg-[#050505] text-slate-100 selection:bg-emerald-500/30">
++        <NanoBananaBackground />
++        <div className="relative z-10">
++          <PartnerPageClient locale={lang} />
++        </div>
++      </main>
++      <GlobalFooter locale={lang} />
++    </>
++  );
++}
+diff --git a/src/app/[locale]/start/lib/digital-card-product.ts b/src/app/[locale]/start/lib/digital-card-product.ts
+old mode 100644
+new mode 100755
+index a11f79c..715dbb5
+--- a/src/app/[locale]/start/lib/digital-card-product.ts
++++ b/src/app/[locale]/start/lib/digital-card-product.ts
+@@ -6,9 +6,9 @@ export type DigitalCardTierId = "subdomain" | "professional" | "executive";
+ export const DIGITAL_CARD_ORDER_SCHEMA_VERSION = 6 as const;
+ 
+ export const DIGITAL_CARD_HOSTING_ANNUAL_GEL: Record<DigitalCardTierId, number> = {
+-  subdomain: 50,
+-  professional: 50,
+-  executive: 120,
++  subdomain: 150,
++  professional: 150,
++  executive: 200,
+ };
+ 
+ export const DIGITAL_CARD_TIER_SETUP_GEL: Record<DigitalCardTierId, number> = {
+diff --git a/src/app/[locale]/start/lib/lane1-pricing.ts b/src/app/[locale]/start/lib/lane1-pricing.ts
+old mode 100644
+new mode 100755
+index bf9448a..73c46fc
+--- a/src/app/[locale]/start/lib/lane1-pricing.ts
++++ b/src/app/[locale]/start/lib/lane1-pricing.ts
+@@ -10,7 +10,7 @@ export const ADDON_EXTRA_LANG_PRO_GEL = 150;
+ export const ADDON_GOOGLE_MAP_GEL = 0;
+ 
+ // RENEWAL COPY note: This is now context-dependent; 
+-// defaulting to subdomain (50) for generic copy references.
++// defaulting to subdomain hosting value for generic copy references.
+ export const LANE1_RENEWAL_COPY_GEL = DIGITAL_CARD_HOSTING_ANNUAL_GEL.subdomain;
+ 
+ /** @deprecated Use tier setup fees; kept to avoid breaking unknown imports. */
+diff --git a/src/app/api/partner-applications/route.ts b/src/app/api/partner-applications/route.ts
+new file mode 100644
+index 0000000..c614f14
+--- /dev/null
++++ b/src/app/api/partner-applications/route.ts
+@@ -0,0 +1,61 @@
++import { NextResponse } from "next/server";
++import { z } from "zod";
++import { turso } from "@/lib/db";
++
++const partnerApplicationSchema = z.object({
++  fullName: z.string().min(1).max(200),
++  phone: z.string().min(1).max(48),
++  email: z.string().min(1).max(320).email(),
++  networkSectors: z.array(z.string().max(100)).max(20),
++  experience: z.string().max(5000).optional().default(""),
++  whyGenezisi: z.string().min(1).max(5000),
++  clientPlan: z.string().min(1).max(5000),
++  resumeLink: z.string().max(500).optional().default(""),
++  referralSource: z.string().max(200).optional().default(""),
++});
++
++export async function POST(request: Request) {
++  try {
++    const body = await request.json();
++    const parsed = partnerApplicationSchema.safeParse(body);
++
++    if (!parsed.success) {
++      return NextResponse.json(
++        { error: "Invalid input.", details: parsed.error.issues },
++        { status: 400 }
++      );
++    }
++
++    const d = parsed.data;
++    const id = `pa-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
++    const now = Date.now();
++
++    await turso.execute({
++      sql: `INSERT INTO partner_applications
++        (id, full_name, phone, email, network_sectors, experience, why_genezisi, client_plan, resume_link, referral_source, status, created_at)
++        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
++      args: [
++        id,
++        d.fullName,
++        d.phone,
++        d.email,
++        JSON.stringify(d.networkSectors),
++        d.experience,
++        d.whyGenezisi,
++        d.clientPlan,
++        d.resumeLink,
++        d.referralSource,
++        "pending",
++        now,
++      ],
++    });
++
++    return NextResponse.json({ success: true, id }, { status: 201 });
++  } catch (error: any) {
++    console.error("Partner application error:", error);
++    return NextResponse.json(
++      { error: "An unexpected error occurred." },
++      { status: 500 }
++    );
++  }
++}
+diff --git a/src/constants/pricing/shields.ts b/src/constants/pricing/shields.ts
+old mode 100644
+new mode 100755
+index 3f8feba..16f2ecc
+--- a/src/constants/pricing/shields.ts
++++ b/src/constants/pricing/shields.ts
+@@ -5,7 +5,7 @@ export const SHIELD_TIERS: ShieldTier[] = [
+   {
+     id: 0,
+     name: 'Reputation Scout',
+-    priceGEL: 120,
++    priceGEL: 300,
+     level: 'Basic',
+     risk: 'High',
+     perks: [
+@@ -19,7 +19,7 @@ export const SHIELD_TIERS: ShieldTier[] = [
+   {
+     id: 1,
+     name: 'Micro Shield',
+-    priceGEL: 500,
++    priceGEL: 600,
+     level: 'Proactive',
+     risk: 'Medium',
+     isRecommended: true,
+diff --git a/src/constants/start-digital-card-copy.ts b/src/constants/start-digital-card-copy.ts
+old mode 100644
+new mode 100755
+index 365a6aa..f30af60
+--- a/src/constants/start-digital-card-copy.ts
++++ b/src/constants/start-digital-card-copy.ts
+@@ -12,7 +12,7 @@ export const START_DC_BRAND = "GENEZISI";
+ export const START_DC_WELCOME = {
+   headline: "Your Elite Digital Business Card",
+   subtitle: "Premium design. Zero friction. Stand out from your peers.",
+-  priceLine: "From 150₾ setup + 50₾/yr hosting",
++  priceLine: "From 150₾ setup + 150₾/yr hosting",
+   stepDesignTitle: "DESIGN",
+   stepDesignBody: "Live-edit your card on this page",
+   stepOrderTitle: "ORDER",
+@@ -31,7 +31,7 @@ export const START_DC_WELCOME = {
+ 
+ export const START_DC_PRICING = {
+   title: "Choose Your Plan",
+-  hostingNote: "Hosting includes security, speed & updates · 50₾/year (Subdomain/Pro) or 120₾/year (VIP)",
++  hostingNote: "Hosting includes security, speed & updates · 150₾/year (Subdomain/Pro) or 200₾/year (VIP)",
+   back: "← Back",
+   setupLabel: "setup",
+   subdomainBadge: "Most affordable",
+-- 
+2.47.3
+

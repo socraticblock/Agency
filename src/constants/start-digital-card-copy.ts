@@ -12,7 +12,7 @@ export const START_DC_BRAND = "GENEZISI";
 export const START_DC_WELCOME = {
   headline: "Your Elite Digital Business Card",
   subtitle: "Premium design. Zero friction. Stand out from your peers.",
-  priceLine: "From 150₾ setup + 50₾/yr hosting",
+  priceLine: "From 150₾ setup + 150₾/yr hosting",
   stepDesignTitle: "DESIGN",
   stepDesignBody: "Live-edit your card on this page",
   stepOrderTitle: "ORDER",
@@ -31,7 +31,7 @@ export const START_DC_WELCOME = {
 
 export const START_DC_PRICING = {
   title: "Choose Your Plan",
-  hostingNote: "Hosting includes security, speed & updates · 50₾/year (Subdomain/Pro) or 120₾/year (VIP)",
+  hostingNote: "Hosting includes security, speed & updates · 150₾/year (Subdomain/Pro) or 200₾/year (VIP)",
   back: "← Back",
   setupLabel: "setup",
   subdomainBadge: "Most affordable",
