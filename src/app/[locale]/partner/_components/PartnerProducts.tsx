@@ -34,6 +34,13 @@ export function PartnerProducts() {
           </h2>
         </motion.div>
 
+        {/* 30% Commission Callout */}
+        <div className="mb-8 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-6 py-4 text-center">
+          <p className="text-lg font-bold text-emerald-300">
+            You earn 30% on every sale — setup, Shield renewals, upgrades, and add-ons.
+          </p>
+        </div>
+
         <div className="grid gap-8 lg:grid-cols-2">
           {/* Digital Card */}
           <motion.div

@@ -19,7 +19,7 @@ export function PartnerCompetitiveEdge() {
           </div>
 
           <h2 className="text-xl font-bold text-white sm:text-3xl">
-            Your price is your advantage.
+            Our price is your advantage
           </h2>
 
           <div className="mt-6 space-y-4 text-base text-slate-300 leading-relaxed sm:text-lg">

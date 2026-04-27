@@ -88,25 +88,61 @@ export function PartnerEarnings() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.3 }}
-              className="grid gap-4 sm:grid-cols-3"
+              className="space-y-8"
             >
-              {SCENARIOS.map((s, idx) => (
-                <motion.div
-                  key={s.label}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: idx * 0.1 }}
-                  className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 text-center backdrop-blur-sm"
-                >
-                  <p className="text-xs font-bold uppercase tracking-wider text-emerald-400">
-                    {s.label}
+              <div className="grid gap-4 sm:grid-cols-3">
+                {SCENARIOS.map((s, idx) => (
+                  <motion.div
+                    key={s.label}
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: idx * 0.1 }}
+                    className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 text-center backdrop-blur-sm"
+                  >
+                    <p className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+                      {s.label}
+                    </p>
+                    <p className="mt-3 text-3xl font-bold text-white sm:text-4xl">{s.year1}</p>
+                    <p className="mt-1 text-xs text-slate-500">Year 1</p>
+                    <p className="mt-4 text-xs leading-relaxed text-slate-400">{s.desc}</p>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Studio Sale Example */}
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.45 }}
+              >
+                <div className="mx-auto mt-8 max-w-2xl overflow-hidden rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.04] p-8 text-center backdrop-blur-sm">
+                  <h3 className="text-xl font-bold text-slate-100">
+                    Example: One Studio sale
+                  </h3>
+                  <div className="mt-6 grid gap-4 sm:grid-cols-3">
+                    <div className="rounded-xl border border-white/5 bg-white/[0.02] p-5">
+                      <p className="text-xs text-slate-500">Command Center</p>
+                      <p className="text-2xl font-bold text-slate-200">1,999₾</p>
+                      <p className="text-xs text-slate-500">Client pays</p>
+                    </div>
+                    <div className="rounded-xl border border-white/5 bg-white/[0.02] p-5">
+                      <p className="text-xs text-slate-500">Your commission</p>
+                      <p className="text-2xl font-bold text-emerald-400">600₾</p>
+                      <p className="text-xs text-slate-500">30% of setup</p>
+                    </div>
+                    <div className="rounded-xl border border-white/5 bg-white/[0.02] p-5">
+                      <p className="text-xs text-slate-500">Yearly Shield</p>
+                      <p className="text-2xl font-bold text-emerald-400">180₾</p>
+                      <p className="text-xs text-slate-500">30% of Micro Shield (600₾)</p>
+                    </div>
+                  </div>
+                  <p className="mt-4 text-sm text-slate-300">
+                    One Command Center client = 780₾ in Year 1, then 180₾ recurring every year.
                   </p>
-                  <p className="mt-3 text-3xl font-bold text-white sm:text-4xl">{s.year1}</p>
-                  <p className="text-xs text-slate-500 mt-1">Year 1</p>
-                  <p className="mt-4 text-xs text-slate-400 leading-relaxed">{s.desc}</p>
-                </motion.div>
-              ))}
+                </div>
+              </motion.div>
             </motion.div>
           ) : (
             <motion.div

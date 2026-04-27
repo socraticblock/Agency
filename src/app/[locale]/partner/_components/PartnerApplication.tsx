@@ -101,7 +101,7 @@ export function PartnerApplication() {
           className="mb-10 text-center"
         >
           <p className="mb-2 text-xs font-bold uppercase tracking-[0.25em] text-emerald-400">
-            Apply Now
+            Explore This Opportunity
           </p>
           <h2 className="text-2xl font-bold text-white sm:text-4xl">
             Become a Genezisi Partner

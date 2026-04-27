@@ -83,7 +83,7 @@ export function PartnerShield() {
           transition={{ duration: 0.5, delay: 0.4 }}
           className="mt-10 rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.04] p-6 sm:p-8"
         >
-          <p className="text-sm text-slate-300 leading-relaxed sm:text-base">
+          <p className="text-sm text-slate-200 leading-relaxed sm:text-base">
             The better you serve your clients, the more they grow. Growing businesses{" "}
             <span className="text-emerald-300 font-semibold">upgrade their Shield</span>. Every upgrade increases your
             recurring income — without selling anything new.

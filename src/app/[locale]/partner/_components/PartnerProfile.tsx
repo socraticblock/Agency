@@ -80,7 +80,7 @@ export function PartnerProfile() {
           transition={{ duration: 0.4, delay: 0.4 }}
           className="mt-8 rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.04] p-6 text-center"
         >
-          <p className="text-sm text-slate-300 leading-relaxed sm:text-base">
+          <p className="text-sm text-slate-200 leading-relaxed sm:text-base">
             If you&apos;re selected, you&apos;ll receive a{" "}
             <span className="text-emerald-300 font-semibold">complete onboarding kit</span> —
             product guide, full price sheet, questionnaire template, and our direct support.

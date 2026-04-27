@@ -33,7 +33,7 @@ export function PartnerDayInLife() {
             Not Abstract. Real.
           </p>
           <h2 className="text-2xl font-bold text-white sm:text-4xl">
-            A Tuesday in March
+            A Tuesday in May
           </h2>
         </motion.div>
 
