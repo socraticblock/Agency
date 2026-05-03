@@ -62,6 +62,7 @@
 - **064** — Order pipeline: `publish_slug` / `requested_domain` / `domain_status` + `card_domains`; tier rules in `order-publish-intent.ts`; admin auth on publish; review dialog blocks on failed save; custom-domain middleware rewrite
 - **065** — Professional domain optional at checkout (advisory); `AdminOrdersRunbook` on admin orders; copy updated
 - **066** — Admin auth: HttpOnly signed session cookie (`ADMIN_PASSWORD` secret); `/api/admin/login|logout|session`; orders/publish APIs use `verifyAdminRequest()`; removed `NEXT_PUBLIC_ADMIN_PASSWORD`
+- **067** — Pricing tier deck cards restructured into buyer-first sections (promise, best-for, deliverables, timeline/warranty, good-to-know)
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -381,6 +382,11 @@
 - **Context:** `NEXT_PUBLIC_ADMIN_PASSWORD` embedded the admin secret in the client bundle; header-based checks duplicated that risk.
 - **Decision:** Server-only `ADMIN_PASSWORD`; HMAC-signed payload in HttpOnly cookie (`admin-auth.ts`); `POST /api/admin/login` sets cookie, `POST /api/admin/logout` clears, `GET /api/admin/session` bootstraps UI; `verifyAdminRequest()` guards `GET /api/orders`, `GET/PATCH /api/orders/[id]`, `POST /api/cards/[slug]/publish`; admin page uses `credentials: "include"` and `useAdminOrdersAuth` (no public env var).
 - **Impact:** Password never ships to browsers; ops must set `ADMIN_PASSWORD` on Vercel and sign in once per browser session.
+
+### 067
+- **Context:** Pricing cards on `/pricing` were feature-heavy and harder to scan quickly; product direction required a consistent buyer-friendly card anatomy.
+- **Decision:** Updated `PricingTierDeck` to use per-tier copy blocks with explicit sections in fixed order: promise, `Best for`, `You get` deliverables, `Timeline` + `Warranty`, and `Good to know`, while preserving existing package buttons and “Most Popular” emphasis.
+- **Impact:** Package comparison is clearer in 5-second scans on desktop/mobile; cards now front-load decision-critical context instead of dense mixed bullet phrasing.
 
 ## Architecture Decisions
 - Zero backend for card features
