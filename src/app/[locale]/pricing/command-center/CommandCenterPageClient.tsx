@@ -54,8 +54,8 @@ export function CommandCenterPageClient() {
           />
           <FeatureCard 
             icon={<Zap className="h-6 w-6 text-emerald-400" />}
-            title="Multi-Language (EN/GE)"
-            body="Georgian and English versions included. Technical setup, language routing, and indexation included in the base price."
+            title="Multi-Language (EN/GE) — Add-on"
+            body="One language is included in Command Center. Georgian/English bilingual setup is available as a paid add-on."
           />
           <FeatureCard 
             icon={<Handshake className="h-6 w-6 text-emerald-400" />}

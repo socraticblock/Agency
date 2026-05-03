@@ -63,7 +63,7 @@ export const FOUNDATIONS: Foundation[] = [
     scope: [
       "4 Pages | Home + About + Contact + 1 of your choice (Blog, Services, Portfolio, etc.)",
       "CMS Dashboard | You publish updates, change prices, add photos — no developer needed",
-      "Multi-Language (EN/GE) | Support for Georgian and English included in base",
+      "Multi-Language (EN/GE) | Georgian/English bilingual setup is available as an add-on (one language included in base)",
       "Basic Analytics | Google Analytics 4 included — see who visits and what they click",
       "Priority Support | Faster response times than Professional",
       "75-Day Warranty | Full coverage on any bugs or breakages",

@@ -86,7 +86,7 @@ export function getComparisonData(_locale: Locale): ComparisonRow[] {
     },
     {
       label: "Multi-Language",
-      values: ["Add-on", "✓", "Add-on"],
+      values: ["Add-on", "Add-on", "Add-on"],
     },
     {
       label: "Priority Support",
