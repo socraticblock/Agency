@@ -20,6 +20,8 @@ export function QrOnCardSegment({
   isResponsive: boolean;
   useSecondary: boolean;
 }) {
+  const [open, setOpen] = useState(false);
+
   if (!state.showQrOnCard || !qrDataUrl) return null;
 
   const radius =
@@ -29,7 +31,6 @@ export function QrOnCardSegment({
         ? "rounded-3xl"
         : "rounded-none";
   const bg = state.qrBackgroundColor?.trim() || "#ffffff";
-  const [open, setOpen] = useState(false);
   const isDropdown = state.qrDisplayMode === "dropdown";
   const btnStyleId = state.style.buttonStyleId;
   const primary = lane1CtaPrimarySurface(btnStyleId);

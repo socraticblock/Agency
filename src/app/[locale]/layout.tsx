@@ -11,7 +11,7 @@ export const viewport: Viewport = {
 
 const SITE_NAME = "Genezisi";
 const SITE_DESCRIPTION =
-  "Escape the social media trap. We build a permanent, high-speed digital home for your brand that sells 24/7.";
+  "Premium website design and development in Tbilisi, Georgia for local businesses that want to look serious online and book more customers.";
 
 function normalizeLocale(locale: string | undefined): Locale {
   if (locale && (locale === "en" || locale === "ka")) return locale;
@@ -30,9 +30,16 @@ export async function generateMetadata({
     description: SITE_DESCRIPTION,
     locale: lang,
     path: "/",
-    jobTitle: "Luxury Branding",
+    jobTitle: "Premium Website Design",
     accentColor: "#10b981",
     theme: "dark",
+    ogTagline: "Premium websites for businesses that want to look serious online.",
+    ogSubline:
+      "Founder-led website design and development for coaches, clinics, studios, restaurants, shops, and local services.",
+    ogServices: "Website design, development, booking, payments, SEO",
+    ogCta: "Book a website call",
+    ogAlt:
+      "Genezisi premium website design and development for Georgian businesses",
   });
   
   return {

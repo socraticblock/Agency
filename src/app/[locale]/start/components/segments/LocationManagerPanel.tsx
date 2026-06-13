@@ -28,14 +28,13 @@ export function LocationManagerPanel({
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement | null>(null);
   const shouldGlow = usePillOnboardingGlow("location", open);
-  if (!editable) return null;
 
   const order = state.mobileButtonOrder?.length
     ? state.mobileButtonOrder
     : (["map-preview", "get-directions"] as MobileButtonId[]);
 
   useEffect(() => {
-    if (!open) return;
+    if (!editable || !open) return;
     const handleOutsidePointerDown = (e: PointerEvent) => {
       const target = e.target as Node | null;
       if (!target) return;
@@ -44,7 +43,7 @@ export function LocationManagerPanel({
     };
     window.addEventListener("pointerdown", handleOutsidePointerDown);
     return () => window.removeEventListener("pointerdown", handleOutsidePointerDown);
-  }, [open]);
+  }, [editable, open]);
 
   const move = (id: MobileButtonId, dir: -1 | 1) => {
     const idx = order.indexOf(id);
@@ -52,6 +51,8 @@ export function LocationManagerPanel({
     if (idx === -1 || nextIdx < 0 || nextIdx >= order.length) return;
     patch({ mobileButtonOrder: swapOrder(order, id, order[nextIdx]) });
   };
+
+  if (!editable) return null;
 
   return (
     <div ref={rootRef} className="business-card-template-print-skip relative z-[120] flex justify-end px-4 pb-2 font-sans">

@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
     }
 
     const data = await response.json();
-    let rawReply =
+    const rawReply =
       data.choices?.[0]?.message?.content ??
       "I'm having trouble responding right now. Please try again or contact us on WhatsApp.";
 

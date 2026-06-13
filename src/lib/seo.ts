@@ -64,7 +64,7 @@ export function createLocalBusinessSeo(options: LocalBusinessOptions): SeoResult
     ogTier,
     ogPrice,
     ogFeatures,
-  ogCta,
+    ogCta,
     ogCategory,
     ogReadTime,
     ogTagline,
@@ -108,13 +108,13 @@ export function createLocalBusinessSeo(options: LocalBusinessOptions): SeoResult
   let finalAlt = ogAlt;
   if (!finalAlt) {
     if (ogType === "home") {
-      finalAlt = `${name} — Professional Digital Foundations in Tbilisi`;
+      finalAlt = `${name} - Professional Digital Foundations in Tbilisi`;
     } else if (ogType === "pricing") {
-      finalAlt = `${name} — ${ogTier || "Professional"} Pricing Packages`;
+      finalAlt = `${name} - ${ogTier || "Professional"} Pricing Packages`;
     } else if (ogType === "blog") {
-      finalAlt = `${name} Blog — Insights on ${ogCategory || "Web Design"}`;
+      finalAlt = `${name} Blog - Insights on ${ogCategory || "Web Design"}`;
     } else if (ogType === "card") {
-      finalAlt = `${name} — ${jobTitle}`;
+      finalAlt = `${name} - ${jobTitle}`;
     } else {
       finalAlt = `${name} - ${jobTitle}`;
     }

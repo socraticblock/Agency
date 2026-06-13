@@ -14,8 +14,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const localized = [
     { path: "", priority: 1 },
+    { path: "/websites", priority: 0.9 },
+    { path: "/booking-websites", priority: 0.85 },
+    { path: "/service-websites", priority: 0.85 },
+    { path: "/online-stores", priority: 0.85 },
+    { path: "/work", priority: 0.85 },
     { path: "/apply", priority: 0.9 },
     { path: "/pricing", priority: 0.95 },
+    { path: "/pricing/professional", priority: 0.85 },
+    { path: "/pricing/command-center", priority: 0.85 },
+    { path: "/pricing/e-commerce", priority: 0.85 },
 
     { path: "/stop-renting", priority: 0.85 },
     { path: "/start", priority: 0.9 },

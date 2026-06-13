@@ -1,11 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { SHIELD_TIERS } from "@/constants/pricing";
 
 interface FaqItem {
   q: string;
   a: string;
 }
+
+const shieldSummary = SHIELD_TIERS.map(
+  (tier) => `${tier.name} (${tier.priceGEL.toLocaleString("ka-GE")} GEL/yr)`
+).join(", ");
 
 const FAQ: FaqItem[] = [
   {
@@ -18,7 +23,7 @@ const FAQ: FaqItem[] = [
   },
   {
     q: "What is a Shield plan?",
-    a: "Shields are yearly support and maintenance plans. They include bug fixes, security patches, content updates, uptime monitoring, and performance optimization. There are four tiers: Guardian (120 ₾/yr), Sentinel (500 ₾/yr), Fortress (1,500 ₾/yr), and Citadel (3,000 ₾/yr).",
+    a: `Shields are yearly support and maintenance plans. They include monitoring, backups, security patching, performance optimization, and priority support depending on tier. Current tiers are ${shieldSummary}.`,
   },
   {
     q: "How does the warranty work?",

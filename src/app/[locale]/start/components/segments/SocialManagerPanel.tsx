@@ -39,12 +39,11 @@ export function SocialManagerPanel({
   const rootRef = useRef<HTMLDivElement | null>(null);
   const savingDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const savedToIdleRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  if (!editable) return null;
 
   const orderedActive = state.socialPlatformOrder.filter((id) => state.activeSocialPlatforms.includes(id));
 
   useEffect(() => {
-    if (!open) return;
+    if (!editable || !open) return;
     const handleOutsidePointerDown = (e: PointerEvent) => {
       const target = e.target as Node | null;
       if (!target) return;
@@ -53,7 +52,7 @@ export function SocialManagerPanel({
     };
     window.addEventListener("pointerdown", handleOutsidePointerDown);
     return () => window.removeEventListener("pointerdown", handleOutsidePointerDown);
-  }, [open]);
+  }, [editable, open]);
 
   useEffect(() => {
     return () => {
@@ -111,6 +110,7 @@ export function SocialManagerPanel({
     runPatchedUpdate({ socialPlatformOrder: nextOrder }, changed);
   };
 
+  if (!editable) return null;
 
   return (
     <div ref={rootRef} className="business-card-template-print-skip relative z-[120] flex justify-end px-4 pb-2 font-sans">

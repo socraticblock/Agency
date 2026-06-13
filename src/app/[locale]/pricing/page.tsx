@@ -19,11 +19,18 @@ export async function generateMetadata({
   const { locale } = await params;
   const lang = normalizeLocale(locale);
   const { metadata } = createLocalBusinessSeo({
-    name: "Genezisi — Pricing",
+    name: "Genezisi Pricing",
     description:
       "Transparent website and e-commerce packages in GEL for Georgian businesses. Full ownership, clear delivery windows, local payment integrations.",
     locale: lang,
     path: "/pricing",
+    ogType: "pricing",
+    ogTier: "Professional, Command Center, and E-Commerce HQ",
+    ogPrice: "from 999 GEL",
+    ogFeatures: "Full ownership, clear timelines, local payment integrations",
+    ogCta: "Discuss your package",
+    ogAlt:
+      "Genezisi pricing packages for Georgian business websites and e-commerce",
   });
   return metadata;
 }

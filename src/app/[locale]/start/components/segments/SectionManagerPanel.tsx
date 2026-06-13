@@ -48,14 +48,13 @@ export function SectionManagerPanel({ editable, state, patch, onStructureChange,
   const rootRef = useRef<HTMLDivElement | null>(null);
   const savingDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const savedToIdleRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  if (!editable) return null;
 
   const orderedActive = state.sectionOrder.filter((id) => state.activeSections.includes(id));
   const orderedInactive = state.sectionOrder.filter((id) => !state.activeSections.includes(id));
   const orderedVisibleRows = [...orderedActive, ...orderedInactive];
 
   useEffect(() => {
-    if (!open) return;
+    if (!editable || !open) return;
     const handleOutsidePointerDown = (e: PointerEvent) => {
       const target = e.target as Node | null;
       if (!target) return;
@@ -66,7 +65,7 @@ export function SectionManagerPanel({ editable, state, patch, onStructureChange,
     return () => {
       window.removeEventListener("pointerdown", handleOutsidePointerDown);
     };
-  }, [open]);
+  }, [editable, open]);
 
   useEffect(() => {
     return () => {
@@ -149,6 +148,8 @@ export function SectionManagerPanel({ editable, state, patch, onStructureChange,
       runPatchedUpdate({ awardCount: nextCount }, nextCount !== state.awardCount, id);
     }
   };
+
+  if (!editable) return null;
 
   return (
     <div ref={rootRef} className="business-card-template-print-skip relative z-[120] flex justify-end px-4 pb-2 font-sans">

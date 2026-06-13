@@ -123,7 +123,7 @@ export function KineticHero({ locale }: { locale: Locale }) {
           const video = document.getElementById('hero-video') as HTMLVideoElement;
           if (!video) return;
           const hlsUrl = "https://stream.mux.com/01yW6GoUz01OTXk5w1Rt1MHkJWlCGIwj46SUONJZ4DJUE.m3u8";
-          // @ts-ignore
+          // @ts-expect-error hls.js is loaded onto window by the CDN script.
           const Hls = window.Hls;
           if (Hls && Hls.isSupported()) {
             const hls = new Hls();
