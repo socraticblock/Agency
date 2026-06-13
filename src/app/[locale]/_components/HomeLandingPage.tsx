@@ -289,6 +289,7 @@ function WorkMockup({
                 src={item.url}
                 title={`${item.title} live website preview`}
                 loading="lazy"
+                scrolling="no"
                 tabIndex={-1}
                 className="pointer-events-none absolute left-0 top-0 h-[150%] w-[150%] origin-top-left scale-[0.667] border-0 bg-white"
               />
