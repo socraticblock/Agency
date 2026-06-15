@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Minus, Plus } from "lucide-react";
 import { SHIELD_TIERS } from "@/constants/pricing";
 
 interface FaqItem {
@@ -9,17 +10,17 @@ interface FaqItem {
 }
 
 const shieldSummary = SHIELD_TIERS.map(
-  (tier) => `${tier.name} (${tier.priceGEL.toLocaleString("ka-GE")} GEL/yr)`
+  (tier) => `${tier.name} (${tier.priceGEL.toLocaleString("ka-GE")} GEL/yr)`,
 ).join(", ");
 
 const FAQ: FaqItem[] = [
   {
     q: "What's the difference between Professional, Command Center, and E-Commerce HQ?",
-    a: "Professional is a fully custom landing page — one powerful page with 4 sections, optimized for conversions. Command Center adds multi-page structure (Home + About + Contact + 1 more), a dashboard, CMS, multi-language support, and priority support. E-Commerce HQ is a complete online store with payment processing, inventory management, and Georgian bank integrations.",
+    a: "Professional is a fully custom landing page: one focused page with 4 sections, optimized for conversions. Command Center adds multi-page structure, a CMS-ready foundation, multi-language support, and priority support. E-Commerce HQ is a complete online store with payment processing, inventory management, and Georgian bank integrations.",
   },
   {
     q: "What does 'starting from' mean for E-Commerce HQ?",
-    a: "E-Commerce HQ starts at 3,999 ₾ for a 5-page online store with full payment and inventory capabilities. The final price depends on the number of products, custom integrations, and additional modules you choose.",
+    a: "E-Commerce HQ starts at 3,999 GEL for a 5-page online store with full payment and inventory capabilities. The final price depends on the number of products, custom integrations, and additional modules you choose.",
   },
   {
     q: "What is a Shield plan?",
@@ -35,7 +36,7 @@ const FAQ: FaqItem[] = [
   },
   {
     q: "What payment methods do you accept?",
-    a: "We accept bank transfer (GEL), card payment, and PayPal for international clients. Payment terms are discussed during the consultation on WhatsApp.",
+    a: "We accept bank transfer in GEL, card payment, and PayPal for international clients. Payment terms are discussed during the consultation on WhatsApp.",
   },
   {
     q: "How long does delivery take?",
@@ -43,7 +44,7 @@ const FAQ: FaqItem[] = [
   },
   {
     q: "Do you offer payment plans?",
-    a: "We keep pricing simple — one-time payment per project. For larger projects like E-Commerce HQ, we can discuss milestones during the WhatsApp consultation.",
+    a: "We keep pricing simple with one-time payment per project. For larger projects like E-Commerce HQ, we can discuss milestones during the WhatsApp consultation.",
   },
 ];
 
@@ -56,23 +57,32 @@ export function PricingFaq() {
         Frequently Asked Questions
       </h2>
       <div className="flex flex-col gap-2">
-        {FAQ.map((item, i) => (
-          <div
-            key={i}
-            className="rounded-xl border border-white/10 bg-white/[0.02] transition"
-          >
-            <button
-              onClick={() => setOpen(open === i ? null : i)}
-              className="flex w-full items-center justify-between px-5 py-4 text-left"
+        {FAQ.map((item, i) => {
+          const isOpen = open === i;
+          return (
+            <div
+              key={item.q}
+              className="rounded-xl border border-white/10 bg-white/[0.02] transition"
             >
-              <span className="text-sm font-bold text-white">{item.q}</span>
-              <span className="text-lg text-slate-400">{open === i ? "−" : "+"}</span>
-            </button>
-            {open === i && (
-              <div className="px-5 pb-4 text-sm text-slate-300">{item.a}</div>
-            )}
-          </div>
-        ))}
+              <button
+                type="button"
+                aria-expanded={isOpen}
+                onClick={() => setOpen(isOpen ? null : i)}
+                className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
+              >
+                <span className="text-sm font-bold text-white">{item.q}</span>
+                {isOpen ? (
+                  <Minus className="h-4 w-4 shrink-0 text-slate-400" />
+                ) : (
+                  <Plus className="h-4 w-4 shrink-0 text-slate-400" />
+                )}
+              </button>
+              {isOpen && (
+                <div className="px-5 pb-4 text-sm leading-6 text-slate-300">{item.a}</div>
+              )}
+            </div>
+          );
+        })}
       </div>
     </section>
   );
