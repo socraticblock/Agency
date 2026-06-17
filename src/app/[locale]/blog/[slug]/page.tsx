@@ -216,7 +216,7 @@ export default async function BlogArticlePage({
           {/* Bottom CTA band */}
           <div className="mt-16 flex flex-col items-center gap-4 border-t border-white/[0.06] pt-10 text-center">
             <p className="text-lg font-semibold text-white">
-              Ready to build your digital presence?
+              Ready to build a serious website?
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3">
               <Link
@@ -237,7 +237,7 @@ export default async function BlogArticlePage({
                 rel="noopener noreferrer"
                 className="rounded-full border border-white/10 bg-white/[0.03] px-5 py-2 text-sm font-bold text-slate-300 transition-all hover:bg-white/[0.06]"
               >
-                WhatsApp Us
+                WhatsApp me
               </a>
             </div>
           </div>

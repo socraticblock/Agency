@@ -117,7 +117,7 @@ const articles: BlogArticle[] = [
         blocks: [
           {
             type: "paragraph",
-            text: "A full online store with product pages, shopping cart, checkout, and payment integration. For Georgian businesses ready to sell online — especially relevant given the 35-40% year-over-year growth in Georgian e-commerce.",
+            text: "A full online store with product pages, shopping cart, checkout, and payment integration. For Georgian businesses ready to sell online, the goal is simple: make products easy to understand, buy, and manage.",
           },
           {
             type: "comparisonTable",
