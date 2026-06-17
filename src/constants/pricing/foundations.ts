@@ -6,7 +6,7 @@ export const FOUNDATIONS: Foundation[] = [
     name: 'Professional',
     emoji: '⭐',
     tagline: 'Custom-designed conversion machine',
-    isRecommendedTier: true,
+    isRecommendedTier: false,
     strategyLabel: "THE INDEPENDENCE PRINCIPLE",
     category: 'Base',
     priceGEL: 999,
@@ -47,6 +47,7 @@ export const FOUNDATIONS: Foundation[] = [
     name: "Command Center",
     emoji: '🚀',
     tagline: 'Your professional headquarters',
+    isRecommendedTier: true,
     category: 'Base',
     priceGEL: 1999,
     deliveryTimeline: '10-15 business days',
@@ -87,9 +88,9 @@ export const FOUNDATIONS: Foundation[] = [
     audienceLabel: 'Perfect for: Product-based businesses ready to scale online',
     revisionRounds: 4,
     warrantyDays: 100,
-    ctaLabel: 'Build My E-Commerce Empire',
+    ctaLabel: 'Build My E-Commerce Store',
     ctaHref: 'https://wa.me/995579723564?text=' + encodeURIComponent('Hi Genezisi! I\'m interested in the E-Commerce HQ package (starting 3,999 ₾). Can we discuss next steps?'),
-    description: "Full online store with native Georgian payment integration (TBC/BOG), automated tax reporting to RS.ge, and inventory management. Built to sell while you sleep.",
+    description: "Full online store with Georgian payment integration options, inventory management, and order operations. Built to help customers buy clearly and confidently.",
     concept: "E-commerce infrastructure designed for Georgian payment and tax realities.",
     strategy: "Compliance, conversion, and operational reliability form the core of this storefront architecture.",
     howItWorks: 'Custom storefront + payment rails + fulfillment and order operations.',
@@ -104,7 +105,7 @@ export const FOUNDATIONS: Foundation[] = [
       "4 Revision Rounds | ₾150/hour after"
     ],
     bestFor: ["Boutique Owners wanting a premium home", "Wine & Jewelry Makers (Global/Local)", "Artisans looking to automate back-office flow"],
-    roiNote: "Automates overheads to scale sales flawlessly.",
+    roiNote: "Automates overheads to scale sales cleanly.",
     recommendedModules: ['bank-integration', 'rs-ge-sync', 'sms-hub', 'recurring-bill', 'extra-page', 'multi-filter'],
   },
   {
@@ -114,35 +115,35 @@ export const FOUNDATIONS: Foundation[] = [
     priceGEL: 0,
     customPriceLabel: "Project-Based Pricing",
     isBespoke: true,
-    description: 'Keep the "House" (your design), but replace the "Plumbing and Electricity" (the code). We make your current site safe, fast, and legal.',
-    concept: 'If your site was built before 2025, it\'s a business liability. We don\'t guess, and we don\'t "patch" old problems. We perform a deep-cycle technical audit to find the "rot" in your current code and provide a fixed-price roadmap to make your site fast, safe, and 2026-compliant.',
-    strategy: 'Old code is a liability. 96% of successful hacks target outdated infrastructure, and a site that takes 3+ seconds to load is losing 40% of its potential sales. We treat your digital presence like real estate—we renovate the core systems to ensure your asset is protected and profitable.',
+    description: 'Keep the current design direction, but replace the weak technical foundation. I audit your current site, identify what is slow, unsafe, outdated, or hard to maintain, then give you a fixed-price roadmap.',
+    concept: 'Older websites can become business liabilities: slow load times, outdated dependencies, weak consent flows, and hard-to-maintain code. The upgrade starts with a clear diagnosis before any rebuild work begins.',
+    strategy: 'Fix the business risk first: performance, security, data handling, and maintainability. The goal is a safer, faster, easier-to-own website without unnecessary redesign work.',
     scope: [
-      "Doctor's Diagnosis | A deep-cycle forensics report uncovering exactly where your old code is leaking data or revenue.",
-      "Surgery Roadmap | A transparent, itemized menu of fixes so you see the ROI before we touch a single line of code."
+      "Diagnosis | A technical review of your current website, hosting, dependencies, forms, analytics, SEO basics, and conversion path.",
+      "Roadmap | A transparent, itemized fix plan so you understand the priority, cost, and business reason before work begins."
     ],
-    howItWorks: 'The Reality Check: Most websites built before 2025 are "Digital Liabilities." They are slow, vulnerable to 2026 bot attacks, and legally non-compliant with the latest data laws. We don\'t just "tinker"—we perform a surgical replacement. You keep your design, but we swap the "Brain" for our high-performance Sentinel engine, instantly turning a risk into a fortress.',
-    bestFor: ["Frustrated WordPress/Wix owners tired of slow dashboards", "Established Businesses with sites built before 2025", "Brands that like their current look but hate their current performance", "Companies needing to meet new GITA or Legal compliance standards"],
-    lawyerRole: 'Professional legal audit in cooperation with a licensed attorney performing compliance audits on existing data handling, legally certifying protection against Georgian Fine anchors.',
-    roiNote: "Eliminates legal risk and fixes revenue leakage.",
+    howItWorks: 'I review the current setup, document the risks and quick wins, then propose the smallest rebuild or repair plan that will make the site fast, stable, and credible again.',
+    bestFor: ["WordPress/Wix owners tired of slow dashboards", "Established businesses with old websites", "Brands that like their current look but need better performance", "Companies that need cleaner privacy, consent, or data-handling flows"],
+    lawyerRole: 'If legal compliance questions are involved, the technical audit can be paired with a licensed professional for the legal review.',
+    roiNote: "Reduces technical risk and fixes revenue leakage.",
     strategicBacking: [
       {
-        title: '🛡️ Security Obsolescence (The "Open Door" Effect)',
-        fact: '96% of successful website breaches in 2025 targeted sites with outdated third-party dependencies (plugins, themes, or PHP versions).',
-        reality: 'If your site was built more than 18 months ago, its defendse were designed to fight 2023-era bots. 2026 automated AI brute-force attacks find "Zero-Day" vulnerabilities fast.',
-        cost: 'Professional malware recovery starts at 1,350 GEL, plus crippling Google ranking blacklist recovery time overheads.'
+        title: 'Security & Maintenance Risk',
+        fact: 'Outdated plugins, themes, dependencies, and hosting setups are common sources of website incidents.',
+        reality: 'If your site is hard to update or built on old tooling, it may become expensive to maintain and easier to break.',
+        cost: 'A focused rebuild can be cheaper than repeated emergency fixes, malware cleanup, and lost customer trust.'
       },
       {
-        title: '⚖️ Regulatory Drift (The "Legal Trap")',
-        fact: 'Georgia\'s Personal Data Protection Law (2024) updated requirements for user consent, data encryption, and "The Right to be Forgotten."',
-        reality: 'Most legacy sites (especially Wix/WP) use "Standard" cookie banners that do NOT meet strict 2026 active consent requirements.',
-        cost: 'Non-compliance carries administrative fines of up to 20,000 GEL. Your site isn\'t just slow; it\'s a legal time bomb.'
+        title: 'Data & Consent Risk',
+        fact: 'Modern websites should clearly explain what data they collect and how forms, analytics, cookies, and integrations are handled.',
+        reality: 'Many older sites have unclear consent flows, unreviewed plugins, and forms that send data through tools the owner no longer understands.',
+        cost: 'A clean audit reduces uncertainty and gives you a practical path to safer data handling.'
       },
       {
-        title: '📉 Revenue Leakage (The "0.1s Rule")',
-        fact: 'Google\'s Core Web Vitals are now the absolute primary organic ranking criteria.',
-        reality: 'Legacy themes are often bloated with "Dead CSS" and unoptimized JS anchors bloating paint workloads.',
-        cost: 'For every 0.1s delay stat loses 8.4% conversion revenue. Losing standard 10,000 GEL setups "burns" 800 GEL monthly workloads sets.'
+        title: 'Performance & Conversion Risk',
+        fact: 'Slow pages and confusing layouts reduce trust and make paid traffic less efficient.',
+        reality: 'Old themes often carry unused scripts, heavy images, and layout choices that make the site feel dated on mobile.',
+        cost: 'Improving speed, clarity, and calls-to-action can make the same traffic more valuable.'
       }
     ],
     recommendedModules: ['compliance-audit', 'seo-audit', 'cro-audit', 'api-opt', 'ga4-analytics', 'heatmap'],
