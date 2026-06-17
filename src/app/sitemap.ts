@@ -10,7 +10,6 @@ function siteBase(): string {
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const root = siteBase();
-  const now = new Date();
 
   const localized = [
     { path: "", priority: 1 },
@@ -24,13 +23,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/pricing/professional", priority: 0.85 },
     { path: "/pricing/command-center", priority: 0.85 },
     { path: "/pricing/e-commerce", priority: 0.85 },
-
     { path: "/stop-renting", priority: 0.85 },
     { path: "/start", priority: 0.9 },
-    { path: "/enterprise", priority: 0.4 },
   ].map(({ path, priority }) => ({
     url: `${root}/${defaultLocale}${path}`,
-    lastModified: now,
     changeFrequency: "weekly" as const,
     priority,
   }));
@@ -38,7 +34,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const global = ["/onboarding", "/onboarding-brief", "/success"].map(
     (path, i) => ({
       url: `${root}${path}`,
-      lastModified: now,
       changeFrequency: "monthly" as const,
       priority: 0.5 - i * 0.05,
     })
