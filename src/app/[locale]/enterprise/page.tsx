@@ -25,7 +25,13 @@ export async function generateMetadata({
     locale: lang,
     path: "/enterprise",
   });
-  return metadata;
+  return {
+    ...metadata,
+    robots: {
+      index: false,
+      follow: false,
+    },
+  };
 }
 
 export default async function EnterprisePlaceholderPage({
