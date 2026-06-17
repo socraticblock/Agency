@@ -200,7 +200,7 @@ export async function createPartnerApplication(
   try {
     await tursoExec(
       `INSERT INTO partner_applications
-        (id, full_name, phone, email, network_sectors, experience, why_genezisi, client_plan, resume_link, referral_source, status, created_at)
+        (id, full_name, phone, email, network_sectors, experience, why_Genezisi, client_plan, resume_link, referral_source, status, created_at)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         input.id,

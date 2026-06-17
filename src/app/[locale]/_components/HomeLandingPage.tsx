@@ -1,40 +1,31 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 import type { Locale } from "@/lib/i18n";
 import { WHATSAPP_DEFAULT_MESSAGE, WHATSAPP_INTAKE } from "@/constants/content";
+import { Navbar } from "./Navbar";
 import {
   ArrowRight,
   Box,
   CalendarDays,
   Check,
   Code2,
+  Github,
   Instagram,
   Layers3,
   Linkedin,
-  Mail,
-  Menu,
   MessageCircle,
   Search,
   ShieldCheck,
   ShoppingBag,
   Sparkles,
   Smartphone,
-  X,
   Zap,
 } from "lucide-react";
 
 const waHref = `https://wa.me/${WHATSAPP_INTAKE}?text=${encodeURIComponent(
   WHATSAPP_DEFAULT_MESSAGE,
 )}`;
-
-const navItems = [
-  { label: "Work", href: "/work" },
-  { label: "Packages", href: "/pricing" },
-  { label: "Process", href: "#process" },
-  { label: "FAQ", href: "#final-cta" },
-];
 
 const proofChips = [
   { label: "Custom design", icon: Sparkles },
@@ -155,36 +146,36 @@ const processSteps = [
 
 const packages = [
   {
-    title: "Starter Website",
+    title: "Professional",
     price: "999",
     icon: Box,
     bullets: [
-      "Up to 5 sections/pages",
+      "Custom landing page",
       "Custom responsive design",
       "Contact / WhatsApp integration",
       "Basic SEO setup",
     ],
   },
   {
-    title: "Business Website",
+    title: "Command Center",
     price: "1,999",
     icon: Layers3,
     badge: "Most popular",
     bullets: [
-      "Up to 10 pages",
-      "Advanced design structure",
+      "Multi-page website foundation",
+      "CMS-ready content structure",
       "Booking / forms / integrations",
       "Basic SEO + speed optimization",
       "Training & handover",
     ],
   },
   {
-    title: "Commerce / Booking System",
+    title: "E-Commerce HQ",
     price: "3,999",
     icon: ShoppingBag,
     bullets: [
-      "E-commerce or booking system",
-      "Payments integration",
+      "Online store or booking system",
+      "TBC / BOG payments integration",
       "Product / service management",
       "Advanced SEO & speed",
       "Priority support",
@@ -371,67 +362,11 @@ function WorkMockup({
 }
 
 export function HomeLandingPage({ locale }: { locale: Locale }) {
-  const [menuOpen, setMenuOpen] = useState(false);
-
   return (
-    <main className="min-h-screen overflow-hidden bg-[#02060d] text-white">
-      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(34,211,238,0.16),transparent_36%),radial-gradient(circle_at_0%_30%,rgba(16,185,129,0.12),transparent_30%)]" />
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-[#030812]/85 backdrop-blur-xl">
-        <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:h-20 sm:px-6 lg:px-8">
-          <Link
-            href={`/${locale}`}
-            className="font-space text-lg font-black uppercase tracking-[0.48em] text-emerald-300 sm:text-xl"
-          >
-            Genezisi
-          </Link>
-          <div className="hidden items-center gap-10 text-sm font-bold text-slate-200 lg:flex">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href.startsWith("#") ? item.href : `/${locale}${item.href}`}
-                className="transition hover:text-emerald-300"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
-          <div className="flex items-center gap-3">
-            <a
-              href={waHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-400 to-cyan-400 px-4 text-sm font-black text-slate-950 shadow-[0_0_28px_rgba(16,185,129,0.28)] transition hover:scale-[1.02] sm:px-5"
-            >
-              <MessageCircle className="h-4 w-4" />
-              <span className="hidden sm:inline">Book a call</span>
-            </a>
-            <button
-              type="button"
-              aria-label={menuOpen ? "Close menu" : "Open menu"}
-              onClick={() => setMenuOpen((value) => !value)}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/15 bg-white/5 text-white lg:hidden"
-            >
-              {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </button>
-          </div>
-        </nav>
-        {menuOpen && (
-          <div className="border-t border-white/10 bg-slate-950/95 px-4 py-4 lg:hidden">
-            <div className="mx-auto grid max-w-7xl gap-2">
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href.startsWith("#") ? item.href : `/${locale}${item.href}`}
-                  onClick={() => setMenuOpen(false)}
-                  className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm font-bold text-slate-200"
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
-      </header>
+    <>
+      <Navbar locale={locale} />
+      <main className="min-h-screen overflow-hidden bg-[#02060d] text-white">
+        <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(34,211,238,0.16),transparent_36%),radial-gradient(circle_at_0%_30%,rgba(16,185,129,0.12),transparent_30%)]" />
 
       <section className="relative mx-auto grid max-w-7xl gap-8 px-4 pb-10 pt-10 sm:px-6 sm:pt-16 lg:grid-cols-[1fr_0.95fr] lg:items-center lg:px-8 lg:pb-16">
         <div>
@@ -630,7 +565,7 @@ export function HomeLandingPage({ locale }: { locale: Locale }) {
           </div>
           <div className="p-6 sm:p-8">
             <h2 className="font-[family:var(--font-playfair),serif] text-3xl font-bold leading-tight text-white sm:text-4xl">
-              Built by Socratic, founder of{" "}
+              Built by Socraticblock, founder of{" "}
               <span className="text-emerald-300">Genezisi.</span>
             </h2>
             <p
@@ -713,11 +648,12 @@ export function HomeLandingPage({ locale }: { locale: Locale }) {
           <a href={waHref} aria-label="WhatsApp" className="transition hover:text-emerald-300">
             <MessageCircle className="h-5 w-5" />
           </a>
-          <a href="mailto:hello@genezisi.com" aria-label="Email" className="transition hover:text-emerald-300">
-            <Mail className="h-5 w-5" />
+          <a href="https://github.com/socraticblock" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="transition hover:text-emerald-300">
+            <Github className="h-5 w-5" />
           </a>
         </div>
       </footer>
-    </main>
+      </main>
+    </>
   );
 }

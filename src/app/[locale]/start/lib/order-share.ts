@@ -6,7 +6,7 @@ export function downloadOrderJsonFile(payload: GenezisiOrderFileV1): void {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `genezisi-order-${payload.orderId}.json`;
+  a.download = `Genezisi-order-${payload.orderId}.json`;
   a.rel = "noopener";
   document.body.appendChild(a);
   a.click();
@@ -26,7 +26,7 @@ export function canShareOrderFile(): boolean {
 
 export async function shareOrderJsonFile(payload: GenezisiOrderFileV1): Promise<boolean> {
   const json = JSON.stringify(payload, null, 2);
-  const file = new File([json], `genezisi-order-${payload.orderId}.json`, {
+  const file = new File([json], `Genezisi-order-${payload.orderId}.json`, {
     type: "application/json",
   });
   if (!navigator.share || !navigator.canShare?.({ files: [file] })) {

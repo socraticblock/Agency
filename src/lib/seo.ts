@@ -35,9 +35,9 @@ interface SeoResult {
 
 function getBaseUrl() {
   if (typeof process !== "undefined") {
-    return process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+    return process.env.NEXT_PUBLIC_SITE_URL || "https://genezisi.com";
   }
-  return "http://localhost:3000";
+  return "https://genezisi.com";
 }
 
 function getLocaleTag(locale: Locale) {

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 function siteBase(): string {
-  return (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(
+  return (process.env.NEXT_PUBLIC_SITE_URL || "https://genezisi.com").replace(
     /\/$/,
     ""
   );

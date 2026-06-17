@@ -1,5 +1,6 @@
 "use client";
 
+import { MessageCircle } from "lucide-react";
 import { trackPricingEvent } from "@/lib/pricingAnalytics";
 import { WHATSAPP_INTAKE } from "@/constants/content";
 import type { Locale } from "@/lib/i18n";
@@ -13,9 +14,9 @@ interface PricingCtaBandProps {
 }
 
 const WA_TEXT =
-  "Hi Genezisi! I saw your pricing page and want to discuss the right package for my business.";
+  "Hi Genezisi! I saw your packages and want advice on the right website package for my business.";
 
-export function PricingCtaBand({ locale, placement, className = "" }: PricingCtaBandProps) {
+export function PricingCtaBand({ placement, className = "" }: PricingCtaBandProps) {
   const wa = `https://wa.me/${WHATSAPP_INTAKE}?text=${encodeURIComponent(WA_TEXT)}`;
 
   const onWa = () => {
@@ -31,9 +32,10 @@ export function PricingCtaBand({ locale, placement, className = "" }: PricingCta
         target="_blank"
         rel="noopener noreferrer"
         onClick={onWa}
-        className="inline-flex min-h-[48px] items-center justify-center rounded-xl bg-emerald-500 px-6 py-3 text-center text-sm font-black uppercase tracking-wide text-slate-950 shadow-[0_0_24px_rgba(16,185,129,0.35)] transition hover:bg-emerald-400"
+        className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-400 to-cyan-400 px-6 py-3 text-center text-sm font-black text-slate-950 shadow-[0_0_24px_rgba(16,185,129,0.35)] transition hover:scale-[1.02]"
       >
-        Let&apos;s Talk — WhatsApp
+        <MessageCircle className="h-4 w-4" />
+        Get package advice
       </a>
     </div>
   );

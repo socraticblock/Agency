@@ -130,7 +130,7 @@ export async function GET(req: NextRequest) {
                   marginBottom: "auto",
                 }}
               >
-                GENEZISI
+                Genezisi
               </div>
 
               <div style={{ display: "flex", flexDirection: "column", marginBottom: "40px", marginTop: "auto", maxWidth: "95%" }}>
@@ -167,7 +167,7 @@ export async function GET(req: NextRequest) {
                   marginBottom: "40px",
                 }}
               >
-                GENEZISI
+                Genezisi
               </div>
 
               <div style={{ fontSize: "14px", fontWeight: 700, color: accent, textTransform: "uppercase", letterSpacing: "0.2em", marginBottom: "20px" }}>
@@ -213,7 +213,7 @@ export async function GET(req: NextRequest) {
                   marginBottom: "auto",
                 }}
               >
-                GENEZISI
+                Genezisi
               </div>
 
               <div style={{ display: "flex", flexDirection: "column", marginBottom: "40px", marginTop: "auto", maxWidth: "95%" }}>
