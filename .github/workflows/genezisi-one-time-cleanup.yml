@@ -1,0 +1,85 @@
+name: One-time Genezisi cleanup
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    if: contains(github.event.head_commit.message, 'Run one-time Genezisi cleanup')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Apply cleanup edits
+        run: |
+          python <<'PY'
+          from pathlib import Path
+
+          def replace(path: str, old: str, new: str):
+              p = Path(path)
+              s = p.read_text()
+              if old not in s:
+                  raise SystemExit(f"Expected text not found in {path}: {old[:120]!r}")
+              p.write_text(s.replace(old, new))
+
+          # Properly remove inactive homepage social links from JSX/imports.
+          home = Path('src/app/[locale]/_components/HomeLandingPage.tsx')
+          s = home.read_text()
+          s = s.replace('  Instagram,\n', '')
+          s = s.replace('  Linkedin,\n', '')
+          s = s.replace('''          <a href="https://www.instagram.com/" aria-label="Instagram" className="transition hover:text-emerald-300">\n            <Instagram className="h-5 w-5" />\n          </a>\n          <a href="https://www.linkedin.com/" aria-label="LinkedIn" className="transition hover:text-emerald-300">\n            <Linkedin className="h-5 w-5" />\n          </a>\n''', '')
+          home.write_text(s)
+
+          # Remove temporary CSS hide rule after JSX cleanup.
+          css = Path('src/app/globals.css')
+          s = css.read_text()
+          s = s.replace('''\n/* Hide inactive homepage footer social links until those profiles are ready. */\nfooter a[aria-label="Instagram"],\nfooter a[aria-label="LinkedIn"] {\n  display: none;\n}\n''', '\n')
+          css.write_text(s)
+
+          # Fix blog credibility, pricing, and unsupported certainty.
+          blog = Path('src/lib/blog.ts')
+          s = blog.read_text()
+          replacements = {
+              'We researched real quotes and published rates from Tbilisi studios — Web Tbilisi, TbilisiWeb, Wevosoft, DEL-OPS — and cross-referenced with recent 2025-2026 pricing guides. Here\'s what a website actually costs in Georgia right now.':
+              'This guide compares visible market ranges, public examples, and typical project scopes in Georgia so business owners can understand where a serious website budget usually lands.',
+              '["Web Tbilisi", "$500–700 (~₾175–245)", "USD-denominated, international quality"],':
+              '["Web Tbilisi", "$500–700", "USD-denominated; GEL equivalent depends on current exchange rate"],',
+              '["Web Tbilisi", "$700–1,500 (~₾245–525)", "USD-denominated"],':
+              '["Web Tbilisi", "$700–1,500", "USD-denominated; GEL equivalent depends on current exchange rate"],',
+              'Georgian e-commerce is growing fast — the market reached GEL 3.5 billion in 2024. TBC Pay and Bank of Georgia payment gateways are now mature. Businesses that set up e-commerce now will own search results for years.':
+              'Georgian e-commerce is becoming more mature, and local payment options like TBC and Bank of Georgia make online selling realistic for more businesses. A clear, fast store can help a business build trust and capture search demand earlier.',
+              'Digital Business Card", "₾150–350 + ₾120/yr", "No direct competitor in Georgia':
+              'Digital Business Card", "from ₾150 + ₾120/yr", "Fast digital presence for professionals',
+              'Georgian/English included on Command Center; available as add-on on other tiers.':
+              'One language is included; Georgian/English bilingual setup is available as an add-on.',
+              'We respond within the hour and will tell you honestly what you need.':
+              'I usually reply quickly and will tell you honestly what you need.',
+              'From ₾150 setup + ₾120/year hosting.':
+              'From ₾150 setup + ₾120/year hosting.',
+          }
+          for old, new in replacements.items():
+              if old not in s:
+                  print(f"WARN: blog replacement not found: {old[:90]!r}")
+              s = s.replace(old, new)
+          blog.write_text(s)
+
+          # Self-delete this workflow after successful cleanup.
+          Path('.github/workflows/genezisi-one-time-cleanup.yml').unlink()
+          PY
+      - name: Commit cleanup
+        run: |
+          git config user.name "genezisi-cleanup-bot"
+          git config user.email "actions@github.com"
+          git add src/app/[locale]/_components/HomeLandingPage.tsx src/app/globals.css src/lib/blog.ts .github/workflows/genezisi-one-time-cleanup.yml
+          if git diff --cached --quiet; then
+            echo "No cleanup changes to commit"
+          else
+            git commit -m "Complete Genezisi launch cleanup"
+            git push
+          fi
