@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
+import { WHATSAPP_INTAKE } from "@/constants/content";
 
 function isValidHttpUrl(s: string) {
   try {
@@ -14,6 +15,26 @@ function isValidHttpUrl(s: string) {
   } catch {
     return false;
   }
+}
+
+function buildApplyWhatsAppHref(input: {
+  businessName: string;
+  taxStatus: string;
+  bankChoice: string;
+  websiteUrl: string;
+}) {
+  const message = [
+    "Hi Genezisi, I filled out the website application.",
+    "",
+    `Business: ${input.businessName.trim()}`,
+    `Tax / registration status: ${input.taxStatus.trim()}`,
+    `Preferred bank / payment setup: ${input.bankChoice.trim()}`,
+    `Current website or reference link: ${input.websiteUrl.trim()}`,
+    "",
+    "Can you review this and tell me the best next step?",
+  ].join("\n");
+
+  return `https://wa.me/${WHATSAPP_INTAKE}?text=${encodeURIComponent(message)}`;
 }
 
 export function ApplyForm({ locale }: { locale: Locale }) {
@@ -79,10 +100,24 @@ export function ApplyForm({ locale }: { locale: Locale }) {
     } catch {
       // ignore storage errors
     }
+
+    const waHref = buildApplyWhatsAppHref({
+      businessName,
+      taxStatus,
+      bankChoice,
+      websiteUrl,
+    });
+
+    const opened = window.open(waHref, "_blank", "noopener,noreferrer");
+    if (!opened) {
+      window.location.href = waHref;
+      return;
+    }
+
     setSubmitted(true);
     setTimeout(() => {
       router.push(`/${locale}/pricing`);
-    }, 2000);
+    }, 1800);
   };
 
   const goBack = () => {
@@ -273,7 +308,7 @@ export function ApplyForm({ locale }: { locale: Locale }) {
               {t.apply.thanks}
             </p>
             <p className="mt-2 text-sm text-slate-400">
-              Redirecting you to schedule a call...
+              Opening WhatsApp with your website brief...
             </p>
           </motion.div>
         )}
