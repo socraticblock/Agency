@@ -88,8 +88,8 @@ export function PricingPageClient({ locale }: PricingPageClientProps) {
               Shield: infrastructure, security, and warranty
             </h3>
             <p className="mt-4 text-base leading-relaxed text-slate-400">
-              Every package includes secure hosting, automated backups, and proactive monitoring.
-              Higher Shield levels extend response coverage and warranty depth.
+              Every package is launched with secure hosting setup, deployment safety checks, and a clear bug warranty.
+              Optional Shield support can add deeper monitoring, backups, and faster response coverage.
             </p>
           </div>
 
@@ -150,7 +150,7 @@ export function PricingPageClient({ locale }: PricingPageClientProps) {
         <div className="mx-auto max-w-xl">
           <p className="text-lg font-black text-white sm:text-xl">Not sure which package fits?</p>
           <p className="mt-2 text-sm font-medium text-slate-400">
-            Send your current website, Instagram, or idea. We will recommend the smallest package that can do the job properly.
+            Send your current website, Instagram, or idea. I will recommend the smallest package that can do the job properly.
           </p>
           <div className="mt-6">
             <PricingCtaBand locale={locale} placement="footer" />
