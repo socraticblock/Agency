@@ -29,7 +29,7 @@ export const ANIMATION_OVERRIDES: Record<string, { whatItIs: string; howItHelps:
 export const WHATSAPP_INTAKE = "995579723564";
 
 /** Default message for WhatsApp links */
-export const WHATSAPP_DEFAULT_MESSAGE = "Hi Genezisi! I'm interested in building a digital foundation for my brand. Can we talk?";
+export const WHATSAPP_DEFAULT_MESSAGE = "Hi Genezisi, I’m interested in a premium website for my business. Can we talk?";
 
 /** Loading phrase templates for the analyzing overlay */
 export function buildLoadingPhrases(params: {
