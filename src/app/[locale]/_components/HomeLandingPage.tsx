@@ -11,9 +11,7 @@ import {
   Check,
   Code2,
   Github,
-  Instagram,
   Layers3,
-  Linkedin,
   MessageCircle,
   Search,
   ShieldCheck,
@@ -639,12 +637,6 @@ export function HomeLandingPage({ locale }: { locale: Locale }) {
         </Link>
         <p className="text-sm text-slate-500">Premium websites. Built to perform.</p>
         <div className="flex items-center gap-4 text-slate-300">
-          <a href="https://www.instagram.com/" aria-label="Instagram" className="transition hover:text-emerald-300">
-            <Instagram className="h-5 w-5" />
-          </a>
-          <a href="https://www.linkedin.com/" aria-label="LinkedIn" className="transition hover:text-emerald-300">
-            <Linkedin className="h-5 w-5" />
-          </a>
           <a href={waHref} aria-label="WhatsApp" className="transition hover:text-emerald-300">
             <MessageCircle className="h-5 w-5" />
           </a>

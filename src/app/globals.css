@@ -187,11 +187,6 @@ body {
   line-height: 1.6;
 }
 
-/* Hide inactive homepage footer social links until those profiles are ready. */
-footer a[aria-label="Instagram"],
-footer a[aria-label="LinkedIn"] {
-  display: none;
-}
 
 /* Homepage ticker: CSS marquee so it keeps moving without Framer’s JS loop (mobile / reduced-motion config). */
 @keyframes scrolling-banner-marquee {

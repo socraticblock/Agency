@@ -62,7 +62,7 @@ const articles: BlogArticle[] = [
           },
           {
             type: "paragraph",
-            text: "We researched real quotes and published rates from Tbilisi studios — Web Tbilisi, TbilisiWeb, Wevosoft, DEL-OPS — and cross-referenced with recent 2025-2026 pricing guides. Here's what a website actually costs in Georgia right now.",
+            text: "This guide compares visible market ranges, public examples, and typical project scopes in Georgia so business owners can understand where a serious website budget usually lands.",
           },
         ],
       },
@@ -80,7 +80,7 @@ const articles: BlogArticle[] = [
               ["Freelancers", "₾200–500", "Basic, no support, inconsistent quality"],
               ["TbilisiWeb", "From ₾300", "Budget-friendly, established studio"],
               ["Wevosoft (2026 guide)", "₾300–800", "Modern approach, more pages"],
-              ["Web Tbilisi", "$500–700 (~₾175–245)", "USD-denominated, international quality"],
+              ["Web Tbilisi", "$500–700", "USD-denominated; GEL equivalent depends on current exchange rate"],
             ],
           },
           {
@@ -102,7 +102,7 @@ const articles: BlogArticle[] = [
             rows: [
               ["TbilisiWeb", "₾1,500–5,000", "Depends on pages and features"],
               ["Wevosoft", "₾1,500–5,000", "2026 pricing guide"],
-              ["Web Tbilisi", "$700–1,500 (~₾245–525)", "USD-denominated"],
+              ["Web Tbilisi", "$700–1,500", "USD-denominated; GEL equivalent depends on current exchange rate"],
               ["DEL-OPS", "Custom", "Full-service, higher-end"],
             ],
           },
@@ -131,7 +131,7 @@ const articles: BlogArticle[] = [
           },
           {
             type: "paragraph",
-            text: "Georgian e-commerce is growing fast — the market reached GEL 3.5 billion in 2024. TBC Pay and Bank of Georgia payment gateways are now mature. Businesses that set up e-commerce now will own search results for years.",
+            text: "Georgian e-commerce is becoming more mature, and local payment options like TBC and Bank of Georgia make online selling realistic for more businesses. A clear, fast store can help a business build trust and capture search demand earlier.",
           },
         ],
       },
@@ -146,7 +146,7 @@ const articles: BlogArticle[] = [
             type: "comparisonTable",
             headers: ["Product", "Price", "vs. Market"],
             rows: [
-              ["Digital Business Card", "₾150–350 + ₾120/yr", "No direct competitor in Georgia"],
+              ["Digital Business Card", "from ₾150 + ₾120/yr", "Fast digital presence for professionals"],
               ["Professional Website", "₾999", "Below ₾1,500 agency floor"],
               ["Command Center", "₾1,999", "Below ₾1,500–5,000 agency range"],
               ["E-Commerce HQ", "From ₾3,999", "At the lower end of ₾3,000–15,000 range"],
@@ -154,7 +154,7 @@ const articles: BlogArticle[] = [
           },
           {
             type: "paragraph",
-            text: "All Genezisi websites include: 100% custom design, full SEO suite, Google Analytics 4, source code ownership, and warranty coverage (45 days Professional, 75 days Command Center, 100 days E-Commerce). No monthly platform fees. Georgian/English included on Command Center; available as add-on on other tiers. TBC/BOG payment integration available as paid add-on.",
+            text: "All Genezisi websites include: 100% custom design, full SEO suite, Google Analytics 4, source code ownership, and warranty coverage (45 days Professional, 75 days Command Center, 100 days E-Commerce). No monthly platform fees. One language is included; Georgian/English bilingual setup is available as an add-on. TBC/BOG payment integration available as paid add-on.",
           },
         ],
       },
@@ -167,7 +167,7 @@ const articles: BlogArticle[] = [
               "<strong>Just need to be findable?</strong> A Digital Business Card from ₾150 is the fastest path. Shareable via link, QR code, and WhatsApp. No maintenance needed.",
               "<strong>Solicitors, doctors, consultants:</strong> Professional Website at ₾999 — custom landing page, professional design, contact forms, SEO-optimized for Google.",
               "<strong>High-volume or e-commerce ready:</strong> Command Center (₾1,999) with CRM integrations, or E-Commerce HQ from ₾3,999 with full online store.",
-              "<strong>Not sure?</strong> Message Genezisi on <a href='https://wa.me/995579723564' target='_blank' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>WhatsApp</a>. We respond within the hour and will tell you honestly what you need.",
+              "<strong>Not sure?</strong> Message Genezisi on <a href='https://wa.me/995579723564' target='_blank' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>WhatsApp</a>. I usually reply quickly and will tell you honestly what you need.",
             ],
           },
           {
