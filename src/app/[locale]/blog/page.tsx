@@ -21,7 +21,7 @@ export async function generateMetadata({
   const { metadata } = createLocalBusinessSeo({
     name: "Genezisi Blog",
     description:
-      "Expert guides on web design, digital strategy, and online growth for Georgian businesses. Practical advice from Tbilisi's digital agency.",
+      "Practical guides on web design, digital strategy, and online growth for Georgian businesses from Genezisi, a founder-led website studio in Tbilisi.",
     locale: lang,
     path: "/blog",
   });
