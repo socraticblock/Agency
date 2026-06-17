@@ -1,0 +1,60 @@
+name: Second Genezisi cleanup
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    if: contains(github.event.head_commit.message, 'Run second Genezisi cleanup')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Apply remaining cleanup edits
+        run: |
+          python <<'PY'
+          from pathlib import Path
+
+          files = {
+            'src/lib/blog.ts': {
+              'A full online store with product pages, shopping cart, checkout, and payment integration. For Georgian businesses ready to sell online — especially relevant given the 35-40% year-over-year growth in Georgian e-commerce.':
+              'A full online store with product pages, shopping cart, checkout, and payment integration. For Georgian businesses ready to sell online, the goal is simple: make products easy to understand, buy, and manage.',
+              'Try searching "how much does a website cost in Georgia" and you\'ll find almost nothing. Unlike the US or UK, Georgian agencies rarely publish pricing. The result: business owners either overpay for a simple site or go to a freelancer at ₾200 and get something that damages their brand. This guide fixes that.':
+              'Try searching "how much does a website cost in Georgia" and you will find limited clear pricing. Many providers do not publish full package details, so business owners often compare offers without knowing what is actually included. This guide gives a clearer starting point.',
+              'The ₾1,500–5,000 range is the "honest mid-market" for Georgian web design. Below ₾1,500 you\'re in freelancer territory. Above ₾5,000 you\'re paying for premium branding agencies.':
+              'The ₾1,500–5,000 range is a practical mid-market range for many Georgian business websites, depending on scope, pages, copy, design depth, CMS, and integrations.',
+            },
+            'src/app/[locale]/blog/[slug]/page.tsx': {
+              'WhatsApp Us': 'WhatsApp me',
+              'Ready to build your digital presence?': 'Ready to build a serious website?'
+            },
+          }
+
+          for path, replacements in files.items():
+              p = Path(path)
+              s = p.read_text()
+              for old, new in replacements.items():
+                  if old not in s:
+                      print(f"WARN: not found in {path}: {old[:90]!r}")
+                  s = s.replace(old, new)
+              p.write_text(s)
+
+          Path('.github/workflows/genezisi-second-cleanup.yml').unlink()
+          PY
+      - name: Commit cleanup
+        run: |
+          git config user.name "genezisi-cleanup-bot"
+          git config user.email "actions@github.com"
+          git add src/lib/blog.ts src/app/[locale]/blog/[slug]/page.tsx .github/workflows/genezisi-second-cleanup.yml
+          if git diff --cached --quiet; then
+            echo "No cleanup changes to commit"
+          else
+            git commit -m "Polish remaining Genezisi content copy"
+            git push
+          fi
