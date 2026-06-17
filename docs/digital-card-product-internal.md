@@ -21,7 +21,7 @@ Hosting (120₾/yr) is always required for a live card.
 
 - WhatsApp order → bank transfer → go live in 3–5 working days (Executive: priority queue).
 - **Primary handoff:** client **copies** the full structured brief from `/start` and **pastes** it into WhatsApp after a short opener message; **optional** prefilled email to the architect with the same text. Avoids long `wa.me` URLs and awkward file attach.
-- **Internal fallback:** lean `genezisi-order-{id}.json` still exists for replay/import (`handoffMedia` records stripped hero/gallery/background images), but the customer flow no longer asks clients to download it.
+- **Internal fallback:** lean `Genezisi-order-{id}.json` still exists for replay/import (`handoffMedia` records stripped hero/gallery/background images), but the customer flow no longer asks clients to download it.
 - See [digital-card-order-handoff.md](./digital-card-order-handoff.md) for replay and optional DB storage notes.
 
 ## Changes policy (summary)
@@ -35,4 +35,4 @@ Hosting (120₾/yr) is always required for a live card.
 - Tier + URL hint: `Lane1CustomizerState.selectedTier`, `digitalCardUrlHint` (`CUSTOMIZER_VERSION` 17).
 - Pricing helpers: `src/app/[locale]/start/lib/lane1-pricing.ts`, `digital-card-product.ts`.
 - Order file + WhatsApp summary: `order-payload.ts`, `order-validation.ts`, `order-share.ts`, `whatsapp.ts`.
-- Overlay persistence: `src/app/[locale]/start/lib/start-overlay-storage.ts` (keys prefixed `genezisi_dc_`).
+- Overlay persistence: `src/app/[locale]/start/lib/start-overlay-storage.ts` (keys prefixed `Genezisi_dc_`).

@@ -1,8 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion, useMotionValue, useSpring } from "framer-motion";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 import { WHATSAPP_INTAKE, WHATSAPP_DEFAULT_MESSAGE } from "@/constants/content";
@@ -10,29 +8,7 @@ import { MessageSquare } from "lucide-react";
 
 export function GlobalFooter({ locale }: { locale: Locale }) {
   const t = getMessages(locale);
-  const [deployedDate, setDeployedDate] = useState("");
-
-  useEffect(() => {
-    setDeployedDate(new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }));
-  }, []);
-  const ctaX = useMotionValue(0);
-  const ctaY = useMotionValue(0);
-  const springX = useSpring(ctaX, { stiffness: 300, damping: 26 });
-  const springY = useSpring(ctaY, { stiffness: 300, damping: 26 });
-
-  const handleCtaMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const relX = (e.clientX - rect.left) / rect.width - 0.5;
-    const relY = (e.clientY - rect.top) / rect.height - 0.5;
-    const strength = 10;
-    ctaX.set(relX * strength);
-    ctaY.set(relY * strength);
-  };
-
-  const handleCtaLeave = () => {
-    ctaX.set(0);
-    ctaY.set(0);
-  };
+  const deployedDate = "Live";
 
   return (
     <footer
@@ -72,7 +48,7 @@ export function GlobalFooter({ locale }: { locale: Locale }) {
             <span>Network: Vercel Edge (Tbilisi)</span>
           </div>
           <div className="flex items-center justify-center border-r border-white/5">
-            <span>Stack: Next.js 19 / Tailwind 4</span>
+            <span>Stack: Next.js / Tailwind</span>
           </div>
           <div className="flex items-center justify-center">
             <a 

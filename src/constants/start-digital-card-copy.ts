@@ -7,7 +7,7 @@ import { WHATSAPP_INTAKE } from "./content";
 
 export type StartDigitalCardOverlayView = "welcome" | "pricing" | "faq";
 
-export const START_DC_BRAND = "GENEZISI";
+export const START_DC_BRAND = "Genezisi";
 
 export const START_DC_WELCOME = {
   headline: "Your Elite Digital Business Card",

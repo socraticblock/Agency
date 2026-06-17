@@ -189,7 +189,7 @@ export const FrictionRaceSimulator = memo(function FrictionRaceSimulator({ local
                )}
               {raceStep > 0 && (
                 <motion.div
-                  key="genezisi-done"
+                  key="Genezisi-done"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   className="flex flex-col items-center justify-center text-center p-2"

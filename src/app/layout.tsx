@@ -1,4 +1,4 @@
-import type { Viewport } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import {
   inter,
@@ -15,6 +15,10 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: "cover",
   themeColor: "#060c22",
+};
+
+export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://genezisi.com"),
 };
 
 export default function RootLayout({

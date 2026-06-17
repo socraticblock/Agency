@@ -10,10 +10,10 @@ import {
   CalendarDays,
   Check,
   Code2,
+  Github,
   Instagram,
   Layers3,
   Linkedin,
-  Mail,
   MessageCircle,
   Search,
   ShieldCheck,
@@ -565,7 +565,7 @@ export function HomeLandingPage({ locale }: { locale: Locale }) {
           </div>
           <div className="p-6 sm:p-8">
             <h2 className="font-[family:var(--font-playfair),serif] text-3xl font-bold leading-tight text-white sm:text-4xl">
-              Built by Socratic, founder of{" "}
+              Built by Socraticblock, founder of{" "}
               <span className="text-emerald-300">Genezisi.</span>
             </h2>
             <p
@@ -648,8 +648,8 @@ export function HomeLandingPage({ locale }: { locale: Locale }) {
           <a href={waHref} aria-label="WhatsApp" className="transition hover:text-emerald-300">
             <MessageCircle className="h-5 w-5" />
           </a>
-          <a href="mailto:hello@genezisi.com" aria-label="Email" className="transition hover:text-emerald-300">
-            <Mail className="h-5 w-5" />
+          <a href="https://github.com/socraticblock" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="transition hover:text-emerald-300">
+            <Github className="h-5 w-5" />
           </a>
         </div>
       </footer>

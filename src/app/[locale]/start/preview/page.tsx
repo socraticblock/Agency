@@ -65,7 +65,7 @@ export default function PreviewPage() {
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-[#faf8f5] p-6 text-[#64748b]">
         <p className="text-center text-sm">No preview data in this tab.</p>
         <p className="max-w-md text-center text-xs">
-          Open Live Preview from the customizer, or load a downloaded <span className="font-mono text-slate-700">genezisi-order-*.json</span> file.
+          Open Live Preview from the customizer, or load a downloaded <span className="font-mono text-slate-700">Genezisi-order-*.json</span> file.
         </p>
         <input
           ref={fileRef}
