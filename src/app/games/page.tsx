@@ -14,10 +14,15 @@ import type { Metadata } from "next";
  * The page is a server component with inline styles: no client JavaScript, nothing to hydrate, and
  * no coupling to the marketing site's theme tokens. It is deliberately self-contained.
  *
- * GAME_NAME is the working title. The official name is not chosen yet, so it is declared once here
- * and nowhere else on this page.
+ * GAME_NAME is the product title, directed by the owner on 2026-10-03 and recorded in the project's
+ * `docs/07_FORNWARD_Game_Title_World_Identity_v0.1_2026-10-03.md`. Note what that record does NOT say:
+ * "Broken Chapel" is not retired — it remains the location and early-adventure identity, so the game's
+ * chamber of that name keeps its title. Only the product layer carries the new name.
+ *
+ * Spelled FORNWARD exactly as directed (forn + -ward, "toward the ancient"; pronounced FORN-ward).
+ * Formal trademark, domain and handle clearance is still OPEN in that record.
  */
-const GAME_NAME = "The Broken Chapel";
+const GAME_NAME = "Fornward";
 const GAME_URL = "https://broken-chapel-prototype.vercel.app";
 
 const INK = "#07101d";
