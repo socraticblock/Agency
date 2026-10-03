@@ -23,7 +23,10 @@ import type { Metadata } from "next";
  * Formal trademark, domain and handle clearance is still OPEN in that record.
  */
 const GAME_NAME = "Fornward";
-const GAME_URL = "https://broken-chapel-prototype.vercel.app";
+// The game's own domain, registered 2026-10-03. It must actually serve the game before this is
+// correct — the Play button below points straight here, so wiring the domain in Vercel and DNS comes
+// first, this constant second. See the setup note in the commit that introduced it.
+const GAME_URL = "https://fornward.com";
 
 const INK = "#07101d";
 const INK_SOFT = "#0b1626";
