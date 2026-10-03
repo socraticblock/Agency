@@ -41,6 +41,12 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next();
     }
 
+    // /games is a standalone surface, not part of the localised marketing site. Without this it is
+    // rewritten to /{locale}{path} below and the landing page can never be reached.
+    if (pathname === "/games" || pathname.startsWith("/games/")) {
+      return NextResponse.next();
+    }
+
     if (!bypassCustomHostRewrite(pathname)) {
       const hostHeader = request.headers.get("x-forwarded-host") ?? request.headers.get("host") ?? "";
       if (hostHeader && !isPrimaryAppHost(hostHeader)) {

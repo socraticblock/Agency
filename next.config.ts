@@ -19,38 +19,27 @@ const securityHeaders = [
 ];
 
 /**
- * Where the game lives.
+ * Note on /games.
  *
- * A sub-path MOUNT (`/games/*` proxied to the game's deployment) is not possible on this site
- * without deeper surgery, and the reasons are worth recording so nobody re-attempts it:
+ * The landing page is a real route (`src/app/games/page.tsx`) — not a redirect, and not a proxied
+ * mount. Each of those alternatives is ruled out by something concrete:
  *
- *   1. `middleware.ts` redirects any path without a known locale prefix to `/{locale}{path}`, so
- *      `/games` becomes `/en/games` before a rewrite can see it;
- *   2. `trailingSlash` is false, so Next normalises `/games/` back to `/games`;
- *   3. the game resolves its assets relatively (`./assets/...`), because it is also served at the
- *      root of its own deployment. At a URL of `/games`, those resolve to `/assets/...`, which this
- *      site does not own. A mount therefore needs the URL to end in `/`, which (2) forbids.
+ *   - a redirect puts the game's own hostname in the address bar and throws away the brand, which is
+ *     the opposite of what a front door is for;
+ *   - a proxied mount cannot work here. `trailingSlash` is false, so Next normalises `/games/` back
+ *     to `/games` — measured on the deployed site on 2026-10-03: `/games/` answered `308 -> /games`.
+ *     The game resolves its assets relatively (`./assets/...`) and so needs a URL that ends in `/`.
+ *     Those two facts are incompatible;
+ *   - a rewrite cannot re-point `/` at a landing page, because Vercel gives the filesystem precedence
+ *     over rewrites ("the source property should NOT be a file... instead, you should rename your
+ *     static file"), and `/` maps to the game's `index.html`.
  *
- * A redirect has none of those problems: the game runs at its own origin, where its relative paths
- * are correct and its crawler rules and manifest apply natively.
- *
- * A subdomain (`games.genezisi.com` pointed at the game's own project) is the better end state when
- * the official name is chosen: same brand, separate origin, separate bandwidth, no redirect in the
- * address bar.
+ * So the game keeps its own origin and bandwidth, and the front door sits on the brand domain.
+ * `middleware.ts` bypasses the locale rewrite for this path, or the page below would be unreachable.
  */
-const GAME_URL = "https://broken-chapel-prototype.vercel.app";
-
 const nextConfig: NextConfig = {
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
-  },
-  // `redirects()` is resolved BEFORE middleware, which is what keeps the locale redirect from
-  // rewriting these paths out from under us.
-  async redirects() {
-    return [
-      { source: "/games", destination: GAME_URL, permanent: false },
-      { source: "/games/:path*", destination: `${GAME_URL}/:path*`, permanent: false },
-    ];
   },
 };
 
