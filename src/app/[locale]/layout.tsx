@@ -10,8 +10,36 @@ export const viewport: Viewport = {
 };
 
 const SITE_NAME = "Genezisi";
-const SITE_DESCRIPTION =
-  "Premium website design and development in Tbilisi, Georgia for local businesses that want to look serious online and book more customers.";
+const SITE_DESCRIPTION = {
+  en: "Genezisi is a founder-led digital studio building distinctive websites, useful AI systems and automation for real businesses.",
+  ka: "Genezisi არის დამფუძნებლის მიერ მართული ციფრული სტუდია, რომელიც ბიზნესებისთვის ქმნის გამორჩეულ ვებსაიტებს, სასარგებლო AI სისტემებსა და ავტომატიზაციას.",
+} satisfies Record<Locale, string>;
+
+const SEO_COPY = {
+  en: {
+    jobTitle: "Websites, AI Systems & Automation",
+    tagline: "Websites, AI and automation built to work together.",
+    subline: "Founder-led digital design and systems work for businesses that want a better customer experience and less repetitive work.",
+    services: "Websites, AI systems, automation, integrations",
+    cta: "Message Genezisi",
+    alt: "Genezisi websites, AI systems and automation for real businesses",
+  },
+  ka: {
+    jobTitle: "ვებსაიტები, AI სისტემები და ავტომატიზაცია",
+    tagline: "ვებსაიტები, AI და ავტომატიზაცია — შექმნილი ერთად სამუშაოდ.",
+    subline: "დამფუძნებელთან პირდაპირი თანამშრომლობა უკეთესი მომხმარებლის გამოცდილებისა და ნაკლები განმეორებადი სამუშაოსთვის.",
+    services: "ვებსაიტები, AI სისტემები, ავტომატიზაცია, ინტეგრაციები",
+    cta: "მომწერეთ Genezisi-ს",
+    alt: "Genezisi — ვებსაიტები, AI სისტემები და ავტომატიზაცია ბიზნესებისთვის",
+  },
+} satisfies Record<Locale, {
+  jobTitle: string;
+  tagline: string;
+  subline: string;
+  services: string;
+  cta: string;
+  alt: string;
+}>;
 
 function normalizeLocale(locale: string | undefined): Locale {
   if (locale && (locale === "en" || locale === "ka")) return locale;
@@ -25,21 +53,20 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const lang = normalizeLocale(locale);
+  const seo = SEO_COPY[lang];
   const { metadata } = createLocalBusinessSeo({
     name: SITE_NAME,
-    description: SITE_DESCRIPTION,
+    description: SITE_DESCRIPTION[lang],
     locale: lang,
     path: "/",
-    jobTitle: "Premium Website Design",
+    jobTitle: seo.jobTitle,
     accentColor: "#10b981",
     theme: "dark",
-    ogTagline: "Premium websites for businesses that want to look serious online.",
-    ogSubline:
-      "Founder-led website design and development for coaches, clinics, studios, restaurants, shops, and local services.",
-    ogServices: "Website design, development, booking, payments, SEO",
-    ogCta: "Book a website call",
-    ogAlt:
-      "Genezisi premium website design and development for Georgian businesses",
+    ogTagline: seo.tagline,
+    ogSubline: seo.subline,
+    ogServices: seo.services,
+    ogCta: seo.cta,
+    ogAlt: seo.alt,
   });
   
   return {
@@ -63,7 +90,7 @@ export default async function LocaleLayout({
   const lang = normalizeLocale(locale);
   const { jsonLd } = createLocalBusinessSeo({
     name: SITE_NAME,
-    description: SITE_DESCRIPTION,
+    description: SITE_DESCRIPTION[lang],
     locale: lang,
     path: "/",
   });
