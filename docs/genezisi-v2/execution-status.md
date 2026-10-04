@@ -57,6 +57,24 @@ These checks cannot truthfully be marked passed from repository code alone:
 - measured frame-rate / Core Web Vitals on deployed preview;
 - final real founder photograph, if owner wants photography rather than the current abstract placeholder.
 
+## Post-implementation self-review
+
+A second-pass review found and corrected:
+- incomplete reduced-motion behavior;
+- missing desktop resolved state;
+- desktop enquiry visible too early;
+- overlong/non-sequential mobile storytelling;
+- partial Georgian localization;
+- duplicated WhatsApp prototype copy;
+- weak skip-link/header navigation;
+- small-phone first-view clipping risk;
+- placeholder portfolio art where real embeddable project proof already existed;
+- invalid/awkward interactive structure caused by live iframes nested inside project links.
+
+The reviewed implementation now uses a 360svh sticky desktop sequence, 280svh sticky mobile sequence, a static reduced-motion story, fully localized Genezisi narrative copy for English/Georgian, centralized WhatsApp copy, explicit V2 navigation, compact short-phone first state, and lazy decorative live project previews with separate accessible outbound links.
+
+**Reviewed build:** Vercel success for commit `cddd834dc643e9b19e141c1e4f9b0818eaed8917`.
+
 ## Verified repository checks
 
 - V2 branch is 23 commits ahead of `main` and 0 behind.
@@ -69,7 +87,7 @@ These checks cannot truthfully be marked passed from repository code alone:
 
 ## Current real blocker
 
-The Vercel deployment is successful, but the protected preview URL is not accessible from the available review browser. Therefore pixel-level rendering, real scroll interaction, browser performance measurement and physical-device QA cannot be truthfully executed from this environment.
+The reviewed Vercel deployment is successful, but the protected preview URL is not accessible from the available review browser. Therefore pixel-level rendering, real scroll interaction, browser performance measurement and physical-device QA cannot be truthfully executed from this environment.
 
 Do not bypass this by merging to production. Resolve preview access or provide rendered review evidence first.
 
