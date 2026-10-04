@@ -92,6 +92,7 @@ export function createDesktopSignalTimeline(root: HTMLElement | null) {
         timeline.to([system, action, owner], { autoAlpha: 0, duration: 8 }, 88);
         timeline.to(signal, { autoAlpha: 0, duration: 5 }, 91);
         timeline.to(resolved, { autoAlpha: 1, duration: 10 }, 86);
+        timeline.to(activePath, { opacity: 0.25, duration: 4 }, 96);
         timeline.to({}, { duration: 4 }, 96);
 
         requestAnimationFrame(() => ScrollTrigger.refresh());
