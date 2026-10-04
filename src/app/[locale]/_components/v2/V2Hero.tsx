@@ -82,7 +82,7 @@ export function V2Hero({ copy }: { copy: V2Copy }) {
 
           <div data-mobile-step className="absolute inset-x-5 top-24 bottom-8 flex flex-col justify-center sm:inset-x-8">
             <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/60">{copy.services}</p>
-            <h1 className="mt-5 max-w-[8ch] text-[clamp(3.2rem,13vw,5.5rem)] font-black leading-[.84] tracking-[-.065em]">{copy.hero}</h1>
+            <h1 className="mt-5 max-w-[8ch] text-[clamp(2.85rem,12vw,5.3rem)] font-black leading-[.84] tracking-[-.065em]">{copy.hero}</h1>
             <p className="mt-6 max-w-md text-[17px] leading-7 text-white/60">{copy.heroSub}</p>
             <MobileSurfacePreview copy={copy} />
           </div>
