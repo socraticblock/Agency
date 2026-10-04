@@ -1,4 +1,6 @@
-import { gsap, MotionPathPlugin, ScrollTrigger } from "gsap/all";
+import { gsap } from "gsap";
+import { MotionPathPlugin } from "gsap/MotionPathPlugin";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 let registered = false;
 
@@ -17,13 +19,8 @@ export function createDesktopSignalTimeline(root: HTMLElement | null) {
   const media = gsap.matchMedia();
 
   media.add(
-    {
-      desktop: "(min-width: 1024px)",
-      motion: "(prefers-reduced-motion: no-preference)",
-    },
-    (context) => {
-      if (!context.conditions?.desktop || !context.conditions?.motion) return;
-
+    "(min-width: 1024px) and (prefers-reduced-motion: no-preference)",
+    () => {
       const scope = gsap.context(() => {
         const intro = root.querySelector<HTMLElement>("[data-hero-intro]");
         const surface = root.querySelector<HTMLElement>("[data-hero-surface]");
@@ -113,13 +110,8 @@ export function createMobileSignalTimeline(root: HTMLElement | null) {
   const media = gsap.matchMedia();
 
   media.add(
-    {
-      mobile: "(max-width: 1023px)",
-      motion: "(prefers-reduced-motion: no-preference)",
-    },
-    (context) => {
-      if (!context.conditions?.mobile || !context.conditions?.motion) return;
-
+    "(max-width: 1023px) and (prefers-reduced-motion: no-preference)",
+    () => {
       const scope = gsap.context(() => {
         const steps = Array.from(root.querySelectorAll<HTMLElement>("[data-mobile-step]"));
         const signal = root.querySelector<HTMLElement>("[data-mobile-signal]");
