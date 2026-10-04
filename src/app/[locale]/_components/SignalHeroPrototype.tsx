@@ -8,7 +8,9 @@ import { getV2Copy } from "./v2/hero.copy";
 import { V2Hero } from "./v2/V2Hero";
 
 export function SignalHeroPrototype({ locale }: { locale: Locale }) {
-  const copy = getV2Copy(locale);\n\n  const waHref = useMemo(
+  const copy = getV2Copy(locale);
+
+  const waHref = useMemo(
     () => "https://wa.me/" + WHATSAPP_INTAKE + "?text=" + encodeURIComponent(WHATSAPP_DEFAULT_MESSAGE),
     [],
   );
@@ -39,7 +41,9 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
           </div>
         </header>
 
-        <V2Hero copy={copy} />\n\n        <section id="work" className="scroll-mt-20 bg-[#f0ece5] px-5 py-28 text-[#101114] sm:px-8 lg:py-40">
+        <V2Hero copy={copy} />
+
+        <section id="work" className="scroll-mt-20 bg-[#f0ece5] px-5 py-28 text-[#101114] sm:px-8 lg:py-40">
           <div className="mx-auto max-w-[92rem]">
             <p className="text-[10px] font-black uppercase tracking-[.22em] text-black/60">{copy.work}</p>
             <h2 className="mt-5 max-w-[9ch] text-[clamp(3.5rem,8vw,8rem)] font-black leading-[.86] tracking-[-.065em]">{copy.proof}</h2>
