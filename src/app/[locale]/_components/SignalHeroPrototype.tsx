@@ -507,9 +507,17 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
             <h2 className="mt-5 max-w-[9ch] text-[clamp(3.5rem,8vw,8rem)] font-black leading-[.86] tracking-[-.065em]">{copy.proof}</h2>
             <div className="mt-20 space-y-24 lg:mt-28 lg:space-y-36">
               <a href="https://tkcounsel.com/" target="_blank" rel="noopener noreferrer" className="group grid gap-7 rounded-[2rem] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black lg:grid-cols-[1.35fr_.65fr] lg:items-end">
-                <div className="min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#d9d2c8] p-7 sm:min-h-[520px] lg:min-h-[650px]">
-                  <div className="flex justify-between text-[9px] font-black uppercase tracking-[.18em] text-black/45"><span>TK Counsel</span><span>{copy.legalCategory}</span></div>
-                  <div className="flex h-[80%] items-end"><p className="max-w-[8ch] text-[clamp(3rem,7vw,7rem)] font-black leading-[.86] tracking-[-.06em]">{copy.tkTagline}</p></div>
+                <div className="relative min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#d9d2c8] p-4 sm:min-h-[520px] lg:min-h-[650px]">
+                  <div className="relative z-20 flex justify-between rounded-full bg-[#f0ece5]/90 px-4 py-3 text-[9px] font-black uppercase tracking-[.18em] text-black/55"><span>TK Counsel</span><span>{copy.legalCategory}</span></div>
+                  <iframe
+                    src="https://tkcounsel.com/"
+                    title="TK Counsel live website preview"
+                    loading="lazy"
+                    scrolling="no"
+                    tabIndex={-1}
+                    className="pointer-events-none absolute left-0 top-0 h-[140%] w-[140%] origin-top-left scale-[.715] border-0 bg-white"
+                  />
+                  <div aria-hidden className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-black/10" />
                 </div>
                 <div className="pb-2"><p className="text-3xl font-black tracking-[-.04em]">TK Counsel</p><p className="mt-4 max-w-md text-base leading-7 text-black/60">{copy.tkBody}</p><span className="mt-6 inline-flex items-center gap-2 text-sm font-black">{copy.viewWebsite} <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-1 group-hover:-translate-y-1" aria-hidden /></span></div>
               </a>
@@ -523,9 +531,17 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
               </a>
 
               <a href="https://her-house-pilates.vercel.app/" target="_blank" rel="noopener noreferrer" className="group grid gap-7 rounded-[2rem] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black lg:grid-cols-[1.35fr_.65fr] lg:items-end">
-                <div className="min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#d8c9b5] p-7 sm:min-h-[520px] lg:min-h-[650px]">
-                  <div className="flex justify-between text-[9px] font-black uppercase tracking-[.18em] text-black/45"><span>Her House Pilates</span><span>{copy.wellnessCategory}</span></div>
-                  <div className="flex h-[80%] items-center justify-center"><p className="max-w-[7ch] text-center text-[clamp(3rem,7vw,7rem)] font-black leading-[.86] tracking-[-.06em]">{copy.pilatesTagline}</p></div>
+                <div className="relative min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#d8c9b5] p-4 sm:min-h-[520px] lg:min-h-[650px]">
+                  <div className="relative z-20 flex justify-between rounded-full bg-[#f0ece5]/90 px-4 py-3 text-[9px] font-black uppercase tracking-[.18em] text-black/55"><span>Her House Pilates</span><span>{copy.wellnessCategory}</span></div>
+                  <iframe
+                    src="https://her-house-pilates.vercel.app/"
+                    title="Her House Pilates live website preview"
+                    loading="lazy"
+                    scrolling="no"
+                    tabIndex={-1}
+                    className="pointer-events-none absolute left-0 top-0 h-[140%] w-[140%] origin-top-left scale-[.715] border-0 bg-white"
+                  />
+                  <div aria-hidden className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-black/10" />
                 </div>
                 <div className="pb-2"><p className="text-3xl font-black tracking-[-.04em]">Her House Pilates</p><p className="mt-4 max-w-md text-base leading-7 text-black/60">{copy.pilatesBody}</p><span className="mt-6 inline-flex items-center gap-2 text-sm font-black">{copy.viewWebsite} <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-1 group-hover:-translate-y-1" aria-hidden /></span></div>
               </a>
