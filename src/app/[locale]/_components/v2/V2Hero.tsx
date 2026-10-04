@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { useReducedMotion } from "framer-motion";
+import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 import type { V2Copy } from "./hero.copy";
 import {
   Availability,
@@ -14,18 +13,45 @@ import {
   Understanding,
 } from "./HeroVisuals";
 
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+
+function subscribeReducedMotion(onStoreChange: () => void) {
+  const media = window.matchMedia(REDUCED_MOTION_QUERY);
+  media.addEventListener("change", onStoreChange);
+  return () => media.removeEventListener("change", onStoreChange);
+}
+
+function getReducedMotionSnapshot() {
+  return window.matchMedia(REDUCED_MOTION_QUERY).matches;
+}
+
+function getReducedMotionServerSnapshot() {
+  return false;
+}
+
 function MobileRail({
   active,
+  completed,
   branch = false,
   born = false,
 }: {
   active: boolean;
+  completed: boolean;
   branch?: boolean;
   born?: boolean;
 }) {
-  const path = branch
-    ? "M17 8 V52 C17 68 10 76 7 96 M17 52 C17 68 24 76 27 96"
+  const basePath = branch
+    ? "M17 8 V48 M17 48 C17 60 8 72 7 96 M17 48 C17 60 26 72 27 96"
     : "M17 8 V104";
+  const activePath = branch
+    ? "M17 8 V48 C17 60 8 72 7 96"
+    : "M17 8 V104";
+  const filled = !born && (active || completed);
+  const dotTransform = active
+    ? branch
+      ? "translate(-10px,72px)"
+      : "translate(0,72px)"
+    : "translate(0,0)";
 
   return (
     <svg
@@ -34,28 +60,30 @@ function MobileRail({
       viewBox="0 0 34 112"
     >
       <path
-        d={path}
+        d={basePath}
         fill="none"
         stroke="rgba(255,255,255,.12)"
         strokeWidth="1.5"
         strokeLinecap="round"
       />
       <path
-        d={path}
+        d={activePath}
         pathLength="1"
         fill="none"
         stroke="rgba(165,243,252,.72)"
         strokeWidth="2"
         strokeLinecap="round"
         strokeDasharray="1"
-        strokeDashoffset={active ? "0" : "1"}
+        strokeDashoffset={filled ? "0" : "1"}
         style={{ transition: "stroke-dashoffset 520ms cubic-bezier(.22,1,.36,1)" }}
       />
       {!born && (
         <g
           style={{
-            transform: active ? "translateY(72px)" : "translateY(0)",
-            transition: "transform 520ms cubic-bezier(.22,1,.36,1)",
+            opacity: active ? 1 : 0,
+            transform: dotTransform,
+            transition:
+              "transform 520ms cubic-bezier(.22,1,.36,1), opacity 160ms ease-out",
             transformOrigin: "17px 24px",
           }}
         >
@@ -70,6 +98,7 @@ function MobileRail({
 function MobileChapter({
   index,
   active,
+  completed,
   label,
   branch,
   born,
@@ -77,6 +106,7 @@ function MobileChapter({
 }: {
   index: number;
   active: boolean;
+  completed: boolean;
   label: string;
   branch?: boolean;
   born?: boolean;
@@ -89,7 +119,7 @@ function MobileChapter({
       className="relative grid min-h-[58svh] grid-cols-[36px_1fr] items-center gap-4 border-t border-white/[.055] py-14 first:min-h-[100svh] first:border-t-0 first:pt-24 last:min-h-[82svh] sm:gap-7 sm:py-20"
     >
       <div className="flex h-full min-h-36 items-center justify-center">
-        <MobileRail active={active} branch={branch} born={born} />
+        <MobileRail active={active} completed={completed} branch={branch} born={born} />
       </div>
       <div
         className={
@@ -110,7 +140,11 @@ function MobileChapter({
 export function V2Hero({ copy }: { copy: V2Copy }) {
   const desktopStoryRef = useRef<HTMLDivElement>(null);
   const mobileStoryRef = useRef<HTMLDivElement>(null);
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useSyncExternalStore(
+    subscribeReducedMotion,
+    getReducedMotionSnapshot,
+    getReducedMotionServerSnapshot,
+  );
   const [mobileStep, setMobileStep] = useState(0);
 
   useLayoutEffect(() => {
@@ -145,30 +179,58 @@ export function V2Hero({ copy }: { copy: V2Copy }) {
   }, [reduceMotion]);
 
   useEffect(() => {
-    if (reduceMotion || !mobileStoryRef.current) return;
+    if (reduceMotion || !mobileStoryRef.current || typeof window === "undefined") return;
 
-    const chapters = Array.from(
-      mobileStoryRef.current.querySelectorAll<HTMLElement>("[data-mobile-chapter]"),
-    );
+    const media = window.matchMedia("(max-width: 1023px)");
+    let observer: IntersectionObserver | null = null;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+    const connect = () => {
+      observer?.disconnect();
+      observer = null;
+      if (!media.matches || !mobileStoryRef.current) return;
 
-        if (!visible) return;
-        const index = Number((visible.target as HTMLElement).dataset.index);
-        if (Number.isFinite(index)) setMobileStep(index);
-      },
-      {
-        rootMargin: "-24% 0px -36% 0px",
-        threshold: [0.15, 0.35, 0.55],
-      },
-    );
+      const chapters = Array.from(
+        mobileStoryRef.current.querySelectorAll<HTMLElement>("[data-mobile-chapter]"),
+      );
 
-    chapters.forEach((chapter) => observer.observe(chapter));
-    return () => observer.disconnect();
+      const pickNearestChapter = () => {
+        const focusY = window.innerHeight * 0.46;
+        let nearestIndex: number | null = null;
+        let nearestDistance = Number.POSITIVE_INFINITY;
+
+        chapters.forEach((chapter) => {
+          const rect = chapter.getBoundingClientRect();
+          if (rect.bottom <= 0 || rect.top >= window.innerHeight) return;
+
+          const index = Number(chapter.dataset.index);
+          const distance = Math.abs(rect.top + rect.height / 2 - focusY);
+          if (Number.isFinite(index) && distance < nearestDistance) {
+            nearestDistance = distance;
+            nearestIndex = index;
+          }
+        });
+
+        if (nearestIndex !== null) {
+          setMobileStep(nearestIndex);
+        }
+      };
+
+      observer = new IntersectionObserver(pickNearestChapter, {
+        rootMargin: "-20% 0px -20% 0px",
+        threshold: [0, 0.2, 0.45],
+      });
+
+      chapters.forEach((chapter) => observer?.observe(chapter));
+      pickNearestChapter();
+    };
+
+    connect();
+    media.addEventListener("change", connect);
+
+    return () => {
+      media.removeEventListener("change", connect);
+      observer?.disconnect();
+    };
   }, [reduceMotion]);
 
   if (reduceMotion) {
@@ -275,14 +337,14 @@ export function V2Hero({ copy }: { copy: V2Copy }) {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_72%_12%,rgba(34,211,238,.06),transparent_22%)]" />
 
         <div className="relative mx-auto max-w-3xl">
-          <MobileChapter index={0} active={mobileStep === 0} label={copy.firstImpression} born>
+          <MobileChapter index={0} active={mobileStep === 0} completed={mobileStep > 0} label={copy.firstImpression} born>
             <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/60">{copy.services}</p>
             <h1 className="mt-5 max-w-[8ch] text-[clamp(2.9rem,12vw,5.2rem)] font-black leading-[.84] tracking-[-.065em]">{copy.hero}</h1>
             <p className="mt-6 max-w-md text-[17px] leading-7 text-white/60">{copy.heroSub}</p>
             <MobileSurfacePreview copy={copy} />
           </MobileChapter>
 
-          <MobileChapter index={1} active={mobileStep === 1} label={copy.enquiryReceived} born>
+          <MobileChapter index={1} active={mobileStep === 1} completed={mobileStep > 1} label={copy.enquiryReceived} born>
             <p className="text-[10px] font-black uppercase tracking-[.2em] text-cyan-100/65">{copy.receive}</p>
             <h2 className="mt-4 text-5xl font-black tracking-[-.05em]">{copy.someoneAsks}</h2>
             <div className="mt-8 rounded-[1.6rem] bg-[#11151a] p-6 shadow-2xl ring-1 ring-white/[.06]">
@@ -297,19 +359,19 @@ export function V2Hero({ copy }: { copy: V2Copy }) {
             </div>
           </MobileChapter>
 
-          <MobileChapter index={2} active={mobileStep === 2} label={copy.systemRevealed}>
+          <MobileChapter index={2} active={mobileStep === 2} completed={mobileStep > 2} label={copy.systemRevealed}>
             <Understanding copy={copy} />
           </MobileChapter>
 
-          <MobileChapter index={3} active={mobileStep === 3} label={copy.usefulAction}>
+          <MobileChapter index={3} active={mobileStep === 3} completed={mobileStep > 3} label={copy.usefulAction}>
             <Availability copy={copy} />
           </MobileChapter>
 
-          <MobileChapter index={4} active={mobileStep === 4} label={copy.humanJudgment} branch>
+          <MobileChapter index={4} active={mobileStep === 4} completed={mobileStep > 4} label={copy.humanJudgment} branch>
             <Owner copy={copy} />
           </MobileChapter>
 
-          <MobileChapter index={5} active={mobileStep === 5} label={copy.resolved} born>
+          <MobileChapter index={5} active={mobileStep === 5} completed={false} label={copy.resolved} born>
             <Resolved copy={copy} />
           </MobileChapter>
         </div>

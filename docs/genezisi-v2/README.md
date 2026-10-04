@@ -1,25 +1,30 @@
-# Genezisi V2 planning
+# Genezisi V2
 
-Status: research and creative direction only — no production redesign is merged yet.
+Status: implementation prototype under review on PR #4. Production `main` is not replaced.
 
 ## North star
 
 **Impress → Prove → Contact**
 
-Build a dark, cinematic, founder-led Genezisi website with one exceptional Signal-driven scroll sequence, a small amount of beautifully presented real work, and a direct “Message me” path that is effortless on desktop and mobile.
+Build a dark, cinematic, founder-led Genezisi website with one clear Signal story, real work, concrete capabilities and a direct message path.
+
+## Current architecture
+
+- **Desktop:** one bounded GSAP / ScrollTrigger sequence with the Signal and its route in the same SVG coordinate system.
+- **Mobile:** native document scrolling, threshold-triggered chapters, compositor-friendly transitions and no GSAP runtime.
+- **Reduced motion:** complete static six-state story.
+- **Below the hero:** editorial Selected Work, Websites / AI systems / Automation, one small Genezisi Lab interaction, founder positioning and direct contact.
 
 ## Documents
 
 - [Research and creative direction](./research-and-creative-direction-2026-10-04.md)
 - [Creative & experience specification v0.1](./creative-experience-spec-v0.1.md)
 - [Implementation roadmap](./implementation-roadmap.md)
+- [Current implementation audit](./current-implementation-audit.md)
+- [Execution status](./execution-status.md)
 
-## Next production step
+## Merge gate
 
-1. Audit the existing Next.js site and current components/assets.
-2. Lock hero headline, contact destination, launch languages, approved portfolio work, and hero scenario.
-3. Produce static desktop + mobile hero keyframes.
-4. Build an isolated hero prototype on a separate implementation branch.
-5. Test the prototype on real mobile devices, reduced motion, fast/reverse scroll, and desktop before rebuilding the rest of the site.
+Do not merge merely because the code builds.
 
-Do not redesign the full production site until the signature hero prototype reaches the intended quality bar.
+Before production cutover, verify the rendered preview on real mobile hardware, including iPhone Safari and a mid-range Android, with slow scroll, aggressive flicks, reverse scrolling, orientation changes and reduced motion. English and Georgian must both receive a visual pass.

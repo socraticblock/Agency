@@ -1,9 +1,14 @@
 import { ArrowUpRight, MessageCircle } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
-import { WHATSAPP_DEFAULT_MESSAGE, WHATSAPP_INTAKE } from "@/constants/content";
+import { WHATSAPP_INTAKE } from "@/constants/content";
 import { getV2Copy } from "./v2/hero.copy";
 import { V2Hero } from "./v2/V2Hero";
 import { V2Lab } from "./v2/V2Lab";
+
+const V2_WHATSAPP_MESSAGE: Record<Locale, string> = {
+  en: "Hi Genezisi, I have something I’d like to build. Can we talk?",
+  ka: "გამარჯობა Genezisi, მაქვს იდეა, რომლის შექმნაც მინდა. შეგვიძლია ვისაუბროთ?",
+};
 
 function ProjectCover({
   variant,
@@ -83,7 +88,7 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
     "https://wa.me/" +
     WHATSAPP_INTAKE +
     "?text=" +
-    encodeURIComponent(WHATSAPP_DEFAULT_MESSAGE);
+    encodeURIComponent(V2_WHATSAPP_MESSAGE[locale]);
 
   const capabilities = [
     ["01", copy.websiteTitle, copy.websiteBody],

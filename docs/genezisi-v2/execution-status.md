@@ -1,126 +1,78 @@
-# Genezisi V2 — Roadmap Completion Status
+# Genezisi V2 — Execution Status
 
 **Date:** 4 October 2026  
-**Branch:** `genezisi-v2/planning`  
-**Production `main`:** untouched  
+**Branch:** `genezisi-v2/motion-performance-rebuild`  
+**PR:** #4  
+**Production `main`:** not replaced  
 **Production cutover:** explicit owner approval required
 
-## Roadmap implementation — complete
+## Implemented
 
-The protected V2 branch now implements the roadmap:
+The V2 prototype currently includes:
 
-- Research, competitive direction, experience specification, codebase audit and implementation roadmap.
-- Isolated English and Georgian V2 prototype routes with `noindex, nofollow` plus robots exclusion.
-- Signature Signal story: **Receive → Route → Review → Resolve**.
-- Desktop hero: ~360svh native-scroll sticky scene using **GSAP 3.15 + ScrollTrigger + MotionPath**.
-- One persistent Signal follows a visible SVG route; human review uses a distinct branch.
-- Website surface shifts/scales/rotates shallowly to reveal the operational layer.
-- Enquiry appears after first paint rather than being present from frame zero.
-- Useful action, owner review and calm resolved state are staged explicitly.
-- Completion fades the active path and removes motion rather than ending in spectacle.
-- Mobile: separately authored ~280svh sticky sequence with one primary interface at a time and a vertical Signal cue.
-- Reduced motion: complete static six-state story; no scroll-dependent comprehension.
-- Hero architecture split into dedicated V2 copy, visual, stage and timeline modules with lifecycle cleanup.
-- Selected Work: three large editorial project moments with real destinations and honest live/prototype status labels.
-- TK Counsel and Her House Pilates use lazy decorative live previews with separate accessible outbound links; Frankencoin Desk uses the real repository screenshot.
+- English and Georgian prototype routes at `/[locale]/v2-prototype` with route-level `noindex, nofollow`.
+- Signature Signal story: **Surface → Request → Understand → Act → Human Review → Resolve**.
+- Desktop cinematic choreography using GSAP / ScrollTrigger / MotionPath, with one Signal contained in the same SVG coordinate system as its route.
+- Mobile choreography rebuilt around normal document scrolling and discrete chapter activation. Mobile does not load or execute the GSAP hero timeline.
+- Mobile route state that remains visually completed as the request progresses, reverses when the visitor scrolls backward, and uses a distinct human-review branch.
+- Reduced-motion detection implemented with the browser media query directly, avoiding a Framer Motion runtime just for one preference hook.
+- Reduced-motion static story with no scroll-dependent comprehension.
+- Selected Work without automatic live iframes; real outbound project links remain available.
 - Websites / AI systems / Automation positioning.
-- Genezisi Lab explicitly labeled **Internal demo**, tied to the same sample request and showing request → understanding → action → exception → final outcome.
-- Founder section: **Small by design**, direct founder-led positioning, no fake team and no fabricated portrait.
-- WhatsApp available in the fixed header, after Selected Work and in the final contact section.
-- Central WhatsApp intake copy broadened beyond website-only enquiries.
-- English and Georgian marketing copy, navigation, status labels and metadata.
-- Georgian font stack includes real 400 / 600 / 700 / 900 Noto Sans Georgian weights.
-- Language switching remains available down to small-phone widths.
-- Localized page metadata and route-specific Open Graph image.
-- Broader Genezisi business metadata/structured-data copy for Websites + AI + Automation.
-- Keyboard focus, touch-target, semantic navigation and hidden-state accessibility pass.
-- No mandatory hero video, WebGL render loop or Lenis dependency.
-- Production homepage is still not replaced.
+- A lightweight Genezisi Lab interaction showing request → understanding → action → exception → outcome.
+- Founder-led positioning and direct WhatsApp conversion.
+- V2-only Georgian display weights instead of widening the production-wide font payload.
+- Below-fold `content-visibility` containment hints.
+- No mandatory hero video, WebGL loop, Lenis scroll-jacking or mobile smooth-scroll layer.
 
-## Self-review corrections completed
+## Self-review corrections
 
-A deliberate second review found and fixed:
+The review pass after PR creation corrected:
 
-- incomplete reduced-motion behavior;
-- missing resolved desktop state;
-- enquiry visible too early;
-- linear “review” behavior instead of a true branch;
-- mobile choreography that was too long / too desktop-like;
-- short-phone clipping/header pressure;
-- partial Georgian localization and synthetic heavy Georgian weights;
-- duplicated WhatsApp copy;
-- duplicate `#main-content` / skip-link ownership;
-- missing mobile locale switch;
-- weak text contrast;
-- placeholder portfolio art where real project proof was available;
-- live iframes nested inside clickable project cards;
-- abstract founder image placeholder despite no real portrait asset;
-- Genezisi Lab ending before the final business outcome;
-- stale website-only locale SEO;
-- stale inherited website-only V2 social image;
-- route cue staying visually loud at completion;
-- inactive opacity-only hero states remaining semantically visible before GSAP initialization.
+- prototype indexing strategy: route-level `noindex` remains, while `robots.txt` no longer blocks crawlers from seeing that directive;
+- unintended global production SEO changes were removed from this prototype PR;
+- unintended global production WhatsApp-copy changes were removed; V2 now owns localized intake copy locally;
+- V2-only Georgian font weights were moved out of the root font bundle;
+- mobile chapter activation no longer depends on whichever IntersectionObserver entry happens to arrive first;
+- completed mobile route segments remain completed instead of retracting immediately;
+- inactive chapters no longer expose multiple visible Signal dots;
+- the human-review chapter has a distinct routed branch;
+- desktop/mobile mode switching retains explicit lifecycle cleanup across breakpoint changes;
+- the V2 hero no longer imports Framer Motion merely to detect reduced-motion preference.
 
-## Build validation
+## Build gate
 
-**PASS.** Full implementation code head:
+The authoritative build result is the Vercel status attached to the **current PR head**. A previously green SHA is not sufficient after later review fixes.
 
-`0815debacc9108ce26ee308249dd1bdaa4c6ae46`
-
-reports a successful Vercel build.
-
-The stable branch preview alias is:
-
-`https://agency-git-genezisi-v2-planning-socraticblock-7157s-projects.vercel.app`
-
-Review routes:
-
-- `/en/v2-prototype`
-- `/ka/v2-prototype`
+Do not merge unless the current head reports success.
 
 ## Repository integrity
 
-- Production `main` remains the base and has not been merged/replaced.
-- V2 is confined to the protected branch.
-- Existing pricing/service routes remain intact.
-- The V2 prototype is excluded from indexing and the sitemap.
-- No old website-only WhatsApp default remains in the V2 path.
-- No TODO/FIXME/placeholder markers remain in the V2 implementation.
-- Framer Motion is retained only for reduced-motion detection in V2; the signature scroll choreography is GSAP/ScrollTrigger.
-- No fake performance metrics, client AI claims or fabricated founder photography were introduced.
+- The branch starts from the latest `main` base used for this work.
+- The previous long-lived V2 draft PR is closed as superseded.
+- Existing production homepage routes remain intact.
+- The V2 prototype is not included as a production homepage replacement.
+- Route-specific metadata marks the prototype as non-indexable.
+- Production-wide SEO/contact copy is intentionally left unchanged until actual cutover.
 
-## External acceptance gates — not certifiable from this environment
+## External acceptance gates
 
-The Vercel alias is deployed, but the available review browser refuses access to the Vercel preview domain and the local Chromium runtime has no outbound DNS/network access. Therefore repository/build validation cannot honestly substitute for:
+Repository/build validation does not substitute for:
 
-- pixel review at 320 / 360 / 390 / 430 / 768 / 1024 / 1280 / 1440 / 1728+ and short-laptop height;
-- slow wheel / fast wheel / trackpad flick / reverse scroll;
-- direct scrollbar jump;
-- reload mid-sequence;
+- rendered review at 320 / 360 / 390 / 430 / 768 / 1024 / 1280 / 1440 / 1728+;
+- slow scroll, fast flick, reverse scroll and rapid direction changes;
+- reload mid-sequence and browser back/forward;
 - resize and orientation changes;
-- browser back/forward;
-- real iPhone Safari;
-- real mid-range Android Chrome;
+- iPhone Safari;
+- mid-range Android Chrome;
 - desktop Safari / Firefox / Edge;
-- measured frame rate and Core Web Vitals;
-- rendered Georgian line-break/glyph review;
-- visual judgment that the final art direction reaches the intended premium bar.
-
-A real founder portrait is not present anywhere in the repository or available project files. The V2 founder section intentionally remains typographic rather than using a fake or generated portrait.
+- measured frame behavior and Core Web Vitals;
+- English and Georgian line-break/glyph review;
+- final visual judgment against the supplied current-site recording;
+- clean direct screenshots for TK Counsel and Her House Pilates before production cutover. The current lightweight covers are prototype presentation, not final proof imagery.
 
 ## Gate conclusion
 
-**Implementation roadmap: complete on the protected branch and build-validated at `0815debacc9108ce26ee308249dd1bdaa4c6ae46`.**
+**Implementation is ready for rendered/device acceptance once the current PR head is green.**
 
-**Acceptance/launch roadmap: not complete until rendered/device QA and owner visual approval occur.**
-
-Do not merge to `main` merely to bypass preview restrictions.
-
-## Production cutover after acceptance
-
-1. Fix any defects discovered in rendered/device QA.
-2. Verify English + Georgian, WhatsApp, work links, keyboard navigation and reduced motion in the rendered build.
-3. Preserve/tag the current production rollback point.
-4. Obtain explicit owner approval.
-5. Merge the approved V2 branch to `main`.
-6. Smoke-test production and preserve immediate rollback.
+Do not merge to `main` until that acceptance pass is complete and explicitly approved.
