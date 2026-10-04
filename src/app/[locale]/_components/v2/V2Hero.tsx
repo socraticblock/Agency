@@ -75,7 +75,7 @@ function MobileRail({
         strokeLinecap="round"
         strokeDasharray="1"
         strokeDashoffset={filled ? "0" : "1"}
-        style={{ transition: "stroke-dashoffset 460ms cubic-bezier(.22,1,.36,1)" }}
+        style={{ transition: "stroke-dashoffset 520ms cubic-bezier(.22,1,.36,1)" }}
       />
       {!born && (
         <g
@@ -83,7 +83,7 @@ function MobileRail({
             opacity: active ? 1 : 0,
             transform: dotTransform,
             transition:
-              "transform 460ms cubic-bezier(.22,1,.36,1), opacity 140ms ease-out",
+              "transform 520ms cubic-bezier(.22,1,.36,1), opacity 220ms ease-out",
             transformOrigin: "17px 24px",
           }}
         >
@@ -116,15 +116,17 @@ function MobileChapter({
     <section
       data-mobile-chapter
       data-index={index}
-      className="relative grid min-h-[50svh] grid-cols-[36px_1fr] items-center gap-4 border-t border-white/[.055] py-10 first:min-h-[92svh] first:border-t-0 first:pt-24 last:min-h-[76svh] sm:gap-7 sm:py-14"
+      className="relative grid min-h-[44svh] grid-cols-[36px_1fr] items-center gap-4 border-t border-white/[.055] py-8 first:min-h-[80svh] first:border-t-0 first:pt-20 last:min-h-[64svh] sm:gap-7 sm:py-12"
     >
       <div className="flex h-full min-h-32 items-center justify-center">
         <MobileRail active={active} completed={completed} branch={branch} born={born} />
       </div>
       <div
         className={
-          "min-w-0 transition-[opacity,transform] duration-[400ms] ease-out " +
-          (active ? "translate-y-0 opacity-100" : "translate-y-2 opacity-45")
+          "min-w-0 transition-[opacity,transform] duration-[520ms] ease-[cubic-bezier(.22,1,.36,1)] " +
+          (active
+            ? "translate-y-0 scale-100 opacity-100"
+            : "translate-y-3 scale-[.985] opacity-40")
         }
       >
         <div className="mb-5 flex items-center justify-between gap-4 text-[9px] font-black uppercase tracking-[.2em] text-white/38">
@@ -235,7 +237,7 @@ export function V2Hero({ copy }: { copy: V2Copy }) {
 
   return (
     <>
-      <div ref={desktopStoryRef} className="relative hidden h-[275svh] lg:block">
+      <div ref={desktopStoryRef} className="relative hidden h-[260svh] lg:block">
         <div className="sticky top-0 h-[100svh] overflow-hidden bg-[#02060b] px-12 pt-24">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_73%_34%,rgba(34,211,238,.075),transparent_27%),radial-gradient(circle_at_18%_72%,rgba(255,255,255,.025),transparent_28%)]" />
           <div className="relative mx-auto h-full max-w-[92rem]">

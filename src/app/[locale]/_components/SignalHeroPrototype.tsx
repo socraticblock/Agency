@@ -93,7 +93,7 @@ function ProjectCover({
       </div>
       <div className="absolute inset-x-[5%] bottom-[6%] top-[18%] overflow-hidden rounded-[1.7rem] border border-white/10 bg-[#090d18] shadow-[0_35px_90px_rgba(0,0,0,.28)]">
         <img
-          src="/work-previews/tk-counsel-real.webp"
+          src="/work-previews/tk-counsel.webp"
           alt="TK Counsel Georgia website homepage"
           loading="lazy"
           decoding="async"

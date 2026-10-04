@@ -56,8 +56,11 @@ export function createDesktopSignalTimeline(root: HTMLElement | null) {
           return;
         }
 
-        gsap.set(enquiry, { autoAlpha: 0, y: 10 });
-        gsap.set([system, action, owner, resolved, resolutionWash, routes, signal], { autoAlpha: 0 });
+        gsap.set(enquiry, { autoAlpha: 0, y: 8 });
+        gsap.set(system, { autoAlpha: 0, y: 16, scale: 0.985 });
+        gsap.set(action, { autoAlpha: 0, y: 16, scale: 0.985 });
+        gsap.set(owner, { autoAlpha: 0, y: 14, scale: 0.99 });
+        gsap.set([resolved, resolutionWash, routes, signal], { autoAlpha: 0 });
         gsap.set([activePath, reviewActive], { attr: { "stroke-dashoffset": 1 } });
 
         const timeline = gsap.timeline({
@@ -66,32 +69,47 @@ export function createDesktopSignalTimeline(root: HTMLElement | null) {
             trigger: root,
             start: "top top",
             end: "bottom bottom",
-            scrub: true,
+            scrub: 0.35,
             invalidateOnRefresh: true,
           },
         });
 
-        // Respond almost immediately after scroll begins.
-        timeline.to(enquiry, { autoAlpha: 1, y: 0, duration: 5, ease: "power2.out" }, 2);
+        // Immediate acknowledgement: visible response begins with the first scroll input.
+        timeline.to(
+          enquiry,
+          { autoAlpha: 1, y: 0, duration: 6, ease: "power2.out" },
+          0.1,
+        );
 
-        // The website remains dominant only long enough to establish the request.
         timeline.to(
           surface,
           {
-            x: "-22vw",
-            scale: 0.86,
-            rotation: -1.5,
-            duration: 11,
+            x: "-20vw",
+            scale: 0.875,
+            rotation: -1.25,
+            duration: 14,
             transformOrigin: "100% 48%",
             ease: "power2.inOut",
           },
-          10,
+          1,
         );
-        if (intro) timeline.to(intro, { autoAlpha: 0, y: -18, duration: 7 }, 11);
-        timeline.to(routes, { autoAlpha: 1, duration: 3 }, 18);
 
-        timeline.to(signal, { autoAlpha: 1, duration: 2 }, 20);
-        timeline.to(activePath, { attr: { "stroke-dashoffset": 0.52 }, duration: 11 }, 20);
+        if (intro) {
+          timeline.to(
+            intro,
+            { autoAlpha: 0, y: -14, duration: 9, ease: "power1.inOut" },
+            3,
+          );
+        }
+
+        timeline.to(routes, { autoAlpha: 1, duration: 7, ease: "power1.inOut" }, 10);
+        timeline.to(signal, { autoAlpha: 1, duration: 5, ease: "power1.inOut" }, 12);
+
+        timeline.to(
+          activePath,
+          { attr: { "stroke-dashoffset": 0.52 }, duration: 17, ease: "power1.inOut" },
+          12,
+        );
         timeline.to(
           signal,
           {
@@ -103,27 +121,42 @@ export function createDesktopSignalTimeline(root: HTMLElement | null) {
               start: 0,
               end: 0.48,
             },
-            duration: 11,
+            duration: 17,
+            ease: "power1.inOut",
           },
-          20,
+          12,
         );
 
-        // Clear the large website before the system becomes the focal surface.
+        // The website relinquishes focus gradually while the system emerges.
         timeline.to(
           surface,
           {
             autoAlpha: 0,
-            x: "-28vw",
-            scale: 0.8,
-            duration: 7,
+            x: "-27vw",
+            scale: 0.81,
+            duration: 14,
             ease: "power2.inOut",
           },
-          23,
+          16,
         );
-        timeline.to(system, { autoAlpha: 1, y: 0, duration: 5, ease: "power2.out" }, 30);
+        timeline.to(
+          system,
+          {
+            autoAlpha: 1,
+            y: 0,
+            scale: 1,
+            duration: 12,
+            ease: "power2.out",
+          },
+          22,
+        );
 
-        // Understand -> useful action.
-        timeline.to(activePath, { attr: { "stroke-dashoffset": 0 }, duration: 12 }, 39);
+        // Understand -> action: no dead interval between path progress and surface handoff.
+        timeline.to(
+          activePath,
+          { attr: { "stroke-dashoffset": 0 }, duration: 16, ease: "power1.inOut" },
+          30,
+        );
         timeline.to(
           signal,
           {
@@ -135,15 +168,34 @@ export function createDesktopSignalTimeline(root: HTMLElement | null) {
               start: 0.48,
               end: 1,
             },
-            duration: 12,
+            duration: 16,
+            ease: "power1.inOut",
           },
-          39,
+          30,
         );
-        timeline.to(action, { autoAlpha: 1, y: 0, duration: 5, ease: "power2.out" }, 49);
-        timeline.to(system, { autoAlpha: 0, scale: 0.97, duration: 5, ease: "power1.inOut" }, 50);
+        timeline.to(
+          action,
+          {
+            autoAlpha: 1,
+            y: 0,
+            scale: 1,
+            duration: 11,
+            ease: "power2.out",
+          },
+          40,
+        );
+        timeline.to(
+          system,
+          { autoAlpha: 0, y: -8, scale: 0.985, duration: 10, ease: "power1.inOut" },
+          44,
+        );
 
-        // Useful action -> human review.
-        timeline.to(reviewActive, { attr: { "stroke-dashoffset": 0 }, duration: 10 }, 60);
+        // Action -> human review: concise handoff, still continuously changing.
+        timeline.to(
+          reviewActive,
+          { attr: { "stroke-dashoffset": 0 }, duration: 14, ease: "power1.inOut" },
+          51,
+        );
         timeline.to(
           signal,
           {
@@ -155,20 +207,51 @@ export function createDesktopSignalTimeline(root: HTMLElement | null) {
               start: 0,
               end: 1,
             },
-            duration: 10,
+            duration: 14,
+            ease: "power1.inOut",
           },
-          60,
+          51,
         );
-        timeline.to(owner, { autoAlpha: 1, x: 0, duration: 5, ease: "power2.out" }, 68);
-        timeline.to(action, { autoAlpha: 0, scale: 0.98, duration: 5, ease: "power1.inOut" }, 69);
+        timeline.to(
+          owner,
+          {
+            autoAlpha: 1,
+            y: 0,
+            scale: 1,
+            duration: 10,
+            ease: "power2.out",
+          },
+          58,
+        );
+        timeline.to(
+          action,
+          { autoAlpha: 0, y: -8, scale: 0.985, duration: 9, ease: "power1.inOut" },
+          61,
+        );
 
-        // Resolve in three beats: clear -> breathe -> reveal.
-        timeline.to([owner, signal, routes], { autoAlpha: 0, duration: 5, ease: "power1.inOut" }, 78);
-        if (progress) timeline.to(progress, { autoAlpha: 0, duration: 4 }, 79);
-        timeline.to(resolutionWash, { autoAlpha: 1, duration: 5, ease: "power1.inOut" }, 80);
-        timeline.to({}, { duration: 3 }, 85);
-        timeline.to(resolved, { autoAlpha: 1, duration: 7, ease: "power2.out" }, 88);
-        timeline.to({}, { duration: 15 }, 95);
+        // Resolve: clear -> breathe -> slow reveal.
+        timeline.to(
+          owner,
+          { autoAlpha: 0, y: -6, scale: 0.99, duration: 10, ease: "power1.inOut" },
+          70,
+        );
+        timeline.to(
+          [signal, routes],
+          { autoAlpha: 0, duration: 9, ease: "power1.inOut" },
+          71,
+        );
+        if (progress) {
+          timeline.to(progress, { autoAlpha: 0, duration: 8, ease: "power1.inOut" }, 72);
+        }
+        timeline.to(
+          resolutionWash,
+          { autoAlpha: 1, duration: 9, ease: "power1.inOut" },
+          73,
+        );
+
+        timeline.to({}, { duration: 4 }, 82);
+        timeline.to(resolved, { autoAlpha: 1, duration: 11, ease: "power2.out" }, 86);
+        timeline.to({}, { duration: 10 }, 97);
 
         requestAnimationFrame(() => ScrollTrigger.refresh());
       }, root);
