@@ -126,7 +126,7 @@ function StaticFrame({
   children: ReactNode;
 }) {
   return (
-    <section className="relative flex min-h-[100svh] flex-col overflow-hidden border-b border-white/[.06] bg-[#02060b] px-5 pb-10 pt-24 text-white sm:px-8">
+    <section className="relative flex min-h-[100svh] flex-col overflow-x-hidden border-b border-white/[.06] bg-[#02060b] px-5 pb-10 pt-24 text-white sm:px-8">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_75%_30%,rgba(34,211,238,.055),transparent_26%)]" />
       <div className="relative mx-auto flex w-full max-w-[92rem] items-center justify-between text-[9px] font-black uppercase tracking-[.2em] text-white/35"><span>{index}</span><span>{label}</span></div>
       <div className="relative mx-auto flex w-full max-w-[92rem] flex-1 items-center py-10">{children}</div>
