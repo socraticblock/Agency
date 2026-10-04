@@ -11,7 +11,7 @@ export const viewport: Viewport = {
 
 const SITE_NAME = "Genezisi";
 const SITE_DESCRIPTION =
-  "Premium website design and development in Tbilisi, Georgia for local businesses that want to look serious online and book more customers.";
+  "Genezisi is a founder-led digital studio building distinctive websites, useful AI systems and automation for real businesses.";
 
 function normalizeLocale(locale: string | undefined): Locale {
   if (locale && (locale === "en" || locale === "ka")) return locale;
@@ -30,16 +30,16 @@ export async function generateMetadata({
     description: SITE_DESCRIPTION,
     locale: lang,
     path: "/",
-    jobTitle: "Premium Website Design",
+    jobTitle: "Websites, AI Systems & Automation",
     accentColor: "#10b981",
     theme: "dark",
-    ogTagline: "Premium websites for businesses that want to look serious online.",
+    ogTagline: "Websites, AI and automation built to work together.",
     ogSubline:
-      "Founder-led website design and development for coaches, clinics, studios, restaurants, shops, and local services.",
-    ogServices: "Website design, development, booking, payments, SEO",
-    ogCta: "Book a website call",
+      "Founder-led digital design and systems work for businesses that want a better customer experience and less repetitive work.",
+    ogServices: "Websites, AI systems, automation, integrations",
+    ogCta: "Message Genezisi",
     ogAlt:
-      "Genezisi premium website design and development for Georgian businesses",
+      "Genezisi websites, AI systems and automation for real businesses",
   });
   
   return {
