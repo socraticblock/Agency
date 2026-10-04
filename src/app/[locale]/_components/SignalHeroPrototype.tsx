@@ -50,7 +50,7 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
             <div className="mt-20 space-y-24 lg:mt-28 lg:space-y-36">
               <article className="grid gap-7 lg:grid-cols-[1.35fr_.65fr] lg:items-end">
                 <div className="relative min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#d9d2c8] p-4 sm:min-h-[520px] lg:min-h-[650px]">
-                  <div className="relative z-20 flex justify-between rounded-full bg-[#f0ece5]/90 px-4 py-3 text-[9px] font-black uppercase tracking-[.18em] text-black/65"><span>TK Counsel</span><span>{copy.legalCategory}</span></div>
+                  <div className="relative z-20 flex justify-between rounded-full bg-[#f0ece5]/90 px-4 py-3 text-[9px] font-black uppercase tracking-[.18em] text-black/65"><span>TK Counsel · {copy.tkStatus}</span><span>{copy.legalCategory}</span></div>
                   <iframe
                     src="https://tkcounsel.com/"
                     title="TK Counsel live website preview"
@@ -68,14 +68,14 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
               <article className="grid gap-7 lg:grid-cols-[.65fr_1.35fr] lg:items-end">
                 <div className="order-2 pb-2 lg:order-1"><p className="text-3xl font-black tracking-[-.04em]">Frankencoin Desk</p><p className="mt-4 max-w-md text-base leading-7 text-black/60">{copy.frankBody}</p><a href="https://www.frankencoindesk.com/" target="_blank" rel="noopener noreferrer" className="group mt-6 inline-flex items-center gap-2 rounded-sm text-sm font-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black">{copy.viewWebsite} <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-1 group-hover:-translate-y-1" aria-hidden /></a></div>
                 <div className="order-1 min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#071321] p-7 text-white sm:min-h-[520px] lg:order-2 lg:min-h-[650px]">
-                  <div className="flex justify-between text-[9px] font-black uppercase tracking-[.18em] text-white/60"><span>Frankencoin Desk</span><span>{copy.productCategory}</span></div>
+                  <div className="flex justify-between text-[9px] font-black uppercase tracking-[.18em] text-white/60"><span>Frankencoin Desk · {copy.frankStatus}</span><span>{copy.productCategory}</span></div>
                   <div className="relative mt-10 h-[75%] overflow-hidden rounded-[1.4rem] border border-white/10 bg-[url('/work-previews/frankencoin-desk.png')] bg-cover bg-top shadow-2xl" />
                 </div>
               </article>
 
               <article className="grid gap-7 lg:grid-cols-[1.35fr_.65fr] lg:items-end">
                 <div className="relative min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#d8c9b5] p-4 sm:min-h-[520px] lg:min-h-[650px]">
-                  <div className="relative z-20 flex justify-between rounded-full bg-[#f0ece5]/90 px-4 py-3 text-[9px] font-black uppercase tracking-[.18em] text-black/65"><span>Her House Pilates</span><span>{copy.wellnessCategory}</span></div>
+                  <div className="relative z-20 flex justify-between rounded-full bg-[#f0ece5]/90 px-4 py-3 text-[9px] font-black uppercase tracking-[.18em] text-black/65"><span>Her House Pilates · {copy.pilatesStatus}</span><span>{copy.wellnessCategory}</span></div>
                   <iframe
                     src="https://her-house-pilates.vercel.app/"
                     title="Her House Pilates live website preview"
