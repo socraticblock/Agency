@@ -24,7 +24,7 @@ export function SiteSurface({
   return (
     <div className={"relative overflow-hidden rounded-[2rem] bg-[#e9e4dc] text-[#101114] shadow-[0_45px_120px_rgba(0,0,0,.45)] " + (compact ? "min-h-[250px] sm:min-h-[330px]" : "min-h-[430px]")}>
       <div className="flex items-center justify-between px-6 py-5 text-[10px] font-black uppercase tracking-[.18em] text-black/60">
-        <span>Atelier North</span><span>{copy.consultations}</span>
+        <span>{copy.demoLabel} · Atelier North</span><span>{copy.consultations}</span>
       </div>
       <div className="grid min-h-[230px] grid-cols-1 sm:min-h-[360px] md:grid-cols-[1.1fr_.9fr]">
         <div className="flex flex-col justify-end p-6 sm:p-9">
