@@ -101,11 +101,11 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
     services: "Websites · AI · Automation", hero: "Your website is only the beginning.", heroSub: "Beautiful digital experiences, with useful systems working underneath.", message: "Message me", work: "Selected work", proof: "Proof, not promises.", capabilities: "What I build", lab: "Genezisi Lab · Internal demo", small: "Small by design", contact: "Have something to build?", contactTitle: "Message me.", contactBody: "A website, an AI system, an automation—or something that combines them. Start with a message."
   };
   return (
-    <main className="bg-[#02060b] text-white">
-      <header className="fixed inset-x-0 top-0 z-[90] bg-[#02060b]/78 backdrop-blur-xl">
+    <main id="main-content" className="bg-[#02060b] text-white">
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[120] focus:rounded-full focus:bg-white focus:px-4 focus:py-3 focus:text-sm focus:font-black focus:text-black">Skip to content</a>\n      <header className="fixed inset-x-0 top-0 z-[90] bg-[#02060b]/78 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-[92rem] items-center justify-between px-5 sm:px-8">
-          <a href={`/${locale}`} className="font-space text-sm font-black uppercase tracking-[.42em] text-white">Genezisi</a>
-          <a href={waHref} target="_blank" rel="noopener noreferrer" className="flex min-h-11 items-center gap-2 rounded-full bg-white px-4 text-sm font-black text-[#071019]"><MessageCircle className="h-4 w-4" />{copy.message}</a>
+          <a href={`/${locale}`} className="rounded-sm font-space text-sm font-black uppercase tracking-[.42em] text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200">Genezisi</a>
+          <a href={waHref} target="_blank" rel="noopener noreferrer" className="flex min-h-11 items-center gap-2 rounded-full bg-white px-4 text-sm font-black text-[#071019] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"><MessageCircle className="h-4 w-4" />{copy.message}</a>
         </div>
       </header>
 
@@ -167,7 +167,7 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
           <p className="text-[10px] font-black uppercase tracking-[.22em] text-black/38">{copy.work}</p>
           <h2 className="mt-5 max-w-[9ch] text-[clamp(3.5rem,8vw,8rem)] font-black leading-[.86] tracking-[-.065em]">{copy.proof}</h2>
           <div className="mt-20 space-y-24 lg:mt-28 lg:space-y-36">
-            <a href="https://tkcounsel.com/" target="_blank" rel="noopener noreferrer" className="group grid gap-7 lg:grid-cols-[1.35fr_.65fr] lg:items-end">
+            <a href="https://tkcounsel.com/" target="_blank" rel="noopener noreferrer" className="group grid gap-7 rounded-[2rem] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black  lg:grid-cols-[1.35fr_.65fr] lg:items-end">
               <div className="min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#d9d2c8] p-7 sm:min-h-[520px] lg:min-h-[650px]">
                 <div className="flex justify-between text-[9px] font-black uppercase tracking-[.18em] text-black/35"><span>TK Counsel</span><span>Legal / Professional</span></div>
                 <div className="flex h-[80%] items-end"><p className="max-w-[8ch] text-[clamp(3rem,7vw,7rem)] font-black leading-[.86] tracking-[-.06em]">Counsel with clarity.</p></div>
@@ -175,7 +175,7 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
               <div className="pb-2"><p className="text-3xl font-black tracking-[-.04em]">TK Counsel</p><p className="mt-4 max-w-md text-base leading-7 text-black/55">A professional service website built around clarity, credibility and a serious first impression.</p><span className="mt-6 inline-flex items-center gap-2 text-sm font-black">View website <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-1 group-hover:-translate-y-1"/></span></div>
             </a>
 
-            <a href="https://www.frankencoindesk.com/" target="_blank" rel="noopener noreferrer" className="group grid gap-7 lg:grid-cols-[.65fr_1.35fr] lg:items-end">
+            <a href="https://www.frankencoindesk.com/" target="_blank" rel="noopener noreferrer" className="group grid gap-7 rounded-[2rem] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black  lg:grid-cols-[.65fr_1.35fr] lg:items-end">
               <div className="order-2 pb-2 lg:order-1"><p className="text-3xl font-black tracking-[-.04em]">Frankencoin Desk</p><p className="mt-4 max-w-md text-base leading-7 text-black/55">A complex product frontend where trust, information hierarchy and user confidence matter.</p><span className="mt-6 inline-flex items-center gap-2 text-sm font-black">View website <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-1 group-hover:-translate-y-1"/></span></div>
               <div className="order-1 min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#071321] p-7 text-white sm:min-h-[520px] lg:order-2 lg:min-h-[650px]">
                 <div className="flex justify-between text-[9px] font-black uppercase tracking-[.18em] text-white/35"><span>Frankencoin Desk</span><span>Product / Crypto</span></div>
@@ -183,7 +183,7 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
               </div>
             </a>
 
-            <a href="https://her-house-pilates.vercel.app/" target="_blank" rel="noopener noreferrer" className="group grid gap-7 lg:grid-cols-[1.35fr_.65fr] lg:items-end">
+            <a href="https://her-house-pilates.vercel.app/" target="_blank" rel="noopener noreferrer" className="group grid gap-7 rounded-[2rem] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black  lg:grid-cols-[1.35fr_.65fr] lg:items-end">
               <div className="min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#d8c9b5] p-7 sm:min-h-[520px] lg:min-h-[650px]">
                 <div className="flex justify-between text-[9px] font-black uppercase tracking-[.18em] text-black/35"><span>Her House Pilates</span><span>Wellness / Studio</span></div>
                 <div className="flex h-[80%] items-center justify-center"><p className="max-w-[7ch] text-center text-[clamp(3rem,7vw,7rem)] font-black leading-[.86] tracking-[-.06em]">Move with intention.</p></div>
@@ -224,7 +224,7 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
           <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/32">{copy.contact}</p>
           <h2 className="mt-6 max-w-[8ch] text-[clamp(4rem,10vw,10rem)] font-black leading-[.82] tracking-[-.07em]">{copy.contactTitle}</h2>
           <p className="mt-8 max-w-xl text-lg leading-8 text-white/45">{copy.contactBody}</p>
-          <a href={waHref} target="_blank" rel="noopener noreferrer" className="mt-10 inline-flex min-h-14 items-center gap-3 rounded-full bg-white px-6 text-base font-black text-[#071019]"><MessageCircle className="h-5 w-5"/>Start on WhatsApp <ArrowUpRight className="h-4 w-4"/></a>
+          <a href={waHref} target="_blank" rel="noopener noreferrer" className="mt-10 inline-flex min-h-14 items-center gap-3 rounded-full bg-white px-6 text-base font-black text-[#071019] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"><MessageCircle className="h-5 w-5"/>Start on WhatsApp <ArrowUpRight className="h-4 w-4"/></a>
           <div className="mt-28 flex items-center justify-between border-t border-white/10 pt-7 text-[10px] font-black uppercase tracking-[.2em] text-white/25"><span>Genezisi</span><span>{copy.services}</span></div>
         </div>
       </section>
