@@ -37,7 +37,7 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
               lang={locale === "en" ? "ka" : "en"}
               hrefLang={locale === "en" ? "ka" : "en"}
               aria-label={locale === "en" ? "ქართული ვერსია" : "English version"}
-              className="rounded-sm px-1 py-1 text-[11px] font-black text-white/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200 sm:hidden"
+              className="flex min-h-11 min-w-11 items-center justify-center rounded-full text-[11px] font-black text-white/65 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200 sm:hidden"
             >
               {locale === "en" ? "KA" : "EN"}
             </a>
