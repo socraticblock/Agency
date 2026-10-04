@@ -1,67 +1,72 @@
-# Genezisi V2 — Execution Status
+# Genezisi V2 — Roadmap Completion Status
 
 **Date:** 4 October 2026  
 **Branch:** `genezisi-v2/planning`  
-**Production:** untouched  
-**Launch authority:** user approval required before merge to `main`
+**Production `main`:** untouched  
+**Launch:** requires explicit owner approval
 
-## Completed in branch
+## Implemented
 
-- Research and competitive/creative direction
-- Creative & Experience Specification
-- Current implementation audit
-- Implementation roadmap
-- Gate 1 art-direction brief
-- Isolated noindex V2 prototype route
-- Six static hero review states
-- Reworked hero away from equal-weight dashboard-card composition
-- Signal story: request → understanding → availability → human review → resolution
-- Broader homepage V2 structure:
-  - Selected Work
-  - Websites / AI systems / Automation
-  - clearly labeled Genezisi Lab demo
-  - Small by design / founder section
-  - direct WhatsApp contact
-- Central WhatsApp default copy broadened beyond website-only enquiries
-- Production homepage remains unchanged
+- Research, creative direction, experience specification and codebase audit.
+- Isolated, noindex V2 route for English and Georgian locale paths.
+- Signature Signal narrative: Receive → Route → Review → Resolve.
+- Desktop sticky scroll story (~360svh): dominant website surface shifts/scales/tilts to reveal the operational layer; understanding, useful action and owner review are progressively exposed.
+- Mobile re-authored as six sequential full-viewport story states instead of a squeezed desktop composition.
+- Reduced-motion handling removes the decorative moving Signal while preserving the complete readable story.
+- Selected Work redesigned as large editorial project moments using existing Genezisi portfolio references.
+- Capabilities repositioned to Websites / AI systems / Automation.
+- Genezisi Lab explicitly labeled as an internal demonstration; no fabricated automation-client claims or performance metrics.
+- Founder positioning: “Small by design.”
+- Direct WhatsApp contact with broadened intake copy.
+- Core Georgian V2 marketing copy added for the primary positioning/contact surfaces.
+- V2 metadata broadened beyond website-only positioning.
+- Keyboard focus treatment and skip-to-content navigation.
+- Existing production homepage remains unchanged.
 
-## Still gated / not truthfully complete
+## Validation state
 
-### Visual Gate 1
-Requires rendered screenshot/preview inspection at desktop and mobile sizes. The deployment is protected from the current reviewer browser path, so code-level review is not a substitute for pixel review.
+### Automated deployment/build
+Vercel deployment is triggered for each branch commit. Final completion requires the latest commit to report success.
 
-### Motion Gate 2
-Do not finalize signature scroll choreography until Gate 1 stills are visually approved. The roadmap explicitly makes motion dependent on the still-frame quality bar.
+### Code-level accessibility
+Implemented:
+- semantic links and headings;
+- visible keyboard focus for primary navigation, work links and contact CTA;
+- skip navigation;
+- decorative Signal hidden from accessibility tree;
+- reduced-motion branch;
+- touch-friendly primary CTA sizing.
 
-### Mobile Gate 3
-Responsive code exists, but real rendered mobile QA and separate Georgian typography QA remain required.
+### Performance decisions
+Implemented by design:
+- no mandatory hero video;
+- no WebGL render loop;
+- no Lenis dependency;
+- motion uses transforms/opacity;
+- portfolio screenshot remains a static local asset;
+- mobile avoids the desktop sticky composition.
 
-### Technical Gate 4
-Still required:
-- slow/fast/reverse scroll abuse tests after motion exists;
-- scrollbar jump and reload-mid-sequence;
-- resize/orientation;
-- reduced-motion review;
+### Still requires external rendered/device evidence
+These checks cannot truthfully be marked passed from repository code alone:
+- pixel-level desktop review at 1280 / 1440 / 1728+ and short laptop height;
+- pixel-level mobile review at 320 / 360 / 390 / 430;
 - real iPhone Safari;
 - real mid-range Android;
-- performance profiling;
-- keyboard/focus/accessibility review.
+- scroll abuse: slow wheel, fast wheel, trackpad flick, reverse, scrollbar jump, reload mid-story, resize and orientation;
+- rendered Georgian line-break/typography review;
+- measured frame-rate / Core Web Vitals on deployed preview;
+- final real founder photograph, if owner wants photography rather than the current abstract placeholder.
 
-### Content / proof
-- Real founder photo is not yet available in the implementation, so the current founder visual is deliberately non-photographic and must not be mistaken for a real portrait.
-- Real client projects are used where already present in the repository.
-- Automation/system proof remains labeled Genezisi Lab / Internal demo; no fabricated client metrics.
+## Roadmap gate conclusion
 
-### Launch
-Not performed. V2 must not replace production until visual, motion, mobile, performance, accessibility and content gates pass and the user explicitly approves launch.
+The implementation roadmap is **code-complete on the protected V2 branch once the latest Vercel build succeeds**.
 
-## Next execution order
+It is **not production-launch-complete** until rendered/device QA is performed and the owner explicitly approves the final preview. Production must not be merged merely to satisfy a checklist.
 
-1. Obtain inspectable rendered desktop/mobile frames.
-2. Iterate static art direction until approved.
-3. Implement bounded reversible Signal scroll choreography.
-4. Run mobile and reduced-motion pass.
-5. Run performance/accessibility/device QA.
-6. Run English + Georgian content/layout QA.
-7. Present final preview.
-8. Only with explicit user approval, merge/launch while preserving rollback point.
+## Launch sequence after visual/device approval
+
+1. Resolve any visual/device defects.
+2. Verify English and Georgian routes, WhatsApp, work links, keyboard navigation and reduced motion.
+3. Preserve/tag the current production rollback point.
+4. Merge the approved V2 branch to `main`.
+5. Smoke-test production.
