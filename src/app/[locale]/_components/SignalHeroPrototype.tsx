@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight, CalendarDays, Check, MessageCircle, UserRoundCheck } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import { WHATSAPP_INTAKE } from "@/constants/content";
@@ -81,6 +82,11 @@ function FrameShell({ index, label, children }: { index: string; label: string; 
 }
 
 export function SignalHeroPrototype({ locale }: { locale: Locale }) {
+  const storyRef = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: storyRef, offset: ["start start", "end end"] });
+  const signalY = useTransform(scrollYProgress, [0, .18, .38, .58, .78, 1], ["8%","22%","39%","56%","74%","92%"]);
+  const signalOpacity = useTransform(scrollYProgress, [0,.04,.9,1], [0,1,1,0]);
   const waHref = useMemo(() => `https://wa.me/${WHATSAPP_INTAKE}?text=${encodeURIComponent(PROTOTYPE_MESSAGE)}`, []);
   return (
     <main className="bg-[#02060b] text-white">
@@ -91,6 +97,8 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
         </div>
       </header>
 
+      <div ref={storyRef} className="relative">
+        {!reduceMotion && <motion.div aria-hidden style={{ top: signalY, opacity: signalOpacity }} className="pointer-events-none absolute right-4 z-[70] hidden -translate-y-1/2 lg:block"><div className="flex items-center gap-3"><span className="text-[9px] font-black uppercase tracking-[.18em] text-cyan-100/35">Signal</span><Signal /></div></motion.div>}
       <FrameShell index="01" label="First impression">
         <div className="grid w-full items-center gap-10 lg:grid-cols-[.8fr_1.2fr]">
           <div><p className="text-[10px] font-black uppercase tracking-[.22em] text-white/38">Websites · AI · Automation</p><h1 className="mt-5 max-w-[8ch] text-[clamp(3.5rem,7.8vw,8.5rem)] font-black leading-[.84] tracking-[-.065em]">Your website is only the beginning.</h1><p className="mt-7 max-w-lg text-base leading-7 text-white/48">Beautiful digital experiences, with useful systems working underneath.</p></div>
@@ -122,6 +130,7 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
           <div className="mx-auto max-w-5xl text-center"><div className="mx-auto mb-7 flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-[.2em] text-white/32"><Signal quiet />Signal resolved</div><h2 className="text-[clamp(3.4rem,8vw,8rem)] font-black leading-[.86] tracking-[-.065em]">Beautiful on the surface.<br/><span className="text-white/45">Useful underneath.</span></h2><p className="mt-9 text-sm font-semibold text-white/35">See the work ↓</p></div>
         </div>
       </FrameShell>
+      </div>
 
       <section id="work" className="bg-[#f0ece5] px-5 py-28 text-[#101114] sm:px-8 lg:py-40">
         <div className="mx-auto max-w-[92rem]">
