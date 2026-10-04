@@ -35,6 +35,7 @@ export type V2Copy = {
   contactTitle: string;
   contactBody: string;
   startWhatsApp: string;
+  demoLabel: string;
   consultations: string;
   siteHeadline: string;
   siteBody: string;
@@ -63,6 +64,9 @@ export type V2Copy = {
   aiBody: string;
   automationTitle: string;
   automationBody: string;
+  tkStatus: string;
+  frankStatus: string;
+  pilatesStatus: string;
   tkBody: string;
   frankBody: string;
   pilatesBody: string;
@@ -112,6 +116,7 @@ const EN: V2Copy = {
   contactTitle: "Message me.",
   contactBody: "A website, an AI system, an automation—or something that combines them. Start with a message.",
   startWhatsApp: "Start on WhatsApp",
+  demoLabel: "Illustrative demo",
   consultations: "Consultations",
   siteHeadline: "Make room for better work.",
   siteBody: "A focused consultation for businesses ready to simplify what happens next.",
@@ -140,6 +145,9 @@ const EN: V2Copy = {
   aiBody: "Useful assistants and intelligent tools shaped around real business work.",
   automationTitle: "Automation",
   automationBody: "Connected workflows that remove repetitive steps while keeping people in control.",
+  tkStatus: "Live website",
+  frankStatus: "Live product",
+  pilatesStatus: "Prototype",
   tkBody: "A professional service website built around clarity, credibility and a serious first impression.",
   frankBody: "A complex product frontend where trust, information hierarchy and user confidence matter.",
   pilatesBody: "A luxury wellness concept with schedule, booking flow and a mobile-first experience.",
@@ -189,6 +197,7 @@ const KA: V2Copy = {
   contactTitle: "მომწერეთ.",
   contactBody: "ვებსაიტი, AI სისტემა, ავტომატიზაცია — ან მათი კომბინაცია. ყველაფერი ერთი შეტყობინებით იწყება.",
   startWhatsApp: "დაიწყეთ WhatsApp-ზე",
+  demoLabel: "საჩვენებელი დემო",
   consultations: "კონსულტაციები",
   siteHeadline: "გაათავისუფლეთ ადგილი უკეთესი მუშაობისთვის.",
   siteBody: "კონცენტრირებული კონსულტაცია ბიზნესებისთვის, რომლებსაც შემდეგი ნაბიჯების გამარტივება სურთ.",
@@ -217,6 +226,9 @@ const KA: V2Copy = {
   aiBody: "სასარგებლო ასისტენტები და ინტელექტუალური ხელსაწყოები, მორგებული რეალურ სამუშაოზე.",
   automationTitle: "ავტომატიზაცია",
   automationBody: "დაკავშირებული პროცესები, რომლებიც იმეორებად ნაბიჯებს ამცირებს და კონტროლს ადამიანთან ტოვებს.",
+  tkStatus: "ცოცხალი ვებსაიტი",
+  frankStatus: "ცოცხალი პროდუქტი",
+  pilatesStatus: "პროტოტიპი",
   tkBody: "პროფესიული სერვისის ვებსაიტი, შექმნილი სიცხადის, სანდოობისა და ძლიერი პირველი შთაბეჭდილების გარშემო.",
   frankBody: "რთული პროდუქტის ფრონტენდი, სადაც ნდობა, ინფორმაციის იერარქია და მომხმარებლის თავდაჯერებულობა მნიშვნელოვანია.",
   pilatesBody: "პრემიუმ wellness კონცეფცია განრიგით, დაჯავშნის პროცესით და mobile-first გამოცდილებით.",
