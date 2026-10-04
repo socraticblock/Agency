@@ -86,35 +86,20 @@ function ProjectCover({
   }
 
   return (
-    <div className="relative min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#d8d4ce] p-5 text-[#101114] sm:min-h-[520px] lg:min-h-[650px]">
-      <div className="relative z-20 flex justify-between rounded-full bg-[#f5f3ef]/94 px-4 py-3 text-[9px] font-black uppercase tracking-[.18em] text-black/58">
+    <div className="relative min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#0a0e18] p-5 text-white sm:min-h-[520px] lg:min-h-[650px]">
+      <div className="relative z-20 flex justify-between rounded-full border border-white/10 bg-[#0a0e18]/90 px-4 py-3 text-[9px] font-black uppercase tracking-[.18em] text-white/62 backdrop-blur-sm">
         <span>{title} · {status}</span>
         <span>{category}</span>
       </div>
-      <div className="absolute inset-x-[5%] bottom-[6%] top-[18%] overflow-hidden rounded-[1.7rem] bg-[#f7f6f2] shadow-[0_35px_90px_rgba(0,0,0,.14)]">
-        <div className="flex h-full flex-col p-[6%]">
-          <div className="flex items-center justify-between border-b border-black/10 pb-4 text-[9px] font-black uppercase tracking-[.18em] text-black/45">
-            <span>TK Counsel Georgia</span>
-            <span>Services · About · News · Contact</span>
-          </div>
-          <div className="flex flex-1 flex-col justify-center py-8">
-            <p className="text-[9px] font-black uppercase tracking-[.18em] text-black/42">Based in Tbilisi, Georgia</p>
-            <p className="mt-5 max-w-[12ch] text-[clamp(2.25rem,4.9vw,4.8rem)] font-black leading-[.88] tracking-[-.055em]">
-              Expert Legal Counsel for the International Community in Georgia
-            </p>
-            <div className="mt-8 grid gap-2 sm:grid-cols-2">
-              {["Residency & Migration", "Corporate & Business", "Employment", "Real Estate & Property"].map((practice) => (
-                <div key={practice} className="rounded-xl border border-black/10 bg-white/55 px-4 py-3 text-[10px] font-black uppercase tracking-[.12em] text-black/58">
-                  {practice}
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="flex items-end justify-between border-t border-black/10 pt-4 text-[9px] font-black uppercase tracking-[.16em] text-black/42">
-            <span>{tagline}</span>
-            <span>View all services →</span>
-          </div>
-        </div>
+      <div className="absolute inset-x-[5%] bottom-[6%] top-[18%] overflow-hidden rounded-[1.7rem] border border-white/10 bg-[#090d18] shadow-[0_35px_90px_rgba(0,0,0,.28)]">
+        <img
+          src="/work-previews/tk-counsel-real.webp"
+          alt="TK Counsel Georgia website homepage"
+          loading="lazy"
+          decoding="async"
+          className="h-full w-full object-cover object-top"
+        />
+        <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/[.06]" />
       </div>
     </div>
   );
