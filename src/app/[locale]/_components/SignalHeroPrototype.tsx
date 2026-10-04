@@ -123,7 +123,14 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
 
         <section className="bg-[#02060b] px-5 py-20 sm:px-8 lg:py-32">
           <div className="mx-auto grid max-w-[92rem] gap-12 border-t border-white/10 pt-14 lg:grid-cols-[.7fr_1.3fr]">
-            <div><p className="text-[10px] font-black uppercase tracking-[.22em] text-cyan-100/55">{copy.lab}</p><h2 className="mt-5 text-5xl font-black leading-[.9] tracking-[-.055em] sm:text-7xl">{copy.labTitle}</h2></div>
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-[.22em] text-cyan-100/55">{copy.lab}</p>
+              <h2 className="mt-5 text-5xl font-black leading-[.9] tracking-[-.055em] sm:text-7xl">{copy.labTitle}</h2>
+              <div className="mt-10 border-l border-cyan-100/30 pl-5">
+                <p className="text-lg font-black leading-7">“{copy.customerMessage}”</p>
+                <p className="mt-4 max-w-lg text-sm leading-6 text-white/60">{copy.resolvedOutcome}</p>
+              </div>
+            </div>
             <div className="border-y border-white/10">
               {labSteps.map((x, i) => (
                 <div key={x} className="grid min-h-24 grid-cols-[48px_1fr] items-center gap-5 border-b border-white/10 py-5 last:border-b-0 sm:grid-cols-[70px_1fr]">
