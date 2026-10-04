@@ -253,6 +253,27 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
   );
   const finalY = useTransform(scrollYProgress, [0.82, 0.93], [28, 0]);
 
+  const mobileWebsiteOpacity = useTransform(
+    scrollYProgress,
+    [0.22, 0.32, 0.42],
+    [1, 1, 0],
+  );
+  const mobileAssistantOpacity = useTransform(
+    scrollYProgress,
+    [0.34, 0.44, 0.54, 0.6],
+    [0, 1, 1, 0],
+  );
+  const mobileBookingOpacity = useTransform(
+    scrollYProgress,
+    [0.54, 0.62, 0.7, 0.76],
+    [0, 1, 1, 0],
+  );
+  const mobileOwnerOpacity = useTransform(
+    scrollYProgress,
+    [0.7, 0.79, 0.92],
+    [0, 1, 1],
+  );
+
   const motionStyle = reduceMotion
     ? undefined
     : {
@@ -393,13 +414,7 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
             >
               <motion.div
                 style={{
-                  opacity: reduceMotion
-                    ? 0
-                    : useTransform(
-                        scrollYProgress,
-                        [0.22, 0.32, 0.42],
-                        [1, 1, 0],
-                      ),
+                  opacity: reduceMotion ? 0 : mobileWebsiteOpacity,
                 }}
                 className="absolute inset-0"
               >
@@ -408,13 +423,7 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
 
               <motion.div
                 style={{
-                  opacity: reduceMotion
-                    ? 0
-                    : useTransform(
-                        scrollYProgress,
-                        [0.34, 0.44, 0.54, 0.6],
-                        [0, 1, 1, 0],
-                      ),
+                  opacity: reduceMotion ? 0 : mobileAssistantOpacity,
                 }}
                 className="absolute inset-0"
               >
@@ -423,13 +432,7 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
 
               <motion.div
                 style={{
-                  opacity: reduceMotion
-                    ? 0
-                    : useTransform(
-                        scrollYProgress,
-                        [0.54, 0.62, 0.7, 0.76],
-                        [0, 1, 1, 0],
-                      ),
+                  opacity: reduceMotion ? 0 : mobileBookingOpacity,
                 }}
                 className="absolute inset-0"
               >
@@ -438,13 +441,7 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
 
               <motion.div
                 style={{
-                  opacity: reduceMotion
-                    ? 1
-                    : useTransform(
-                        scrollYProgress,
-                        [0.7, 0.79, 0.92],
-                        [0, 1, 1],
-                      ),
+                  opacity: reduceMotion ? 1 : mobileOwnerOpacity,
                 }}
                 className="absolute inset-0"
               >
