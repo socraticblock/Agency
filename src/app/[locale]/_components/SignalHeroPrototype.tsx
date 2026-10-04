@@ -89,7 +89,6 @@ type Copy = {
   wellnessCategory: string;
   tkTagline: string;
   pilatesTagline: string;
-  skip: string;
 };
 
 const EN: Copy = {
@@ -165,7 +164,6 @@ const EN: Copy = {
   wellnessCategory: "Wellness / Studio",
   tkTagline: "Counsel with clarity.",
   pilatesTagline: "Move with intention.",
-  skip: "Skip to content",
 };
 
 const KA: Copy = {
@@ -241,7 +239,6 @@ const KA: Copy = {
   wellnessCategory: "ველნესი / სტუდია",
   tkTagline: "სიცხადე იურიდიულ სერვისში.",
   pilatesTagline: "იმოძრავეთ გააზრებულად.",
-  skip: "გადადით მთავარ კონტენტზე",
 };
 
 function Signal({ quiet = false }: { quiet?: boolean }) {
@@ -425,9 +422,7 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
   const labSteps = [copy.receiveStep, copy.understandStep, copy.actionStep, copy.exceptionStep];
 
   return (
-    <>
-      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[120] focus:rounded-full focus:bg-white focus:px-4 focus:py-3 focus:text-sm focus:font-black focus:text-black">{copy.skip}</a>
-      <main id="main-content" tabIndex={-1} className="bg-[#02060b] text-white outline-none">
+    <main className="bg-[#02060b] text-white">
         <header className="fixed inset-x-0 top-0 z-[90] border-b border-white/[.05] bg-[#02060b]/92">
           <div className="mx-auto flex h-16 max-w-[92rem] items-center justify-between gap-6 px-5 sm:px-8">
             <a href={"/" + locale + "/v2-prototype"} className="rounded-sm font-space text-sm font-black uppercase tracking-[.42em] text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200">Genezisi</a>
@@ -601,7 +596,6 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
             <div className="mt-28 flex items-center justify-between border-t border-white/10 pt-7 text-[10px] font-black uppercase tracking-[.2em] text-white/30"><span>Genezisi</span><span>{copy.services}</span></div>
           </div>
         </section>
-      </main>
-    </>
+    </main>
   );
 }
