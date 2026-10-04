@@ -84,6 +84,7 @@ type Copy = {
   pilatesBody: string;
   viewWebsite: string;
   founderLabel: string;
+  workContact: string;
   availabilityTime: string;
   legalCategory: string;
   productCategory: string;
@@ -158,7 +159,8 @@ const EN: Copy = {
   frankBody: "A complex product frontend where trust, information hierarchy and user confidence matter.",
   pilatesBody: "A luxury wellness concept with schedule, booking flow and a mobile-first experience.",
   viewWebsite: "View website",
-  founderLabel: "Founder · Genezisi",
+  founderLabel: "Socraticblock · Founder",
+  workContact: "Have something at this level in mind? Message me.",
   availabilityTime: "Tuesday · 14:00",
   legalCategory: "Legal / Professional",
   productCategory: "Product / Crypto",
@@ -233,7 +235,8 @@ const KA: Copy = {
   frankBody: "რთული პროდუქტის ფრონტენდი, სადაც ნდობა, ინფორმაციის იერარქია და მომხმარებლის თავდაჯერებულობა მნიშვნელოვანია.",
   pilatesBody: "პრემიუმ wellness კონცეფცია განრიგით, დაჯავშნის პროცესით და mobile-first გამოცდილებით.",
   viewWebsite: "ნახეთ ვებსაიტი",
-  founderLabel: "დამფუძნებელი · Genezisi",
+  founderLabel: "Socraticblock · დამფუძნებელი",
+  workContact: "გსურთ მსგავსი დონის პროექტი? მომწერეთ.",
   availabilityTime: "სამშაბათი · 14:00",
   legalCategory: "იურიდიული / პროფესიული",
   productCategory: "პროდუქტი / კრიპტო",
@@ -264,13 +267,13 @@ function SiteSurface({
   const showEnquiry = enquiry || Boolean(enquiryOpacity);
   return (
     <div className={"relative overflow-hidden rounded-[2rem] bg-[#e9e4dc] text-[#101114] shadow-[0_45px_120px_rgba(0,0,0,.45)] " + (compact ? "min-h-[250px] sm:min-h-[330px]" : "min-h-[430px]")}>
-      <div className="flex items-center justify-between px-6 py-5 text-[10px] font-black uppercase tracking-[.18em] text-black/45">
+      <div className="flex items-center justify-between px-6 py-5 text-[10px] font-black uppercase tracking-[.18em] text-black/60">
         <span>Atelier North</span><span>{copy.consultations}</span>
       </div>
       <div className="grid min-h-[230px] grid-cols-1 sm:min-h-[360px] md:grid-cols-[1.1fr_.9fr]">
         <div className="flex flex-col justify-end p-6 sm:p-9">
           <p className="max-w-[9ch] text-[clamp(2rem,8vw,5.8rem)] font-black leading-[.86] tracking-[-.06em]">{copy.siteHeadline}</p>
-          <p className="mt-5 hidden max-w-sm text-sm leading-6 text-black/55 sm:block">{copy.siteBody}</p>
+          <p className="mt-5 hidden max-w-sm text-sm leading-6 text-black/65 sm:block">{copy.siteBody}</p>
           <span className="mt-7 hidden w-fit rounded-full bg-[#111318] px-5 py-3 text-xs font-black text-white sm:inline-block">{copy.book}</span>
         </div>
         <div className="relative m-3 hidden min-h-[230px] overflow-hidden rounded-[1.5rem] bg-[#c8b9a3] sm:block md:m-5">
@@ -283,7 +286,7 @@ function SiteSurface({
           style={enquiryOpacity ? { opacity: enquiryOpacity } : undefined}
           className="absolute bottom-5 right-5 max-w-[min(88%,390px)] rounded-[1.4rem] bg-[#11151a] p-4 text-white shadow-2xl"
         >
-          <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[.18em] text-white/45"><Signal /> {copy.newEnquiry}</div>
+          <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[.18em] text-white/60"><Signal /> {copy.newEnquiry}</div>
           <p className="mt-3 text-base font-semibold leading-6">“{copy.customerMessage}”</p>
         </motion.div>
       )}
@@ -294,7 +297,7 @@ function SiteSurface({
 function MobileSurfacePreview({ copy }: { copy: Copy }) {
   return (
     <div className="relative mt-6 min-h-[132px] overflow-hidden rounded-[1.4rem] bg-[#e9e4dc] p-4 text-[#101114] shadow-[0_24px_60px_rgba(0,0,0,.35)]">
-      <div className="flex items-center justify-between text-[8px] font-black uppercase tracking-[.16em] text-black/45">
+      <div className="flex items-center justify-between text-[8px] font-black uppercase tracking-[.16em] text-black/60">
         <span>Atelier North</span><span>{copy.consultations}</span>
       </div>
       <div className="mt-7 grid grid-cols-[1.2fr_.8fr] items-end gap-4">
@@ -308,7 +311,7 @@ function MobileSurfacePreview({ copy }: { copy: Copy }) {
 function Understanding({ copy }: { copy: Copy }) {
   return (
     <div className="max-w-xl">
-      <p className="text-[10px] font-black uppercase tracking-[.2em] text-white/45">{copy.requestUnderstood}</p>
+      <p className="text-[10px] font-black uppercase tracking-[.2em] text-white/60">{copy.requestUnderstood}</p>
       <p className="mt-4 text-3xl font-black tracking-[-.045em] sm:text-5xl">{copy.parsedRequest}</p>
       <div className="mt-7 flex items-center gap-3 text-sm text-white/60"><Signal /><span>{copy.requestNextStep}</span></div>
     </div>
@@ -322,7 +325,7 @@ function Availability({ copy }: { copy: Copy }) {
       <div className="flex items-center gap-4">
         <CalendarDays className="h-6 w-6" aria-hidden />
         <div>
-          <p className="text-xs font-black uppercase tracking-[.16em] text-black/45">{copy.availability}</p>
+          <p className="text-xs font-black uppercase tracking-[.16em] text-black/60">{copy.availability}</p>
           <p className="mt-1 text-2xl font-black">{copy.availabilityTime}</p>
         </div>
       </div>
@@ -338,7 +341,7 @@ function Owner({ copy }: { copy: Copy }) {
     <div className="w-full max-w-lg">
       <div className="flex items-center gap-4">
         <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-black"><UserRoundCheck className="h-5 w-5" aria-hidden /></div>
-        <div><p className="text-[10px] font-black uppercase tracking-[.18em] text-white/45">{copy.needsReview}</p><p className="text-xl font-black">{copy.owner}</p></div>
+        <div><p className="text-[10px] font-black uppercase tracking-[.18em] text-white/60">{copy.needsReview}</p><p className="text-xl font-black">{copy.owner}</p></div>
       </div>
       <p className="mt-7 max-w-md text-2xl font-semibold leading-tight text-white/80">{copy.ownerBody}</p>
       <div aria-hidden className="mt-7 h-px w-full bg-gradient-to-r from-amber-200/45 to-transparent" />
@@ -349,9 +352,9 @@ function Owner({ copy }: { copy: Copy }) {
 function Resolved({ copy }: { copy: Copy }) {
   return (
     <div className="mx-auto max-w-5xl text-center">
-      <div className="mx-auto mb-7 flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-[.2em] text-white/45"><Signal quiet />{copy.signalResolved}</div>
+      <div className="mx-auto mb-7 flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-[.2em] text-white/60"><Signal quiet />{copy.signalResolved}</div>
       <h2 className="text-[clamp(3.1rem,8vw,8rem)] font-black leading-[.86] tracking-[-.065em]">{copy.surfaceUseful}<br /><span className="text-white/48">{copy.underneathUseful}</span></h2>
-      <p className="mt-9 text-sm font-semibold text-white/45">{copy.seeWork}</p>
+      <p className="mt-9 text-sm font-semibold text-white/60">{copy.seeWork}</p>
     </div>
   );
 }
@@ -379,7 +382,7 @@ function StaticStory({ copy }: { copy: Copy }) {
     <div>
       <StaticFrame index="01" label={copy.firstImpression}>
         <div className="grid w-full items-center gap-10">
-          <div><p className="text-[10px] font-black uppercase tracking-[.22em] text-white/45">{copy.services}</p><h1 className="mt-5 max-w-[8ch] text-[clamp(3.3rem,10vw,6rem)] font-black leading-[.84] tracking-[-.065em]">{copy.hero}</h1><p className="mt-7 max-w-lg text-base leading-7 text-white/55">{copy.heroSub}</p></div>
+          <div><p className="text-[10px] font-black uppercase tracking-[.22em] text-white/60">{copy.services}</p><h1 className="mt-5 max-w-[8ch] text-[clamp(3.3rem,10vw,6rem)] font-black leading-[.84] tracking-[-.065em]">{copy.hero}</h1><p className="mt-7 max-w-lg text-base leading-7 text-white/55">{copy.heroSub}</p></div>
           <SiteSurface copy={copy} compact />
         </div>
       </StaticFrame>
@@ -422,6 +425,7 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
   const signalOpacity = useTransform(desktopProgress, [.12, .18, .88, .96], [0, 1, 1, 0]);
   const signalX = useTransform(desktopProgress, [.18, .4, .6, .78, .9], ["22vw", "11vw", "24vw", "-24vw", "0vw"]);
   const signalY = useTransform(desktopProgress, [.18, .4, .6, .78, .9], ["18vh", "-2vh", "25vh", "26vh", "0vh"]);
+  const routeProgress = useTransform(desktopProgress, [.18, .9], [0, 1]);
 
   const m0 = useTransform(mobileProgress, [0, .12, .19], [1, 1, 0]);
   const m1 = useTransform(mobileProgress, [.13, .21, .3], [0, 1, 0]);
@@ -454,6 +458,11 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
               <a className="hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200" href="#capabilities">{copy.navCapabilities}</a>
               <a className="hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200" href="#about">{copy.navAbout}</a>
             </nav>
+            <div aria-label="Language" className="hidden items-center gap-2 text-xs font-black text-white/60 sm:flex">
+              <a href="/en/v2-prototype" lang="en" aria-current={locale === "en" ? "page" : undefined} className="rounded-sm px-1.5 py-1 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200">EN</a>
+              <span aria-hidden className="text-white/25">·</span>
+              <a href="/ka/v2-prototype" lang="ka" aria-current={locale === "ka" ? "page" : undefined} className="rounded-sm px-1.5 py-1 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200">KA</a>
+            </div>
             <a href={waHref} target="_blank" rel="noopener noreferrer" className="flex min-h-11 items-center gap-2 rounded-full bg-white px-4 text-sm font-black text-[#071019] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"><MessageCircle className="h-4 w-4" aria-hidden />{copy.message}</a>
           </div>
         </header>
@@ -466,8 +475,13 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
               <div className="sticky top-0 h-[100svh] overflow-hidden bg-[#02060b] px-12 pt-24">
                 <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_74%_32%,rgba(34,211,238,.07),transparent_28%)]" />
                 <div className="relative mx-auto h-full max-w-[92rem]">
+                  <svg aria-hidden className="pointer-events-none absolute inset-0 z-10 h-full w-full" viewBox="0 0 1400 800" preserveAspectRatio="none">
+                    <path d="M1010 270 C1120 260 1165 350 1070 420 S940 535 1045 585 C935 620 760 610 600 585" fill="none" stroke="rgba(255,255,255,.09)" strokeWidth="2" strokeDasharray="5 9" />
+                    <motion.path d="M1010 270 C1120 260 1165 350 1070 420 S940 535 1045 585 C935 620 760 610 600 585" fill="none" stroke="rgba(165,243,252,.72)" strokeWidth="2.5" strokeLinecap="round" style={{ pathLength: routeProgress }} />
+                    <path d="M1045 585 C890 640 560 650 355 585" fill="none" stroke="rgba(255,255,255,.09)" strokeWidth="2" strokeDasharray="5 9" />
+                  </svg>
                   <motion.div style={{ opacity: introOpacity }} className="absolute left-0 top-[15%] z-30 w-[42%] max-w-[44rem]">
-                    <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/45">{copy.services}</p>
+                    <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/60">{copy.services}</p>
                     <h1 className="mt-5 max-w-[7ch] text-[clamp(4.8rem,7.2vw,8.2rem)] font-black leading-[.84] tracking-[-.065em]">{copy.hero}</h1>
                     <p className="mt-7 max-w-md text-base leading-7 text-white/55">{copy.heroSub}</p>
                   </motion.div>
@@ -494,7 +508,7 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
               <div className="sticky top-0 h-[100svh] overflow-hidden bg-[#02060b] px-5 pb-8 pt-24 sm:px-8">
                 <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_70%_25%,rgba(34,211,238,.065),transparent_32%)]" />
                 <motion.div style={{ opacity: m0 }} className="absolute inset-x-5 top-24 bottom-8 flex flex-col justify-center sm:inset-x-8">
-                  <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/45">{copy.services}</p>
+                  <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/60">{copy.services}</p>
                   <h1 className="mt-5 max-w-[8ch] text-[clamp(3.2rem,13vw,5.5rem)] font-black leading-[.84] tracking-[-.065em]">{copy.hero}</h1>
                   <p className="mt-6 max-w-md text-sm leading-6 text-white/55">{copy.heroSub}</p>
                   <MobileSurfacePreview copy={copy} />
@@ -503,7 +517,7 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
                 <motion.div style={{ opacity: m1 }} className="absolute inset-x-5 top-24 bottom-8 flex flex-col justify-center sm:inset-x-8">
                   <p className="text-[10px] font-black uppercase tracking-[.2em] text-cyan-100/65">{copy.receive}</p>
                   <h2 className="mt-4 text-5xl font-black tracking-[-.05em]">{copy.someoneAsks}</h2>
-                  <div className="mt-8 rounded-[1.6rem] bg-[#11151a] p-6 shadow-2xl"><div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[.18em] text-white/45"><Signal /> {copy.newEnquiry}</div><p className="mt-5 text-2xl font-black leading-tight">“{copy.customerMessage}”</p></div>
+                  <div className="mt-8 rounded-[1.6rem] bg-[#11151a] p-6 shadow-2xl"><div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[.18em] text-white/60"><Signal /> {copy.newEnquiry}</div><p className="mt-5 text-2xl font-black leading-tight">“{copy.customerMessage}”</p></div>
                 </motion.div>
 
                 <motion.div style={{ opacity: m2 }} className="absolute inset-x-5 top-24 bottom-8 flex items-center sm:inset-x-8"><Understanding copy={copy} /></motion.div>
@@ -517,12 +531,12 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
 
         <section id="work" className="scroll-mt-20 bg-[#f0ece5] px-5 py-28 text-[#101114] sm:px-8 lg:py-40">
           <div className="mx-auto max-w-[92rem]">
-            <p className="text-[10px] font-black uppercase tracking-[.22em] text-black/45">{copy.work}</p>
+            <p className="text-[10px] font-black uppercase tracking-[.22em] text-black/60">{copy.work}</p>
             <h2 className="mt-5 max-w-[9ch] text-[clamp(3.5rem,8vw,8rem)] font-black leading-[.86] tracking-[-.065em]">{copy.proof}</h2>
             <div className="mt-20 space-y-24 lg:mt-28 lg:space-y-36">
               <article className="grid gap-7 lg:grid-cols-[1.35fr_.65fr] lg:items-end">
                 <div className="relative min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#d9d2c8] p-4 sm:min-h-[520px] lg:min-h-[650px]">
-                  <div className="relative z-20 flex justify-between rounded-full bg-[#f0ece5]/90 px-4 py-3 text-[9px] font-black uppercase tracking-[.18em] text-black/55"><span>TK Counsel</span><span>{copy.legalCategory}</span></div>
+                  <div className="relative z-20 flex justify-between rounded-full bg-[#f0ece5]/90 px-4 py-3 text-[9px] font-black uppercase tracking-[.18em] text-black/65"><span>TK Counsel</span><span>{copy.legalCategory}</span></div>
                   <iframe
                     src="https://tkcounsel.com/"
                     title="TK Counsel live website preview"
@@ -540,14 +554,14 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
               <article className="grid gap-7 lg:grid-cols-[.65fr_1.35fr] lg:items-end">
                 <div className="order-2 pb-2 lg:order-1"><p className="text-3xl font-black tracking-[-.04em]">Frankencoin Desk</p><p className="mt-4 max-w-md text-base leading-7 text-black/60">{copy.frankBody}</p><a href="https://www.frankencoindesk.com/" target="_blank" rel="noopener noreferrer" className="group mt-6 inline-flex items-center gap-2 rounded-sm text-sm font-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black">{copy.viewWebsite} <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-1 group-hover:-translate-y-1" aria-hidden /></a></div>
                 <div className="order-1 min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#071321] p-7 text-white sm:min-h-[520px] lg:order-2 lg:min-h-[650px]">
-                  <div className="flex justify-between text-[9px] font-black uppercase tracking-[.18em] text-white/45"><span>Frankencoin Desk</span><span>{copy.productCategory}</span></div>
+                  <div className="flex justify-between text-[9px] font-black uppercase tracking-[.18em] text-white/60"><span>Frankencoin Desk</span><span>{copy.productCategory}</span></div>
                   <div className="relative mt-10 h-[75%] overflow-hidden rounded-[1.4rem] border border-white/10 bg-[url('/work-previews/frankencoin-desk.png')] bg-cover bg-top shadow-2xl" />
                 </div>
               </article>
 
               <article className="grid gap-7 lg:grid-cols-[1.35fr_.65fr] lg:items-end">
                 <div className="relative min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#d8c9b5] p-4 sm:min-h-[520px] lg:min-h-[650px]">
-                  <div className="relative z-20 flex justify-between rounded-full bg-[#f0ece5]/90 px-4 py-3 text-[9px] font-black uppercase tracking-[.18em] text-black/55"><span>Her House Pilates</span><span>{copy.wellnessCategory}</span></div>
+                  <div className="relative z-20 flex justify-between rounded-full bg-[#f0ece5]/90 px-4 py-3 text-[9px] font-black uppercase tracking-[.18em] text-black/65"><span>Her House Pilates</span><span>{copy.wellnessCategory}</span></div>
                   <iframe
                     src="https://her-house-pilates.vercel.app/"
                     title="Her House Pilates live website preview"
@@ -562,12 +576,16 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
                 <div className="pb-2"><p className="text-3xl font-black tracking-[-.04em]">Her House Pilates</p><p className="mt-4 max-w-md text-base leading-7 text-black/60">{copy.pilatesBody}</p><a href="https://her-house-pilates.vercel.app/" target="_blank" rel="noopener noreferrer" className="group mt-6 inline-flex items-center gap-2 rounded-sm text-sm font-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black">{copy.viewWebsite} <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-1 group-hover:-translate-y-1" aria-hidden /></a></div>
               </article>
             </div>
+          <div className="mt-20 flex flex-col gap-5 border-t border-black/15 pt-8 sm:flex-row sm:items-center sm:justify-between">
+            <p className="max-w-xl text-xl font-black tracking-[-.025em]">{copy.workContact}</p>
+            <a href={waHref} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 w-fit items-center gap-3 rounded-full bg-[#101114] px-5 text-sm font-black text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black"><MessageCircle className="h-4 w-4" aria-hidden />{copy.message}</a>
+          </div>
           </div>
         </section>
 
         <section id="capabilities" className="scroll-mt-20 bg-[#02060b] px-5 py-28 sm:px-8 lg:py-40">
           <div className="mx-auto max-w-[92rem]">
-            <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/40">{copy.capabilities}</p>
+            <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/60">{copy.capabilities}</p>
             <div className="mt-10 divide-y divide-white/10 border-y border-white/10">
               {capabilities.map(([n, title, body]) => (
                 <div key={n} className="grid gap-4 py-9 sm:grid-cols-[80px_.8fr_1.2fr] sm:items-baseline lg:py-14">
@@ -592,13 +610,13 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
         <section id="about" className="scroll-mt-20 bg-[#e8e1d7] px-5 py-28 text-[#101114] sm:px-8 lg:py-40">
           <div className="mx-auto grid max-w-[92rem] gap-14 lg:grid-cols-[.9fr_1.1fr] lg:items-end">
             <div className="aspect-[4/5] max-w-xl overflow-hidden rounded-[2rem] bg-[radial-gradient(circle_at_50%_35%,rgba(255,255,255,.75),transparent_24%),linear-gradient(145deg,#b8aa97,#665f57)]"><div className="flex h-full items-end p-7 text-[10px] font-black uppercase tracking-[.2em] text-white/65">{copy.founderLabel}</div></div>
-            <div><p className="text-[10px] font-black uppercase tracking-[.22em] text-black/45">{copy.small}</p><h2 className="mt-5 max-w-[9ch] text-[clamp(3.4rem,7vw,7rem)] font-black leading-[.86] tracking-[-.065em]">{copy.founderTitle}</h2><p className="mt-8 max-w-xl text-lg leading-8 text-black/60">{copy.founderBody}</p></div>
+            <div><p className="text-[10px] font-black uppercase tracking-[.22em] text-black/60">{copy.small}</p><h2 className="mt-5 max-w-[9ch] text-[clamp(3.4rem,7vw,7rem)] font-black leading-[.86] tracking-[-.065em]">{copy.founderTitle}</h2><p className="mt-8 max-w-xl text-lg leading-8 text-black/60">{copy.founderBody}</p></div>
           </div>
         </section>
 
         <section id="contact" className="bg-[#02060b] px-5 py-28 sm:px-8 lg:py-44">
           <div className="mx-auto max-w-[92rem]">
-            <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/40">{copy.contact}</p>
+            <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/60">{copy.contact}</p>
             <h2 className="mt-6 max-w-[8ch] text-[clamp(4rem,10vw,10rem)] font-black leading-[.82] tracking-[-.07em]">{copy.contactTitle}</h2>
             <p className="mt-8 max-w-xl text-lg leading-8 text-white/55">{copy.contactBody}</p>
             <a href={waHref} target="_blank" rel="noopener noreferrer" className="mt-10 inline-flex min-h-14 items-center gap-3 rounded-full bg-white px-6 text-base font-black text-[#071019] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"><MessageCircle className="h-5 w-5" aria-hidden />{copy.startWhatsApp} <ArrowUpRight className="h-4 w-4" aria-hidden /></a>
