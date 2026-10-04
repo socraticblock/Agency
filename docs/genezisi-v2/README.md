@@ -12,6 +12,7 @@ Build a dark, cinematic, founder-led Genezisi website with one exceptional Signa
 
 - [Research and creative direction](./research-and-creative-direction-2026-10-04.md)
 - [Creative & experience specification v0.1](./creative-experience-spec-v0.1.md)
+- [Implementation roadmap](./implementation-roadmap.md)
 
 ## Next production step
 
