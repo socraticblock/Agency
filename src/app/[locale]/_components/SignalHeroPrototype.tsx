@@ -84,6 +84,12 @@ type Copy = {
   pilatesBody: string;
   viewWebsite: string;
   founderLabel: string;
+  availabilityTime: string;
+  legalCategory: string;
+  productCategory: string;
+  wellnessCategory: string;
+  tkTagline: string;
+  pilatesTagline: string;
   skip: string;
 };
 
@@ -153,6 +159,12 @@ const EN: Copy = {
   pilatesBody: "A luxury wellness concept with schedule, booking flow and a mobile-first experience.",
   viewWebsite: "View website",
   founderLabel: "Founder · Genezisi",
+  availabilityTime: "Tuesday · 14:00",
+  legalCategory: "Legal / Professional",
+  productCategory: "Product / Crypto",
+  wellnessCategory: "Wellness / Studio",
+  tkTagline: "Counsel with clarity.",
+  pilatesTagline: "Move with intention.",
   skip: "Skip to content",
 };
 
@@ -222,6 +234,12 @@ const KA: Copy = {
   pilatesBody: "პრემიუმ wellness კონცეფცია განრიგით, დაჯავშნის პროცესით და mobile-first გამოცდილებით.",
   viewWebsite: "ნახეთ ვებსაიტი",
   founderLabel: "დამფუძნებელი · Genezisi",
+  availabilityTime: "სამშაბათი · 14:00",
+  legalCategory: "იურიდიული / პროფესიული",
+  productCategory: "პროდუქტი / კრიპტო",
+  wellnessCategory: "ველნესი / სტუდია",
+  tkTagline: "სიცხადე იურიდიულ სერვისში.",
+  pilatesTagline: "იმოძრავეთ გააზრებულად.",
   skip: "გადადით მთავარ კონტენტზე",
 };
 
@@ -245,17 +263,17 @@ function SiteSurface({
 }) {
   const showEnquiry = enquiry || Boolean(enquiryOpacity);
   return (
-    <div className={"relative overflow-hidden rounded-[2rem] bg-[#e9e4dc] text-[#101114] shadow-[0_45px_120px_rgba(0,0,0,.45)] " + (compact ? "min-h-[330px]" : "min-h-[430px]")}>
+    <div className={"relative overflow-hidden rounded-[2rem] bg-[#e9e4dc] text-[#101114] shadow-[0_45px_120px_rgba(0,0,0,.45)] " + (compact ? "min-h-[250px] sm:min-h-[330px]" : "min-h-[430px]")}>
       <div className="flex items-center justify-between px-6 py-5 text-[10px] font-black uppercase tracking-[.18em] text-black/45">
         <span>Atelier North</span><span>{copy.consultations}</span>
       </div>
-      <div className="grid min-h-[360px] grid-cols-1 md:grid-cols-[1.1fr_.9fr]">
+      <div className="grid min-h-[230px] grid-cols-1 sm:min-h-[360px] md:grid-cols-[1.1fr_.9fr]">
         <div className="flex flex-col justify-end p-6 sm:p-9">
-          <p className="max-w-[9ch] text-[clamp(2.4rem,5vw,5.8rem)] font-black leading-[.86] tracking-[-.06em]">{copy.siteHeadline}</p>
-          <p className="mt-5 max-w-sm text-sm leading-6 text-black/55">{copy.siteBody}</p>
-          <span className="mt-7 w-fit rounded-full bg-[#111318] px-5 py-3 text-xs font-black text-white">{copy.book}</span>
+          <p className="max-w-[9ch] text-[clamp(2rem,8vw,5.8rem)] font-black leading-[.86] tracking-[-.06em]">{copy.siteHeadline}</p>
+          <p className="mt-5 hidden max-w-sm text-sm leading-6 text-black/55 sm:block">{copy.siteBody}</p>
+          <span className="mt-7 hidden w-fit rounded-full bg-[#111318] px-5 py-3 text-xs font-black text-white sm:inline-block">{copy.book}</span>
         </div>
-        <div className="relative m-3 min-h-[230px] overflow-hidden rounded-[1.5rem] bg-[#c8b9a3] md:m-5">
+        <div className="relative m-3 hidden min-h-[230px] overflow-hidden rounded-[1.5rem] bg-[#c8b9a3] sm:block md:m-5">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_60%_35%,rgba(255,255,255,.7),transparent_28%),linear-gradient(145deg,transparent,rgba(0,0,0,.18))]" />
           <p className="absolute bottom-5 left-5 max-w-[14ch] text-2xl font-black leading-none tracking-[-.04em]">{copy.siteVisual}</p>
         </div>
@@ -291,7 +309,7 @@ function Availability({ copy }: { copy: Copy }) {
         <CalendarDays className="h-6 w-6" aria-hidden />
         <div>
           <p className="text-xs font-black uppercase tracking-[.16em] text-black/45">{copy.availability}</p>
-          <p className="mt-1 text-2xl font-black">Tuesday · 14:00</p>
+          <p className="mt-1 text-2xl font-black">{copy.availabilityTime}</p>
         </div>
       </div>
       <div className="mt-8 divide-y divide-black/10 border-y border-black/10">
@@ -434,13 +452,13 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
               <div className="sticky top-0 h-[100svh] overflow-hidden bg-[#02060b] px-12 pt-24">
                 <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_74%_32%,rgba(34,211,238,.07),transparent_28%)]" />
                 <div className="relative mx-auto h-full max-w-[92rem]">
-                  <motion.div style={{ opacity: introOpacity }} className="absolute left-0 top-[15%] z-30 max-w-[44rem]">
+                  <motion.div style={{ opacity: introOpacity }} className="absolute left-0 top-[15%] z-30 w-[42%] max-w-[44rem]">
                     <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/45">{copy.services}</p>
                     <h1 className="mt-5 max-w-[7ch] text-[clamp(4.8rem,7.2vw,8.2rem)] font-black leading-[.84] tracking-[-.065em]">{copy.hero}</h1>
                     <p className="mt-7 max-w-md text-base leading-7 text-white/55">{copy.heroSub}</p>
                   </motion.div>
 
-                  <motion.div style={{ x: surfaceX, scale: surfaceScale, rotate: surfaceRotate, opacity: surfaceOpacity }} className="absolute right-0 top-[20%] z-40 w-[62%] origin-right">
+                  <motion.div style={{ x: surfaceX, scale: surfaceScale, rotate: surfaceRotate, opacity: surfaceOpacity }} className="absolute right-0 top-[20%] z-40 w-[54%] origin-right">
                     <SiteSurface copy={copy} enquiryOpacity={enquiryOpacity} />
                   </motion.div>
 
@@ -490,8 +508,8 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
             <div className="mt-20 space-y-24 lg:mt-28 lg:space-y-36">
               <a href="https://tkcounsel.com/" target="_blank" rel="noopener noreferrer" className="group grid gap-7 rounded-[2rem] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black lg:grid-cols-[1.35fr_.65fr] lg:items-end">
                 <div className="min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#d9d2c8] p-7 sm:min-h-[520px] lg:min-h-[650px]">
-                  <div className="flex justify-between text-[9px] font-black uppercase tracking-[.18em] text-black/45"><span>TK Counsel</span><span>Legal / Professional</span></div>
-                  <div className="flex h-[80%] items-end"><p className="max-w-[8ch] text-[clamp(3rem,7vw,7rem)] font-black leading-[.86] tracking-[-.06em]">Counsel with clarity.</p></div>
+                  <div className="flex justify-between text-[9px] font-black uppercase tracking-[.18em] text-black/45"><span>TK Counsel</span><span>{copy.legalCategory}</span></div>
+                  <div className="flex h-[80%] items-end"><p className="max-w-[8ch] text-[clamp(3rem,7vw,7rem)] font-black leading-[.86] tracking-[-.06em]">{copy.tkTagline}</p></div>
                 </div>
                 <div className="pb-2"><p className="text-3xl font-black tracking-[-.04em]">TK Counsel</p><p className="mt-4 max-w-md text-base leading-7 text-black/60">{copy.tkBody}</p><span className="mt-6 inline-flex items-center gap-2 text-sm font-black">{copy.viewWebsite} <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-1 group-hover:-translate-y-1" aria-hidden /></span></div>
               </a>
@@ -499,15 +517,15 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
               <a href="https://www.frankencoindesk.com/" target="_blank" rel="noopener noreferrer" className="group grid gap-7 rounded-[2rem] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black lg:grid-cols-[.65fr_1.35fr] lg:items-end">
                 <div className="order-2 pb-2 lg:order-1"><p className="text-3xl font-black tracking-[-.04em]">Frankencoin Desk</p><p className="mt-4 max-w-md text-base leading-7 text-black/60">{copy.frankBody}</p><span className="mt-6 inline-flex items-center gap-2 text-sm font-black">{copy.viewWebsite} <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-1 group-hover:-translate-y-1" aria-hidden /></span></div>
                 <div className="order-1 min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#071321] p-7 text-white sm:min-h-[520px] lg:order-2 lg:min-h-[650px]">
-                  <div className="flex justify-between text-[9px] font-black uppercase tracking-[.18em] text-white/45"><span>Frankencoin Desk</span><span>Product / Crypto</span></div>
+                  <div className="flex justify-between text-[9px] font-black uppercase tracking-[.18em] text-white/45"><span>Frankencoin Desk</span><span>{copy.productCategory}</span></div>
                   <div className="relative mt-10 h-[75%] overflow-hidden rounded-[1.4rem] border border-white/10 bg-[url('/work-previews/frankencoin-desk.png')] bg-cover bg-top shadow-2xl" />
                 </div>
               </a>
 
               <a href="https://her-house-pilates.vercel.app/" target="_blank" rel="noopener noreferrer" className="group grid gap-7 rounded-[2rem] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black lg:grid-cols-[1.35fr_.65fr] lg:items-end">
                 <div className="min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#d8c9b5] p-7 sm:min-h-[520px] lg:min-h-[650px]">
-                  <div className="flex justify-between text-[9px] font-black uppercase tracking-[.18em] text-black/45"><span>Her House Pilates</span><span>Wellness / Studio</span></div>
-                  <div className="flex h-[80%] items-center justify-center"><p className="max-w-[7ch] text-center text-[clamp(3rem,7vw,7rem)] font-black leading-[.86] tracking-[-.06em]">Move with intention.</p></div>
+                  <div className="flex justify-between text-[9px] font-black uppercase tracking-[.18em] text-black/45"><span>Her House Pilates</span><span>{copy.wellnessCategory}</span></div>
+                  <div className="flex h-[80%] items-center justify-center"><p className="max-w-[7ch] text-center text-[clamp(3rem,7vw,7rem)] font-black leading-[.86] tracking-[-.06em]">{copy.pilatesTagline}</p></div>
                 </div>
                 <div className="pb-2"><p className="text-3xl font-black tracking-[-.04em]">Her House Pilates</p><p className="mt-4 max-w-md text-base leading-7 text-black/60">{copy.pilatesBody}</p><span className="mt-6 inline-flex items-center gap-2 text-sm font-black">{copy.viewWebsite} <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-1 group-hover:-translate-y-1" aria-hidden /></span></div>
               </a>
