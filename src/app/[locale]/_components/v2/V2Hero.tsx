@@ -61,12 +61,12 @@ export function V2Hero({ copy }: { copy: V2Copy }) {
               <SiteSurface copy={copy} enquiry deferredEnquiry />
             </div>
 
-            <div data-hero-system className="absolute right-[4%] top-[31%] z-20 w-[36%] opacity-0"><Understanding copy={copy} /></div>
-            <div data-hero-action className="absolute bottom-[10%] right-[7%] z-30 w-[34%] opacity-0"><Availability copy={copy} /></div>
-            <div data-hero-owner className="absolute bottom-[13%] left-[7%] z-30 w-[32%] opacity-0"><Owner copy={copy} /></div>
-            <div data-hero-resolved className="absolute inset-x-0 top-1/2 z-50 -translate-y-1/2 opacity-0"><Resolved copy={copy} /></div>
+            <div data-hero-system className="absolute right-[4%] top-[31%] z-20 w-[36%] invisible opacity-0"><Understanding copy={copy} /></div>
+            <div data-hero-action className="absolute bottom-[10%] right-[7%] z-30 w-[34%] invisible opacity-0"><Availability copy={copy} /></div>
+            <div data-hero-owner className="absolute bottom-[13%] left-[7%] z-30 w-[32%] invisible opacity-0"><Owner copy={copy} /></div>
+            <div data-hero-resolved className="absolute inset-x-0 top-1/2 z-50 -translate-y-1/2 invisible opacity-0"><Resolved copy={copy} /></div>
 
-            <div data-hero-signal aria-hidden className="pointer-events-none absolute left-0 top-0 z-[70] opacity-0">
+            <div data-hero-signal aria-hidden className="pointer-events-none absolute left-0 top-0 z-[70] invisible opacity-0">
               <div className="flex items-center gap-3"><span className="text-[9px] font-black uppercase tracking-[.18em] text-cyan-100/60">Signal</span><Signal /></div>
             </div>
 
@@ -78,7 +78,7 @@ export function V2Hero({ copy }: { copy: V2Copy }) {
       <div ref={mobileStoryRef} className="relative h-[280svh] lg:hidden">
         <div className="sticky top-0 h-[100svh] overflow-hidden bg-[#02060b] px-5 pb-8 pt-24 sm:px-8">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_70%_25%,rgba(34,211,238,.065),transparent_32%)]" />
-          <div data-mobile-signal aria-hidden className="pointer-events-none absolute right-5 top-[26%] z-40 flex items-center gap-2 opacity-0 sm:right-8"><span className="text-[8px] font-black uppercase tracking-[.16em] text-cyan-100/60">Signal</span><Signal /></div>
+          <div data-mobile-signal aria-hidden className="pointer-events-none absolute right-5 top-[26%] z-40 flex items-center gap-2 invisible opacity-0 sm:right-8"><span className="text-[8px] font-black uppercase tracking-[.16em] text-cyan-100/60">Signal</span><Signal /></div>
 
           <div data-mobile-step className="absolute inset-x-5 top-24 bottom-8 flex flex-col justify-center sm:inset-x-8">
             <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/60">{copy.services}</p>
@@ -87,16 +87,16 @@ export function V2Hero({ copy }: { copy: V2Copy }) {
             <MobileSurfacePreview copy={copy} />
           </div>
 
-          <div data-mobile-step className="absolute inset-x-5 top-24 bottom-8 flex flex-col justify-center opacity-0 sm:inset-x-8">
+          <div data-mobile-step className="absolute inset-x-5 top-24 bottom-8 flex flex-col justify-center invisible opacity-0 sm:inset-x-8">
             <p className="text-[10px] font-black uppercase tracking-[.2em] text-cyan-100/65">{copy.receive}</p>
             <h2 className="mt-4 text-5xl font-black tracking-[-.05em]">{copy.someoneAsks}</h2>
             <div className="mt-8 rounded-[1.6rem] bg-[#11151a] p-6 shadow-2xl"><div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[.18em] text-white/60"><Signal /> {copy.newEnquiry}</div><p className="mt-5 text-2xl font-black leading-tight">“{copy.customerMessage}”</p></div>
           </div>
 
-          <div data-mobile-step className="absolute inset-x-5 top-24 bottom-8 flex items-center opacity-0 sm:inset-x-8"><Understanding copy={copy} /></div>
-          <div data-mobile-step className="absolute inset-x-5 top-24 bottom-8 flex items-center opacity-0 sm:inset-x-8"><Availability copy={copy} /></div>
-          <div data-mobile-step className="absolute inset-x-5 top-24 bottom-8 flex items-center opacity-0 sm:inset-x-8"><Owner copy={copy} /></div>
-          <div data-mobile-step className="absolute inset-x-5 top-24 bottom-8 flex items-center opacity-0 sm:inset-x-8"><Resolved copy={copy} /></div>
+          <div data-mobile-step className="absolute inset-x-5 top-24 bottom-8 flex items-center invisible opacity-0 sm:inset-x-8"><Understanding copy={copy} /></div>
+          <div data-mobile-step className="absolute inset-x-5 top-24 bottom-8 flex items-center invisible opacity-0 sm:inset-x-8"><Availability copy={copy} /></div>
+          <div data-mobile-step className="absolute inset-x-5 top-24 bottom-8 flex items-center invisible opacity-0 sm:inset-x-8"><Owner copy={copy} /></div>
+          <div data-mobile-step className="absolute inset-x-5 top-24 bottom-8 flex items-center invisible opacity-0 sm:inset-x-8"><Resolved copy={copy} /></div>
         </div>
       </div>
     </>
