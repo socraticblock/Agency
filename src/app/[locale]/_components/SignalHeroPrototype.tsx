@@ -47,7 +47,6 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
               <a href="/ka/v2-prototype" lang="ka" hrefLang="ka" aria-current={locale === "ka" ? "page" : undefined} className="rounded-sm px-1.5 py-1 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200">KA</a>
             </nav>
             <a href={waHref} target="_blank" rel="noopener noreferrer" className="flex min-h-11 items-center gap-2 rounded-full bg-white px-3 text-xs font-black text-[#071019] sm:px-4 sm:text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"><MessageCircle className="hidden h-4 w-4 min-[360px]:block" aria-hidden />{copy.message}</a>
-            </div>
           </div>
         </header>
 
