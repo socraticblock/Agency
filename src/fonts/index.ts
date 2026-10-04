@@ -22,7 +22,7 @@ export const spaceGrotesk = Space_Grotesk({
 
 export const notoGeorgian = Noto_Sans_Georgian({
   subsets: ["georgian"],
-  weight: ["400", "700"],
+  weight: ["400", "600", "700", "900"],
   variable: "--font-noto-georgian",
   display: "swap",
 });
