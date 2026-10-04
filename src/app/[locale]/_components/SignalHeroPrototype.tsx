@@ -98,7 +98,7 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
   const copy = ka ? {
     services: "ვებსაიტები · AI · ავტომატიზაცია", hero: "თქვენი ვებსაიტი მხოლოდ დასაწყისია.", heroSub: "გამორჩეული ციფრული გამოცდილება და სასარგებლო სისტემები, რომლებიც მის უკან მუშაობს.", message: "მომწერეთ", work: "რჩეული ნამუშევრები", proof: "საქმე, არა დაპირებები.", capabilities: "რას ვქმნი", lab: "Genezisi Lab · შიდა დემო", small: "განზრახ პატარა გუნდი", contact: "გაქვთ იდეა?", contactTitle: "მომწერეთ.", contactBody: "ვებსაიტი, AI სისტემა, ავტომატიზაცია — ან მათი კომბინაცია. ყველაფერი ერთი შეტყობინებით იწყება."
   } : {
-    services: "{copy.services}", hero: "{copy.hero}", heroSub: "{copy.heroSub}", message: "Message me", work: "Selected work", proof: "Proof, not promises.", capabilities: "What I build", lab: "Genezisi Lab · Internal demo", small: "Small by design", contact: "Have something to build?", contactTitle: "Message me.", contactBody: "A website, an AI system, an automation—or something that combines them. Start with a message."
+    services: "Websites · AI · Automation", hero: "Your website is only the beginning.", heroSub: "Beautiful digital experiences, with useful systems working underneath.", message: "Message me", work: "Selected work", proof: "Proof, not promises.", capabilities: "What I build", lab: "Genezisi Lab · Internal demo", small: "Small by design", contact: "Have something to build?", contactTitle: "Message me.", contactBody: "A website, an AI system, an automation—or something that combines them. Start with a message."
   };
   return (
     <main className="bg-[#02060b] text-white">
