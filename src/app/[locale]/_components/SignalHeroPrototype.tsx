@@ -37,6 +37,7 @@ type Copy = {
   signalResolved: string;
   surfaceUseful: string;
   underneathUseful: string;
+  resolvedOutcome: string;
   seeWork: string;
   work: string;
   proof: string;
@@ -71,6 +72,7 @@ type Copy = {
   understandStep: string;
   actionStep: string;
   exceptionStep: string;
+  outcomeStep: string;
   websiteTitle: string;
   websiteBody: string;
   aiTitle: string;
@@ -112,6 +114,7 @@ const EN: Copy = {
   signalResolved: "Signal resolved",
   surfaceUseful: "Beautiful on the surface.",
   underneathUseful: "Useful underneath.",
+  resolvedOutcome: "The request is structured, the time is checked, and the owner gets a clear next step.",
   seeWork: "See the work ↓",
   work: "Selected work",
   proof: "Proof, not promises.",
@@ -146,6 +149,7 @@ const EN: Copy = {
   understandStep: "Understand the intent",
   actionStep: "Take the useful action",
   exceptionStep: "Send exceptions to a person",
+  outcomeStep: "Deliver a clear next step to the owner",
   websiteTitle: "Websites",
   websiteBody: "Clear, distinctive digital experiences built to earn attention and trust.",
   aiTitle: "AI systems",
@@ -187,6 +191,7 @@ const KA: Copy = {
   signalResolved: "Signal დასრულებულია",
   surfaceUseful: "გარედან ლამაზი.",
   underneathUseful: "შიგნით სასარგებლო.",
+  resolvedOutcome: "მოთხოვნა დალაგებულია, დრო შემოწმებულია და მფლობელი მკაფიო შემდეგ ნაბიჯს იღებს.",
   seeWork: "ნახეთ ნამუშევრები ↓",
   work: "რჩეული ნამუშევრები",
   proof: "საქმე, არა დაპირებები.",
@@ -221,6 +226,7 @@ const KA: Copy = {
   understandStep: "განზრახვის გაგება",
   actionStep: "სასარგებლო მოქმედების შესრულება",
   exceptionStep: "გამონაკლისის ადამიანთან გადაგზავნა",
+  outcomeStep: "მფლობელისთვის მკაფიო შემდეგი ნაბიჯის მიწოდება",
   websiteTitle: "ვებსაიტები",
   websiteBody: "მკაფიო და გამორჩეული ციფრული გამოცდილება, რომელიც ყურადღებასა და ნდობას იმსახურებს.",
   aiTitle: "AI სისტემები",
@@ -348,8 +354,9 @@ function Resolved({ copy }: { copy: Copy }) {
   return (
     <div className="mx-auto max-w-5xl text-center">
       <div className="mx-auto mb-7 flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-[.2em] text-white/60"><Signal quiet />{copy.signalResolved}</div>
-      <h2 className="text-[clamp(3.1rem,8vw,8rem)] font-black leading-[.86] tracking-[-.065em]">{copy.surfaceUseful}<br /><span className="text-white/48">{copy.underneathUseful}</span></h2>
-      <p className="mt-9 text-sm font-semibold text-white/60">{copy.seeWork}</p>
+      <h2 className="text-[clamp(3.1rem,8vw,8rem)] font-black leading-[.86] tracking-[-.065em]">{copy.surfaceUseful}<br /><span className="text-white/55">{copy.underneathUseful}</span></h2>
+      <p className="mx-auto mt-7 max-w-xl text-base leading-7 text-white/60">{copy.resolvedOutcome}</p>
+      <p className="mt-8 text-sm font-semibold text-white/60">{copy.seeWork}</p>
     </div>
   );
 }
@@ -419,7 +426,7 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
     ["02", copy.aiTitle, copy.aiBody],
     ["03", copy.automationTitle, copy.automationBody],
   ];
-  const labSteps = [copy.receiveStep, copy.understandStep, copy.actionStep, copy.exceptionStep];
+  const labSteps = [copy.receiveStep, copy.understandStep, copy.actionStep, copy.exceptionStep, copy.outcomeStep];
 
   return (
     <main className="bg-[#02060b] text-white">
@@ -574,8 +581,13 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
         <section className="bg-[#02060b] px-5 py-20 sm:px-8 lg:py-32">
           <div className="mx-auto grid max-w-[92rem] gap-12 border-t border-white/10 pt-14 lg:grid-cols-[.7fr_1.3fr]">
             <div><p className="text-[10px] font-black uppercase tracking-[.22em] text-cyan-100/55">{copy.lab}</p><h2 className="mt-5 text-5xl font-black leading-[.9] tracking-[-.055em] sm:text-7xl">{copy.labTitle}</h2></div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              {labSteps.map((x, i) => <div key={x} className="min-h-40 rounded-[1.5rem] bg-white/[.045] p-6"><span className="text-[10px] font-black text-white/30">0{i + 1}</span><p className="mt-12 max-w-[16ch] text-xl font-black">{x}</p></div>)}
+            <div className="border-y border-white/10">
+              {labSteps.map((x, i) => (
+                <div key={x} className="grid min-h-24 grid-cols-[48px_1fr] items-center gap-5 border-b border-white/10 py-5 last:border-b-0 sm:grid-cols-[70px_1fr]">
+                  <span className="text-[10px] font-black text-white/45">0{i + 1}</span>
+                  <p className="max-w-2xl text-xl font-black tracking-[-.02em] sm:text-2xl">{x}</p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
