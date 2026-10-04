@@ -15,13 +15,12 @@ import {
   UserRoundCheck,
 } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
-import {
-  WHATSAPP_DEFAULT_MESSAGE,
-  WHATSAPP_INTAKE,
-} from "@/constants/content";
+import { WHATSAPP_INTAKE } from "@/constants/content";
 
 const SIGNAL = "#22d3ee";
 const SIGNAL_2 = "#34d399";
+const PROTOTYPE_MESSAGE =
+  "Hi Genezisi, I have something I'd like to build. Can we talk?";
 
 function SignalDot({ className = "" }: { className?: string }) {
   return (
@@ -203,7 +202,7 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
   const waHref = useMemo(
     () =>
       `https://wa.me/${WHATSAPP_INTAKE}?text=${encodeURIComponent(
-        WHATSAPP_DEFAULT_MESSAGE,
+        PROTOTYPE_MESSAGE,
       )}`,
     [],
   );
@@ -382,8 +381,8 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
             </motion.div>
           </div>
 
-          {/* Mobile: authored as a vertical sequence, not a compressed desktop canvas */}
-          <div className="absolute inset-x-4 bottom-[4%] top-[38%] lg:hidden">
+          {/* Mobile: one primary panel at a time. Same story, different choreography. */}
+          <div className="absolute inset-x-4 bottom-[8%] top-[39%] lg:hidden">
             <motion.div
               style={
                 reduceMotion
@@ -392,17 +391,71 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
               }
               className="relative h-full"
             >
-              <div className="absolute inset-x-0 top-0 h-[42%]">
+              <motion.div
+                style={{
+                  opacity: reduceMotion
+                    ? 0
+                    : useTransform(
+                        scrollYProgress,
+                        [0.22, 0.32, 0.42],
+                        [1, 1, 0],
+                      ),
+                }}
+                className="absolute inset-0"
+              >
                 <WebsitePanel />
-              </div>
-              <div className="absolute left-1/2 top-[44%] h-16 w-px -translate-x-1/2 bg-gradient-to-b from-cyan-200/50 to-emerald-200/10">
-                <span className="absolute left-1/2 top-5 -translate-x-1/2">
-                  <SignalDot />
-                </span>
-              </div>
-              <div className="absolute inset-x-0 bottom-0 grid h-[48%] grid-cols-2 gap-3">
+              </motion.div>
+
+              <motion.div
+                style={{
+                  opacity: reduceMotion
+                    ? 0
+                    : useTransform(
+                        scrollYProgress,
+                        [0.34, 0.44, 0.54, 0.6],
+                        [0, 1, 1, 0],
+                      ),
+                }}
+                className="absolute inset-0"
+              >
                 <AssistantPanel />
+              </motion.div>
+
+              <motion.div
+                style={{
+                  opacity: reduceMotion
+                    ? 0
+                    : useTransform(
+                        scrollYProgress,
+                        [0.54, 0.62, 0.7, 0.76],
+                        [0, 1, 1, 0],
+                      ),
+                }}
+                className="absolute inset-0"
+              >
+                <BookingPanel />
+              </motion.div>
+
+              <motion.div
+                style={{
+                  opacity: reduceMotion
+                    ? 1
+                    : useTransform(
+                        scrollYProgress,
+                        [0.7, 0.79, 0.92],
+                        [0, 1, 1],
+                      ),
+                }}
+                className="absolute inset-0"
+              >
                 <OwnerPanel />
+              </motion.div>
+
+              <div className="pointer-events-none absolute left-5 top-5 z-50 flex items-center gap-2 rounded-full border border-cyan-200/12 bg-[#03101a]/75 px-3 py-2 backdrop-blur">
+                <SignalDot className="h-2.5 w-2.5" />
+                <span className="text-[9px] font-black uppercase tracking-[0.18em] text-cyan-100/55">
+                  The Signal
+                </span>
               </div>
             </motion.div>
           </div>
