@@ -593,9 +593,12 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
         </section>
 
         <section id="about" className="scroll-mt-20 bg-[#e8e1d7] px-5 py-28 text-[#101114] sm:px-8 lg:py-40">
-          <div className="mx-auto grid max-w-[92rem] gap-14 lg:grid-cols-[.9fr_1.1fr] lg:items-end">
-            <div className="aspect-[4/5] max-w-xl overflow-hidden rounded-[2rem] bg-[radial-gradient(circle_at_50%_35%,rgba(255,255,255,.75),transparent_24%),linear-gradient(145deg,#b8aa97,#665f57)]"><div className="flex h-full items-end p-7 text-[10px] font-black uppercase tracking-[.2em] text-white/65">{copy.founderLabel}</div></div>
-            <div><p className="text-[10px] font-black uppercase tracking-[.22em] text-black/60">{copy.small}</p><h2 className="mt-5 max-w-[9ch] text-[clamp(3.4rem,7vw,7rem)] font-black leading-[.86] tracking-[-.065em]">{copy.founderTitle}</h2><p className="mt-8 max-w-xl text-lg leading-8 text-black/60">{copy.founderBody}</p></div>
+          <div className="mx-auto max-w-[92rem]">
+            <div className="flex items-center justify-between border-b border-black/15 pb-5 text-[10px] font-black uppercase tracking-[.22em] text-black/60"><span>{copy.small}</span><span>{copy.founderLabel}</span></div>
+            <div className="mt-12 grid gap-12 lg:grid-cols-[1.15fr_.85fr] lg:items-end">
+              <h2 className="max-w-[9ch] text-[clamp(3.8rem,8vw,8rem)] font-black leading-[.84] tracking-[-.07em]">{copy.founderTitle}</h2>
+              <div className="border-l border-black/15 pl-6 sm:pl-8"><p className="max-w-xl text-lg leading-8 text-black/65">{copy.founderBody}</p><p className="mt-8 text-sm font-black uppercase tracking-[.14em] text-black/60">{copy.founderLabel}</p></div>
+            </div>
           </div>
         </section>
 
