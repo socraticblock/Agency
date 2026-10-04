@@ -47,6 +47,7 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
               <a href="/ka/v2-prototype" lang="ka" hrefLang="ka" aria-current={locale === "ka" ? "page" : undefined} className="rounded-sm px-1.5 py-1 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200">KA</a>
             </nav>
             <a href={waHref} target="_blank" rel="noopener noreferrer" className="flex min-h-11 items-center gap-2 rounded-full bg-white px-3 text-xs font-black text-[#071019] sm:px-4 sm:text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"><MessageCircle className="hidden h-4 w-4 min-[360px]:block" aria-hidden />{copy.message}</a>
+            </div>
           </div>
         </header>
 
@@ -103,6 +104,13 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
             <p className="max-w-xl text-xl font-black tracking-[-.025em]">{copy.workContact}</p>
             <a href={waHref} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 w-fit items-center gap-3 rounded-full bg-[#101114] px-5 text-sm font-black text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black"><MessageCircle className="h-4 w-4" aria-hidden />{copy.message}</a>
           </div>
+          </div>
+        </section>
+
+        <section className="bg-[#f0ece5] px-5 pb-28 text-[#101114] sm:px-8 lg:pb-40">
+          <div className="mx-auto flex max-w-[92rem] flex-col gap-6 border-t border-black/10 pt-10 sm:flex-row sm:items-end sm:justify-between">
+            <p className="max-w-[12ch] text-3xl font-black tracking-[-.045em] sm:text-5xl">{copy.afterWork}</p>
+            <a href={waHref} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 w-fit items-center gap-2 rounded-full bg-[#101114] px-5 text-sm font-black text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black">{copy.afterWorkCta}<ArrowUpRight className="h-4 w-4" aria-hidden /></a>
           </div>
         </section>
 
