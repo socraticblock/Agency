@@ -106,13 +106,6 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
           </div>
         </section>
 
-        <section className="bg-[#f0ece5] px-5 pb-28 text-[#101114] sm:px-8 lg:pb-40">
-          <div className="mx-auto flex max-w-[92rem] flex-col gap-6 border-t border-black/10 pt-10 sm:flex-row sm:items-end sm:justify-between">
-            <p className="max-w-[12ch] text-3xl font-black tracking-[-.045em] sm:text-5xl">{copy.afterWork}</p>
-            <a href={waHref} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 w-fit items-center gap-2 rounded-full bg-[#101114] px-5 text-sm font-black text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black">{copy.afterWorkCta}<ArrowUpRight className="h-4 w-4" aria-hidden /></a>
-          </div>
-        </section>
-
         <section id="capabilities" className="scroll-mt-20 bg-[#02060b] px-5 py-28 sm:px-8 lg:py-40">
           <div className="mx-auto max-w-[92rem]">
             <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/60">{copy.capabilities}</p>
