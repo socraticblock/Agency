@@ -44,8 +44,11 @@ export function V2Hero({ copy }: { copy: V2Copy }) {
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_74%_32%,rgba(34,211,238,.07),transparent_28%)]" />
           <div className="relative mx-auto h-full max-w-[92rem]">
             <svg aria-hidden className="pointer-events-none absolute inset-0 z-10 h-full w-full" viewBox="0 0 1400 800" preserveAspectRatio="none">
-              <path data-signal-path d="M1010 270 C1120 260 1165 350 1070 420 S940 535 1045 585 C900 625 610 635 355 585" fill="none" stroke="rgba(255,255,255,.09)" strokeWidth="2" strokeDasharray="5 9" />
-              <path data-signal-active pathLength="1" strokeDasharray="1" strokeDashoffset="1" d="M1010 270 C1120 260 1165 350 1070 420 S940 535 1045 585 C900 625 610 635 355 585" fill="none" stroke="rgba(165,243,252,.72)" strokeWidth="2.5" strokeLinecap="round" />
+              <path data-signal-path d="M1010 270 C1120 260 1165 350 1070 420 S990 520 1045 585" fill="none" stroke="rgba(255,255,255,.09)" strokeWidth="2" strokeDasharray="5 9" />
+              <path data-signal-active pathLength="1" strokeDasharray="1" strokeDashoffset="1" d="M1010 270 C1120 260 1165 350 1070 420 S990 520 1045 585" fill="none" stroke="rgba(165,243,252,.72)" strokeWidth="2.5" strokeLinecap="round" />
+              <path data-review-path d="M1045 585 C900 625 610 635 355 585" fill="none" stroke="rgba(255,255,255,.1)" strokeWidth="2" strokeDasharray="3 11" />
+              <path data-review-active pathLength="1" strokeDasharray="1" strokeDashoffset="1" d="M1045 585 C900 625 610 635 355 585" fill="none" stroke="rgba(165,243,252,.72)" strokeWidth="2.5" strokeLinecap="round" />
+              <path d="M1045 575 l10 10 -10 10 -10 -10 z" fill="rgba(255,255,255,.18)" />
             </svg>
 
             <div data-hero-intro className="absolute left-0 top-[15%] z-30 w-[42%] max-w-[44rem]">
