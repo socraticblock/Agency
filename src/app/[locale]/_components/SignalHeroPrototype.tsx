@@ -32,11 +32,11 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
               <a className="hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200" href="#capabilities">{copy.navCapabilities}</a>
               <a className="hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200" href="#about">{copy.navAbout}</a>
             </nav>
-            <div aria-label="Language" className="hidden items-center gap-2 text-xs font-black text-white/60 sm:flex">
+            <nav aria-label="Language" className="hidden items-center gap-2 text-xs font-black text-white/60 sm:flex">
               <a href="/en/v2-prototype" lang="en" aria-current={locale === "en" ? "page" : undefined} className="rounded-sm px-1.5 py-1 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200">EN</a>
               <span aria-hidden className="text-white/25">·</span>
               <a href="/ka/v2-prototype" lang="ka" aria-current={locale === "ka" ? "page" : undefined} className="rounded-sm px-1.5 py-1 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200">KA</a>
-            </div>
+            </nav>
             <a href={waHref} target="_blank" rel="noopener noreferrer" className="flex min-h-11 items-center gap-2 rounded-full bg-white px-4 text-sm font-black text-[#071019] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"><MessageCircle className="h-4 w-4" aria-hidden />{copy.message}</a>
           </div>
         </header>
