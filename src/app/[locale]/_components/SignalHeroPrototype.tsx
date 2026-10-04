@@ -25,31 +25,59 @@ function ProjectCover({
 }) {
   if (variant === "product") {
     return (
-      <div className="relative min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#071321] p-7 text-white sm:min-h-[520px] lg:min-h-[650px]">
-        <div className="relative z-20 flex justify-between text-[9px] font-black uppercase tracking-[.18em] text-white/60">
+      <div className="relative min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#071321] p-5 text-white sm:min-h-[520px] lg:min-h-[650px]">
+        <div className="relative z-20 flex justify-between rounded-full border border-white/10 bg-[#071321]/88 px-4 py-3 text-[9px] font-black uppercase tracking-[.18em] text-white/62 backdrop-blur-sm">
           <span>{title} · {status}</span>
           <span>{category}</span>
         </div>
-        <div className="relative mt-10 h-[75%] overflow-hidden rounded-[1.4rem] border border-white/10 bg-[url('/work-previews/frankencoin-desk.png')] bg-cover bg-top shadow-2xl" />
+        <div className="absolute inset-x-[5%] bottom-[6%] top-[18%] overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#0b1725] shadow-[0_30px_90px_rgba(0,0,0,.35)]">
+          <img
+            src="/work-previews/frankencoin-desk.png"
+            alt=""
+            loading="lazy"
+            decoding="async"
+            className="h-full w-full object-cover object-top brightness-110 saturate-[.88]"
+          />
+          <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/[.06]" />
+        </div>
       </div>
     );
   }
 
   if (variant === "wellness") {
     return (
-      <div className="relative min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#d8c9b5] p-5 text-[#171513] sm:min-h-[520px] lg:min-h-[650px]">
-        <div className="relative z-20 flex justify-between rounded-full bg-[#f4eee6]/85 px-4 py-3 text-[9px] font-black uppercase tracking-[.18em] text-black/60">
+      <div className="relative min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#e8dfd3] p-5 text-[#171513] sm:min-h-[520px] lg:min-h-[650px]">
+        <div className="relative z-20 flex justify-between rounded-full bg-[#f8f3ec]/92 px-4 py-3 text-[9px] font-black uppercase tracking-[.18em] text-black/58">
           <span>{title} · {status}</span>
           <span>{category}</span>
         </div>
-        <div className="absolute inset-x-[7%] bottom-[8%] top-[20%] overflow-hidden rounded-[2rem] bg-[#efe7dc] shadow-[0_35px_90px_rgba(50,32,20,.18)]">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_26%,rgba(255,255,255,.9),transparent_22%),linear-gradient(145deg,#eadfd0,#c8ad92)]" />
-          <div className="absolute left-[8%] top-[10%] text-[10px] font-black uppercase tracking-[.2em] text-black/45">Her House</div>
-          <div className="absolute bottom-[11%] left-[8%] right-[8%]">
-            <p className="max-w-[8ch] text-[clamp(2.4rem,6vw,5.2rem)] font-black leading-[.86] tracking-[-.06em]">{tagline}</p>
-            <div className="mt-7 flex gap-2 text-[9px] font-black uppercase tracking-[.14em] text-black/55">
-              <span className="rounded-full border border-black/15 px-3 py-2">Schedule</span>
-              <span className="rounded-full border border-black/15 px-3 py-2">Booking</span>
+        <div className="absolute inset-x-[5%] bottom-[6%] top-[18%] overflow-hidden rounded-[1.7rem] bg-[#f7f1e8] shadow-[0_35px_90px_rgba(67,45,30,.18)]">
+          <div className="grid h-full md:grid-cols-[.82fr_1.18fr]">
+            <div className="relative z-10 flex flex-col justify-between p-[8%] md:p-[10%]">
+              <div className="flex items-center justify-between text-[9px] font-black uppercase tracking-[.2em] text-black/48">
+                <span>HER HOUSE</span>
+                <span>Vera · Tbilisi</span>
+              </div>
+              <div>
+                <p className="text-[9px] font-black uppercase tracking-[.18em] text-black/42">Luxury women&apos;s wellness club</p>
+                <p className="mt-4 max-w-[8ch] text-[clamp(2.4rem,5.3vw,5rem)] font-black leading-[.86] tracking-[-.06em]">
+                  More than a workout. It&apos;s your place.
+                </p>
+                <div className="mt-7 flex flex-wrap gap-2 text-[9px] font-black uppercase tracking-[.14em] text-black/58">
+                  <span className="rounded-full bg-[#171513] px-3 py-2 text-white">Book your class</span>
+                  <span className="rounded-full border border-black/15 px-3 py-2">View schedule</span>
+                </div>
+              </div>
+            </div>
+            <div className="relative min-h-56 overflow-hidden bg-[#cdb9a1]">
+              <img
+                src="https://her-house-pilates.vercel.app/assets/webp/hero-studio.webp"
+                alt=""
+                loading="lazy"
+                decoding="async"
+                className="h-full w-full object-cover"
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/12 via-transparent to-white/10" />
             </div>
           </div>
         </div>
@@ -58,23 +86,33 @@ function ProjectCover({
   }
 
   return (
-    <div className="relative min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#d9d2c8] p-5 text-[#111318] sm:min-h-[520px] lg:min-h-[650px]">
-      <div className="relative z-20 flex justify-between rounded-full bg-[#f0ece5]/90 px-4 py-3 text-[9px] font-black uppercase tracking-[.18em] text-black/60">
+    <div className="relative min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#d8d4ce] p-5 text-[#101114] sm:min-h-[520px] lg:min-h-[650px]">
+      <div className="relative z-20 flex justify-between rounded-full bg-[#f5f3ef]/94 px-4 py-3 text-[9px] font-black uppercase tracking-[.18em] text-black/58">
         <span>{title} · {status}</span>
         <span>{category}</span>
       </div>
-      <div className="absolute inset-x-[7%] bottom-[8%] top-[20%] overflow-hidden rounded-[2rem] bg-[#f2efe9] shadow-[0_35px_90px_rgba(0,0,0,.14)]">
-        <div className="grid h-full grid-rows-[auto_1fr_auto] p-[7%]">
-          <div className="flex items-center justify-between text-[9px] font-black uppercase tracking-[.2em] text-black/45">
-            <span>TK Counsel</span>
-            <span>Legal clarity</span>
+      <div className="absolute inset-x-[5%] bottom-[6%] top-[18%] overflow-hidden rounded-[1.7rem] bg-[#f7f6f2] shadow-[0_35px_90px_rgba(0,0,0,.14)]">
+        <div className="flex h-full flex-col p-[6%]">
+          <div className="flex items-center justify-between border-b border-black/10 pb-4 text-[9px] font-black uppercase tracking-[.18em] text-black/45">
+            <span>TK Counsel Georgia</span>
+            <span>Services · About · News · Contact</span>
           </div>
-          <div className="flex items-center">
-            <p className="max-w-[8ch] text-[clamp(2.5rem,6vw,5.4rem)] font-black leading-[.86] tracking-[-.06em]">{tagline}</p>
+          <div className="flex flex-1 flex-col justify-center py-8">
+            <p className="text-[9px] font-black uppercase tracking-[.18em] text-black/42">Based in Tbilisi, Georgia</p>
+            <p className="mt-5 max-w-[12ch] text-[clamp(2.25rem,4.9vw,4.8rem)] font-black leading-[.88] tracking-[-.055em]">
+              Expert Legal Counsel for the International Community in Georgia
+            </p>
+            <div className="mt-8 grid gap-2 sm:grid-cols-2">
+              {["Residency & Migration", "Corporate & Business", "Employment", "Real Estate & Property"].map((practice) => (
+                <div key={practice} className="rounded-xl border border-black/10 bg-white/55 px-4 py-3 text-[10px] font-black uppercase tracking-[.12em] text-black/58">
+                  {practice}
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="flex items-end justify-between border-t border-black/10 pt-5 text-[9px] font-black uppercase tracking-[.16em] text-black/45">
-            <span>Strategy · Counsel · Execution</span>
-            <span className="h-9 w-9 rounded-full bg-[#111318]" />
+          <div className="flex items-end justify-between border-t border-black/10 pt-4 text-[9px] font-black uppercase tracking-[.16em] text-black/42">
+            <span>{tagline}</span>
+            <span>View all services →</span>
           </div>
         </div>
       </div>
@@ -101,6 +139,13 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
     copy.actionStep,
     copy.exceptionStep,
     copy.outcomeStep,
+  ];
+  const labDetails = [
+    copy.customerMessage,
+    copy.parsedRequest,
+    `${copy.availability}: ${copy.availabilityTime}`,
+    `${copy.needsReview}: ${copy.owner}`,
+    copy.resolvedOutcome,
   ];
 
   return (
@@ -228,12 +273,19 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
       >
         <div className="mx-auto max-w-[92rem]">
           <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/60">{copy.capabilities}</p>
-          <div className="mt-10 divide-y divide-white/10 border-y border-white/10">
+          <div className="mt-12 border-y border-white/10">
             {capabilities.map(([n, title, body]) => (
-              <div key={n} className="grid gap-4 py-9 sm:grid-cols-[80px_.8fr_1.2fr] sm:items-baseline lg:py-14">
-                <span className="text-xs font-black text-white/30">{n}</span>
-                <h3 className="text-3xl font-black tracking-[-.045em] sm:text-5xl">{title}</h3>
-                <p className="max-w-xl text-base leading-7 text-white/55">{body}</p>
+              <div
+                key={n}
+                className="group relative grid gap-4 border-b border-white/10 py-9 last:border-b-0 sm:grid-cols-[80px_.8fr_1.2fr] sm:items-baseline lg:py-14"
+              >
+                <span className="absolute bottom-5 left-0 top-5 w-px origin-top scale-y-0 bg-cyan-100/55 transition-transform duration-500 ease-out group-hover:scale-y-100" aria-hidden />
+                <span className="text-xs font-black text-white/28 transition-colors group-hover:text-cyan-100/55">{n}</span>
+                <h3 className="flex items-center gap-4 text-3xl font-black tracking-[-.045em] sm:text-5xl">
+                  {title}
+                  <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-white/15 transition-[background-color,box-shadow] duration-300 group-hover:bg-cyan-200 group-hover:shadow-[0_0_14px_rgba(165,243,252,.55)]" />
+                </h3>
+                <p className="max-w-xl text-base leading-7 text-white/55 transition-colors group-hover:text-white/68">{body}</p>
               </div>
             ))}
           </div>
@@ -248,8 +300,12 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
           </div>
           <V2Lab
             steps={labSteps}
+            details={labDetails}
             customerMessage={copy.customerMessage}
             resolvedOutcome={copy.resolvedOutcome}
+            eyebrow={copy.lab}
+            requestLabel={copy.newEnquiry}
+            stateLabel={copy.systemRevealed}
           />
         </div>
       </section>
