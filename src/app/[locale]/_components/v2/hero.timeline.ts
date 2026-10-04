@@ -32,14 +32,16 @@ export function createDesktopSignalTimeline(root: HTMLElement | null) {
         const signal = root.querySelector<HTMLElement>("[data-hero-signal]");
         const signalPath = root.querySelector<SVGPathElement>("[data-signal-path]");
         const activePath = root.querySelector<SVGPathElement>("[data-signal-active]");
+        const reviewPath = root.querySelector<SVGPathElement>("[data-review-path]");
+        const reviewActive = root.querySelector<SVGPathElement>("[data-review-active]");
 
-        if (!surface || !enquiry || !system || !action || !owner || !resolved || !signal || !signalPath || !activePath) {
+        if (!surface || !enquiry || !system || !action || !owner || !resolved || !signal || !signalPath || !activePath || !reviewPath || !reviewActive) {
           return;
         }
 
         gsap.set(enquiry, { autoAlpha: 0 });
         gsap.set([system, action, owner, resolved, signal], { autoAlpha: 0 });
-        gsap.set(activePath, { attr: { "stroke-dashoffset": 1 } });
+        gsap.set([activePath, reviewActive], { attr: { "stroke-dashoffset": 1 } });
 
         const timeline = gsap.timeline({
           defaults: { ease: "none" },
@@ -62,7 +64,7 @@ export function createDesktopSignalTimeline(root: HTMLElement | null) {
         timeline.to(system, { autoAlpha: 1, duration: 10 }, 32);
 
         // Route the same Signal through the visible path.
-        timeline.to(activePath, { attr: { "stroke-dashoffset": 0 }, duration: 58 }, 28);
+        timeline.to(activePath, { attr: { "stroke-dashoffset": 0 }, duration: 47 }, 28);
         timeline.to(
           signal,
           {
@@ -74,7 +76,7 @@ export function createDesktopSignalTimeline(root: HTMLElement | null) {
               start: 0,
               end: 1,
             },
-            duration: 58,
+            duration: 47,
           },
           28,
         );
@@ -83,7 +85,23 @@ export function createDesktopSignalTimeline(root: HTMLElement | null) {
         timeline.to(action, { autoAlpha: 1, duration: 10 }, 58);
         timeline.to(system, { autoAlpha: 0.3, duration: 8 }, 66);
 
-        // Human review
+        // Human review branches from the useful-action path.
+        timeline.to(reviewActive, { attr: { "stroke-dashoffset": 0 }, duration: 11 }, 75);
+        timeline.to(
+          signal,
+          {
+            motionPath: {
+              path: reviewPath,
+              align: reviewPath,
+              alignOrigin: [0.5, 0.5],
+              autoRotate: false,
+              start: 0,
+              end: 1,
+            },
+            duration: 11,
+          },
+          75,
+        );
         timeline.to(owner, { autoAlpha: 1, duration: 8 }, 75);
         timeline.to(action, { autoAlpha: 0.35, duration: 6 }, 80);
 
@@ -92,7 +110,7 @@ export function createDesktopSignalTimeline(root: HTMLElement | null) {
         timeline.to([system, action, owner], { autoAlpha: 0, duration: 8 }, 88);
         timeline.to(signal, { autoAlpha: 0, duration: 5 }, 91);
         timeline.to(resolved, { autoAlpha: 1, duration: 10 }, 86);
-        timeline.to(activePath, { opacity: 0.25, duration: 4 }, 96);
+        timeline.to([activePath, reviewActive], { opacity: 0.25, duration: 4 }, 96);
         timeline.to({}, { duration: 4 }, 96);
 
         requestAnimationFrame(() => ScrollTrigger.refresh());
