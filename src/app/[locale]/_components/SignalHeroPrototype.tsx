@@ -1,13 +1,7 @@
 "use client";
 
-import { useMemo, useRef } from "react";
-import {
-  motion,
-  type MotionValue,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-} from "framer-motion";
+import { useLayoutEffect, useMemo, useRef } from "react";
+import { useReducedMotion } from "framer-motion";
 import {
   ArrowUpRight,
   CalendarDays,
@@ -17,6 +11,10 @@ import {
 } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import { WHATSAPP_DEFAULT_MESSAGE, WHATSAPP_INTAKE } from "@/constants/content";
+import {
+  createDesktopSignalTimeline,
+  createMobileSignalTimeline,
+} from "./v2/hero.timeline";
 
 type Copy = {
   services: string;
@@ -257,14 +255,14 @@ function SiteSurface({
   copy,
   enquiry = false,
   compact = false,
-  enquiryOpacity,
+  deferredEnquiry = false,
 }: {
   copy: Copy;
   enquiry?: boolean;
   compact?: boolean;
-  enquiryOpacity?: MotionValue<number>;
+  deferredEnquiry?: boolean;
 }) {
-  const showEnquiry = enquiry || Boolean(enquiryOpacity);
+  const showEnquiry = enquiry;
   return (
     <div className={"relative overflow-hidden rounded-[2rem] bg-[#e9e4dc] text-[#101114] shadow-[0_45px_120px_rgba(0,0,0,.45)] " + (compact ? "min-h-[250px] sm:min-h-[330px]" : "min-h-[430px]")}>
       <div className="flex items-center justify-between px-6 py-5 text-[10px] font-black uppercase tracking-[.18em] text-black/60">
@@ -282,13 +280,13 @@ function SiteSurface({
         </div>
       </div>
       {showEnquiry && (
-        <motion.div
-          style={enquiryOpacity ? { opacity: enquiryOpacity } : undefined}
-          className="absolute bottom-5 right-5 max-w-[min(88%,390px)] rounded-[1.4rem] bg-[#11151a] p-4 text-white shadow-2xl"
+        <div
+          data-hero-enquiry={deferredEnquiry ? "" : undefined}
+          className={"absolute bottom-5 right-5 max-w-[min(88%,390px)] rounded-[1.4rem] bg-[#11151a] p-4 text-white shadow-2xl " + (deferredEnquiry ? "opacity-0" : "")}
         >
           <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[.18em] text-white/60"><Signal /> {copy.newEnquiry}</div>
           <p className="mt-3 text-base font-semibold leading-6">“{copy.customerMessage}”</p>
-        </motion.div>
+        </div>
       )}
     </div>
   );
@@ -403,36 +401,16 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
   const reduceMotion = useReducedMotion();
   const copy = locale === "ka" ? KA : EN;
 
-  const { scrollYProgress: desktopProgress } = useScroll({
-    target: desktopStoryRef,
-    offset: ["start start", "end end"],
-  });
-  const { scrollYProgress: mobileProgress } = useScroll({
-    target: mobileStoryRef,
-    offset: ["start start", "end end"],
-  });
+  useLayoutEffect(() => {
+    if (reduceMotion) return;
+    const cleanDesktop = createDesktopSignalTimeline(desktopStoryRef.current);
+    const cleanMobile = createMobileSignalTimeline(mobileStoryRef.current);
+    return () => {
+      cleanDesktop();
+      cleanMobile();
+    };
+  }, [reduceMotion]);
 
-  const introOpacity = useTransform(desktopProgress, [0, .18, .3], [1, 1, 0]);
-  const enquiryOpacity = useTransform(desktopProgress, [.1, .18, .28], [0, 1, 1]);
-  const surfaceX = useTransform(desktopProgress, [.18, .36], ["0vw", "-12vw"]);
-  const surfaceScale = useTransform(desktopProgress, [.18, .36], [1, .86]);
-  const surfaceRotate = useTransform(desktopProgress, [.18, .36], [0, -4]);
-  const surfaceOpacity = useTransform(desktopProgress, [.78, .92], [1, .16]);
-  const systemOpacity = useTransform(desktopProgress, [.28, .4, .56, .66], [0, 1, 1, 0]);
-  const actionOpacity = useTransform(desktopProgress, [.48, .6, .7, .79], [0, 1, 1, 0]);
-  const ownerOpacity = useTransform(desktopProgress, [.68, .78, .86, .93], [0, 1, 1, 0]);
-  const resolvedOpacity = useTransform(desktopProgress, [.86, .95, 1], [0, 1, 1]);
-  const signalOpacity = useTransform(desktopProgress, [.12, .18, .88, .96], [0, 1, 1, 0]);
-  const signalX = useTransform(desktopProgress, [.18, .4, .6, .78, .9], ["22vw", "11vw", "24vw", "-24vw", "0vw"]);
-  const signalY = useTransform(desktopProgress, [.18, .4, .6, .78, .9], ["18vh", "-2vh", "25vh", "26vh", "0vh"]);
-  const routeProgress = useTransform(desktopProgress, [.18, .9], [0, 1]);
-
-  const m0 = useTransform(mobileProgress, [0, .12, .19], [1, 1, 0]);
-  const m1 = useTransform(mobileProgress, [.13, .21, .3], [0, 1, 0]);
-  const m2 = useTransform(mobileProgress, [.25, .34, .44], [0, 1, 0]);
-  const m3 = useTransform(mobileProgress, [.39, .49, .59], [0, 1, 0]);
-  const m4 = useTransform(mobileProgress, [.54, .66, .77], [0, 1, 0]);
-  const m5 = useTransform(mobileProgress, [.72, .84, 1], [0, 1, 1]);
 
   const waHref = useMemo(
     () => "https://wa.me/" + WHATSAPP_INTAKE + "?text=" + encodeURIComponent(WHATSAPP_DEFAULT_MESSAGE),
@@ -476,28 +454,27 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
                 <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_74%_32%,rgba(34,211,238,.07),transparent_28%)]" />
                 <div className="relative mx-auto h-full max-w-[92rem]">
                   <svg aria-hidden className="pointer-events-none absolute inset-0 z-10 h-full w-full" viewBox="0 0 1400 800" preserveAspectRatio="none">
-                    <path d="M1010 270 C1120 260 1165 350 1070 420 S940 535 1045 585 C935 620 760 610 600 585" fill="none" stroke="rgba(255,255,255,.09)" strokeWidth="2" strokeDasharray="5 9" />
-                    <motion.path d="M1010 270 C1120 260 1165 350 1070 420 S940 535 1045 585 C935 620 760 610 600 585" fill="none" stroke="rgba(165,243,252,.72)" strokeWidth="2.5" strokeLinecap="round" style={{ pathLength: routeProgress }} />
-                    <path d="M1045 585 C890 640 560 650 355 585" fill="none" stroke="rgba(255,255,255,.09)" strokeWidth="2" strokeDasharray="5 9" />
+                    <path data-signal-path d="M1010 270 C1120 260 1165 350 1070 420 S940 535 1045 585 C900 625 610 635 355 585" fill="none" stroke="rgba(255,255,255,.09)" strokeWidth="2" strokeDasharray="5 9" />
+                    <path data-signal-active pathLength="1" strokeDasharray="1" strokeDashoffset="1" d="M1010 270 C1120 260 1165 350 1070 420 S940 535 1045 585 C900 625 610 635 355 585" fill="none" stroke="rgba(165,243,252,.72)" strokeWidth="2.5" strokeLinecap="round" />
                   </svg>
-                  <motion.div style={{ opacity: introOpacity }} className="absolute left-0 top-[15%] z-30 w-[42%] max-w-[44rem]">
+                  <div data-hero-intro className="absolute left-0 top-[15%] z-30 w-[42%] max-w-[44rem]">
                     <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/60">{copy.services}</p>
                     <h1 className="mt-5 max-w-[7ch] text-[clamp(4.8rem,7.2vw,8.2rem)] font-black leading-[.84] tracking-[-.065em]">{copy.hero}</h1>
                     <p className="mt-7 max-w-md text-base leading-7 text-white/55">{copy.heroSub}</p>
-                  </motion.div>
+                  </div>
 
-                  <motion.div style={{ x: surfaceX, scale: surfaceScale, rotate: surfaceRotate, opacity: surfaceOpacity }} className="absolute right-0 top-[20%] z-40 w-[54%] origin-right">
-                    <SiteSurface copy={copy} enquiryOpacity={enquiryOpacity} />
-                  </motion.div>
+                  <div data-hero-surface className="absolute right-0 top-[20%] z-40 w-[54%] origin-right">
+                    <SiteSurface copy={copy} enquiry deferredEnquiry />
+                  </div>
 
-                  <motion.div style={{ opacity: systemOpacity }} className="absolute right-[4%] top-[31%] z-20 w-[36%]"><Understanding copy={copy} /></motion.div>
-                  <motion.div style={{ opacity: actionOpacity }} className="absolute bottom-[10%] right-[7%] z-30 w-[34%]"><Availability copy={copy} /></motion.div>
-                  <motion.div style={{ opacity: ownerOpacity }} className="absolute bottom-[13%] left-[7%] z-30 w-[32%]"><Owner copy={copy} /></motion.div>
-                  <motion.div style={{ opacity: resolvedOpacity }} className="absolute inset-x-0 top-1/2 z-50 -translate-y-1/2"><Resolved copy={copy} /></motion.div>
+                  <div data-hero-system className="absolute right-[4%] top-[31%] z-20 w-[36%] opacity-0"><Understanding copy={copy} /></div>
+                  <div data-hero-action className="absolute bottom-[10%] right-[7%] z-30 w-[34%] opacity-0"><Availability copy={copy} /></div>
+                  <div data-hero-owner className="absolute bottom-[13%] left-[7%] z-30 w-[32%] opacity-0"><Owner copy={copy} /></div>
+                  <div data-hero-resolved className="absolute inset-x-0 top-1/2 z-50 -translate-y-1/2 opacity-0"><Resolved copy={copy} /></div>
 
-                  <motion.div aria-hidden style={{ x: signalX, y: signalY, opacity: signalOpacity }} className="pointer-events-none absolute left-1/2 top-1/2 z-[70] -translate-x-1/2 -translate-y-1/2">
-                    <div className="flex items-center gap-3"><span className="text-[9px] font-black uppercase tracking-[.18em] text-cyan-100/45">Signal</span><Signal /></div>
-                  </motion.div>
+                  <div data-hero-signal aria-hidden className="pointer-events-none absolute left-0 top-0 z-[70] opacity-0">
+                    <div className="flex items-center gap-3"><span className="text-[9px] font-black uppercase tracking-[.18em] text-cyan-100/60">Signal</span><Signal /></div>
+                  </div>
 
                   <div className="absolute bottom-7 left-0 right-0 flex justify-between text-[9px] font-black uppercase tracking-[.2em] text-white/30"><span>{copy.receive}</span><span>{copy.route}</span><span>{copy.humanJudgment}</span><span>{copy.resolved}</span></div>
                 </div>
@@ -507,23 +484,24 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
             <div ref={mobileStoryRef} className="relative h-[280svh] lg:hidden">
               <div className="sticky top-0 h-[100svh] overflow-hidden bg-[#02060b] px-5 pb-8 pt-24 sm:px-8">
                 <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_70%_25%,rgba(34,211,238,.065),transparent_32%)]" />
-                <motion.div style={{ opacity: m0 }} className="absolute inset-x-5 top-24 bottom-8 flex flex-col justify-center sm:inset-x-8">
+                <div data-mobile-signal aria-hidden className="pointer-events-none absolute right-5 top-[26%] z-40 flex items-center gap-2 opacity-0 sm:right-8"><span className="text-[8px] font-black uppercase tracking-[.16em] text-cyan-100/60">Signal</span><Signal /></div>
+                <div data-mobile-step className="absolute inset-x-5 top-24 bottom-8 flex flex-col justify-center sm:inset-x-8">
                   <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/60">{copy.services}</p>
                   <h1 className="mt-5 max-w-[8ch] text-[clamp(3.2rem,13vw,5.5rem)] font-black leading-[.84] tracking-[-.065em]">{copy.hero}</h1>
                   <p className="mt-6 max-w-md text-sm leading-6 text-white/55">{copy.heroSub}</p>
                   <MobileSurfacePreview copy={copy} />
-                </motion.div>
+                </div>
 
-                <motion.div style={{ opacity: m1 }} className="absolute inset-x-5 top-24 bottom-8 flex flex-col justify-center sm:inset-x-8">
+                <div data-mobile-step className="absolute inset-x-5 top-24 bottom-8 flex flex-col justify-center opacity-0 sm:inset-x-8">
                   <p className="text-[10px] font-black uppercase tracking-[.2em] text-cyan-100/65">{copy.receive}</p>
                   <h2 className="mt-4 text-5xl font-black tracking-[-.05em]">{copy.someoneAsks}</h2>
                   <div className="mt-8 rounded-[1.6rem] bg-[#11151a] p-6 shadow-2xl"><div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[.18em] text-white/60"><Signal /> {copy.newEnquiry}</div><p className="mt-5 text-2xl font-black leading-tight">“{copy.customerMessage}”</p></div>
-                </motion.div>
+                </div>
 
-                <motion.div style={{ opacity: m2 }} className="absolute inset-x-5 top-24 bottom-8 flex items-center sm:inset-x-8"><Understanding copy={copy} /></motion.div>
-                <motion.div style={{ opacity: m3 }} className="absolute inset-x-5 top-24 bottom-8 flex items-center sm:inset-x-8"><Availability copy={copy} /></motion.div>
-                <motion.div style={{ opacity: m4 }} className="absolute inset-x-5 top-24 bottom-8 flex items-center sm:inset-x-8"><Owner copy={copy} /></motion.div>
-                <motion.div style={{ opacity: m5 }} className="absolute inset-x-5 top-24 bottom-8 flex items-center sm:inset-x-8"><Resolved copy={copy} /></motion.div>
+                <div data-mobile-step className="absolute inset-x-5 top-24 bottom-8 flex items-center opacity-0 sm:inset-x-8"><Understanding copy={copy} /></div>
+                <div data-mobile-step className="absolute inset-x-5 top-24 bottom-8 flex items-center opacity-0 sm:inset-x-8"><Availability copy={copy} /></div>
+                <div data-mobile-step className="absolute inset-x-5 top-24 bottom-8 flex items-center opacity-0 sm:inset-x-8"><Owner copy={copy} /></div>
+                <div data-mobile-step className="absolute inset-x-5 top-24 bottom-8 flex items-center opacity-0 sm:inset-x-8"><Resolved copy={copy} /></div>
               </div>
             </div>
           </>
