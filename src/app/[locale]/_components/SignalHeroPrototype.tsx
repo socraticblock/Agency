@@ -61,7 +61,7 @@ function MiniWindow({
 function WebsitePanel() {
   return (
     <MiniWindow title="Your business" className="h-full">
-      <div className="grid h-[calc(100%-2.5rem)] grid-cols-[1.05fr_.95fr] gap-6 p-6 md:p-8">
+      <div className="grid h-[calc(100%_-_2.5rem)] grid-cols-[1.05fr_.95fr] gap-6 p-6 md:p-8">
         <div className="flex flex-col justify-center">
           <span className="mb-5 w-fit rounded-full border border-emerald-300/15 bg-emerald-300/5 px-3 py-1 text-[9px] font-bold uppercase tracking-[0.16em] text-emerald-200/75">
             Premium service
@@ -95,7 +95,7 @@ function WebsitePanel() {
 function AssistantPanel() {
   return (
     <MiniWindow title="Assistant" className="h-full">
-      <div className="flex h-[calc(100%-2.5rem)] flex-col justify-center p-6">
+      <div className="flex h-[calc(100%_-_2.5rem)] flex-col justify-center p-6">
         <div className="mb-5 flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-300/15 bg-cyan-300/8 text-cyan-200">
             <Bot className="h-5 w-5" />
@@ -127,7 +127,7 @@ function AssistantPanel() {
 function BookingPanel() {
   return (
     <MiniWindow title="Booking" className="h-full">
-      <div className="flex h-[calc(100%-2.5rem)] flex-col justify-center p-6">
+      <div className="flex h-[calc(100%_-_2.5rem)] flex-col justify-center p-6">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-emerald-300/15 bg-emerald-300/8 text-emerald-200">
             <CalendarDays className="h-5 w-5" />
@@ -160,7 +160,7 @@ function BookingPanel() {
 function OwnerPanel() {
   return (
     <MiniWindow title="Owner" className="h-full">
-      <div className="flex h-[calc(100%-2.5rem)] flex-col justify-center p-6">
+      <div className="flex h-[calc(100%_-_2.5rem)] flex-col justify-center p-6">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/[0.035] text-white">
             <UserRoundCheck className="h-5 w-5" />
