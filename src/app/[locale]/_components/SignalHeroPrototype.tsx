@@ -291,6 +291,20 @@ function SiteSurface({
   );
 }
 
+function MobileSurfacePreview({ copy }: { copy: Copy }) {
+  return (
+    <div className="relative mt-6 min-h-[132px] overflow-hidden rounded-[1.4rem] bg-[#e9e4dc] p-4 text-[#101114] shadow-[0_24px_60px_rgba(0,0,0,.35)]">
+      <div className="flex items-center justify-between text-[8px] font-black uppercase tracking-[.16em] text-black/45">
+        <span>Atelier North</span><span>{copy.consultations}</span>
+      </div>
+      <div className="mt-7 grid grid-cols-[1.2fr_.8fr] items-end gap-4">
+        <p className="max-w-[10ch] text-2xl font-black leading-[.88] tracking-[-.05em]">{copy.siteHeadline}</p>
+        <div className="h-16 rounded-[1rem] bg-[radial-gradient(circle_at_60%_35%,rgba(255,255,255,.75),transparent_28%),linear-gradient(145deg,#c8b9a3,#968a7c)]" />
+      </div>
+    </div>
+  );
+}
+
 function Understanding({ copy }: { copy: Copy }) {
   return (
     <div className="max-w-xl">
@@ -483,7 +497,7 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
                   <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/45">{copy.services}</p>
                   <h1 className="mt-5 max-w-[8ch] text-[clamp(3.2rem,13vw,5.5rem)] font-black leading-[.84] tracking-[-.065em]">{copy.hero}</h1>
                   <p className="mt-6 max-w-md text-sm leading-6 text-white/55">{copy.heroSub}</p>
-                  <div className="mt-8"><SiteSurface copy={copy} compact /></div>
+                  <MobileSurfacePreview copy={copy} />
                 </motion.div>
 
                 <motion.div style={{ opacity: m1 }} className="absolute inset-x-5 top-24 bottom-8 flex flex-col justify-center sm:inset-x-8">
@@ -506,7 +520,7 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
             <p className="text-[10px] font-black uppercase tracking-[.22em] text-black/45">{copy.work}</p>
             <h2 className="mt-5 max-w-[9ch] text-[clamp(3.5rem,8vw,8rem)] font-black leading-[.86] tracking-[-.065em]">{copy.proof}</h2>
             <div className="mt-20 space-y-24 lg:mt-28 lg:space-y-36">
-              <a href="https://tkcounsel.com/" target="_blank" rel="noopener noreferrer" className="group grid gap-7 rounded-[2rem] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black lg:grid-cols-[1.35fr_.65fr] lg:items-end">
+              <article className="grid gap-7 lg:grid-cols-[1.35fr_.65fr] lg:items-end">
                 <div className="relative min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#d9d2c8] p-4 sm:min-h-[520px] lg:min-h-[650px]">
                   <div className="relative z-20 flex justify-between rounded-full bg-[#f0ece5]/90 px-4 py-3 text-[9px] font-black uppercase tracking-[.18em] text-black/55"><span>TK Counsel</span><span>{copy.legalCategory}</span></div>
                   <iframe
@@ -515,22 +529,23 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
                     loading="lazy"
                     scrolling="no"
                     tabIndex={-1}
+                    aria-hidden
                     className="pointer-events-none absolute left-0 top-0 h-[140%] w-[140%] origin-top-left scale-[.715] border-0 bg-white"
                   />
                   <div aria-hidden className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-black/10" />
                 </div>
-                <div className="pb-2"><p className="text-3xl font-black tracking-[-.04em]">TK Counsel</p><p className="mt-4 max-w-md text-base leading-7 text-black/60">{copy.tkBody}</p><span className="mt-6 inline-flex items-center gap-2 text-sm font-black">{copy.viewWebsite} <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-1 group-hover:-translate-y-1" aria-hidden /></span></div>
-              </a>
+                <div className="pb-2"><p className="text-3xl font-black tracking-[-.04em]">TK Counsel</p><p className="mt-4 max-w-md text-base leading-7 text-black/60">{copy.tkBody}</p><a href="https://tkcounsel.com/" target="_blank" rel="noopener noreferrer" className="group mt-6 inline-flex items-center gap-2 rounded-sm text-sm font-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black">{copy.viewWebsite} <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-1 group-hover:-translate-y-1" aria-hidden /></a></div>
+              </article>
 
-              <a href="https://www.frankencoindesk.com/" target="_blank" rel="noopener noreferrer" className="group grid gap-7 rounded-[2rem] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black lg:grid-cols-[.65fr_1.35fr] lg:items-end">
-                <div className="order-2 pb-2 lg:order-1"><p className="text-3xl font-black tracking-[-.04em]">Frankencoin Desk</p><p className="mt-4 max-w-md text-base leading-7 text-black/60">{copy.frankBody}</p><span className="mt-6 inline-flex items-center gap-2 text-sm font-black">{copy.viewWebsite} <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-1 group-hover:-translate-y-1" aria-hidden /></span></div>
+              <article className="grid gap-7 lg:grid-cols-[.65fr_1.35fr] lg:items-end">
+                <div className="order-2 pb-2 lg:order-1"><p className="text-3xl font-black tracking-[-.04em]">Frankencoin Desk</p><p className="mt-4 max-w-md text-base leading-7 text-black/60">{copy.frankBody}</p><a href="https://www.frankencoindesk.com/" target="_blank" rel="noopener noreferrer" className="group mt-6 inline-flex items-center gap-2 rounded-sm text-sm font-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black">{copy.viewWebsite} <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-1 group-hover:-translate-y-1" aria-hidden /></a></div>
                 <div className="order-1 min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#071321] p-7 text-white sm:min-h-[520px] lg:order-2 lg:min-h-[650px]">
                   <div className="flex justify-between text-[9px] font-black uppercase tracking-[.18em] text-white/45"><span>Frankencoin Desk</span><span>{copy.productCategory}</span></div>
                   <div className="relative mt-10 h-[75%] overflow-hidden rounded-[1.4rem] border border-white/10 bg-[url('/work-previews/frankencoin-desk.png')] bg-cover bg-top shadow-2xl" />
                 </div>
-              </a>
+              </article>
 
-              <a href="https://her-house-pilates.vercel.app/" target="_blank" rel="noopener noreferrer" className="group grid gap-7 rounded-[2rem] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black lg:grid-cols-[1.35fr_.65fr] lg:items-end">
+              <article className="grid gap-7 lg:grid-cols-[1.35fr_.65fr] lg:items-end">
                 <div className="relative min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#d8c9b5] p-4 sm:min-h-[520px] lg:min-h-[650px]">
                   <div className="relative z-20 flex justify-between rounded-full bg-[#f0ece5]/90 px-4 py-3 text-[9px] font-black uppercase tracking-[.18em] text-black/55"><span>Her House Pilates</span><span>{copy.wellnessCategory}</span></div>
                   <iframe
@@ -539,12 +554,13 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
                     loading="lazy"
                     scrolling="no"
                     tabIndex={-1}
+                    aria-hidden
                     className="pointer-events-none absolute left-0 top-0 h-[140%] w-[140%] origin-top-left scale-[.715] border-0 bg-white"
                   />
                   <div aria-hidden className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-black/10" />
                 </div>
-                <div className="pb-2"><p className="text-3xl font-black tracking-[-.04em]">Her House Pilates</p><p className="mt-4 max-w-md text-base leading-7 text-black/60">{copy.pilatesBody}</p><span className="mt-6 inline-flex items-center gap-2 text-sm font-black">{copy.viewWebsite} <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-1 group-hover:-translate-y-1" aria-hidden /></span></div>
-              </a>
+                <div className="pb-2"><p className="text-3xl font-black tracking-[-.04em]">Her House Pilates</p><p className="mt-4 max-w-md text-base leading-7 text-black/60">{copy.pilatesBody}</p><a href="https://her-house-pilates.vercel.app/" target="_blank" rel="noopener noreferrer" className="group mt-6 inline-flex items-center gap-2 rounded-sm text-sm font-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black">{copy.viewWebsite} <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-1 group-hover:-translate-y-1" aria-hidden /></a></div>
+              </article>
             </div>
           </div>
         </section>
