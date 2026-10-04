@@ -26,7 +26,7 @@
 ## Validation state
 
 ### Automated deployment/build
-Vercel deployment is triggered for each branch commit. Final completion requires the latest commit to report success.
+**PASS.** Latest roadmap implementation build reports Vercel success.
 
 ### Code-level accessibility
 Implemented:
@@ -56,6 +56,22 @@ These checks cannot truthfully be marked passed from repository code alone:
 - rendered Georgian line-break/typography review;
 - measured frame-rate / Core Web Vitals on deployed preview;
 - final real founder photograph, if owner wants photography rather than the current abstract placeholder.
+
+## Verified repository checks
+
+- V2 branch is 23 commits ahead of `main` and 0 behind.
+- Production `main` remains unchanged.
+- Diff is isolated to Genezisi V2 docs/prototype plus the intentional centralized WhatsApp-copy change.
+- Prototype remains `noindex, nofollow`.
+- English fallback contains no unresolved copy placeholders.
+- WhatsApp intake uses the broader Genezisi message.
+- Separate desktop/mobile implementations, reduced-motion handling and skip navigation are present.
+
+## Current real blocker
+
+The Vercel deployment is successful, but the protected preview URL is not accessible from the available review browser. Therefore pixel-level rendering, real scroll interaction, browser performance measurement and physical-device QA cannot be truthfully executed from this environment.
+
+Do not bypass this by merging to production. Resolve preview access or provide rendered review evidence first.
 
 ## Roadmap gate conclusion
 
