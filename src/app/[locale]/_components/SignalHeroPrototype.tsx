@@ -87,6 +87,12 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
   const { scrollYProgress } = useScroll({ target: storyRef, offset: ["start start", "end end"] });
   const signalY = useTransform(scrollYProgress, [0, .18, .38, .58, .78, 1], ["8%","22%","39%","56%","74%","92%"]);
   const signalOpacity = useTransform(scrollYProgress, [0,.04,.9,1], [0,1,1,0]);
+  const surfaceX = useTransform(scrollYProgress, [.16,.34], ["0vw","-12vw"]);
+  const surfaceScale = useTransform(scrollYProgress, [.16,.34], [1,.86]);
+  const surfaceRotate = useTransform(scrollYProgress, [.16,.34], [0,-4]);
+  const systemOpacity = useTransform(scrollYProgress, [.24,.38,.72,.86], [0,1,1,.25]);
+  const actionOpacity = useTransform(scrollYProgress, [.42,.56,.78,.9], [0,1,1,.2]);
+  const ownerOpacity = useTransform(scrollYProgress, [.64,.76,.92,1], [0,1,1,0]);
   const waHref = useMemo(() => `https://wa.me/${WHATSAPP_INTAKE}?text=${encodeURIComponent(PROTOTYPE_MESSAGE)}`, []);
   return (
     <main className="bg-[#02060b] text-white">
@@ -97,8 +103,26 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
         </div>
       </header>
 
-      <div ref={storyRef} className="relative">
-        {!reduceMotion && <motion.div aria-hidden style={{ top: signalY, opacity: signalOpacity }} className="pointer-events-none absolute right-4 z-[70] hidden -translate-y-1/2 lg:block"><div className="flex items-center gap-3"><span className="text-[9px] font-black uppercase tracking-[.18em] text-cyan-100/35">Signal</span><Signal /></div></motion.div>}
+      <div ref={storyRef} className="relative hidden h-[360svh] lg:block">
+        <div className="sticky top-0 h-[100svh] overflow-hidden bg-[#02060b] px-12 pt-24">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_74%_32%,rgba(34,211,238,.07),transparent_28%)]" />
+          <div className="relative mx-auto flex h-full max-w-[92rem] items-center">
+            <div className="absolute left-0 top-[15%] z-30 max-w-[44rem]">
+              <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/38">Websites · AI · Automation</p>
+              <h1 className="mt-5 max-w-[7ch] text-[clamp(4.8rem,7.2vw,8.2rem)] font-black leading-[.84] tracking-[-.065em]">Your website is only the beginning.</h1>
+              <p className="mt-7 max-w-md text-base leading-7 text-white/48">Beautiful digital experiences, with useful systems working underneath.</p>
+            </div>
+            <motion.div style={{ x: surfaceX, scale: surfaceScale, rotate: surfaceRotate }} className="absolute right-0 top-[20%] z-40 w-[62%] origin-right"><SiteSurface enquiry /></motion.div>
+            <motion.div style={{ opacity: systemOpacity }} className="absolute right-[4%] top-[30%] z-20 w-[36%]"><Understanding /></motion.div>
+            <motion.div style={{ opacity: actionOpacity }} className="absolute bottom-[10%] right-[7%] z-30 w-[34%]"><Availability /></motion.div>
+            <motion.div style={{ opacity: ownerOpacity }} className="absolute bottom-[13%] left-[7%] z-30 w-[32%]"><Owner /></motion.div>
+            {!reduceMotion && <motion.div aria-hidden style={{ top: signalY, opacity: signalOpacity }} className="pointer-events-none absolute right-[2%] z-[70] -translate-y-1/2"><div className="flex items-center gap-3"><span className="text-[9px] font-black uppercase tracking-[.18em] text-cyan-100/35">Signal</span><Signal /></div></motion.div>}
+            <div className="absolute bottom-7 left-0 right-0 flex justify-between text-[9px] font-black uppercase tracking-[.2em] text-white/22"><span>Receive</span><span>Route</span><span>Review</span><span>Resolve</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div className="lg:hidden">
       <FrameShell index="01" label="First impression">
         <div className="grid w-full items-center gap-10 lg:grid-cols-[.8fr_1.2fr]">
           <div><p className="text-[10px] font-black uppercase tracking-[.22em] text-white/38">Websites · AI · Automation</p><h1 className="mt-5 max-w-[8ch] text-[clamp(3.5rem,7.8vw,8.5rem)] font-black leading-[.84] tracking-[-.065em]">Your website is only the beginning.</h1><p className="mt-7 max-w-lg text-base leading-7 text-white/48">Beautiful digital experiences, with useful systems working underneath.</p></div>
