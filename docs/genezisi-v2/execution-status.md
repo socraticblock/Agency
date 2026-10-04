@@ -65,7 +65,7 @@ A deliberate second review found and fixed:
 
 **PASS.** Full implementation code head:
 
-`8ab3f96a70605bf8343e5c614ccb568dd2bf1ed4`
+`0815debacc9108ce26ee308249dd1bdaa4c6ae46`
 
 reports a successful Vercel build.
 
@@ -110,7 +110,7 @@ A real founder portrait is not present anywhere in the repository or available p
 
 ## Gate conclusion
 
-**Implementation roadmap: complete on the protected branch.**
+**Implementation roadmap: complete on the protected branch and build-validated at `0815debacc9108ce26ee308249dd1bdaa4c6ae46`.**
 
 **Acceptance/launch roadmap: not complete until rendered/device QA and owner visual approval occur.**
 
