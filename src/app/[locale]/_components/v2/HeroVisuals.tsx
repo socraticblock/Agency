@@ -40,7 +40,7 @@ export function SiteSurface({
       {showEnquiry && (
         <div
           data-hero-enquiry={deferredEnquiry ? "" : undefined}
-          className={"absolute bottom-5 right-5 max-w-[min(88%,390px)] rounded-[1.4rem] bg-[#11151a] p-4 text-white shadow-2xl " + (deferredEnquiry ? "opacity-0" : "")}
+          className={"absolute bottom-5 right-5 max-w-[min(88%,390px)] rounded-[1.4rem] bg-[#11151a] p-4 text-white shadow-2xl " + (deferredEnquiry ? "invisible opacity-0" : "")}
         >
           <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[.18em] text-white/60"><Signal /> {copy.newEnquiry}</div>
           <p className="mt-3 text-base font-semibold leading-6">“{copy.customerMessage}”</p>
@@ -111,7 +111,7 @@ export function Resolved({ copy }: { copy: V2Copy }) {
       <div className="mx-auto mb-7 flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-[.2em] text-white/60"><Signal quiet />{copy.signalResolved}</div>
       <h2 className="text-[clamp(3.1rem,8vw,8rem)] font-black leading-[.86] tracking-[-.065em]">{copy.surfaceUseful}<br /><span className="text-white/55">{copy.underneathUseful}</span></h2>
       <p className="mx-auto mt-7 max-w-xl text-base leading-7 text-white/60">{copy.resolvedOutcome}</p>
-      <a href="#work" className="mt-8 inline-flex min-h-11 items-center rounded-full px-4 text-sm font-semibold text-white/65 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200">{copy.seeWork}</a>
+      <p className="mt-8 text-sm font-semibold text-white/60">{copy.seeWork}</p>
     </div>
   );
 }
