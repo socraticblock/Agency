@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { CalendarDays, Check, MessageCircle, UserRoundCheck } from "lucide-react";
+import { ArrowUpRight, CalendarDays, Check, MessageCircle, UserRoundCheck } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import { WHATSAPP_INTAKE } from "@/constants/content";
 
@@ -122,6 +122,73 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
           <div className="mx-auto max-w-5xl text-center"><div className="mx-auto mb-7 flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-[.2em] text-white/32"><Signal quiet />Signal resolved</div><h2 className="text-[clamp(3.4rem,8vw,8rem)] font-black leading-[.86] tracking-[-.065em]">Beautiful on the surface.<br/><span className="text-white/45">Useful underneath.</span></h2><p className="mt-9 text-sm font-semibold text-white/35">See the work ↓</p></div>
         </div>
       </FrameShell>
+
+      <section id="work" className="bg-[#f0ece5] px-5 py-28 text-[#101114] sm:px-8 lg:py-40">
+        <div className="mx-auto max-w-[92rem]">
+          <p className="text-[10px] font-black uppercase tracking-[.22em] text-black/38">Selected work</p>
+          <h2 className="mt-5 max-w-[9ch] text-[clamp(3.5rem,8vw,8rem)] font-black leading-[.86] tracking-[-.065em]">Proof, not promises.</h2>
+          <div className="mt-20 space-y-24 lg:mt-28 lg:space-y-36">
+            <a href="https://tkcounsel.com/" target="_blank" rel="noopener noreferrer" className="group grid gap-7 lg:grid-cols-[1.35fr_.65fr] lg:items-end">
+              <div className="min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#d9d2c8] p-7 sm:min-h-[520px] lg:min-h-[650px]">
+                <div className="flex justify-between text-[9px] font-black uppercase tracking-[.18em] text-black/35"><span>TK Counsel</span><span>Legal / Professional</span></div>
+                <div className="flex h-[80%] items-end"><p className="max-w-[8ch] text-[clamp(3rem,7vw,7rem)] font-black leading-[.86] tracking-[-.06em]">Counsel with clarity.</p></div>
+              </div>
+              <div className="pb-2"><p className="text-3xl font-black tracking-[-.04em]">TK Counsel</p><p className="mt-4 max-w-md text-base leading-7 text-black/55">A professional service website built around clarity, credibility and a serious first impression.</p><span className="mt-6 inline-flex items-center gap-2 text-sm font-black">View website <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-1 group-hover:-translate-y-1"/></span></div>
+            </a>
+
+            <a href="https://www.frankencoindesk.com/" target="_blank" rel="noopener noreferrer" className="group grid gap-7 lg:grid-cols-[.65fr_1.35fr] lg:items-end">
+              <div className="order-2 pb-2 lg:order-1"><p className="text-3xl font-black tracking-[-.04em]">Frankencoin Desk</p><p className="mt-4 max-w-md text-base leading-7 text-black/55">A complex product frontend where trust, information hierarchy and user confidence matter.</p><span className="mt-6 inline-flex items-center gap-2 text-sm font-black">View website <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-1 group-hover:-translate-y-1"/></span></div>
+              <div className="order-1 min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#071321] p-7 text-white sm:min-h-[520px] lg:order-2 lg:min-h-[650px]">
+                <div className="flex justify-between text-[9px] font-black uppercase tracking-[.18em] text-white/35"><span>Frankencoin Desk</span><span>Product / Crypto</span></div>
+                <div className="relative mt-10 h-[75%] overflow-hidden rounded-[1.4rem] border border-white/10 bg-[url('/work-previews/frankencoin-desk.png')] bg-cover bg-top shadow-2xl"/>
+              </div>
+            </a>
+
+            <a href="https://her-house-pilates.vercel.app/" target="_blank" rel="noopener noreferrer" className="group grid gap-7 lg:grid-cols-[1.35fr_.65fr] lg:items-end">
+              <div className="min-h-[52vw] overflow-hidden rounded-[2rem] bg-[#d8c9b5] p-7 sm:min-h-[520px] lg:min-h-[650px]">
+                <div className="flex justify-between text-[9px] font-black uppercase tracking-[.18em] text-black/35"><span>Her House Pilates</span><span>Wellness / Studio</span></div>
+                <div className="flex h-[80%] items-center justify-center"><p className="max-w-[7ch] text-center text-[clamp(3rem,7vw,7rem)] font-black leading-[.86] tracking-[-.06em]">Move with intention.</p></div>
+              </div>
+              <div className="pb-2"><p className="text-3xl font-black tracking-[-.04em]">Her House Pilates</p><p className="mt-4 max-w-md text-base leading-7 text-black/55">A luxury wellness concept with schedule, booking flow and a mobile-first experience.</p><span className="mt-6 inline-flex items-center gap-2 text-sm font-black">View website <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-1 group-hover:-translate-y-1"/></span></div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section id="capabilities" className="bg-[#02060b] px-5 py-28 sm:px-8 lg:py-40">
+        <div className="mx-auto max-w-[92rem]">
+          <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/32">What I build</p>
+          <div className="mt-10 divide-y divide-white/10 border-y border-white/10">
+            {[["01","Websites","Clear, distinctive digital experiences built to earn attention and trust."],["02","AI systems","Useful assistants and intelligent tools shaped around real business work."],["03","Automation","Connected workflows that remove repetitive steps while keeping people in control."]].map(([n,title,body]) => <div key={n} className="grid gap-4 py-9 sm:grid-cols-[80px_.8fr_1.2fr] sm:items-baseline lg:py-14"><span className="text-xs font-black text-white/25">{n}</span><h3 className="text-3xl font-black tracking-[-.045em] sm:text-5xl">{title}</h3><p className="max-w-xl text-base leading-7 text-white/45">{body}</p></div>)}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-[#02060b] px-5 py-20 sm:px-8 lg:py-32">
+        <div className="mx-auto grid max-w-[92rem] gap-12 border-t border-white/10 pt-14 lg:grid-cols-[.7fr_1.3fr]">
+          <div><p className="text-[10px] font-black uppercase tracking-[.22em] text-cyan-100/45">Genezisi Lab · Internal demo</p><h2 className="mt-5 text-5xl font-black leading-[.9] tracking-[-.055em] sm:text-7xl">See what the system actually does.</h2></div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {["Receive the request","Understand the intent","Take the useful action","Send exceptions to a person"].map((x,i)=><div key={x} className="min-h-40 rounded-[1.5rem] bg-white/[.045] p-6"><span className="text-[10px] font-black text-white/22">0{i+1}</span><p className="mt-12 max-w-[14ch] text-xl font-black">{x}</p></div>)}
+          </div>
+        </div>
+      </section>
+
+      <section id="about" className="bg-[#e8e1d7] px-5 py-28 text-[#101114] sm:px-8 lg:py-40">
+        <div className="mx-auto grid max-w-[92rem] gap-14 lg:grid-cols-[.9fr_1.1fr] lg:items-end">
+          <div className="aspect-[4/5] max-w-xl overflow-hidden rounded-[2rem] bg-[radial-gradient(circle_at_50%_35%,rgba(255,255,255,.75),transparent_24%),linear-gradient(145deg,#b8aa97,#665f57)]"><div className="flex h-full items-end p-7 text-[10px] font-black uppercase tracking-[.2em] text-white/55">Founder · Genezisi</div></div>
+          <div><p className="text-[10px] font-black uppercase tracking-[.22em] text-black/35">Small by design</p><h2 className="mt-5 max-w-[8ch] text-[clamp(3.5rem,7vw,7rem)] font-black leading-[.86] tracking-[-.065em]">You work with the person doing the work.</h2><p className="mt-8 max-w-xl text-lg leading-8 text-black/55">No account-manager layer and no pretend giant team. Genezisi stays small so design, technical decisions and communication stay close together.</p></div>
+        </div>
+      </section>
+
+      <section id="contact" className="bg-[#02060b] px-5 py-28 sm:px-8 lg:py-44">
+        <div className="mx-auto max-w-[92rem]">
+          <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/32">Have something to build?</p>
+          <h2 className="mt-6 max-w-[8ch] text-[clamp(4rem,10vw,10rem)] font-black leading-[.82] tracking-[-.07em]">Message me.</h2>
+          <p className="mt-8 max-w-xl text-lg leading-8 text-white/45">A website, an AI system, an automation—or something that combines them. Start with a message.</p>
+          <a href={waHref} target="_blank" rel="noopener noreferrer" className="mt-10 inline-flex min-h-14 items-center gap-3 rounded-full bg-white px-6 text-base font-black text-[#071019]"><MessageCircle className="h-5 w-5"/>Start on WhatsApp <ArrowUpRight className="h-4 w-4"/></a>
+          <div className="mt-28 flex items-center justify-between border-t border-white/10 pt-7 text-[10px] font-black uppercase tracking-[.2em] text-white/25"><span>Genezisi</span><span>Websites · AI · Automation</span></div>
+        </div>
+      </section>
     </main>
   );
 }
