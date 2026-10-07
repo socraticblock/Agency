@@ -13,15 +13,13 @@ const V2_WHATSAPP_MESSAGE: Record<Locale,string>={en:"Hi Genezisi, I have someth
 export function SignalHeroPrototype({locale}:{locale:Locale}){
  const copy=getV2Copy(locale);
  const waHref="https://wa.me/"+WHATSAPP_INTAKE+"?text="+encodeURIComponent(V2_WHATSAPP_MESSAGE[locale]);
- const steps=[copy.receiveStep,copy.understandStep,copy.actionStep,copy.exceptionStep,copy.outcomeStep];
- const details=[copy.requestReceivedDetail,copy.intentDetail,copy.actionDetail,copy.exceptionDetail,copy.resolutionDetail];
- return <main className="v2-home bg-[#02060b] text-white">
+ return <main lang={locale} className="v2-home bg-[#02060b] text-white">
   <StudioHeader locale={locale} copy={copy} contactHref={waHref}/>
   <V2Hero copy={copy} contactHref={waHref}/>
   <SelectedWork copy={copy}/>
   <Capabilities copy={copy}/>
-  <section className="bg-[#02060b] px-5 py-20 sm:px-8 lg:py-28"><div className="mx-auto max-w-[92rem] border-t border-white/10 pt-14"><p className="text-[11px] font-extrabold uppercase tracking-[.2em] text-cyan-100/58">{copy.systemEyebrow}</p><h2 className="mt-5 max-w-[12ch] text-[clamp(3rem,5vw,5.5rem)] font-black leading-[.9] tracking-[-.055em]">{copy.labTitle}</h2><div className="mt-12"><V2Lab steps={steps} details={details} customerMessage={copy.customerMessage} resolvedOutcome={copy.resolutionDetail} eyebrow={copy.lab} requestLabel={copy.newEnquiry} stateLabel={copy.systemRevealed}/></div></div></section>
+  <section className="bg-[#02060b] px-5 py-20 sm:px-8 lg:py-28"><div className="mx-auto max-w-[92rem] border-t border-white/10 pt-14"><V2Lab copy={copy}/></div></section>
   <FounderClose copy={copy} contactHref={waHref}/>
-  <StudioFooter copy={copy}/>
+  <StudioFooter copy={copy} locale={locale}/>
  </main>;
 }

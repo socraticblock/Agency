@@ -4,7 +4,7 @@ import { cloneElement, type ReactElement, type ReactNode } from "react";
 import { motion } from "framer-motion";
 import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
 import type { Lane1CustomizerState, SocialPlatformId } from "../../lib/types";
-import { MagneticButton } from "../../../_components/MagneticButton";
+import { MagneticButton } from "../../../../_components/MagneticButton";
 import {
   socialIconColorVar,
   socialIconFillStyle,

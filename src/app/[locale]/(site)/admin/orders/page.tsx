@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import type { Lane1CustomizerState } from "@/app/[locale]/start/lib/types";
+import type { Lane1CustomizerState } from "@/app/[locale]/(site)/start/lib/types";
 import { AdminOrderPreviewModal, type AdminOrderRow } from "./AdminOrderPreviewModal";
 import { AdminOrdersTable } from "./AdminOrdersTable";
 import { AdminOrdersEnvMissing, AdminOrdersLogin } from "./AdminOrdersLogin";

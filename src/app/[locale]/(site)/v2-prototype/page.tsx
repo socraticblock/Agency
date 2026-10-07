@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { Locale } from "@/lib/i18n";
-import { SignalHeroPrototype } from "../_components/SignalHeroPrototype";
+import { SignalHeroPrototype } from "../../_components/SignalHeroPrototype";
 
 const ROBOTS = {
   index: false,

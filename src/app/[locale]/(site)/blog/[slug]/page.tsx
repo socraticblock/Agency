@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Navbar } from "../../_components/Navbar";
-import { GlobalFooter } from "../../_components/GlobalFooter";
+import { Navbar } from "../../../_components/Navbar";
+import { GlobalFooter } from "../../../_components/GlobalFooter";
 import { getArticleBySlug, getAllSlugs } from "@/lib/blog";
 import type { Locale } from "@/lib/i18n";
 import { createLocalBusinessSeo } from "@/lib/seo";

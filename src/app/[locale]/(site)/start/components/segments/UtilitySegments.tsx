@@ -3,7 +3,7 @@
 import { Share2, Send } from "lucide-react";
 import type { CSSProperties } from "react";
 import type { Lane1CustomizerState } from "../../lib/types";
-import { MagneticButton } from "../../../_components/MagneticButton";
+import { MagneticButton } from "../../../../_components/MagneticButton";
 import { lane1PrimaryAccentBackground, lane1UtilityPrimaryClasses } from "../../lib/button-styles";
 
 interface UtilitySegmentsProps {

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Calendar } from "lucide-react";
 import type { CSSProperties } from "react";
 import type { Lane1CustomizerState } from "../../lib/types";
-import { MagneticButton } from "../../../_components/MagneticButton";
+import { MagneticButton } from "../../../../_components/MagneticButton";
 import { lane1BookingPrimaryClasses, lane1PrimaryAccentBackground } from "../../lib/button-styles";
 import { InlineEditable } from "../InlineEditable";
 

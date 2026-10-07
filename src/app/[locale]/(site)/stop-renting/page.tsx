@@ -1,5 +1,5 @@
-import { Navbar } from "../_components/Navbar";
-import { GlobalFooter } from "../_components/GlobalFooter";
+import { Navbar } from "../../_components/Navbar";
+import { GlobalFooter } from "../../_components/GlobalFooter";
 import type { Locale } from "@/lib/i18n";
 import { StopRentingContent } from "./_components/StopRentingContent";
 

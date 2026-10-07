@@ -7,7 +7,7 @@ export const size = { width: 1200, height: 630 };
 
 // Replicating the home OG template directly to ensure static generation stability
 export default function Image() {
-  const accent = "#10b981";
+  const accent = "#a5f3fc";
   const bgPrimary = "#030712";
   const textPrimary = "#ffffff";
   const textMuted = "#9ca3af";
@@ -72,10 +72,10 @@ export default function Image() {
 
           <div style={{ display: "flex", flexDirection: "column", gap: "10px", flex: 1 }}>
             <div style={{ fontSize: "32px", fontWeight: 400, color: textPrimary, lineHeight: 1.4 }}>
-              "Escape the social media trap."
+              Your website is only the beginning.
             </div>
             <div style={{ fontSize: "28px", fontWeight: 400, color: textDarker }}>
-              "Build a permanent digital home."
+              Websites, AI systems and automation.
             </div>
           </div>
 
@@ -84,7 +84,7 @@ export default function Image() {
             
             <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "flex-end" }}>
               <div style={{ fontSize: "18px", fontWeight: 500, color: textMuted, letterSpacing: "0.05em" }}>
-                Web Design  ·  Branding  ·  E-Commerce  ·  Digital Cards
+                Websites  ·  AI systems  ·  Automation
               </div>
               <div style={{ fontSize: "16px", fontWeight: 500, color: textDarker }}>
                 genezisi.com

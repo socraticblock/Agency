@@ -1,6 +1,6 @@
-import { Navbar } from "../_components/Navbar";
-import { GlobalFooter } from "../_components/GlobalFooter";
-import { NanoBananaBackground } from "../_components/NanoBananaBackground";
+import { Navbar } from "../../_components/Navbar";
+import { GlobalFooter } from "../../_components/GlobalFooter";
+import { NanoBananaBackground } from "../../_components/NanoBananaBackground";
 import type { Locale } from "@/lib/i18n";
 import { PartnerPageClient } from "./_components/PartnerPageClient";
 

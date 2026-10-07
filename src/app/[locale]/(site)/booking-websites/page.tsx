@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { Locale } from "@/lib/i18n";
-import { ServiceSeoPage } from "../_components/ServiceSeoPage";
+import { ServiceSeoPage } from "../../_components/ServiceSeoPage";
 
 export const metadata: Metadata = {
   title: "Booking Website Design in Tbilisi | Genezisi",

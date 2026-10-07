@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Phone, Mail, MessageCircle, Facebook, Instagram, Linkedin, Youtube, Map } from "lucide-react";
 import type { Lane1CustomizerState, MobileButtonId, SocialPlatformId } from "../../lib/types";
 import { InlineEditable } from "../InlineEditable";
-import { MagneticButton } from "../../../_components/MagneticButton";
+import { MagneticButton } from "../../../../_components/MagneticButton";
 import type { CSSProperties } from "react";
 import { hasValidAddress, MAP_ADDRESS_HELPER_TEXT } from "../../lib/location";
 

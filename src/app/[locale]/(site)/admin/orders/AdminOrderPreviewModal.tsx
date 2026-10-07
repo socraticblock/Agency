@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BusinessCardTemplate } from "@/app/[locale]/start/components/BusinessCardTemplate";
-import type { Lane1CustomizerState } from "@/app/[locale]/start/lib/types";
+import { BusinessCardTemplate } from "@/app/[locale]/(site)/start/components/BusinessCardTemplate";
+import type { Lane1CustomizerState } from "@/app/[locale]/(site)/start/lib/types";
 
 export type AdminOrderRow = {
   id: string;

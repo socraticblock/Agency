@@ -1,7 +1,7 @@
 "use client";
 
 import { Phone, MessageCircle } from "lucide-react";
-import { MagneticButton } from "../../../_components/MagneticButton";
+import { MagneticButton } from "../../../../_components/MagneticButton";
 import { InlineEditable } from "../InlineEditable";
 import type { CtaChannelId, Lane1CustomizerState } from "../../lib/types";
 import { orderedActiveCtaChannels } from "../../lib/types";

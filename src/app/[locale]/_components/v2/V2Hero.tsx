@@ -1,6 +1,6 @@
 import { ArrowDownRight, MessageCircle } from "lucide-react";
 import type { V2Copy } from "./hero.copy";
-import { Signal, SiteSurface } from "./HeroVisuals";
+import { HeroInterface, Signal } from "./HeroInterface";
 
 export function V2Hero({ copy, contactHref }: { copy: V2Copy; contactHref: string }) {
   return (
@@ -18,11 +18,9 @@ export function V2Hero({ copy, contactHref }: { copy: V2Copy; contactHref: strin
             </div>
           </div>
           <div className="v2-hero-enter v2-hero-enter-delay relative min-w-0">
-            <div className="relative overflow-hidden rounded-[24px] border border-white/[.1] bg-[#071019] p-3 shadow-[0_30px_90px_rgba(0,0,0,.38)] sm:p-5">
-              <SiteSurface copy={copy} enquiry />
-              <div className="mt-3 grid grid-cols-2 gap-2 text-[10px] font-extrabold uppercase tracking-[.13em] text-white/46 sm:grid-cols-3">
-                {[copy.websiteTitle, copy.aiTitle, copy.automationTitle].map((label, i) => <div key={label} className="flex min-h-11 items-center gap-2 rounded-[14px] border border-white/[.08] px-3"><span className={i === 1 ? "h-1.5 w-1.5 rounded-full bg-cyan-200" : "h-1.5 w-1.5 rounded-full bg-white/20"} aria-hidden /><span className="truncate">{label}</span></div>)}
-              </div>
+            <HeroInterface />
+            <div className="mt-3 grid grid-cols-2 gap-2 text-[10px] font-extrabold uppercase tracking-[.13em] text-white/46 sm:grid-cols-3">
+              {[copy.websiteTitle, copy.aiTitle, copy.automationTitle].map((label, i) => <div key={label} className="flex min-h-11 items-center gap-2 rounded-[14px] border border-white/[.08] px-3"><span className={i === 1 ? "h-1.5 w-1.5 rounded-full bg-cyan-200" : "h-1.5 w-1.5 rounded-full bg-white/20"} aria-hidden /><span className="truncate">{label}</span></div>)}
             </div>
           </div>
         </div>

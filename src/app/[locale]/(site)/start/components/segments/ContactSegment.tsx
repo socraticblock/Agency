@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Phone, Mail, Map } from "lucide-react";
 import type { Lane1CustomizerState, MobileButtonId } from "../../lib/types";
 import { InlineEditable } from "../InlineEditable";
-import { MagneticButton } from "../../../_components/MagneticButton";
+import { MagneticButton } from "../../../../_components/MagneticButton";
 import type { CSSProperties } from "react";
 import { hasValidAddress, MAP_ADDRESS_HELPER_TEXT } from "../../lib/location";
 import { lane1CtaPrimarySurface, lane1DirectionsClasses, lane1PrimaryAccentBackground } from "../../lib/button-styles";

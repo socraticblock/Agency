@@ -2,11 +2,11 @@
 
 import { motion } from "framer-motion";
 import { Calendar, CreditCard, Magnet, BarChart3, ArrowRight } from "lucide-react";
-import { KineticText } from "../../_components/KineticText";
-import { MagneticButton } from "../../_components/MagneticButton";
-import { ScrollReveal } from "../../_components/ScrollReveal";
-import { TrueAudienceVisualizer } from "../../_components/lead-gen/TrueAudienceVisualizer";
-import { TimeDebtReceipt } from "../../_components/lead-gen/TimeDebtReceipt";
+import { KineticText } from "../../../_components/KineticText";
+import { MagneticButton } from "../../../_components/MagneticButton";
+import { ScrollReveal } from "../../../_components/ScrollReveal";
+import { TrueAudienceVisualizer } from "../../../_components/lead-gen/TrueAudienceVisualizer";
+import { TimeDebtReceipt } from "../../../_components/lead-gen/TimeDebtReceipt";
 import type { Locale } from "@/lib/i18n";
 
 interface StopRentingContentProps {

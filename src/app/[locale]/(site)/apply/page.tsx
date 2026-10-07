@@ -1,5 +1,5 @@
-import { ApplyForm } from "../_components/ApplyForm";
-import { FunnelShell } from "../_components/FunnelShell";
+import { ApplyForm } from "../../_components/ApplyForm";
+import { FunnelShell } from "../../_components/FunnelShell";
 import type { Locale } from "@/lib/i18n";
 
 export default async function ApplyPage({
