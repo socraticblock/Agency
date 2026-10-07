@@ -264,3 +264,39 @@ body {
     animation: none !important;
   }
 }
+
+
+/* Genezisi V2 editorial hardening. Scoped so legacy routes keep their existing visual system. */
+.relative:has(.v2-home) > .noise-overlay {
+  display: none;
+}
+
+.v2-home a:focus-visible,
+.v2-home button:focus-visible {
+  outline: 2px solid #a5f3fc;
+  outline-offset: 3px;
+}
+
+.locale-ka .v2-home h1,
+.locale-ka .v2-home h2,
+.locale-ka .v2-home h3 {
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
+
+@media (max-width: 767px) {
+  .locale-ka .v2-home h1,
+  .locale-ka .v2-home h2 {
+    letter-spacing: -0.025em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v2-home *,
+  .v2-home *::before,
+  .v2-home *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
