@@ -11,7 +11,7 @@ export const viewport: Viewport = {
 
 const SITE_NAME = "Genezisi";
 const SITE_DESCRIPTION =
-  "Genezisi builds distinctive websites, useful AI systems and practical automation for real businesses.";
+  "Genezisi builds distinctive websites, AI systems and automation that make the business behind them work better.";
 
 function normalizeLocale(locale: string | undefined): Locale {
   if (locale && (locale === "en" || locale === "ka")) return locale;
@@ -75,7 +75,7 @@ export default async function LocaleLayout({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div id="main-content" className={`locale-${lang} outline-none`} tabIndex={-1}>
+      <div id="main-content" lang={lang} className={`locale-${lang} outline-none`} tabIndex={-1}>
         {children}
       </div>
     </>

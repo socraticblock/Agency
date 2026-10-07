@@ -9,7 +9,7 @@ export const knowledgeBase = {
   businessName: "Genezisi",
   botName: "Sophiko AI",
   tagline:
-    "Escape the social media trap. We build a permanent, high-speed digital home for your brand that sells 24/7.",
+    "Your website is only the beginning. We build distinctive websites, AI systems and automation that make the business behind them work better.",
   location: "Tbilisi, Georgia",
   websiteTiers: [
     {

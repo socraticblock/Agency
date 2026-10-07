@@ -19,8 +19,8 @@ export async function generateMetadata({
     ? "Genezisi — ვებსაიტები, AI და ავტომატიზაცია"
     : "Genezisi — Websites, AI & Automation";
   const description = ka
-    ? "Genezisi ქმნის გამორჩეულ ვებსაიტებს, სასარგებლო AI სისტემებსა და ავტომატიზაციას რეალური ბიზნესებისთვის."
-    : "Genezisi builds distinctive websites, useful AI systems and automation for real businesses.";
+    ? "Genezisi ქმნის გამორჩეულ ვებსაიტებს, AI სისტემებსა და ავტომატიზაციას, რომლებიც მათ უკან მდგომ ბიზნესს უკეთ მუშაობაში ეხმარება."
+    : "Genezisi builds distinctive websites, AI systems and automation that make the business behind them work better.";
 
   return {
     title,
