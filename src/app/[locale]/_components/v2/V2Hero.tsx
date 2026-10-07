@@ -2,6 +2,69 @@ import { ArrowDownRight, Bot, MessageCircle, MonitorSmartphone, Workflow } from 
 import type { V2Copy } from "./hero.copy";
 
 export function V2Hero({ copy, contactHref }: { copy: V2Copy; contactHref: string }) {
- const nodes=[{Icon:MonitorSmartphone,label:copy.websiteTitle},{Icon:Bot,label:copy.aiTitle},{Icon:Workflow,label:copy.automationTitle}];
- return <section className="relative overflow-hidden bg-[#02060b] px-5 pb-16 pt-28 text-white sm:px-8 sm:pt-32 lg:min-h-[680px] lg:pb-20"><div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_78%_36%,rgba(34,211,238,.09),transparent_27%)]"/><div className="relative mx-auto grid max-w-[92rem] items-center gap-12 lg:grid-cols-[.46fr_.54fr] lg:gap-10"><div className="v2-hero-enter"><h1 className="text-[clamp(3.6rem,7vw,7.5rem)] font-black leading-[.86] tracking-[-.065em]"><span className="hidden whitespace-pre-line lg:inline">{copy.heroDesktop}</span><span className="whitespace-pre-line lg:hidden">{copy.heroMobile}</span></h1><p className="mt-6 max-w-[35rem] text-[17px] leading-7 text-white/66 sm:text-lg">{copy.heroSub}</p><div className="mt-7 flex flex-wrap items-center gap-4"><a href={contactHref} target="_blank" rel="noopener noreferrer" className="group inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-6 text-sm font-extrabold text-[#071019]"><MessageCircle className="h-4 w-4" aria-hidden/>{copy.message}<span aria-hidden>→</span></a><a href="#work" className="group inline-flex min-h-12 items-center gap-2 text-sm font-extrabold text-white/72 hover:text-white"><span className="h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_14px_rgba(34,211,238,.8)]" aria-hidden/>{copy.seeWork}<ArrowDownRight className="h-4 w-4" aria-hidden/></a></div></div><div className="v2-hero-enter v2-hero-enter-delay relative min-h-[330px] sm:min-h-[420px] lg:min-h-[500px]" aria-label={copy.services}><div aria-hidden className="absolute left-[5%] top-[13%] h-[68%] w-[64%] -rotate-2 rounded-[18px] border border-cyan-200/25 bg-[#071019] shadow-[0_35px_100px_rgba(0,0,0,.5)]"><div className="absolute inset-4 rounded-[12px] border border-white/[.08] bg-[linear-gradient(145deg,#0b1720,#071019_52%,#10202a)]"><div className="absolute left-6 top-6 text-[8px] font-black uppercase tracking-[.28em] text-white/48">Genezisi</div><div className="absolute bottom-8 left-7 text-[clamp(1.8rem,3.5vw,3.7rem)] font-black leading-[.86] tracking-[-.055em]">Ideas.<br/>Systems.<br/>Progress.</div><div className="absolute bottom-7 right-6 h-[46%] w-[43%] rounded-[10px] bg-[radial-gradient(circle_at_58%_35%,rgba(165,243,252,.18),transparent_25%),linear-gradient(145deg,#132631,#05090d)]"/></div></div><div aria-hidden className="absolute bottom-[7%] left-[45%] h-[34%] w-[27%] rotate-2 rounded-[14px] border border-cyan-100/20 bg-[#0b141b]/95 shadow-2xl"><div className="m-4 space-y-3"><span className="block h-1 w-1/2 bg-white/20"/><span className="block h-1 w-4/5 bg-white/10"/><span className="block h-1 w-2/3 bg-white/10"/></div></div><div className="absolute right-0 top-[12%] flex w-[42%] flex-col gap-3 sm:w-[38%]">{nodes.map(({Icon,label},i)=><div key={label} className="relative flex min-h-16 items-center gap-3 rounded-[12px] border border-cyan-100/25 bg-[#08131b]/95 px-4 shadow-[0_14px_40px_rgba(0,0,0,.28)]"><span aria-hidden className="absolute -left-[22%] top-1/2 h-px w-[22%] bg-cyan-300/45"/><Icon className="h-5 w-5 text-cyan-300" strokeWidth={1.7} aria-hidden/><span className="text-xs font-bold text-white/80">{label}</span>{i===1&&<span className="absolute -left-1.5 top-1/2 h-2.5 w-2.5 -translate-y-1/2 rounded-full bg-cyan-300 shadow-[0_0_18px_rgba(34,211,238,.95)]" aria-hidden/>}</div>)}</div></div></div></section>;
+  const nodes = [
+    { Icon: MonitorSmartphone, label: copy.websiteTitle },
+    { Icon: Bot, label: copy.aiTitle },
+    { Icon: Workflow, label: copy.automationTitle },
+  ];
+
+  return (
+    <section className="relative overflow-hidden bg-[#02060b] px-5 pb-16 pt-28 text-white sm:px-8 sm:pt-32 lg:min-h-[680px] lg:pb-20">
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_78%_36%,rgba(34,211,238,.09),transparent_27%)]" />
+      <div className="relative mx-auto grid max-w-[92rem] items-center gap-12 lg:grid-cols-[.46fr_.54fr] lg:gap-10">
+        <div className="v2-hero-enter">
+          <h1 className="text-[clamp(3.6rem,7vw,7.5rem)] font-black leading-[.86] tracking-[-.065em]">
+            <span className="hidden whitespace-pre-line lg:inline">{copy.heroDesktop}</span>
+            <span className="whitespace-pre-line lg:hidden">{copy.heroMobile}</span>
+          </h1>
+          <p className="mt-6 max-w-[35rem] text-[17px] leading-7 text-white/66 sm:text-lg">{copy.heroSub}</p>
+          <div className="mt-7 flex flex-wrap items-center gap-4">
+            <a href={contactHref} target="_blank" rel="noopener noreferrer" className="group inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-6 text-sm font-extrabold text-[#071019]">
+              <MessageCircle className="h-4 w-4" aria-hidden />
+              {copy.message}
+              <span aria-hidden className="transition-transform group-hover:translate-x-0.5">→</span>
+            </a>
+            <a href="#work" className="group inline-flex min-h-12 items-center gap-2 text-sm font-extrabold text-white/72 hover:text-white">
+              <span className="h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_14px_rgba(34,211,238,.8)]" aria-hidden />
+              {copy.seeWork}
+              <ArrowDownRight className="h-4 w-4 transition-transform group-hover:translate-y-0.5" aria-hidden />
+            </a>
+          </div>
+        </div>
+
+        <div className="v2-hero-enter v2-hero-enter-delay relative min-h-[330px] sm:min-h-[420px] lg:min-h-[500px]" aria-label={copy.services}>
+          <div aria-hidden className="absolute left-[5%] top-[13%] h-[68%] w-[64%] -rotate-2 rounded-[18px] border border-cyan-200/25 bg-[#071019] shadow-[0_35px_100px_rgba(0,0,0,.5)]">
+            <div className="absolute inset-4 rounded-[12px] border border-white/[.08] bg-[linear-gradient(145deg,#0b1720,#071019_52%,#10202a)]">
+              <div className="absolute left-6 top-6 text-[8px] font-black uppercase tracking-[.28em] text-white/48">Genezisi</div>
+              <div className="absolute bottom-8 left-7 space-y-3">
+                <span className="block h-3 w-32 rounded-full bg-white/80" />
+                <span className="block h-3 w-24 rounded-full bg-white/45" />
+                <span className="block h-3 w-28 rounded-full bg-white/22" />
+              </div>
+              <div className="absolute bottom-7 right-6 h-[46%] w-[43%] rounded-[10px] bg-[radial-gradient(circle_at_58%_35%,rgba(165,243,252,.18),transparent_25%),linear-gradient(145deg,#132631,#05090d)]" />
+            </div>
+          </div>
+
+          <div aria-hidden className="absolute bottom-[7%] left-[45%] h-[34%] w-[27%] rotate-2 rounded-[14px] border border-cyan-100/20 bg-[#0b141b]/95 shadow-2xl">
+            <div className="m-4 space-y-3">
+              <span className="block h-1 w-1/2 bg-white/20" />
+              <span className="block h-1 w-4/5 bg-white/10" />
+              <span className="block h-1 w-2/3 bg-white/10" />
+            </div>
+          </div>
+
+          <div className="absolute right-0 top-[12%] flex w-[42%] flex-col gap-3 sm:w-[38%]">
+            {nodes.map(({ Icon, label }, i) => (
+              <div key={label} className="relative flex min-h-16 items-center gap-3 rounded-[12px] border border-cyan-100/25 bg-[#08131b]/95 px-4 shadow-[0_14px_40px_rgba(0,0,0,.28)]">
+                <span aria-hidden className="absolute -left-[22%] top-1/2 h-px w-[22%] bg-cyan-300/45" />
+                <Icon className="h-5 w-5 text-cyan-300" strokeWidth={1.7} aria-hidden />
+                <span className="text-xs font-bold text-white/80">{label}</span>
+                {i === 1 && <span className="absolute -left-1.5 top-1/2 h-2.5 w-2.5 -translate-y-1/2 rounded-full bg-cyan-300 shadow-[0_0_18px_rgba(34,211,238,.95)]" aria-hidden />}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }
