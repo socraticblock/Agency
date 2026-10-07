@@ -42,9 +42,13 @@ export function V2Lab({
 
   return (
     <>
-      <div className="hidden gap-16 lg:grid lg:grid-cols-[.88fr_1.12fr]">
-        <div className="sticky top-28 self-start">
-          <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#071019] p-8 shadow-[0_32px_90px_rgba(0,0,0,.28)]">
+      <div className="hidden gap-12 lg:grid lg:grid-cols-[.9fr_1.1fr] xl:gap-16">
+        <div className="self-start">
+          <div
+            id="genezisi-lab-desktop-state"
+            aria-live="polite"
+            className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#071019] p-8 shadow-[0_32px_90px_rgba(0,0,0,.28)]"
+          >
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_82%_16%,rgba(165,243,252,.09),transparent_26%)]" />
 
             <div className="relative flex items-center justify-between gap-4 text-[9px] font-black uppercase tracking-[.2em] text-white/42">
@@ -57,7 +61,9 @@ export function V2Lab({
                 <span className="h-2.5 w-2.5 rounded-full bg-cyan-200 shadow-[0_0_20px_rgba(165,243,252,.65)]" />
                 {requestLabel}
               </div>
-              <p className="mt-4 text-base font-semibold leading-6 text-white/72">“{customerMessage}”</p>
+              <p className="mt-4 text-base font-semibold leading-6 text-white/72">
+                “{customerMessage}”
+              </p>
             </div>
 
             <div className="relative my-5 flex items-center gap-3" aria-hidden>
@@ -67,9 +73,15 @@ export function V2Lab({
             </div>
 
             <div className="relative rounded-[1.45rem] bg-[#f0ece5] p-5 text-[#101114]">
-              <p className="text-[9px] font-black uppercase tracking-[.18em] text-black/42">{stateLabel}</p>
-              <p className="mt-3 text-2xl font-black leading-tight tracking-[-.035em]">{steps[active]}</p>
-              <p className="mt-5 text-sm font-semibold leading-6 text-black/58">{details[active]}</p>
+              <p className="text-[9px] font-black uppercase tracking-[.18em] text-black/42">
+                {stateLabel}
+              </p>
+              <p className="mt-3 text-2xl font-black leading-tight tracking-[-.035em]">
+                {steps[active]}
+              </p>
+              <p className="mt-5 text-sm font-semibold leading-6 text-black/58">
+                {details[active]}
+              </p>
               {complete && (
                 <div className="mt-5 border-t border-black/10 pt-5 text-sm font-semibold leading-6 text-black/62">
                   {resolvedOutcome}
@@ -97,25 +109,40 @@ export function V2Lab({
                 key={step}
                 type="button"
                 onClick={() => setActive(index)}
-                onFocus={() => setActive(index)}
-                onMouseEnter={() => setActive(index)}
                 aria-pressed={isActive}
-                className="group relative grid min-h-24 w-full grid-cols-[70px_1fr_auto] items-center gap-4 border-b border-white/10 py-5 text-left last:border-b-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"
+                aria-controls="genezisi-lab-desktop-state"
+                className={
+                  "group relative grid min-h-24 w-full grid-cols-[70px_1fr_auto] items-center gap-4 border-b border-white/10 py-5 text-left transition-colors duration-300 last:border-b-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200 " +
+                  (isActive ? "bg-white/[.035]" : "hover:bg-white/[.018]")
+                }
               >
                 <span className="relative z-10 flex items-center justify-center">
                   <StepDot active={isActive} complete={isComplete} />
                 </span>
                 <span>
-                  <span className={"block text-[9px] font-black uppercase tracking-[.18em] transition-colors " + (isActive ? "text-cyan-100/65" : "text-white/30")}>
+                  <span
+                    className={
+                      "block text-[9px] font-black uppercase tracking-[.18em] transition-colors " +
+                      (isActive ? "text-cyan-100/65" : "text-white/30")
+                    }
+                  >
                     0{index + 1}
                   </span>
-                  <span className={"mt-2 block max-w-2xl text-2xl font-black tracking-[-.02em] transition-[color,transform] duration-300 " + (isActive ? "translate-x-1 text-white" : "text-white/58")}>
+                  <span
+                    className={
+                      "mt-2 block max-w-2xl text-2xl font-black tracking-[-.02em] transition-[color,transform] duration-300 " +
+                      (isActive ? "translate-x-1 text-white" : "text-white/58")
+                    }
+                  >
                     {step}
                   </span>
                 </span>
                 <span
                   aria-hidden
-                  className={"mr-2 text-sm font-black transition-colors " + (isActive ? "text-cyan-100/62" : "text-white/20")}
+                  className={
+                    "mr-2 text-sm font-black transition-colors " +
+                    (isActive ? "text-cyan-100/62" : "text-white/20")
+                  }
                 >
                   {isActive ? "●" : isComplete ? "✓" : "→"}
                 </span>
@@ -130,13 +157,14 @@ export function V2Lab({
           const isActive = active === index;
           const isComplete = index < active;
           const panelId = `genezisi-lab-panel-${index}`;
+          const buttonId = `genezisi-lab-button-${index}`;
 
           return (
             <div key={step} className="border-b border-white/10 last:border-b-0">
               <button
+                id={buttonId}
                 type="button"
                 onClick={() => setActive(index)}
-                onFocus={() => setActive(index)}
                 aria-expanded={isActive}
                 aria-controls={panelId}
                 className="grid min-h-20 w-full grid-cols-[34px_1fr_auto] items-center gap-3 py-5 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"
@@ -145,16 +173,29 @@ export function V2Lab({
                   <StepDot active={isActive} complete={isComplete} />
                 </span>
                 <span>
-                  <span className={"block text-[9px] font-black uppercase tracking-[.18em] transition-colors duration-300 " + (isActive ? "text-cyan-100/65" : "text-white/30")}>
+                  <span
+                    className={
+                      "block text-[9px] font-black uppercase tracking-[.18em] transition-colors duration-300 " +
+                      (isActive ? "text-cyan-100/65" : "text-white/30")
+                    }
+                  >
                     0{index + 1}
                   </span>
-                  <span className={"mt-1.5 block text-xl font-black tracking-[-.025em] transition-colors duration-300 " + (isActive ? "text-white" : "text-white/58")}>
+                  <span
+                    className={
+                      "mt-1.5 block text-xl font-black tracking-[-.025em] transition-colors duration-300 " +
+                      (isActive ? "text-white" : "text-white/58")
+                    }
+                  >
                     {step}
                   </span>
                 </span>
                 <span
                   aria-hidden
-                  className={"mr-1 text-lg transition-[color,transform] duration-300 " + (isActive ? "rotate-45 text-cyan-100/70" : "text-white/24")}
+                  className={
+                    "mr-1 text-lg transition-[color,transform] duration-300 " +
+                    (isActive ? "rotate-45 text-cyan-100/70" : "text-white/24")
+                  }
                 >
                   +
                 </span>
@@ -162,6 +203,8 @@ export function V2Lab({
 
               <div
                 id={panelId}
+                role="region"
+                aria-labelledby={buttonId}
                 aria-hidden={!isActive}
                 className={
                   "grid transition-[grid-template-rows,opacity] duration-[420ms] ease-[cubic-bezier(.22,1,.36,1)] " +
@@ -177,8 +220,12 @@ export function V2Lab({
                   >
                     {index === 0 && (
                       <div className="mb-4 rounded-xl border border-white/[.07] bg-white/[.035] p-4">
-                        <p className="text-[9px] font-black uppercase tracking-[.18em] text-cyan-100/58">{requestLabel}</p>
-                        <p className="mt-3 text-sm font-semibold leading-6 text-white/68">“{customerMessage}”</p>
+                        <p className="text-[9px] font-black uppercase tracking-[.18em] text-cyan-100/58">
+                          {requestLabel}
+                        </p>
+                        <p className="mt-3 text-sm font-semibold leading-6 text-white/68">
+                          “{customerMessage}”
+                        </p>
                       </div>
                     )}
 
@@ -186,8 +233,12 @@ export function V2Lab({
                       <span className="h-2 w-2 rounded-full bg-cyan-200 shadow-[0_0_16px_rgba(165,243,252,.55)]" />
                       {stateLabel}
                     </div>
-                    <p className="mt-4 text-lg font-black tracking-[-.02em] text-white">{step}</p>
-                    <p className="mt-3 text-sm font-semibold leading-6 text-white/58">{details[index]}</p>
+                    <p className="mt-4 text-lg font-black tracking-[-.02em] text-white">
+                      {step}
+                    </p>
+                    <p className="mt-3 text-sm font-semibold leading-6 text-white/58">
+                      {details[index]}
+                    </p>
 
                     {index === steps.length - 1 && (
                       <p className="mt-4 border-t border-white/10 pt-4 text-sm font-semibold leading-6 text-white/68">

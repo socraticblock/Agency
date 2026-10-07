@@ -91,13 +91,13 @@ function ProjectCover({
         <span>{title} · {status}</span>
         <span>{category}</span>
       </div>
-      <div className="absolute inset-x-[5%] bottom-[6%] top-[18%] overflow-hidden rounded-[1.7rem] border border-white/10 bg-[#090d18] shadow-[0_35px_90px_rgba(0,0,0,.28)]">
+      <div className="absolute inset-x-[5%] bottom-[6%] top-[18%] flex items-start justify-center overflow-hidden rounded-[1.7rem] border border-white/10 bg-[#090d18] p-3 shadow-[0_35px_90px_rgba(0,0,0,.28)] sm:p-5">
         <img
-          src="/work-previews/tk-counsel.webp"
+          src="/work-previews/tk-counsel-real.webp"
           alt="TK Counsel Georgia website homepage"
           loading="lazy"
           decoding="async"
-          className="h-full w-full object-cover object-top"
+          className="block max-h-full max-w-full object-contain object-top shadow-[0_22px_70px_rgba(0,0,0,.28)]"
         />
         <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/[.06]" />
       </div>
@@ -138,7 +138,7 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
       <header className="fixed inset-x-0 top-0 z-[90] border-b border-white/[.05] bg-[#02060b]/92">
         <div className="mx-auto flex h-16 max-w-[92rem] items-center justify-between gap-2 px-5 sm:gap-6 sm:px-8">
           <a
-            href={"/" + locale + "/v2-prototype"}
+            href={"/" + locale}
             className="rounded-sm font-space text-xs font-black uppercase tracking-[.26em] text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200 sm:text-sm sm:tracking-[.42em]"
           >
             Genezisi
@@ -149,7 +149,7 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
             <a className="hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200" href="#about">{copy.navAbout}</a>
           </nav>
           <a
-            href={locale === "en" ? "/ka/v2-prototype" : "/en/v2-prototype"}
+            href={locale === "en" ? "/ka" : "/en"}
             lang={locale === "en" ? "ka" : "en"}
             hrefLang={locale === "en" ? "ka" : "en"}
             aria-label={locale === "en" ? "ქართული ვერსია" : "English version"}
@@ -158,9 +158,9 @@ export function SignalHeroPrototype({ locale }: { locale: Locale }) {
             {locale === "en" ? "KA" : "EN"}
           </a>
           <nav aria-label="Language" className="hidden items-center gap-2 text-xs font-black text-white/60 sm:flex">
-            <a href="/en/v2-prototype" lang="en" hrefLang="en" aria-current={locale === "en" ? "page" : undefined} className="rounded-sm px-1.5 py-1 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200">EN</a>
+            <a href="/en" lang="en" hrefLang="en" aria-current={locale === "en" ? "page" : undefined} className="rounded-sm px-1.5 py-1 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200">EN</a>
             <span aria-hidden className="text-white/25">·</span>
-            <a href="/ka/v2-prototype" lang="ka" hrefLang="ka" aria-current={locale === "ka" ? "page" : undefined} className="rounded-sm px-1.5 py-1 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200">KA</a>
+            <a href="/ka" lang="ka" hrefLang="ka" aria-current={locale === "ka" ? "page" : undefined} className="rounded-sm px-1.5 py-1 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200">KA</a>
           </nav>
           <a
             href={waHref}
