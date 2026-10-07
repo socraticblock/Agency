@@ -1,5 +1,4 @@
 import type { MetadataRoute } from "next";
-import { defaultLocale } from "@/lib/i18n";
 
 function siteBase(): string {
   return (process.env.NEXT_PUBLIC_SITE_URL || "https://genezisi.com").replace(
@@ -11,6 +10,7 @@ function siteBase(): string {
 export default function sitemap(): MetadataRoute.Sitemap {
   const root = siteBase();
 
+  // English routes. These are the canonical locale for every route below.
   const localized = [
     { path: "", priority: 1 },
     { path: "/websites", priority: 0.9 },
@@ -26,10 +26,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/stop-renting", priority: 0.85 },
     { path: "/start", priority: 0.9 },
   ].map(({ path, priority }) => ({
-    url: `${root}/${defaultLocale}${path}`,
+    url: `${root}/en${path}`,
     changeFrequency: "weekly" as const,
     priority,
   }));
+
+  // Georgian is only published for surfaces that are genuinely localized.
+  // The homepage is fully translated; the legacy marketing routes above are not.
+  const georgian: MetadataRoute.Sitemap = [
+    {
+      url: `${root}/ka`,
+      changeFrequency: "weekly" as const,
+      priority: 0.95,
+    },
+  ];
 
   const global = ["/onboarding", "/onboarding-brief", "/success"].map(
     (path, i) => ({
@@ -39,5 +49,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })
   );
 
-  return [...localized, ...global];
+  return [...localized, ...georgian, ...global];
 }
