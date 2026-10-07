@@ -3,6 +3,8 @@ import type { Locale } from "@/lib/i18n";
 export type V2Copy = {
   services: string;
   hero: string;
+  heroDesktop: string;
+  heroMobile: string;
   heroSub: string;
   message: string;
   navWork: string;
@@ -25,12 +27,21 @@ export type V2Copy = {
   seeWork: string;
   work: string;
   proof: string;
+  workIntro: string;
   capabilities: string;
   lab: string;
+  systemEyebrow: string;
   labTitle: string;
+  requestReceivedDetail: string;
+  intentDetail: string;
+  actionDetail: string;
+  exceptionDetail: string;
+  resolutionDetail: string;
   small: string;
+  founderEyebrow: string;
   founderTitle: string;
   founderBody: string;
+  founderBodySecond: string;
   contact: string;
   contactTitle: string;
   contactBody: string;
@@ -84,7 +95,9 @@ export type V2Copy = {
 const EN: V2Copy = {
   services: "Websites · AI · Automation",
   hero: "Your website is only the beginning.",
-  heroSub: "Beautiful digital experiences, with useful systems working underneath.",
+  heroDesktop: "Your website\nis only the\nbeginning.",
+  heroMobile: "Your website is\nonly the beginning.",
+  heroSub: "Genezisi builds distinctive websites, AI systems and automations that make the business behind them work better.",
   message: "Message me",
   navWork: "Work",
   navCapabilities: "What I build",
@@ -103,15 +116,24 @@ const EN: V2Copy = {
   surfaceUseful: "Beautiful on the surface.",
   underneathUseful: "Useful underneath.",
   resolvedOutcome: "The request is structured, the time is checked, and the owner gets a clear next step.",
-  seeWork: "See the work ↓",
+  seeWork: "See selected work",
   work: "Selected work",
   proof: "Proof, not promises.",
+  workIntro: "Websites, products and prototypes built around real business needs.",
   capabilities: "What I build",
   lab: "Genezisi Lab · Internal demo",
+  systemEyebrow: "The system in action",
   labTitle: "See what the system actually does.",
+  requestReceivedDetail: "A potential client asks to book a consultation next week.",
+  intentDetail: "Consultation request · timing: next week · next action: check availability.",
+  actionDetail: "Availability checked · Tuesday at 14:00 is available · confirmation can be prepared.",
+  exceptionDetail: "The request falls outside the standard scope. Send it to the owner for judgment.",
+  resolutionDetail: "The owner gets structured information and the customer gets a clear next step.",
   small: "Small by design",
+  founderEyebrow: "Founder-led studio",
   founderTitle: "You work with the person doing the work.",
-  founderBody: "No account-manager layer and no pretend giant team. Genezisi stays small so design, technical decisions and communication stay close together.",
+  founderBody: "Genezisi is founder-led. You work directly with the person designing and building your project — from the first conversation to launch.",
+  founderBodySecond: "Clear communication, practical advice and work built around your actual goals.",
   contact: "Have something to build?",
   contactTitle: "Message me.",
   contactBody: "A website, an AI system, an automation—or something that combines them. Start with a message.",
@@ -140,11 +162,11 @@ const EN: V2Copy = {
   exceptionStep: "Send exceptions to a person",
   outcomeStep: "Deliver a clear next step to the owner",
   websiteTitle: "Websites",
-  websiteBody: "Clear, distinctive digital experiences built to earn attention and trust.",
+  websiteBody: "Distinctive, high-performance websites built to make a strong first impression and turn interest into opportunities.",
   aiTitle: "AI systems",
-  aiBody: "Useful assistants and intelligent tools shaped around real business work.",
+  aiBody: "Useful systems that understand requests, use your business information and help move work forward.",
   automationTitle: "Automation",
-  automationBody: "Connected workflows that remove repetitive steps while keeping people in control.",
+  automationBody: "Practical workflows that connect your tools, remove repetitive steps and keep people in control.",
   tkStatus: "Live website",
   frankStatus: "Live product",
   pilatesStatus: "Prototype",
@@ -165,6 +187,8 @@ const EN: V2Copy = {
 const KA: V2Copy = {
   services: "ვებსაიტები · AI · ავტომატიზაცია",
   hero: "თქვენი ვებსაიტი მხოლოდ დასაწყისია.",
+  heroDesktop: "თქვენი ვებსაიტი\nმხოლოდ\nდასაწყისია.",
+  heroMobile: "თქვენი ვებსაიტი\nმხოლოდ დასაწყისია.",
   heroSub: "გამორჩეული ციფრული გამოცდილება და სასარგებლო სისტემები, რომლებიც მის უკან მუშაობს.",
   message: "მომწერეთ",
   navWork: "ნამუშევრები",
@@ -187,12 +211,21 @@ const KA: V2Copy = {
   seeWork: "ნახეთ ნამუშევრები ↓",
   work: "რჩეული ნამუშევრები",
   proof: "საქმე, არა დაპირებები.",
+  workIntro: "ვებსაიტები, პროდუქტები და პროტოტიპები, შექმნილი რეალური ბიზნეს საჭიროებების გარშემო.",
   capabilities: "რას ვქმნი",
   lab: "Genezisi Lab · შიდა დემო",
+  systemEyebrow: "სისტემა მოქმედებაში",
   labTitle: "ნახეთ, რას აკეთებს სისტემა სინამდვილეში.",
+  requestReceivedDetail: "პოტენციურ კლიენტს სურს კონსულტაციის დაჯავშნა მომავალ კვირას.",
+  intentDetail: "კონსულტაციის მოთხოვნა · დრო: მომავალი კვირა · შემდეგი ნაბიჯი: ხელმისაწვდომობის შემოწმება.",
+  actionDetail: "ხელმისაწვდომობა შემოწმებულია · სამშაბათი 14:00 თავისუფალია · დადასტურება შეიძლება მომზადდეს.",
+  exceptionDetail: "მოთხოვნა სტანდარტულ ფარგლებს სცდება. გადაწყვეტილებისთვის გადაეგზავნოს მფლობელს.",
+  resolutionDetail: "მფლობელი იღებს დალაგებულ ინფორმაციას, კლიენტი კი — მკაფიო შემდეგ ნაბიჯს.",
   small: "განზრახ პატარა გუნდი",
+  founderEyebrow: "დამფუძნებლის მიერ მართული სტუდია",
   founderTitle: "თქვენ მუშაობთ უშუალოდ იმ ადამიანთან, ვინც საქმეს აკეთებს.",
-  founderBody: "არ არის ანგარიშების მენეჯერების შრე და არც ხელოვნურად დიდი გუნდი. Genezisi პატარა რჩება, რათა დიზაინი, ტექნიკური გადაწყვეტილებები და კომუნიკაცია ერთმანეთთან ახლოს იყოს.",
+  founderBody: "Genezisi დამფუძნებლის მიერ მართული სტუდიაა. პროექტის პირველი საუბრიდან გაშვებამდე უშუალოდ იმ ადამიანთან მუშაობთ, ვინც მას დიზაინს უკეთებს და აშენებს.",
+  founderBodySecond: "მკაფიო კომუნიკაცია, პრაქტიკული რჩევები და სამუშაო, რომელიც თქვენს რეალურ მიზნებზეა აგებული.",
   contact: "გაქვთ იდეა?",
   contactTitle: "მომწერეთ.",
   contactBody: "ვებსაიტი, AI სისტემა, ავტომატიზაცია — ან მათი კომბინაცია. ყველაფერი ერთი შეტყობინებით იწყება.",

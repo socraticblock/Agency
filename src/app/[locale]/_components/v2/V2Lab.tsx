@@ -42,12 +42,12 @@ export function V2Lab({
 
   return (
     <>
-      <div className="hidden gap-12 lg:grid lg:grid-cols-[.9fr_1.1fr] xl:gap-16">
+      <div className="hidden gap-5 lg:grid lg:grid-cols-[.85fr_1.15fr]">
         <div className="self-start">
           <div
             id="genezisi-lab-desktop-state"
             aria-live="polite"
-            className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#071019] p-8 shadow-[0_32px_90px_rgba(0,0,0,.28)]"
+            className="relative overflow-hidden rounded-[14px] border border-white/10 bg-[#071019] p-5 shadow-[0_32px_90px_rgba(0,0,0,.28)]"
           >
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_82%_16%,rgba(165,243,252,.09),transparent_26%)]" />
 
@@ -112,7 +112,7 @@ export function V2Lab({
                 aria-pressed={isActive}
                 aria-controls="genezisi-lab-desktop-state"
                 className={
-                  "group relative grid min-h-24 w-full grid-cols-[70px_1fr_auto] items-center gap-4 border-b border-white/10 py-5 text-left transition-colors duration-300 last:border-b-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200 " +
+                  "group relative grid min-h-24 w-full grid-cols-[70px_1fr_auto] items-center gap-4 border-b border-white/10 py-3 text-left transition-colors duration-300 last:border-b-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200 " +
                   (isActive ? "bg-white/[.035]" : "hover:bg-white/[.018]")
                 }
               >
@@ -130,7 +130,7 @@ export function V2Lab({
                   </span>
                   <span
                     className={
-                      "mt-2 block max-w-2xl text-2xl font-black tracking-[-.02em] transition-[color,transform] duration-300 " +
+                      "mt-1 block max-w-2xl text-base font-black tracking-[-.02em] transition-[color,transform] duration-300 " +
                       (isActive ? "translate-x-1 text-white" : "text-white/58")
                     }
                   >

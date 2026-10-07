@@ -1,0 +1,14 @@
+import Image from "next/image";
+import { ArrowUpRight } from "lucide-react";
+import type { V2Copy } from "./hero.copy";
+
+const PROJECTS=[
+ {name:"TK Counsel",href:"https://tkcounsel.com/",image:"/work-previews/tk-counsel-real.webp",kind:"image"},
+ {name:"Frankencoin Desk",href:"https://www.frankencoindesk.com/",image:"/work-previews/frankencoin-desk.png",kind:"image"},
+ {name:"Her House Pilates",href:"https://her-house-pilates.vercel.app/",image:"",kind:"authored"},
+] as const;
+
+export function SelectedWork({copy}:{copy:V2Copy}){
+ const meta=[{status:copy.tkStatus,body:copy.tkBody,category:copy.legalCategory},{status:copy.frankStatus,body:copy.frankBody,category:copy.productCategory},{status:copy.pilatesStatus,body:copy.pilatesBody,category:copy.wellnessCategory}];
+ return <section id="work" className="scroll-mt-16 bg-[#f0ece5] px-5 py-16 text-[#101114] sm:px-8 lg:py-20"><div className="mx-auto max-w-[92rem]"><p className="text-[10px] font-extrabold uppercase tracking-[.24em] text-black/48">{copy.work}</p><div className="mt-3 grid gap-5 border-b border-black/10 pb-8 lg:grid-cols-[1.2fr_.8fr] lg:items-end"><h2 className="text-[clamp(3rem,5vw,5.25rem)] font-black leading-[.88] tracking-[-.06em]">{copy.proof}</h2><p className="max-w-lg text-sm leading-6 text-black/58 lg:justify-self-end">{copy.workIntro}</p></div><div className="mt-6 grid gap-3 lg:grid-cols-3">{PROJECTS.map((p,i)=><article key={p.name} className="rounded-[14px] bg-white/30 p-3 shadow-[0_12px_35px_rgba(36,30,22,.035)]"><a href={p.href} target="_blank" rel="noopener noreferrer" className="group grid gap-3 sm:grid-cols-[.9fr_1.1fr] lg:block">{p.kind==="image"?<div className="relative aspect-[16/10] overflow-hidden rounded-[9px] bg-[#0a0e18]"><Image src={p.image} alt={p.name+" project preview"} fill sizes="(max-width:1023px) 45vw, 33vw" className="object-cover object-top transition-transform duration-300 group-hover:scale-[1.015]"/></div>:<div className="relative aspect-[16/10] overflow-hidden rounded-[9px] bg-[#e7d9c8] p-3"><div className="flex h-full flex-col justify-between rounded-[6px] bg-[#f8f1e7] p-3"><div className="flex justify-between text-[7px] font-black uppercase tracking-[.15em]"><span>Her House</span><span>Studio</span></div><p className="max-w-[8ch] text-[clamp(1.6rem,3vw,2.6rem)] font-black leading-[.88] tracking-[-.055em]">More than a workout.</p></div></div>}<div className="min-w-0"><p className="mt-1 text-[9px] font-extrabold uppercase tracking-[.14em] text-black/42 lg:mt-4">{meta[i].status} · {meta[i].category}</p><h3 className="mt-1.5 text-xl font-black tracking-[-.035em]">{p.name}</h3><p className="mt-2 text-sm leading-5 text-black/58">{meta[i].body}</p><span className="mt-3 inline-flex items-center gap-2 text-sm font-extrabold">{copy.viewWebsite}<ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden/></span></div></a></article>)}</div></div></section>;
+}

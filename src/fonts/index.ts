@@ -9,7 +9,7 @@ import {
 
 export const inter = Inter({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800", "900"],
   variable: "--font-inter",
   display: "swap",
 });
@@ -22,7 +22,7 @@ export const spaceGrotesk = Space_Grotesk({
 
 export const notoGeorgian = Noto_Sans_Georgian({
   subsets: ["georgian"],
-  weight: ["400", "700"],
+  weight: ["400", "500", "600", "700", "800", "900"],
   variable: "--font-noto-georgian",
   display: "swap",
 });
