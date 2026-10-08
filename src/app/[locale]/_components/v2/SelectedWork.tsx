@@ -6,8 +6,8 @@ const PROJECTS = [
   {
     name: "TK Counsel",
     href: "https://tkcounsel.com/",
-    image: "/work-previews/tk-counsel-real.webp",
-    alt: "TK Counsel — website preview",
+    image: "/work-previews/tk-counsel.webp",
+    alt: "TK Counsel — website hero preview",
   },
   {
     name: "Frankencoin Desk",
