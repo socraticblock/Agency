@@ -11,60 +11,108 @@ import { DemoState, StepDot } from "./SystemDemoState";
  *
  * The step column is deliberately taller than the viewport. That height is the
  * whole mechanism: a sticky panel can only "follow the screen" while there is
- * column left to scroll past it, so the travel *is* the extra height — roughly
- * (+50px per row) of follow. Each row already needed about that much to read as
- * a step rather than a flicker, so the same height does both jobs.
+ * column left to scroll past it, so the travel *is* the extra height.
  */
 export function V2LabStage({ copy, steps }: { copy: V2Copy; steps: string[] }) {
   const [active, setActive] = useState(0);
   const stepRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const pendingRef = useRef<number | null>(null);
   const progress = ((active + 1) / steps.length) * 100;
 
+  /*
+    The active step is whichever row sits nearest the middle of the screen, read
+    from the rows' real positions once per frame.
+
+    This deliberately does NOT use an IntersectionObserver. An observer callback
+    carries only the elements whose intersection just changed, so a winner picked
+    from that list ignores every row that was already intersecting — and with
+    rows taller than the trigger band that is the common case. The panel then
+    freezes on the step you just left, because the only entry in the callback is
+    the row that exited (and it gets filtered out as non-intersecting). That was
+    the observed fault: stubborn going backwards, step 2 especially.
+    Measuring positions removes the whole failure mode — there is always exactly
+    one nearest row, so the panel always has a correct answer.
+  */
   useEffect(() => {
     const nodes = stepRefs.current.filter(
       (node): node is HTMLButtonElement => node !== null,
     );
     if (nodes.length === 0) return;
 
-    // A narrow band across the middle of the viewport decides the active step.
-    // Of whatever falls inside that band, the block nearest dead centre wins.
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const inBand = entries.filter((entry) => entry.isIntersecting);
-        if (inBand.length === 0) return;
+    let frame = 0;
 
-        const centre = window.innerHeight / 2;
-        let best = -1;
-        let bestDistance = Number.POSITIVE_INFINITY;
+    const measure = () => {
+      frame = 0;
 
-        for (const entry of inBand) {
-          const index = Number((entry.target as HTMLElement).dataset.step);
-          if (!Number.isInteger(index)) continue;
-          const { top, bottom } = entry.boundingClientRect;
-          const distance = Math.abs((top + bottom) / 2 - centre);
-          if (distance < bestDistance) {
-            bestDistance = distance;
-            best = index;
-          }
+      // The stage is display:none below lg, where the card stack is showing and
+      // these rows have no boxes at all. Without this guard the maths would run
+      // against zero rects on every phone scroll.
+      if (nodes[0].getBoundingClientRect().height === 0) return;
+
+      const line = window.innerHeight / 2;
+
+      if (pendingRef.current !== null) {
+        const rect = nodes[pendingRef.current].getBoundingClientRect();
+        // A click asks the page to scroll to that row. Wait until the scroll
+        // actually settles on it before handing control back to the position
+        // rule — otherwise the panel flickers through every step in between.
+        if (Math.abs((rect.top + rect.bottom) / 2 - line) < 8) {
+          setActive(pendingRef.current);
+          pendingRef.current = null;
         }
+        return;
+      }
 
-        if (best >= 0) setActive(best);
-      },
-      { rootMargin: "-45% 0px -45% 0px" },
-    );
+      let best = 0;
+      let bestDistance = Number.POSITIVE_INFINITY;
 
-    nodes.forEach((node) => observer.observe(node));
-    return () => observer.disconnect();
+      for (let index = 0; index < nodes.length; index += 1) {
+        const rect = nodes[index].getBoundingClientRect();
+        const distance = Math.abs((rect.top + rect.bottom) / 2 - line);
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          best = index;
+        }
+      }
+
+      setActive((current) => (current === best ? current : best));
+    };
+
+    const schedule = () => {
+      if (frame === 0) frame = window.requestAnimationFrame(measure);
+    };
+
+    // Deliberate input means any click-scroll is over: the user is driving.
+    const releasePending = () => {
+      pendingRef.current = null;
+    };
+
+    measure();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    window.addEventListener("wheel", releasePending, { passive: true });
+    window.addEventListener("touchstart", releasePending, { passive: true });
+    window.addEventListener("keydown", releasePending);
+
+    return () => {
+      if (frame !== 0) window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      window.removeEventListener("wheel", releasePending);
+      window.removeEventListener("touchstart", releasePending);
+      window.removeEventListener("keydown", releasePending);
+    };
   }, []);
 
   const selectStep = (index: number) => {
+    pendingRef.current = index;
     setActive(index);
     const node = stepRefs.current[index];
     if (!node) return;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    // One source of truth: what activates a step is it sitting in the middle of
-    // the viewport, so a click moves the page there instead of fighting the
-    // observer the next time the user scrolls.
+    // One source of truth: what makes a step active is it sitting in the middle
+    // of the screen, so a click moves the page there rather than setting state
+    // behind the position rule's back.
     node.scrollIntoView({ block: "center", behavior: reduced ? "auto" : "smooth" });
   };
 
@@ -91,7 +139,6 @@ export function V2LabStage({ copy, steps }: { copy: V2Copy; steps: string[] }) {
                 ref={(node) => {
                   stepRefs.current[index] = node;
                 }}
-                data-step={index}
                 onClick={() => selectStep(index)}
                 aria-pressed={isActive}
                 aria-controls="genezisi-lab-desktop-state"
@@ -156,9 +203,7 @@ export function V2LabStage({ copy, steps }: { copy: V2Copy; steps: string[] }) {
           {/*
             All five states share one grid cell, so the panel is always as tall
             as the tallest state and never resizes under the reader. That also
-            gives the ~200ms cross-fade the roadmap asks for — and it replaces
-            an abrupt content swap, which was the only place on the page where a
-            click produced no motion at all.
+            gives the ~200ms cross-fade the roadmap asks for.
           */}
           <div className="relative mt-7 grid">
             {steps.map((step, index) => (
@@ -188,9 +233,7 @@ export function V2LabStage({ copy, steps }: { copy: V2Copy; steps: string[] }) {
         {/*
           Announces the step that just became active, in the reader's own
           language — the titles come from the locale copy, so nothing hard-coded
-          in English lands on the Georgian page. Deliberately not on the panel
-          itself: an aria-live on the whole panel re-reads the counter and every
-          demo field on each change.
+          in English lands on the Georgian page.
         */}
         <p className="sr-only" aria-live="polite">
           {steps[active]}
