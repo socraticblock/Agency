@@ -301,3 +301,63 @@ body {
   }
 }
 
+/* Mobile "System in Action": as the next card slides over the current one, the
+   card's display title condenses into the small title beside its number.
+
+   Driven by a view-timeline on the STACK, not on the cards: a sticky element's
+   own view progress freezes the moment it pins, which is exactly when the morph
+   has to run. Each card is given its own window inside the stack's progress.
+
+   Only transform and opacity animate — no per-frame reflow (a font-size morph
+   would recompute layout every frame on the phones this runs on).
+
+   Progressive enhancement: without scroll-driven animations (iOS Safari today)
+   both titles render normally, so the peek strips stay readable. The keyframes
+   only ever ADD the condensed state — if the timeline is missing the base style
+   wins, so no title can be left invisible. */
+@keyframes v2-title-lg-out {
+  from {
+    transform: none;
+    opacity: 1;
+  }
+  to {
+    transform: translate3d(0, -14px, 0) scale(0.58);
+    opacity: 0;
+  }
+}
+
+@keyframes v2-title-sm-in {
+  from {
+    transform: translate3d(-6px, 0, 0);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.v2-stack {
+  view-timeline-name: --v2-stack;
+  view-timeline-axis: block;
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .v2-title-lg {
+      transform-origin: top left;
+      animation: v2-title-lg-out linear both;
+      animation-timeline: --v2-stack;
+      animation-range-start: var(--v2-from);
+      animation-range-end: var(--v2-to);
+    }
+
+    .v2-title-sm {
+      animation: v2-title-sm-in linear both;
+      animation-timeline: --v2-stack;
+      animation-range-start: var(--v2-from);
+      animation-range-end: var(--v2-to);
+    }
+  }
+}
+
