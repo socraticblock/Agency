@@ -1,16 +1,72 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { V2Copy } from "./hero.copy";
 import { DemoState, StepDot } from "./SystemDemoState";
 
 /**
- * Desktop only: the five steps as tabs driving one persistent interface stage.
- * Mobile uses a scroll-through timeline instead (see V2Lab).
+ * Desktop / tablet-landscape only: the five steps as a column that scrolls past
+ * one persistent interface stage. Mobile uses a scroll-through card stack
+ * instead (see V2Lab).
+ *
+ * The step column is deliberately taller than the viewport. That height is the
+ * whole mechanism: a sticky panel can only "follow the screen" while there is
+ * column left to scroll past it, so the travel *is* the extra height — roughly
+ * (+50px per row) of follow. Each row already needed about that much to read as
+ * a step rather than a flicker, so the same height does both jobs.
  */
 export function V2LabStage({ copy, steps }: { copy: V2Copy; steps: string[] }) {
   const [active, setActive] = useState(0);
+  const stepRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const progress = ((active + 1) / steps.length) * 100;
+
+  useEffect(() => {
+    const nodes = stepRefs.current.filter(
+      (node): node is HTMLButtonElement => node !== null,
+    );
+    if (nodes.length === 0) return;
+
+    // A narrow band across the middle of the viewport decides the active step.
+    // Of whatever falls inside that band, the block nearest dead centre wins.
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const inBand = entries.filter((entry) => entry.isIntersecting);
+        if (inBand.length === 0) return;
+
+        const centre = window.innerHeight / 2;
+        let best = -1;
+        let bestDistance = Number.POSITIVE_INFINITY;
+
+        for (const entry of inBand) {
+          const index = Number((entry.target as HTMLElement).dataset.step);
+          if (!Number.isInteger(index)) continue;
+          const { top, bottom } = entry.boundingClientRect;
+          const distance = Math.abs((top + bottom) / 2 - centre);
+          if (distance < bestDistance) {
+            bestDistance = distance;
+            best = index;
+          }
+        }
+
+        if (best >= 0) setActive(best);
+      },
+      { rootMargin: "-45% 0px -45% 0px" },
+    );
+
+    nodes.forEach((node) => observer.observe(node));
+    return () => observer.disconnect();
+  }, []);
+
+  const selectStep = (index: number) => {
+    setActive(index);
+    const node = stepRefs.current[index];
+    if (!node) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // One source of truth: what activates a step is it sitting in the middle of
+    // the viewport, so a click moves the page there instead of fighting the
+    // observer the next time the user scrolls.
+    node.scrollIntoView({ block: "center", behavior: reduced ? "auto" : "smooth" });
+  };
 
   return (
     <div className="grid gap-12 lg:grid-cols-[.92fr_1.08fr] xl:gap-16">
@@ -32,11 +88,15 @@ export function V2LabStage({ copy, steps }: { copy: V2Copy; steps: string[] }) {
               <button
                 key={step}
                 type="button"
-                onClick={() => setActive(index)}
+                ref={(node) => {
+                  stepRefs.current[index] = node;
+                }}
+                data-step={index}
+                onClick={() => selectStep(index)}
                 aria-pressed={isActive}
                 aria-controls="genezisi-lab-desktop-state"
                 className={
-                  "group relative grid min-h-20 w-full grid-cols-[70px_1fr_auto] items-center gap-4 border-b border-white/10 py-5 text-left transition-colors duration-300 last:border-b-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200 " +
+                  "group relative grid min-h-[130px] w-full grid-cols-[70px_1fr_auto] items-center gap-4 border-b border-white/10 py-5 text-left transition-colors duration-300 last:border-b-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200 " +
                   (isActive ? "bg-white/[.035]" : "hover:bg-white/[.018]")
                 }
               >
@@ -76,10 +136,9 @@ export function V2LabStage({ copy, steps }: { copy: V2Copy; steps: string[] }) {
         </div>
       </div>
 
-      <div className="self-start">
+      <div className="sticky top-24 self-start">
         <div
           id="genezisi-lab-desktop-state"
-          aria-live="polite"
           className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#071019] p-8 shadow-[0_32px_90px_rgba(0,0,0,.28)]"
         >
           <div
@@ -94,8 +153,28 @@ export function V2LabStage({ copy, steps }: { copy: V2Copy; steps: string[] }) {
             </span>
           </div>
 
-          <div className="relative mt-7">
-            <DemoState index={active} copy={copy} />
+          {/*
+            All five states share one grid cell, so the panel is always as tall
+            as the tallest state and never resizes under the reader. That also
+            gives the ~200ms cross-fade the roadmap asks for — and it replaces
+            an abrupt content swap, which was the only place on the page where a
+            click produced no motion at all.
+          */}
+          <div className="relative mt-7 grid">
+            {steps.map((step, index) => (
+              <div
+                key={step}
+                aria-hidden={index !== active}
+                className={
+                  "col-start-1 row-start-1 transition-[opacity,transform] duration-200 ease-out " +
+                  (index === active
+                    ? "translate-y-0 opacity-100"
+                    : "pointer-events-none translate-y-1.5 opacity-0")
+                }
+              >
+                <DemoState index={index} copy={copy} />
+              </div>
+            ))}
           </div>
 
           <div className="relative mt-8 h-px overflow-hidden bg-white/10" aria-hidden>
@@ -105,6 +184,17 @@ export function V2LabStage({ copy, steps }: { copy: V2Copy; steps: string[] }) {
             />
           </div>
         </div>
+
+        {/*
+          Announces the step that just became active, in the reader's own
+          language — the titles come from the locale copy, so nothing hard-coded
+          in English lands on the Georgian page. Deliberately not on the panel
+          itself: an aria-live on the whole panel re-reads the counter and every
+          demo field on each change.
+        */}
+        <p className="sr-only" aria-live="polite">
+          {steps[active]}
+        </p>
       </div>
     </div>
   );
