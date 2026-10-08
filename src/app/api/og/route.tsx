@@ -10,12 +10,12 @@ export async function GET(req: NextRequest) {
     // Universal
     const type = searchParams.get("type") || "home";
     const theme = searchParams.get("theme") || "dark";
-    const accent = searchParams.get("accent") || "#10b981";
+    const accent = searchParams.get("accent") || "#a5f3fc";
     
     // Type: home
-    const tagline = searchParams.get("tagline") || "Escape the social media trap.";
-    const subline = searchParams.get("subline") || "Build a permanent digital home.";
-    const services = searchParams.get("services") || "Web Design  ·  Branding  ·  E-Commerce  ·  Digital Cards";
+    const tagline = searchParams.get("tagline") || "Your website is only the beginning.";
+    const subline = searchParams.get("subline") || "Websites, AI systems and automation.";
+    const services = searchParams.get("services") || "Websites  ·  AI systems  ·  Automation";
 
     // Type: pricing
     const tier = searchParams.get("tier") || "Professional";

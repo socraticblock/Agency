@@ -7,7 +7,7 @@ import { NextResponse } from "next/server";
 import { getCardById, updateCardDomainStatus, upsertCardDomainHost } from "@/lib/db";
 import { verifyAdminRequest } from "@/lib/admin-auth";
 import type { DomainStatus } from "@/lib/order-publish-intent";
-import type { Lane1CustomizerState } from "@/app/[locale]/start/lib/types";
+import type { Lane1CustomizerState } from "@/app/[locale]/(site)/start/lib/types";
 
 const DOMAIN_STATUSES = new Set<DomainStatus>([
   "none",

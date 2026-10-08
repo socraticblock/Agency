@@ -9,7 +9,7 @@ import {
 
 export const inter = Inter({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800", "900"],
   variable: "--font-inter",
   display: "swap",
 });
@@ -22,7 +22,7 @@ export const spaceGrotesk = Space_Grotesk({
 
 export const notoGeorgian = Noto_Sans_Georgian({
   subsets: ["georgian"],
-  weight: ["400", "700"],
+  weight: ["400", "500", "600", "700", "800", "900"],
   variable: "--font-noto-georgian",
   display: "swap",
 });
@@ -31,6 +31,7 @@ export const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-playfair",
   display: "swap",
+  preload: false,
 });
 
 export const merriweather = Merriweather({
@@ -38,6 +39,7 @@ export const merriweather = Merriweather({
   weight: ["400", "700"],
   variable: "--font-merriweather",
   display: "swap",
+  preload: false,
 });
 
 export const sourceSans3 = Source_Sans_3({
@@ -45,4 +47,5 @@ export const sourceSans3 = Source_Sans_3({
   weight: ["300", "400", "600"],
   variable: "--font-source-sans",
   display: "swap",
+  preload: false,
 });

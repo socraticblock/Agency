@@ -74,10 +74,9 @@ export function createLocalBusinessSeo(options: LocalBusinessOptions): SeoResult
   } = options;
 
   const baseUrl = getBaseUrl().replace(/\/$/, "");
-  /** Public URLs only use routed locales (`/en` today; `/ka` redirects). */
-  const pathLocale = locale === "ka" ? defaultLocale : locale;
-  const synchronizedPath = `/${pathLocale}${path}`;
-  const url = `${baseUrl}${synchronizedPath}`.replace(/\/+$/, "");
+  /** Every routed locale gets its own canonical URL. */
+  const localizedPath = `/${locale}${path}`;
+  const url = `${baseUrl}${localizedPath}`.replace(/\/+$/, "");
 
   const title = jobTitle && ogType === "card" ? `${name} | ${jobTitle}` : name;
   const localeTag = getLocaleTag(locale);
@@ -128,7 +127,8 @@ export function createLocalBusinessSeo(options: LocalBusinessOptions): SeoResult
       canonical: url,
       languages: {
         "x-default": `${baseUrl}/${defaultLocale}`,
-        "en-US": `${baseUrl}/${defaultLocale}`,
+        "en-US": `${baseUrl}/en`,
+        "ka-GE": `${baseUrl}/ka`,
       },
     },
     openGraph: {

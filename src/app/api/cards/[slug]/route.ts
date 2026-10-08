@@ -6,7 +6,7 @@
 
 import { NextResponse } from "next/server";
 import { getPublishedCardBySlug } from "@/lib/db";
-import type { Lane1CustomizerState } from "@/app/[locale]/start/lib/types";
+import type { Lane1CustomizerState } from "@/app/[locale]/(site)/start/lib/types";
 
 export async function GET(
   _request: Request,

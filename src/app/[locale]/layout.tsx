@@ -11,7 +11,7 @@ export const viewport: Viewport = {
 
 const SITE_NAME = "Genezisi";
 const SITE_DESCRIPTION =
-  "Premium website design and development in Tbilisi, Georgia for local businesses that want to look serious online and book more customers.";
+  "Genezisi builds distinctive websites, AI systems and automation that make the business behind them work better.";
 
 function normalizeLocale(locale: string | undefined): Locale {
   if (locale && (locale === "en" || locale === "ka")) return locale;
@@ -30,16 +30,16 @@ export async function generateMetadata({
     description: SITE_DESCRIPTION,
     locale: lang,
     path: "/",
-    jobTitle: "Premium Website Design",
-    accentColor: "#10b981",
+    jobTitle: "Websites, AI & Automation",
+    accentColor: "#a5f3fc",
     theme: "dark",
-    ogTagline: "Premium websites for businesses that want to look serious online.",
+    ogTagline: "Your website is only the beginning.",
     ogSubline:
-      "Founder-led website design and development for coaches, clinics, studios, restaurants, shops, and local services.",
-    ogServices: "Website design, development, booking, payments, SEO",
-    ogCta: "Book a website call",
+      "Founder-led websites, AI systems and automation built around real business needs.",
+    ogServices: "Websites, AI systems, automation",
+    ogCta: "Start a conversation",
     ogAlt:
-      "Genezisi premium website design and development for Georgian businesses",
+      "Genezisi — websites, AI systems and automation",
   });
   
   return {
@@ -75,7 +75,7 @@ export default async function LocaleLayout({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div id="main-content" className={`locale-${lang} outline-none`} tabIndex={-1}>
+      <div id="main-content" lang={lang} className={`locale-${lang} outline-none`} tabIndex={-1}>
         {children}
       </div>
     </>

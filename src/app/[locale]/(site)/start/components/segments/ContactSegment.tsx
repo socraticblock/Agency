@@ -1,0 +1,169 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { Phone, Mail, Map } from "lucide-react";
+import type { Lane1CustomizerState, MobileButtonId } from "../../lib/types";
+import { InlineEditable } from "../InlineEditable";
+import { MagneticButton } from "../../../../_components/MagneticButton";
+import type { CSSProperties } from "react";
+import { hasValidAddress, MAP_ADDRESS_HELPER_TEXT } from "../../lib/location";
+import { lane1CtaPrimarySurface, lane1DirectionsClasses, lane1PrimaryAccentBackground } from "../../lib/button-styles";
+
+interface ContactSegmentProps {
+  state: Lane1CustomizerState;
+  editable: boolean;
+  useSecondary: boolean;
+  isResponsive: boolean;
+  patch: (p: Partial<Lane1CustomizerState>) => void;
+  bodyStyle: CSSProperties;
+  ctaLabelStyle: CSSProperties;
+  itemVariants: any;
+  glassStyle: CSSProperties;
+  orderHighlightIssueIds?: ReadonlySet<string>;
+}
+
+export function ContactSegment({
+  state,
+  editable,
+  useSecondary,
+  isResponsive,
+  patch,
+  bodyStyle,
+  ctaLabelStyle,
+  itemVariants,
+  glassStyle,
+  orderHighlightIssueIds,
+}: ContactSegmentProps) {
+  const hl = orderHighlightIssueIds;
+  const address = useSecondary ? state.addressSecondary || state.address : state.address;
+  const validAddress = hasValidAddress(address);
+  const orderRing = "rounded-xl ring-2 ring-red-600 ring-offset-2 ring-offset-white/10";
+  const mobileButtonOrder = state.mobileButtonOrder?.length
+    ? state.mobileButtonOrder
+    : (["map-preview", "get-directions"] as MobileButtonId[]);
+  const btnId = state.style.buttonStyleId;
+  const primary = lane1CtaPrimarySurface(btnId);
+  const directionsFill = lane1PrimaryAccentBackground(btnId);
+
+  return (
+    <motion.section
+      variants={itemVariants}
+      className={`business-card-print-contact relative z-20 flex flex-col gap-4 px-4 py-5 ${isResponsive ? "md:rounded-3xl md:border md:p-8" : "border-t"}`}
+      style={{
+        ...glassStyle,
+        borderColor: "var(--accent-secondary)",
+      }}
+    >
+      <div className={`space-y-4 text-sm ${isResponsive ? "md:text-base" : ""}`}>
+        <div className={`flex items-center gap-3 font-semibold ${hl?.has("phone") ? orderRing : ""} p-0.5`}>
+          <Phone className="h-4 w-4 shrink-0" style={{ color: "var(--accent)" }} aria-hidden />
+          <InlineEditable
+            value={state.phone}
+            onChange={(v) => patch({ phone: v })}
+            placeholder={useSecondary ? "ტელეფონი" : "Phone"}
+            editable={editable}
+            inputMode="tel"
+            className="min-w-0 flex-1"
+            style={{ color: "var(--accent)", ...bodyStyle }}
+          />
+        </div>
+
+        <div className={`flex items-start gap-3 ${hl?.has("email") ? orderRing : ""} p-0.5`}>
+          <Mail className="mt-1 h-4 w-4 shrink-0" style={{ color: "var(--accent)" }} aria-hidden />
+          <span className="min-w-0 flex-1 underline">
+            <InlineEditable
+              value={state.email}
+              onChange={(v) => patch({ email: v })}
+              placeholder={useSecondary ? "ელ-ფოსტა" : "Email"}
+              editable={editable}
+              inputMode="email"
+              className="block w-full"
+              style={bodyStyle}
+            />
+          </span>
+        </div>
+
+        <div
+          className={`flex items-start gap-3 ${
+            hl?.has("map-address") || hl?.has("directions-address") ? orderRing : ""
+          } p-0.5`}
+        >
+          <Map className="mt-1 h-4 w-4 shrink-0" style={{ color: "var(--accent)" }} aria-hidden />
+          <div className="min-w-0 flex-1" style={bodyStyle}>
+            <InlineEditable
+              value={useSecondary ? state.addressSecondary : state.address}
+              onChange={(v) => patch(useSecondary ? { addressSecondary: v } : { address: v })}
+              placeholder={useSecondary ? "მისამართი" : "Address"}
+              multiline
+              editable={editable}
+              className="block w-full"
+              style={bodyStyle}
+            />
+          </div>
+        </div>
+
+        <div className="pt-2">
+          <InlineEditable
+            value={useSecondary ? state.hoursSecondary : state.hours}
+            onChange={(v) => patch(useSecondary ? { hoursSecondary: v } : { hours: v })}
+            placeholder={useSecondary ? "სამუშაო საათები" : "Operating hours"}
+            editable={editable}
+            className="block w-full text-xs opacity-70"
+            style={bodyStyle}
+          />
+        </div>
+
+        {mobileButtonOrder.map((id) => {
+          if (id === "map-preview" && state.addGoogleMap && state.showMapPreview && validAddress) {
+            return (
+              <div key={id} className="overflow-hidden rounded-xl border border-[color:var(--accent-secondary)]/45 bg-black/10">
+                <iframe
+                  title="Location map preview"
+                  src={`https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`}
+                  className="h-40 w-full"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
+            );
+          }
+          if (id === "map-preview" && state.addGoogleMap && state.showMapPreview && !validAddress) {
+            return (
+              <p key={`${id}-hint`} className="text-xs opacity-75">
+                {MAP_ADDRESS_HELPER_TEXT}
+              </p>
+            );
+          }
+          if (id === "get-directions" && state.addGoogleMap && state.showGetDirectionsButton && validAddress) {
+            return (
+              <div key={id} className="pt-4">
+                <MagneticButton
+                  as="a"
+                  href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${lane1DirectionsClasses(btnId)} shadow-lg active:scale-95`}
+                  style={
+                    primary.filledAccent
+                      ? {
+                          ...ctaLabelStyle,
+                          background: directionsFill ?? "var(--accent)",
+                          color: state.style.ctaTextHex?.trim()
+                            ? "var(--text-cta)"
+                            : "var(--accent-contrast, #fff)",
+                        }
+                      : { ...ctaLabelStyle }
+                  }
+                >
+                  <Map className="h-4 w-4 opacity-70" />
+                  {useSecondary ? "მიიღეთ მიმართულებები" : "Get Directions"}
+                </MagneticButton>
+              </div>
+            );
+          }
+          return null;
+        })}
+      </div>
+    </motion.section>
+  );
+}

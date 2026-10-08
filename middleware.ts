@@ -2,8 +2,21 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getPublishedSlugByMappedHost } from "@/lib/db";
 
-const LOCALES = ["en"] as const;
+const LOCALES = ["en", "ka"] as const;
 const DEFAULT_LOCALE = "en";
+
+/**
+ * Public routes that intentionally live outside the locale prefix.
+ * Without this bypass the middleware redirects them to `/{locale}{path}`,
+ * which has no matching route and 404s.
+ */
+const UNLOCALIZED_PUBLIC_ROUTES = ["/onboarding", "/onboarding-brief", "/success"];
+
+function isUnlocalizedPublicRoute(pathname: string): boolean {
+  return UNLOCALIZED_PUBLIC_ROUTES.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`)
+  );
+}
 
 function bypassCustomHostRewrite(pathname: string): boolean {
   if (pathname.startsWith("/api/")) return true;
@@ -41,6 +54,10 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next();
     }
 
+    if (isUnlocalizedPublicRoute(pathname)) {
+      return NextResponse.next();
+    }
+
     if (!bypassCustomHostRewrite(pathname)) {
       const hostHeader = request.headers.get("x-forwarded-host") ?? request.headers.get("host") ?? "";
       if (hostHeader && !isPrimaryAppHost(hostHeader)) {
@@ -55,12 +72,6 @@ export async function middleware(request: NextRequest) {
           /* Turso env missing or DB error — fall through */
         }
       }
-    }
-
-    if (pathname.startsWith("/ka")) {
-      const url = new URL(request.url);
-      url.pathname = pathname.replace("/ka", "/en");
-      return NextResponse.redirect(url, 308);
     }
 
     if (pathname === "/" || pathname === "") {

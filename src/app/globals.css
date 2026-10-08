@@ -231,3 +231,115 @@ body {
     display: none;
   }
 }
+
+
+/* Genezisi V2: restrained first-impression motion only. Core layout and story remain complete without animation. */
+@keyframes v2-hero-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0) scale(0.992);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+.v2-hero-enter {
+  animation: v2-hero-enter 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.v2-hero-enter-delay {
+  animation-delay: 110ms;
+}
+
+.v2-hero-enter-late {
+  animation-delay: 220ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v2-hero-enter,
+  .v2-hero-enter-delay,
+  .v2-hero-enter-late {
+    animation: none !important;
+  }
+}
+
+
+/* Genezisi V2 editorial hardening. Scoped so legacy routes keep their existing visual system. */
+.relative:has(.v2-home) > .noise-overlay {
+  display: none;
+}
+
+.v2-home a:focus-visible,
+.v2-home button:focus-visible {
+  outline: 2px solid #a5f3fc;
+  outline-offset: 3px;
+}
+
+.locale-ka .v2-home h1,
+.locale-ka .v2-home h2,
+.locale-ka .v2-home h3 {
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
+
+@media (max-width: 767px) {
+  .locale-ka .v2-home h1,
+  .locale-ka .v2-home h2 {
+    letter-spacing: -0.025em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v2-home *,
+  .v2-home *::before,
+  .v2-home *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Mobile "System in Action": the step title sits next to its number, and
+   condenses as the next card slides over it — one element, so there is never a
+   duplicate title and the last card is never left with an empty header.
+
+   Driven by a view-timeline on the STACK, not on the cards: a sticky element's
+   own view progress freezes the moment it pins, which is exactly when the morph
+   has to run. Each card is given its own window in the stack's progress.
+
+   `transform` only — no per-frame reflow (a font-size morph would recompute
+   layout every frame on the phones this runs on).
+
+   Support (checked 2026-10): Chrome/Edge 115+, and Safari 26+ including iOS
+   (compositor-driven from 26.4). Firefox stable is the hold-out — the feature
+   is still behind the layout.css.scroll-driven-animations.enabled preference.
+   Without support the animation never runs, so every header simply shows its
+   full-size title. */
+@keyframes v2-title-morph {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0.58);
+  }
+}
+
+.v2-stack {
+  view-timeline-name: --v2-stack;
+  view-timeline-axis: block;
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .v2-title-lg {
+      transform-origin: left center;
+      animation: v2-title-morph linear both;
+      animation-timeline: --v2-stack;
+      animation-range-start: var(--v2-from);
+      animation-range-end: var(--v2-to);
+    }
+  }
+}
+
