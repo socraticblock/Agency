@@ -9,7 +9,8 @@ import { V2LabStage } from "./V2LabStage";
  * per-card cycle is ~14.7% of that range at any viewport height, and the morph
  * must finish just before the next card covers the title.
  *
- * The last card is never covered, so it gets no window and no header title.
+ * The last card is never covered, so it gets no window — its title simply stays
+ * at full size.
  */
 const MORPH_RANGES: ReadonlyArray<{ from: string; to: string }> = [
   { from: "15%", to: "36%" },
@@ -26,9 +27,9 @@ type StackCardStyle = CSSProperties & { [key: `--${string}`]: string };
  * Desktop: five tab controls driving one persistent interface stage.
  * Mobile: a sticky card stack — each step pins under the header and the next
  * slides up over it, so the five states are read one at a time by scrolling
- * alone. As a card is covered, its display title condenses into the small title
- * beside its number (see `globals.css`; a no-op on browsers without
- * scroll-driven animations).
+ * alone. The step title sits next to its number and condenses as the card is
+ * covered, so the peek strips read as an index of where you are (see
+ * `globals.css`; a no-op without scroll-driven animations).
  *
  * Pure `position: sticky` — no scroll-jacking, no autoplay, no carousel — and
  * fully server-rendered: only the desktop stage needs client state.
@@ -77,16 +78,10 @@ export function V2Lab({ copy }: { copy: V2Copy }) {
                     <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-cyan-100/40 bg-cyan-100/10 text-[10px] font-black text-cyan-100/85">
                       {index + 1}
                     </span>
-                    {range && (
-                      <h4 className="v2-title-sm truncate text-sm font-bold tracking-[-.01em] text-white">
-                        {step}
-                      </h4>
-                    )}
+                    <h3 className="v2-title-lg min-w-0 flex-1 truncate text-2xl font-black tracking-[-.03em] text-white">
+                      {step}
+                    </h3>
                   </div>
-
-                  <h3 className="v2-title-lg mt-4 text-2xl font-black tracking-[-.03em] text-white">
-                    {step}
-                  </h3>
 
                   <div className="mt-5">
                     <DemoState index={index} copy={copy} />
