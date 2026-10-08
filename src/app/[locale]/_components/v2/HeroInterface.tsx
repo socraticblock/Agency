@@ -14,28 +14,41 @@ function Bar({ className }: { className: string }) {
 
 function SystemRow({ label, active = false }: { label: string; active?: boolean }) {
   return (
-    <div className="flex items-center gap-3 rounded-[10px] border border-white/[.06] px-3 py-2.5">
+    <div
+      className={
+        "flex items-center gap-3 rounded-[10px] border px-3 py-2.5 " +
+        (active ? "border-cyan-100/35 bg-cyan-100/[.06]" : "border-white/[.1]")
+      }
+    >
       <span
         aria-hidden
         className={
-          "h-1.5 w-1.5 shrink-0 rounded-full " +
-          (active ? "bg-cyan-200 shadow-[0_0_10px_rgba(165,243,252,.7)]" : "bg-white/20")
+          "h-2 w-2 shrink-0 rounded-full " +
+          (active ? "bg-cyan-200 shadow-[0_0_12px_rgba(165,243,252,.8)]" : "bg-white/30")
         }
       />
       <div className="min-w-0 flex-1">
-        <p className="truncate text-[10px] font-extrabold uppercase tracking-[.14em] text-white/62">{label}</p>
+        <p
+          className={
+            "truncate text-[10px] font-extrabold uppercase tracking-[.14em] " +
+            (active ? "text-white" : "text-white/70")
+          }
+        >
+          {label}
+        </p>
         <div className="mt-2 space-y-1">
-          <Bar className="h-1 w-[70%] bg-white/[.08]" />
-          <Bar className="h-1 w-[46%] bg-white/[.06]" />
+          <Bar className="h-1 w-[70%] bg-white/18" />
+          <Bar className="h-1 w-[46%] bg-white/13" />
         </div>
       </div>
+      {active && <span aria-hidden className="mr-0.5 text-[11px] font-black text-cyan-100/80">→</span>}
     </div>
   );
 }
 
 function Frame({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
-    <div className={"rounded-[16px] border border-white/[.08] bg-[#0a141f] p-4 " + className}>
+    <div className={"rounded-[16px] border border-white/[.12] bg-[#0c1826] p-4 " + className}>
       {children}
     </div>
   );
@@ -52,58 +65,65 @@ export function HeroInterface() {
   return (
     <div
       aria-hidden
-      className="relative overflow-hidden rounded-[24px] border border-white/[.1] bg-[#071019] p-3 shadow-[0_30px_90px_rgba(0,0,0,.38)] sm:p-5"
+      className="relative overflow-hidden rounded-[24px] border border-white/[.14] bg-[#08131f] p-3 shadow-[0_30px_90px_rgba(0,0,0,.45)] sm:p-5"
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_86%_12%,rgba(165,243,252,.07),transparent_30%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_86%_12%,rgba(165,243,252,.09),transparent_32%)]" />
 
       <div className="relative flex items-center justify-between px-1 pb-4">
-        <span className="font-space text-[11px] font-black uppercase tracking-[.28em] text-white/85">
+        <span className="font-space text-[11px] font-black uppercase tracking-[.28em] text-white">
           Genezisi
         </span>
-        <span className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[.2em] text-cyan-100/60">
-          <span className="h-1.5 w-1.5 rounded-full bg-cyan-200 shadow-[0_0_10px_rgba(165,243,252,.75)]" />
+        <span className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[.2em] text-cyan-100/75">
+          <span className="h-1.5 w-1.5 rounded-full bg-cyan-200 shadow-[0_0_10px_rgba(165,243,252,.85)]" />
           Live
         </span>
       </div>
 
       <div className="relative grid gap-3 sm:grid-cols-[1.06fr_.94fr]">
+        {/* A composed editorial page: nav strip, headline, body, media, actions. */}
         <Frame>
           <div className="flex items-center gap-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-white/15" />
-            <span className="h-1.5 w-1.5 rounded-full bg-white/15" />
-            <span className="h-1.5 w-1.5 rounded-full bg-white/15" />
-            <Bar className="ml-2 h-1.5 w-16 bg-white/10" />
+            <span className="h-2 w-2 rounded-full bg-white/30" />
+            <span className="h-2 w-2 rounded-full bg-white/30" />
+            <span className="h-2 w-2 rounded-full bg-white/30" />
+            <Bar className="ml-2 h-2 w-14 bg-white/25" />
+            <Bar className="ml-auto h-2 w-8 bg-white/15" />
           </div>
 
-          <div className="mt-5 space-y-2.5">
-            <Bar className="h-3 w-[86%] bg-white/[.16]" />
-            <Bar className="h-3 w-[58%] bg-white/[.11]" />
+          <div className="mt-6 space-y-2.5">
+            <Bar className="h-3.5 w-[88%] bg-white/32" />
+            <Bar className="h-3.5 w-[58%] bg-white/24" />
           </div>
 
-          <div className="mt-4 space-y-1.5">
-            <Bar className="h-1.5 w-full bg-white/[.07]" />
-            <Bar className="h-1.5 w-[74%] bg-white/[.07]" />
+          <div className="mt-4 space-y-2">
+            <Bar className="h-1.5 w-full bg-white/16" />
+            <Bar className="h-1.5 w-[74%] bg-white/13" />
           </div>
 
-          <div className="mt-5 h-16 rounded-[10px] border border-white/[.07] bg-[radial-gradient(circle_at_28%_28%,rgba(165,243,252,.12),transparent_62%)]" />
+          <div className="mt-5 h-16 rounded-[10px] border border-white/[.14] bg-[radial-gradient(circle_at_28%_28%,rgba(165,243,252,.2),transparent_64%)]" />
 
           <div className="mt-4 flex items-center gap-2">
-            <span className="h-6 w-20 rounded-full bg-white/85" />
-            <span className="h-6 w-14 rounded-full border border-white/[.14]" />
+            <span className="flex h-7 w-20 items-center justify-center rounded-full bg-white/90 text-[11px] font-black leading-none text-[#071019]">
+              →
+            </span>
+            <span className="flex h-7 w-16 items-center justify-center gap-1 rounded-full border border-white/20">
+              <span className="h-1 w-4 rounded-full bg-white/35" />
+              <span className="h-1 w-3 rounded-full bg-white/25" />
+            </span>
           </div>
         </Frame>
 
         <Frame className="flex flex-col">
-          <span className="text-[9px] font-black uppercase tracking-[.18em] text-white/40">System</span>
+          <span className="text-[9px] font-black uppercase tracking-[.18em] text-white/55">System</span>
           <div className="mt-4 space-y-2">
             <SystemRow label="Website" />
             <SystemRow label="Systems" active />
             <SystemRow label="Workflow" />
           </div>
           <div className="mt-auto flex items-center gap-3 pt-4">
-            <span className="h-px flex-1 bg-white/[.09]" />
+            <span className="h-px flex-1 bg-white/15" />
             <Signal quiet />
-            <span className="text-[9px] font-black uppercase tracking-[.18em] text-white/38">Ready</span>
+            <span className="text-[9px] font-black uppercase tracking-[.18em] text-white/55">Ready</span>
           </div>
         </Frame>
       </div>
