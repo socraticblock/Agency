@@ -1,13 +1,5 @@
 import type { V2Copy } from "./hero.copy";
 
-/** Single restrained cyan signal used across the V2 homepage. */
-export function Signal({ quiet = false }: { quiet?: boolean }) {
-  const glow = quiet
-    ? "h-2 w-2 shadow-[0_0_12px_rgba(34,211,238,.45)]"
-    : "h-3 w-3 shadow-[0_0_14px_rgba(34,211,238,.95),0_0_40px_rgba(34,211,238,.45)]";
-  return <span aria-hidden className={"inline-block rounded-full bg-cyan-200 " + glow} />;
-}
-
 /**
  * The hero's right-hand plate.
  *
