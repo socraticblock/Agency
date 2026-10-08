@@ -312,8 +312,11 @@ body {
    `transform` only — no per-frame reflow (a font-size morph would recompute
    layout every frame on the phones this runs on).
 
-   Progressive enhancement: without scroll-driven animations (iOS Safari today)
-   the animation never runs, so every header simply shows its full-size title. */
+   Support (checked 2026-10): Chrome/Edge 115+, and Safari 26+ including iOS
+   (compositor-driven from 26.4). Firefox stable is the hold-out — the feature
+   is still behind the layout.css.scroll-driven-animations.enabled preference.
+   Without support the animation never runs, so every header simply shows its
+   full-size title. */
 @keyframes v2-title-morph {
   from {
     transform: scale(1);
