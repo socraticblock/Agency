@@ -301,7 +301,7 @@ const NL: V2Copy = {
   legalCategory: "Juridisch / Professioneel",
   productCategory: "Product / Crypto",
   wellnessCategory: "Wellness / Studio",
-  altTk: "TK Counsel — voorbeeld van de website",
+  altTk: "TK Counsel — voorbeeld van de startpagina",
   altFranken: "Frankencoin Desk — voorbeeld van de productinterface",
   altPilates: "Her House Pilates — studiofoto uit het prototype",
 
