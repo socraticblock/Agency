@@ -56,9 +56,16 @@ Legacy regression: `/en/pricing` still serves its own canonical, its pricing OG 
 
 ## Content language
 
-`/nl` ships `<div id="main-content" lang="nl-BE">` and `<main lang="nl-BE">`.
-Root `<html lang="en">` remains (known limitation, see decisions doc §7.1). `LangSetter`
-sets `document.documentElement.lang = "nl-BE"` after hydration.
+`/nl` ships `<html lang="nl-BE">`, `<div id="main-content" lang="nl-BE">` and `<main lang="nl-BE">`
+in the **initial server response** (no JavaScript required). `/ka` ships `<html lang="ka-GE">` and
+`/en` ships `<html lang="en">`. `LangSetter` keeps the document language in step after hydration.
+`/nl/unknown` returns 404 with `<html lang="en">`, which matches the English not-found shell it
+actually serves.
+
+The document language is forwarded from middleware as `x-doc-lang` and rendered by the root
+layout. Measured build cost of that choice: `/_not-found`, `/onboarding`, `/onboarding-brief` and
+`/success` become server-rendered on demand instead of static; `/[locale]/blog/[slug]` remains
+SSG.
 
 ## WhatsApp
 

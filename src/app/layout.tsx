@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { headers } from "next/headers";
 import "./globals.css";
 import {
   inter,
@@ -20,11 +21,14 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://genezisi.com"),
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  // Set by middleware from the first path segment, so the *initial* server HTML
+  // carries the correct document language instead of always "en".
+  const lang = (await headers()).get("x-doc-lang") ?? "en";
   return (
-    <html lang="en">
+    <html lang={lang}>
       <body
         className={`${inter.variable} ${notoGeorgian.variable} ${spaceGrotesk.variable} ${playfairDisplay.variable} ${merriweather.variable} ${sourceSans3.variable} font-sans antialiased bg-background text-foreground`}
       >

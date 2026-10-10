@@ -77,17 +77,50 @@ function isPrimaryAppHost(host: string): boolean {
   return false;
 }
 
+/** Request header carrying the document language for the initial server HTML. */
+const DOC_LANG_HEADER = "x-doc-lang";
+
+/**
+ * The document language implied by the requested first path segment — what the
+ * *initial* (pre-hydration) `<html lang>` should say. The `[locale]` layout and
+ * `LangSetter` keep refining the DOM afterwards.
+ */
+function documentLanguage(pathname: string): string {
+  const segment = pathname.split("/")[1];
+  if (segment === NL_HOME_LOCALE) return "nl-BE";
+  if (segment === "ka") return "ka-GE";
+  return DEFAULT_LOCALE;
+}
+
+/** `NextResponse.next()` that forwards the document language to the root layout. */
+function forwardWithDocLang(request: NextRequest): NextResponse {
+  const headers = new Headers(request.headers);
+  headers.set(DOC_LANG_HEADER, documentLanguage(request.nextUrl.pathname));
+  return NextResponse.next({ request: { headers } });
+}
+
+/** `NextResponse.rewrite()` that forwards the document language as well. */
+function rewriteWithDocLang(
+  request: NextRequest,
+  url: URL,
+  lang: string = documentLanguage(request.nextUrl.pathname),
+): NextResponse {
+  const headers = new Headers(request.headers);
+  headers.set(DOC_LANG_HEADER, lang);
+  return NextResponse.rewrite(url, { request: { headers } });
+}
+
 export async function middleware(request: NextRequest) {
   try {
     const pathname = request.nextUrl.pathname;
     const origin = request.nextUrl.origin;
 
     if (pathname.startsWith("/api/")) {
-      return NextResponse.next();
+      return forwardWithDocLang(request);
     }
 
     if (isUnlocalizedPublicRoute(pathname)) {
-      return NextResponse.next();
+      return forwardWithDocLang(request);
     }
 
     if (!bypassCustomHostRewrite(pathname)) {
@@ -98,7 +131,7 @@ export async function middleware(request: NextRequest) {
           if (slug) {
             const url = request.nextUrl.clone();
             url.pathname = `/${DEFAULT_LOCALE}/c/${slug}`;
-            return NextResponse.rewrite(url);
+            return rewriteWithDocLang(request, url);
           }
         } catch {
           /* Turso env missing or DB error — fall through */
@@ -122,7 +155,7 @@ export async function middleware(request: NextRequest) {
     const nlPath = pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
 
     if (nlPath === `/${NL_HOME_LOCALE}`) {
-      return NextResponse.next();
+      return forwardWithDocLang(request);
     }
 
     if (nlPath.startsWith(`/${NL_HOME_LOCALE}/`)) {
@@ -137,7 +170,9 @@ export async function middleware(request: NextRequest) {
 
       const url = request.nextUrl.clone();
       url.pathname = `/${DEFAULT_LOCALE}/${NOT_FOUND_PROBE_PATH}`;
-      return NextResponse.rewrite(url);
+      // The shell it lands on is the app's English not-found page, so the
+      // document language must match that content, not the requested Dutch URL.
+      return rewriteWithDocLang(request, url, DEFAULT_LOCALE);
     }
 
     const locale = getLocale(pathname);
@@ -147,7 +182,7 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(url, 308);
     }
 
-    return NextResponse.next();
+    return forwardWithDocLang(request);
   } catch {
     const url = request.nextUrl.origin + `/${DEFAULT_LOCALE}`;
     return NextResponse.redirect(url, 308);
