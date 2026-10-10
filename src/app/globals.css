@@ -349,11 +349,19 @@ body {
   min-height: 54svh;
 }
 
-/* Five sticky cards need more vertical room than a short phone screen has.
-   Rather than let the last step sit under the next card (or clip a translated
-   title), drop the stack into normal document flow: every step stays readable,
-   scrolling stays native, and no title is truncated. */
-@media (max-width: 1023px) and (max-height: 700px) {
+/* Five sticky cards cannot fit in a genuinely short viewport — that means a
+   phone held in landscape, or a short landscape window. There, drop the stack
+   into normal document flow: every step stays readable, scrolling stays
+   native, and no title is truncated.
+
+   PORTRAIT IS DELIBERATELY EXCLUDED. The sticky card stack is the intended
+   mobile interaction, and a portrait phone has the height to carry it. The
+   un-scoped `max-height: 700px` version of this query also caught portrait
+   phones (and any viewport ≤700px tall), silently replacing the stack with a
+   plain list — read by the owner as "the stacking was removed". Keep the
+   orientation guard: it restores the stack on every portrait phone while
+   still degrading gracefully when the device is rotated. */
+@media (max-width: 1023px) and (max-height: 700px) and (orientation: landscape) {
   .v2-stack > li {
     position: static;
     top: auto;
