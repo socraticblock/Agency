@@ -2,6 +2,15 @@
 
 Status: implementation prototype under review on PR #4. Production `main` is not replaced.
 
+> **Update — 2026-10-10:** the V2 homepage is merged to `main`
+> (`879b5b7e9ea5c16681b56b5e176f127830692918`) and is what `genezisi.com/en` serves. The
+> desktop GSAP/ScrollTrigger hero described below was removed before that merge: the hero is
+> deliberately **text-only** now, and the "System in Action" section keeps five demo states
+> (receive, understand, act, human review, next step). A Belgian-Dutch version of the same
+> homepage is being added at `/nl` on `feat/genezisi-belgian-dutch-homepage` — see
+> [../internationalization/](../internationalization/). The sections below are the original
+> 2026-10-04 build direction and are kept for history.
+
 ## North star
 
 **Impress → Prove → Contact**
