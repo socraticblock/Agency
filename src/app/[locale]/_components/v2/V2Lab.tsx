@@ -64,21 +64,20 @@ export function V2Lab({ copy }: { copy: V2Copy }) {
           {steps.map((step, index) => {
             const range = MORPH_RANGES[index];
             const cardStyle: StackCardStyle = {
-              minHeight: "54svh",
               ...(range ? { "--v2-from": range.from, "--v2-to": range.to } : {}),
             };
 
             return (
               <li key={step} className="sticky" style={{ top: `calc(4.5rem + ${index * 2.5}rem)` }}>
                 <div
-                  className="mb-4 flex min-h-[420px] flex-col rounded-[26px] border border-white/[.13] bg-[#0a141f] p-5 shadow-[0_-18px_50px_rgba(0,0,0,.55)]"
+                  className="v2-stack-card mb-4 flex flex-col rounded-[26px] border border-white/[.13] bg-[#0a141f] p-5 shadow-[0_-18px_50px_rgba(0,0,0,.55)]"
                   style={cardStyle}
                 >
                   <div className="flex items-center gap-3">
                     <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-cyan-100/40 bg-cyan-100/10 text-[10px] font-black text-cyan-100/85">
                       {index + 1}
                     </span>
-                    <h3 className="v2-title-lg min-w-0 flex-1 truncate text-2xl font-black tracking-[-.03em] text-white">
+                    <h3 className="v2-title-lg min-w-0 flex-1 text-2xl font-black leading-tight tracking-[-.03em] text-white">
                       {step}
                     </h3>
                   </div>

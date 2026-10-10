@@ -343,3 +343,24 @@ body {
   }
 }
 
+/* Mobile stack card. The floor lives here, not inline, so the short-screen
+   fallback below can actually lower it. */
+.v2-stack-card {
+  min-height: 54svh;
+}
+
+/* Five sticky cards need more vertical room than a short phone screen has.
+   Rather than let the last step sit under the next card (or clip a translated
+   title), drop the stack into normal document flow: every step stays readable,
+   scrolling stays native, and no title is truncated. */
+@media (max-width: 1023px) and (max-height: 700px) {
+  .v2-stack > li {
+    position: static;
+    top: auto;
+  }
+
+  .v2-stack-card {
+    min-height: 0;
+  }
+}
+

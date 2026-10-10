@@ -69,6 +69,16 @@ Before merge, review:
 - Selected Work image loading and crops;
 - final visual comparison against the supplied before/after recordings.
 
+## Belgian Dutch (`/nl`) — 2026-10-10
+
+The V2 homepage is being extended to Belgian Dutch on
+`feat/genezisi-belgian-dutch-homepage` (base `879b5b7e9ea5…`). The same rendered/device gate
+above applies to `/nl`, plus the language switcher and the Dutch line breaks. Local route,
+metadata and content evidence is in
+[`../internationalization/nl-be-test-report.md`](../internationalization/nl-be-test-report.md);
+the owner-run visual checklist is at the end of that file. No preview or production deployment
+has been created.
+
 The current environment cannot open the private Vercel preview, so rendered judgment remains an owner/device gate.
 
 ## Gate conclusion

@@ -1,8 +1,13 @@
-import type { Locale } from "@/lib/i18n";
+import type { HomeLocale } from "@/lib/home-i18n";
 
 export type SystemDemoRow = { label: string; value: string };
 
-/** Copy for the five distinct states of the "System in Action" demo. */
+/**
+ * Copy for the five distinct states of the "System in Action" demo.
+ *
+ * The demo sender uses the IANA-reserved `example.com` domain, so the page never
+ * displays a real third-party mailbox the studio has no relationship with.
+ */
 export type SystemDemoCopy = {
   enquiryLabel: string;
   fromLabel: string;
@@ -35,6 +40,9 @@ export type V2Copy = {
   navWork: string;
   navCapabilities: string;
   navAbout: string;
+  /** Accessible names for the two navigation landmarks (never hard-coded in JSX). */
+  primaryNavLabel: string;
+  languageNavLabel: string;
   // hero
   heroDesktop: string;
   heroMobile: string;
@@ -53,6 +61,10 @@ export type V2Copy = {
   legalCategory: string;
   productCategory: string;
   wellnessCategory: string;
+  /** Image alt text: describes what each preview actually shows. */
+  altTk: string;
+  altFranken: string;
+  altPilates: string;
   // what I do
   capabilitiesEyebrow: string;
   websiteTitle: string;
@@ -86,6 +98,8 @@ const EN: V2Copy = {
   navWork: "Work",
   navCapabilities: "What I do",
   navAbout: "About",
+  primaryNavLabel: "Primary navigation",
+  languageNavLabel: "Language",
 
   heroDesktop: "Your website\nis only the\nbeginning.",
   heroMobile: "Your website is\nonly the beginning.",
@@ -104,6 +118,9 @@ const EN: V2Copy = {
   legalCategory: "Legal / Professional",
   productCategory: "Product / Crypto",
   wellnessCategory: "Wellness / Studio",
+  altTk: "TK Counsel — website hero preview",
+  altFranken: "Frankencoin Desk — product interface preview",
+  altPilates: "Her House Pilates — studio photography from the prototype",
 
   capabilitiesEyebrow: "What I do",
   websiteTitle: "Websites",
@@ -124,7 +141,7 @@ const EN: V2Copy = {
   demo: {
     enquiryLabel: "New website enquiry",
     fromLabel: "From",
-    fromValue: "sarah.lin@greenwayapp.com",
+    fromValue: "sarah@example.com",
     subjectLabel: "Subject",
     subjectValue: "Consultation request",
     messageLabel: "Message",
@@ -166,6 +183,8 @@ const KA: V2Copy = {
   navWork: "ნამუშევრები",
   navCapabilities: "რას ვაკეთებ",
   navAbout: "ჩვენ შესახებ",
+  primaryNavLabel: "მთავარი ნავიგაცია",
+  languageNavLabel: "ენა",
 
   heroDesktop: "თქვენი ვებსაიტი\nმხოლოდ\nდასაწყისია.",
   heroMobile: "თქვენი ვებსაიტი\nმხოლოდ დასაწყისია.",
@@ -184,6 +203,9 @@ const KA: V2Copy = {
   legalCategory: "იურიდიული / პროფესიული",
   productCategory: "პროდუქტი / კრიპტო",
   wellnessCategory: "ველნესი / სტუდია",
+  altTk: "TK Counsel-ის ვებსაიტის წინასწარი ხედი",
+  altFranken: "Frankencoin Desk-ის პროდუქტის ინტერფეისის წინასწარი ხედი",
+  altPilates: "Her House Pilates-ის პროტოტიპის წინასწარი ხედი",
 
   capabilitiesEyebrow: "რას ვაკეთებ",
   websiteTitle: "ვებსაიტები",
@@ -204,7 +226,7 @@ const KA: V2Copy = {
   demo: {
     enquiryLabel: "ახალი მოთხოვნა ვებსაიტზე",
     fromLabel: "გამომგზავნი",
-    fromValue: "sarah.lin@greenwayapp.com",
+    fromValue: "sarah@example.com",
     subjectLabel: "თემა",
     subjectValue: "კონსულტაციის მოთხოვნა",
     messageLabel: "შეტყობინება",
@@ -239,6 +261,126 @@ const KA: V2Copy = {
   startWhatsApp: "დაიწყეთ WhatsApp-ზე",
 };
 
-export function getV2Copy(locale: Locale): V2Copy {
-  return locale === "ka" ? KA : EN;
+/**
+ * Belgian Dutch.
+ *
+ * Register: `je` / `jouw`, calm and practical, written for a Flemish
+ * small-business owner reading on a phone. Transcreated rather than translated
+ * word for word, so the short strings stay short on narrow screens.
+ *
+ * Editorial status: candidate copy supplied with the implementation brief and
+ * lightly polished here. NOT native-certified — see
+ * `docs/internationalization/nl-be-implementation-decisions.md`.
+ *
+ * No claim is made about a Belgian office, Dutch-language calls, prices or
+ * clients: the studio is in Georgia and works remotely.
+ */
+const NL: V2Copy = {
+  services: "Websites · AI · Automatisering",
+  message: "Stuur me een bericht",
+  seeWork: "Bekijk mijn werk",
+  navWork: "Werk",
+  navCapabilities: "Wat ik doe",
+  navAbout: "Over mij",
+  primaryNavLabel: "Hoofdnavigatie",
+  languageNavLabel: "Taalkeuze",
+
+  heroDesktop: "Je website is\nnog maar het\nbegin.",
+  heroMobile: "Je website is\nnog maar het begin.",
+  heroSub:
+    "Genezisi bouwt onderscheidende websites, praktische AI-systemen en automatiseringen die je bedrijf beter laten werken.",
+
+  work: "Geselecteerd werk",
+  proof: "Bewijs, geen beloftes.",
+  workIntro: "Websites, producten en prototypes gebouwd voor echte zakelijke behoeften.",
+  viewWebsite: "Bekijk het project",
+  tkStatus: "Live website",
+  frankStatus: "Live product",
+  pilatesStatus: "Prototype",
+  tkBody:
+    "Een website voor professionele dienstverlening, ontworpen met aandacht voor duidelijkheid, vertrouwen en een sterke eerste indruk.",
+  frankBody:
+    "Een uitgebreide productinterface waarin vertrouwen, duidelijke informatie en gebruiksgemak centraal staan.",
+  pilatesBody:
+    "Een wellnessconcept met lesrooster, boekingsproces en een ontwerp dat eerst voor mobiel is gemaakt.",
+  legalCategory: "Juridisch / Professioneel",
+  productCategory: "Product / Crypto",
+  wellnessCategory: "Wellness / Studio",
+  altTk: "TK Counsel — voorbeeld van de startpagina",
+  altFranken: "Frankencoin Desk — voorbeeld van de productinterface",
+  altPilates: "Her House Pilates — studiofoto uit het prototype",
+
+  capabilitiesEyebrow: "Wat ik doe",
+  websiteTitle: "Websites",
+  websiteBody:
+    "Onderscheidende, snelle websites die een sterke eerste indruk maken en interesse omzetten in nieuwe kansen.",
+  aiTitle: "AI-systemen",
+  aiBody:
+    "Praktische systemen die vragen begrijpen, relevante bedrijfsinformatie gebruiken en het werk vooruithelpen.",
+  automationTitle: "Automatisering",
+  automationBody:
+    "Praktische werkprocessen die je tools verbinden, terugkerende stappen wegnemen en de controle bij mensen laten.",
+
+  systemEyebrow: "Het systeem in actie",
+  labTitle: "Bekijk wat het systeem echt doet.",
+  lab: "Genezisi Lab · Interne demonstratie",
+  receiveStep: "De aanvraag ontvangen",
+  understandStep: "De vraag begrijpen",
+  actionStep: "De nuttige stap zetten",
+  exceptionStep: "Uitzonderingen naar een persoon",
+  outcomeStep: "Een duidelijke volgende stap",
+  demo: {
+    enquiryLabel: "Nieuwe websiteaanvraag",
+    fromLabel: "Van",
+    fromValue: "sarah@example.com",
+    subjectLabel: "Onderwerp",
+    subjectValue: "Vraag om een kennismakingsgesprek",
+    messageLabel: "Bericht",
+    messageValue:
+      "Hallo, ik wil graag bespreken of jullie een nieuwe website voor ons bedrijf kunnen bouwen. Is er volgende week tijd voor een gesprek?",
+    intentLabel: "De aanvraag begrepen",
+    intentRows: [
+      { label: "Type aanvraag", value: "Gesprek over een website" },
+      { label: "Bedrijf", value: "Greenway" },
+      { label: "Wanneer", value: "Volgende week" },
+      { label: "Volgende stap", value: "Beschikbaarheid bekijken" },
+    ],
+    actionLabel: "Beschikbaarheid bekeken",
+    actionTime: "Dinsdag · 14.00 uur",
+    actionStatus: "Beschikbaar",
+    actionDraft: "Conceptantwoord klaar",
+    reviewLabel: "Controle nodig",
+    reviewTitle: "Buiten de gewone opdracht",
+    reviewBody:
+      "De aanvraag gaat over iets wat het systeem niet zelfstandig mag beantwoorden. Daarom krijgt de eigenaar alle informatie om zelf te beslissen.",
+    resolvedLabel: "Afgerond",
+    resolvedOwnerTitle: "Eigenaar op de hoogte",
+    resolvedOwnerBody:
+      "De aanvraag, het gewenste moment en een voorstel voor het antwoord staan overzichtelijk bij elkaar.",
+    resolvedCustomerTitle: "Duidelijke volgende stap",
+    resolvedCustomerBody:
+      "De klant krijgt een bevestiging en een helder vervolg, zonder onnodig heen-en-weer mailen.",
+  },
+
+  founderEyebrow: "Rechtstreeks met de oprichter",
+  founderTitle: "Je werkt met de persoon die het zelf bouwt.",
+  founderBody:
+    "Genezisi wordt geleid door de oprichter. Van het eerste gesprek tot de lancering werk je rechtstreeks met degene die je project ontwerpt en ontwikkelt.",
+  founderBodySecond:
+    "Duidelijke communicatie, praktisch advies en oplossingen afgestemd op wat je bedrijf echt nodig heeft.",
+  startWhatsApp: "Stuur een bericht via WhatsApp",
+};
+
+/**
+ * Exhaustive by construction: adding a homepage language without providing its
+ * copy is a type error, never a silent English fallback.
+ */
+const COPY = {
+  en: EN,
+  ka: KA,
+  nl: NL,
+} satisfies Record<HomeLocale, V2Copy>;
+
+export function getV2Copy(locale: HomeLocale): V2Copy {
+  return COPY[locale];
 }
