@@ -77,6 +77,12 @@ WhatsApp: the same `WHATSAPP_INTAKE` constant, encoded once; the Dutch prefill i
 
 No claim is made about a Belgian office, Dutch-language calls, prices, or Belgian clients.
 
+**Demo sender address (roadmap §11 semantic correction).** The staged demo previously showed
+`sarah.lin@greenwayapp.com` — a plausible-looking real domain the studio has no relationship
+with. It now shows the IANA-reserved `sarah@example.com` in all three locales, pinned by
+`tests/home-i18n/content.test.mjs`. Nothing is ever mailed to it and the block stays labelled an
+internal demonstration.
+
 ## 6. Mobile / accessibility
 
 - `truncate` removed from the mobile stage titles; they now wrap (`leading-tight`).

@@ -2,7 +2,12 @@ import type { HomeLocale } from "@/lib/home-i18n";
 
 export type SystemDemoRow = { label: string; value: string };
 
-/** Copy for the five distinct states of the "System in Action" demo. */
+/**
+ * Copy for the five distinct states of the "System in Action" demo.
+ *
+ * The demo sender uses the IANA-reserved `example.com` domain, so the page never
+ * displays a real third-party mailbox the studio has no relationship with.
+ */
 export type SystemDemoCopy = {
   enquiryLabel: string;
   fromLabel: string;
@@ -136,7 +141,7 @@ const EN: V2Copy = {
   demo: {
     enquiryLabel: "New website enquiry",
     fromLabel: "From",
-    fromValue: "sarah.lin@greenwayapp.com",
+    fromValue: "sarah@example.com",
     subjectLabel: "Subject",
     subjectValue: "Consultation request",
     messageLabel: "Message",
@@ -221,7 +226,7 @@ const KA: V2Copy = {
   demo: {
     enquiryLabel: "ახალი მოთხოვნა ვებსაიტზე",
     fromLabel: "გამომგზავნი",
-    fromValue: "sarah.lin@greenwayapp.com",
+    fromValue: "sarah@example.com",
     subjectLabel: "თემა",
     subjectValue: "კონსულტაციის მოთხოვნა",
     messageLabel: "შეტყობინება",
@@ -327,7 +332,7 @@ const NL: V2Copy = {
   demo: {
     enquiryLabel: "Nieuwe websiteaanvraag",
     fromLabel: "Van",
-    fromValue: "sarah.lin@greenwayapp.com",
+    fromValue: "sarah@example.com",
     subjectLabel: "Onderwerp",
     subjectValue: "Vraag om een kennismakingsgesprek",
     messageLabel: "Bericht",

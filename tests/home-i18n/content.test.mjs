@@ -174,7 +174,7 @@ test("C20 the WhatsApp prefill is one string per locale and mentions no scope li
   // that the Dutch demo message is still an internal simulation value and the
   // demo mailbox is the same fictional one in all three languages.
   for (const locale of LOCALES) {
-    assert.equal(COPY[locale].demo.fromValue, "sarah.lin@greenwayapp.com", `${locale} demo sender drifted`);
+    assert.equal(COPY[locale].demo.fromValue, "sarah@example.com", `${locale} demo sender drifted`);
   }
 });
 
