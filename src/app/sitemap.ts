@@ -41,6 +41,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
+  // Dutch exists for the homepage only. Advertising `/nl/pricing` and friends
+  // would point crawlers at URLs that deliberately redirect to English.
+  const dutch: MetadataRoute.Sitemap = [
+    {
+      url: `${root}/nl`,
+      changeFrequency: "weekly" as const,
+      priority: 0.95,
+    },
+  ];
+
   const global = ["/onboarding", "/onboarding-brief", "/success"].map(
     (path, i) => ({
       url: `${root}${path}`,
@@ -49,5 +59,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })
   );
 
-  return [...localized, ...georgian, ...global];
+  return [...localized, ...georgian, ...dutch, ...global];
 }

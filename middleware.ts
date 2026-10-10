@@ -5,6 +5,38 @@ import { getPublishedSlugByMappedHost } from "@/lib/db";
 const LOCALES = ["en", "ka"] as const;
 const DEFAULT_LOCALE = "en";
 
+/** The one extra homepage language. It is deliberately NOT in `LOCALES`: see below. */
+const NL_HOME_LOCALE = "nl";
+
+/**
+ * Legacy route families that really exist under a locale prefix
+ * (`/{locale}/<family>/...`). A Dutch request for one of these is redirected
+ * (temporarily) to its English page, so a visitor never reads English behind a
+ * Dutch address. Anything else under `/nl` is a 404 — never an invented page.
+ */
+const NL_LEGACY_ROUTE_FAMILIES = new Set([
+  "apply",
+  "blog",
+  "booking-websites",
+  "c",
+  "enterprise",
+  "online-stores",
+  "partner",
+  "pricing",
+  "service-websites",
+  "start",
+  "stop-renting",
+  "websites",
+  "work",
+]);
+
+/**
+ * Where an unknown Dutch path is rewritten to. It intentionally matches no
+ * route, so the visitor gets the app's own 404 while the requested URL stays in
+ * the address bar.
+ */
+const NOT_FOUND_PROBE_PATH = "_nl-unmapped";
+
 /**
  * Public routes that intentionally live outside the locale prefix.
  * Without this bypass the middleware redirects them to `/{locale}{path}`,
@@ -78,6 +110,34 @@ export async function middleware(request: NextRequest) {
       const url = new URL(origin);
       url.pathname = `/${DEFAULT_LOCALE}`;
       return NextResponse.redirect(url, 308);
+    }
+
+    /*
+      Dutch is a homepage-only language. `/nl` itself is the Dutch homepage;
+      `/nl/<known legacy family>` redirects to the English page; everything else
+      under `/nl` is a real 404 rather than English content wearing a Dutch URL.
+      This runs after the mapped-host rewrite and the root redirect, so custom
+      domains and `/` behave exactly as before.
+    */
+    const nlPath = pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
+
+    if (nlPath === `/${NL_HOME_LOCALE}`) {
+      return NextResponse.next();
+    }
+
+    if (nlPath.startsWith(`/${NL_HOME_LOCALE}/`)) {
+      const rest = nlPath.slice(NL_HOME_LOCALE.length + 1);
+      const family = rest.split("/")[1] ?? "";
+
+      if (NL_LEGACY_ROUTE_FAMILIES.has(family)) {
+        const url = request.nextUrl.clone();
+        url.pathname = `/${DEFAULT_LOCALE}${rest}`;
+        return NextResponse.redirect(url, 307);
+      }
+
+      const url = request.nextUrl.clone();
+      url.pathname = `/${DEFAULT_LOCALE}/${NOT_FOUND_PROBE_PATH}`;
+      return NextResponse.rewrite(url);
     }
 
     const locale = getLocale(pathname);

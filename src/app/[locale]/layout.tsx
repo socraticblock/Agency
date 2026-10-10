@@ -1,6 +1,6 @@
-import type { Metadata, Viewport } from "next";
-import { createLocalBusinessSeo } from "@/lib/seo";
+import type { Viewport } from "next";
 import type { Locale } from "@/lib/i18n";
+import { HOME_HTML_LANG, isHomeLocale } from "@/lib/home-i18n";
 import { LangSetter } from "@/components/providers/LangSetter";
 
 export const viewport: Viewport = {
@@ -9,49 +9,29 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
-const SITE_NAME = "Genezisi";
-const SITE_DESCRIPTION =
-  "Genezisi builds distinctive websites, AI systems and automation that make the business behind them work better.";
+/**
+ * Document language for this subtree.
+ *
+ * EN/KA keep the values they have always had here. `nl` is the homepage-only
+ * addition, and it needs the region subtag: the same word is spelled
+ * differently in Belgium and the Netherlands.
+ */
+function contentLanguage(locale: string | undefined): string {
+  if (locale && isHomeLocale(locale) && locale === "nl") return HOME_HTML_LANG.nl;
+  return normalizeLegacyLocale(locale);
+}
 
-function normalizeLocale(locale: string | undefined): Locale {
+function normalizeLegacyLocale(locale: string | undefined): Locale {
   if (locale && (locale === "en" || locale === "ka")) return locale;
   return "en";
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
-  const { locale } = await params;
-  const lang = normalizeLocale(locale);
-  const { metadata } = createLocalBusinessSeo({
-    name: SITE_NAME,
-    description: SITE_DESCRIPTION,
-    locale: lang,
-    path: "/",
-    jobTitle: "Websites, AI & Automation",
-    accentColor: "#a5f3fc",
-    theme: "dark",
-    ogTagline: "Your website is only the beginning.",
-    ogSubline:
-      "Founder-led websites, AI systems and automation built around real business needs.",
-    ogServices: "Websites, AI systems, automation",
-    ogCta: "Start a conversation",
-    ogAlt:
-      "Genezisi — websites, AI systems and automation",
-  });
-  
-  return {
-    ...metadata,
-    appleWebApp: {
-      title: SITE_NAME,
-      statusBarStyle: "black-translucent",
-      capable: true,
-    },
-  };
-}
-
+/**
+ * Sitewide legacy metadata used to live here. It moved into the `(site)` route
+ * group so that the V2 homepage can own its metadata outright — otherwise the
+ * homepage inherited a second, contradictory canonical and a second
+ * organization graph. Nothing about legacy pages changed.
+ */
 export default async function LocaleLayout({
   children,
   params,
@@ -60,22 +40,12 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const lang = normalizeLocale(locale);
-  const { jsonLd } = createLocalBusinessSeo({
-    name: SITE_NAME,
-    description: SITE_DESCRIPTION,
-    locale: lang,
-    path: "/",
-  });
+  const lang = contentLanguage(locale);
 
   return (
     <>
       <LangSetter lang={lang} />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <div id="main-content" lang={lang} className={`locale-${lang} outline-none`} tabIndex={-1}>
+      <div id="main-content" lang={lang} className={`locale-${lang}`} tabIndex={-1}>
         {children}
       </div>
     </>
