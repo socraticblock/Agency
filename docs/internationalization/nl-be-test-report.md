@@ -71,8 +71,36 @@ All three CTAs on `/nl` (header, hero, founder) resolve to the same URL:
 | Suite | Command | Result |
 |---|---|---|
 | Content / translation (§24) | `node --test tests/home-i18n/content.test.mjs` | **14 tests, 14 pass** |
-| Static a11y + no-JS + payload parity (§15 subset, §16, §23 S21, §18.1) | `BASE_URL=… node --test tests/home-i18n/assets-a11y.test.mjs` | see below |
-| Mapped custom host (§8.2, R26/R27) | `npm run build && node --test tests/home-i18n/mapped-host.test.mjs` | see below |
+| Static a11y + no-JS + payload parity (§15 subset, §16, §23 S21, §18.1) | `BASE_URL=… node --test tests/home-i18n/assets-a11y.test.mjs` | **10 tests, 10 pass** |
+| Mapped custom host (§8.2, R26/R27) | `npm run build && node --test tests/home-i18n/mapped-host.test.mjs` | **5 tests, 5 pass** |
+
+**71 tests total** (42 route/head + 14 content + 10 a11y/asset + 5 mapped-host), all passing against
+a served production build.
+
+What the additional suites actually establish:
+
+- **Accessibility (static subset of §15):** exactly one `H1` per locale with no heading-level
+  jumps; header/main/footer landmarks present with a single `main` and a working skip link;
+  `aria-current="page"` on the current language in both header and footer; every `<img>` has
+  non-empty alt text; every inline icon is `aria-hidden`; no duplicate element ids; every
+  external link carries `noopener noreferrer`; all three WhatsApp CTAs per locale are identical
+  and single-encoded. This is a real subset, **not** a substitute for keyboard, screen-reader,
+  zoom or device testing.
+- **No-JS (§23 S21):** with scripting removed the Dutch page still contains the hero, work
+  section, capabilities, the five-stage demo, the founder block, the contact link and both
+  navigation labels.
+- **Third-party isolation (§16, §18.1):** every script, stylesheet and image on all three
+  homepages is same-origin. No analytics bootstrap, no remote font request, no third-party host
+  of any kind appears in the served HTML.
+- **Payload parity (§16):** `/nl` ships exactly the same script and stylesheet sets as `/en`
+  (and so does `/ka`), i.e. the Dutch homepage adds no JavaScript and no font payload. Measured
+  server-rendered weight: EN 105,377 B, KA 133,129 B, NL 107,148 B (~12 ms TTFB locally). These
+  are local measurements on one machine, **not** field Core Web Vitals.
+- **Mapped custom host (§8.2 precedence, §22 R26/R27):** with a canned Turso/Hrana stub and a
+  real production server, a published customer domain (`client-demo.example`) is rewritten to
+  `/en/c/demo-card` and is **not** handed the Dutch homepage on `/nl`; the NL legacy redirect
+  cannot pre-empt that rewrite; an unmapped host never leaks another customer's slug; and the
+  primary host keeps 308 `/` → `/en`, 200 `/nl`, 307 `/nl/pricing` → `/en/pricing`.
 
 The content suite loads the real `V2Copy` object straight out of `hero.copy.ts` (Node 26 strips
 the types; the module's only import is type-only) instead of scraping the rendered page, so
@@ -83,10 +111,6 @@ internal demonstration, truthful and distinct portfolio statuses (prototype neve
 launched), no price/currency in any locale, alt text naming its project, the informal `je`
 register with no formal drift, no Belgian-presence/call/client claim, and authored hero line
 breaks that stay within the approved English width.
-
-The mapped-host suite starts a canned Turso (Hrana) stub and a real production server, so the
-`Critical` §8.2 ordering claim — customer domain rewrite happens before Dutch routing — is
-tested rather than asserted from reading the code.
 
 ## Verified image content (roadmap §11.2)
 
