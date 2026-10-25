@@ -72,6 +72,31 @@ const workItems = [
     previewStats: ["Identity", "Clarity", "Action"],
     dark: true,
   },
+  {
+    // Socraticblock — the studio's own founder site. It is listed here for the
+    // same reason the others are: it is a real, live site built to a high
+    // standard, and it is the clearest example of the work itself.
+    //
+    // `embeddable: false` with a screenshot rather than a live iframe because
+    // socraticblock.com sends `X-Frame-Options: DENY` and a CSP with
+    // `frame-ancestors 'none'`. That is a deliberate choice by that site, not a
+    // defect, so the preview is a captured screenshot instead — which is also
+    // how the two non-embeddable entries above are handled.
+    title: "Socraticblock",
+    type: "Portfolio / Systems",
+    url: "https://www.socraticblock.com/",
+    embeddable: false,
+    screenshot: "/work-previews/socraticblock.png",
+    description:
+      "Personal portfolio and engineering notes site, built around a systems view: complex problems, deliberate structure, and a clear next action.",
+    palette: "from-slate-950 via-indigo-950 to-sky-900",
+    previewHeadline: "Complex problems. Thoughtful solutions.",
+    previewSubline: "A portfolio and a notebook from the person who built Genezisi.",
+    previewCta: "Read the notes",
+    previewNav: ["Work", "Notes", "Experience"],
+    previewStats: ["Systems", "Clarity", "Delivery"],
+    dark: true,
+  },
 ];
 
 function BrowserPreview({ item }: { item: (typeof workItems)[number] }) {
