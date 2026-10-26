@@ -352,6 +352,55 @@ export function V2Hero({ copy }: { copy: V2Copy }) {
             </div>
           </div>
         </div>
+
+        {/*
+          SCREEN-READER TRANSCRIPT OF THE STORY.
+
+          The desktop story is a scroll-driven sequence, and every beat is
+          animated with GSAP `autoAlpha: 0` — which sets visibility: hidden
+          and therefore removes the panel from the accessibility tree. That is
+          correct for a purely decorative element, but these panels carry the
+          NARRATIVE: without this block a screen-reader user on a desktop
+          reaches the page and finds one heading and nothing else. The mobile
+          branch does not have this problem (its panels are ordinary in-flow
+          sections), which is why the gap only shows on wide viewports.
+
+          So the whole story is also published here, visually hidden but
+          readable, in the same order the scroll tells it.
+
+          It sits AFTER the sticky stage on purpose: the h1 lives inside the
+          stage, so putting the transcript first would put an h2 before the
+          h1 in the accessibility tree.
+        */}
+        <div className="sr-only">
+          <h2>{copy.someoneAsks}</h2>
+          <p>{copy.newEnquiry}</p>
+          <p>{copy.customerMessage}</p>
+
+          <h3>{copy.requestUnderstood}</h3>
+          <p>{copy.parsedRequest}</p>
+          <p>{copy.requestNextStep}</p>
+
+          <h3>{copy.availability}</h3>
+          <p>{copy.availabilityTime}</p>
+          <ul>
+            <li>{copy.requestRecorded}</li>
+            <li>{copy.timeAvailable}</li>
+            <li>{copy.confirmationPrepared}</li>
+          </ul>
+
+          <h3>{copy.usefulAction}</h3>
+          <p>{copy.requestUseful}</p>
+
+          <h3>{copy.needsReview}</h3>
+          <p>{copy.owner}</p>
+          <p>{copy.ownerBody}</p>
+
+          <h3>{copy.signalResolved}</h3>
+          <p>{copy.surfaceUseful}</p>
+          <p>{copy.underneathUseful}</p>
+          <p>{copy.resolvedOutcome}</p>
+        </div>
       </div>
 
       <div
