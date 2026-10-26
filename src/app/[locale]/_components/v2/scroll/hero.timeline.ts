@@ -1,6 +1,7 @@
 import { gsap } from "gsap";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { scrubProgress } from "./ScrubVideo";
 
 let registered = false;
 
@@ -73,6 +74,16 @@ export function createDesktopSignalTimeline(root: HTMLElement | null) {
             invalidateOnRefresh: true,
           },
         });
+
+        // The scroll-scrubbed clip is driven by THIS timeline, not by a second
+        // scroll listener. One clock, one easing curve: the footage and the
+        // panels can never drift apart, because they are literally the same
+        // tween.
+        //
+        // It runs across the whole story (0 -> 100) so the clip's own arc —
+        // signal travels the route, stations light up, browser frame closes —
+        // spans the same journey the panels are telling.
+        timeline.to(scrubProgress, { value: 1, duration: 100, ease: "none" }, 0);
 
         // Immediate acknowledgement: visible response begins with the first scroll input.
         timeline.to(
