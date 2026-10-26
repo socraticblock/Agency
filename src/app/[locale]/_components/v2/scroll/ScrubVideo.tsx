@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
 
 /**
  * Scroll-scrubbed video layer.
@@ -43,10 +43,40 @@ type Props = {
   className?: string;
 };
 
+/**
+ * The layer only exists on the desktop branch.
+ *
+ * Its parent is `hidden lg:block`, so on a phone the layer is never painted —
+ * but a mounted <video preload="auto"> still DOWNLOADS. Measured: a 1.28 MB
+ * clip fetched on mobile for a layer that phone never shows. Gating the mount
+ * itself (not just the visibility) is what actually saves the bytes.
+ */
+const DESKTOP_QUERY = "(min-width: 1024px)";
+
+function subscribeDesktop(onStoreChange: () => void) {
+  const media = window.matchMedia(DESKTOP_QUERY);
+  media.addEventListener("change", onStoreChange);
+  return () => media.removeEventListener("change", onStoreChange);
+}
+
+function getDesktopSnapshot() {
+  return window.matchMedia(DESKTOP_QUERY).matches;
+}
+
+function getDesktopServerSnapshot() {
+  return false;
+}
+
 export function ScrubVideo({ src, poster, className }: Props) {
   const rootRef = useRef<HTMLDivElement | null>(null);
+  const isDesktop = useSyncExternalStore(
+    subscribeDesktop,
+    getDesktopSnapshot,
+    getDesktopServerSnapshot,
+  );
 
   useEffect(() => {
+    if (!isDesktop) return;
     const root = rootRef.current;
     if (!root) return;
     const video = root.querySelector<HTMLVideoElement>("video");
@@ -188,25 +218,31 @@ export function ScrubVideo({ src, poster, className }: Props) {
       window.removeEventListener("resize", resize);
       frames = [];
     };
-  }, [src]);
+  }, [src, isDesktop]);
+
+  if (!isDesktop) return null;
 
   return (
     <div ref={rootRef} aria-hidden className={`scrubbg ${className ?? ""}`}>
       {/*
-        The poster is the LCP candidate for this layer, so it is preloaded.
-        It is served UNOPTIMIZED: the file is already a 15 KB hand-compressed
-        JPEG at exactly the right size, and the site's next/image quality
-        allowlist (75 only) would otherwise reject a custom quality or push
-        the browser into requesting upscaled 3840px variants of a 1200px
-        source. `fill` keeps it a direct child of .scrubbg, which the CSS
-        crossfade rules depend on.
+        The poster is the FIRST PAINT of this layer, so it must be a plain
+        file with no optimizer round-trip: it is already a 15 KB hand-compressed
+        JPEG at the right size, and the site's next/image quality allowlist
+        (75 only) would otherwise reject a custom quality or push the browser
+        into requesting upscaled 3840px variants of a 1200px source.
+
+        Deliberately NOT `priority`: the page's LCP element is the headline
+        (measured 372ms desktop / 196ms mobile), not this layer, and the
+        layer lives inside a `hidden lg:block` container — preloading it would
+        spend mobile bandwidth on an image a phone never shows.
+        `fill` keeps it a direct child of .scrubbg, which the CSS crossfade
+        rules depend on.
       */}
       <Image
         className="scrubbg__poster"
         src={poster}
         alt=""
         fill
-        priority
         sizes="100vw"
         unoptimized
       />
