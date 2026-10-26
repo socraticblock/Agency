@@ -35,6 +35,7 @@ import os
 import subprocess
 import sys
 import time
+import urllib.error
 import urllib.request
 
 BASE = "https://api.minimax.io"
@@ -48,8 +49,28 @@ def api(method: str, url: str, key: str, payload: dict | None = None) -> dict:
     req = urllib.request.Request(url, data=data, method=method)
     req.add_header("Authorization", f"Bearer {key}")
     req.add_header("Content-Type", "application/json")
-    with urllib.request.urlopen(req, timeout=120) as r:
-        return json.loads(r.read().decode())
+    try:
+        with urllib.request.urlopen(req, timeout=120) as r:
+            return json.loads(r.read().decode())
+    except urllib.error.HTTPError as e:
+        body = e.read().decode(errors="replace")
+        try:
+            err = json.loads(body)["error"]
+            msg = err.get("message", body)
+            code = err.get("http_code", e.code)
+        except Exception:
+            msg, code = body, e.code
+        if e.code == 402:
+            sys.exit(
+                f"MiniMax rejected the request: HTTP {code}\n"
+                f"  {msg}\n"
+                "\nThe video product is out of quota on this account (the chat\n"
+                "product keeps working — it is a separate plan). Fix it by buying\n"
+                "credits and enabling auto consumption, or use the Hailuo web\n"
+                "product, or fall back to the local renderer:\n"
+                "  node scripts/media/render-scrub-video.js --out public/media/hero-scrub.mp4"
+            )
+        sys.exit(f"MiniMax request failed: HTTP {code}\n  {msg}")
 
 
 def create(key: str, model: str, prompt: str, duration: int, resolution: str, ratio: str) -> str:
