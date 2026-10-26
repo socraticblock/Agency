@@ -64,13 +64,18 @@ const TMP = path.resolve(__dirname, '.frames');
   }
   await browser.close();
 
-  // Poster: a frame from ~70% where the route is lit but the frame is closing.
+  // Poster: a frame from ~72% where the route is lit but the frame is closing.
+  // Compressed here, not left as a raw frame capture — an uncompressed
+  // 1440x810 poster is ~500 KB and this image is the layer's first paint, so
+  // it is on the critical path. 1200px wide at q=6 lands at ~15 KB.
   const posterFrame = Math.round(FRAMES * 0.72);
+  const posterPath = OUT.replace(/\.mp4$/, '-poster.jpg');
   fs.mkdirSync(path.dirname(path.resolve(OUT)), { recursive: true });
-  fs.copyFileSync(
-    path.join(TMP, `f${String(posterFrame).padStart(4, '0')}.png`),
-    OUT.replace(/\.mp4$/, '-poster.jpg'),
-  );
+  execFileSync('ffmpeg', [
+    '-y', '-i', path.join(TMP, `f${String(posterFrame).padStart(4, '0')}.png`),
+    '-vf', 'scale=1200:-2', '-q:v', '6',
+    posterPath,
+  ], { stdio: ['ignore', 'ignore', 'inherit'] });
 
   execFileSync('ffmpeg', [
     '-y', '-framerate', String(FPS), '-i', path.join(TMP, 'f%04d.png'),
