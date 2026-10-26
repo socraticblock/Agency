@@ -65,6 +65,14 @@ export type V2Copy = {
   altTk: string;
   altFranken: string;
   altPilates: string;
+  sakartveloStatus: string;
+  sakartveloBody: string;
+  sakartveloCategory: string;
+  socraticblockStatus: string;
+  socraticblockBody: string;
+  socraticblockCategory: string;
+  altSakartvelo: string;
+  altSocraticblock: string;
   // what I do
   capabilitiesEyebrow: string;
   websiteTitle: string;
@@ -121,6 +129,16 @@ const EN: V2Copy = {
   altTk: "TK Counsel — website hero preview",
   altFranken: "Frankencoin Desk — product interface preview",
   altPilates: "Her House Pilates — studio photography from the prototype",
+  sakartveloStatus: "Live website",
+  sakartveloBody:
+    "A public-facing civic site with a strong identity, clear messaging and an action-focused layout.",
+  sakartveloCategory: "Civic / Community",
+  socraticblockStatus: "Live site",
+  socraticblockBody:
+    "The founder's own portfolio and engineering notes, built around a systems view: complex problems, deliberate structure, a clear next action.",
+  socraticblockCategory: "Portfolio / Systems",
+  altSakartvelo: "Sakartvelo Defenders — website hero preview",
+  altSocraticblock: "Socraticblock — portfolio homepage preview",
 
   capabilitiesEyebrow: "What I do",
   websiteTitle: "Websites",
@@ -206,6 +224,16 @@ const KA: V2Copy = {
   altTk: "TK Counsel-ის ვებსაიტის წინასწარი ხედი",
   altFranken: "Frankencoin Desk-ის პროდუქტის ინტერფეისის წინასწარი ხედი",
   altPilates: "Her House Pilates-ის პროტოტიპის წინასწარი ხედი",
+  sakartveloStatus: "ცოცხალი ვებსაიტი",
+  sakartveloBody:
+    "საზოგადოებრივი ვებსაიტი ძლიერი იდენტობით, გასაგები მესიგნალით და მოქმედებაზე ფოკუსირებული განლაგებით.",
+  sakartveloCategory: "საზოგადოებრივი / საზოგადოება",
+  socraticblockStatus: "ცოცხალი საიტი",
+  socraticblockBody:
+    "დამსაწყის საკუთარი პორტფოლიო და საინჟინერო შენიშვნების საიტი, რომელიც აშენებულია სისტემური ხედვით: რთული ამოცამები, გადაწყვალებული სტრუქტურა, ნათელი შემდეგი ნაბიჯი.",
+  socraticblockCategory: "პორტფოლიო / სისტემები",
+  altSakartvelo: "Sakartvelo Defenders — ვებსაიტის წინასწარი ხედი",
+  altSocraticblock: "Socraticblock — პორტფოლიო მთავარი გვერდის წინასწარი ხედი",
 
   capabilitiesEyebrow: "რას ვაკეთებ",
   websiteTitle: "ვებსაიტები",
@@ -309,6 +337,16 @@ const NL: V2Copy = {
   altTk: "TK Counsel — voorbeeld van de startpagina",
   altFranken: "Frankencoin Desk — voorbeeld van de productinterface",
   altPilates: "Her House Pilates — studiofoto uit het prototype",
+  sakartveloStatus: "Live website",
+  sakartveloBody:
+    "Een publieke website met een sterke identiteit, heldere communicatie en een handelinggerichte opbouw.",
+  sakartveloCategory: "Maatschappelijk / Community",
+  socraticblockStatus: "Live site",
+  socraticblockBody:
+    "Het eigen portfolio en de technische notities van de oprichter, gebouwd vanuit een systeemvisie: complexe problemen, bewuste structuur, een heldere volgende stap.",
+  socraticblockCategory: "Portfolio / Systemen",
+  altSakartvelo: "Sakartvelo Defenders — voorbeeld van de startpagina",
+  altSocraticblock: "Socraticblock — voorbeeld van de portfolio-startpagina",
 
   capabilitiesEyebrow: "Wat ik doe",
   websiteTitle: "Websites",

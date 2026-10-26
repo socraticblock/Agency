@@ -5,6 +5,11 @@ import type { V2Copy } from "./hero.copy";
 /**
  * Project identity and destinations are shared across languages; only the
  * headings, statuses, descriptions and alt text are localised.
+ *
+ * All five live projects are listed. Sakartvelo Defenders and Socraticblock
+ * were already shipped as previews and already listed on /work — they were
+ * simply missing from the homepage, where "Proof, not promises" claimed five
+ * pieces of proof and showed three.
  */
 const PROJECTS = [
   {
@@ -22,11 +27,21 @@ const PROJECTS = [
     href: "https://her-house-pilates.vercel.app/",
     image: "/work-previews/her-house-pilates.webp",
   },
+  {
+    name: "Sakartvelo Defenders",
+    href: "https://sakartvelo-defenders.vercel.app/",
+    image: "/work-previews/sakartvelo-defenders.png",
+  },
+  {
+    name: "Socraticblock",
+    href: "https://www.socraticblock.com/",
+    image: "/work-previews/socraticblock.png",
+  },
 ] as const;
 
 export function SelectedWork({ copy }: { copy: V2Copy }) {
- const meta=[{status:copy.tkStatus,body:copy.tkBody,category:copy.legalCategory,alt:copy.altTk},{status:copy.frankStatus,body:copy.frankBody,category:copy.productCategory,alt:copy.altFranken},{status:copy.pilatesStatus,body:copy.pilatesBody,category:copy.wellnessCategory,alt:copy.altPilates}];
- return <section id="work" className="scroll-mt-16 bg-[#f0ece5] px-5 py-20 text-[#101114] sm:px-8 lg:py-28"><div className="mx-auto max-w-[92rem]"><p className="text-[11px] font-extrabold uppercase tracking-[.2em] text-black/52">{copy.work}</p><div className="mt-4 flex flex-col gap-5 border-b border-black/12 pb-10 lg:flex-row lg:items-end lg:justify-between"><h2 className="max-w-[10ch] text-[clamp(3rem,5vw,5.5rem)] font-black leading-[.9] tracking-[-.055em]">{copy.proof}</h2><p className="max-w-xl text-base leading-7 text-black/58">{copy.workIntro}</p></div><div className="mt-10 grid gap-7 lg:grid-cols-3 lg:gap-8">
+ const meta=[{status:copy.tkStatus,body:copy.tkBody,category:copy.legalCategory,alt:copy.altTk},{status:copy.frankStatus,body:copy.frankBody,category:copy.productCategory,alt:copy.altFranken},{status:copy.pilatesStatus,body:copy.pilatesBody,category:copy.wellnessCategory,alt:copy.altPilates},{status:copy.sakartveloStatus,body:copy.sakartveloBody,category:copy.sakartveloCategory,alt:copy.altSakartvelo},{status:copy.socraticblockStatus,body:copy.socraticblockBody,category:copy.socraticblockCategory,alt:copy.altSocraticblock}];
+ return <section id="work" className="scroll-mt-16 bg-[#f0ece5] px-5 py-20 text-[#101114] sm:px-8 lg:py-28"><div className="mx-auto max-w-[92rem]"><p className="text-[11px] font-extrabold uppercase tracking-[.2em] text-black/52">{copy.work}</p><div className="mt-4 flex flex-col gap-5 border-b border-black/12 pb-10 lg:flex-row lg:items-end lg:justify-between"><h2 className="max-w-[10ch] text-[clamp(3rem,5vw,5.5rem)] font-black leading-[.9] tracking-[-.055em]">{copy.proof}</h2><p className="max-w-xl text-base leading-7 text-black/58">{copy.workIntro}</p></div><div className="mt-10 grid gap-7 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
  {PROJECTS.map((p,i)=><article key={p.name}><a href={p.href} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-4 lg:block"><div className="relative aspect-[16/10] w-[38%] shrink-0 overflow-hidden rounded-[16px] bg-[#0a0e18] lg:w-full lg:rounded-[20px]"><Image src={p.image} alt={meta[i].alt} fill sizes="(max-width: 1023px) 40vw, 33vw" className="object-cover object-top transition-transform duration-300 group-hover:scale-[1.015]"/></div><div className="min-w-0 lg:mt-5"><ProjectText name={p.name} status={meta[i].status} category={meta[i].category} body={meta[i].body} link={copy.viewWebsite}/></div></a></article>)}
  </div></div></section>;
 }

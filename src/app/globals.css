@@ -20,10 +20,27 @@
   --font-space: var(--font-space), var(--font-noto-georgian), system-ui, sans-serif;
 }
 
+/*
+ * WHY THIS IS NOT `font-family: var(--font-sans)`
+ *
+ * `next/font` puts `--font-inter` and `--font-noto-georgian` on <body>.
+ * Tailwind's `@theme` variables are emitted on `:root` (<html>) — an ANCESTOR
+ * of <body>. A custom property declared on <html> cannot read a variable
+ * declared on <body>, so `var(--font-inter)` was invalid there and the whole
+ * `font-family` declaration was dropped at computed-value time. Every element
+ * then inherited the browser default (Segoe UI on Windows, DejaVu Sans on
+ * Linux) instead of Inter: 110 KB of Inter was downloaded and used for nothing,
+ * and the headline was set in a fallback face on every OS.
+ *
+ * The `font-sans` UTILITY class on <body> was always correct — it inlines the
+ * same stack — but the unlayered `body { font-family: ... }` rule below
+ * outranked it. Both now name `--font-inter` directly, which is defined on the
+ * element that uses it.
+ */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans);
+  font-family: var(--font-inter), var(--font-noto-georgian), system-ui, sans-serif;
 }
 
 @layer base {
@@ -257,10 +274,86 @@ body {
   animation-delay: 220ms;
 }
 
+/*
+ * Blur-rise entrance.
+ *
+ * A plain fade-up reads as a template; the blur is what separates "premium"
+ * from "average". Per-element so the hero arrives in reading order —
+ * eyebrow, then headline lines, then sub, then the CTA row — instead of one
+ * 620ms blob carrying the whole viewport.
+ *
+ * Blur is applied to the HEADLINE ONLY: `filter: blur()` on a 100px+ glyph run
+ * is expensive to composite, so the paragraph and buttons use a plain rise.
+ * Delays follow the MotionSites choreography (80-200ms between siblings, the
+ * whole sequence landing by ~1.5s).
+ *
+ * The REST STATE IS VISIBLE: elements are hidden only through
+ * `animation-fill-mode: both`, so a failed script or a blocked animation
+ * leaves the page readable rather than blank.
+ */
+@keyframes v2-blur-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0);
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    filter: blur(0);
+  }
+}
+
+@keyframes v2-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.v2-rise {
+  animation: v2-rise 780ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.v2-blur-rise {
+  animation: v2-blur-rise 950ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Reading order: eyebrow -> headline -> sub -> CTA row. */
+.v2-hero-eyebrow {
+  animation: v2-rise 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0ms;
+}
+
+.v2-hero-headline {
+  animation: v2-blur-rise 950ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 90ms;
+}
+
+.v2-hero-sub {
+  animation: v2-rise 780ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 280ms;
+}
+
+.v2-hero-actions {
+  animation: v2-rise 780ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 400ms;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .v2-hero-enter,
   .v2-hero-enter-delay,
-  .v2-hero-enter-late {
+  .v2-hero-enter-late,
+  .v2-rise,
+  .v2-blur-rise,
+  .v2-hero-eyebrow,
+  .v2-hero-headline,
+  .v2-hero-sub,
+  .v2-hero-actions {
     animation: none !important;
   }
 }
