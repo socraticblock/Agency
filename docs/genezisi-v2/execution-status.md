@@ -130,6 +130,14 @@ with the footage (intro → surface → enquiry → system → action → owner 
 drawing 0.00 → 0.46 → 0.86 → 1.00, review branch 0 → 1) · mobile issues zero media requests ·
 AX tree contains the full transcript in `h1 → h2 → h3` order.
 
+**The pipeline has its own entry point:** [`scripts/media/README.md`](../../scripts/media/README.md)
+— how to produce each layer (Blender vs Remotion vs MiniMax), how to run each
+verification, how to record a video, and the five traps this pipeline has
+already paid for (1-based filenames, `has-frames` on draw not load, `"use
+client"` exports being client references to a server component, rebuilding
+`.next` under a running server, and `networkidle` never settling on a page
+that keeps prefetching).
+
 **Both layers verified** — `verify-scrub-browser.mjs` PASS on each (9 distinct canvas states
 across 9 scroll positions, `has-frames` set at every step, zero page errors) and
 `probe-layer-requests.mjs` PASS on each (the default fetches `scrub-frames/f001..f096`, the flat
