@@ -98,13 +98,23 @@ The V2 homepage in `main` is text-led and static. This branch is the **motion** 
   cache of 90 decoded canvases at 960×540 to make the scrub smooth — ~178 MB of decoded RGBA,
   built by seeking 90 times at load. With frames there is no seek, no decode and nothing to
   drift; memory is a 16-frame LRU (~33 MB) instead of the clip length.
-- The frames are **rendered in 3D, not drawn in 2D**: a Blender Cycles scene — a routed path
-  across a blueprint grid with volumetric mist, a moving camera, depth of field and a signal that
-  lights each station as it arrives. Rendered on the RTX 3090 (CUDA): 96 frames at 1920×1080 /
-  48 samples in 15m44s. `scripts/media/build-scrub-frames.sh` reproduces the sequence end to end
-  (render → WebP → poster). `scripts/media/generate-scroll-video.py` remains committed as the
-  MiniMax path for when the account has video quota (it returned 402 — the video product is a
-  separate plan from chat).
+- **Two layers ship side by side**, both frame sequences, both behind the DOM panels at the same
+  opacity. `?layer=flat` on the preview route switches between them.
+  - `3d` (default) — a **Blender Cycles** scene: a routed path across a blueprint grid with
+    volumetric mist, a moving camera, depth of field and a signal that lights each station as it
+    arrives. Reads as a *place*. Rendered on the RTX 3090 (CUDA): 96 frames at 1920×1080 /
+    48 samples in **15m44s**. 1.9 MB.
+  - `flat` — a **Remotion** composition in the site's own vector language, with no type (it sits
+    behind the DOM headline, so type in it would double up). Reads as a *system diagram*.
+    120 frames, 812 KB, and it renders in **22 seconds** — the cheap one to iterate on.
+- `scripts/media/build-scrub-frames.sh` reproduces the 3D sequence end to end (render → WebP →
+  poster). The Remotion compositions live in the `product-demo-video` repo (`abad621`,
+  `e73d278`) and render with
+  `npx remotion render ScrubLayer out/layer --sequence --image-sequence-pattern "f[frame].[ext]"`
+  — note Remotion substitutes `[frame]`/`[ext]`, not printf-style `%04d`, which it writes out
+  literally. `scripts/media/generate-scroll-video.py` remains committed as the MiniMax path for
+  when the account has video quota (it returned 402 — the video product is a separate plan from
+  chat).
 - Homepage craft pass on top: one grotesk display type scale, staggered hero entrance, a
   five-project work grid, and the Sakartvelo + Socraticblock portfolio entries.
 - The desktop story is now published to the accessibility tree (GSAP `autoAlpha: 0` had dropped
@@ -120,9 +130,23 @@ with the footage (intro → surface → enquiry → system → action → owner 
 drawing 0.00 → 0.46 → 0.86 → 1.00, review branch 0 → 1) · mobile issues zero media requests ·
 AX tree contains the full transcript in `h1 → h2 → h3` order.
 
-**Fixed during verification:** the client requested `f000..f095` while the files are
-`f001..f096` (every fetch 404'd), and the layer's `has-frames` class was set on frame *load*
-rather than on frame *draw* (a black flash over the poster). Both fixed in `63e9742`.
+**Both layers verified** — `verify-scrub-browser.mjs` PASS on each (9 distinct canvas states
+across 9 scroll positions, `has-frames` set at every step, zero page errors) and
+`probe-layer-requests.mjs` PASS on each (the default fetches `scrub-frames/f001..f096`, the flat
+layer fetches `scrub-frames-flat/f001..f120`).
+
+**Four real bugs found by measuring instead of assuming:**
+1. The client requested `f000..f095` while the files are `f001..f096` — every fetch 404'd.
+2. `has-frames` was set on frame *load* rather than on frame *draw* — a black flash over the poster.
+3. **The layer switch did not switch.** The specs lived in a `"use client"` module, so the server
+   component importing them got a client-reference proxy, not the object — `SCRUB_LAYERS["3d"]`
+   was `undefined`, the server passed `layer={undefined}`, and the hero fell back to its default
+   for *both* URLs. The specs now live in `scrub.layers.ts`, which has no `"use client"`.
+4. **Luminance cannot tell the two layers apart** — both canvases read within 0.3 of each other, so
+   a brightness comparison would have "confirmed" a switch that was not happening. The probe
+   records the *requested URLs* instead, which are unambiguous.
+5. The flat layer's first render was too dim (canvas luminance 5.8 vs the 3D layer's 38; a vision
+   pass called it "slightly too subdued to read as an active motion system"). Brightened to 17.3.
 
 **Not done:** no production deploy, `main` untouched. `vercel.json` gates Git deployments to
 `main` and `preview-*`, so this branch triggers no Vercel build. Rendered/device acceptance on
