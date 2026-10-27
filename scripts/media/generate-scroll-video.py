@@ -1,11 +1,22 @@
 #!/usr/bin/env python3
 """
-Generate a MiniMax H3 video for the Genezisi scroll experience.
+Generate a MiniMax H3 clip for the Genezisi scroll experience.
 
-Why this script exists
-----------------------
-The scroll-scrubbed hero needs clips that survive being scrubbed frame by
-frame (see references/techniques/video-and-media.md, technique 7). That means:
+Where this sits in the pipeline
+-------------------------------
+The scroll-scrubbed hero ships FRAMES, not a video: the frame index is
+arithmetic on scroll progress, so there is no seek, no decode and no drift.
+The frames are the master asset and are produced by
+`scripts/media/build-scrub-frames.sh` (Blender -> PNG -> WebP).
+
+This script is the OTHER source: a generated clip, when the account has
+video quota. A text-to-video model cannot render legible interface, which is
+the one thing this studio sells, so a generated clip is atmosphere only —
+it works as a source for the frames the same way Blender does, and it is
+converted to frames by the build script rather than shipped as a video.
+
+If you DO want a video artifact from the generated clip (social, reel), it
+must survive being scrubbed frame by frame:
   - short GOPs, so every seek lands on a real keyframe boundary
   - a stable first frame, so the poster and the scrub start agree
   - one continuous shot with no cuts, because a cut mid-scrub reads as a glitch
@@ -27,6 +38,10 @@ Usage
 Cost: MiniMax-H3 = $0.08/s at 768P, $0.13/s at 2K. A 10s 768P clip = $0.80.
 Quota: the account allows 3 generations per day — generate one, review the
 frames, THEN spend the next.
+
+Status on this account: the video product returned HTTP 402
+(insufficient_balance_error) — the chat product is a separate plan and
+keeps working. The local Blender renderer is the working path today.
 """
 
 import argparse

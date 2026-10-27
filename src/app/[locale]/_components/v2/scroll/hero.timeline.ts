@@ -1,7 +1,7 @@
 import { gsap } from "gsap";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { scrubProgress } from "./ScrubVideo";
+import { scrubProgress } from "./ScrubFrames";
 
 let registered = false;
 

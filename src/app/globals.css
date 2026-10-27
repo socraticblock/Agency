@@ -345,12 +345,11 @@ body {
 }
 
 /*
- * Scroll-scrubbed video layer (technique 7 of the MotionSites video recipes).
+ * Scroll-scrubbed frame layer.
  *
- * Layer order is poster -> video -> canvas, each crossfading over 500ms:
- * the poster paints immediately (it is the LCP candidate), the video takes
- * over once it has data, the canvas takes over once the frame cache is built.
- * Nothing ever flashes empty.
+ * Layer order is poster -> canvas, crossfading over 500ms: the poster paints
+ * immediately (it is the LCP candidate) and the canvas takes over once the
+ * first frame has decoded. Nothing ever flashes empty.
  *
  * The whole layer sits at 0.55. The footage carries motion and atmosphere;
  * the panels above carry the meaning, and white type plus the cyan signal
@@ -380,16 +379,7 @@ body {
   opacity: 1;
 }
 
-.scrubbg__video,
 .scrubbg__canvas {
-  opacity: 0;
-}
-
-.scrubbg.has-video .scrubbg__video {
-  opacity: 0.55;
-}
-
-.scrubbg.has-video .scrubbg__poster {
   opacity: 0;
 }
 
@@ -397,7 +387,7 @@ body {
   opacity: 0.55;
 }
 
-.scrubbg.has-frames .scrubbg__video {
+.scrubbg.has-frames .scrubbg__poster {
   opacity: 0;
 }
 

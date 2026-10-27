@@ -2,7 +2,7 @@
 
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 import type { V2Copy } from "./hero.copy";
-import { ScrubVideo } from "./ScrubVideo";
+import { ScrubFrames } from "./ScrubFrames";
 import {
   Availability,
   MobileSurfacePreview,
@@ -246,7 +246,11 @@ export function V2Hero({ copy }: { copy: V2Copy }) {
             panels carry the meaning. It is dimmed to 0.42 so white text and
             the cyan signal path stay legible on top of it.
           */}
-          <ScrubVideo src="/media/hero-scrub.mp4" poster="/media/hero-scrub-poster.jpg" />
+          <ScrubFrames
+            base="/media/scrub-frames"
+            count={96}
+            poster="/media/scrub-frames/poster.jpg"
+          />
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_73%_34%,rgba(34,211,238,.075),transparent_27%),radial-gradient(circle_at_18%_72%,rgba(255,255,255,.025),transparent_28%)]" />
           <div className="relative mx-auto h-full max-w-[92rem]">
             <svg
