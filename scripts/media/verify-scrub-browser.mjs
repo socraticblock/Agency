@@ -20,7 +20,7 @@ const PW = require("/home/socraticblock/.hermes/hermes-agent/node_modules/playwr
 const CHROME = "/home/socraticblock/.hermes/tools/chromium-1208/chrome-linux64/chrome";
 
 const BASE = process.argv[2] || "http://127.0.0.1:3311";
-const URL = `${BASE}/en/scroll-preview`;
+const URL = `${BASE}/en/scroll-preview${process.argv[3] ? `?layer=${process.argv[3]}` : ""}`;
 
 const browser = await PW.chromium.launch({
   executablePath: CHROME,

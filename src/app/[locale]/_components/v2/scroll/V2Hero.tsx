@@ -3,6 +3,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 import type { V2Copy } from "./hero.copy";
 import { ScrubFrames } from "./ScrubFrames";
+import { SCRUB_LAYERS, type ScrubLayerSpec } from "./scrub.layers";
 import {
   Availability,
   MobileSurfacePreview,
@@ -140,7 +141,13 @@ function MobileChapter({
   );
 }
 
-export function V2Hero({ copy }: { copy: V2Copy }) {
+export function V2Hero({
+  copy,
+  layer = SCRUB_LAYERS["3d"],
+}: {
+  copy: V2Copy;
+  layer?: ScrubLayerSpec;
+}) {
   const desktopStoryRef = useRef<HTMLDivElement>(null);
   const mobileStoryRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useSyncExternalStore(
@@ -247,9 +254,9 @@ export function V2Hero({ copy }: { copy: V2Copy }) {
             the cyan signal path stay legible on top of it.
           */}
           <ScrubFrames
-            base="/media/scrub-frames"
-            count={96}
-            poster="/media/scrub-frames/poster.jpg"
+            base={layer.base}
+            count={layer.count}
+            poster={layer.poster}
           />
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_73%_34%,rgba(34,211,238,.075),transparent_27%),radial-gradient(circle_at_18%_72%,rgba(255,255,255,.025),transparent_28%)]" />
           <div className="relative mx-auto h-full max-w-[92rem]">

@@ -19,6 +19,7 @@ const CHROME = "/home/socraticblock/.hermes/tools/chromium-1208/chrome-linux64/c
 
 const BASE = process.argv[2] || "http://127.0.0.1:3311";
 const OUT = process.argv[3] || "/tmp/scrub-stills";
+const LAYER = process.argv[4];
 mkdirSync(OUT, { recursive: true });
 
 const browser = await PW.chromium.launch({
@@ -26,7 +27,10 @@ const browser = await PW.chromium.launch({
   args: ["--hide-scrollbars", "--disable-gpu", "--force-device-scale-factor=1"],
 });
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-await page.goto(`${BASE}/en/scroll-preview`, { waitUntil: "load", timeout: 60000 });
+await page.goto(
+  `${BASE}/en/scroll-preview${LAYER ? `?layer=${LAYER}` : ""}`,
+  { waitUntil: "load", timeout: 60000 },
+);
 await page.waitForTimeout(2500);
 
 const pageHeight = await page.evaluate(() => document.body.scrollHeight);
