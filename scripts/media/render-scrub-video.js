@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/no-require-imports --
+ * This is a standalone Node CLI run by hand, not part of the Next app.
+ * The package has no "type": "module", so it is CommonJS on purpose. */
 /**
  * Render scripts/media/scrub-source.html to a scroll-scrub-ready MP4.
  *
