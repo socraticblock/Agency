@@ -81,6 +81,85 @@ has been created.
 
 The current environment cannot open the private Vercel preview, so rendered judgment remains an owner/device gate.
 
+## The motion rebuild — 2026-10-27
+
+**Branch:** `feat/genezisi-epic-preview` (base `08b3177`) · **PR:** #9 (draft) · **HEAD:** `c74f157`
+
+The V2 homepage in `main` is text-led and static. This branch is the **motion** version:
+
+- `/[locale]/scroll-preview` — the desktop GSAP/ScrollTrigger Signal story restored on its own
+  `noindex, nofollow` route, so it can be judged without touching the live homepage.
+- A **scroll-scrubbed frame layer** behind the story: the frame index is arithmetic on scroll
+  progress, driven by the same GSAP timeline as the panels (one clock, one easing curve, no
+  drift). 96 WebP frames at 960 px, fetched on demand as the scroll approaches them; the layer is
+  not mounted at all below 1024 px.
+- **The frames are the master asset, not a derivative of a video.** The previous layer shipped
+  one MP4 and scrubbed it by seeking `video.currentTime` on every tick, then built a runtime
+  cache of 90 decoded canvases at 960×540 to make the scrub smooth — ~178 MB of decoded RGBA,
+  built by seeking 90 times at load. With frames there is no seek, no decode and nothing to
+  drift; memory is a 16-frame LRU (~33 MB) instead of the clip length.
+- **Two layers ship side by side**, both frame sequences, both behind the DOM panels at the same
+  opacity. `?layer=flat` on the preview route switches between them.
+  - `3d` (default) — a **Blender Cycles** scene: a routed path across a blueprint grid with
+    volumetric mist, a moving camera, depth of field and a signal that lights each station as it
+    arrives. Reads as a *place*. Rendered on the RTX 3090 (CUDA): 96 frames at 1920×1080 /
+    48 samples in **15m44s**. 1.9 MB.
+  - `flat` — a **Remotion** composition in the site's own vector language, with no type (it sits
+    behind the DOM headline, so type in it would double up). Reads as a *system diagram*.
+    120 frames, 812 KB, and it renders in **22 seconds** — the cheap one to iterate on.
+- `scripts/media/build-scrub-frames.sh` reproduces the 3D sequence end to end (render → WebP →
+  poster). The Remotion compositions live in the `product-demo-video` repo (`abad621`,
+  `e73d278`) and render with
+  `npx remotion render ScrubLayer out/layer --sequence --image-sequence-pattern "f[frame].[ext]"`
+  — note Remotion substitutes `[frame]`/`[ext]`, not printf-style `%04d`, which it writes out
+  literally. `scripts/media/generate-scroll-video.py` remains committed as the MiniMax path for
+  when the account has video quota (it returned 402 — the video product is a separate plan from
+  chat).
+- Homepage craft pass on top: one grotesk display type scale, staggered hero entrance, a
+  five-project work grid, and the Sakartvelo + Socraticblock portfolio entries.
+- The desktop story is now published to the accessibility tree (GSAP `autoAlpha: 0` had dropped
+  the whole narrative out of it — measured with CDP `Accessibility.getFullAXTree`: one heading,
+  nothing else).
+
+**Gates:** typecheck clean · lint 0 errors (236 pre-existing warnings) · `next build` clean ·
+`scripts/media/test-scrub-frames.mjs` 18/18 pass (index mapping, monotonicity, every frame
+reachable, nearest-frame fallback, LRU bound) · `scripts/media/verify-scrub-browser.mjs` PASS —
+9 distinct canvas states across 9 scroll positions, `has-frames` set at every step, zero page
+errors · `scripts/media/probe-scrub-story.mjs` confirms the foreground story advances in step
+with the footage (intro → surface → enquiry → system → action → owner → resolved, signal route
+drawing 0.00 → 0.46 → 0.86 → 1.00, review branch 0 → 1) · mobile issues zero media requests ·
+AX tree contains the full transcript in `h1 → h2 → h3` order.
+
+**The pipeline has its own entry point:** [`scripts/media/README.md`](../../scripts/media/README.md)
+— how to produce each layer (Blender vs Remotion vs MiniMax), how to run each
+verification, how to record a video, and the five traps this pipeline has
+already paid for (1-based filenames, `has-frames` on draw not load, `"use
+client"` exports being client references to a server component, rebuilding
+`.next` under a running server, and `networkidle` never settling on a page
+that keeps prefetching).
+
+**Both layers verified** — `verify-scrub-browser.mjs` PASS on each (9 distinct canvas states
+across 9 scroll positions, `has-frames` set at every step, zero page errors) and
+`probe-layer-requests.mjs` PASS on each (the default fetches `scrub-frames/f001..f096`, the flat
+layer fetches `scrub-frames-flat/f001..f120`).
+
+**Four real bugs found by measuring instead of assuming:**
+1. The client requested `f000..f095` while the files are `f001..f096` — every fetch 404'd.
+2. `has-frames` was set on frame *load* rather than on frame *draw* — a black flash over the poster.
+3. **The layer switch did not switch.** The specs lived in a `"use client"` module, so the server
+   component importing them got a client-reference proxy, not the object — `SCRUB_LAYERS["3d"]`
+   was `undefined`, the server passed `layer={undefined}`, and the hero fell back to its default
+   for *both* URLs. The specs now live in `scrub.layers.ts`, which has no `"use client"`.
+4. **Luminance cannot tell the two layers apart** — both canvases read within 0.3 of each other, so
+   a brightness comparison would have "confirmed" a switch that was not happening. The probe
+   records the *requested URLs* instead, which are unambiguous.
+5. The flat layer's first render was too dim (canvas luminance 5.8 vs the 3D layer's 38; a vision
+   pass called it "slightly too subdued to read as an active motion system"). Brightened to 17.3.
+
+**Not done:** no production deploy, `main` untouched. `vercel.json` gates Git deployments to
+`main` and `preview-*`, so this branch triggers no Vercel build. Rendered/device acceptance on
+the owner's hardware is still the open gate.
+
 ## Gate conclusion
 
 **Code architecture: accepted.**  
