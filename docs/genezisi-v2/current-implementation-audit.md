@@ -5,6 +5,13 @@
 **Purpose:** establish what can be reused before the V2 hero prototype.  
 **Status:** implementation audit only; no production redesign yet.
 
+> **Update — 2026-10-27:** this is a dated snapshot of 4 October and is kept
+> as history; its findings were true when written. One is no longer true: the
+> 22.5 MB `public/hero-bg-animation.mp4` it reports was deleted on 2026-10-26
+> (commit `4649386`) and is not in the tree. The current motion layer is a
+> **frame sequence** (`public/media/scrub-frames/`), rendered in Blender —
+> see [execution-status.md](./execution-status.md).
+
 ## Executive finding
 
 **Keep the existing Next.js repository. Do not rewrite the site into another framework.**

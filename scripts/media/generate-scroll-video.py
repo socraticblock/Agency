@@ -15,6 +15,10 @@ the one thing this studio sells, so a generated clip is atmosphere only —
 it works as a source for the frames the same way Blender does, and it is
 converted to frames by the build script rather than shipped as a video.
 
+The frames are what the site ships. This script's output is a SOURCE CLIP,
+not a site asset: convert it to frames with the same WebP encode the build
+script uses, or keep it as a standalone video (social, reel).
+
 If you DO want a video artifact from the generated clip (social, reel), it
 must survive being scrubbed frame by frame:
   - short GOPs, so every seek lands on a real keyframe boundary
@@ -27,13 +31,13 @@ MiniMax output with `ffmpeg -g 5`. Generation alone is not enough.
 Usage
 -----
     MINIMAX_API_KEY=... python3 scripts/media/generate-scroll-video.py \
-        --prompt-file scripts/media/prompts/hero.txt \
-        --out public/media/hero-scrub.mp4 \
+        --prompt-file scripts/media/prompts/hero-scrub.txt \
+        --out /tmp/hero-scrub.mp4 \
         --duration 10 --resolution 768P --ratio 16:9
 
     # then, to make a 2K upgrade of an approved 768P clip (costs $0.05/s):
     MINIMAX_API_KEY=... python3 scripts/media/generate-scroll-video.py \
-        --regenerate 2K --task-id <task_id> --out public/media/hero-scrub.mp4
+        --regenerate 2K --task-id <task_id> --out /tmp/hero-scrub.mp4
 
 Cost: MiniMax-H3 = $0.08/s at 768P, $0.13/s at 2K. A 10s 768P clip = $0.80.
 Quota: the account allows 3 generations per day — generate one, review the
@@ -83,7 +87,8 @@ def api(method: str, url: str, key: str, payload: dict | None = None) -> dict:
                 "product keeps working — it is a separate plan). Fix it by buying\n"
                 "credits and enabling auto consumption, or use the Hailuo web\n"
                 "product, or fall back to the local renderer:\n"
-                "  node scripts/media/render-scrub-video.js --out public/media/hero-scrub.mp4"
+                "  (the local renderer that replaced it is now a Blender scene:\n"
+                "   scripts/media/build-scrub-frames.sh)"
             )
         sys.exit(f"MiniMax request failed: HTTP {code}\n  {msg}")
 
