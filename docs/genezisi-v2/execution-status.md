@@ -81,6 +81,38 @@ has been created.
 
 The current environment cannot open the private Vercel preview, so rendered judgment remains an owner/device gate.
 
+## The motion rebuild — 2026-10-27
+
+**Branch:** `feat/genezisi-epic-preview` (base `08b3177`) · **PR:** #9 (draft) · **HEAD:** `c74f157`
+
+The V2 homepage in `main` is text-led and static. This branch is the **motion** version:
+
+- `/[locale]/scroll-preview` — the desktop GSAP/ScrollTrigger Signal story restored on its own
+  `noindex, nofollow` route, so it can be judged without touching the live homepage.
+- A **scroll-scrubbed video layer** behind the story: the page scroll *is* the video timeline,
+  driven by the same GSAP timeline as the panels (one clock, one easing curve, no drift).
+  Poster → video → canvas layer stack with a 500 ms crossfade; frames cached at 960 px on
+  desktop only; the clip is not even mounted below 1024 px (a mounted `<video preload="auto">`
+  downloads 1.28 MB for a layer a phone never paints).
+- The clip is **rendered locally** from a deterministic canvas source
+  (`scripts/media/scrub-source.html`), not generated: the MiniMax H3 account hit its Token Plan
+  limit (402) and a text-to-video model cannot render legible interface.
+  `scripts/media/generate-scroll-video.py` is committed and ready to drop a generated clip into
+  the same slot.
+- Homepage craft pass on top: one grotesk display type scale, staggered hero entrance, a
+  five-project work grid, and the Sakartvelo + Socraticblock portfolio entries.
+- The desktop story is now published to the accessibility tree (GSAP `autoAlpha: 0` had dropped
+  the whole narrative out of it — measured with CDP `Accessibility.getFullAXTree`: one heading,
+  nothing else).
+
+**Gates:** typecheck clean · lint 0 errors (235 pre-existing warnings) · `next build` clean ·
+desktop scrub advances (canvas luminance 11.86 → 21.07, page height 2340 px, 0 page errors) ·
+mobile issues zero media requests · AX tree contains the full transcript in `h1 → h2 → h3` order.
+
+**Not done:** no production deploy, `main` untouched. `vercel.json` gates Git deployments to
+`main` and `preview-*`, so this branch triggers no Vercel build. Rendered/device acceptance on
+the owner's hardware is still the open gate.
+
 ## Gate conclusion
 
 **Code architecture: accepted.**  
