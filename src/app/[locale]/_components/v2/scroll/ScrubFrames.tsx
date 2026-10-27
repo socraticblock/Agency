@@ -109,6 +109,21 @@ export function ScrubFrames({ base, count, poster, className }: Props) {
       ctx.drawImage(bmp, (cw - w) / 2, (ch - h) / 2, w, h);
     };
 
+    /**
+     * The nearest frame that is actually decoded, searching outward from the
+     * requested one. A fast flick can land on a frame that has not arrived
+     * yet; holding the nearest available one is right, but the canvas must
+     * never be blank, so it falls back rather than waiting.
+     */
+    const nearest = (target: number): number => {
+      if (cache.has(target)) return target;
+      for (let d = 1; d < count; d++) {
+        if (cache.has(target - d)) return target - d;
+        if (cache.has(target + d)) return target + d;
+      }
+      return -1;
+    };
+
     const evict = () => {
       while (cache.size > LRU_SIZE) {
         const oldest = cache.keys().next().value;
@@ -124,7 +139,10 @@ export function ScrubFrames({ base, count, poster, className }: Props) {
       if (cache.has(index) || pending.has(index)) return;
       pending.add(index);
       try {
-        const res = await fetch(`${base}/f${String(index).padStart(3, "0")}.webp`);
+        // Files are 1-based (f001..f096); the frame index is 0-based.
+        const res = await fetch(
+          `${base}/f${String(index + 1).padStart(3, "0")}.webp`,
+        );
         if (!res.ok) throw new Error(`frame ${index}: HTTP ${res.status}`);
         const blob = await res.blob();
         const bmp = await createImageBitmap(blob);
@@ -135,7 +153,6 @@ export function ScrubFrames({ base, count, poster, className }: Props) {
         cache.set(index, bmp);
         pending.delete(index);
         evict();
-        root.classList.add("has-frames");
       } catch {
         pending.delete(index);
       }
@@ -154,12 +171,17 @@ export function ScrubFrames({ base, count, poster, className }: Props) {
       const target = Math.max(0, Math.min(count - 1, Math.round(p * (count - 1))));
 
       if (target !== lastDrawn) {
-        // Draw the exact frame if it is decoded; otherwise hold the previous
-        // one and keep it. A brief hold beats a flash of the wrong frame.
-        const bmp = cache.get(target);
-        if (bmp) {
-          drawCover(bmp);
-          lastDrawn = target;
+        const idx = nearest(target);
+        if (idx >= 0) {
+          const bmp = cache.get(idx);
+          if (bmp) {
+            drawCover(bmp);
+            lastDrawn = target;
+            // The layer only becomes visible once a frame is actually ON the
+            // canvas. Adding the class at load time would cross-fade to an
+            // empty canvas — a black flash over the poster.
+            root.classList.add("has-frames");
+          }
         }
       }
 
