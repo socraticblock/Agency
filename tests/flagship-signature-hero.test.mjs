@@ -22,17 +22,38 @@ test("full flagship remains intact behind the new signature hero", () => {
   assert.match(hero, /Real work\./);
 });
 
-test("each system scene exists once and the narrative uses one stage model", () => {
+test("five persistent text scenes replace snap-swapped titles", () => {
   for (const id of ["signatureSurface", "signatureRequest", "signatureAutomation", "signatureAgent", "signatureReview", "signatureOutcome"]) {
     assert.equal((html.match(new RegExp('id="' + id + '"', "g")) ?? []).length, 1, id);
     assert.ok(js.includes("#" + id), id + " must be scroll-controlled");
   }
-  for (const id of ["signaturePhase", "signatureCounter", "signatureStoryTitle", "signatureStoryDetail"]) {
-    assert.equal((html.match(new RegExp('id="' + id + '"', "g")) ?? []).length, 1, id);
-    assert.ok(js.includes("#" + id), id + " must be synchronized");
+  for (const role of ["website", "automation", "agent", "review", "outcome"]) {
+    assert.equal((html.match(new RegExp('data-signature-story="' + role + '"', "g")) ?? []).length, 1, role);
   }
-  assert.match(js, /journey\.dataset\.signaturePhase/);
-  assert.equal((js.match(/const narrative=\[/g) ?? []).length, 1);
+  assert.match(js, /querySelectorAll\('\[data-signature-story\]'\)/);
+  assert.match(css, /\.signature-story-slide\{/);
+  assert.doesNotMatch(js, /signatureStoryTitle/);
+  assert.doesNotMatch(js, /journey\.dataset\.signaturePhase/);
+});
+
+test("reversible, damped native scroll keeps cards opaque and prevents ghosting", () => {
+  assert.match(js, /heroVisualProgress/);
+  assert.match(js, /Math\.exp\(-dt\/115\)/);
+  assert.match(js, /el\.style\.clipPath/);
+  assert.match(js, /el\.style\.opacity=reveal>/);
+  assert.match(js, /signatureProgressFill/);
+  assert.match(css, /\.signature-progress-track/);
+  assert.doesNotMatch(js, /window\.scrollTo\(/);
+  assert.doesNotMatch(js, /wheel.*preventDefault/);
+  assert.doesNotMatch(js, /history\.scrollRestoration/);
+});
+
+test("website, automation, and agentic integration are explicit capabilities", () => {
+  assert.match(hero, /WEBSITE DESIGN & DEVELOPMENT/);
+  assert.match(hero, /AUTOMATION \+ INTEGRATIONS/);
+  assert.match(hero, /AGENTIC AI/);
+  assert.match(hero, /calendar\.read_availability/);
+  assert.match(hero, /CRM/);
 });
 
 test("fictional system actions are not represented as externally completed", () => {
