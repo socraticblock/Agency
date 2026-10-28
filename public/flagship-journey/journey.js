@@ -9,62 +9,80 @@ const moments={
  fw:[['01 / THE THRESHOLD','Interaction creates atmosphere.','The original landing-page gate artwork introduces a persistent, mobile-first RPG.'],['02 / THE CROSSING','The world responds to you.','A cinematic gate sequence translates a simple scroll into a sense of arrival.'],['03 / THE GAME','An evolving early test.','The game is playable, incomplete and changing. The live test is always a separate deliberate choice.']]
 };
 let updateQueued=false;
+let heroVisualProgress=null;
+let heroLastFrame=null;
 function updateScroll(){updateQueued=false;const top=window.scrollY,range=Math.max(1,document.documentElement.scrollHeight-innerHeight);document.querySelector('#readingTrack').style.width=Math.round(top/range*10000)/100+'%';if(reduced)return;
 
 const journey=document.querySelector('#heroJourney');
 if(journey){
  const bounds=journey.getBoundingClientRect();
- const progress=clamp(-bounds.top/Math.max(1,bounds.height-innerHeight));
- const smooth=(a,b)=>{const t=clamp((progress-a)/Math.max(.001,b-a));return t*t*(3-2*t)};
- const visible=(a,b,c,d)=>smooth(a,b)*(1-smooth(c,d));
- const copy=journey.querySelector('.hero-copy'),art=journey.querySelector('.signature-art');
- const copyVisible=1-smooth(.08,.25);
- copy.style.opacity=String(copyVisible);
- copy.style.transform=`translate3d(0,${(-progress*28).toFixed(1)}px,0)`;
- const zoom=Math.min(progress/.72,1);
- if(innerWidth<=760){
-   art.style.transform=`translate3d(0,${(-zoom*5).toFixed(1)}%,0) scale(${(1+zoom*.12).toFixed(3)})`;
- }else{
-   art.style.transform=`translate3d(${(-zoom*11).toFixed(1)}%,0,0) scale(${(1+zoom*.18).toFixed(3)})`;
- }
+ const target=clamp(-bounds.top/Math.max(1,bounds.height-innerHeight));
+ // Damp visual progress without hijacking native scroll. The timeline remains
+ // reversible and follows the pointer / wheel / touch input deterministically.
+ if(heroVisualProgress===null) heroVisualProgress=target;
+ const now=performance.now();
+ const dt=heroLastFrame===null?16:Math.max(8,Math.min(32,now-heroLastFrame));
+ heroLastFrame=now;
+ heroVisualProgress+=(target-heroVisualProgress)*(1-Math.exp(-dt/115));
+ if(Math.abs(target-heroVisualProgress)<.00025) heroVisualProgress=target;
+ else schedule();
+ const progress=heroVisualProgress;
+ const smooth=(start,end)=>{const t=clamp((progress-start)/Math.max(.0001,end-start));return t*t*(3-2*t)};
+ const visible=(inStart,inEnd,outStart,outEnd)=>smooth(inStart,inEnd)*(1-smooth(outStart,outEnd));
+ const copy=journey.querySelector('.hero-copy');
+ const introFade=1-smooth(.13,.24);
+ copy.style.opacity=String(introFade);
+ copy.style.transform=`translate3d(0,${(-smooth(.12,.26)*34).toFixed(2)}px,0)`;
+ const art=journey.querySelector('.signature-art');
+ const widen=smooth(.07,.74);
+ const compact=innerWidth<=760;
+ art.style.transform=compact?
+   `translate3d(0,${(-widen*4).toFixed(2)}%,0) scale(${(1+widen*.075).toFixed(4)})`:
+   `translate3d(${(-widen*10).toFixed(2)}%,0,0) scale(${(1+widen*.14).toFixed(4)})`;
  const surface=journey.querySelector('#signatureSurface');
- surface.style.opacity=String(1-smooth(.18,.38));
- surface.style.transform=`perspective(1200px) rotateY(${(-9+smooth(.06,.30)*9).toFixed(1)}deg) rotateZ(${(-2+smooth(.06,.30)*2).toFixed(1)}deg) scale(${(1+smooth(.08,.35)*.06).toFixed(3)})`;
- const scenes=[
-   ['#signatureRequest',visible(.15,.27,.34,.43)],
-   ['#signatureAutomation',visible(.32,.41,.50,.59)],
-   ['#signatureAgent',visible(.49,.58,.66,.75)],
-   ['#signatureReview',visible(.65,.73,.79,.88)],
-   ['#signatureOutcome',smooth(.82,.92)]
+ const unfold=smooth(.06,.30);
+ // The underlying website stays opaque until an opaque system panel opens on top.
+ // Previously, stacked semi-transparent cards made several texts readable at once.
+ surface.style.transform=`perspective(1200px) rotateY(${(-9+unfold*9).toFixed(2)}deg) rotateZ(${(-2+unfold*2).toFixed(2)}deg) scale(${(1+unfold*.045).toFixed(4)})`;
+ const panels=[
+   ['#signatureRequest',.24,.34],
+   ['#signatureAutomation',.43,.52],
+   ['#signatureAgent',.61,.70],
+   ['#signatureReview',.77,.85],
+   ['#signatureOutcome',.90,.97]
  ];
- scenes.forEach(([selector,opacity])=>{const el=journey.querySelector(selector);el.style.opacity=String(opacity);el.style.transform=`translate3d(0,${((1-opacity)*16).toFixed(1)}px,0) scale(${(.965+opacity*.035).toFixed(3)})`});
+ // Successive, fully opaque scenes are revealed by a single edge instead of
+ // cross-fading dense interface text. Reverse scroll reveals the previous layer.
+ panels.forEach(([selector,start,end])=>{
+   const el=journey.querySelector(selector),reveal=smooth(start,end);
+   el.style.opacity=reveal>.0001?'1':'0';
+   el.style.clipPath=`inset(0 ${((1-reveal)*100).toFixed(3)}% 0 0 round 12px)`;
+   el.style.transform=`translate3d(${((1-reveal)*13).toFixed(2)}px,0,0)`;
+ });
  const cutaway=journey.querySelector('#signatureCutaway');
- cutaway.style.opacity=String(visible(.11,.20,.27,.35));
- const phase=progress<.15?0:progress<.33?1:progress<.50?2:progress<.67?3:progress<.83?4:5;
- const narrative=[
-  ['01 / THE SURFACE','A first impression should mean something.','Designed to be memorable. Engineered to make the business behind it work better.'],
-  ['02 / THE REQUEST','One visitor. One useful intention.','The design is only the beginning. A real question enters a connected system.'],
-  ['03 / AUTOMATION','Routine work, connected.','Fixed rules validate the enquiry, prepare a CRM record and alert the owner.'],
-  ['04 / AI AGENT','Context makes the difference.','A permitted read-only tool helps turn an unstructured request into two practical options.'],
-  ['05 / HUMAN CONTROL','Judgment stays human.','The draft enters a real decision boundary. In this example, the owner approves it.'],
-  ['06 / THE OUTCOME','Ready for the next step.','The approved draft is ready to send. This illustration performs no external actions.']
+ cutaway.style.opacity=String(visible(.13,.20,.23,.30));
+ // Independently authored text scenes: no textContent swaps or threshold jumps.
+ // Each headline fades all the way out before the next becomes legible.
+ const stories=[
+   ['website',.25,.33,.38,.43],
+   ['automation',.44,.51,.55,.61],
+   ['agent',.62,.69,.73,.78],
+   ['review',.79,.85,.87,.91],
+   ['outcome',.91,.96,.97,1.02]
  ];
- if(journey.dataset.signaturePhase!==String(phase)){
-   journey.dataset.signaturePhase=String(phase);
-   journey.querySelector('#signatureCounter').textContent=String(phase+1).padStart(2,'0')+' / 06';
-   journey.querySelector('#signaturePhase').textContent=narrative[phase][0];
-   journey.querySelector('#signatureStoryTitle').textContent=narrative[phase][1];
-   journey.querySelector('#signatureStoryDetail').textContent=narrative[phase][2];
- }
- const storyline=journey.querySelector('.signature-storyline');
- const storyOpacity=smooth(.19,.30)*(1-smooth(.88,.96));
- storyline.style.opacity=String(storyOpacity);
- storyline.style.transform=`translate3d(0,${((1-storyOpacity)*16).toFixed(1)}px,0)`;
+ journey.querySelectorAll('[data-signature-story]').forEach(el=>{
+   const st=stories.find(x=>x[0]===el.dataset.signatureStory);
+   if(!st)return;
+   const entering=smooth(st[1],st[2]),leaving=smooth(st[3],st[4]);
+   el.style.opacity=String(entering*(1-leaving));
+   el.style.transform=`translate3d(0,${((1-entering)*28-leaving*18).toFixed(2)}px,0)`;
+ });
+ journey.querySelector('#signatureProgressFill').style.transform=`scaleX(${progress.toFixed(4)})`;
  const transition=journey.querySelector('.hero-transition-label');
- const handoff=smooth(.94,.99);
+ const handoff=smooth(.968,1);
  transition.style.opacity=String(handoff);
- transition.style.transform=`translate3d(0,${((1-handoff)*18).toFixed(1)}px,0)`;
- journey.querySelector('.hero-bottom').style.opacity=String(1-smooth(.02,.18));
+ transition.style.transform=`translate3d(0,${((1-handoff)*24).toFixed(2)}px,0)`;
+ journey.querySelector('.hero-bottom').style.opacity=String(1-smooth(.06,.22));
 }
 for(const el of chapters){const rect=el.getBoundingClientRect();if(rect.top>innerHeight*1.4||rect.bottom< -innerHeight*.4)continue;const span=Math.max(1,rect.height-innerHeight);const progress=clamp(-rect.top/span);const visual=el.querySelector('.case-visual');el.style.setProperty('--p',progress.toFixed(4));visual.style.transform=`translate3d(0,${((.5-progress)*32).toFixed(1)}px,0)`;const browser=visual.querySelector('.browser-frame');if(browser)browser.style.transform=`perspective(1200px) rotateY(${((1-progress)*-8).toFixed(1)}deg) rotateZ(${((1-progress)*-2).toFixed(1)}deg) scale(${(.91+progress*.07).toFixed(3)})`;const capture=visual.querySelector('.project-capture img');if(capture){if(capture.classList.contains('is-full')){const viewport=capture.parentElement;const imgHeight=capture.naturalHeight/capture.naturalWidth*viewport.clientWidth;const maxPan=Math.max(0,imgHeight-viewport.clientHeight);capture.style.transform=`translate3d(0,${(-progress*maxPan).toFixed(1)}px,0)`;}else{capture.style.transform=`translate3d(0,${(-progress*11).toFixed(1)}%,0) scale(1.12)`;}}const doors=visual.querySelectorAll('.gate-door');if(doors.length===2){doors[0].style.transform=`translateX(${(-progress*37).toFixed(1)}%)`;doors[1].style.transform=`translateX(${(progress*37).toFixed(1)}%)`;}const idx=Math.min(2,Math.floor(progress*3));if(el.dataset.moment!==String(idx)){el.dataset.moment=String(idx);const [k,t,b]=moments[el.dataset.project][idx];const m=el.querySelector('.case-moment');m.querySelector('.moment-index').textContent=k;m.querySelector('strong').textContent=t;m.querySelector('p').textContent=b;}}}
 function schedule(){if(updateQueued)return;updateQueued=true;requestAnimationFrame(updateScroll)}window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule,{passive:true});schedule();
