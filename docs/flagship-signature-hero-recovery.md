@@ -16,7 +16,7 @@ The full Prototype 05 source ZIP described in previous handoffs could not be rec
 
 - `public/flagship-journey/index.html`: Replace the TK Counsel opening artwork with one original Genezisi illustrative surface and five progressively visible business-system scenes. Keep real projects and all later sections. Hero handoff now says **Real work.** rather than prematurely introducing TK Counsel before the Work introduction.
 - `public/flagship-journey/signature-hero.css`: Isolated styling for the opening. Dark/ivory/mint palette; an editorial surface, custom geometric element, authentic-looking workflow UI; distinct automation, AI, human review and outcome treatments; mobile-specific composition; reduced-motion static fallback.
-- `public/flagship-journey/journey.js`: One normalized scroll progress controls the scene transitions, stage indicator, caption and visual state; reverse scrolling is deterministic. No new animation library, no automatic page scrolling, no network operations.
+- `public/flagship-journey/journey.js`: One normalized native-scroll target is followed by a small, time-based, reversible damping function (~115 ms). Five static, independently authored copy layers enter and exit smoothly; no story headline changes via JavaScript text replacement. Six visual surfaces (including the opening website) progress through one controlled reveal sequence. No new animation library, no automatic page scrolling, no network operations.
 - `tests/flagship-signature-hero.test.mjs`: Zero-dependency structural regression tests. Run: `node --test tests/flagship-signature-hero.test.mjs`.
 
 ## Single canonical six-stage story
@@ -30,7 +30,7 @@ The full Prototype 05 source ZIP described in previous handoffs could not be rec
 | 05 | Human control | Proposal reviewed; owner approval **simulated** |
 | 06 | Result | Approved reply **ready for manual delivery**; no actual message sent or booking created |
 
-The narrative and current caption are always indexed by the same JS stage variable. Scene crossfades interpolate using scroll progress. This addresses Prototype 04's inconsistent stage/footer captions and false leap from HOLD to RESOLVED.
+Each copy slide is present in the HTML; its entrance, readable hold, and exit are computed from the same damped native-scroll position as the corresponding system panel. A continuous visual progress line replaces the instant-changing numeric stage label. Successive system panels use opaque clipped reveals instead of overlapping translucent UI. The human approval is explicitly simulated; the final reply is ready for manual delivery, not sent.
 
 ## Deliberate boundaries
 
@@ -56,3 +56,29 @@ The narrative and current caption are always indexed by the same JS stage variab
 The HTML tag counts, referenced scene IDs, JavaScript syntax (compiled without executing browser code), and CSS brace balance were checked during implementation. GitHub connector comparison confirmed the branch diverged only by the intended hero files at that checkpoint. A connected real-browser session was not available in this ChatGPT context; the Browser connector requires an originating browser context. Therefore **no real browser screenshots, full build, Playwright run, or device performance claims are made**.
 
 The goal remains a bespoke, high-end, continuous visitor journey. This checkpoint establishes the correct story and implementation seam, not final creative polish.
+
+## 28 October second-pass refinement — founder's recording feedback
+
+The founder reviewed `20261028-1000-29.7740115.mp4` and rejected the first hero pass as too dominated by an appointment-workflow example. They also observed snappy left-hand headline replacements and unsmooth transitions, including overlapping dense UI.
+
+Implemented in the **same isolated branch**:
+- Replaced one mutable story caption with **five durable DOM text scenes**, independently animated with smoothly eased scroll-derived opacity and position. Explicit service labels: **Websites**, **Automation & Integrations**, **Agentic AI**, then human control and outcome.
+- Preserved the main first-screen headline and illustrated website, but made its internal page recognizably designed: navigation, a service-led message, art direction, an interface CTA, and responsive design details.
+- Replaced simultaneous semi-transparent scene crossfades with **opaque sequential reveals**, so incoming UI covers outgoing UI rather than making two text-heavy screens readable through each other.
+- Replaced instant-changing story counter with a continuous progress track.
+- Introduced `heroVisualProgress`, which eases towards real scroll position with a small time-based damping value; native scroll is never prevented or hijacked. All transitions remain reversible.
+- Hide hero copy from focus/interaction when fully invisible; preserve keyboard skip navigation and static reduced-motion fallback.
+- Added a short-portrait-viewport variant. No mobile/device/browser rendering evidence yet.
+
+### Acceptance criteria for next browser review
+
+1. At opening: clearly recognisable **website design/development** (not a generic AI dashboard). Hero headline and introductory CTA are readable and attractive.
+2. On scroll: the website appears to open into a connected business system, not a random unrelated sequence.
+3. Explicitly see **Automation & Integrations** as fixed-rule work, then **Agentic AI** as authorized contextual tool use, with a clearly different visual treatment.
+4. Watch the left-hand headline leave and return smoothly on slow scroll, fast scroll, and reverse scroll. No instant replacement of title content, and no two legible text blocks overlapping.
+5. Right-hand material layers should replace rather than ghost through each other. No cards or captions collide at intermediate scroll positions.
+6. Check short mobile (320×568, 390×667) as well as typical phone (390×844), 1366×768, and 1440×900. Screenshots at all transition boundaries, not only mid-scene.
+7. Use a real browser performance trace to determine if any residual jerk comes from scroll/DOM/clip-path paint cost vs aesthetic motion timing. Change implementation on evidence; do not claim 60 FPS from code inspection.
+8. After hero verification, inspect the complete site and the handoff into authentic TK Counsel/Socraticblock/Fornward work. Do not redeploy or merge to production before owner approval.
+
+**Source validation:** The edited HTML has balanced checked structural elements, the JS parses, all five fixed story slides and six visual elements are present exactly once, the CSS braces balance, and static checks show no competing story slide is simultaneously visible. These are structural checks, not browser QA, FPS measurements or a completed full-site build.
