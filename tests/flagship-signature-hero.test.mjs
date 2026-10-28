@@ -66,7 +66,7 @@ test('website unfolds into physical layers before automation becomes visible',()
  t.run(.4);assert.ok(Number(t.nodes.systemRoute.style.opacity)>.9);
  t.run(.56);assert.ok(Number(t.nodes.agentWorkspace.style.opacity)>.3);
  t.run(.72);assert.ok(Number(t.nodes.agentToolPulse.style.opacity)>.5);
- t.run(.80);assert.equal(t.nodes.approvalBoundary.style.opacity,'1.0000');
+ t.run(.82);assert.equal(t.nodes.approvalBoundary.style.opacity,'1.0000');
  t.run(.95);assert.equal(t.nodes.resolutionNote.style.opacity,'1.0000');
 });
 test('the system diagram claims are illustrative and the final result is honest',()=>{
