@@ -20,41 +20,96 @@ const routeStations=[...document.querySelectorAll('[data-route]')];
 const heroStage=heroJourney?.querySelector('.signature-stage');
 function heroFrame(progress){
  const smooth=(a,b)=>{const t=clamp((progress-a)/(b-a));return t*t*(3-2*t)};
- const show=(el,amount,y=0)=>{el.style.opacity=amount.toFixed(4);el.style.visibility=amount<.001?'hidden':'visible';el.style.transform=`translate3d(0,${y.toFixed(2)}px,0)`};
- const lift=smooth(.16,.30),agent=smooth(.45,.56),resolve=smooth(.77,.88),bridge=smooth(.94,1);
+ const show=(el,amount,y=0)=>{
+   if(!el)return;
+   el.style.opacity=amount.toFixed(4);
+   el.style.visibility=amount<.001?'hidden':'visible';
+   el.style.transform=`translate3d(0,${y.toFixed(2)}px,0)`;
+ };
  const compact=innerWidth<=760;
- heroJourney.style.setProperty('--foundation-label',String(1-agent));
- heroJourney.style.setProperty('--unfold',String(lift));
- const opening=1-smooth(.16,.23);
- show(heroCopy,opening,-smooth(.16,.23)*22);
- heroCopy.inert=opening<.1;
- // Whole-object geometry: the original page lifts, stays identifiable, then returns.
- // No text masks, threshold text replacements, or frame-dependent damping.
- const surface=heroNodes.signatureSurface;
  const short=compact&&innerHeight<=710;
- const y=-lift*(short?65:50)+resolve*(short?61:46);
- const scale=1-lift*(short?.74:.60)+resolve*(short?.29:.15);
- surface.style.transform=`translate3d(${(lift*3-resolve*3).toFixed(2)}%,${y.toFixed(2)}%,0) scale(${scale.toFixed(4)}) perspective(1600px) rotateY(${(-8*(1-lift)).toFixed(2)}deg) rotateZ(${(-2+lift*2-resolve*3).toFixed(2)}deg)`;
- show(heroNodes.systemRoute,smooth(.24,.31)*(1-smooth(.44,.50)),(1-lift)*25);
- show(heroJourney.querySelector('.system-foundation'),lift*(1-resolve));
- const travel=smooth(.31,.40);
- show(heroNodes.requestToken,smooth(.28,.31)*(1-smooth(.40,.42)));
- heroNodes.requestToken.style.left=`${(travel*65).toFixed(2)}%`;
- show(heroNodes.crmRecord,smooth(.365,.39));
+ const lift=smooth(.14,.31);
+ const agent=smooth(.49,.60);
+ const resolve=smooth(.78,.91);
+ const bridge=smooth(.94,1);
+ const opening=1-smooth(.16,.26);
+ show(heroCopy,opening,-smooth(.16,.26)*26);
+ heroCopy.inert=opening<.1;
+ heroJourney.style.setProperty('--unfold',String(lift));
+ heroJourney.style.setProperty('--foundation-label',String(1-agent));
+
+ // ACT I → II: the website is the uppermost physical layer of a connected
+ // stack. Do not simply slide away one card and reveal an unrelated dashboard.
+ const surface=heroNodes.signatureSurface;
+ const surfaceScale=1-lift*(short?.47:.43)-agent*.14+resolve*.48;
+ const surfaceY=-lift*(short?27:30)-agent*8+resolve*35;
+ const surfaceX=-agent*8+resolve*8;
+ const surfaceTilt=-8*(1-lift)+agent*3+resolve*5;
+ surface.style.transform=`translate3d(${surfaceX.toFixed(2)}%,${surfaceY.toFixed(2)}%,0) scale(${surfaceScale.toFixed(4)}) perspective(1600px) rotateY(${surfaceTilt.toFixed(2)}deg) rotateZ(${(-2+lift*2-agent*.5+resolve*.5).toFixed(2)}deg)`;
+ surface.style.opacity=String((1-agent*.77)*(1-resolve*.23));
+ const depthAmount=smooth(.18,.31)*(1-smooth(.78,.90));
+ show(heroNodes.systemDepth,depthAmount);
+ heroNodes.systemDepth.style.transform=`translate3d(0,${((1-lift)*26-agent*9).toFixed(2)}px,0) perspective(1700px) rotateX(${((1-lift)*9).toFixed(2)}deg) scale(${(.91+lift*.09).toFixed(4)})`;
+ show(heroJourney.querySelector('.system-foundation'),smooth(.18,.29)*(1-smooth(.82,.93)));
+
+ // ACT II: the single enquiry visibly travels from the website's enquiry
+ // strip into three fixed-rule integration stations. No AI is implied here.
+ const routeVisible=smooth(.28,.35)*(1-smooth(.46,.54));
+ show(heroNodes.systemRoute,routeVisible,(1-routeVisible)*16);
+ const travel=smooth(.32,.43);
+ show(heroNodes.requestToken,smooth(.30,.34)*(1-smooth(.43,.47)));
+ heroNodes.requestToken.style.left=`${(travel*68).toFixed(2)}%`;
  heroNodes.routeSignal.style.transform=`scaleX(${travel.toFixed(4)})`;
- routeStations.forEach((el,i)=>{const reached=smooth(.30+i*.035,.33+i*.035);el.style.opacity=String(.35+.65*reached);el.style.transform=`translateY(${(1-reached)*6}px)`});
- show(heroNodes.routeResult,smooth(.39,.43),(1-smooth(.39,.43))*8);
- show(heroNodes.agentWorkspace,smooth(.51,.57)*(1-smooth(.78,.82)),(1-agent)*22);
- show(heroNodes.agentContext,smooth(.55,.59));
- show(heroNodes.agentTool,smooth(.60,.64),(1-smooth(.60,.64))*8);
- show(heroNodes.agentOptions,smooth(.63,.67),(1-smooth(.63,.67))*8);
- show(heroNodes.approvalBoundary,smooth(.68,.72),(1-smooth(.68,.72))*8);
- show(heroNodes.resolutionNote,smooth(.82,.88),(1-resolve)*24);
- const ranges={automation:[.245,.30,.44,.49],agent:[.50,.55,.78,.82],resolution:[.83,.88,1.1,1.2]};
- heroStories.forEach(el=>{const [a,b,c,d]=ranges[el.dataset.signatureStory],enter=smooth(a,b),exit=smooth(c,d),opacity=enter*(1-exit);el.style.opacity=opacity.toFixed(4);el.style.visibility=opacity<.001?'hidden':'visible';el.style.transform=`translateY(calc(${compact?'0%':'-40%'} + ${((1-enter)*20-exit*20).toFixed(2)}px))`;el.inert=opacity<.95;const link=el.querySelector('a');if(link)link.tabIndex=opacity>.95?0:-1;});
- heroStage.style.transform=`translate3d(0,${(-bridge*6).toFixed(2)}%,0) scale(${(1-bridge*.08).toFixed(4)})`;
+ routeStations.forEach((el,i)=>{
+   const reached=smooth(.33+i*.033,.36+i*.033);
+   el.style.opacity=String(.37+.63*reached);
+   el.style.transform=`translate3d(0,${((1-reached)*7).toFixed(2)}px,0)`;
+ });
+ show(heroNodes.crmRecord,smooth(.39,.43));
+ show(heroNodes.routeResult,smooth(.40,.46),(1-smooth(.40,.46))*8);
+ show(heroNodes.systemExchange,smooth(.33,.38)*(1-smooth(.47,.53)));
+
+ // ACT III: distinct visual path: intent → permitted read-only tool →
+ // returned calendar options → a visible human decision boundary.
+ const agentVisible=smooth(.50,.59)*(1-smooth(.79,.86));
+ show(heroNodes.agentWorkspace,agentVisible,(1-smooth(.50,.59))*18);
+ show(heroNodes.agentContext,smooth(.54,.60));
+ const toolIn=smooth(.61,.67);
+ show(heroNodes.agentTool,toolIn,(1-toolIn)*10);
+ const connectorIn=smooth(.64,.70);
+ show(heroNodes.agentToolConnector,connectorIn);
+ const pulseProgress=smooth(.67,.74);
+ heroNodes.agentToolPulse.style.opacity=String(connectorIn*(1-smooth(.76,.80)));
+ heroNodes.agentToolPulse.style.left=`${(pulseProgress*81).toFixed(2)}%`;
+ const optionsIn=smooth(.70,.76);
+ show(heroNodes.agentOptions,optionsIn,(1-optionsIn)*10);
+ const approvalIn=smooth(.75,.81);
+ show(heroNodes.approvalBoundary,approvalIn,(1-approvalIn)*8);
+ heroNodes.toolState.textContent=pulseProgress>.97?'RETURNED':'READ ONLY';
+
+ // ACT IV: reassemble into one physical editorial composition; the final
+ // cream surface occupies the original object's geometry. Nothing was sent.
+ const resultVisible=smooth(.83,.92);
+ show(heroNodes.resolutionNote,resultVisible);
+ heroNodes.resolutionNote.style.transform=`translate3d(0,${((1-resultVisible)*23).toFixed(2)}px,0) scale(${(.915+.085*resultVisible).toFixed(4)})`;
+ const ranges={
+   automation:[.26,.33,.46,.52],
+   agent:[.52,.59,.79,.85],
+   resolution:[.84,.91,1.1,1.2]
+ };
+ heroStories.forEach(el=>{
+   const [a,b,c,d]=ranges[el.dataset.signatureStory];
+   const enter=smooth(a,b),exit=smooth(c,d),opacity=enter*(1-exit);
+   el.style.opacity=opacity.toFixed(4);
+   el.style.visibility=opacity<.001?'hidden':'visible';
+   el.style.transform=`translateY(calc(${compact?'0%':'-40%'} + ${((1-enter)*24-exit*20).toFixed(2)}px))`;
+   el.inert=opacity<.95;
+   const link=el.querySelector('a');
+   if(link)link.tabIndex=opacity>.95?0:-1;
+ });
+ heroStage.style.transform=`translate3d(0,${(-bridge*5).toFixed(2)}%,0) scale(${(1-bridge*.055).toFixed(4)})`;
  heroNodes.signatureProgressFill.style.transform=`scaleX(${progress.toFixed(4)})`;
- heroJourney.querySelector('.hero-bottom').style.opacity=String(1-smooth(.13,.20));
+ heroJourney.querySelector('.hero-bottom').style.opacity=String(1-smooth(.14,.24));
 }
 function updateScroll(){updateQueued=false;const top=window.scrollY,range=Math.max(1,document.documentElement.scrollHeight-innerHeight);document.querySelector('#readingTrack').style.width=Math.round(top/range*10000)/100+'%';if(reduced)return;
 
