@@ -10,7 +10,7 @@ const js=readFileSync(new URL('journey.js',site),'utf8');
 const hero=html.slice(html.indexOf('<div class="hero-journey"'),html.indexOf('<section class="work-intro"'));
 const base=execFileSync('git',['show','edab4cd:public/flagship-journey/index.html'],{encoding:'utf8'});
 test('all chapters after the hero remain identical after newline normalization',()=>{
- const tail=s=>s.slice(s.indexOf('<section class="work-intro"')).replace(/\r\n/g,'\n').replace('<script src="./hero-composition-study.js" defer></script>\n','');
+ const tail=s=>s.slice(s.indexOf('<section class="work-intro"')).replace(/\r\n/g,'\n').replace('<script src="./hero-composition-study.js" defer></script>\n','').replace('<script src="./doorway-hero.js" defer></script>\n','');
  assert.equal(tail(html),tail(base));
 });
 test('one original website and three subsequent narrative acts replace six cards',()=>{
