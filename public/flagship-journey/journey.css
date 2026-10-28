@@ -7,3 +7,4 @@
 
 @media(max-width:760px){.chapter-index{top:76px}.chapter-copy{padding-top:48px}.project h2,.chapter-fw h2{font-size:clamp(44px,10.4vw,68px)}.chapter-sticky{padding-top:76px}.case-visual{height:min(32svh,275px)}.case-description{font-size:11px}.case-moment{min-height:64px}.case-moment p{font-size:10px}.case-progress{margin:9px 0}.case-actions{margin-top:5px}.case-actions .button{padding:10px 12px}.case-identifier{font-size:8px}}
 @media(max-width:390px){.project h2,.chapter-fw h2{font-size:43px}.chapter-copy{padding-top:45px}.case-visual{height:27svh}}
+.project-capture>img.is-full{position:absolute;left:0;top:0;width:100%;height:auto;max-height:none;object-fit:initial;object-position:top;will-change:transform}
