@@ -17,12 +17,12 @@ test('one original website and three subsequent narrative acts replace six cards
  assert.equal((hero.match(/data-signature-story=/g)||[]).length,3);
  assert.equal((hero.match(/id="signatureSurface"/g)||[]).length,1);
  assert.doesNotMatch(hero,/signature-visual|signatureRequest|signatureReview|signatureOutcome/);
- assert.doesNotMatch(css,/clip-path|will-change/);
+ assert.doesNotMatch(css,/clip-path\\s*:\\s*inset\\(/);
  assert.doesNotMatch(js,/heroVisualProgress|Math.exp|preventDefault.*wheel/);
- for(const label of ['WEBSITE DESIGN & DEVELOPMENT','AUTOMATION + INTEGRATIONS','AI AGENTS + HUMAN CONTROL','FROM POSSIBILITY TO PROOF'])assert.ok(hero.includes(label));
+ for(const label of ['WEBSITE DESIGN & DEVELOPMENT','AUTOMATION + INTEGRATIONS','AI AGENTS + HUMAN CONTROL','ONE CONSIDERED WHOLE'])assert.ok(hero.includes(label));
 });
 test('simulation boundaries and independently purchasable services are explicit',()=>{
- for(const text of ['DEMO-1042','calendar.read_availability','Send & calendar create blocked','OWNER APPROVAL SIMULATED','No message sent or booking created','available independently','approved draft is ready for manual delivery'])assert.ok(hero.includes(text),text);
+ for(const text of ['DEMO-1042','calendar.read_availability','SEND BLOCKED','OWNER APPROVAL SIMULATED','No message sent','available independently','approved draft is ready for manual delivery'])assert.ok(hero.includes(text),text);
  assert.match(hero,/href="#work"/);assert.match(hero,/href="#services"/);assert.match(css,/prefers-reduced-motion:reduce/);assert.match(css,/:not\(.is-enhanced\)/);
 });
 function makeTimeline(width){
@@ -47,7 +47,32 @@ test('forward, fast jumps and reverse scrolling produce identical clean states',
   }
   for(let i=200;i>=0;i--){t.run(i/200);assert.equal(JSON.stringify([t.nodes,t.stories,t.copy]),snapshots.get(i));}
   t.run(.95);assert.equal(t.link.tabIndex,0);t.run(0);assert.equal(t.link.tabIndex,-1);assert.equal(t.copy.inert,false);
-  t.run(.75);assert.equal(t.nodes.approvalBoundary.style.opacity,'1.0000');assert.equal(t.copy.inert,true);
+  t.run(.82);assert.equal(t.nodes.approvalBoundary.style.opacity,'1.0000');assert.equal(t.copy.inert,true);
  }
+});
+test('website unfolds into physical layers before automation becomes visible',()=>{
+ for(const id of ['systemDepth','depthSpine','systemExchange','agentToolConnector','agentToolPulse','toolState','resolutionNote']){
+  assert.equal((hero.match(new RegExp('id="'+id+'"','g'))||[]).length,1,id);
+ }
+ for(const word of ['THE EXPERIENCE','CONNECTED INPUT','BUSINESS SYSTEMS','AUTHORIZED TOOL','RESPONSE DATA','HUMAN DECISION GATE']){
+  assert.ok(hero.includes(word),word);
+ }
+ assert.match(css,/\.depth-plane-data/);
+ assert.match(css,/\.resolution-linkage/);
+ assert.match(css,/\.agent-tool-connector/);
+ const t=makeTimeline(1440);
+ t.run(0);assert.equal(t.nodes.systemDepth.style.visibility,'hidden');
+ t.run(.34);assert.ok(Number(t.nodes.systemDepth.style.opacity)>.5);
+ t.run(.4);assert.ok(Number(t.nodes.systemRoute.style.opacity)>.9);
+ t.run(.56);assert.ok(Number(t.nodes.agentWorkspace.style.opacity)>.3);
+ t.run(.72);assert.ok(Number(t.nodes.agentToolPulse.style.opacity)>.5);
+ t.run(.80);assert.equal(t.nodes.approvalBoundary.style.opacity,'1.0000');
+ t.run(.95);assert.equal(t.nodes.resolutionNote.style.opacity,'1.0000');
+});
+test('the system diagram claims are illustrative and the final result is honest',()=>{
+ for(const word of ['No message sent','No booking created','No external service called','read-only','available independently']){
+   assert.match(hero,new RegExp(word,'i'));
+ }
+ assert.doesNotMatch(hero,/message successfully sent|meeting booked|crm updated in production/i);
 });
 test('script parses',()=>execFileSync(process.execPath,['--check',new URL('journey.js',site).pathname.replace(/^\/([A-Za-z]:)/,'$1')],{stdio:'pipe'}));
