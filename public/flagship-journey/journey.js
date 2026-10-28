@@ -32,6 +32,7 @@ if(journey){
  const copy=journey.querySelector('.hero-copy');
  const introFade=1-smooth(.13,.24);
  copy.style.opacity=String(introFade);
+ copy.style.visibility=introFade<.005?'hidden':'visible';
  copy.style.transform=`translate3d(0,${(-smooth(.12,.26)*34).toFixed(2)}px,0)`;
  const art=journey.querySelector('.signature-art');
  const widen=smooth(.07,.74);
