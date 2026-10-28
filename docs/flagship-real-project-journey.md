@@ -11,7 +11,7 @@ Production homepage, current Genezisi V2, and Vercel deployment rules are preser
 - Prototype 05 headline, positioning and core brand palette retained.
 - Native-scroll guided three-chapter journey through TK Counsel (client-facing legal/professional practice), Socraticblock (founder engineering portfolio), and Fornward (original early-test RPG landing artwork).
 - Actual project screenshots from `/public/work-previews/`, verified to exist in the Agency repository. Their preview resolution is limited and they are not full-page captures.
-- The Fornward stone gate uses verified original files in `socraticblock/broken-chapel-prototype/assets/landing/gate/`. These remain fetched from the source GitHub repository (public availability to be checked in a deployed browser).
+- The Fornward stone gate uses verified original files in `socraticblock/broken-chapel-prototype/assets/landing/gate/`. These original assets are copied into `public/flagship-journey/fornward/` on the isolated feature branch so the deployed experience does not depend on GitHub Raw.
 - Three real-project explanations with progress-driven focal points and a direct link to each original website.
 - Intentional, modal project exploration. TK Counsel attempts a **sandboxed, read-only** live iframe and has a separate open-original link. Socraticblock deliberately uses a screenshot because its existing CSP/X-Frame-Options prevent ordinary embedding. Fornward shows legitimate landing artwork and opens the original (never autostarts gameplay).
 - Five-step local, non-networked automation and AI-agent demos with separate states, authorized tool reads, restricted sends, example owner approval and truthful outcome.
