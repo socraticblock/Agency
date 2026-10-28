@@ -53,3 +53,37 @@ Rendered with the local full-page build in Codex's Chromium-based in-app browser
 ## Scope and release
 
 Changed: public/flagship-journey/index.html, signature-hero.css, journey.js; tests/flagship-signature-hero.test.mjs; this review record. No new runtime dependency or raster asset. No later-site copy or layout edit. No push, production change, deployment, merge, preview-branch push or freeze.
+
+## Follow-up owner-directed art-direction pass (28 October 2026)
+
+**Input:** owner's latest 12:30 recording review and explicit request to implement refinements **on this existing branch**. This pass builds on Codex's four-act version; it does not establish an alternate site or change Selected Work and later chapters.
+
+### Creative changes
+
+1. **Architectural unfolding.** Added the `system-depth` stack beneath the *same* editorial site surface: three graduated planes identify experience, structured input and connected business systems. A vertical illuminated spine visually joins the layers. The website moves into a smaller upper layer while these planes become visible; the fixed-rule route appears as the connected lower surface. The interface should no longer feel like a different unrelated dashboard appearing behind the website.
+2. **Explicit automation exchange.** The existing enquiry token and 3-step rail remain. A small **WEBSITE → BUSINESS TOOLS** indicator explains what the transfer represents. The flow remains deterministic and makes no real CRM write.
+3. **AI tool-return event.** The permitted `calendar.read_availability` row now connects visually to the returned options through an animated relay/pulse. The interface distinguishes reading availability from sending a message or creating an event. The latter operations remain blocked.
+4. **Human boundary.** The proposed reply reaches a strongly differentiated amber review gate with **SEND BLOCKED / CREATE BLOCKED**, not a claim that approval happened automatically.
+5. **Physical resolution.** Replaced the small floating approval receipt with a full editorial ivory composition that visually takes over the same physical object. It joins **Experience → Connection → Intelligence** and states that an owner approved the illustrative draft for **manual delivery only**; no message was sent or booking created.
+6. **Portfolio material handoff.** At the final native-scroll fraction, a shallow ivory background rises *behind* the hero objects to match the existing Selected Work section. The downstream section source is untouched.
+7. **Reduce overlapping content.** The original browser surface now fades fully when the AI workspace becomes the focus, avoiding transparent competing text while the connected system foundation remains.
+
+### Engineering and tests
+
+- All changes are in `public/flagship-journey/index.html`, `signature-hero.css` and the `heroFrame` portion of `journey.js`; a modified structural test file covers the new elements and choreography. No application dependency or external asset added.
+- Progress remains pure normalized native scroll, with eased stateless ranges. No wheel interception, artificial scroll lock or frame-dependent damping. All effects reverse with the user's scroll.
+- New test coverage asserts original downstream sections remain byte-for-byte unchanged, spatial and tool-return DOM elements exist, permissions are described honestly and the phase scene values respond at expected normalized positions.
+- An additional isolated, tool-side source check successfully parsed the hero JavaScript, checked matching HTML tags and CSS braces, and stepped 201 forward + 201 reverse states at each of six simulated viewport widths. **2,412 sampled states passed**, with no non-finite transform values, overlapping readable story headings or reverse-state mismatch. This is algorithmic/source verification, **not** an executed full repo test run or rendered-browser QA.
+- The previously recorded full-build, lint and local-browser results in this document apply to Codex's **earlier** commit, not to the present amendments. They must be rerun before any visual approval.
+
+### Mandatory visual acceptance
+
+The owner must see the new hero in actual Chromium desktop and phone viewport recordings, not just code. Pay special attention to:
+- 0–35%: browser scale and the reveal of physical depth layers. Confirm the panels read as one object and no text is clipped.
+- 30–50%: token movement and 3-step workflow. The fixed-rule nature of automation must remain clear.
+- 50–84%: the agent tool request/result and human gate, including the small short-phone variant. Confirm no visual ghosts or awkward pauses.
+- 82–100%: the new ivory resolution occupies the former website footprint, then releases coherently into Selected Work. Validate readability and cream-to-cream handoff.
+- Slow touch, trackpad and reverse scroll; no jitter/blank holds; reduced motion, keyboard, 200% zoom and iOS Safari must be checked.
+- Capture stills at every act boundary and compare with the owner's recording. Do not claim premium creative approval, mobile performance, 60 FPS, cross-browser or final freeze until measured and accepted.
+
+**Still not approved or frozen.** No push to `main` or `preview-*`, merge or deployment is authorized by this pass.
