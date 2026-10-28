@@ -242,3 +242,17 @@
  .system-depth,.agent-tool-connector{display:none!important}
  .resolution-note{display:none!important}
 }
+
+/* Release the dark hero into the exact ivory material of Selected Work.
+   This belongs to the hero, so the following section remains unchanged. */
+.hero-journey>.hero:before{
+ content:"";position:absolute;z-index:1;left:0;right:0;bottom:0;
+ height:min(28svh,260px);background:#ebe7dc;
+ transform:translate3d(0,var(--outro-shift,100%),0);
+ will-change:transform;pointer-events:none;
+ box-shadow:0 -24px 70px rgba(227,231,219,.07);
+}
+.hero-journey:not(.is-enhanced)>.hero:before{display:none}
+@media(prefers-reduced-motion:reduce){
+ .hero-journey>.hero:before{display:none!important}
+}
