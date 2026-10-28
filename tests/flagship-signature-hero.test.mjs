@@ -1,79 +1,53 @@
-import test from "node:test";
-import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
-import { execFileSync } from "node:child_process";
-import { fileURLToPath } from "node:url";
-import path from "node:path";
-
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const site = path.join(root, "public/flagship-journey");
-const html = readFileSync(path.join(site, "index.html"), "utf8");
-const css = readFileSync(path.join(site, "signature-hero.css"), "utf8");
-const js = readFileSync(path.join(site, "journey.js"), "utf8");
-const hero = html.split('<div class="hero-journey"')[1]?.split('<section class="work-intro"')[0];
-
-test("full flagship remains intact behind the new signature hero", () => {
-  assert.ok(hero, "expected the complete hero section");
-  for (const section of ["work", "tk-counsel", "socraticblock", "fornward", "intelligence", "services", "contact"]) {
-    assert.match(html, new RegExp('id="' + section + '"'));
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {execFileSync} from 'node:child_process';
+import vm from 'node:vm';
+const site=new URL('../public/flagship-journey/',import.meta.url);
+const html=readFileSync(new URL('index.html',site),'utf8');
+const css=readFileSync(new URL('signature-hero.css',site),'utf8');
+const js=readFileSync(new URL('journey.js',site),'utf8');
+const hero=html.slice(html.indexOf('<div class="hero-journey"'),html.indexOf('<section class="work-intro"'));
+const base=execFileSync('git',['show','edab4cd:public/flagship-journey/index.html'],{encoding:'utf8'});
+test('all chapters after the hero remain identical after newline normalization',()=>{
+ const tail=s=>s.slice(s.indexOf('<section class="work-intro"')).replace(/\r\n/g,'\n');
+ assert.equal(tail(html),tail(base));
+});
+test('one original website and three subsequent narrative acts replace six cards',()=>{
+ assert.equal((hero.match(/data-signature-story=/g)||[]).length,3);
+ assert.equal((hero.match(/id="signatureSurface"/g)||[]).length,1);
+ assert.doesNotMatch(hero,/signature-visual|signatureRequest|signatureReview|signatureOutcome/);
+ assert.doesNotMatch(css,/clip-path|will-change/);
+ assert.doesNotMatch(js,/heroVisualProgress|Math.exp|preventDefault.*wheel/);
+ for(const label of ['WEBSITE DESIGN & DEVELOPMENT','AUTOMATION + INTEGRATIONS','AI AGENTS + HUMAN CONTROL','FROM POSSIBILITY TO PROOF'])assert.ok(hero.includes(label));
+});
+test('simulation boundaries and independently purchasable services are explicit',()=>{
+ for(const text of ['DEMO-1042','calendar.read_availability','Send & calendar create blocked','OWNER APPROVAL SIMULATED','No message sent or booking created','available independently','approved draft is ready for manual delivery'])assert.ok(hero.includes(text),text);
+ assert.match(hero,/href="#work"/);assert.match(hero,/href="#services"/);assert.match(css,/prefers-reduced-motion:reduce/);assert.match(css,/:not\(.is-enhanced\)/);
+});
+function makeTimeline(width){
+ const node=()=>({style:{},inert:false,tabIndex:-1});
+ const ids=[...hero.matchAll(/id="([^"]+)"/g)].map(x=>x[1]);
+ const nodes=Object.fromEntries(ids.map(id=>[id,node()]));
+ const stories=['automation','agent','resolution'].map(role=>({...node(),dataset:{signatureStory:role},querySelector:()=>role==='resolution'?link:null}));
+ const link=node(),copy=node(),stage=node(),foundation=node(),bottom=node();
+ const context={innerWidth:width,innerHeight:width<400?568:900,clamp:n=>Math.max(0,Math.min(1,n)),heroNodes:nodes,heroCopy:copy,heroStories:stories,routeStations:[node(),node(),node()],heroStage:stage,heroJourney:{style:{setProperty(){}},querySelector:s=>s==='.system-foundation'?foundation:bottom}};
+ vm.createContext(context);vm.runInContext(js.slice(js.indexOf('function heroFrame('),js.indexOf('function updateScroll(')),context);
+ return {context,nodes,stories,copy,link,run:p=>vm.runInContext(`heroFrame(${p})`,context)};
+}
+test('forward, fast jumps and reverse scrolling produce identical clean states',()=>{
+ for(const width of [320,390,768,1440,1920]){
+  const t=makeTimeline(width),snapshots=new Map();
+  for(let i=0;i<=200;i++){
+   t.run(i/200);
+   const visible=t.stories.filter(x=>Number(x.style.opacity)>.05);
+   assert.ok(visible.length<=1,`overlapping readable headings at ${i/200}`);
+   for(const el of Object.values(t.nodes))assert.doesNotMatch(JSON.stringify(el.style),/NaN|Infinity/);
+   snapshots.set(i,JSON.stringify([t.nodes,t.stories,t.copy]));
   }
-  assert.match(html, /href="\.\/signature-hero\.css"/);
-  assert.match(html, /Your website/);
-  assert.match(hero, /Real work\./);
+  for(let i=200;i>=0;i--){t.run(i/200);assert.equal(JSON.stringify([t.nodes,t.stories,t.copy]),snapshots.get(i));}
+  t.run(.95);assert.equal(t.link.tabIndex,0);t.run(0);assert.equal(t.link.tabIndex,-1);assert.equal(t.copy.inert,false);
+  t.run(.75);assert.equal(t.nodes.approvalBoundary.style.opacity,'1.0000');assert.equal(t.copy.inert,true);
+ }
 });
-
-test("five persistent text scenes replace snap-swapped titles", () => {
-  for (const id of ["signatureSurface", "signatureRequest", "signatureAutomation", "signatureAgent", "signatureReview", "signatureOutcome"]) {
-    assert.equal((html.match(new RegExp('id="' + id + '"', "g")) ?? []).length, 1, id);
-    assert.ok(js.includes("#" + id), id + " must be scroll-controlled");
-  }
-  for (const role of ["website", "automation", "agent", "review", "outcome"]) {
-    assert.equal((html.match(new RegExp('data-signature-story="' + role + '"', "g")) ?? []).length, 1, role);
-  }
-  assert.match(js, /querySelectorAll\('\[data-signature-story\]'\)/);
-  assert.match(css, /\.signature-story-slide\{/);
-  assert.doesNotMatch(js, /signatureStoryTitle/);
-  assert.doesNotMatch(js, /journey\.dataset\.signaturePhase/);
-});
-
-test("reversible, damped native scroll keeps cards opaque and prevents ghosting", () => {
-  assert.match(js, /heroVisualProgress/);
-  assert.match(js, /Math\.exp\(-dt\/115\)/);
-  assert.match(js, /el\.style\.clipPath/);
-  assert.match(js, /el\.style\.opacity=reveal>/);
-  assert.match(js, /signatureProgressFill/);
-  assert.match(css, /\.signature-progress-track/);
-  assert.doesNotMatch(js, /window\.scrollTo\(/);
-  assert.doesNotMatch(js, /wheel.*preventDefault/);
-  assert.doesNotMatch(js, /history\.scrollRestoration/);
-});
-
-test("website, automation, and agentic integration are explicit capabilities", () => {
-  assert.match(hero, /WEBSITE DESIGN & DEVELOPMENT/);
-  assert.match(hero, /AUTOMATION \+ INTEGRATIONS/);
-  assert.match(hero, /AGENTIC AI/);
-  assert.match(hero, /calendar\.read_availability/);
-  assert.match(hero, /CRM/);
-});
-
-test("fictional system actions are not represented as externally completed", () => {
-  assert.match(hero, /NO LIVE ACTIONS|No message was actually sent/i);
-  assert.match(hero, /Notification prepared, not sent/);
-  assert.match(hero, /Calendar creation and outbound messages are disabled/);
-  assert.match(hero, /Owner approval simulated/);
-  assert.match(hero, /approved draft is ready for manual delivery/);
-  assert.doesNotMatch(hero, /TKCOUNSEL\.COM/);
-});
-
-test("reduced-motion and mobile modes have intentional fallbacks", () => {
-  assert.match(css, /@media\(prefers-reduced-motion:reduce\)/);
-  assert.match(css, /@media\(max-width:760px\)/);
-  assert.match(css, /@media\(max-width:390px\)/);
-  assert.match(css, /\.signature-surface\{opacity:1!important/);
-  assert.match(css, /\.signature-storyline\{top:16%/);
-  assert.match(html, /signature-accessible-summary/);
-});
-
-test("site choreography parses as JavaScript", () => {
-  execFileSync(process.execPath, ["--check", path.join(site, "journey.js")], { stdio: "pipe" });
-});
+test('script parses',()=>execFileSync(process.execPath,['--check',new URL('journey.js',site).pathname.replace(/^\/([A-Za-z]:)/,'$1')],{stdio:'pipe'}));

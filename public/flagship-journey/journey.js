@@ -9,81 +9,62 @@ const moments={
  fw:[['01 / THE THRESHOLD','Interaction creates atmosphere.','The original landing-page gate artwork introduces a persistent, mobile-first RPG.'],['02 / THE CROSSING','The world responds to you.','A cinematic gate sequence translates a simple scroll into a sense of arrival.'],['03 / THE GAME','An evolving early test.','The game is playable, incomplete and changing. The live test is always a separate deliberate choice.']]
 };
 let updateQueued=false;
-let heroVisualProgress=null;
-let heroLastFrame=null;
+const heroJourney=document.querySelector('#heroJourney');
+const flowing=()=>innerHeight<=500&&innerWidth>innerHeight;
+if(heroJourney&&!reduced&&!flowing())heroJourney.classList.add('is-enhanced');
+// Cache hero references once. Native scroll is the only progress source.
+const heroNodes=heroJourney?Object.fromEntries([...heroJourney.querySelectorAll('[id]')].map(el=>[el.id,el])):{};
+const heroCopy=heroJourney?.querySelector('.hero-copy');
+const heroStories=[...document.querySelectorAll('[data-signature-story]')];
+const routeStations=[...document.querySelectorAll('[data-route]')];
+const heroStage=heroJourney?.querySelector('.signature-stage');
+function heroFrame(progress){
+ const smooth=(a,b)=>{const t=clamp((progress-a)/(b-a));return t*t*(3-2*t)};
+ const show=(el,amount,y=0)=>{el.style.opacity=amount.toFixed(4);el.style.visibility=amount<.001?'hidden':'visible';el.style.transform=`translate3d(0,${y.toFixed(2)}px,0)`};
+ const lift=smooth(.16,.30),agent=smooth(.45,.56),resolve=smooth(.77,.88),bridge=smooth(.94,1);
+ const compact=innerWidth<=760;
+ heroJourney.style.setProperty('--foundation-label',String(1-agent));
+ heroJourney.style.setProperty('--unfold',String(lift));
+ const opening=1-smooth(.16,.23);
+ show(heroCopy,opening,-smooth(.16,.23)*22);
+ heroCopy.inert=opening<.1;
+ // Whole-object geometry: the original page lifts, stays identifiable, then returns.
+ // No text masks, threshold text replacements, or frame-dependent damping.
+ const surface=heroNodes.signatureSurface;
+ const short=compact&&innerHeight<=710;
+ const y=-lift*(short?65:50)+resolve*(short?61:46);
+ const scale=1-lift*(short?.74:.60)+resolve*(short?.29:.15);
+ surface.style.transform=`translate3d(${(lift*3-resolve*3).toFixed(2)}%,${y.toFixed(2)}%,0) scale(${scale.toFixed(4)}) perspective(1600px) rotateY(${(-8*(1-lift)).toFixed(2)}deg) rotateZ(${(-2+lift*2-resolve*3).toFixed(2)}deg)`;
+ show(heroNodes.systemRoute,smooth(.24,.31)*(1-smooth(.44,.50)),(1-lift)*25);
+ show(heroJourney.querySelector('.system-foundation'),lift*(1-resolve));
+ const travel=smooth(.31,.40);
+ show(heroNodes.requestToken,smooth(.28,.31)*(1-smooth(.40,.42)));
+ heroNodes.requestToken.style.left=`${(travel*65).toFixed(2)}%`;
+ show(heroNodes.crmRecord,smooth(.365,.39));
+ heroNodes.routeSignal.style.transform=`scaleX(${travel.toFixed(4)})`;
+ routeStations.forEach((el,i)=>{const reached=smooth(.30+i*.035,.33+i*.035);el.style.opacity=String(.35+.65*reached);el.style.transform=`translateY(${(1-reached)*6}px)`});
+ show(heroNodes.routeResult,smooth(.39,.43),(1-smooth(.39,.43))*8);
+ show(heroNodes.agentWorkspace,smooth(.51,.57)*(1-smooth(.78,.82)),(1-agent)*22);
+ show(heroNodes.agentContext,smooth(.55,.59));
+ show(heroNodes.agentTool,smooth(.60,.64),(1-smooth(.60,.64))*8);
+ show(heroNodes.agentOptions,smooth(.63,.67),(1-smooth(.63,.67))*8);
+ show(heroNodes.approvalBoundary,smooth(.68,.72),(1-smooth(.68,.72))*8);
+ show(heroNodes.resolutionNote,smooth(.82,.88),(1-resolve)*24);
+ const ranges={automation:[.245,.30,.44,.49],agent:[.50,.55,.78,.82],resolution:[.83,.88,1.1,1.2]};
+ heroStories.forEach(el=>{const [a,b,c,d]=ranges[el.dataset.signatureStory],enter=smooth(a,b),exit=smooth(c,d),opacity=enter*(1-exit);el.style.opacity=opacity.toFixed(4);el.style.visibility=opacity<.001?'hidden':'visible';el.style.transform=`translateY(calc(${compact?'0%':'-40%'} + ${((1-enter)*20-exit*20).toFixed(2)}px))`;el.inert=opacity<.95;const link=el.querySelector('a');if(link)link.tabIndex=opacity>.95?0:-1;});
+ heroStage.style.transform=`translate3d(0,${(-bridge*6).toFixed(2)}%,0) scale(${(1-bridge*.08).toFixed(4)})`;
+ heroNodes.signatureProgressFill.style.transform=`scaleX(${progress.toFixed(4)})`;
+ heroJourney.querySelector('.hero-bottom').style.opacity=String(1-smooth(.13,.20));
+}
 function updateScroll(){updateQueued=false;const top=window.scrollY,range=Math.max(1,document.documentElement.scrollHeight-innerHeight);document.querySelector('#readingTrack').style.width=Math.round(top/range*10000)/100+'%';if(reduced)return;
 
-const journey=document.querySelector('#heroJourney');
-if(journey){
- const bounds=journey.getBoundingClientRect();
- const target=clamp(-bounds.top/Math.max(1,bounds.height-innerHeight));
- // Damp visual progress without hijacking native scroll. The timeline remains
- // reversible and follows the pointer / wheel / touch input deterministically.
- if(heroVisualProgress===null) heroVisualProgress=target;
- const now=performance.now();
- const dt=heroLastFrame===null?16:Math.max(8,Math.min(32,now-heroLastFrame));
- heroLastFrame=now;
- heroVisualProgress+=(target-heroVisualProgress)*(1-Math.exp(-dt/115));
- if(Math.abs(target-heroVisualProgress)<.00025) heroVisualProgress=target;
- else schedule();
- const progress=heroVisualProgress;
- const smooth=(start,end)=>{const t=clamp((progress-start)/Math.max(.0001,end-start));return t*t*(3-2*t)};
- const visible=(inStart,inEnd,outStart,outEnd)=>smooth(inStart,inEnd)*(1-smooth(outStart,outEnd));
- const copy=journey.querySelector('.hero-copy');
- const introFade=1-smooth(.13,.24);
- copy.style.opacity=String(introFade);
- copy.style.visibility=introFade<.005?'hidden':'visible';
- copy.style.transform=`translate3d(0,${(-smooth(.12,.26)*34).toFixed(2)}px,0)`;
- const art=journey.querySelector('.signature-art');
- const widen=smooth(.07,.74);
- const compact=innerWidth<=760;
- art.style.transform=compact?
-   `translate3d(0,${(-widen*4).toFixed(2)}%,0) scale(${(1+widen*.075).toFixed(4)})`:
-   `translate3d(${(-widen*10).toFixed(2)}%,0,0) scale(${(1+widen*.14).toFixed(4)})`;
- const surface=journey.querySelector('#signatureSurface');
- const unfold=smooth(.06,.30);
- // The underlying website stays opaque until an opaque system panel opens on top.
- // Previously, stacked semi-transparent cards made several texts readable at once.
- surface.style.transform=`perspective(1200px) rotateY(${(-9+unfold*9).toFixed(2)}deg) rotateZ(${(-2+unfold*2).toFixed(2)}deg) scale(${(1+unfold*.045).toFixed(4)})`;
- const panels=[
-   ['#signatureRequest',.24,.34],
-   ['#signatureAutomation',.43,.52],
-   ['#signatureAgent',.61,.70],
-   ['#signatureReview',.77,.85],
-   ['#signatureOutcome',.90,.97]
- ];
- // Successive, fully opaque scenes are revealed by a single edge instead of
- // cross-fading dense interface text. Reverse scroll reveals the previous layer.
- panels.forEach(([selector,start,end])=>{
-   const el=journey.querySelector(selector),reveal=smooth(start,end);
-   el.style.opacity=reveal>.0001?'1':'0';
-   el.style.clipPath=`inset(0 ${((1-reveal)*100).toFixed(3)}% 0 0 round 12px)`;
-   el.style.transform=`translate3d(${((1-reveal)*13).toFixed(2)}px,0,0)`;
- });
- const cutaway=journey.querySelector('#signatureCutaway');
- cutaway.style.opacity=String(visible(.13,.20,.23,.30));
- // Independently authored text scenes: no textContent swaps or threshold jumps.
- // Each headline fades all the way out before the next becomes legible.
- const stories=[
-   ['website',.25,.33,.38,.43],
-   ['automation',.44,.51,.55,.61],
-   ['agent',.62,.69,.73,.78],
-   ['review',.79,.85,.87,.91],
-   ['outcome',.91,.96,.97,1.02]
- ];
- journey.querySelectorAll('[data-signature-story]').forEach(el=>{
-   const st=stories.find(x=>x[0]===el.dataset.signatureStory);
-   if(!st)return;
-   const entering=smooth(st[1],st[2]),leaving=smooth(st[3],st[4]);
-   el.style.opacity=String(entering*(1-leaving));
-   el.style.transform=`translate3d(0,${((1-entering)*28-leaving*18).toFixed(2)}px,0)`;
- });
- journey.querySelector('#signatureProgressFill').style.transform=`scaleX(${progress.toFixed(4)})`;
- const transition=journey.querySelector('.hero-transition-label');
- const handoff=smooth(.968,1);
- transition.style.opacity=String(handoff);
- transition.style.transform=`translate3d(0,${((1-handoff)*24).toFixed(2)}px,0)`;
- journey.querySelector('.hero-bottom').style.opacity=String(1-smooth(.06,.22));
+if(heroJourney){
+ heroJourney.classList.toggle('is-enhanced',!flowing());
+ if(!flowing()){
+  const bounds=heroJourney.getBoundingClientRect();
+  const progress=clamp(-bounds.top/Math.max(1,bounds.height-innerHeight));
+  heroFrame(progress);
+ }
 }
 for(const el of chapters){const rect=el.getBoundingClientRect();if(rect.top>innerHeight*1.4||rect.bottom< -innerHeight*.4)continue;const span=Math.max(1,rect.height-innerHeight);const progress=clamp(-rect.top/span);const visual=el.querySelector('.case-visual');el.style.setProperty('--p',progress.toFixed(4));visual.style.transform=`translate3d(0,${((.5-progress)*32).toFixed(1)}px,0)`;const browser=visual.querySelector('.browser-frame');if(browser)browser.style.transform=`perspective(1200px) rotateY(${((1-progress)*-8).toFixed(1)}deg) rotateZ(${((1-progress)*-2).toFixed(1)}deg) scale(${(.91+progress*.07).toFixed(3)})`;const capture=visual.querySelector('.project-capture img');if(capture){if(capture.classList.contains('is-full')){const viewport=capture.parentElement;const imgHeight=capture.naturalHeight/capture.naturalWidth*viewport.clientWidth;const maxPan=Math.max(0,imgHeight-viewport.clientHeight);capture.style.transform=`translate3d(0,${(-progress*maxPan).toFixed(1)}px,0)`;}else{capture.style.transform=`translate3d(0,${(-progress*11).toFixed(1)}%,0) scale(1.12)`;}}const doors=visual.querySelectorAll('.gate-door');if(doors.length===2){doors[0].style.transform=`translateX(${(-progress*37).toFixed(1)}%)`;doors[1].style.transform=`translateX(${(progress*37).toFixed(1)}%)`;}const idx=Math.min(2,Math.floor(progress*3));if(el.dataset.moment!==String(idx)){el.dataset.moment=String(idx);const [k,t,b]=moments[el.dataset.project][idx];const m=el.querySelector('.case-moment');m.querySelector('.moment-index').textContent=k;m.querySelector('strong').textContent=t;m.querySelector('p').textContent=b;}}}
 function schedule(){if(updateQueued)return;updateQueued=true;requestAnimationFrame(updateScroll)}window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule,{passive:true});schedule();
