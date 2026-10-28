@@ -46,7 +46,7 @@ function heroFrame(progress){
  const surfaceX=-agent*8+resolve*8;
  const surfaceTilt=-8*(1-lift)+agent*3+resolve*5;
  surface.style.transform=`translate3d(${surfaceX.toFixed(2)}%,${surfaceY.toFixed(2)}%,0) scale(${surfaceScale.toFixed(4)}) perspective(1600px) rotateY(${surfaceTilt.toFixed(2)}deg) rotateZ(${(-2+lift*2-agent*.5+resolve*.5).toFixed(2)}deg)`;
- surface.style.opacity=String((1-agent*.77)*(1-resolve*.23));
+ surface.style.opacity=String(1-agent);
  const depthAmount=smooth(.18,.31)*(1-smooth(.78,.90));
  show(heroNodes.systemDepth,depthAmount);
  heroNodes.systemDepth.style.transform=`translate3d(0,${((1-lift)*26-agent*9).toFixed(2)}px,0) perspective(1700px) rotateX(${((1-lift)*9).toFixed(2)}deg) scale(${(.91+lift*.09).toFixed(4)})`;
@@ -108,6 +108,7 @@ function heroFrame(progress){
    if(link)link.tabIndex=opacity>.95?0:-1;
  });
  heroStage.style.transform=`translate3d(0,${(-bridge*5).toFixed(2)}%,0) scale(${(1-bridge*.055).toFixed(4)})`;
+ heroJourney.style.setProperty('--outro-shift',`${((1-smooth(.958,1))*100).toFixed(2)}%`);
  heroNodes.signatureProgressFill.style.transform=`scaleX(${progress.toFixed(4)})`;
  heroJourney.querySelector('.hero-bottom').style.opacity=String(1-smooth(.14,.24));
 }
