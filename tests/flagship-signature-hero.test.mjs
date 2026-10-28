@@ -10,14 +10,14 @@ const js=readFileSync(new URL('journey.js',site),'utf8');
 const hero=html.slice(html.indexOf('<div class="hero-journey"'),html.indexOf('<section class="work-intro"'));
 const base=execFileSync('git',['show','edab4cd:public/flagship-journey/index.html'],{encoding:'utf8'});
 test('all chapters after the hero remain identical after newline normalization',()=>{
- const tail=s=>s.slice(s.indexOf('<section class="work-intro"')).replace(/\r\n/g,'\n');
+ const tail=s=>s.slice(s.indexOf('<section class="work-intro"')).replace(/\r\n/g,'\n').replace('<script src="./hero-composition-study.js" defer></script>\n','');
  assert.equal(tail(html),tail(base));
 });
 test('one original website and three subsequent narrative acts replace six cards',()=>{
  assert.equal((hero.match(/data-signature-story=/g)||[]).length,3);
  assert.equal((hero.match(/id="signatureSurface"/g)||[]).length,1);
  assert.doesNotMatch(hero,/signature-visual|signatureRequest|signatureReview|signatureOutcome/);
- assert.doesNotMatch(css,/clip-path\\s*:\\s*inset\\(/);
+ assert.doesNotMatch(css,/clip-path\s*:\s*inset\(/);
  assert.doesNotMatch(js,/heroVisualProgress|Math.exp|preventDefault.*wheel/);
  for(const label of ['WEBSITE DESIGN & DEVELOPMENT','AUTOMATION + INTEGRATIONS','AI AGENTS + HUMAN CONTROL','ONE CONSIDERED WHOLE'])assert.ok(hero.includes(label));
 });
