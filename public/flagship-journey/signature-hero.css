@@ -251,3 +251,45 @@
   .signature-surface{clip-path:none!important}
   .signature-progress-track{display:none}
 }
+
+/* Short portrait screens: keep both the opening and later scene detail inside
+   the real visual viewport, without forcing a 620px sticky element onto 568px. */
+@media(max-width:760px) and (max-height:700px){
+  .hero-journey>.hero{height:100svh;min-height:0;padding:70px 6vw 28px}
+  .hero-journey .hero h1{font-size:clamp(42px,10.7vw,62px);margin:14px 0;line-height:.9}
+  .hero-journey .hero-copy .lead{font-size:11px;line-height:1.42}
+  .hero-journey .hero-copy .overline{font-size:8px}
+  .hero-journey .hero-actions{margin-top:12px;gap:8px}
+  .hero-journey .hero-actions .button{font-size:10px;padding:11px 12px;gap:10px}
+  .hero-journey .hero-art.signature-art{
+    position:absolute;left:5%;bottom:33px;top:auto;
+    width:90%;height:clamp(185px,38svh,235px);
+    min-height:0;max-width:none;margin:0;
+  }
+  .signature-storyline{top:13%;bottom:auto;left:7%;height:235px}
+  .signature-story-slide strong{font-size:clamp(27px,7.4vw,37px);line-height:1}
+  .signature-story-slide p{font-size:11px;max-width:320px}
+  .signature-story-slide span{font-size:8px;margin-bottom:9px}
+  .signature-surface-content>strong{font-size:clamp(27px,7vw,36px);margin-top:15px}
+  .signature-surface-content>p{font-size:8px}
+  .signature-surface-kicker{font-size:6px}
+  .signature-surface-footer{font-size:6px}
+  .signature-panel-top{height:28px}
+  .signature-visual-title,.signature-request-title{font-size:clamp(19px,5vw,27px);margin:11px 0}
+  .signature-request blockquote{font-size:clamp(15px,4.1vw,21px);margin-bottom:12px}
+  .signature-data-row{padding:6px 0}
+  .signature-agent-grid{padding:8px 0;gap:7px}
+  .signature-agent-restriction{font-size:8px;margin-top:7px}
+  .signature-system-path{gap:3px}
+  .signature-path-node{padding:8px 3px}
+  .signature-system-summary{margin-top:9px;padding:7px 0;font-size:8px}
+  .signature-review-graphic{padding:8px 0}
+  .signature-review-graphic strong{font-size:clamp(23px,6vw,34px);margin:6px 0}
+  .signature-review-note{padding:6px 0;gap:5px}
+  .signature-review-gate{margin-top:7px;padding:6px 8px}
+  .signature-outcome-mark{width:28px;height:28px;font-size:15px;margin-top:8px}
+  .signature-outcome>strong{font-size:clamp(23px,6vw,32px);margin-top:8px}
+  .signature-outcome>p{font-size:9px;line-height:1.25;margin:7px 0}
+  .signature-outcome-rule{margin-top:7px}
+  .signature-outcome-foot{font-size:7px;margin-top:7px}
+}
