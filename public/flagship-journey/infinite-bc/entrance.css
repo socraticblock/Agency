@@ -16,7 +16,7 @@
 .bc-motion-ready .journey:not([data-mode]) .intro .actions {justify-content:center;}
 .bc-motion-ready .journey[data-mode="motion"] .interface-wrap,
 .bc-motion-ready .journey:not([data-mode]) .interface-wrap {
-  transform:translate3d(var(--panelOffsetX,110vw),var(--panelOffsetY,0px),0);
+  transform:translate3d(var(--panelOffsetX,110vw),var(--panelOffsetY,0px),0) scale(var(--panelScale,1));
   transform-style:preserve-3d;
 }
 /* The visual must remain visible in full once B resolves; entrance does not scale,
@@ -46,7 +46,7 @@
   }
   .bc-motion-ready .journey[data-mode="motion"] .interface-wrap,
   .bc-motion-ready .journey:not([data-mode]) .interface-wrap {
-    transform:translate3d(var(--panelOffsetX,0px),var(--panelOffsetY,105svh),0);
+    transform:translate3d(var(--panelOffsetX,0px),var(--panelOffsetY,105svh),0) scale(var(--panelScale,1));
     aspect-ratio:1.20;
     max-height:37svh;
     margin:14px auto 0;
@@ -112,3 +112,14 @@
   .bc-motion-ready .journey[data-mode="motion"] .discipline b,
   .bc-motion-ready .journey:not([data-mode]) .discipline b {font-size:13px;}
 }
+
+/* The interface, not the introductory headline, is the full-size B keyframe.
+   All B surfaces and caption text stay opaque until the later scene begins. */
+.bc-motion-ready .journey[data-mode="motion"] .site-window,
+.bc-motion-ready .journey[data-mode="motion"] .sheet {opacity:1;backface-visibility:hidden;}
+.bc-motion-ready .journey[data-mode="motion"] .site-window {background:#183528;}
+.bc-motion-ready .journey[data-mode="motion"] .window-copy p {opacity:1;color:#d1dfd0;}
+.bc-motion-ready .journey[data-mode="motion"] .window-copy small,
+.bc-motion-ready .journey[data-mode="motion"] .discipline span {color:#bbd3bc;}
+.bc-motion-ready .journey[data-mode="motion"] .window-head small,
+.bc-motion-ready .journey[data-mode="motion"] .window-foot {color:#c0d5c1;}
