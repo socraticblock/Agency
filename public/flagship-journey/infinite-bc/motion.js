@@ -4,14 +4,26 @@
  'use strict';
  const root=document.getElementById('journey'),scene=document.getElementById('scene');
  const opening=root.querySelector('.opening'),intro=opening.querySelector('.intro'),panel=opening.querySelector('.interface-wrap');
+ const cardFace=panel.querySelector('.site-window');
  const reveal=root.querySelector('.reveal'),reading=root.querySelector('.reading');
  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
  const clamp=v=>Math.max(0,Math.min(1,v));
  const smooth=(a,b,v)=>{const t=clamp((v-a)/(b-a));return t*t*(3-2*t)};
  const mix=(a,b,t)=>a+(b-a)*t;
+ // Fit the actual opaque green face inside the viewport at the camera's nearest
+ // approach. Unlike a fixed 2.25x multiplier, this leaves visible margins so
+ // the surrounding site-derived geometry can still read as a physical space.
+ const panelScaleFor=(w,h,pw,ph)=>w<=740
+   ?Math.min(1.08,(w-28)/Math.max(1,pw))
+   :Math.max(1,Math.min(1.68,(w-96)/Math.max(1,pw),(h-195)/Math.max(1,ph*.8)));
+ const cameraScaleFor=(w,h,panelScale)=>Math.max(1,Math.min(
+   2.25,
+   (w-(w<=740?32:96))/Math.max(1,cardFace.offsetWidth*panelScale),
+   (h-(w<=740?148:140))/Math.max(1,cardFace.offsetHeight*panelScale)
+ ));
  // All scene state, including the entrance, is a pure function of scroll progress.
  // .20–.32 is an intentional full-B reading window before depth begins.
- const sample=(p,w)=>{
+ const sample=(p,w,zoomCap=2.25)=>{
    // One physical entrance: the panel arrives while the complete opening moves
    // out of the viewport. B becomes the sole center-stage composition.
    const arrival=smooth(.012,.20,p),e=smooth(.32,.49,p);
@@ -25,7 +37,7 @@
      foldAlpha:smooth(.6,.68,p)*(1-smooth(.85,.94,p)),
      foldLeftX:mix(-w*.18,0,f),foldRightX:mix(w*.18,0,f),foldRotL:mix(-48,0,f),foldRotR:mix(48,0,f),
      // Do not magnify the readable panel while it is still visible in full.
-     shiftX:mix(0,-Math.min(w*.23,320),smooth(.56,.64,p)),shiftY:mix(0,-24,smooth(.56,.64,p)),artScale:mix(1,2.25,smooth(.32,.52,p)),
+     shiftX:mix(0,-Math.min(w*.23,320),smooth(.56,.64,p)),shiftY:mix(0,-24,smooth(.56,.64,p)),artScale:mix(1,zoomCap,smooth(.32,.52,p)),
      leftX:-e*Math.min(w*.31,460)+f*Math.min(w*.17,250),rightX:e*Math.min(w*.31,460)-f*Math.min(w*.17,250),
      nearZ:350*e+250*f,farLeft:e*-Math.min(w*.13,170),farRight:e*Math.min(w*.13,170),groundZ:550*e+250*f,
      cOffset:mix(48,0,c)
@@ -35,7 +47,7 @@
  const apply=()=>{
    raf=0;if(root.dataset.mode!=='motion')return;
    const rect=root.getBoundingClientRect(),total=root.offsetHeight-window.innerHeight;
-   const p=clamp(-rect.top/Math.max(1,total)),w=window.innerWidth,v=sample(p,w);
+   const p=clamp(-rect.top/Math.max(1,total)),w=window.innerWidth;
    // All bounds below come from *layout*, not animated rectangles. Both tracks
    // are driven by the same arrival progress, with a shared non-overlap edge.
    const isMobile=w<=740,h=window.innerHeight;
@@ -46,8 +58,8 @@
    const startIntroY=h*.51-(iy+ih/2);
    // Desktop B is deliberately larger, centered and fully opaque at rest.
    // Scale is capped by both viewport width and the actual visible stack height.
-   const panelScale=isMobile?Math.min(1.08,(w-28)/Math.max(1,pw)):
-     Math.max(1,Math.min(1.68,(w-96)/Math.max(1,pw),(h-195)/Math.max(1,ph*.8)));
+   const panelScale=panelScaleFor(w,h,pw,ph);
+   const v=sample(p,w,cameraScaleFor(w,h,panelScale));
    const finalPanelX=w/2-(px+pw/2),finalPanelY=isMobile?h*.52-(py+ph/2):0;
    const startPanelX=w+(pw*panelScale)/2+55-(px+pw/2);
    const startPanelY=h+(ph*panelScale)/2+48-(py+ph/2);
@@ -110,5 +122,9 @@
  if(reduce.addEventListener)reduce.addEventListener('change',enable);else reduce.addListener(enable);
  enable();
  // Named development hook: sample and seek never run on their own.
- window.__GENEZISI_BC_TEST__={sample,seek:p=>{const total=root.offsetHeight-window.innerHeight;window.scrollTo(0,root.offsetTop+clamp(p)*total);apply();return sample(clamp(p),window.innerWidth)}};
+ const inspect=p=>{
+   const w=window.innerWidth,h=window.innerHeight;
+   return sample(clamp(p),w,cameraScaleFor(w,h,panelScaleFor(w,h,panel.offsetWidth,panel.offsetHeight)));
+ };
+ window.__GENEZISI_BC_TEST__={sample:inspect,seek:p=>{const total=root.offsetHeight-window.innerHeight;window.scrollTo(0,root.offsetTop+clamp(p)*total);apply();return inspect(p)}};
 })();
