@@ -46,11 +46,11 @@
    // Its typography is delayed separately so no letter fragments can lead it.
    // The reading stage is solid while it folds away. The opaque C surface
    // grows from its physical hinge; no overlapping full-scene alpha fades.
-   const h=smooth(w<=740?.462:.452,.484,p)*(1-smooth(.745,.768,p));
+   const h=smooth(w<=740?.462:.452,.484,p)*(1-smooth(.725,.75,p));
    const f=smooth(.60,.88,p),c=smooth(.715,.77,p);
-   const handoff=smooth(.665,.738,p);
-   const fold=smooth(.655,.725,p);
-   const cInk=smooth(.708,.748,p);
+   const handoff=smooth(.665,.709,p);
+   const fold=smooth(.655,.712,p);
+   const cInk=smooth(.709,.746,p);
    // Keep the site facade solid until the same-color spatial room has fully
    // covered it. We never crossfade two simultaneously readable panels.
    const d=smooth(.415,.515,p)*(1-smooth(.79,.94,p)),b=p<.515?1:0;
@@ -169,7 +169,7 @@
    root.style.setProperty('--cInsetLeft',Math.max(0,coverX-coverW/2)+'px');
    root.style.setProperty('--cInk',String(v.cInk));
    root.style.setProperty('--cInkRise',(12*(1-v.cInk))+'px');
-   root.dataset.beat=p<.515?'opening':p>=.82?'reveal':'interior';
+   root.dataset.beat=p<.515?'opening':p>=.75?'reveal':'interior';
    const night=smooth(.32,.49,p);
    const darkInk=Math.round(mix(23,240,night)),greenInk=Math.round(mix(51,241,night)),blueInk=Math.round(mix(39,233,night));
    root.style.setProperty('--nav-ink',darkInk+' '+greenInk+' '+blueInk);
@@ -178,7 +178,7 @@
    // Offscreen CTA links must not receive keyboard focus after the push.
    // The graphical B becomes the accessible content when its full pose settles.
    intro.inert=p>=.20;panel.setAttribute('aria-hidden',p>=.20&&p<.50?'false':'true');
-   opening.inert=p>=.515;reveal.inert=p<.82;reading.inert=p<.515||p>.795;
+   opening.inert=p>=.515;reveal.inert=p<.75;reading.inert=p<.515||p>.75;
  };
  const queue=()=>{if(!raf)raf=requestAnimationFrame(apply)};
  const enable=()=>{
