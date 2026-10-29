@@ -44,14 +44,20 @@
    // B reaches its stable camera pose at .41. A *complete*, distant third
    // surface appears inside the formed room, then comes forward as a unit.
    // Its typography is delayed separately so no letter fragments can lead it.
-   const h=smooth(w<=740?.462:.452,.484,p)*(1-smooth(.62,.76,p));
-   const f=smooth(.60,.88,p),c=smooth(.72,.93,p);
+   // The reading stage is solid while it folds away. The opaque C surface
+   // grows from its physical hinge; no overlapping full-scene alpha fades.
+   const h=smooth(w<=740?.462:.452,.484,p)*(1-smooth(.795,.815,p));
+   const f=smooth(.60,.88,p),c=smooth(.745,.835,p);
+   const handoff=smooth(.655,.795,p);
+   const fold=smooth(.655,.765,p);
+   const cInk=smooth(.775,.83,p);
    // Keep the site facade solid until the same-color spatial room has fully
    // covered it. We never crossfade two simultaneously readable panels.
    const d=smooth(.415,.515,p)*(1-smooth(.79,.94,p)),b=p<.515?1:0;
    return {p,arrival,e,h,f,c,d,b,n:smooth(.32,.49,p)*(1-c),
-     foldAlpha:smooth(.6,.68,p)*(1-smooth(.85,.94,p)),
-     foldLeftX:mix(-w*.18,0,f),foldRightX:mix(w*.18,0,f),foldRotL:mix(-48,0,f),foldRotR:mix(48,0,f),
+     foldAlpha:smooth(.625,.695,p)*(1-smooth(.79,.845,p)),
+     foldLeftX:mix(-w*.18,0,f),foldRightX:mix(w*.18,0,f),
+     foldRotL:mix(-52,0,smooth(.63,.785,p)),foldRotR:mix(52,0,smooth(.63,.785,p)),
      // Hold full B at .20-.32. Camera advances .32-.41 and stops before the
      // next surface travels in from depth: independent "settle -> enter" beats.
      shiftX:mix(0,-Math.min(w*.23,320),smooth(.54,.64,p)),shiftY:mix(0,-24,smooth(.54,.64,p)),artScale:mix(1,zoomCap,smooth(.32,.41,p)),
@@ -61,7 +67,7 @@
      readInk:smooth(.507,.543,p),
      leftX:-e*Math.min(w*.17,230)+f*Math.min(w*.13,180),rightX:e*Math.min(w*.17,230)-f*Math.min(w*.13,180),
      nearZ:300*e+180*f,farLeft:e*-Math.min(w*.13,170),farRight:e*Math.min(w*.13,170),groundZ:550*e+250*f,
-     cOffset:mix(48,0,c)
+     cOffset:mix(20,0,c),handoff,fold,cInk
    };
  };
  let raf=0;
@@ -144,11 +150,26 @@
    root.style.setProperty('--depthBottom',Math.max(0,h-cropY-cropH/2)+'px');
    root.style.setProperty('--depthLeft',Math.max(0,cropX-cropW/2)+'px');
    const depthOpen=smooth(.415,.515,p);
-   root.style.setProperty('--readZ',v.readZ+'px');
+   root.style.setProperty('--readZ',(v.readZ-150*v.fold)+'px');
+   root.style.setProperty('--readingTurn',(-77*v.fold)+'deg');
    root.style.setProperty('--readInk',String(v.readInk));
    root.style.setProperty('--roomAdvance',v.roomAdvance+'px');
    root.style.setProperty('--roomReveal',String(depthOpen));
-   root.dataset.beat=p<.515?'opening':p>.79?'reveal':'interior';
+   // C opens from the *left hinge* of the completed reading stage. The crop
+   // expands to the whole scene while the solid reading surface folds aside.
+   // Its dimensions use stable layout measurements, not its animated rect,
+   // so fast/reverse scroll jumps cannot change the opening's origin.
+   const coverW=w*v.handoff;
+   const coverH=mix(reading.offsetHeight*.9,h,v.handoff);
+   const coverX=mix(w/2-reading.offsetWidth/2,w/2,v.handoff);
+   const coverY=mix(h*.49,h/2,v.handoff);
+   root.style.setProperty('--cInsetTop',Math.max(0,coverY-coverH/2)+'px');
+   root.style.setProperty('--cInsetRight',Math.max(0,w-coverX-coverW/2)+'px');
+   root.style.setProperty('--cInsetBottom',Math.max(0,h-coverY-coverH/2)+'px');
+   root.style.setProperty('--cInsetLeft',Math.max(0,coverX-coverW/2)+'px');
+   root.style.setProperty('--cInk',String(v.cInk));
+   root.style.setProperty('--cInkRise',(12*(1-v.cInk))+'px');
+   root.dataset.beat=p<.515?'opening':p>=.82?'reveal':'interior';
    const night=smooth(.32,.49,p);
    const darkInk=Math.round(mix(23,240,night)),greenInk=Math.round(mix(51,241,night)),blueInk=Math.round(mix(39,233,night));
    root.style.setProperty('--nav-ink',darkInk+' '+greenInk+' '+blueInk);
@@ -157,7 +178,7 @@
    // Offscreen CTA links must not receive keyboard focus after the push.
    // The graphical B becomes the accessible content when its full pose settles.
    intro.inert=p>=.20;panel.setAttribute('aria-hidden',p>=.20&&p<.50?'false':'true');
-   opening.inert=p>=.515;reveal.inert=p<.78;reading.inert=p<.515||p>.78;
+   opening.inert=p>=.515;reveal.inert=p<.82;reading.inert=p<.515||p>.795;
  };
  const queue=()=>{if(!raf)raf=requestAnimationFrame(apply)};
  const enable=()=>{
