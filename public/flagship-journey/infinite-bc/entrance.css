@@ -202,7 +202,9 @@
   inset:0;
   pointer-events:none;
   transform-style:preserve-3d;
-  overflow:hidden;
+  /* overflow:hidden forces 3D descendants to flatten. The outer .depth
+     already clips the whole viewport; preserve Z and side-wall occlusion here. */
+  overflow:visible;
 }
 .bc-motion-ready .journey[data-mode="motion"] .room-ceiling,
 .bc-motion-ready .journey[data-mode="motion"] .room-floor,
@@ -339,4 +341,11 @@
   .bc-motion-ready .journey[data-mode="motion"] .depth .reading h2 {font-size:clamp(25px,6.6vw,35px);}
   .bc-motion-ready .journey[data-mode="motion"] .depth .reading p {margin-top:12px;font-size:12px;}
   .bc-motion-ready .journey[data-mode="motion"] .depth .reading-bottom {margin-top:15px;padding-top:10px;}
+}
+
+/* The light-to-room handoff takes its ambient hue from B, avoiding a neutral
+   gray wash around the interface before the architectural chamber expands.
+   Does not alter the solid facade, cards, or final C composition. */
+.bc-motion-ready .journey[data-mode="motion"] .scene::after {
+  background:radial-gradient(ellipse at 50% 48%,#285840 0%,#183c2c 55%,#0b1713 100%);
 }
