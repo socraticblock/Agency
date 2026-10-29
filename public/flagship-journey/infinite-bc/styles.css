@@ -414,7 +414,7 @@ a:focus-visible,button:focus-visible {
   pointer-events:none;
   opacity:var(--depthAlpha,0);
   overflow:hidden;
-  background:radial-gradient(ellipse at 50% 47%,#183b2d 0%,#11271e 36%,#091611 89%)
+  background:radial-gradient(ellipse at 50% 47%,#244f3d 0%,#183427 36%,#0b1b15 89%)
 }
 
 .depth::before {
