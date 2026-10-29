@@ -124,11 +124,10 @@
 .bc-motion-ready .journey[data-mode="motion"] .window-head small,
 .bc-motion-ready .journey[data-mode="motion"] .window-foot {color:#c0d5c1;}
 
-/* Gate 1b corrective handoff: an opaque site-colored plane covers the
-   interface from right to left. Unlike parent opacity fades, this prevents
-   ghost typography and layered transparency during B -> depth transition.
-   The deeper architecture remains the existing, not-yet-approved prototype. */
+/* At close-up, opaque depth geometry emerges through B's central visual field.
+   A centered crop expands only after the camera has enlarged the solid B card;
+   no premature opacity fade or right-to-left cover. Deeper scene is unchanged. */
 .bc-motion-ready .journey[data-mode="motion"] .depth {
   opacity:1;
-  clip-path:inset(0 0 0 var(--depthMask,100%));
+  clip-path:inset(var(--depthInset,50%));
 }
