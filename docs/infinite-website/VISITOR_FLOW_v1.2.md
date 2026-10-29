@@ -35,17 +35,17 @@ These are conceptual moments, **not individual compulsory screens**. Native scro
 
 ### 01 — The interface enters and makes room
 
-**What moves:** On the visitor's first meaningful downward scroll, the structured interface arrives from the right. The centered headline, supporting copy and actions respond together by moving left in a single coordinated layout transformation. The interface does not cover the copy or randomly fade through it.
+**What moves (founder clarification, 29 October, superseding the earlier two-column finish):** On the visitor's first meaningful downward scroll, the structured interface enters from the right. The centered headline, supporting copy and actions move **completely out of the viewport to the left**, pushed by the arriving interface, rather than simply ending in the left column. Motion is driven by native scroll and must never let the two readable regions overlap.
 
 **Physical logic:** The arriving panel creates room, like one part of a coherent editorial composition reorganizing to accommodate another. Add restrained depth and easing, not a literal collision or a generic carousel.
 
-**Mobile:** Instead of compressing side by side, the centered introduction shifts upward and the interface rises into the available central space. Headline, links and labels remain legible.
+**Mobile:** The introduction moves fully upward out of view as the opaque interface rises into the center; do not compress the desktop layout. The introduction and its links must remain legible and accessible until they exit, then be excluded from focus order while offscreen; the persistent navigation remains usable.
 
 **Meaning:** The visitor is already experiencing the transformation of a website before the journey starts.
 
 ### 02 — The full B composition resolves
 
-**What the visitor sees:** The familiar two-part arrangement is now stable: headline left; full green interface right. Its complete contents and boundaries remain visible and readable before any departure begins.
+**What the visitor sees:** One **large, centrally settled, fully opaque green Interface B** is the complete keyframe. The introductory headline has left the viewport; it is **not** parked in a left column. On large screens, the interface occupies generous space and all three service labels, heading, boundaries and supporting copy are clearly readable before any departure begins.
 
 **Interface content:** “THREE DISCIPLINES”; one editorial focal phrase such as “Form and function, connected.”; distinct zones for “Websites”, “Automation”, and “AI systems”. Each can be commissioned separately. The interface is a graphical expression of our offer, **not** a fake external client dashboard.
 
@@ -53,7 +53,7 @@ These are conceptual moments, **not individual compulsory screens**. Native scro
 
 ### 03 — The visitor moves forward *through the real website*
 
-**What happens:** The two-column layout becomes spatial. The headline region, its alignments and the interface frame supply the left plane, right plane, near/far structural edges and vanishing-point geometry. The site grid extends into depth; nearby surfaces pass the viewpoint while distant surfaces move less.
+**What happens:** The opening's original alignments and the **large centered interface frame** become spatial structure. The departed headline's grid ancestry—not ghost text or visible duplicate typography—can inform the left plane, while B's edges establish near/far structural elements and vanishing-point geometry. The site grid extends into depth; nearby surfaces pass the viewpoint while distant surfaces move less.
 
 **Visual proof:** Actual occlusion, relative parallax and perspective from identifiable page elements. They retain enough material solidity that they do not turn into transparent overlapping posters. The camera follows a controlled forward axis; it does not simply enlarge a flat screenshot.
 
