@@ -1,3 +1,9 @@
+> **CURRENT HOMEPAGE DOCUMENT AUTHORITY — HISTORICAL IMPLEMENTATION BASELINE (29 October 2026)**
+>
+> This audit describes the October 4 application state, not the current code or future homepage requirements. Some route names, layout assumptions and component owners have changed. Re-check current `src/app/[locale]/page.tsx`, `SignalHeroPrototype`, locale config and deployed branch; use [North Star v1.2](../infinite-website/NORTH_STAR_v1.2.md) for the new design. Retain the technical observations below as a historical baseline.
+
+---
+
 # Genezisi V2 — current implementation audit
 
 **Date:** 4 October 2026  

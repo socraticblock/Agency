@@ -1,18 +1,28 @@
 ---
-description: Critical anti-patterns and performance blockers to avoid
+description: Shared architectural anti-patterns with clearly scoped digital-card printing and studio-homepage interaction checks.
 globs: "*"
 alwaysApply: true
 ---
 
-# Anti-Patterns
+# Anti-Patterns and Verification
 
-- ❌ Never let components exceed 200 lines
-- ❌ Never add backend dependencies for card features
-- ❌ Never use CSS variables as Framer Motion key values
-- ❌ Never hardcode OG tags in client components
-- ❌ Never try to hide web elements for print — use dedicated print container
-- ❌ Never add animations that require JavaScript when CSS can do it
-- ❌ Never use overflow:hidden on ancestors of sticky elements
-- ✅ Always run npm run build after changes
-- ✅ Always use @media print with @page { size: 3.5in 2in; margin: 0; }
-- ✅ Always test on Samsung Internet for mobile features
+## General software and browser work
+
+- Keep components maintainable and focused; refactor large files when beneficial without changing unrelated code.
+- Do not hardcode server-controlled metadata in client components.
+- Avoid unintended hydration mismatches and unnecessary scroll listeners, paint-intensive filters and dependency growth.
+- Prefer CSS where it fulfills the interaction contract; use client-side JS or 3D only where needed for real perspective/occlusion, deterministic reversible progress or accessibility.
+- Do not break `position: sticky` with unexpected ancestor clipping/overflow. If clipping is necessary, test actual sticky behavior.
+- After code changes run the applicable typecheck/lint/build/tests **when the environment supports them** and report any unrun checks. A passing build is not a visual acceptance.
+- Mobile acceptance includes real-device checks (Android/Samsung Internet and iOS Safari where specified), reverse/fast scrolling, small viewport, reduced-motion, navigation and keyboard. Never claim device testing from desktop emulation.
+
+## Genezisi studio homepage only
+
+- Follow `docs/infinite-website/NORTH_STAR_v1.2.md`. Do not force effects, dashboards, or a full AI story ahead of the current approved gate.
+- No unverified live email/calendar/CRM actions. Preserve links and independent service identities.
+- No direct production merge/deployment without founder consent.
+
+## Digital business card only
+
+- Preserve the existing card product without unnecessary new backend dependencies.
+- For card print/export, use a dedicated tested print layout and appropriate `@media print`/`@page` dimensions (including 3.5in × 2in where the product requires them). **Do not apply business-card print dimensions globally to the studio homepage**.

@@ -1,29 +1,21 @@
 ---
-description: 2026 God-Tier design standards (Native CSS Animations, OKLCH, Anti-Grid, Glassmorphism 2.0).
+description: Context-sensitive UI quality and accessibility; use current product North Star rather than imposing trend-based effects.
 globs: src/components/ui/**/*.{ts,tsx}, src/app/**/*.{ts,tsx}
 alwaysApply: false
 ---
 
-# 003: THE VISIONARY PROTOCOL (2026 STANDARD)
+# UI Craft & Design Context
 
-Adhere to bleeding-edge browser APIs and modern design pillars:
+## Studio homepage — current Infinite Website
 
-## 1. Advanced CSS & Color Science (OKLCH)
-- **OKLCH Colors:** Use `oklch()` for all gradients, shadows, and color mixing. It provides physically accurate lightness and prevents the "gray dead zone" in gradients.
-- **CSS `@property`:** Use typed CSS variables for smooth, native animation of complex properties (e.g., conic gradients).
+- The controlling creative direction is `docs/infinite-website/NORTH_STAR_v1.2.md`: **restrained centered B → C**. Neither Liquid Glass, clay-card styling, translucent dashboard panels nor turquoise glow is a required aesthetic. **Do not add them merely because a reusable rule recommends a trend**.
+- The opening becomes spatial only through visibly connected website-derived columns, surfaces, borders and perspective. Favor meaningful depth/occlusion over opacity tricks, empty tunnels, particle effects or gratuitous WebGL.
+- Preserve a clear typographic hierarchy, contrast, readable intermediate frames, native reversible scroll, no-JS/reduced-motion fallback and uninterrupted access to genuine work/contact.
+- Use motion and layout primitives (CSS transitions, scroll-linked techniques, or scoped JS/GSAP) when justified by measured accessibility, reverse determinism and browser performance. No blanket requirement for one animation engine.
 
-## 2. Liquid Glass & Soft Depth
-- Implement "Liquid Glass" using multi-layered refraction, ultra-subtle SVG noise overlays, color-tinted dynamic shadows, and embossed inner-shadows.
-- Use advanced Tailwind v4 CSS variables to create localized glow and specular highlights.
-- **The Clay-Card Metric:** Utilize `.clay-card` and `.clay-card-hover` layout classes to achieve soft inner refraction borders (`border-emerald-500/30`), relying less on raw transparent layer stacks node framing.
+## Reusable interface principles across products
 
-## 3. Native Engine Motion & Anti-Grid
-- **View Transitions:** Use the native View Transitions API for seamless, app-like routing.
-- **Scroll-Driven Animations:** Use CSS `animation-timeline: scroll()` and `view()` instead of JS-heavy scroll listeners.
-- **Anti-Grid / Organic Layouts:** Introduce visual tension via asymmetrical layouts, structural whitespace, and CSS container queries (`@container`). Break the 12-column conformity.
-- **Carousel Component UX overlays:** All Horizontal snap-scroller templates (`overflow-x-auto`) must include floating absolute overlays supporting Clickable Navigate Arrow triggers (`ChevronLeft`, `ChevronRight`) and static Pagination Dots so desktop & mobile affordances stand 100% crystal clear.
-
-## 4. Translation Resilience (i18n)
-- **Bounding Dimensions:** Flexible components must use scalable grid anchors and `max-content` widths rather than static sizing (`w-64`, `w-[400px]`) that breaks structure under translation-based text node expansions.
-- **Scaling Buffers:** Ensure text overlays preserve aesthetic framing and do not clip outer border bounds on heavy character buffers.
-
+- Prefer legible copy, obvious focus, keyboard operation, touch-safe targets and meaningful affordances. Never rely solely on hover.
+- Responsive layout must accommodate localized EN, KA and NL strings without clipping or unstable transitions. Test all locale lengths.
+- `oklch()`, CSS `@property`, container queries and view transitions are **optional techniques**, not mandatory style signatures. Use them only where browser support, readability and fallback are verified.
+- Digital-card customizer/card visual styles have their own product-specific requirements. Do not transfer those to the studio homepage.

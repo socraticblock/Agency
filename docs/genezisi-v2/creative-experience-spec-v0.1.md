@@ -1,3 +1,9 @@
+> **CURRENT HOMEPAGE DOCUMENT AUTHORITY — SUPERSEDED ART DIRECTION — HISTORICAL (29 October 2026)**
+>
+> The “creative direction locked enough to prototype” below describes the **October 4 Signal-era V2 experiment**, not the founder's later centered B → C decision. [North Star v1.2](../infinite-website/NORTH_STAR_v1.2.md) is the current homepage authority. Keep this document as a record of the former creative exploration; do not treat its Signal storyboard, mandatory visual treatments or original navigation as the current acceptance criteria.
+
+---
+
 # GENEZISI V2 — Creative & Experience Specification v0.1
 
 **Status:** Creative direction locked enough to prototype; not yet a production implementation spec  

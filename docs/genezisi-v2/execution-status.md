@@ -1,3 +1,9 @@
+> **CURRENT HOMEPAGE DOCUMENT AUTHORITY — HISTORICAL STATUS (29 October 2026)**
+>
+> This status report records the October 4 V2 prototype and later Dutch rollout **at that historical checkpoint**, not the current design or deployment state. For the new studio homepage, follow [Infinite Website North Star v1.2](../infinite-website/NORTH_STAR_v1.2.md) and [Acceptance Gates](../infinite-website/ACCEPTANCE_GATES_v1.2.md). Current gate: **1b spatial refinement, not visually approved**. Do not infer live production status from this dated report.
+
+---
+
 # Genezisi V2 — Execution Status
 
 **Date:** 4 October 2026  

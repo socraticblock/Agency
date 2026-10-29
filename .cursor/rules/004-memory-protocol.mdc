@@ -1,22 +1,18 @@
 ---
-description: Enforces the progressive disclosure memory update workflow and self-healing.
-globs: *
+description: Scoped implementation-memory workflow; preserve existing digital-card history and keep current Infinite Website decisions in its authoritative documents.
+globs: "*"
 alwaysApply: true
 ---
 
-# 004: MEMORY WRITE-BACK PROTOCOL
+# 004: PRODUCT-AWARE DECISION LOGGING
 
-## 1. The Write Phase (Automatic Capture)
-When a major architectural decision, non-trivial fix, or new convention is successfully completed, you MUST:
-1. **De-duplicate:** Scan the `docs/MEMORY.md` Index to ensure this decision isn't already logged.
-2. **Increment:** Determine the next available, strictly sequential ID.
-3. **Index:** Append a 1-line Index entry to `docs/MEMORY.md`.
-4. **Log:** Append a 3-bullet block to the Detailed Observations formatted exactly as:
-   - **Context:** [Brief setup]
-   - **Decision:** [The technical choice made]
-   - **Impact:** [How it affects the system/performance/tokens]
+## Choose the correct memory destination
 
-## 2. The Archive Phase (Overload Mitigation)
-- **Bloat Threshold:** When `docs/MEMORY.md` triggers an index rate exceeding **20 Detailed Observation blocks**, it triggers offloads to avoid reading excessive tokens into the main loop buffer.
-- **Offload Procedure:** Migrate historical entries into `docs/memory/[id_spread].md` markdown archives. Retain only the singular bullet points on the main file to act strictly for high-fidelity lookup pointers.
+- **Genezisi studio homepage / Infinite Website:** The current authority is `docs/infinite-website/NORTH_STAR_v1.2.md`, `VISITOR_FLOW_v1.2.md`, and `ACCEPTANCE_GATES_v1.2.md`. Log founder-locked creative/architecture decisions there and update the documentation audit/index for precedence changes. Record gate evidence and open defects in the active review report; **do not append unrelated homepage decisions to the historical digital-card `docs/MEMORY.md`**.
+- **Digital business-card customizer, order, and its specific engineering:** Maintain `docs/MEMORY.md` as a chronological engineering log. Before adding an entry, check the Index for duplicates, then add a stable index ID and Context / Decision / Impact details when relevant.
+- **Other repository work:** Use the relevant product-specific document or a dated issue/report; do not create silent cross-product directives.
 
+## Archival discipline
+
+- Preserve historic IDs and observations. If a log must be split for size, move old entries only in a deliberate, separate, verified refactor that leaves working index links. Never automatically relocate years of source history as a side-effect of a small coding task.
+- Never claim a planned feature, branch review, or passed test is accepted or deployed. Identify source revisions and verified environments.

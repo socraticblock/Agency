@@ -1,0 +1,18 @@
+---
+description: Direct studio-homepage and Genezisi Infinite Website development to the currently approved v1.2 documents; avoid obsolete V2/Signal and digital-card instructions.
+globs: "*"
+alwaysApply: true
+---
+
+# Genezisi Studio Homepage Authority (29 October 2026)
+
+This repository has multiple products. **For studio homepage, journey, hero, studio positioning, or Infinite Website work only:**
+
+1. Read `AGENTS.md`, `docs/infinite-website/NORTH_STAR_v1.2.md`, `VISITOR_FLOW_v1.2.md` and `ACCEPTANCE_GATES_v1.2.md`.
+2. The **controlling current design** is **centered opening → B interface pushes headline left → complete B → website-derived forward depth and meaningful system story → centered C → genuine `SelectedWork` → normal site**. Genezisi sells independent Websites, Automation/Workflows/System Engineering, and AI Systems. It is NOT solely a digital business-card studio, AI agent reseller, or old turquoise Signal demo.
+3. Preserve and accurately distinguish current production code from opt-in prototypes. Gate 1b is **not yet visually accepted**. Do not implement Gate 2 story, integrate/release or merge solely on documentation authority. No unapproved `main` or `preview-*` push.
+4. Do not force glassmorphism, clay cards, turquoise accents, generic WebGL, visual dashboards or 3D for its own sake. Use the restrained founder-selected palette/composition. Real relative perspective/occlusion, native reversible scroll, readable live text, truthful fictional simulation, locale and accessible fallbacks are required. Rendering choice is evidence-led.
+5. Digital-card rules and docs apply to digital-card paths only. Do not rewrite or delete those features. Older Genezisi V2 and flagship specs are historical prototypes, **not** equal authorities.
+6. `package.json` and current source determine actual stack: Next.js 16.2.1, React 19.2.3, Tailwind CSS 4 at this recorded checkpoint. Recheck before implementation.
+
+For unrelated work in this repository, follow the relevant existing product-specific instructions instead.

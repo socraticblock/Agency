@@ -1,3 +1,9 @@
+> **CURRENT HOMEPAGE DOCUMENT AUTHORITY — FOUR-ACT PROTOTYPE — NOT THE NEW STORYBOARD (29 October 2026)**
+>
+> This file documents the October 28 standalone flagship hero comparison, not the selected future Genezisi homepage. Its “canonical timeline” below was canonical **for that historical prototype only**. The founder's updated direction is centered opening → B pushes left → full B → website-derived depth → designed-system journey (later gate) → centered C → real Selected Work. See [North Star v1.2](infinite-website/NORTH_STAR_v1.2.md). Preserve the old test findings; do not treat the former four acts as active acceptance criteria.
+
+---
+
 # Genezisi four-act hero — local review candidate
 
 Date: 28 October 2026. Status: implemented for creative review; not approved or frozen.

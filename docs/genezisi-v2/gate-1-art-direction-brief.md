@@ -1,3 +1,9 @@
+> **CURRENT HOMEPAGE DOCUMENT AUTHORITY — GATE LABEL SUPERSEDED — HISTORICAL (29 October 2026)**
+>
+> The **“Active implementation gate”** below belonged to Genezisi V2 on October 4. It is **not the current Gate 1**. New Infinite Website **Gate 1a** selected B → C; **Gate 1b** remains under founder visual refinement and is **not accepted**. The authoritative acceptance checklist is [Infinite Website Acceptance Gates v1.2](../infinite-website/ACCEPTANCE_GATES_v1.2.md). Retain this former Signal art-direction brief for historical comparison only.
+
+---
+
 # GENEZISI V2 — Gate 1 Art Direction Brief
 
 **Status:** Active implementation gate  

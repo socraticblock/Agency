@@ -1,3 +1,9 @@
+> **CURRENT HOMEPAGE DOCUMENT AUTHORITY — SIGNATURE HERO PROTOTYPE — HISTORICAL (29 October 2026)**
+>
+> This recovered hero and its original six-stage signature story remain preserved as an implementation checkpoint. They are superseded as the target studio-homepage storyboard by [Infinite Website North Star v1.2](infinite-website/NORTH_STAR_v1.2.md) and [Visitor Flow](infinite-website/VISITOR_FLOW_v1.2.md). The currently selected centered B → C design is **not** production-approved. Keep this recovery document as source history only.
+
+---
+
 # Genezisi flagship — signature hero recovery (implementation checkpoint)
 
 **Date:** 28 October 2026

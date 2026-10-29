@@ -1,15 +1,13 @@
 ---
-description: Tech stack and core technologies rules
+description: Actual Genezisi repository stack and boundaries; distinguish homepage, legacy digital-card features and optional rendering choices.
 globs: "*"
 alwaysApply: true
 ---
 
-# Tech Stack
+# Tech Stack & Change Safety
 
-- Next.js 15 App Router
-- Tailwind CSS 4
-- Framer Motion (lightweight use only)
-- TypeScript strict mode
-- Vercel deployment
-- No backend database for digital card features
-- All card features must work client-side only
+- At the 29 October 2026 repository checkpoint, `package.json` declares **Next.js 16.2.1**, **React 19.2.3**, **Tailwind CSS 4**, **TypeScript**, **Framer Motion**, **GSAP**, **Three.js/R3F/Drei**, and optional infrastructure. **Verify current dependency versions before making changes**; do not impose an obsolete Next.js 15 contract.
+- Next.js App Router: preserve server/client boundaries and the current route design. Use existing patterns; do not mandate Server Actions over every API route or introduce unneeded dependencies.
+- The **studio homepage** is governed by `docs/infinite-website/NORTH_STAR_v1.2.md`. Start with the smallest rendering method that achieves convincing, reversible, accessible site-derived depth. WebGL is neither required nor prohibited.
+- **Digital-card-specific limitations** (template customization, order pipeline, database decisions, print dimensions) apply to the digital-card product only. Do not treat them as global homepage design or implementation restrictions.
+- Respect current deployment controls: isolated branches; no direct production/`main` or `preview-*` changes without founder consent.

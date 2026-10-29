@@ -1,29 +1,27 @@
 ---
-description: Core operating system for the AI. Enforces Token Economy, Context Surgery, React 19, and Next 15 boundaries.
+description: Core AI engineering workflow for the actual Next.js 16 / React 19 repository, with current product-specific docs.
 globs: *
 alwaysApply: true
 ---
 
-# 001: THE ARCHITECT CORE PROTOCOL
+# 001: ARCHITECTURE & CONTEXT PROTOCOL
 
-## 1. Context Surgery & Token Economy
-- **Never read the whole project.** Only analyze files strictly necessary for the logic chain.
-- **Never rewrite untouched logic.** Provide exact line numbers and diff-style outputs. 
-- **The "Cheap" Constraint:** Always prioritize the most token-efficient logic.
+## 1. Use the appropriate current authority
 
-## 2. Mandatory Workflow
-Before executing a code change, you must:
-1. **Memory Check:** Read the `docs/MEMORY.md` Index. Expand IDs only if relevant.
-2. **Context Report:** Explicitly state targeted files vs. ignored files.
-3. **Execution:** Provide the architectural rationale, then the diff/code.
+- For **Genezisi studio homepage / Infinite Website** work, first read `AGENTS.md` and `docs/infinite-website/NORTH_STAR_v1.2.md` with its visitor flow and acceptance gates. The old V2 “Signal” specs are historical, not an equal choice.
+- For the separate **digital-card** product, consult its own specs and `docs/MEMORY.md` index. Preserve its existing flows.
+- Start with a scoped reading of the relevant code, but when asked for an **audit of all documentation or cross-cutting rules**, inspect the complete relevant documentation inventory instead of refusing under a token-economy shortcut.
+- Avoid rewriting unaffected logic. State the files to be touched, preserved boundaries, implementation rationale, actual tests and unresolved risks.
 
-## 3. The Bridge (Next.js 15 & React 19)
-- **Server Default:** Exploit React Server Components and Next.js Partial Prerendering (PPR). Use Server Actions instead of API routes.
-- **Modern State:** Use React 19's `use`, `useOptimistic`, and `useActionState`. DO NOT use `useEffect` for data fetching.
-- **Client Isolation:** Heavy physics, WebGL, and high-frequency DOM manipulation must be strictly `"use client"`.
-- **SSR Hydration Safety:** Do not nest Framer Motion `<motion.div>` dynamic `initial` animations loaded inside nested layouts directly beneath parent component animations like `<ScrollReveal>`, to eliminate SSR Hydration Divergence Exceptions (Digest triggers).
+## 2. Actual framework and state
 
-## 4. Deterministic Server Actions
-- **Response Shape:** All Server Actions must conform to a predictable structure: `{ success: boolean; data?: T; error?: { message: string; code: string } }`.
-- **Inference Stability:** Ensure React 19 standard hooks like `useActionState` receive consistent type structures so client handlers don't crash from dynamic object payloads during state transitions.
+- The recorded baseline is **Next.js 16.2.1 / React 19.2.3**, not Next.js 15. Inspect `package.json` and app structure before working.
+- Prefer React Server Components for server-rendered work and client isolation for DOM animation/WebGL or client interaction. Use established app patterns; don't introduce Partial Prerendering or Server Actions as unconditional requirements.
+- Do not use React effects for redundant data loading when server data or existing patterns suffice. Avoid SSR/client hydration mismatches from motion and dynamic initial states.
+- Maintain deterministic state shapes for any existing Server Actions; never replace API routes just to satisfy a generic architecture recipe.
 
+## 3. Preserve quality and release safety
+
+- Use recoverable branches and minimize unrelated churn. Preserve actual local unpublished work and authentic site content.
+- Do not confuse an opt-in HTML proof with real Next.js route integration or production acceptance. Capture browser/device evidence of the animation and fallback paths.
+- No `main`, `preview-*`, or deployment changes without explicit founder authorization.

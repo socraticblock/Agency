@@ -1,3 +1,9 @@
+> **CURRENT HOMEPAGE DOCUMENT AUTHORITY — SUPERSEDED ROADMAP — HISTORICAL (29 October 2026)**
+>
+> The **“authoritative implementation handoff”** label below applied to the October 4 Genezisi V2 / Signal proposal **at that time**. It is **not** the authoritative plan for the new studio homepage. The replacement is [Infinite Website North Star v1.2](../infinite-website/NORTH_STAR_v1.2.md), together with its [Visitor Flow](../infinite-website/VISITOR_FLOW_v1.2.md) and [Acceptance Gates](../infinite-website/ACCEPTANCE_GATES_v1.2.md). Do not implement this roadmap's GSAP Signal-phase geometry, original hero, or old page architecture for the new B → C site. Preserve the dated technical analysis as historical evidence.
+
+---
+
 # Genezisi V2 — Implementation Roadmap
 
 **Status:** authoritative implementation handoff  

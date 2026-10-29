@@ -1,15 +1,14 @@
 ---
-description: Georgian market and target audience rules
+description: Market and language context for the separate studio homepage and digital-card product; do not apply product prices to the homepage.
 globs: "*"
 alwaysApply: true
 ---
 
-# Georgian Market
+# Market, Localization & Product Scope
 
-- Primary market: Tbilisi, Georgia
-- Mobile-first (80%+ traffic on mobile)
-- Must test on Samsung Internet browser
-- Primary language: English (Standard)
-- Georgian Translation: Use human translation later (no automated / AI Georgian)
-- WhatsApp is the primary communication platform
-- Product is a premium digital business card: from 150₾ setup + 120₾/yr hosting (Subdomain / Professional / Executive tiers)
+- The studio operates from Tbilisi, Georgia, but the **Genezisi studio website** is not restricted to local Georgian digital-card customers. Do not assert a primary international market or traffic percentages without current evidence.
+- **Studio homepage:** current supported homepage locales are English (`/en`), Georgian (`/ka`) and Belgian Dutch (`/nl`) at the 29 October 2026 repository checkpoint. Preserve existing locale routing, native translations/SEO, language controls and contact destinations. Recheck actual implementation before editing.
+- Treat mobile as a first-class design and QA target. Check on actual devices, including Samsung Internet and iOS Safari before release; no unverified “80%+ mobile traffic” claim.
+- The current founder-selected **studio homepage** positioning is Websites & digital experiences; Automation, workflows, system engineering & integrations; AI systems where useful. Details: `docs/infinite-website/NORTH_STAR_v1.2.md`.
+- **Separate digital business-card product:** pricing, tiers and fulfillment belong to `docs/digital-card-product-internal.md` and its actual code. Its local market offer does **not** describe the entire Genezisi studio.
+- Contact: retain the verified channel from the current code rather than fabricating or replacing a phone number; avoid automatically translating Georgian/Dutch copy without a deliberate quality review.
