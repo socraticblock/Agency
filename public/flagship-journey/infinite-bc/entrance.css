@@ -1,0 +1,114 @@
+/* Gate 1b increment: opening-to-B only. The original 3D journey and C rules stay in styles.css. */
+.opening { --opening-gap:clamp(16px,3.5vw,60px); }
+
+/* Only active in the scroll-driven experience. Static/reduced-motion layouts use the
+   original normal-flow composition, including working anchors and controls. */
+.bc-motion-ready .journey[data-mode="motion"] .intro,
+.bc-motion-ready .journey:not([data-mode]) .intro {
+  width:100%;
+  text-align:center;
+  transform:translate3d(var(--introOffset,calc(50% + var(--opening-gap)/2)),var(--introVertical,0px),0);
+  transform-origin:center center;
+}
+.bc-motion-ready .journey[data-mode="motion"] .intro .body,
+.bc-motion-ready .journey:not([data-mode]) .intro .body {margin-left:auto;margin-right:auto;}
+.bc-motion-ready .journey[data-mode="motion"] .intro .actions,
+.bc-motion-ready .journey:not([data-mode]) .intro .actions {justify-content:center;}
+.bc-motion-ready .journey[data-mode="motion"] .interface-wrap,
+.bc-motion-ready .journey:not([data-mode]) .interface-wrap {
+  transform:translate3d(var(--panelOffsetX,110vw),var(--panelOffsetY,0px),0);
+  transform-style:preserve-3d;
+}
+/* The visual must remain visible in full once B resolves; entrance does not scale,
+   mask, or alpha-fade the contents of the existing editorial interface. */
+.bc-motion-ready .journey[data-mode="motion"] .interface-wrap .stack {transform-style:preserve-3d;}
+
+@media (min-width:741px) {
+  .bc-motion-ready .journey[data-mode="motion"] .opening,
+  .bc-motion-ready .journey:not([data-mode]) .opening {gap:var(--opening-gap);}
+  .bc-motion-ready .journey[data-mode="motion"] .intro,
+  .bc-motion-ready .journey:not([data-mode]) .intro {max-width:none;}
+  .bc-motion-ready .journey[data-mode="motion"] .intro h1,
+  .bc-motion-ready .journey:not([data-mode]) .intro h1 {font-size:clamp(53px,5.55vw,89px);line-height:.94;letter-spacing:-.071em;}
+  .bc-motion-ready .journey[data-mode="motion"] .eyebrow,
+  .bc-motion-ready .journey:not([data-mode]) .eyebrow {margin-bottom:clamp(22px,3vh,36px);}
+  .bc-motion-ready .journey[data-mode="motion"] .intro .body,
+  .bc-motion-ready .journey:not([data-mode]) .intro .body {margin-top:clamp(19px,3vh,32px);max-width:44ch;}
+  .bc-motion-ready .journey[data-mode="motion"] .intro .actions,
+  .bc-motion-ready .journey:not([data-mode]) .intro .actions {margin-top:clamp(18px,2.8vh,29px);}
+}
+
+@media (max-width:740px) {
+  .bc-motion-ready .journey[data-mode="motion"] .intro,
+  .bc-motion-ready .journey:not([data-mode]) .intro {
+    transform:translate3d(var(--introOffset,0px),var(--introVertical,calc(51svh - 50% - 94px)),0);
+    margin-left:auto;margin-right:auto;
+  }
+  .bc-motion-ready .journey[data-mode="motion"] .interface-wrap,
+  .bc-motion-ready .journey:not([data-mode]) .interface-wrap {
+    transform:translate3d(var(--panelOffsetX,0px),var(--panelOffsetY,105svh),0);
+    aspect-ratio:1.33;
+    max-height:34svh;
+    margin:14px auto 0;
+  }
+  .bc-motion-ready .journey[data-mode="motion"] .opening,
+  .bc-motion-ready .journey:not([data-mode]) .opening {justify-content:space-between;}
+  .bc-motion-ready .journey[data-mode="motion"] .intro h1,
+  .bc-motion-ready .journey:not([data-mode]) .intro h1 {font-size:clamp(43px,11.6vw,67px);line-height:.94;}
+  .bc-motion-ready .journey[data-mode="motion"] .intro .body,
+  .bc-motion-ready .journey:not([data-mode]) .intro .body {max-width:39ch;}
+  .bc-motion-ready .journey[data-mode="motion"] .interface-wrap .stack,
+  .bc-motion-ready .journey:not([data-mode]) .interface-wrap .stack {width:94%;height:94%;}
+  .bc-motion-ready .journey[data-mode="motion"] .window-head,
+  .bc-motion-ready .journey:not([data-mode]) .window-head {font-size:10px;}
+  .bc-motion-ready .journey[data-mode="motion"] .window-copy strong,
+  .bc-motion-ready .journey:not([data-mode]) .window-copy strong {font-size:clamp(22px,6vw,32px);}
+  .bc-motion-ready .journey[data-mode="motion"] .discipline b,
+  .bc-motion-ready .journey:not([data-mode]) .discipline b {font-size:clamp(15px,3.8vw,19px);}
+}
+
+@media (max-width:380px) {
+  .bc-motion-ready .journey[data-mode="motion"] .opening,
+  .bc-motion-ready .journey:not([data-mode]) .opening {padding-top:77px;padding-bottom:18px;}
+  .bc-motion-ready .journey[data-mode="motion"] .intro,
+  .bc-motion-ready .journey:not([data-mode]) .intro {transform:translate3d(var(--introOffset,0px),var(--introVertical,calc(51svh - 50% - 77px)),0);}
+  .bc-motion-ready .journey[data-mode="motion"] .intro h1,
+  .bc-motion-ready .journey:not([data-mode]) .intro h1 {font-size:clamp(39px,11.4vw,44px);}
+  .bc-motion-ready .journey[data-mode="motion"] .eyebrow,
+  .bc-motion-ready .journey:not([data-mode]) .eyebrow {font-size:8px;letter-spacing:.115em;margin-bottom:13px;}
+  .bc-motion-ready .journey[data-mode="motion"] .intro .body,
+  .bc-motion-ready .journey:not([data-mode]) .intro .body {font-size:12px;line-height:1.42;margin-top:13px;}
+  .bc-motion-ready .journey[data-mode="motion"] .intro .actions,
+  .bc-motion-ready .journey:not([data-mode]) .intro .actions {gap:6px;margin-top:12px;}
+  .bc-motion-ready .journey[data-mode="motion"] .button,
+  .bc-motion-ready .journey:not([data-mode]) .button {min-height:40px;gap:6px;padding:0 10px;font-size:10px;}
+  .bc-motion-ready .journey[data-mode="motion"] .interface-wrap,
+  .bc-motion-ready .journey:not([data-mode]) .interface-wrap {aspect-ratio:1.46;max-height:33svh;margin-top:8px;}
+  .bc-motion-ready .journey[data-mode="motion"] .window-copy strong,
+  .bc-motion-ready .journey:not([data-mode]) .window-copy strong {font-size:20px;}
+  .bc-motion-ready .journey[data-mode="motion"] .opening-foot,
+  .bc-motion-ready .journey:not([data-mode]) .opening-foot {display:none;}
+}
+@media (max-width:740px) and (max-height:650px) {
+  .bc-motion-ready .journey[data-mode="motion"] .interface-wrap,
+  .bc-motion-ready .journey:not([data-mode]) .interface-wrap {max-height:34svh;}
+  .bc-motion-ready .journey[data-mode="motion"] .window-foot,
+  .bc-motion-ready .journey:not([data-mode]) .window-foot {font-size:7px;}
+}
+/* Guard against grid min-content overflow inside the short mobile interface. */
+@media (max-width:380px) {
+  .bc-motion-ready .journey[data-mode="motion"] .site-window,
+  .bc-motion-ready .journey:not([data-mode]) .site-window {grid-template-rows:13% minmax(0,1fr) 10%;}
+  .bc-motion-ready .journey[data-mode="motion"] .window-core,
+  .bc-motion-ready .journey:not([data-mode]) .window-core,
+  .bc-motion-ready .journey[data-mode="motion"] .disciplines,
+  .bc-motion-ready .journey:not([data-mode]) .disciplines {min-height:0;}
+  .bc-motion-ready .journey[data-mode="motion"] .window-copy,
+  .bc-motion-ready .journey:not([data-mode]) .window-copy {min-height:0;overflow:hidden;padding:7px;}
+  .bc-motion-ready .journey[data-mode="motion"] .window-copy strong,
+  .bc-motion-ready .journey:not([data-mode]) .window-copy strong {font-size:17px;}
+  .bc-motion-ready .journey[data-mode="motion"] .discipline,
+  .bc-motion-ready .journey:not([data-mode]) .discipline {min-height:0;padding:5px 8px;gap:3px;}
+  .bc-motion-ready .journey[data-mode="motion"] .discipline b,
+  .bc-motion-ready .journey:not([data-mode]) .discipline b {font-size:13px;}
+}

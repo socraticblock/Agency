@@ -1,19 +1,20 @@
 # Genezisi Infinite Website — Gate 1b / B → C spatial proof
 
-**Prepared:** 29 October 2026. **Status:** interactive opt-in development proof, **not visual acceptance** and **not production integration**.
+**Prepared:** 29 October 2026. **Updated:** 29 October 2026 for the centered-opening first increment. **Status:** interactive opt-in development proof, **not founder visual acceptance**, **not the complete Gate 1b**, and **not production integration**.
 
 ## Approved art direction
 
-The founder explicitly selected **B → C**: start with Interface Strata, travel **forward through site-derived geometry**, emerge in a distinct Typographic Architecture (C) composition, then **continue downward normally** to discover the studio's actual work. No second hero, reverse-only return, new portal, AI enquiry narrative or mandatory play-to-contact requirement.
+The founder explicitly selected **B → C**: start with a centered introduction, let Interface Strata enter from the right and push the introduction left, hold a fully readable B composition, then travel **forward through site-derived geometry**, emerge in a distinct Typographic Architecture (C) composition, then **continue downward normally** to discover the studio's actual work. No second hero, reverse-only return, new portal, AI enquiry narrative or mandatory play-to-contact requirement.
 
 This stage implements and tests the **visual and interaction mechanism** in a self-contained route. The original source of truth remains the existing Next.js homepage's `SelectedWork` component. The preview's `#work` uses **source-verified project names and real external project URLs**, but it is **not** that React component; the true Next.js seam still needs integration and founder review. This distinction is a pass/fail boundary, not a minor footnote.
 
 ## Files
 
-- `index.html` — semantic opening B, middle reading plane, C editorial reveal, Work preview, and ordinary lower service section. Real `#work` and `#capabilities` anchors; verified WhatsApp intake CTA.
-- `styles.css` — responsive page and plane geometry, 3D perspective, editorial C, skip link, keyboard focus, no-JavaScript and reduced-motion layouts.
-- `motion.js` — one timeline sampler, pure `sample(progress,width)` geometry, requestAnimationFrame-coalesced native scroll input, reverse determinism, viewport resizing, and inert states for offscreen semantic content.
-- `capture.py`, `qa.py`, `record.py` — local Chromium QA scripts; `evidence/` — browser screenshots, review sheets, and scroll walkthrough videos.
+- `index.html` — first-frame motion bootstrap and stylesheet link; existing opening B, middle reading plane, C editorial reveal, Work preview and service section are preserved. Real `#work` and `#capabilities` anchors; original WhatsApp CTA unchanged.
+- `styles.css` — **unchanged** original page/plane geometry, perspective, C reveal, skip/focus, and fallback rules.
+- `entrance.css` — isolated desktop horizontal push, mobile vertical entrance, first-frame centering and narrow-screen B text-fit corrections.
+- `motion.js` — preserves the original sampler, deep geometry, fold/C values, coalesced native scroll, reverse determinism, resize and inert management; adds deterministic entrance progress/offsets and delays the original depth start until after a full B reading window.
+- **Evidence inventory correction:** `capture.py`, `qa.py`, `record.py` and an `infinite-bc/evidence/` directory **do not exist in this verified commit**. Previous references to checked-in scripts, captures and recordings were inaccurate. Do not rely on or cite them as repository evidence.
 
 ## Geometry / identity map
 
@@ -28,13 +29,19 @@ This stage implements and tests the **visual and interaction mechanism** in a se
 | Navigation | Real Work, Services and WhatsApp links | Header stays clickable through entire timeline | Same clickable header + distinct C→Work link |
 | WorkSeam | The `#work` destination is available immediately | No fake projects inside the cinematic environment | Native sticky release into a **preview** of existing project identities; production React seam pending |
 
-**Timeline hypotheses (normalised progress):** K0 0–0.12; entry 0.12–0.39; reading hold around 0.4–0.62; distinct fold 0.62–0.90; C at 0.93–1; normal scroll into Work immediately thereafter. No independent clock/tween. Pause and reverse are valid at every fractional value.
+**First-increment entrance timeline (normalised progress):** centered opening at `0`; interface and introduction move together from `.012–.20`; complete B is held at `.20–.32`; original depth starts at `.32`, with its remainder and the future C work preserved for subsequent review. Full-journey timing is still provisional. No independent clock/tween; every fractional position is reversible.
 
-**User flow:** `B → threshold → readable interior → forward reassembly → C → #work`. Scrolling backward reverses the *entire* path, not just the opening.
+**User flow:** `centered intro → right-hand interface pushes into B → full B hold → existing threshold/interior/fold/C prototype → #work preview`. Scrolling backward retraces progress.
 
-## Verification in this environment
+## Verification and evidence status — first increment only
 
-Chromium via Playwright `page.set_content` of the *same HTML, CSS and JS* inlined in memory; local browser navigation/deployment were not available, so this is **not a served-route test**. Headless stills at 1440×900, 390×844 and 320×568. Reduced-motion and disabled-JS tests use native nonsticky sections. A separate test exercises 11 scroll samples per viewport: 33 samples with zero horizontal overflow, clickable header CTA, correct semantic inert behaviour, and working native jump to Work; additional tests exercise reverse deterministic sampling and rapid reset. Desktop and mobile wheel walkthroughs provided as available. Physical iPhone/Android, Safari, Firefox, screen reader, production hydration, multilingual rendering and FPS on low-end Android are **not yet verified**.
+**Source inspection:** GitHub verified that the original HTML, CSS and scroll-motion logic exist at `public/flagship-journey/infinite-bc/` in base commit `722d78a312e336dde7dad39fa3f4d36aea1f0f0c`. Existing 3D/depth/fold/C markup and its `styles.css` were preserved.
+
+**Checks actually performed during this increment:** `node --check` on the new `motion.js` source; headless Chromium with Playwright `page.set_content` over a **local opening-only reconstruction** containing the preserved opening markup and relevant original CSS selectors plus the new `entrance.css` and `motion.js`. Tested scroll positions `0, .045, .105, .16, .20, .27, .32` at `1440×900`, `1366×768`, `390×844` and `320×568`. The local test recorded browser bounding boxes and horizontal-overflow flags; narrow mobile initially exposed clipping in B, leading to a CSS grid-minimum correction. **These are isolated prototype captures, not full-repository served-route validation.**
+
+**Evidence storage:** Captures and a JSON-lines measurement log were created as **conversation artifacts**, not committed to a repository `evidence/` directory. Do not claim that videos, production/browser route captures or missing Python QA scripts were checked into Git. This stage still needs a real served-route review of the committed branch, reverse-scroll and reduced-motion checks against the full original CSS, hardware testing, and founder visual acceptance.
+
+**Not run / not established:** `npm install`, full Next.js build, typecheck/lint of the full repository, production integration, cross-browser or physical-device testing, video capture, performance/FPS measurements, and localized route visual checks. None of those are implied by these static-source changes.
 
 ### Follow-up defects / acceptance blockers
 
@@ -47,4 +54,4 @@ Chromium via Playwright `page.set_content` of the *same HTML, CSS and JS* inline
 
 ## Reviewer instructions
 
-Open `index.html` in a browser alongside `styles.css` and `motion.js`. Scroll normally through B into C, then below C into the preview Work section. Scroll backward. Try `Explore our work`, `Start a project`, the navigation links, and browser reduced motion. The `evidence/` folder contains `desktop-contact.png` and `portrait-contact.png`, the intermediate quarter-frame images, and desktop/mobile walkthrough recordings. Compare at 1440×900 and portrait 390×844; 320×568 is a small-height stress case. Report any ambiguous or visually weak frames. **Stop at founder review**; do not expand into Gate 2 enquiry content.
+Open `public/flagship-journey/infinite-bc/index.html` on a local served route with `styles.css`, `entrance.css` and `motion.js`. Scroll normally through B into C, then below C into the preview Work section. Scroll backward. Try `Explore our work`, `Start a project`, the navigation links, and browser reduced motion. There is **no checked-in evidence folder** for this proof. Use the separately supplied first-increment headless Chromium stills and measurements, and review the actual branch in a browser before visual acceptance. Compare at 1440×900 and portrait 390×844; 320×568 is a small-height stress case. Report any ambiguous or visually weak frames. **Stop at founder review**; do not expand into Gate 2 enquiry content.
