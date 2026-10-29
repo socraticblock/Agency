@@ -129,7 +129,7 @@
    no premature opacity fade or right-to-left cover. Deeper scene is unchanged. */
 .bc-motion-ready .journey[data-mode="motion"] .depth {
   opacity:1;
-  clip-path:inset(var(--depthInset,50%));
+  clip-path:inset(var(--depthTop,50%) var(--depthRight,50%) var(--depthBottom,50%) var(--depthLeft,50%));
 }
 
 /* Gate 1b: B itself supplies the first architectural planes. The two solid
