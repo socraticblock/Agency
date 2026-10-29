@@ -33,6 +33,14 @@ This stage implements and tests the **visual and interaction mechanism** in a se
 
 **User flow:** `centered intro → right-hand interface pushes into B → full B hold → existing threshold/interior/fold/C prototype → #work preview`. Scrolling backward retraces progress.
 
+## Focused corrective pass — opaque B-to-depth handoff (29 October)
+
+**Founder feedback:** the enlarged centered B now looks closer to the requested entrance, but its readable green surfaces and the following scene became semitransparent and layered over one another after the full-B hold. This was caused by `--b` reducing the **entire opening parent's opacity** while `--d` increased the depth scene opacity.
+
+**Corrective implementation:** retain the whole B at opacity `1` until a solid right-to-left site-colored depth layer has covered the viewport. The new `--depthMask` is a deterministic rectangular occlusion sampled from p=.32–.44; the depth layer itself stays opaque while clipped, and B hides only after the cover completes. Defer magnification of B until the visual cover is nearly complete; introduce the existing interior reading content after the cover. The unchanged full-B hold remains p=.20–.32. This **removes the previous two-layer transparency artifact** but is **not** acceptance of the later spatial journey or its floating-card aesthetics.
+
+**Verification limitation:** new local headless Chromium isolated-opening reconstruction sampled **85 states** (17 progress values × five desktop/mobile viewports: 1690×900, 1440×900, 1366×768, 390×844, 320×568). Verified B opacity remained 1 through the early cover, the depth scene remained opaque while clipped, and the new interior appears after occlusion; `node --check` passed. Reduced-motion kept the static path. These are not served-route or device tests; the revised tunnel branch still requires actual browser inspection. **No main/preview deployment or merge; Gate 1b remains unapproved.**
+
 ## Superseding visual requirement — founder clarification, 29 October 2026
 
 The founder reviewed the actual PR #15 tunnel route and specifically rejected ending with the original introduction still in the left column. **The first copy must be pushed out of sight completely**. On a large desktop screen, **one fully opaque, expanded green Interface B** must occupy the center with readable text and labels. On portrait mobile, the introduction moves upward out of view and B becomes the central subject. Both arrive via a shared, geometry-derived native-scroll path rather than separate unrelated slides.
