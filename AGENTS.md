@@ -14,10 +14,12 @@ Read in this order:
 2. [Full Visitor Flow v1.2](docs/infinite-website/VISITOR_FLOW_v1.2.md) — proposed scene copy and B → C storyboard; subordinate where wording is not yet visually accepted.
 3. [Acceptance Gates v1.2](docs/infinite-website/ACCEPTANCE_GATES_v1.2.md) — scope/QA/evidence gates.
 4. [Documentation audit and precedence](docs/DOCUMENTATION_AUDIT_2026-10-29.md) — old/current documents and rules.
+5. [29 October current handoff](docs/infinite-website/HANDOFF_2026-10-29.md) — current draft PR #15 state, latest code checkpoint, actual source path, remaining decisions and tomorrow's start.
+6. [29 October lessons](docs/infinite-website/LESSONS_2026-10-29.md) and [repository-local motion-review skill](skills/infinite-website-motion-review/SKILL.md) — repeatable visual QA, scroll pacing, CSS 3D and screenshot/proof boundaries. The skill is a checked-in reference, not automatically installed by every agent runtime.
 
 **Locked destination:** centered “Your website is only the beginning.” → right-hand B interface pushes original headline left → complete, readable B → native-scroll forward through the website's own architecture → coherent illustration of system design, ordinary automation, connected systems, appropriate AI and optional human approval → distinct forward fold into centered C, “Made to be seen. Built to work.” → *actual* `SelectedWork` and ordinary website content.
 
-**Current delivery status:** Gate 1b interactive proof exists as an **isolated opt-in review candidate**, but the newly refined centered opening, full B hold, convincing spatial depth, compact interior and final genuine-app integration are **NOT accepted or implemented** merely because specified. Do not jump to full Gate 2 narrative without explicit authorization.
+**Current delivery status (29 October, after founder-reviewed increments):** Gate 1b is an **isolated opt-in, technically implemented draft candidate** at PR #15. The centered push, full-B hold, B-derived CSS architectural chamber, third reading plane, shortened scroll holds, and early C headline are in the prototype source. **The full served route has NOT been visually accepted by the founder; the real Next.js app integration, full Gate 2 narrative and genuine Selected Work seam have NOT been implemented.** Read the dated handoff for evidence limits and current code checkpoint; do not jump to Gate 2 without explicit authorization.
 
 **Business:** Websites/digital experiences, automation/workflow/system engineering/integration, and AI systems/assistants are **independently commissionable**. Do not position the site as an AI-only or digital-business-card-only company.
 

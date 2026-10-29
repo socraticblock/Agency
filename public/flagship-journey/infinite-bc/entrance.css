@@ -1,0 +1,415 @@
+/* Gate 1b increment: opening-to-B only. The original 3D journey and C rules stay in styles.css. */
+.opening { --opening-gap:clamp(16px,3.5vw,60px); }
+
+/* Only active in the scroll-driven experience. Static/reduced-motion layouts use the
+   original normal-flow composition, including working anchors and controls. */
+.bc-motion-ready .journey[data-mode="motion"] .intro,
+.bc-motion-ready .journey:not([data-mode]) .intro {
+  width:100%;
+  text-align:center;
+  transform:translate3d(var(--introOffset,calc(50% + var(--opening-gap)/2)),var(--introVertical,0px),0);
+  transform-origin:center center;
+}
+.bc-motion-ready .journey[data-mode="motion"] .intro .body,
+.bc-motion-ready .journey:not([data-mode]) .intro .body {margin-left:auto;margin-right:auto;}
+.bc-motion-ready .journey[data-mode="motion"] .intro .actions,
+.bc-motion-ready .journey:not([data-mode]) .intro .actions {justify-content:center;}
+.bc-motion-ready .journey[data-mode="motion"] .interface-wrap,
+.bc-motion-ready .journey:not([data-mode]) .interface-wrap {
+  transform:translate3d(var(--panelOffsetX,110vw),var(--panelOffsetY,0px),0) scale(var(--panelScale,1));
+  transform-style:preserve-3d;
+}
+/* The visual must remain visible in full once B resolves; entrance does not scale,
+   mask, or alpha-fade the contents of the existing editorial interface. */
+.bc-motion-ready .journey[data-mode="motion"] .interface-wrap .stack {transform-style:preserve-3d;}
+
+@media (min-width:741px) {
+  .bc-motion-ready .journey[data-mode="motion"] .opening,
+  .bc-motion-ready .journey:not([data-mode]) .opening {gap:var(--opening-gap);}
+  .bc-motion-ready .journey[data-mode="motion"] .intro,
+  .bc-motion-ready .journey:not([data-mode]) .intro {max-width:none;}
+  .bc-motion-ready .journey[data-mode="motion"] .intro h1,
+  .bc-motion-ready .journey:not([data-mode]) .intro h1 {font-size:clamp(53px,5.55vw,89px);line-height:.94;letter-spacing:-.071em;}
+  .bc-motion-ready .journey[data-mode="motion"] .eyebrow,
+  .bc-motion-ready .journey:not([data-mode]) .eyebrow {margin-bottom:clamp(22px,3vh,36px);}
+  .bc-motion-ready .journey[data-mode="motion"] .intro .body,
+  .bc-motion-ready .journey:not([data-mode]) .intro .body {margin-top:clamp(19px,3vh,32px);max-width:44ch;}
+  .bc-motion-ready .journey[data-mode="motion"] .intro .actions,
+  .bc-motion-ready .journey:not([data-mode]) .intro .actions {margin-top:clamp(18px,2.8vh,29px);}
+}
+
+@media (max-width:740px) {
+  .bc-motion-ready .journey[data-mode="motion"] .intro,
+  .bc-motion-ready .journey:not([data-mode]) .intro {
+    transform:translate3d(var(--introOffset,0px),var(--introVertical,calc(51svh - 50% - 94px)),0);
+    margin-left:auto;margin-right:auto;
+  }
+  .bc-motion-ready .journey[data-mode="motion"] .interface-wrap,
+  .bc-motion-ready .journey:not([data-mode]) .interface-wrap {
+    transform:translate3d(var(--panelOffsetX,0px),var(--panelOffsetY,105svh),0) scale(var(--panelScale,1));
+    aspect-ratio:1.20;
+    max-height:37svh;
+    margin:14px auto 0;
+  }
+  .bc-motion-ready .journey[data-mode="motion"] .opening,
+  .bc-motion-ready .journey:not([data-mode]) .opening {justify-content:space-between;}
+  .bc-motion-ready .journey[data-mode="motion"] .intro h1,
+  .bc-motion-ready .journey:not([data-mode]) .intro h1 {font-size:clamp(43px,11.6vw,67px);line-height:.94;}
+  .bc-motion-ready .journey[data-mode="motion"] .intro .body,
+  .bc-motion-ready .journey:not([data-mode]) .intro .body {max-width:39ch;}
+  .bc-motion-ready .journey[data-mode="motion"] .interface-wrap .stack,
+  .bc-motion-ready .journey:not([data-mode]) .interface-wrap .stack {width:94%;height:94%;}
+  .bc-motion-ready .journey[data-mode="motion"] .window-head,
+  .bc-motion-ready .journey:not([data-mode]) .window-head {font-size:10px;}
+  .bc-motion-ready .journey[data-mode="motion"] .window-copy strong,
+  .bc-motion-ready .journey:not([data-mode]) .window-copy strong {font-size:clamp(22px,6vw,32px);}
+  .bc-motion-ready .journey[data-mode="motion"] .discipline b,
+  .bc-motion-ready .journey:not([data-mode]) .discipline b {font-size:clamp(15px,3.8vw,19px);}
+}
+
+@media (max-width:380px) {
+  .bc-motion-ready .journey[data-mode="motion"] .opening,
+  .bc-motion-ready .journey:not([data-mode]) .opening {padding-top:77px;padding-bottom:18px;}
+  .bc-motion-ready .journey[data-mode="motion"] .intro,
+  .bc-motion-ready .journey:not([data-mode]) .intro {transform:translate3d(var(--introOffset,0px),var(--introVertical,calc(51svh - 50% - 77px)),0);}
+  .bc-motion-ready .journey[data-mode="motion"] .intro h1,
+  .bc-motion-ready .journey:not([data-mode]) .intro h1 {font-size:clamp(39px,11.4vw,44px);}
+  .bc-motion-ready .journey[data-mode="motion"] .eyebrow,
+  .bc-motion-ready .journey:not([data-mode]) .eyebrow {font-size:8px;letter-spacing:.115em;margin-bottom:13px;}
+  .bc-motion-ready .journey[data-mode="motion"] .intro .body,
+  .bc-motion-ready .journey:not([data-mode]) .intro .body {font-size:12px;line-height:1.42;margin-top:13px;}
+  .bc-motion-ready .journey[data-mode="motion"] .intro .actions,
+  .bc-motion-ready .journey:not([data-mode]) .intro .actions {gap:6px;margin-top:12px;}
+  .bc-motion-ready .journey[data-mode="motion"] .button,
+  .bc-motion-ready .journey:not([data-mode]) .button {min-height:40px;gap:6px;padding:0 10px;font-size:10px;}
+  .bc-motion-ready .journey[data-mode="motion"] .interface-wrap,
+  .bc-motion-ready .journey:not([data-mode]) .interface-wrap {aspect-ratio:1.46;max-height:33svh;margin-top:8px;}
+  .bc-motion-ready .journey[data-mode="motion"] .window-copy strong,
+  .bc-motion-ready .journey:not([data-mode]) .window-copy strong {font-size:20px;}
+  .bc-motion-ready .journey[data-mode="motion"] .opening-foot,
+  .bc-motion-ready .journey:not([data-mode]) .opening-foot {display:none;}
+}
+@media (max-width:740px) and (max-height:650px) {
+  .bc-motion-ready .journey[data-mode="motion"] .interface-wrap,
+  .bc-motion-ready .journey:not([data-mode]) .interface-wrap {max-height:34svh;}
+  .bc-motion-ready .journey[data-mode="motion"] .window-foot,
+  .bc-motion-ready .journey:not([data-mode]) .window-foot {font-size:7px;}
+}
+/* Guard against grid min-content overflow inside the short mobile interface. */
+@media (max-width:380px) {
+  .bc-motion-ready .journey[data-mode="motion"] .site-window,
+  .bc-motion-ready .journey:not([data-mode]) .site-window {grid-template-rows:13% minmax(0,1fr) 10%;}
+  .bc-motion-ready .journey[data-mode="motion"] .window-core,
+  .bc-motion-ready .journey:not([data-mode]) .window-core,
+  .bc-motion-ready .journey[data-mode="motion"] .disciplines,
+  .bc-motion-ready .journey:not([data-mode]) .disciplines {min-height:0;}
+  .bc-motion-ready .journey[data-mode="motion"] .window-copy,
+  .bc-motion-ready .journey:not([data-mode]) .window-copy {min-height:0;overflow:hidden;padding:7px;}
+  .bc-motion-ready .journey[data-mode="motion"] .window-copy strong,
+  .bc-motion-ready .journey:not([data-mode]) .window-copy strong {font-size:17px;}
+  .bc-motion-ready .journey[data-mode="motion"] .discipline,
+  .bc-motion-ready .journey:not([data-mode]) .discipline {min-height:0;padding:5px 8px;gap:3px;}
+  .bc-motion-ready .journey[data-mode="motion"] .discipline b,
+  .bc-motion-ready .journey:not([data-mode]) .discipline b {font-size:13px;}
+}
+
+/* The interface, not the introductory headline, is the full-size B keyframe.
+   All B surfaces and caption text stay opaque until the later scene begins. */
+.bc-motion-ready .journey[data-mode="motion"] .site-window,
+.bc-motion-ready .journey[data-mode="motion"] .sheet {opacity:1;backface-visibility:hidden;}
+.bc-motion-ready .journey[data-mode="motion"] .site-window {background:#183528;}
+.bc-motion-ready .journey[data-mode="motion"] .window-copy p {opacity:1;color:#d1dfd0;}
+.bc-motion-ready .journey[data-mode="motion"] .window-copy small,
+.bc-motion-ready .journey[data-mode="motion"] .discipline span {color:#bbd3bc;}
+.bc-motion-ready .journey[data-mode="motion"] .window-head small,
+.bc-motion-ready .journey[data-mode="motion"] .window-foot {color:#c0d5c1;}
+
+/* At close-up, opaque depth geometry emerges through B's central visual field.
+   A centered crop expands only after the camera has enlarged the solid B card;
+   no premature opacity fade or right-to-left cover. Deeper scene is unchanged. */
+.bc-motion-ready .journey[data-mode="motion"] .depth {
+  opacity:1;
+  clip-path:inset(var(--depthTop,50%) var(--depthRight,50%) var(--depthBottom,50%) var(--depthLeft,50%));
+}
+
+/* Gate 1b: B itself supplies the first architectural planes. The two solid
+   backing sheets swing to the sides as the camera advances; the existing
+   corridor continues their geometry instead of introducing unrelated props.
+   Deliberately opt-in; static/reduced-motion keep the original flat layout. */
+.bc-motion-ready .journey[data-mode="motion"] .interface-wrap .sheet {
+  transform:translate3d(calc(-12px - var(--wingSpread,0px)),18px,-80px)
+    rotateY(calc(0deg - var(--wingAngle,0deg)));
+  transform-origin:right center;
+  backface-visibility:hidden;
+}
+.bc-motion-ready .journey[data-mode="motion"] .interface-wrap .sheet.two {
+  transform:translate3d(calc(20px + var(--wingSpread,0px)),-22px,-36px)
+    rotateY(var(--wingAngle,0deg));
+  transform-origin:left center;
+}
+.bc-motion-ready .journey[data-mode="motion"] .interface-wrap .sheet::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(115deg,#2e6249,#163b2b);
+  opacity:var(--wingProgress,0);
+  pointer-events:none;
+}
+.bc-motion-ready .journey[data-mode="motion"] .depth .rail {
+  border-color:#9dc2a27a;
+  background:linear-gradient(108deg,#26543f 0%,#204b37 25%,#123024 100%);
+  box-shadow:inset 0 0 0 1px #d7e9d008,inset 0 0 60px #071a1369,0 12px 45px #06191052;
+}
+.bc-motion-ready .journey[data-mode="motion"] .depth .rail.far {
+  opacity:.76;
+}
+.bc-motion-ready .journey[data-mode="motion"] .depth .rail::after {
+  content:"";
+  position:absolute;
+  inset:11% 9%;
+  border:1px solid #a1c4aa24;
+  background:repeating-linear-gradient(0deg,transparent 0 100px,#a2c8a72e 101px 102px);
+  pointer-events:none;
+}
+/* The existing third reading plane is placed far down the shared camera axis
+   and approaches smoothly; its contents and semantics remain unchanged. */
+.bc-motion-ready .journey[data-mode="motion"] .depth .reading {
+  transform:translate(-50%,-50%) translateZ(var(--readZ,-780px));
+  backface-visibility:hidden;
+  border-color:#afc9b0;
+  box-shadow:0 0 0 12px #153d2d,0 0 0 13px #a2c8ac65,0 24px 100px #07160fd6;
+}
+
+/* The site-window's actual text columns move into the left/right architecture
+   instead of remaining as ghost typography under the third surface. Opacity is
+   only used on the retiring text, never on the solid green window material. */
+.bc-motion-ready .journey[data-mode="motion"] .window-copy {
+  transform:translate3d(calc(0px - var(--contentSlide,0px)),0,0);
+  opacity:var(--contentAlpha,1);
+}
+.bc-motion-ready .journey[data-mode="motion"] .disciplines {
+  transform:translate3d(var(--contentSlide,0px),0,0);
+  opacity:var(--contentAlpha,1);
+}
+
+
+/* Gate 1b founder review: B's own frame opens into a restrained chamber.
+   This architecture exists only in motion mode; reduced-motion retains
+   ordinary readable sections. All materials derive from the opaque B palette.
+   No glowing sci-fi portal, opacity crossfade, or detached third-card fragment. */
+.bc-motion-ready .journey[data-mode="motion"] .room-architecture {
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  transform-style:preserve-3d;
+  /* overflow:hidden forces 3D descendants to flatten. The outer .depth
+     already clips the whole viewport; preserve Z and side-wall occlusion here. */
+  overflow:visible;
+}
+.bc-motion-ready .journey[data-mode="motion"] .room-ceiling,
+.bc-motion-ready .journey[data-mode="motion"] .room-floor,
+.bc-motion-ready .journey[data-mode="motion"] .room-wall,
+.bc-motion-ready .journey[data-mode="motion"] .room-frame {
+  position:absolute;
+  pointer-events:none;
+  backface-visibility:hidden;
+}
+.bc-motion-ready .journey[data-mode="motion"] .room-ceiling {
+  inset:0 0 76%;
+  clip-path:polygon(0 0,100% 0,68% 100%,32% 100%);
+  background:linear-gradient(180deg,#294c3a,#173729 64%,#0e281d);
+  box-shadow:inset 0 -1px #a8c6a64b;
+}
+.bc-motion-ready .journey[data-mode="motion"] .room-floor {
+  inset:74% 0 0;
+  clip-path:polygon(32% 0,68% 0,100% 100%,0 100%);
+  background:linear-gradient(0deg,#10291f,#254a36 72%,#173729);
+}
+.bc-motion-ready .journey[data-mode="motion"] .room-floor::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(90deg,transparent 49.8%,#b9d0b239 50%,transparent 50.2%),
+    repeating-linear-gradient(0deg,transparent 0 46px,#9bb99e26 47px 48px);
+}
+.bc-motion-ready .journey[data-mode="motion"] .room-wall {
+  top:0;
+  bottom:0;
+  width:43%;
+  background:linear-gradient(100deg,#1c402f,#24523b 35%,#102a1e 100%);
+  box-shadow:inset 0 0 0 1px #a2c5a549,inset 0 0 70px #0719117d;
+}
+.bc-motion-ready .journey[data-mode="motion"] .room-wall.left {
+  left:0;
+  clip-path:polygon(0 0,100% 23%,100% 77%,0 100%);
+}
+.bc-motion-ready .journey[data-mode="motion"] .room-wall.right {
+  right:0;
+  clip-path:polygon(0 23%,100% 0,100% 100%,0 77%);
+  background:linear-gradient(260deg,#214331,#204a37 35%,#102a1e 100%);
+}
+.bc-motion-ready .journey[data-mode="motion"] .room-wall::after {
+  content:"";
+  position:absolute;
+  inset:10% 10%;
+  border:1px solid #b4d2b03d;
+  background:
+    repeating-linear-gradient(0deg,transparent 0 92px,#abc6ad25 93px 94px),
+    linear-gradient(90deg,transparent 49.8%,#c2d9b82b 50%,transparent 50.2%);
+  opacity:.9;
+}
+.bc-motion-ready .journey[data-mode="motion"] .room-frame {
+  left:50%;
+  top:50%;
+  border:1px solid #a8c5a16f;
+  box-shadow:0 0 0 8px #0d281d50,inset 0 0 0 2px #d8edce0c;
+  transform-style:preserve-3d;
+  transform-origin:center center;
+}
+.bc-motion-ready .journey[data-mode="motion"] .room-frame.near {
+  width:72%;
+  height:86%;
+  transform:translate(-50%,-50%) translateZ(calc(-220px + var(--roomAdvance,0px)));
+  border-color:#9dc2a45e;
+}
+.bc-motion-ready .journey[data-mode="motion"] .room-frame.far {
+  width:59%;
+  height:76%;
+  transform:translate(-50%,-50%) translateZ(calc(-670px + var(--roomAdvance,0px)));
+  border-color:#afd0af73;
+  background:linear-gradient(90deg,#08241b13,transparent 20% 80%,#08241b13);
+}
+.bc-motion-ready .journey[data-mode="motion"] .room-frame::before,
+.bc-motion-ready .journey[data-mode="motion"] .room-frame::after {
+  content:"";
+  position:absolute;
+  height:1px;
+  left:10%;
+  right:10%;
+  background:#b9d5b35a;
+}
+.bc-motion-ready .journey[data-mode="motion"] .room-frame::before {top:9%;}
+.bc-motion-ready .journey[data-mode="motion"] .room-frame::after {bottom:9%;}
+
+/* Remove all original facade labels, not only the two columns. The window,
+   sheets and green architecture remain solid during the whole transition. */
+.bc-motion-ready .journey[data-mode="motion"] .window-head {
+  opacity:var(--facadeMetaAlpha,1);
+  transform:translateY(var(--facadeMetaLift,0px));
+}
+.bc-motion-ready .journey[data-mode="motion"] .window-foot {
+  opacity:var(--facadeMetaAlpha,1);
+  transform:translateY(calc(0px - var(--facadeMetaLift,0px)));
+}
+.bc-motion-ready .journey[data-mode="motion"] .opening-foot {
+  opacity:var(--facadeMetaAlpha,1);
+}
+
+/* One solid stage enters along the center-axis. The surface appears whole and
+   from afar; only after it is large enough is its real HTML text introduced.
+   The frame visually belongs to the surrounding architectural bay. */
+.bc-motion-ready .journey[data-mode="motion"] .depth .reading {
+  background:#e8efe4;
+  border:1px solid #9bb69d;
+  box-shadow:0 0 0 11px #112f22,0 0 0 12px #9fbca474,0 28px 80px #04190f9c;
+  transform:translate(-50%,-50%) translateZ(var(--readZ,-1120px));
+  transform-origin:center center;
+  overflow:hidden;
+}
+.bc-motion-ready .journey[data-mode="motion"] .depth .reading::before {
+  content:"";
+  position:absolute;
+  inset:8px;
+  border:1px solid #244b3332;
+  pointer-events:none;
+}
+.bc-motion-ready .journey[data-mode="motion"] .depth .reading-ink {
+  opacity:var(--readInk,0);
+  transform:translateY(calc((1 - var(--readInk,0)) * 12px));
+}
+@media (max-width:740px) {
+  .bc-motion-ready .journey[data-mode="motion"] .room-wall {width:39%;}
+  .bc-motion-ready .journey[data-mode="motion"] .room-frame.near {width:86%;height:82%;}
+  .bc-motion-ready .journey[data-mode="motion"] .room-frame.far {width:78%;height:72%;}
+  .bc-motion-ready .journey[data-mode="motion"] .room-floor {inset:80% 0 0;}
+  .bc-motion-ready .journey[data-mode="motion"] .room-ceiling {inset:0 0 81%;}
+}
+@media (max-width:380px), (max-height:650px) {
+  .bc-motion-ready .journey[data-mode="motion"] .depth .reading {padding:17px;}
+  .bc-motion-ready .journey[data-mode="motion"] .depth .reading small {margin-bottom:13px;font-size:8px;}
+  .bc-motion-ready .journey[data-mode="motion"] .depth .reading h2 {font-size:clamp(25px,6.6vw,35px);}
+  .bc-motion-ready .journey[data-mode="motion"] .depth .reading p {margin-top:12px;font-size:12px;}
+  .bc-motion-ready .journey[data-mode="motion"] .depth .reading-bottom {margin-top:15px;padding-top:10px;}
+}
+
+/* The light-to-room handoff takes its ambient hue from B, avoiding a neutral
+   gray wash around the interface before the architectural chamber expands.
+   Does not alter the solid facade, cards, or final C composition. */
+.bc-motion-ready .journey[data-mode="motion"] .scene::after {
+  background:radial-gradient(ellipse at 50% 48%,#285840 0%,#183c2c 55%,#0b1713 100%);
+}
+
+/* Third card -> C: the complete cream reading surface folds modestly
+   into its own room; a full-height C plane advances from the same side.
+   No competing triangular fold props, detached dark rectangle or faded
+   layers. C copy appears as soon as the solid plane covers the viewport. */
+.bc-motion-ready .journey[data-mode="motion"] .depth .reading {
+  transform-origin:left center;
+  transform:translate(-50%,-50%) translateZ(var(--readZ,-1120px))
+    rotateY(var(--readingTurn,0deg));
+  backface-visibility:hidden;
+}
+.bc-motion-ready .journey[data-mode="motion"] .depth .fold-pane {
+  background:linear-gradient(127deg,#345c43,#1c4634 52%,#102d22);
+  border:1px solid #a7c7a36d;
+  box-shadow:inset 0 0 0 1px #d1e2c410,0 12px 65px #061b1380;
+  backdrop-filter:none;
+}
+.bc-motion-ready .journey[data-mode="motion"] .reveal {
+  /* One full-height, solid C plane with a shallow architectural leading
+     edge. It advances from the left as the reading card folds behind it.
+     The clipped geometry never becomes a floating centered dark rectangle. */
+  opacity:1;
+  clip-path:polygon(
+    0 0,
+    var(--cFrontTop,0%) 0,
+    var(--cFrontBottom,0%) 100%,
+    0 100%
+  );
+  transform:none;
+}
+/* The existing giant editorial G. belongs to the *completed* C layout.
+   Suppress it during transition so it cannot become a foreground object. */
+.bc-motion-ready .journey[data-mode="motion"] .reveal::after {
+  opacity:var(--cWatermark,0);
+}
+.bc-motion-ready .journey[data-mode="motion"] .reveal .c-center,
+.bc-motion-ready .journey[data-mode="motion"] .reveal .c-topline,
+.bc-motion-ready .journey[data-mode="motion"] .reveal .c-lastline {
+  opacity:var(--cInk,0);
+  transform:translate3d(0,var(--cInkRise,12px),0);
+}
+/* C's final positions, typography, contrast and responsive rules are
+   inherited unchanged from styles.css. Keep reduced-motion unmasked. */
+
+/* Founder refinement: the main C message is allowed to resolve *while* the
+   adjacent evergreen chamber is still visible. We measure the actual
+   rendered headline against the moving cover edge before revealing it:
+   no clipped letters on desktop or narrow portrait layouts. Secondary C
+   content remains deferred until the background has fully expanded.
+   Motion-only; static/reduced-motion and final C composition are unchanged. */
+.bc-motion-ready .journey[data-mode="motion"] .reveal .c-center {
+  opacity:1;
+  transform:translate3d(0,var(--cHeadlineRise,8px),0)
+    scale(var(--cEntranceScale,1));
+  transform-origin:center center;
+}
+.bc-motion-ready .journey[data-mode="motion"] .reveal .c-center .c-kicker,
+.bc-motion-ready .journey[data-mode="motion"] .reveal .c-center h2 {
+  opacity:var(--cHeadlineInk,0);
+}
+.bc-motion-ready .journey[data-mode="motion"] .reveal .c-center .c-description,
+.bc-motion-ready .journey[data-mode="motion"] .reveal .c-center .c-bands {
+  opacity:var(--cInk,0);
+}
