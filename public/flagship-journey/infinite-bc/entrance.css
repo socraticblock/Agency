@@ -392,3 +392,24 @@
 }
 /* C's final positions, typography, contrast and responsive rules are
    inherited unchanged from styles.css. Keep reduced-motion unmasked. */
+
+/* Founder refinement: the main C message is allowed to resolve *while* the
+   adjacent evergreen chamber is still visible. We measure the actual
+   rendered headline against the moving cover edge before revealing it:
+   no clipped letters on desktop or narrow portrait layouts. Secondary C
+   content remains deferred until the background has fully expanded.
+   Motion-only; static/reduced-motion and final C composition are unchanged. */
+.bc-motion-ready .journey[data-mode="motion"] .reveal .c-center {
+  opacity:1;
+  transform:translate3d(0,var(--cHeadlineRise,8px),0)
+    scale(var(--cEntranceScale,1));
+  transform-origin:center center;
+}
+.bc-motion-ready .journey[data-mode="motion"] .reveal .c-center .c-kicker,
+.bc-motion-ready .journey[data-mode="motion"] .reveal .c-center h2 {
+  opacity:var(--cHeadlineInk,0);
+}
+.bc-motion-ready .journey[data-mode="motion"] .reveal .c-center .c-description,
+.bc-motion-ready .journey[data-mode="motion"] .reveal .c-center .c-bands {
+  opacity:var(--cInk,0);
+}
