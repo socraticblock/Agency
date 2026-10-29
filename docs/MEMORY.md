@@ -1,3 +1,9 @@
+> **CURRENT HOMEPAGE DOCUMENT AUTHORITY — DIGITAL-CARD/HISTORICAL ENGINEERING MEMORY, NOT HOMEPAGE NORTH STAR (29 October 2026)**
+>
+> This log primarily indexes digital-card customizer, UI, order and related legacy implementation observations. Preserve it for affected features and engineering history. For new **Genezisi studio homepage / Infinite Website** work, use [North Star v1.2](infinite-website/NORTH_STAR_v1.2.md), [Visitor Flow](infinite-website/VISITOR_FLOW_v1.2.md), [Acceptance Gates](infinite-website/ACCEPTANCE_GATES_v1.2.md) and [repo agent instructions](../AGENTS.md). The historical entries below are unchanged; they are not the current studio creative authority.
+
+---
+
 # Project Memory
 
 ## Index
