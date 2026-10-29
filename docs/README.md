@@ -10,8 +10,11 @@
 4. **[Acceptance gates](infinite-website/ACCEPTANCE_GATES_v1.2.md)** — each gate's proof and founder sign-off requirements.
 5. **[Documentation audit and conflicts](DOCUMENTATION_AUDIT_2026-10-29.md)** — full disposition of legacy documents and editor rules.
 6. **[Repository agent instructions](../AGENTS.md)** — work routing for Codex and other coding agents.
+7. **[29 October current next-chat handoff](infinite-website/HANDOFF_2026-10-29.md)** — PR #15 state, code checkpoint, tested/pending scope and next actions.
+8. **[29 October motion lessons](infinite-website/LESSONS_2026-10-29.md)** — defects, solutions, reusable QA.
+9. **[Repository-local motion-review skill](../skills/infinite-website-motion-review/SKILL.md)** — repeatable review/coding procedure, subordinated to the North Star.
 
-The new website is **the intended future studio homepage**, **not** the production homepage yet. Gate 1b is still in review and the full fictional business journey is a later gate.
+The new website is **the intended future studio homepage**, **not** the production homepage yet. The isolated Gate 1b proof has been coded through the early C handoff on **draft PR #15**, but the full served result still awaits founder visual acceptance; the full fictional business journey and genuine production integration are later gates.
 
 ## Historical Genezisi website material — retain as evidence, not current authority
 
