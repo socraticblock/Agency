@@ -46,16 +46,16 @@
    // Its typography is delayed separately so no letter fragments can lead it.
    // The reading stage is solid while it folds away. The opaque C surface
    // grows from its physical hinge; no overlapping full-scene alpha fades.
-   const h=smooth(w<=740?.462:.452,.484,p)*(1-smooth(.795,.815,p));
-   const f=smooth(.60,.88,p),c=smooth(.745,.835,p);
-   const handoff=smooth(.655,.795,p);
-   const fold=smooth(.655,.765,p);
-   const cInk=smooth(.775,.83,p);
+   const h=smooth(w<=740?.462:.452,.484,p)*(1-smooth(.745,.768,p));
+   const f=smooth(.60,.88,p),c=smooth(.715,.77,p);
+   const handoff=smooth(.665,.738,p);
+   const fold=smooth(.655,.725,p);
+   const cInk=smooth(.708,.748,p);
    // Keep the site facade solid until the same-color spatial room has fully
    // covered it. We never crossfade two simultaneously readable panels.
    const d=smooth(.415,.515,p)*(1-smooth(.79,.94,p)),b=p<.515?1:0;
    return {p,arrival,e,h,f,c,d,b,n:smooth(.32,.49,p)*(1-c),
-     foldAlpha:smooth(.625,.695,p)*(1-smooth(.79,.845,p)),
+     foldAlpha:smooth(.625,.69,p)*(1-smooth(.765,.82,p)),
      foldLeftX:mix(-w*.18,0,f),foldRightX:mix(w*.18,0,f),
      foldRotL:mix(-52,0,smooth(.63,.785,p)),foldRotR:mix(52,0,smooth(.63,.785,p)),
      // Hold full B at .20-.32. Camera advances .32-.41 and stops before the
