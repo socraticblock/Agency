@@ -1,3 +1,21 @@
+## Founder correction — remove floating G. panel and simplify third-to-C handoff (29 October 2026)
+
+**Source:** founder's 15:33 desktop screen recording and subsequent explicit approval to correct it. The previous C opening was a small dark rectangle that expanded over the cream reading card; because the C scene had a giant faint `G.` pseudo-element at all progress states, this looked like a foreground panel rather than connected spatial motion. Separate fold-plane triangles competed with the card's rotation, particularly under reverse scrolling. C also briefly appeared as an empty dark rectangle.
+
+**Change (same draft PR #15):**
+- Preserve the first headline push, green B hold, B-to-chamber transition, third card content and pose, native scrolling, shortened card holds, and finished C editorial layout.
+- Simplify the third plane: keep it fully opaque, reduce its folding rotation from **-77° to -36°** and its recede distance to **155px**, removing the competing animated fold-plane layer during the handoff.
+- Replace the centered rectangular C `clip-path:inset(...)` with an opaque **full-height, shallow angled left-to-right architectural reveal** (`clip-path:polygon`); unlike a detached central rectangle, it grows as a continuation of the room's edge and ends as the full viewport.
+- Synchronize story progress: dark cover from **.658–.706**, then actual C text resolves **.706–.738**, without a lengthy empty dark hold. Hide the existing large `G.` watermark during this transition; it returns only as a faint background detail after the C headline is fully readable (**.755–.83**).
+- Keep all C headline text, typography, navigation, final location, and Selected Work link structure unchanged. Still native scroll: no forced read waits, scroll locking, extra cards or external 3D engine.
+- CSS rule applies only to `.bc-motion-ready .journey[data-mode="motion"]`; static and reduced-motion render the normal complete C section without masking.
+
+**Verification / scope:** JS syntax check passed. A local partial browser reconstruction sampled **112 forward states** across four viewports (1440×900, 1024×768, 390×844, 320×568), **112 reverse seek comparisons**, and **two reduced-motion** checks. No observed browser JS exceptions, horizontal overflow or clip mismatch. The large G. was absent in the transition and reappeared subtly after C copy resolved. Evidence: `Genezisi_C_Handoff_Refinement_Review_2026-10-29.zip` in founder chat, including desktop/mobile eight-frame contacts and raw measurements.
+
+**Limits:** This local proof is only a partial HTML/CSS reconstruction; the actual route with its full 21KB `styles.css`, browser rendering under the coder's Cloudflare tunnel, Android/iOS hardware performance and real visitor interactions have **not** been retested. Founder visual acceptance still pending. No branch merge, deploy, or push to main/preview.
+
+---
+
 ## Founder-approved third-card → C spatial handoff — 29 October
 
 **Founder review:** Latest desktop video confirmed that the entrance and B-to-third transition are worth preserving. The remaining problem was C arriving as a low-contrast, unrelated crossfade over the third card. Founder authorized this next focused construction, with no merge/deploy until actual visual review.
