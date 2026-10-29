@@ -19,6 +19,14 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://genezisi.com"),
+  // Bing Webmaster Tools ownership proof (added 2026-10-29). It has to stay: a
+  // removed tag drops the site back to unverified, which makes every tool page in
+  // WMT read "User is unauthorized to access the site."
+  verification: {
+    other: {
+      "msvalidate.01": "2FBB284D9E12D4EE1C7293F92F118AA0",
+    },
+  },
 };
 
 export default async function RootLayout({
