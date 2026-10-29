@@ -110,11 +110,22 @@
    // the two columns. The green structural plane stays solid underneath.
    root.style.setProperty('--facadeMetaAlpha',String(1-smooth(.422,.468,p)));
    root.style.setProperty('--facadeMetaLift',(-26*smooth(.422,.468,p))+'px');
-   // The facade becomes a chamber through a centered aperture, but the
-   // chamber's materials match B's architecture—not a replacement screen wipe.
-   // A distant, solid reading surface is first fully visible, then advances.
+   // Open the chamber *within the actual settled B facade*, not a generic
+   // viewport-centered crop. This matters on portrait mobile: a symmetric
+   // 50%-inset viewport crop produces a disconnected tall slit over a
+   // horizontal green card. Grow to the card's proportions first, then fill
+   // the viewport only after the facade's labels have cleared.
+   const facade=cardFace.getBoundingClientRect();
+   const enter=smooth(.415,.47,p),expand=smooth(.47,.515,p);
+   const cropW=mix(facade.width*enter,w,expand);
+   const cropH=mix(facade.height*enter,h,expand);
+   const cropX=mix(facade.left+facade.width/2,w/2,expand);
+   const cropY=mix(facade.top+facade.height/2,h/2,expand);
+   root.style.setProperty('--depthTop',Math.max(0,cropY-cropH/2)+'px');
+   root.style.setProperty('--depthRight',Math.max(0,w-cropX-cropW/2)+'px');
+   root.style.setProperty('--depthBottom',Math.max(0,h-cropY-cropH/2)+'px');
+   root.style.setProperty('--depthLeft',Math.max(0,cropX-cropW/2)+'px');
    const depthOpen=smooth(.415,.515,p);
-   root.style.setProperty('--depthInset',(50*(1-depthOpen))+'%');
    root.style.setProperty('--readZ',v.readZ+'px');
    root.style.setProperty('--readInk',String(v.readInk));
    root.style.setProperty('--roomAdvance',v.roomAdvance+'px');
