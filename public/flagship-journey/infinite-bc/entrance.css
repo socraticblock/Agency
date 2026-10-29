@@ -47,8 +47,8 @@
   .bc-motion-ready .journey[data-mode="motion"] .interface-wrap,
   .bc-motion-ready .journey:not([data-mode]) .interface-wrap {
     transform:translate3d(var(--panelOffsetX,0px),var(--panelOffsetY,105svh),0);
-    aspect-ratio:1.33;
-    max-height:34svh;
+    aspect-ratio:1.20;
+    max-height:37svh;
     margin:14px auto 0;
   }
   .bc-motion-ready .journey[data-mode="motion"] .opening,
