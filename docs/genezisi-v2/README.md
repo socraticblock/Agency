@@ -1,3 +1,9 @@
+> **CURRENT HOMEPAGE DOCUMENT AUTHORITY — HISTORICAL GENEZISI V2 INDEX (29 October 2026)**
+>
+> This directory preserves the October 2026 **Signal-era V2 design, implementation and evidence**. The current studio-homepage direction is the **Infinite Website, centered B → C**. Start with [North Star v1.2](../infinite-website/NORTH_STAR_v1.2.md), [Visitor Flow](../infinite-website/VISITOR_FLOW_v1.2.md) and [Acceptance Gates](../infinite-website/ACCEPTANCE_GATES_v1.2.md). The historical status and authority assertions below describe the former V2 project only and do **not** authorize rebuilding the Signal animation, merging, deployment or modifying the digital-card product. The current production and branch state must be verified from code and GitHub.
+
+---
+
 # Genezisi V2
 
 Status: implementation prototype under review on PR #4. Production `main` is not replaced.
