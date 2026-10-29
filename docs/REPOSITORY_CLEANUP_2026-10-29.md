@@ -101,3 +101,30 @@ Also inspect active routes and Dutch/Georgian behavior, card ordering and mapped
 - Keep PR #10 (studies), #11 (opt-in geometry proof), and #12 (North Star/docs) as independently reviewable historical checkpoints; this cleanup is a new child branch.
 - Next creative coding gate remains **Gate 1b**: centered hero → right-hand B push and full readable hold → genuinely spatial site-derived movement → compact meaningful interior → forward C fold → actual Work only after integration authorization.
 - A new homepage is **not** released by a repository cleanup; preserve all existing business features until separately approved.
+
+---
+
+## Final independent source-readiness review (29 October 2026)
+
+**Verdict: suitable to resume isolated Gate 1b development, NOT accepted for merge or production release.**
+
+### Facts rechecked after PRs #13 and #14 were opened
+
+- GitHub PRs **#10 → #11 → #12 → #13** remain **open, draft, unmerged and fast-forward stacked**, with the base for #13 at the head of #12. No head is missing its parent. The combined cleanup head was **92 commits ahead of `main` and zero behind** at review time; that count includes the prior older flagship exploration and documentation history, **not 92 new cleanup changes**. Recheck refs before cherry-pick/rebase or merge.
+- The cleanup compared with its parent is a focused five-path change: root one-off script deletion, exactly preserved partner patch moved to `docs/archive/`, `/api/test-db` restriction, new smoke test and this audit. The patch's file content matches the old root copy.
+- **Eight source-level consistency checks passed** against the actual cleanup-branch GitHub tree and contents: all required North Star/flow/acceptance/legacy files present; actual `src/app/[locale]/page.tsx` and `v2/SelectedWork.tsx` preserved; card, partner, card-by-slug and locale middleware paths present; old root clutter removed; patch header preserved; production-mode database diagnostic guard exists; response no longer serializes token fragments; agent and README clearly label prototype limitations.
+- Inspected actual `SelectedWork.tsx`: section `id="work"` exists; project definitions still include **TK Counsel**, **Frankencoin Desk** and **Her House Pilates**, each with current source-held external URL and image path. This is the **actual React component**, not the B → C proof's sample Work section.
+- Current `next.config.ts` / `middleware.ts` remain untouched; `vercel.json` still restricts automatic deployment to `main` and `preview-*`. The combined cleanup branch did not trigger a production cutover.
+- Separately, **PR #14** is an **open, draft, unmerged one-file change based on `main`** carrying the database diagnostic hardening. Its presence in GitHub is **not** proof that production has been patched.
+
+### Concrete limits still preventing a clean merge/release sign-off
+
+1. **Full checkout validation missing:** there was no network-enabled Git clone/Node dependency install in this review environment. The committed `tests/repository-cleanup.test.mjs` was verified against GitHub source/tree expectations, but **not executed under `node --test` in a complete checkout**. Typecheck, lint, Next build and application regression tests remain necessary.
+2. **Security still unreleased:** a running deployment built from the old `main` may still expose the DB diagnostic. Treat separate PR #14 as a priority security review and confirm a deployed 404 without revealing any secret values. Do not claim this vulnerability is fixed on the live site yet.
+3. **No route/device acceptance:** EN/KA/NL SEO and routing, actual business-card/partner/onboarding paths, cross-browser/native scroll, reduced-motion and mobile performance are **not yet tested** after consolidation. Static sources cannot establish production parity.
+4. **Visual Gate 1b remains unfinished:** the old B → C standalone motion proof does not yet implement the new centered-to-push entrance, full B hold, genuine foreground depth, compact readable interior or fully integrated C→React Work seam. Founder visual acceptance and subsequent Gate 2 authorization are separate.
+5. **Potential cleanup deliberately deferred:** large public video, starter SVGs, old opt-in hero code, duplicated-looking React components and chat endpoints require a complete dependency/runtime inspection before deletion. Do not treat absence from GitHub code-search results as proof of dead code.
+
+**Next coder's starting point:** begin an isolated **new feature branch from `chore/repository-cleanup-infinite-website-2026-10-29`** after confirming this is still the newest committed base and reconciling unpublished local files. Read `AGENTS.md`, the v1.2 North Star, Visitor Flow and Gate Acceptance documents. Complete actual build/test smoke checks before implementing **Gate 1b only**. Do not casually merge the five stacked PRs or automatically deploy.
+
+**Status conclusion:** strong **design, source organization and branch-preservation foundation**; **not yet a verified production-ready release foundation**.
