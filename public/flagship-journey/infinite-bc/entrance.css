@@ -131,3 +131,51 @@
   opacity:1;
   clip-path:inset(var(--depthInset,50%));
 }
+
+/* Gate 1b: B itself supplies the first architectural planes. The two solid
+   backing sheets swing to the sides as the camera advances; the existing
+   corridor continues their geometry instead of introducing unrelated props.
+   Deliberately opt-in; static/reduced-motion keep the original flat layout. */
+.bc-motion-ready .journey[data-mode="motion"] .interface-wrap .sheet {
+  transform:translate3d(calc(-12px - var(--wingSpread,0px)),18px,-80px)
+    rotateY(calc(0deg - var(--wingAngle,0deg)));
+  transform-origin:right center;
+  backface-visibility:hidden;
+}
+.bc-motion-ready .journey[data-mode="motion"] .interface-wrap .sheet.two {
+  transform:translate3d(calc(20px + var(--wingSpread,0px)),-22px,-36px)
+    rotateY(var(--wingAngle,0deg));
+  transform-origin:left center;
+}
+.bc-motion-ready .journey[data-mode="motion"] .interface-wrap .sheet::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(115deg,#2e6249,#163b2b);
+  opacity:var(--wingProgress,0);
+  pointer-events:none;
+}
+.bc-motion-ready .journey[data-mode="motion"] .depth .rail {
+  border-color:#9dc2a27a;
+  background:linear-gradient(108deg,#26543f 0%,#204b37 25%,#123024 100%);
+  box-shadow:inset 0 0 0 1px #d7e9d008,inset 0 0 60px #071a1369,0 12px 45px #06191052;
+}
+.bc-motion-ready .journey[data-mode="motion"] .depth .rail.far {
+  opacity:.76;
+}
+.bc-motion-ready .journey[data-mode="motion"] .depth .rail::after {
+  content:"";
+  position:absolute;
+  inset:11% 9%;
+  border:1px solid #a1c4aa24;
+  background:repeating-linear-gradient(0deg,transparent 0 100px,#a2c8a72e 101px 102px);
+  pointer-events:none;
+}
+/* The existing third reading plane is placed far down the shared camera axis
+   and approaches smoothly; its contents and semantics remain unchanged. */
+.bc-motion-ready .journey[data-mode="motion"] .depth .reading {
+  transform:translate(-50%,-50%) translateZ(var(--readZ,-780px));
+  backface-visibility:hidden;
+  border-color:#afc9b0;
+  box-shadow:0 0 0 12px #153d2d,0 0 0 13px #a2c8ac65,0 24px 100px #07160fd6;
+}
