@@ -27,20 +27,24 @@
    // One physical entrance: the panel arrives while the complete opening moves
    // out of the viewport. B becomes the sole center-stage composition.
    const arrival=smooth(.012,.20,p),e=smooth(.345,.54,p);
-   // A small, distant third surface appears while B still forms its room;
-   // it approaches only after the camera finishes advancing into solid B.
-   const h=smooth(.432,.474,p)*(1-smooth(.62,.76,p));
+   // B reaches its stable camera pose at .41. A *complete*, distant third
+   // surface appears inside the formed room, then comes forward as a unit.
+   // Its typography is delayed separately so no letter fragments can lead it.
+   const h=smooth(w<=740?.462:.452,.484,p)*(1-smooth(.62,.76,p));
    const f=smooth(.60,.88,p),c=smooth(.72,.93,p);
-   // Keep B at opacity 1 until an opaque right-to-left plane covers it.
-   // This replaces the previous two-transparent-surfaces crossfade.
-   const d=smooth(.42,.54,p)*(1-smooth(.79,.94,p)),b=p<.54?1:0;
+   // Keep the site facade solid until the same-color spatial room has fully
+   // covered it. We never crossfade two simultaneously readable panels.
+   const d=smooth(.415,.515,p)*(1-smooth(.79,.94,p)),b=p<.515?1:0;
    return {p,arrival,e,h,f,c,d,b,n:smooth(.32,.49,p)*(1-c),
      foldAlpha:smooth(.6,.68,p)*(1-smooth(.85,.94,p)),
      foldLeftX:mix(-w*.18,0,f),foldRightX:mix(w*.18,0,f),foldRotL:mix(-48,0,f),foldRotR:mix(48,0,f),
      // Hold full B at .20-.32. Camera advances .32-.41 and stops before the
      // next surface travels in from depth: independent "settle -> enter" beats.
      shiftX:mix(0,-Math.min(w*.23,320),smooth(.54,.64,p)),shiftY:mix(0,-24,smooth(.54,.64,p)),artScale:mix(1,zoomCap,smooth(.32,.41,p)),
-     wingProgress:smooth(.345,.445,p),readZ:mix(-780,0,smooth(.43,.54,p)),
+     wingProgress:smooth(.345,.445,p),
+     readZ:mix(-1120,0,smooth(.46,.56,p)),
+     roomAdvance:mix(0,155,smooth(.44,.565,p)),
+     readInk:smooth(.507,.543,p),
      leftX:-e*Math.min(w*.17,230)+f*Math.min(w*.13,180),rightX:e*Math.min(w*.17,230)-f*Math.min(w*.13,180),
      nearZ:300*e+180*f,farLeft:e*-Math.min(w*.13,170),farRight:e*Math.min(w*.13,170),groundZ:550*e+250*f,
      cOffset:mix(48,0,c)
@@ -102,14 +106,22 @@
    const split=smooth(.42,.495,p);
    root.style.setProperty('--contentSlide',(cardFace.offsetWidth*.64*split)+'px');
    root.style.setProperty('--contentAlpha',String(1-smooth(.425,.46,p)));
-   // Reveal the constructed room through the center of B, after the camera
-   // settles. The third surface is visible at a distance before it approaches.
-   const depthOpen=smooth(.42,.54,p);
+   // The header/footer are also *interface contents*: they must retreat with
+   // the two columns. The green structural plane stays solid underneath.
+   root.style.setProperty('--facadeMetaAlpha',String(1-smooth(.422,.468,p)));
+   root.style.setProperty('--facadeMetaLift',(-26*smooth(.422,.468,p))+'px');
+   // The facade becomes a chamber through a centered aperture, but the
+   // chamber's materials match B's architecture—not a replacement screen wipe.
+   // A distant, solid reading surface is first fully visible, then advances.
+   const depthOpen=smooth(.415,.515,p);
    root.style.setProperty('--depthInset',(50*(1-depthOpen))+'%');
    root.style.setProperty('--readZ',v.readZ+'px');
+   root.style.setProperty('--readInk',String(v.readInk));
+   root.style.setProperty('--roomAdvance',v.roomAdvance+'px');
+   root.style.setProperty('--roomReveal',String(depthOpen));
    const map={p:v.p,e:v.e,h:v.h,f:v.f,c:v.c,d:v.d,b:v.b,n:v.n,shiftX:v.shiftX,shiftY:v.shiftY,artScale:v.artScale,leftX:v.leftX,rightX:v.rightX,nearZ:v.nearZ,farLeft:v.farLeft,farRight:v.farRight,groundZ:v.groundZ,cOffset:v.cOffset,foldAlpha:v.foldAlpha,foldLeftX:v.foldLeftX,foldRightX:v.foldRightX,foldRotL:v.foldRotL,foldRotR:v.foldRotR};
    for(const [k,x] of Object.entries(map))root.style.setProperty('--'+k,String(x));
-   root.dataset.beat=p<.54?'opening':p>.79?'reveal':'interior';
+   root.dataset.beat=p<.515?'opening':p>.79?'reveal':'interior';
    const night=smooth(.32,.49,p);
    const darkInk=Math.round(mix(23,240,night)),greenInk=Math.round(mix(51,241,night)),blueInk=Math.round(mix(39,233,night));
    root.style.setProperty('--nav-ink',darkInk+' '+greenInk+' '+blueInk);
@@ -118,7 +130,7 @@
    // Offscreen CTA links must not receive keyboard focus after the push.
    // The graphical B becomes the accessible content when its full pose settles.
    intro.inert=p>=.20;panel.setAttribute('aria-hidden',p>=.20&&p<.50?'false':'true');
-   opening.inert=p>=.54;reveal.inert=p<.78;reading.inert=p<.50||p>.78;
+   opening.inert=p>=.515;reveal.inert=p<.78;reading.inert=p<.515||p>.78;
  };
  const queue=()=>{if(!raf)raf=requestAnimationFrame(apply)};
  const enable=()=>{
