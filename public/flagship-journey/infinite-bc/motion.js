@@ -12,13 +12,13 @@
  // All scene state, including the entrance, is a pure function of scroll progress.
  // .20–.32 is an intentional full-B reading window before depth begins.
  const sample=(p,w)=>{
-   // The arriving panel leads by a fraction of the scroll distance, so the copy
-   // visibly makes room in response instead of behaving like a separate slide.
-   const arrival=smooth(.012,.20,p),introArrival=smooth(.040,.20,p),e=smooth(.32,.49,p);
+   // One physical entrance: the panel arrives while the complete opening moves
+   // out of the viewport. B becomes the sole center-stage composition.
+   const arrival=smooth(.012,.20,p),e=smooth(.32,.49,p);
    const h=smooth(.38,.50,p)*(1-smooth(.62,.76,p));
    const f=smooth(.60,.88,p),c=smooth(.72,.93,p);
    const d=smooth(.32,.49,p)*(1-smooth(.79,.94,p)),b=1-smooth(.32,.49,p);
-   return {p,arrival,introArrival,e,h,f,c,d,b,n:smooth(.32,.49,p)*(1-c),
+   return {p,arrival,e,h,f,c,d,b,n:smooth(.32,.49,p)*(1-c),
      foldAlpha:smooth(.6,.68,p)*(1-smooth(.85,.94,p)),
      foldLeftX:mix(-w*.18,0,f),foldRightX:mix(w*.18,0,f),foldRotL:mix(-48,0,f),foldRotR:mix(48,0,f),
      shiftX:mix(0,-Math.min(w*.23,320),e),shiftY:mix(0,-24,e),artScale:mix(1,2.25,e),
@@ -32,20 +32,34 @@
    raf=0;if(root.dataset.mode!=='motion')return;
    const rect=root.getBoundingClientRect(),total=root.offsetHeight-window.innerHeight;
    const p=clamp(-rect.top/Math.max(1,total)),w=window.innerWidth,v=sample(p,w);
-   // offsetLeft/Top measure layout positions, unaffected by a previous transform.
-   // This keeps the introduction optically centered on the first frame, including resize.
-   const isMobile=w<=740;
-   const introShiftX=isMobile?0:(w/2-(opening.offsetLeft+intro.offsetLeft+intro.offsetWidth/2));
-   const introShiftY=isMobile?window.innerHeight*.51-(opening.offsetTop+intro.offsetTop+intro.offsetHeight/2):0;
-   const panelShiftX=isMobile?0:w-(opening.offsetLeft+panel.offsetLeft)+40;
-   const panelShiftY=isMobile?window.innerHeight-(opening.offsetTop+panel.offsetTop)+40:0;
-   // Two tracks share one scroll sampler; the earlier panel track causes
-   // the later intro displacement. Both finish together at the full-B pose.
-   const introRest=1-v.introArrival,panelRest=1-v.arrival;
-   root.style.setProperty('--introOffset',(introShiftX*introRest)+'px');
-   root.style.setProperty('--introVertical',(introShiftY*introRest)+'px');
-   root.style.setProperty('--panelOffsetX',(panelShiftX*panelRest)+'px');
-   root.style.setProperty('--panelOffsetY',(panelShiftY*panelRest)+'px');
+   // All bounds below come from *layout*, not animated rectangles. Both tracks
+   // are driven by the same arrival progress, with a shared non-overlap edge.
+   const isMobile=w<=740,h=window.innerHeight;
+   const ix=opening.offsetLeft+intro.offsetLeft,iy=opening.offsetTop+intro.offsetTop;
+   const px=opening.offsetLeft+panel.offsetLeft,py=opening.offsetTop+panel.offsetTop;
+   const iw=intro.offsetWidth,ih=intro.offsetHeight,pw=panel.offsetWidth,ph=panel.offsetHeight;
+   const startIntroX=w/2-(ix+iw/2);
+   const startIntroY=h*.51-(iy+ih/2);
+   // Desktop B is deliberately larger, centered and fully opaque at rest.
+   // Scale is capped by both viewport width and the actual visible stack height.
+   const panelScale=isMobile?Math.min(1.08,(w-28)/Math.max(1,pw)):
+     Math.max(1,Math.min(1.68,(w-96)/Math.max(1,pw),(h-195)/Math.max(1,ph*.8)));
+   const finalPanelX=w/2-(px+pw/2),finalPanelY=isMobile?h*.52-(py+ph/2):0;
+   const startPanelX=w+(pw*panelScale)/2+55-(px+pw/2);
+   const startPanelY=h+(ph*panelScale)/2+48-(py+ph/2);
+   const travel=v.arrival;
+   const panelX=isMobile?0:mix(startPanelX,finalPanelX,travel);
+   const panelY=isMobile?mix(startPanelY,finalPanelY,travel):0;
+   const targetIntroX=mix(startIntroX,-ix-iw-56,travel);
+   // A real moving gap: text cannot cross the panel's leading edge.
+   const panelLeft=px+pw/2+panelX-(pw*panelScale)/2;
+   const introX=isMobile?0:Math.min(targetIntroX,panelLeft-45-ix-iw);
+   const introY=isMobile?mix(startIntroY,-iy-ih-48,travel):0;
+   root.style.setProperty('--introOffset',introX+'px');
+   root.style.setProperty('--introVertical',introY+'px');
+   root.style.setProperty('--panelOffsetX',panelX+'px');
+   root.style.setProperty('--panelOffsetY',panelY+'px');
+   root.style.setProperty('--panelScale',String(panelScale));
    const map={p:v.p,e:v.e,h:v.h,f:v.f,c:v.c,d:v.d,b:v.b,n:v.n,shiftX:v.shiftX,shiftY:v.shiftY,artScale:v.artScale,leftX:v.leftX,rightX:v.rightX,nearZ:v.nearZ,farLeft:v.farLeft,farRight:v.farRight,groundZ:v.groundZ,cOffset:v.cOffset,foldAlpha:v.foldAlpha,foldLeftX:v.foldLeftX,foldRightX:v.foldRightX,foldRotL:v.foldRotL,foldRotR:v.foldRotR};
    for(const [k,x] of Object.entries(map))root.style.setProperty('--'+k,String(x));
    root.dataset.beat=p<.44?'opening':p>.79?'reveal':'interior';
@@ -54,6 +68,9 @@
    root.style.setProperty('--nav-ink',darkInk+' '+greenInk+' '+blueInk);
    root.style.setProperty('--nav-cta',Math.round(mix(23,236,night))+' '+Math.round(mix(51,243,night))+' '+Math.round(mix(39,232,night)));
    root.style.setProperty('--nav-cta-ink',Math.round(mix(255,20,night))+' '+Math.round(mix(255,42,night))+' '+Math.round(mix(255,31,night)));
+   // Offscreen CTA links must not receive keyboard focus after the push.
+   // The graphical B becomes the accessible content when its full pose settles.
+   intro.inert=p>=.20;panel.setAttribute('aria-hidden',p>=.20&&p<.46?'false':'true');
    opening.inert=p>=.46;reveal.inert=p<.78;reading.inert=p<.36||p>.78;
  };
  const queue=()=>{if(!raf)raf=requestAnimationFrame(apply)};
@@ -61,6 +78,7 @@
    const motion=!reduce.matches;
    document.documentElement.classList.toggle('bc-motion-ready',motion);
    root.dataset.mode=motion?'motion':'static';root.style.cssText='';
+   intro.inert=false;panel.setAttribute('aria-hidden','true');
    opening.inert=false;reveal.inert=false;reading.inert=false;
    // This runs before the next paint, avoiding a one-frame approximate layout
    // when the stylesheet is already active but CSS variables are not sampled.
