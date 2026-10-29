@@ -33,6 +33,23 @@ This stage implements and tests the **visual and interaction mechanism** in a se
 
 **User flow:** `centered intro → right-hand interface pushes into B → full B hold → existing threshold/interior/fold/C prototype → #work preview`. Scrolling backward retraces progress.
 
+## Architectural B-to-third entry — focused Gate 1b next increment, 29 October
+
+**Founder direction:** The entrance motion is generally satisfactory. The green B interface should remain a stable point of reference after the initial camera approach; its visible side cards should unfold into a convincing **site-derived 3D environment**, and the **third content plane should begin appearing sooner** so scrolling does not spend too long on an empty green composition. The third plane approaches only **after** the camera has settled. The intended final aesthetic is sophisticated and spacious, not a portal or a separate floating modal.
+
+**Implementation on the same draft branch:**
+- Keep the existing centered intro/proximity-triggered push, fully readable B hold `p=.20–.32`, and viewport-fitted zoom cap.
+- Camera approaches B during `p=.32–.41`, then becomes stable before the third readable plane approaches.
+- Transform the two existing backing `.sheet` elements into opposite, solid side wings `p=.345–.445`; material accents match B's green.
+- Keep the existing depth rails but give the side surfaces actual opaque material, legible structural divisions, and less offscreen displacement so near/far geometry remains visible. These originate from B's layered interface instead of unrelated objects.
+- The existing B text columns retire sideways `p=.42–.495`, progressively clearing the center **without fading the parent green facade**. This prevents two full-size readable text layers competing.
+- Use the existing `.reading` DOM, not cloned typography. It begins emerging as a distant Z plane around `p=.432`, advances forward `p=.43–.54`, and becomes the central readable surface. The existing center-depth occlusion expands `p=.42–.54`, completing the transition without a fully transparent B card.
+- No new Gate 2 content, fabricated dashboards, invented third-card copy, C rework or production integration.
+
+**Local technical evidence:** isolated Chromium reconstruction, updated with the new entrance/geometry and a **subset of the original stylesheet and HTML** (not the full original served route), 41 normalized scroll positions at eight viewports = **328 samples**. No detected entrance B/intro collisions, full-B premature transparency, B viewport clipping, reduced-motion failure, or reversible state discrepancies. JS syntax check passed. Desktop and portrait contact sheets and all sample measurements are in the founder review attachment `Genezisi_Gate1b_Spatial_Entry_Review_2026-10-29.zip`.
+
+**Limitations / explicit pending decision:** the newer structural panels and foreground approach require founder review on the actual PR #15 tunnel, which must point to the newest commit. The interior still uses the original reading card; its integration and ultimate 3D art direction are **not** declared complete or accepted. Real route build/performance/mobile hardware/selected-work seam/C scene not retested. Keep PR draft; do not merge or deploy.
+
 ## Camera-fit correction from founder's 16:37 recording — 29 October
 
 Founder observed that the apparent speed of the initial push can vary with touchpad scroll input. **Do not diagnose this as a timing defect solely from recording duration:** the entrance remains a deterministic function of native scroll progress (`arrival=smooth(.012,.20,p)`), with text displacement gated by the actual incoming interface edge and a measured gap. The code uses neither a time-based transition nor a forced scroll speed.
