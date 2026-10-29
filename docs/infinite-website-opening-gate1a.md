@@ -37,7 +37,7 @@ All three use real text and links, the same locked headline and truthful, indepe
 
 - All three directions rendered in headless Chromium at 1440×900, 390×844, and 320×568.
 - At each captured size no **horizontal** document overflow was detected.
-- At 1440×900 A and B fit in the viewport, while C extends approximately 91px beyond the first viewport; this is a visual-pacing issue for refinement.
+- At 1440×900 all A/B/C layouts fit in the initial viewport after a focused C spacing refinement.
 - At 390×844 A/B/C fit the viewport (no vertical document overflow).
 - At 320×568 the page content is intentionally taller than the screen (A ~747px, B ~770px, C ~778px); crucial headline/three-discipline proposition/Work+Contact paths are visible at first paint, but the art runs below the fold.
 - `prefers-reduced-motion: reduce` was selected in the capture context. The page has no automatic cinematic motion or WebGL. Links are semantic HTML. The live destinations have not been clicked through in a real served review build.
