@@ -1,55 +1,56 @@
 /**
- * Diagnostic endpoint: GET /api/test-db
+ * Development-only Turso health probe.
  *
- * Tests Turso connection and returns env var status.
+ * NEVER expose connection URLs, tokens, token fragments or raw driver responses.
+ * No sensitive details are returned even in development. Disabled in all
+ * production builds and preview deployments (NODE_ENV=production).
  */
-
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
+  if (process.env.NODE_ENV !== "development") {
+    return new NextResponse(null, { status: 404 });
+  }
+
   const dbUrl = process.env.TURSO_DATABASE_URL;
   const authToken = process.env.TURSO_AUTH_TOKEN;
 
-  const info = {
-    hasDbUrl: !!dbUrl,
-    hasAuthToken: !!authToken,
-    dbUrl: dbUrl ? dbUrl.replace(/\/\/.*@/, "//***@") : "MISSING",
-    tokenPrefix: authToken ? `eyJ...${authToken.slice(-10)}` : "MISSING",
-  };
-
-  let queryOk = false;
-  let queryError = "";
-
-  if (dbUrl && authToken) {
-    try {
-      const res = await fetch(`${dbUrl}/v2/pipeline`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          requests: [{ type: "execute", stmt: { sql: "SELECT count(*) as cnt FROM cards", params: [] } }],
-        }),
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        queryOk = true;
-        queryError = JSON.stringify(data);
-      } else {
-        queryError = `HTTP ${res.status}: ${await res.text()}`;
-      }
-    } catch (err: unknown) {
-      queryError = err instanceof Error ? err.message : String(err);
-    }
-  } else {
-    queryError = "Missing env vars";
+  if (!dbUrl || !authToken) {
+    return NextResponse.json(
+      { configured: false, queryWorks: false },
+      { status: 503, headers: { "Cache-Control": "no-store" } },
+    );
   }
 
-  return NextResponse.json({
-    env: info,
-    queryWorks: queryOk,
-    queryError,
-  });
+  try {
+    const response = await fetch(`${dbUrl}/v2/pipeline`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        requests: [
+          { type: "execute", stmt: { sql: "SELECT count(*) as cnt FROM cards", params: [] } },
+        ],
+      }),
+      cache: "no-store",
+    });
+
+    // Intentionally never include response body, URL, token or raw errors.
+    return NextResponse.json(
+      { configured: true, queryWorks: response.ok },
+      {
+        status: response.ok ? 200 : 503,
+        headers: { "Cache-Control": "no-store" },
+      },
+    );
+  } catch {
+    return NextResponse.json(
+      { configured: true, queryWorks: false },
+      { status: 503, headers: { "Cache-Control": "no-store" } },
+    );
+  }
 }
