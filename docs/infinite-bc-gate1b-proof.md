@@ -1,3 +1,19 @@
+## Founder-approved third-card → C spatial handoff — 29 October
+
+**Founder review:** Latest desktop video confirmed that the entrance and B-to-third transition are worth preserving. The remaining problem was C arriving as a low-contrast, unrelated crossfade over the third card. Founder authorized this next focused construction, with no merge/deploy until actual visual review.
+
+**Implementation (motion.js + entrance.css only):**
+- Keep first intro push, B pause/approach, solid architectural room, reading copy, native scroll map, and final C's layout/typography unchanged.
+- After the third reading plane has fully settled, it **folds about its left edge** and recedes in Z (story p≈.655–.712). Existing architectural folding surfaces are given solid green materials and meet behind it.
+- C is an **opaque stage**, exposed by a clip aperture rooted at the settled third plane's left edge, growing to full viewport (p≈.665–.709). The dark background never appears by globally fading in over still-readable cream typography. The aperture is computed from untransformed `.reading.offsetWidth/offsetHeight` and viewport dimensions; deterministic for jumps, reverse, resizing.
+- C's actual editorial content remains hidden until the aperture is **fully open**; visible with a short fade-and-vertical-resolve at p≈.709–.746. This specifically prevents a cropped or dim C headline at intermediate sizes.
+- The cream reading remains solid while it turns, and becomes inert by p>.75; the C links become focusable at p≥.75. Reduced-motion/static mode retains normal readable sections, without the clip or fold.
+- No extra new story cards, shader assets, Three.js, scroll prison, automatic advancement, main integration or C/SelectedWork redesign.
+
+**Technical checks:** JS syntax valid on the authored branch. An **isolated local Chromium reconstruction** sampled 184 forward and 184 reverse scroll states over eight viewport sizes (1690×900, 1440×900, 1366×768, 1024×768, 768×1024, 390×844, 360×640, 320×568). No modeled horizontal overflow, invalid transform values, jump/reverse mismatch, or JS runtime errors; eight reduced-motion static-mode checks passed. Desktop/mobile contact sheets and QA metadata are in `Genezisi_C_Handoff_Review_2026-10-29.zip` attached in the founder chat.
+
+**Explicit limit:** Browser evidence uses a **partial reconstruction** of the prototype; it is not the full GitHub route with the exact 21 KB stylesheet. The complete actual tunnel must be refreshed to the PR tip and reviewed for timing, card-front visibility, typography on small devices, performance, and seamlessness into Selected Work. Founder art acceptance pending. **PR #15 remains draft; no merge or deployment.**
+
 ## Pacing and actual 3D-depth correction — founder video 14:23 (29 October)
 
 **Founder requirement:** Native scroll should feel like one fluid, user-directed motion. Fully settled cards are natural places to **stop and read**, not long compulsory stretches of otherwise static scrolling. Critically, do **not** diagnose apparent pace from a touchpad recording alone: the code's normalized progress controls motion; the video shows scroll input, not prescribed duration. Also keep refining the B-derived architectural space, without restarting the opening or C composition.
