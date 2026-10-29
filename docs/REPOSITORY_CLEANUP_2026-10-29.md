@@ -61,6 +61,12 @@
 
 **Conclusion:** file existence and a negative code-search result are not adequate proof that a public asset, route, API or component is safe to delete.
 
+## Separate production security hotfix
+
+A **one-file, draft PR #14** ([review the production-targeted fix](https://github.com/socraticblock/Agency/pull/14)) was opened separately from the cleanup branch. It targets `main` and restricts `GET /api/test-db` to development without depending on the unmerged website/creative documentation stack. The exact same route correction remains in this cleanup branch.
+
+**Merge coordination:** if PR #14 is released first, reconcile duplicate edits before combining the stacked cleanup PR with main; do not double-revert the security guard. Neither PR was merged or deployed in this audit. The potential exposure persists on any running deployment with the previous route.
+
 ## 5. Verification and release gates
 
 ### Verified at GitHub source level
