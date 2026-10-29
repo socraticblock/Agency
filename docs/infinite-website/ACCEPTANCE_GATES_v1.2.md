@@ -31,6 +31,9 @@
 - [ ] The site-derived B geometry travels in forward perspective: traceable page edges, near/far parallax, solid surfaces, **real occlusion**. Reject uniform scale, layered flat posters and generic dark gradient corridors.
 - [ ] The neutral interior is composed as a plausible space from the site, with readable **architecturally integrated** centered content. No unrelated floating white modal, nearly empty long hold or filler scroll.
 - [ ] A separate forward-going fold physically aligns the existing structures into a distinct, **centered** C. Exact C headline: **“Made to be seen. Built to work.”** No replay of the first headline or blank cut.
+- [ ] The third readable plane stays a solid, complete physical surface while folding/receding; there are no stray ghost text layers, disconnected dark rectangles, oversized foreground `G.` panels or competing triangular fold planes.
+- [ ] The **main C headline begins appearing with some green architectural context still visible**, but only where the solid dark plane covers the full rendered glyphs at that scroll state. Verify the first visible letters and moving boundary on desktop **and** 390px / 320px mobile; no crop or empty dark hold. Secondary C content may follow after coverage.
+- [ ] Fully settled readable cards are pause points, not compulsory long motionless scrolling. Measure native physical scroll distance between meaningful changes; do not infer fixed motion duration from a trackpad recording's seconds.
 - [ ] C is visually complete and leads immediately into **genuine** Selected Work in the real app where integration is claimed. If only the static proof's verified portfolio preview is used, label **integration pending**, not passed.
 
 ### Interaction and evidence
