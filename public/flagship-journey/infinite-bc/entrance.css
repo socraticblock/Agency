@@ -350,11 +350,10 @@
   background:radial-gradient(ellipse at 50% 48%,#285840 0%,#183c2c 55%,#0b1713 100%);
 }
 
-/* Third card -> C: one physical handoff, not two entire layers crossfading.
-   The completed reading plane hinges left and recedes. Its own architectural
-   fold planes close behind it. An opaque C plane opens from that *same card*
-   and fills the viewport, so there is no dim superimposed C headline.
-   Only the final editorial ink eases into a fully solid, dark C background. */
+/* Third card -> C: the complete cream reading surface folds modestly
+   into its own room; a full-height C plane advances from the same side.
+   No competing triangular fold props, detached dark rectangle or faded
+   layers. C copy appears as soon as the solid plane covers the viewport. */
 .bc-motion-ready .journey[data-mode="motion"] .depth .reading {
   transform-origin:left center;
   transform:translate(-50%,-50%) translateZ(var(--readZ,-1120px))
@@ -368,12 +367,22 @@
   backdrop-filter:none;
 }
 .bc-motion-ready .journey[data-mode="motion"] .reveal {
-  /* Solid background at every intermediate frame: clip shows exactly the
-     area that has opened, rather than fading the full screen across text. */
+  /* One full-height, solid C plane with a shallow architectural leading
+     edge. It advances from the left as the reading card folds behind it.
+     The clipped geometry never becomes a floating centered dark rectangle. */
   opacity:1;
-  clip-path:inset(var(--cInsetTop,50%) var(--cInsetRight,50%)
-    var(--cInsetBottom,50%) var(--cInsetLeft,50%));
+  clip-path:polygon(
+    0 0,
+    var(--cFrontTop,0%) 0,
+    var(--cFrontBottom,0%) 100%,
+    0 100%
+  );
   transform:none;
+}
+/* The existing giant editorial G. belongs to the *completed* C layout.
+   Suppress it during transition so it cannot become a foreground object. */
+.bc-motion-ready .journey[data-mode="motion"] .reveal::after {
+  opacity:var(--cWatermark,0);
 }
 .bc-motion-ready .journey[data-mode="motion"] .reveal .c-center,
 .bc-motion-ready .journey[data-mode="motion"] .reveal .c-topline,
