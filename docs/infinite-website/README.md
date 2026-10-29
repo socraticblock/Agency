@@ -19,6 +19,15 @@
 - Original opt-in geometry proof PR #11 remains preserved and is not the actual production React `SelectedWork` integration.
 - `main`, `preview-*` and deployments are untouched by a docs-only update. Any integration must preserve the newest local worktree and real locales/projects/contact channels.
 
+## Repository-wide guidance and compatibility
+
+- [Repository README](../../README.md) — the actual app entry point, setup and current homepage destination.
+- [Coding agent instructions](../../AGENTS.md) — which product's specifications to follow, release boundaries and acceptance reporting.
+- [Full repository documentation audit](../DOCUMENTATION_AUDIT_2026-10-29.md) — legacy website specs, digital-card documents, localization evidence and editor-rule resolutions.
+- [Documentation map](../README.md) — active vs historical documents and independent product boundaries.
+
+Some old V2 and flagship files still contain their original dated “authoritative”, “active” or “canonical” text *inside the historical record*; their newly added scope banners and this current North Star take precedence. **Do not delete those files or apply their old aesthetic rules to the new homepage.**
+
 ## Version policy
 
 Keep `v1.1` archived for provenance. Edit `v1.2` and its companion docs together when founder changes a locked decision, recording the new date, change and any implementation impact. Never leave contradictory top-level instructions in parallel.
