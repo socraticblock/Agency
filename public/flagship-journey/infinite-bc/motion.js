@@ -10,6 +10,20 @@
  const clamp=v=>Math.max(0,Math.min(1,v));
  const smooth=(a,b,v)=>{const t=clamp((v-a)/(b-a));return t*t*(3-2*t)};
  const mix=(a,b,t)=>a+(b-a)*t;
+ // Native scroll is a continuous, reversible film; a reader pauses by
+ // stopping, not by being forced through long stationary scroll bands.
+ // Re-map physical scroll distance to the original authored keyframes so
+ // their poses and B -> room -> C geometry stay unchanged.
+ const scrollStops=[[0,0],[.20,.20],[.24,.32],[.33,.415],[.42,.50],
+   [.48,.56],[.505,.62],[.715,.76],[.93,.93],[1,1]];
+ const storyProgress=(raw)=>{
+   const x=clamp(raw);
+   for(let i=1;i<scrollStops.length;i++){
+     const [x0,y0]=scrollStops[i-1],[x1,y1]=scrollStops[i];
+     if(x<=x1)return mix(y0,y1,(x-x0)/(x1-x0));
+   }
+   return 1;
+ };
  // Fit the actual opaque green face inside the viewport at the camera's nearest
  // approach. Unlike a fixed 2.25x multiplier, this leaves visible margins so
  // the surrounding site-derived geometry can still read as a physical space.
@@ -22,7 +36,7 @@
    (h-(w<=740?148:140))/Math.max(1,cardFace.offsetHeight*panelScale)
  ));
  // All scene state, including the entrance, is a pure function of scroll progress.
- // .20–.32 is an intentional full-B reading window before depth begins.
+ // Full B remains a legible stop; only the physical scroll distance of its hold is shortened.
  const sample=(p,w,zoomCap=2.25)=>{
    // One physical entrance: the panel arrives while the complete opening moves
    // out of the viewport. B becomes the sole center-stage composition.
@@ -54,7 +68,7 @@
  const apply=()=>{
    raf=0;if(root.dataset.mode!=='motion')return;
    const rect=root.getBoundingClientRect(),total=root.offsetHeight-window.innerHeight;
-   const p=clamp(-rect.top/Math.max(1,total)),w=window.innerWidth;
+   const raw=clamp(-rect.top/Math.max(1,total)),p=storyProgress(raw),w=window.innerWidth;
    // All bounds below come from *layout*, not animated rectangles. Both tracks
    // are driven by the same arrival progress, with a shared non-overlap edge.
    const isMobile=w<=740,h=window.innerHeight;
@@ -105,11 +119,11 @@
    // The green facade itself stays opaque until its depth scene covers it.
    const split=smooth(.42,.495,p);
    root.style.setProperty('--contentSlide',(cardFace.offsetWidth*.64*split)+'px');
-   root.style.setProperty('--contentAlpha',String(1-smooth(.415,.445,p)));
+   root.style.setProperty('--contentAlpha',String(1-smooth(.408,.429,p)));
    // The header/footer are also *interface contents*: they must retreat with
    // the two columns. The green structural plane stays solid underneath.
-   root.style.setProperty('--facadeMetaAlpha',String(1-smooth(.415,.445,p)));
-   root.style.setProperty('--facadeMetaLift',(-26*smooth(.415,.445,p))+'px');
+   root.style.setProperty('--facadeMetaAlpha',String(1-smooth(.408,.429,p)));
+   root.style.setProperty('--facadeMetaLift',(-26*smooth(.408,.429,p))+'px');
    // Update every geometry variable *before* reading the transformed face.
    // This removes dependence on the previous scroll sample on jump/reversal.
    const map={p:v.p,e:v.e,h:v.h,f:v.f,c:v.c,d:v.d,b:v.b,n:v.n,shiftX:v.shiftX,shiftY:v.shiftY,artScale:v.artScale,leftX:v.leftX,rightX:v.rightX,nearZ:v.nearZ,farLeft:v.farLeft,farRight:v.farRight,groundZ:v.groundZ,cOffset:v.cOffset,foldAlpha:v.foldAlpha,foldLeftX:v.foldLeftX,foldRightX:v.foldRightX,foldRotL:v.foldRotL,foldRotR:v.foldRotR};
@@ -164,7 +178,7 @@
  // Named development hook: sample and seek never run on their own.
  const inspect=p=>{
    const w=window.innerWidth,h=window.innerHeight;
-   return sample(clamp(p),w,cameraScaleFor(w,h,panelScaleFor(w,h,panel.offsetWidth,panel.offsetHeight)));
+   return sample(storyProgress(p),w,cameraScaleFor(w,h,panelScaleFor(w,h,panel.offsetWidth,panel.offsetHeight)));
  };
  window.__GENEZISI_BC_TEST__={sample:inspect,seek:p=>{const total=root.offsetHeight-window.innerHeight;window.scrollTo(0,root.offsetTop+clamp(p)*total);apply();return inspect(p)}};
 })();
