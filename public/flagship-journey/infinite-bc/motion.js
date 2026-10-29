@@ -8,8 +8,8 @@
  const smooth=(a,b,v)=>{const t=clamp((v-a)/(b-a));return t*t*(3-2*t)};
  const mix=(a,b,t)=>a+(b-a)*t;
  const sample=(p,w)=>{
-   const e=smooth(.09,.37,p),h=smooth(.35,.46,p)*(1-smooth(.61,.76,p)),f=smooth(.60,.88,p),c=smooth(.72,.93,p);
-   const d=smooth(.14,.34,p)*(1-smooth(.79,.94,p)),b=1-smooth(.12,.39,p);
+   const e=smooth(.09,.37,p),h=smooth(.30,.42,p)*(1-smooth(.62,.76,p)),f=smooth(.60,.88,p),c=smooth(.72,.93,p);
+   const d=smooth(.12,.30,p)*(1-smooth(.79,.94,p)),b=1-smooth(.12,.39,p);
    return {p,e,h,f,c,d,b,n:smooth(.14,.34,p)*(1-c),foldAlpha:smooth(.6,.68,p)*(1-smooth(.85,.94,p)),foldLeftX:mix(-w*.18,0,f),foldRightX:mix(w*.18,0,f),foldRotL:mix(-48,0,f),foldRotR:mix(48,0,f),
      shiftX:mix(0,-Math.min(w*.23,320),e),shiftY:mix(0,-24,e),artScale:mix(1,2.25,e),
      leftX:-e*Math.min(w*.31,460)+f*Math.min(w*.17,250),rightX:e*Math.min(w*.31,460)-f*Math.min(w*.17,250),
