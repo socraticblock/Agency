@@ -105,11 +105,11 @@
    // The green facade itself stays opaque until its depth scene covers it.
    const split=smooth(.42,.495,p);
    root.style.setProperty('--contentSlide',(cardFace.offsetWidth*.64*split)+'px');
-   root.style.setProperty('--contentAlpha',String(1-smooth(.425,.46,p)));
+   root.style.setProperty('--contentAlpha',String(1-smooth(.415,.445,p)));
    // The header/footer are also *interface contents*: they must retreat with
    // the two columns. The green structural plane stays solid underneath.
-   root.style.setProperty('--facadeMetaAlpha',String(1-smooth(.422,.468,p)));
-   root.style.setProperty('--facadeMetaLift',(-26*smooth(.422,.468,p))+'px');
+   root.style.setProperty('--facadeMetaAlpha',String(1-smooth(.415,.445,p)));
+   root.style.setProperty('--facadeMetaLift',(-26*smooth(.415,.445,p))+'px');
    // Open the chamber *within the actual settled B facade*, not a generic
    // viewport-centered crop. This matters on portrait mobile: a symmetric
    // 50%-inset viewport crop produces a disconnected tall slit over a
