@@ -33,6 +33,16 @@ This stage implements and tests the **visual and interaction mechanism** in a se
 
 **User flow:** `centered intro → right-hand interface pushes into B → full B hold → existing threshold/interior/fold/C prototype → #work preview`. Scrolling backward retraces progress.
 
+## Camera-fit correction from founder's 16:37 recording — 29 October
+
+Founder observed that the apparent speed of the initial push can vary with touchpad scroll input. **Do not diagnose this as a timing defect solely from recording duration:** the entrance remains a deterministic function of native scroll progress (`arrival=smooth(.012,.20,p)`), with text displacement gated by the actual incoming interface edge and a measured gap. The code uses neither a time-based transition nor a forced scroll speed.
+
+The same recording shows a **separate confirmed geometry problem**: the green face was magnified by a hard-coded **2.25×** on top of the already-expanded centered B scale. On 1440×900 reference captures, the settled green face is approximately 914×644 CSS pixels, so 2.25× would overflow the viewport substantially. Founder wants the camera to stop when the green face nearly fills the viewport, preferably with some remaining structure visible for 3D depth.
+
+**Only correction in this pass:** the previous fixed camera multiplier is replaced with a DOM/viewport-based cap. The maximum close-up scale is computed from the *actual* untransformed `.site-window` width and height, the settled interface scale, and the viewport dimensions, leaving horizontal and vertical margins; the camera still samples the same smooth scroll range p=.32–.52. An internal development sample hook reports the same fitted zoom. The proximity push, opaque transition, subsequent scene and its timing are otherwise untouched.
+
+**Verification:** GitHub post-commit source inspection and JavaScript parser check passed. Visual reference is the founder's 92-second screen recording and the earlier isolated p=.32 browser screenshot. The revised geometry **has not** yet been verified in an actual served browser at this commit; no claimed cross-browser/mobile/physical-device proof or visual founder acceptance. The recording has a non-silent audio stream, but no reliable speech transcription was available for this review. **Do not infer additional spoken instructions or treat this as full Gate 1b acceptance.**
+
 ## Newest founder refinement — proximity push and camera-first B entry (29 October)
 
 The founder further clarified the entrance: **first-card text must stay still until the incoming B panel gets close enough to push it**. Once the intro has moved away and B is fully centered, the **camera must advance closer to B while its green surface stays solid**; only after B becomes significantly enlarged should the third/interior geometry emerge. The prior right-to-left opaque depth wipe was explicitly rejected as a different effect. **This latest requirement supersedes the wipe experiment described below.**
