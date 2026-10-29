@@ -74,7 +74,7 @@ These past design artifacts remain in their original locations. Existing source 
 | `001-architect-core.mdc` | **UPDATED** — Next 16, current authority, no obsolete mandatory Server Actions/PPR, cross-cutting audit allowed |
 | `002-gpu-physics.mdc` | **Preserve** — restricted rendering/shader paths; no generalized WebGL requirement |
 | `003-ui-aesthetics.mdc` | **UPDATED** — no unconditional Liquid Glass, clay cards, turquoise glows or forced animation engine; accessible design context |
-| `004-memory-protocol.mdc` | **Preserve** — context logging workflow; card history remains separate |
+| `004-memory-protocol.mdc` | **UPDATED** — route homepage decisions to the current North Star and gate notes; preserve card-specific `docs/MEMORY.md` for its own history |
 | `005-interaction-protocol.mdc` | **Preserve** — explicit-consent and deployment boundaries |
 | `anti-patterns.mdc` | **UPDATED** — card print `@page` rule scoped to cards, preserve evidence-based animation/QA requirements |
 | `code-efficiency.mdc`, `component-rules.mdc` | **Preserve** modularity rules; assess file-specific structure when coding |
