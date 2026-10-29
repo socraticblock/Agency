@@ -123,3 +123,12 @@
 .bc-motion-ready .journey[data-mode="motion"] .discipline span {color:#bbd3bc;}
 .bc-motion-ready .journey[data-mode="motion"] .window-head small,
 .bc-motion-ready .journey[data-mode="motion"] .window-foot {color:#c0d5c1;}
+
+/* Gate 1b corrective handoff: an opaque site-colored plane covers the
+   interface from right to left. Unlike parent opacity fades, this prevents
+   ghost typography and layered transparency during B -> depth transition.
+   The deeper architecture remains the existing, not-yet-approved prototype. */
+.bc-motion-ready .journey[data-mode="motion"] .depth {
+  opacity:1;
+  clip-path:inset(0 0 0 var(--depthMask,100%));
+}
