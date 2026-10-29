@@ -179,3 +179,15 @@
   border-color:#afc9b0;
   box-shadow:0 0 0 12px #153d2d,0 0 0 13px #a2c8ac65,0 24px 100px #07160fd6;
 }
+
+/* The site-window's actual text columns move into the left/right architecture
+   instead of remaining as ghost typography under the third surface. Opacity is
+   only used on the retiring text, never on the solid green window material. */
+.bc-motion-ready .journey[data-mode="motion"] .window-copy {
+  transform:translate3d(calc(0px - var(--contentSlide,0px)),0,0);
+  opacity:var(--contentAlpha,1);
+}
+.bc-motion-ready .journey[data-mode="motion"] .disciplines {
+  transform:translate3d(var(--contentSlide,0px),0,0);
+  opacity:var(--contentAlpha,1);
+}
