@@ -1,15 +1,14 @@
 ---
-description: Project structure and directory rules
+description: Product-aware project layout; distinguish studio homepage from digital card customizer paths.
 globs: "*"
 alwaysApply: true
 ---
 
-# Project Structure
+# Repository Structure
 
-- App Router: src/app/[locale]/
-- Components: src/app/[locale]/start/components/
-- Types: src/app/[locale]/start/lib/types.ts
-- Presets: src/app/[locale]/start/lib/presets.ts
-- Constants: src/constants/
-- Max 200 lines per component file
-- No new dependencies without explicit approval
+- App Router and locales: `src/app/[locale]/` with existing locale-specific handling.
+- Studio homepage composition at current checkpoint: `src/app/[locale]/page.tsx` → `src/app/[locale]/_components/SignalHeroPrototype.tsx` and `_components/v2/` (including actual `SelectedWork`). Verify actual source before integrating.
+- New Infinite Website review experiments: `public/flagship-journey/infinite-opening-study/` and `public/flagship-journey/infinite-bc/` are **opt-in historical/experimental artifacts**, not the production React homepage.
+- Separate digital-card app: `src/app/[locale]/start/` and its `components/`, `lib/types.ts`, `lib/presets.ts` as applicable.
+- Shared configuration and constants: `src/constants/`; localization: `src/lib/home-i18n.ts` and existing route middleware.
+- Favor concise modules; avoid arbitrary rewrites. Do not add new dependencies without explicit approval. Never move or remove existing application routes because the homepage direction changed.
