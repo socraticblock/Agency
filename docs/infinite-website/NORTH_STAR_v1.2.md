@@ -14,6 +14,8 @@
 
 **Decision shorthand:** *Centered clarity → B pushes into view → complete B → website-derived spatial journey → designed system at work → forward C reveal → authentic work.*
 
+> **Entrance clarification — founder decision, 29 October 2026 (11:01 UTC):** The earlier **two-column, headline-left + interface-right final B pose is superseded**. The opening headline, body and CTA begin centered. As the opaque green Interface B enters from the right, the **entire introduction must be pushed fully out of the desktop viewport**, not merely into a left column; on mobile it exits upward. The **single prominent, centrally settled Interface B** is enlarged on large screens, solid/high-contrast and completely legible, with a scroll-controlled stable reading interval before any deeper fade/transition. The persistent navigation continues to offer Work, Services and Contact; offscreen intro CTAs must not be keyboard focus targets. This clarification governs any older references below to a "two-part" or "left-column" finished B. **Only this entrance is currently in implementation/review**, and neither Gate 1b as a whole nor the subsequent narrative is approved.
+
 **Version rule:** This file contains the agreed *destination* and contracts, **not authorization to implement every gate**. The flow storyboard includes proposed copy/visual detail that is subject to founder review; it does not authorize Gate 2 or a production merge.
 
 ---
@@ -195,7 +197,7 @@ If the language, preferred time or available options change in any creative revi
 
 ## 8A. Direction-study history and selected combination
 
-**Completed Gate 1a:** Three different desktop/portrait-mobile static explorations were produced: A / Editorial Aperture, B / Interface Strata, C / Typographic Architecture. The founder selected **B for the entry** and **C for the resolution**, then improved B's choreography: start with the centered left-side headline; the right interface moves inward and *pushes* it into its eventual left-side position.
+**Completed Gate 1a:** Three different desktop/portrait-mobile static explorations were produced: A / Editorial Aperture, B / Interface Strata, C / Typographic Architecture. The founder selected **B for the entry** and **C for the resolution**, then refined B's choreography: the centered headline is *pushed completely out of view* as the right interface moves inward and becomes the sole, large centered B keyframe.
 
 Do not continue comparing A/B/C as competing whole-page opening directions. A's editorial restraint is a useful quality benchmark; B's edges/columns supply the geometry; C's type/grid supplies the finale. The founder has **not** approved final color values, motion execution or application integration. The three studies and historical selected B art remain valuable comparison artifacts.
 
@@ -275,7 +277,7 @@ Maintain **stable visual identities** across transforms. A new image can't appea
 
 | Stable identity | Centered first frame | Complete B | Forward interior | Forward fold and C | Nonnegotiable invariant |
 |---|---|---|---|---|---|
-| **CenteredIntro** | Hero headline, body and real CTA centered | Coordinated push moves intro left | Intro's page alignment supplies left-side architectural origin; semantic text hidden appropriately when out of view | Its typography/grid ancestry belongs to the same design system, but the opening headline is **not** replayed | No jump, unreadable overlap or premature fade; real CTA still reachable elsewhere |
+| **CenteredIntro** | Hero headline, body and real CTA centered | Coordinated push moves intro fully offscreen | Intro's page alignment supplies left-side architectural origin; semantic text hidden appropriately when out of view | Its typography/grid ancestry belongs to the same design system, but the opening headline is **not** replayed | No jump, unreadable overlap or premature fade; real CTA still reachable elsewhere |
 | **IncomingInterfaceB** | Offscreen/not visually present; essential business offer already in hero | From right to full readable services structure | Right-side grids and edges gain perspective and solidity | Its divisions become C's architectural grid | Entire B must be seen before entry and must never resemble a fake external client app |
 | **PageFrame / FrameLines** | Genuine Genezisi page spacing/borders | Paired editorial geometry | Structural near/far surfaces and vanishing point | Lines flatten/align with the C typographic grid | Traceability across all frames; no portal or separate microsite |
 | **LeftPlane / RightPlane** | Originating intro/interface boundaries | Identifiable real site structure | Relative parallax, correct occlusion and material opacity | Fold/recede into C page/grid | No two translucent flat poster layers pretending to be depth |
@@ -592,7 +594,7 @@ Three desktop/mobile opening studies A/B/C were created. The founder selected **
 ### Gate 1b — Centered opening, B entrance, geometry and C forward fold (ACTIVE; NOT ACCEPTED)
 
 1. Implement a **beautiful, actionable centered first frame**, with three independent offerings, real links and a calm no-motion experience.
-2. Build a **coordinated desktop right-to-left B arrival**, preserving readable headline, body and CTA; author a distinct **mobile vertical push**.
+2. Build a **coordinated desktop right-to-left B arrival** that physically displaces the headline, body and CTA **fully offscreen**, finishing with a much larger centered B; author a distinct **mobile vertical push** that moves the intro upward and B to center. Preserve real navigation, and remove offscreen controls from focus order.
 3. Let **complete B** resolve clearly before any fading or forward entry. No unreadable overlapping headings during intermediate progress.
 4. Map B's real page edges/columns to **solid spatial near/far geometry**, responsive projection, relative parallax and occlusion. Forward viewpoint passes *through* site-derived objects, not a scaled screenshot.
 5. Stage one **short, well-composed, architecturally integrated neutral interior**; eliminate the excessive empty/flat hold and unrelated floating modal. **Do not add full Gate 2 fictional story** here.
