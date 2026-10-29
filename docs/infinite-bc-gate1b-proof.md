@@ -33,6 +33,14 @@ This stage implements and tests the **visual and interaction mechanism** in a se
 
 **User flow:** `centered intro → right-hand interface pushes into B → full B hold → existing threshold/interior/fold/C prototype → #work preview`. Scrolling backward retraces progress.
 
+## Newest founder refinement — proximity push and camera-first B entry (29 October)
+
+The founder further clarified the entrance: **first-card text must stay still until the incoming B panel gets close enough to push it**. Once the intro has moved away and B is fully centered, the **camera must advance closer to B while its green surface stays solid**; only after B becomes significantly enlarged should the third/interior geometry emerge. The prior right-to-left opaque depth wipe was explicitly rejected as a different effect. **This latest requirement supersedes the wipe experiment described below.**
+
+**Implementation:** Both desktop and portrait mobile compute proximity from the incoming panel's actual screen-space leading edge relative to the initially stationary intro. The intro displacement stays exactly zero until the incoming panel reaches a visible gap; the same edge then determines the displacement, preserving non-collision and fully exiting by p=.20. The existing full-B reading interval remains p=.20–.32. From p=.32 onward B enlarges toward the camera while still rendered at parent opacity 1, reaching approximately 2.25× stack scale by p=.52. The deeper surface reveals through a growing **centered opaque aperture** only from p=.46–.56; the opening is removed after the aperture has filled the viewport. No right-to-left wipe or early crossfade. The existing deeper rails/fold/C are preserved, not polished or approved by this increment.
+
+**Local validation:** 272 scroll states (34 positions × 8 desktop/tablet/portrait mobile viewport sizes), with no intro/panel collisions, a stationary intro at early approach positions, full B stationary p=.20–.32, full B opacity preserved during the approach, and deterministic reverse seek. Headless Chromium screenshots of the entrance/camera approach at 1440×900 and 390×844 were captured from the **isolated opening reconstruction** with the local motion and entrance files; `node --check` passed. The preview tunnel, original full CSS served route, devices, and later journey still require testing. **Founder visual acceptance pending; no merge or deploy.**
+
 ## Focused corrective pass — opaque B-to-depth handoff (29 October)
 
 **Founder feedback:** the enlarged centered B now looks closer to the requested entrance, but its readable green surfaces and the following scene became semitransparent and layered over one another after the full-B hold. This was caused by `--b` reducing the **entire opening parent's opacity** while `--d` increased the depth scene opacity.
