@@ -44,18 +44,24 @@
    // B reaches its stable camera pose at .41. A *complete*, distant third
    // surface appears inside the formed room, then comes forward as a unit.
    // Its typography is delayed separately so no letter fragments can lead it.
-   // The reading stage is solid while it folds away. The opaque C surface
-   // grows from its physical hinge; no overlapping full-scene alpha fades.
-   const h=smooth(w<=740?.462:.452,.484,p)*(1-smooth(.725,.75,p));
+   // The third reading stays fully solid as it folds and recedes. C arrives
+   // as a full-height architectural surface along the direction of that fold,
+   // not a detached rectangular panel floating in front of the chamber.
+   const h=smooth(w<=740?.462:.452,.484,p)*(1-smooth(.718,.744,p));
    const f=smooth(.60,.88,p),c=smooth(.715,.77,p);
-   const handoff=smooth(.665,.709,p);
-   const fold=smooth(.655,.712,p);
-   const cInk=smooth(.709,.746,p);
+   const handoff=smooth(.658,.706,p);
+   const fold=smooth(.647,.707,p);
+   // As soon as the opaque surface fills the viewport its actual headline
+   // resolves. The decorative G. waits until the real C message is legible.
+   const cInk=smooth(.706,.738,p);
+   const cWatermark=smooth(.755,.83,p);
    // Keep the site facade solid until the same-color spatial room has fully
    // covered it. We never crossfade two simultaneously readable panels.
    const d=smooth(.415,.515,p)*(1-smooth(.79,.94,p)),b=p<.515?1:0;
    return {p,arrival,e,h,f,c,d,b,n:smooth(.32,.49,p)*(1-c),
-     foldAlpha:smooth(.625,.69,p)*(1-smooth(.765,.82,p)),
+     // No second pair of fold wings: their old triangular silhouettes
+     // competed with the card's hinge, especially in reverse scroll.
+     foldAlpha:0,
      foldLeftX:mix(-w*.18,0,f),foldRightX:mix(w*.18,0,f),
      foldRotL:mix(-52,0,smooth(.63,.785,p)),foldRotR:mix(52,0,smooth(.63,.785,p)),
      // Hold full B at .20-.32. Camera advances .32-.41 and stops before the
@@ -67,7 +73,7 @@
      readInk:smooth(.507,.543,p),
      leftX:-e*Math.min(w*.17,230)+f*Math.min(w*.13,180),rightX:e*Math.min(w*.17,230)-f*Math.min(w*.13,180),
      nearZ:300*e+180*f,farLeft:e*-Math.min(w*.13,170),farRight:e*Math.min(w*.13,170),groundZ:550*e+250*f,
-     cOffset:mix(20,0,c),handoff,fold,cInk
+     cOffset:mix(20,0,c),handoff,fold,cInk,cWatermark
    };
  };
  let raf=0;
@@ -150,25 +156,25 @@
    root.style.setProperty('--depthBottom',Math.max(0,h-cropY-cropH/2)+'px');
    root.style.setProperty('--depthLeft',Math.max(0,cropX-cropW/2)+'px');
    const depthOpen=smooth(.415,.515,p);
-   root.style.setProperty('--readZ',(v.readZ-150*v.fold)+'px');
-   root.style.setProperty('--readingTurn',(-77*v.fold)+'deg');
+   root.style.setProperty('--readZ',(v.readZ-155*v.fold)+'px');
+   // A modest turn retains recognizable card geometry until the solid C
+   // cover overtakes it. No near-edge-on white triangles or hard flips.
+   root.style.setProperty('--readingTurn',(-36*v.fold)+'deg');
    root.style.setProperty('--readInk',String(v.readInk));
    root.style.setProperty('--roomAdvance',v.roomAdvance+'px');
    root.style.setProperty('--roomReveal',String(depthOpen));
-   // C opens from the *left hinge* of the completed reading stage. The crop
-   // expands to the whole scene while the solid reading surface folds aside.
-   // Its dimensions use stable layout measurements, not its animated rect,
-   // so fast/reverse scroll jumps cannot change the opening's origin.
-   const coverW=w*v.handoff;
-   const coverH=mix(reading.offsetHeight*.9,h,v.handoff);
-   const coverX=mix(w/2-reading.offsetWidth/2,w/2,v.handoff);
-   const coverY=mix(h*.49,h/2,v.handoff);
-   root.style.setProperty('--cInsetTop',Math.max(0,coverY-coverH/2)+'px');
-   root.style.setProperty('--cInsetRight',Math.max(0,w-coverX-coverW/2)+'px');
-   root.style.setProperty('--cInsetBottom',Math.max(0,h-coverY-coverH/2)+'px');
-   root.style.setProperty('--cInsetLeft',Math.max(0,coverX-coverW/2)+'px');
+   // C is a full-height architectural continuation of the reading plane:
+   // its slightly angled leading edge advances left-to-right. There is no
+   // small dark box and no central G. floating in front of the card.
+   // The endpoint is exactly the complete C viewport, on all aspect ratios.
+   const slant=8*4*v.handoff*(1-v.handoff);
+   const edgeTop=Math.max(0,Math.min(100,100*v.handoff+slant));
+   const edgeBottom=Math.max(0,Math.min(100,100*v.handoff-slant));
+   root.style.setProperty('--cFrontTop',edgeTop+'%');
+   root.style.setProperty('--cFrontBottom',edgeBottom+'%');
    root.style.setProperty('--cInk',String(v.cInk));
-   root.style.setProperty('--cInkRise',(12*(1-v.cInk))+'px');
+   root.style.setProperty('--cInkRise',(9*(1-v.cInk))+'px');
+   root.style.setProperty('--cWatermark',String(v.cWatermark));
    root.dataset.beat=p<.515?'opening':p>=.75?'reveal':'interior';
    const night=smooth(.32,.49,p);
    const darkInk=Math.round(mix(23,240,night)),greenInk=Math.round(mix(51,241,night)),blueInk=Math.round(mix(39,233,night));
