@@ -110,6 +110,10 @@
    // the two columns. The green structural plane stays solid underneath.
    root.style.setProperty('--facadeMetaAlpha',String(1-smooth(.415,.445,p)));
    root.style.setProperty('--facadeMetaLift',(-26*smooth(.415,.445,p))+'px');
+   // Update every geometry variable *before* reading the transformed face.
+   // This removes dependence on the previous scroll sample on jump/reversal.
+   const map={p:v.p,e:v.e,h:v.h,f:v.f,c:v.c,d:v.d,b:v.b,n:v.n,shiftX:v.shiftX,shiftY:v.shiftY,artScale:v.artScale,leftX:v.leftX,rightX:v.rightX,nearZ:v.nearZ,farLeft:v.farLeft,farRight:v.farRight,groundZ:v.groundZ,cOffset:v.cOffset,foldAlpha:v.foldAlpha,foldLeftX:v.foldLeftX,foldRightX:v.foldRightX,foldRotL:v.foldRotL,foldRotR:v.foldRotR};
+   for(const [k,x] of Object.entries(map))root.style.setProperty('--'+k,String(x));
    // Open the chamber *within the actual settled B facade*, not a generic
    // viewport-centered crop. This matters on portrait mobile: a symmetric
    // 50%-inset viewport crop produces a disconnected tall slit over a
@@ -130,8 +134,6 @@
    root.style.setProperty('--readInk',String(v.readInk));
    root.style.setProperty('--roomAdvance',v.roomAdvance+'px');
    root.style.setProperty('--roomReveal',String(depthOpen));
-   const map={p:v.p,e:v.e,h:v.h,f:v.f,c:v.c,d:v.d,b:v.b,n:v.n,shiftX:v.shiftX,shiftY:v.shiftY,artScale:v.artScale,leftX:v.leftX,rightX:v.rightX,nearZ:v.nearZ,farLeft:v.farLeft,farRight:v.farRight,groundZ:v.groundZ,cOffset:v.cOffset,foldAlpha:v.foldAlpha,foldLeftX:v.foldLeftX,foldRightX:v.foldRightX,foldRotL:v.foldRotL,foldRotR:v.foldRotR};
-   for(const [k,x] of Object.entries(map))root.style.setProperty('--'+k,String(x));
    root.dataset.beat=p<.515?'opening':p>.79?'reveal':'interior';
    const night=smooth(.32,.49,p);
    const darkInk=Math.round(mix(23,240,night)),greenInk=Math.round(mix(51,241,night)),blueInk=Math.round(mix(39,233,night));
