@@ -349,3 +349,37 @@
 .bc-motion-ready .journey[data-mode="motion"] .scene::after {
   background:radial-gradient(ellipse at 50% 48%,#285840 0%,#183c2c 55%,#0b1713 100%);
 }
+
+/* Third card -> C: one physical handoff, not two entire layers crossfading.
+   The completed reading plane hinges left and recedes. Its own architectural
+   fold planes close behind it. An opaque C plane opens from that *same card*
+   and fills the viewport, so there is no dim superimposed C headline.
+   Only the final editorial ink eases into a fully solid, dark C background. */
+.bc-motion-ready .journey[data-mode="motion"] .depth .reading {
+  transform-origin:left center;
+  transform:translate(-50%,-50%) translateZ(var(--readZ,-1120px))
+    rotateY(var(--readingTurn,0deg));
+  backface-visibility:hidden;
+}
+.bc-motion-ready .journey[data-mode="motion"] .depth .fold-pane {
+  background:linear-gradient(127deg,#345c43,#1c4634 52%,#102d22);
+  border:1px solid #a7c7a36d;
+  box-shadow:inset 0 0 0 1px #d1e2c410,0 12px 65px #061b1380;
+  backdrop-filter:none;
+}
+.bc-motion-ready .journey[data-mode="motion"] .reveal {
+  /* Solid background at every intermediate frame: clip shows exactly the
+     area that has opened, rather than fading the full screen across text. */
+  opacity:1;
+  clip-path:inset(var(--cInsetTop,50%) var(--cInsetRight,50%)
+    var(--cInsetBottom,50%) var(--cInsetLeft,50%));
+  transform:none;
+}
+.bc-motion-ready .journey[data-mode="motion"] .reveal .c-center,
+.bc-motion-ready .journey[data-mode="motion"] .reveal .c-topline,
+.bc-motion-ready .journey[data-mode="motion"] .reveal .c-lastline {
+  opacity:var(--cInk,0);
+  transform:translate3d(0,var(--cInkRise,12px),0);
+}
+/* C's final positions, typography, contrast and responsive rules are
+   inherited unchanged from styles.css. Keep reduced-motion unmasked. */
