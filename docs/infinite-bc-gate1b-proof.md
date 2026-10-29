@@ -1,3 +1,20 @@
+## Founder-authorized architectural correction — full B → 3D chamber → complete third plane (29 October)
+
+**Context:** Founder reviewed the latest 19.5-second tunnel recording and approved fixing the visually weak B-to-third transition. The entrance was considered good and must not be reworked. Defects: faint side geometry, third text fragments appearing before the card surface, old B header/footer and content competing behind the third card, and a flat/modal feel.
+
+**Code changes** (only `public/flagship-journey/infinite-bc/index.html`, `motion.js`, and `entrance.css`):
+- Built a minimal, authored **site-derived chamber** within the existing `.depth-space`: solid evergreen left/right architecture, perspective ceiling/floor and nested structural frames. The two existing B backing sheets still unfold into the side planes and the existing rails remain. This is restrained 2.5D/CSS geometry, not a new 3D engine or unrelated visual theme.
+- Kept the initial proximity-triggered push, centered B read hold (`p=.20–.32`), and viewport-fitted camera approach (`p=.32–.41`) unchanged.
+- The portal aperture is now calculated from the **actual transformed B face bounds**, expanding first to those proportions (`p=.415–.47`), then to the whole viewport (`p=.47–.515`). This prevents the former narrow viewport-shaped slit from appearing disconnected from B on portrait mobile. The facade remains opaque until it is occluded.
+- B's original title/footer labels **and** column typography retreat and vanish by approximately `p=.445`, before the third plane becomes visually present. Green materials are never faded.
+- The existing third card (unchanged authorial copy) is rendered as a **whole, distant surface** beginning around `p=.452` desktop / `p=.462` portrait; it moves along the same depth axis (`p=.46–.56`). An inner `.reading-ink` wrapper makes its real text readable only once the surface has become large (`p=.507–.543`). No isolated letter fragments precede the card.
+- Fixed a discovered **reverse-scroll defect**: applying camera variables *before* measuring `getBoundingClientRect()` makes the mask geometry deterministic rather than dependent on the previous scroll sample. No wheel hijacking or timers.
+- Left the later C/fold, Selected Work proof area, wording and scope untouched. Static/reduced-motion path shows the existing ordinary readable sections; the new architecture is only active in motion mode.
+
+**Local evidence and checks:** Isolated browser mirror based on a **subset of the original CSS and simplified markup** (not the full source route). After the geometry fix, 64 progress-position snapshots across 1440×900, 1024×768, 390×844 and 320×568; 60 forward/reverse/repeated-seek assertions; four reduced-motion checks; all passed. No obvious initial B opacity loss, header remnant at p=.45, early third-card text, final third-card legibility failure or horizontal overflow in the mirror. `node --check` passed. Desktop/mobile contact sheets and measurements in the founder-chat attachment `Genezisi_B3_Architectural_Entry_Review_2026-10-29.zip`.
+
+**Limitations:** These frames are **NOT screenshots of the complete original served app**. Actual tunnel and full original CSS, hardware performance, C handoff and selected-work integration must still be inspected. This is a founder review candidate, **not approval**. Keep PR #15 in draft. **Do not merge, deploy or push to main/preview branches.**
+
 # Genezisi Infinite Website — Gate 1b / B → C spatial proof
 
 **Prepared:** 29 October 2026. **Updated:** 29 October 2026 for the centered-opening first increment. **Status:** interactive opt-in development proof, **not founder visual acceptance**, **not the complete Gate 1b**, and **not production integration**.
