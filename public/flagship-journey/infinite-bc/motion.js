@@ -96,6 +96,12 @@
    root.style.setProperty('--wingSpread',sideSpread+'px');
    root.style.setProperty('--wingAngle',(32*v.wingProgress)+'deg');
    root.style.setProperty('--wingProgress',String(v.wingProgress));
+   // As the B surface opens, its two readable columns retire into the
+   // corresponding architectural wings; only the third plane remains centered.
+   // The green facade itself stays opaque until its depth scene covers it.
+   const split=smooth(.42,.495,p);
+   root.style.setProperty('--contentSlide',(cardFace.offsetWidth*.64*split)+'px');
+   root.style.setProperty('--contentAlpha',String(1-smooth(.425,.46,p)));
    // Reveal the constructed room through the center of B, after the camera
    // settles. The third surface is visible at a distance before it approaches.
    const depthOpen=smooth(.42,.54,p);
