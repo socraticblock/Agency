@@ -22,9 +22,9 @@
 ### Opening and interface push
 
 - [ ] At first paint the headline **“Your website is only the beginning.”** is centered, visually complete, and clear about websites, automation and AI systems being independently commissionable; authentic Work/Services/Contact links work.
-- [ ] Desktop scroll brings B from the right while moving the intro left as a **coordinated geometric cause/effect**, not a carousel, teleport or fade swap.
-- [ ] Portrait mobile receives a separately designed **vertical** push; at 320–390px wide, headline/CTA/interface remain readable and non-overlapping.
-- [ ] The full B interface actually becomes **fully visible**. Its entire legible composition settles before any opacity loss or forward deconstruction. Inspect 25/50/75% transition frames.
+- [ ] Desktop scroll brings B from the right and **pushes the entire introductory text/body/CTAs completely off the left edge** as a coordinated geometric cause/effect, not a carousel, teleport or fade swap. Merely returning to a two-column hero is a failure.
+- [ ] Portrait mobile receives a separately designed **vertical** push: the introduction exits fully upward and B centers in the available space; at 320–390px wide, headline/CTA/interface remain readable during their visible stages and non-overlapping.
+- [ ] The full B interface becomes a **large, central, fully opaque standalone composition**, not a smaller right column. All three discipline labels and supporting text remain readable. Hold this complete composition with **opacity 1** before any later scene transition, and inspect 25/50/75% entrance frames.
 
 ### Entry, interior, and C ending
 
@@ -42,7 +42,7 @@
 - [ ] Compare captured stills at centered start, B push fractions, full B, entry fractions, neutral interior, fold fractions, C end and Work seam. Record **forward and reverse** video and exact tested browser/commit.
 - [ ] Founder reviews actual moving output and explicitly accepts polish before Gate 2. “Good start” and green automated checks are not acceptance.
 
-**Current known failure/feedback from 29 October review:** first prototype fades before showing all of B; overlapping typography; central card feels like an isolated modal; interior appears flat/empty and may consume excessive scrolling; the opening now needs to start centered. These are design fixes, **not** completed tasks.
+**Founder clarification (29 October, 11:01 UTC):** the full-B finish must contain **only the enlarged opaque centered green interface**; the original introduction must exit completely. Prior references to a stable two-column intro-left/interface-right pose are superseded. The deeper prototype's overlapping typography, isolated reading modal, flat interior and excessive empty scrolling remain known **separate later-stage defects**, not fixed by entrance polish. Neither entrance nor Gate 1b has founder acceptance.
 
 **Escalation:** if two focused geometry methods fail, preserve both, report measured limitations and seek a creative direction decision rather than hiding the issue under more animation.
 
