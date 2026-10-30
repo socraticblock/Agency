@@ -112,3 +112,18 @@ Do not start Gate 2 (fictional enquiry / AI), real Next.js integration, merge, `
 - **Not yet run or verified:** served full-route desktop/mobile animation footage, visual frame review, actual browser back history, device responsiveness, actual GPU/compositor performance, assistive technology, and Next.js integration. Do not mark the checklist in section 3 passed without this evidence.
 
 **Founder review target:** capture the complete ~980 ms click at normal speed and in slowed/intermediate frames on 1440×900, 390×844 and 320×568, plus reduced motion and browser back/forward. Look particularly at live-hero-to-door visual alignment, physical depth while doors fold, whether the preview is visually legible before arrival, and the final no-flash handoff. Revise **this prototype only** until approved. No Gate 2 / merge / deployment.
+
+
+## 6. Founder video review and smoothness correction — 30 October 2026
+
+**Evidence:** Founder-supplied video `20261030-1338-44.0128918.mp4` (19.7 seconds at 1918×966 / 30fps; contains desktop and narrower browser windows). This is footage of the actual prototype, but does **not** certify physical-mobile rendering or browser frame timing. Founder assessment: transition does not feel smooth and lacks cinematic/art-direction impact.
+
+**Observed defects:** Abrupt transition from intact hero to huge rotated cream halves (roughly 0.7–0.9 s from video start), distorted oversized text fragments on their lateral faces, large green rectangular outlines making the composition resemble a framed UI screenshot, and a rapid expansion/abrupt end rather than convincing continuous forward camera movement. Narrow-browser footage exposes the same weaknesses. Do not claim measured dropped frames from a 30fps recording alone.
+
+**Scope:** Improve **only Screen 01 CTA**. Do not redesign Work, touch Screen 02/03/04, expand Gate 2, or modify native-scroll motion.
+
+**Focused correction:** `work-nav.js` now drives the fold, outgoing typography, camera approach, passing geometry and light with one smooth normalized progression (33 precomputed WAAPI sample keyframes, smoothstep-derived phases). Hypothesis duration is 1120ms, adjustable from actual video. `work-dive.css` makes the thick green thresholds into thinner architectural lines. Hero print retires while cream leaves fold, avoiding giant distorted side text. The actual Work section remains unchanged; the transition uses a noninteractive decorative copy and retains normal `#work` navigation.
+
+**Verification limits:** Source-backed JavaScript syntax parse, CSS braces and smooth monotone phase checks passed. Local Chromium visual rehearsal for this iteration could not be run because browser navigation to the test file/localhost was blocked by the environment; **this is not browser QA**. The founder recording reviewed here shows the **previous** implementation, not the correction.
+
+**Next evidence:** Capture and review a new full-route desktop/narrow-mobile click recording on the new branch; audit visual continuity and actual responsiveness, then verify real browser history/keyboard/reduced-motion. Keep unapproved until founder visually accepts. No merge/deploy.
