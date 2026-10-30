@@ -32,7 +32,7 @@ These are conceptual moments, **not individual compulsory screens**. The four Ga
 **Visible service identifiers:** Websites · Automation · AI systems.  
 **Real controls:** Explore our work → real `#work`; Start a project → real contact; Services → real `#capabilities` or service anchor.
 
-**Optional click shortcut, distinct from native-scroll story (30 October concept, NOT coded/approved):** A short *Folding Project Dive* may fold the opening to expose an authentic Work preview, then travel forward to the actual `#work` destination. It must not replay scenes 01–13, make the user wait through a corridor, invent portfolio work or replace direct navigation. For Gate 1b this can reach only the explicitly labeled static Work preview; the real Next.js component is Gate 3. Source/acceptance: [Gate 1 visual foundation](./GATE_1_VISUAL_FOUNDATION_2026-10-30.md).  
+**Optional click shortcut, distinct from native-scroll story (30 October direction; first isolated prototype coded, NOT founder approved):** A short *Folding Project Dive* may fold the opening to expose an authentic Work preview, then travel forward to the actual `#work` destination. It must not replay scenes 01–13, make the user wait through a corridor, invent portfolio work or replace direct navigation. For Gate 1b this can reach only the explicitly labeled static Work preview; the real Next.js component is Gate 3. Source/acceptance: [Gate 1 visual foundation](./GATE_1_VISUAL_FOUNDATION_2026-10-30.md).  
 **Subtle invitation:** “Scroll to see what lies behind the experience.”
 
 **Meaning:** A polished studio that designs and engineers useful systems. The page still works commercially when motion is unavailable or skipped.
