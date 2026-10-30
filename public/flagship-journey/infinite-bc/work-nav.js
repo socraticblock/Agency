@@ -87,7 +87,8 @@
     const stage=document.createElement('div');
     stage.className='work-dive';
     stage.setAttribute('aria-hidden','true');
-    stage.inert=true;
+    // The visual copies are inert, but the stage itself can receive a tap to
+    // immediately finish the journey rather than trapping the visitor.
 
     const space=document.createElement('div');
     space.className='dive-space';
@@ -143,8 +144,12 @@
     event.preventDefault();
     const keyboardActivated=event.detail===0;
     let visuals;
-    try {visuals=makeStage();}
-    catch(_error){visuals?.stage.remove();goToWork();return;}
+    try {
+      visuals=makeStage();
+      // Do not run an invisible overlay if the isolated visual stylesheet
+      // failed to load in this browser/environment.
+      if(window.getComputedStyle(visuals.stage).position!=='fixed')throw Error('dive stylesheet unavailable');
+    }catch(_error){visuals?.stage.remove();goToWork();return;}
 
     let committed=false;
     let finished=false;
@@ -161,6 +166,7 @@
       window.removeEventListener('hashchange',onHashchange);
       window.removeEventListener('pagehide',onPagehide);
       document.removeEventListener('visibilitychange',onVisibility);
+      if(reduce.removeEventListener)reduce.removeEventListener('change',onMotionPreference);
       active=null;
     };
     const commit=()=>{
@@ -190,6 +196,7 @@
     const onHashchange=()=>{if(!committed && window.location.hash!=='#work')cleanup();};
     const onPagehide=()=>cleanup();
     const onVisibility=()=>{if(document.hidden)complete();};
+    const onMotionPreference=()=>{if(reduce.matches)complete();};
     active={complete};
     visuals.stage.addEventListener('click',complete);
 
@@ -257,6 +264,7 @@
       window.addEventListener('hashchange',onHashchange);
       window.addEventListener('pagehide',onPagehide);
       document.addEventListener('visibilitychange',onVisibility);
+      if(reduce.addEventListener)reduce.addEventListener('change',onMotionPreference);
     }catch(_error){
       // Animation failure must never strand the click in a noninteractive layer.
       complete();
