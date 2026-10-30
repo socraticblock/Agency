@@ -11,7 +11,7 @@ The founder-selected **future** Genezisi studio homepage is a continuous, native
 
 The studio's independently commissionable work is **Websites & digital experiences**, **Automation / workflow / integration / system engineering**, and **AI systems / assistants where useful**. Clients can request one service or a complete solution.
 
-**Project state (30 October 2026):** Gate 1a selection is complete; the Gate 1b centered opening → green B → architectural interior → centered C is an **isolated, still-unaccepted visual proof**. A separate Option D branch contains the warmer cream opening and simplified copy, while its Folding Project Dive Work CTA is a **selected concept awaiting prototype/visual review**. Four-screen individual polish and end-to-end Gate 1b acceptance remain ahead. Full fictional story, genuine Next.js Selected Work integration and production are later, separately authorized gates. No `main` merge or production deployment is implied.
+**Project state (30 October 2026):** Gate 1a selection is complete; the Gate 1b centered opening → green B → architectural interior → centered C is an **isolated, still-unaccepted visual proof**. A separate Option D branch contains the warmer cream opening and simplified copy, and the first Folding Project Dive Work CTA prototype is now **coded but awaiting real-browser visual review**. Four-screen individual polish and end-to-end Gate 1b acceptance remain ahead. Full fictional story, genuine Next.js Selected Work integration and production are later, separately authorized gates. No `main` merge or production deployment is implied.
 
 ### Read before any homepage development
 
