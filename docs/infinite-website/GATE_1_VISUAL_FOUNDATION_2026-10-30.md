@@ -2,7 +2,9 @@
 
 **Decision date:** 30 October 2026  
 **Scope:** Four visible Gate 1b compositions, first-screen refinement, and an optional shortcut from the opening CTA to Selected Work.  
-**Authority:** [North Star v1.2](./NORTH_STAR_v1.2.md) controls. This is a dated implementation/review brief and decision register, **not a separate North Star or a gate approval**. Read with [Visitor Flow](./VISITOR_FLOW_v1.2.md) and [Acceptance Gates](./ACCEPTANCE_GATES_v1.2.md).
+**Authority:** [North Star v1.2](./NORTH_STAR_v1.2.md) controls. This is a dated implementation/review brief and decision register, **not a separate North Star or a gate approval**.
+
+**Latest CTA direction (late 30 October):** [The Living Page — current creative-director treatment](./SCREEN_01_LIVING_PAGE_CREATIVE_DIRECTION_2026-10-30.md). The initial symmetric Folding Project Dive experiments and generic five-frame storyboard were rejected visually. Section 3 below is **historical concept provenance**, not permission to reimplement two doors or a green tunnel. D1 Living Page artwork, D2 animatic and later implementation are pending. Read with [Visitor Flow](./VISITOR_FLOW_v1.2.md) and [Acceptance Gates](./ACCEPTANCE_GATES_v1.2.md).
 
 ## 1. Why this refinement phase exists
 
@@ -40,7 +42,7 @@ Repo `socraticblock/Agency`; branch `feature/infinite-gate1b-opening-option-d-cr
 
 No evidence of production integration, browser/device certification, exact current coder tunnel state, or full final approval follows from those commits.
 
-## 3. The Folding Project Dive (C + D) — selected *concept*, not implemented motion
+## 3. Historical Folding Project Dive (C + D) — superseded aesthetic, preserved concept record
 
 The founder preferred two concept-art directions: **C — The Folding Website** and **D — The Project Dive**. Their **hybrid is the selected creative direction** for a prototype, but not an approved final animation, camera path, timing, or engineering method.
 
@@ -136,3 +138,15 @@ After additional real-screen founder recordings, **repeated iteration by coding 
 **Active next-work contract:** [Screen 01 Cinematic Blueprint](./SCREEN_01_CINEMATIC_BLUEPRINT_2026-10-30.md). The reusable process lives in [motion-review skill](../../skills/infinite-website-motion-review/SKILL.md) and is reflected in [Acceptance Gates](./ACCEPTANCE_GATES_v1.2.md). Before more full structural implementation: prepare high-fidelity storyboard frames with desktop/portrait variants, create a moving animatic, verify a unified spatial camera and geometry proof, then code only against accepted visual evidence.
 
 **Evidence status:** Five written keyframe descriptions and anticipated failure modes now exist in the blueprint. **High-fidelity images, animatic and founder approval of those deliverables do not yet exist.** Do not claim a completed D1/D2 gate. Limit scope to the clicked Screen 01 CTA, preserve current opening, unchanged Work and all other scroll screens, do not merge or deploy.
+
+## 8. Creative director and new Living Page shot — late 30 October 2026
+
+**Founder request:** Establish explicit responsibility for creative direction, art direction, cinematic scale, camera and material quality, and anticipating follow-on problems *before* implementation. The founder asked to document the resulting direction; this does **not** mean the new visual treatment or storyboard is approved.
+
+**Current lead treatment:** [The Living Page](./SCREEN_01_LIVING_PAGE_CREATIVE_DIRECTION_2026-10-30.md). The actual Genezisi cream editorial surface becomes **asymmetric spatial architecture**, not a symmetric door pair or a generic portal. The existing Work section appears through the fold and is approached along a consistent camera path. Real source typography retires without being duplicated and distorted. One destination, restrained lighting, convincing near/far material scale and an invisible arrival determine the result.
+
+**Quality ownership:** The AI creative/motion-director collaborator proposes the shot, sets the three scales (editorial optical scale, architectural geometry scale, temporal velocity), predicts second-order failures, evaluates CSS-versus-small-mesh feasibility and recommends a critical visual veto when output is not genuinely excellent. The **founder retains final approval**. The "$50,000 website" phrase denotes **bespoke-quality aspiration**, not price/budget.
+
+**D1 evidence:** An earlier five-frame desktop/portrait **storyboard candidate was produced** but rejected as generic and too door/tunnel-like. The new **Living Page high-fidelity storyboard has not yet been made**; no approved animatic exists. Use [cinematic blueprint](./SCREEN_01_CINEMATIC_BLUEPRINT_2026-10-30.md) and [motion skill](../../skills/infinite-website-motion-review/SKILL.md) for D0–D5. Do not keep patching the old transition code to simulate a shot that has not been approved.
+
+**Hard scope:** Only Screen 01 clicked `Explore our work` transition; no Work redesign, no Screen 02–04 changes, no changes to `motion.js`, no Gate 2 or new deployment. The previous implementation remains an isolated historical code checkpoint pending a separately accepted replacement.
