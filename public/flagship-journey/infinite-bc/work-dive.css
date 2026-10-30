@@ -67,6 +67,36 @@
   stroke-width:1.5;
   vector-effect:non-scaling-stroke;
 }
+/* One viewport-sized text print, never divided or rotated. Its coordinates
+   are measured from the existing hero; its motion is opacity only. */
+.living-dive .living-ink-layer {
+  position:absolute;
+  inset:0;
+  z-index:4;
+  overflow:hidden;
+  pointer-events:none;
+  color:#173327;
+  will-change:opacity;
+}
+.living-dive .living-ink-layer .site-nav,
+.living-dive .living-ink-layer .intro,
+.living-dive .living-ink-layer .opening-foot {
+  position:absolute!important;
+  inset:auto!important;
+  transform:none!important;
+  margin:0!important;
+  max-width:none!important;
+  pointer-events:none!important;
+}
+.living-dive .living-ink-layer .intro .body {
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.living-dive .living-ink-layer .intro .actions {
+  justify-content:center!important;
+}
+.living-dive .living-ink-layer a {pointer-events:none!important}
+
 /* A very quiet material sheen. No glowing portal or UI frames. */
 .living-dive .living-rim {
   position:absolute;
