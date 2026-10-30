@@ -5,7 +5,7 @@
 ## Authority and entry
 
 1. Read `AGENTS.md` and `docs/infinite-website/NORTH_STAR_v1.2.md` first. North Star controls if anything here conflicts.
-2. Read `VISITOR_FLOW_v1.2.md`, `ACCEPTANCE_GATES_v1.2.md`, the current dated `HANDOFF_2026-10-29.md`, and `LESSONS_2026-10-29.md`.
+2. Read `VISITOR_FLOW_v1.2.md`, `ACCEPTANCE_GATES_v1.2.md`, the **current** `GATE_1_VISUAL_FOUNDATION_2026-10-30.md`, and the dated 29 October `HANDOFF_2026-10-29.md` and `LESSONS_2026-10-29.md` as historic evidence.
 3. Inspect the exact branch/worktree and full source. Never treat historic screenshots, isolated reconstructions, a prior SHA, or a passed synthetic test as proof that the currently served tunnel has the same code.
 4. Do not alter `main`, `preview-*`, production routes, deployment config or independent business-card features without explicit authorization. Do not expand Gate 2 or integrate the prototype into the genuine Next.js homepage unless separately authorized.
 
@@ -45,6 +45,18 @@ A scene is convincing when its **geometry, material, occlusion, parallax and cau
 7. Differentiate **source verified**, **local partial reconstruction**, **complete served prototype**, **physical mobile device**, **founder visual acceptance**, and **production release**. Never call one another. Report exact SHA, changed files, screenshots, test coverage and remaining gaps.
 8. Keep PR draft until founder explicitly approves. Do not merge/deploy on the basis of local QA or a positive general comment.
 
+## Clicked Work shortcut — separate from native-scroll motion (30 October)
+
+The founder selected the **Folding Project Dive** (fold → reveal Work-facing preview → forward dive → actual `#work`) as a **creative hypothesis to prototype**, not a finished transition. First read [current Gate 1 brief](../../docs/infinite-website/GATE_1_VISUAL_FOUNDATION_2026-10-30.md). The existing `work-nav.js` 680 ms root-snapshot fade/scale is an **unaccepted experiment**. Preserve `motion.js` scroll choreography and `#work` fallback.
+
+For this clicked shortcut:
+- Use a temporary, decorative, noninteractive layer and the minimum credible site-derived geometry. Do not split or disable the actual anchor or accessible business text.
+- Validate *paused and in-between frames*: fold must be legible, occlusion truly solid, preview recognizably related to actual Work, and dive must feel forward rather than flat zoom.
+- No compulsory intermediate card or tunnel hold: users click to see work. Keep duration as a tested hypothesis, not a fixed quality metric.
+- Verify click/back/forward/repeated click/interrupt/keyboard/mobile/short viewport/reduced motion and no-JS. The Work destination must be accessible and ready immediately when the effect ends.
+- Do not label the current mirrored static `#work` as real React `SelectedWork`; that is a later integration gate.
+- Art-directed excellence is required, but a bespoke high-budget-quality aspiration is **not** authority to add WebGL or heavy assets without visual/performance evidence.
+
 ## Reporting template
 
 State: current branch + SHA + PR status; **what changed** (brief); **what was preserved**; actual verification run and where; observed defects; what has *not* been tested; the one next review action. Never invent acceptance or a tunnel URL.
@@ -56,4 +68,6 @@ State: current branch + SHA + PR status; **what changed** (brief); **what was pr
 - `docs/infinite-website/ACCEPTANCE_GATES_v1.2.md`
 - `docs/infinite-website/HANDOFF_2026-10-29.md`
 - `docs/infinite-website/LESSONS_2026-10-29.md`
+- `docs/infinite-website/GATE_1_VISUAL_FOUNDATION_2026-10-30.md`
+- `docs/DOCUMENTATION_AUDIT_2026-10-30.md`
 - Current source: `public/flagship-journey/infinite-bc/{index.html,styles.css,entrance.css,motion.js}`
