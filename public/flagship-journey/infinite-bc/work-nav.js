@@ -14,7 +14,7 @@
   if(!link || !destination || !journey || !sourceIntro || !sourceHeader || !sourceFoot)return;
 
   const reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
-  const DURATION=1080; // Cinematic timing hypothesis; tune from real browser footage.
+  const DURATION=1120; // Screen 01 visual hypothesis; tune after full-route footage.
   let active=null;
 
   // Clones are artwork: never duplicate document identities, navigation, or focus.
@@ -226,75 +226,91 @@
     };
 
     try{
-      // One coordinated physical event: ivory leaves part, the existing
-      // Work plane becomes visible at once, and foreground architecture moves
-      // past the viewer faster than the far plane. No opaque 3D parent can
-      // occlude the destination and no root-snapshot crossfade is involved.
-      const left=play(visuals.left,[
-        {offset:0,transform:'translate3d(0,0,0) rotateY(0deg)',easing:'cubic-bezier(.48,0,.28,1)'},
-        {offset:.12,transform:'translate3d(0,0,0) rotateY(-7deg)',easing:'cubic-bezier(.42,0,.18,1)'},
-        {offset:.40,transform:'translate3d(0,0,0) rotateY(-76deg)',easing:'cubic-bezier(.32,0,.15,1)'},
-        {offset:.66,transform:'translate3d(-9%,0,70px) rotateY(-106deg)',easing:'ease-out'},
-        {offset:.91,transform:'translate3d(-32%,0,110px) rotateY(-114deg)'},
-        {offset:1,transform:'translate3d(-32%,0,110px) rotateY(-114deg)'}
-      ]);
-      const right=play(visuals.right,[
-        {offset:0,transform:'translate3d(0,0,0) rotateY(0deg)',easing:'cubic-bezier(.48,0,.28,1)'},
-        {offset:.12,transform:'translate3d(0,0,0) rotateY(7deg)',easing:'cubic-bezier(.42,0,.18,1)'},
-        {offset:.40,transform:'translate3d(0,0,0) rotateY(76deg)',easing:'cubic-bezier(.32,0,.15,1)'},
-        {offset:.66,transform:'translate3d(9%,0,70px) rotateY(106deg)',easing:'ease-out'},
-        {offset:.91,transform:'translate3d(32%,0,110px) rotateY(114deg)'},
-        {offset:1,transform:'translate3d(32%,0,110px) rotateY(114deg)'}
-      ]);
+      // Every moving surface samples ONE smooth progression. The previous
+      // staggered per-keyframe easings caused mismatched velocities: typography
+      // bent around huge doors while heavy green frames raced past a static card.
+      // The samples are computed once; the browser compositor runs the motion.
+      const clamp01=(value)=>Math.max(0,Math.min(1,value));
+      const smooth=(value)=>{
+        const t=clamp01(value);
+        return t*t*(3-2*t);
+      };
+      const phase=(progress,start,end)=>smooth((progress-start)/(end-start));
+      const framesFor=(sample)=>{
+        const frames=[];
+        for(let i=0;i<=32;i++){
+          const p=i/32;
+          frames.push({offset:p,...sample(p)});
+        }
+        return frames;
+      };
+      const fixed=(value)=>Number(value.toFixed(3));
 
-      // Work copy is an opaque viewport-sized card. Scale stays entirely
-      // positive and its paint layer is above the background at every frame.
-      // It resolves to exactly scale(1) before the real Work page is exposed.
-      const arrivalMotion=play(visuals.arrival,[
-        {offset:0,transform:'scale(.24)',easing:'ease-out'},
-        {offset:.17,transform:'scale(.24)',easing:'cubic-bezier(.35,0,.18,1)'},
-        {offset:.39,transform:'scale(.36)',easing:'cubic-bezier(.22,.48,.14,1)'},
-        {offset:.66,transform:'scale(.75)',easing:'cubic-bezier(.18,.64,.17,1)'},
-        {offset:.89,transform:'scale(1)',easing:'ease-out'},
-        {offset:1,transform:'scale(1)'}
-      ]);
+      const left=play(visuals.left,framesFor((p)=>{
+        const opening=phase(p,.07,.62);
+        const travel=phase(p,.28,.86);
+        return {transform:`translate3d(${fixed(-16*travel)}%,0,${fixed(65*travel)}px) rotateY(${fixed(-106*opening)}deg)`};
+      }));
+      const right=play(visuals.right,framesFor((p)=>{
+        const opening=phase(p,.07,.62);
+        const travel=phase(p,.28,.86);
+        return {transform:`translate3d(${fixed(16*travel)}%,0,${fixed(65*travel)}px) rotateY(${fixed(106*opening)}deg)`};
+      }));
 
-      play(visuals.radiance,[
-        {offset:0,opacity:0,transform:'scale(.72)',easing:'ease-out'},
-        {offset:.20,opacity:.68,transform:'scale(.95)',easing:'ease-out'},
-        {offset:.48,opacity:.9,transform:'scale(1.1)',easing:'ease-out'},
-        {offset:.85,opacity:.22,transform:'scale(1.25)'},
-        {offset:1,opacity:0,transform:'scale(1.3)'}
-      ]);
+      // As the page physically folds, its printed typography disappears WITH
+      // the surface; avoid enlarged, warped chunks of headline at the sides.
+      for(const print of visuals.stage.querySelectorAll('.dive-print')){
+        play(print,framesFor((p)=>({opacity:fixed(1-phase(p,.18,.49))})));
+      }
 
-      // Two structural thresholds sweep past at different depths. Their
-      // scale and opacity are independent from the destination's.
-      play(visuals.outer,[
-        {offset:0,transform:'translate(-50%,-50%) scale(.62)',opacity:.95,easing:'ease-out'},
-        {offset:.34,transform:'translate(-50%,-50%) scale(.74)',opacity:.95,easing:'cubic-bezier(.22,.7,.19,1)'},
-        {offset:.66,transform:'translate(-50%,-50%) scale(1.65)',opacity:.56,easing:'cubic-bezier(.21,.7,.17,1)'},
-        {offset:.89,transform:'translate(-50%,-50%) scale(3.2)',opacity:0},
-        {offset:1,transform:'translate(-50%,-50%) scale(3.3)',opacity:0}
-      ]);
-      play(visuals.inner,[
-        {offset:0,transform:'translate(-50%,-50%) scale(.43)',opacity:.95,easing:'ease-out'},
-        {offset:.34,transform:'translate(-50%,-50%) scale(.56)',opacity:.95,easing:'cubic-bezier(.22,.7,.18,1)'},
-        {offset:.67,transform:'translate(-50%,-50%) scale(1.52)',opacity:.52,easing:'cubic-bezier(.22,.74,.18,1)'},
-        {offset:.90,transform:'translate(-50%,-50%) scale(3.5)',opacity:0},
-        {offset:1,transform:'translate(-50%,-50%) scale(3.5)',opacity:0}
-      ]);
-      play(visuals.wallLeft,[
-        {offset:0,transform:'translate3d(0,0,0) rotateY(14deg) scale(1)',opacity:.95,easing:'ease-out'},
-        {offset:.42,transform:'translate3d(-20%,0,0) rotateY(17deg) scale(1.1)',opacity:.9,easing:'cubic-bezier(.18,.7,.23,1)'},
-        {offset:.82,transform:'translate3d(-145%,0,0) rotateY(22deg) scale(1.5)',opacity:0},
-        {offset:1,transform:'translate3d(-150%,0,0) rotateY(22deg) scale(1.5)',opacity:0}
-      ]);
-      play(visuals.wallRight,[
-        {offset:0,transform:'translate3d(0,0,0) rotateY(-14deg) scale(1)',opacity:.95,easing:'ease-out'},
-        {offset:.42,transform:'translate3d(20%,0,0) rotateY(-17deg) scale(1.1)',opacity:.9,easing:'cubic-bezier(.18,.7,.23,1)'},
-        {offset:.82,transform:'translate3d(145%,0,0) rotateY(-22deg) scale(1.5)',opacity:0},
-        {offset:1,transform:'translate3d(150%,0,0) rotateY(-22deg) scale(1.5)',opacity:0}
-      ]);
+      // From the first opening slit the existing Work section is already
+      // visible. It then approaches in perspective without a premature cut.
+      // The backdrop is painted behind the Work plane, never over it.
+      const arrivalMotion=play(visuals.arrival,framesFor((p)=>{
+        const travel=phase(p,.24,.9);
+        return {
+          transform:`translate3d(0,0,${fixed(-110*(1-travel))}px) scale(${fixed(.38+.62*travel)})`
+        };
+      }));
+
+      // Light spills softly from behind the folding material, cresting as
+      // the opening becomes legible; it does not read as a neon tunnel.
+      play(visuals.radiance,framesFor((p)=>{
+        const light=Math.sin(Math.PI*phase(p,.1,.88));
+        const travel=phase(p,.24,.9);
+        return {opacity:fixed(.5*light),transform:`scale(${fixed(.86+.28*travel)})`};
+      }));
+
+      // Restrained site-derived architectural lines move past at different
+      // depths, with much lower contrast than the actual Work destination.
+      play(visuals.outer,framesFor((p)=>{
+        const rush=phase(p,.25,.83);
+        return {
+          transform:`translate(-50%,-50%) scale(${fixed(.72+2.22*rush)})`,
+          opacity:fixed(.56*(1-phase(p,.42,.79)))
+        };
+      }));
+      play(visuals.inner,framesFor((p)=>{
+        const rush=phase(p,.31,.85);
+        return {
+          transform:`translate(-50%,-50%) scale(${fixed(.53+2.04*rush)})`,
+          opacity:fixed(.25*(1-phase(p,.43,.77)))
+        };
+      }));
+      play(visuals.wallLeft,framesFor((p)=>{
+        const rush=phase(p,.23,.82);
+        return {
+          transform:`translate3d(${fixed(-135*rush)}%,0,0) rotateY(${fixed(15+9*rush)}deg) scale(${fixed(1+.28*rush)})`,
+          opacity:fixed(.78*(1-phase(p,.37,.81)))
+        };
+      }));
+      play(visuals.wallRight,framesFor((p)=>{
+        const rush=phase(p,.23,.82);
+        return {
+          transform:`translate3d(${fixed(135*rush)}%,0,0) rotateY(${fixed(-15-9*rush)}deg) scale(${fixed(1+.28*rush)})`,
+          opacity:fixed(.78*(1-phase(p,.37,.81)))
+        };
+      }));
 
       // Move the underlying document only when the Work copy fills the view;
       // the last tenth is a 1:1 pixel handoff, with the layer still present.
