@@ -11,8 +11,9 @@
 5. **[30 October documentation audit and reconciliation](DOCUMENTATION_AUDIT_2026-10-30.md)** — current Screen 01/CTA decisions and provenance, supplementing the [29 October full audit](DOCUMENTATION_AUDIT_2026-10-29.md). — full disposition of legacy documents and editor rules.
 6. **[Repository agent instructions](../AGENTS.md)** — work routing for Codex and other coding agents.
 7. **[Current Gate 1 visual foundation and CTA brief](infinite-website/GATE_1_VISUAL_FOUNDATION_2026-10-30.md)** — active four-screen refinement, Option D decisions and next click-transition prototype; [29 October handoff](infinite-website/HANDOFF_2026-10-29.md) remains a dated status snapshot.
-8. **[29 October motion lessons](infinite-website/LESSONS_2026-10-29.md)** — defects, solutions, reusable QA.
-9. **[Repository-local motion-review skill](../skills/infinite-website-motion-review/SKILL.md)** — repeatable review/coding procedure, subordinated to the North Star.
+8. **[Screen 01 Cinematic Blueprint](infinite-website/SCREEN_01_CINEMATIC_BLUEPRINT_2026-10-30.md)** — written five-keyframe shot plan and storyboard/animatic/feasibility gates before more CTA animation coding.
+9. **[29 October motion lessons](infinite-website/LESSONS_2026-10-29.md)** — defects, solutions, reusable QA.
+10. **[Repository-local motion-review skill](../skills/infinite-website-motion-review/SKILL.md)** — repeatable review/coding procedure, subordinated to the North Star.
 
 The new website is **the intended future studio homepage**, **not** the production homepage yet. The separate 30 October Option D branch is **not** a replacement for PR #15 or an approved release. The isolated Gate 1b proof has been coded through the early C handoff on **draft PR #15**, but the full served result still awaits founder visual acceptance; the full fictional business journey and genuine production integration are later gates.
 
