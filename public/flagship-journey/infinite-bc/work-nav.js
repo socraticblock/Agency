@@ -12,7 +12,10 @@
   const trigger=document.querySelector('.opening .actions a[href="#work"]');
   const target=document.getElementById('work');
   const journey=document.getElementById('journey');
-  if(!trigger || !target || !journey)return;
+  const sourceIntro=document.querySelector('.opening .intro');
+  const sourceHeader=document.getElementById('siteNav');
+  const sourceFoot=document.querySelector('.opening-foot');
+  if(!trigger || !target || !journey || !sourceIntro || !sourceHeader || !sourceFoot)return;
 
   const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
   const NS='http://www.w3.org/2000/svg';
@@ -45,6 +48,35 @@
     clone.removeAttribute('aria-describedby');
     return clone;
   };
+
+  // Unlike the rejected half-page duplicates, these are full-layout inert
+  // replicas at the actual pixel coordinates of the real on-screen hero.
+  // They never rotate: the continuous cream material does all the folding.
+  function makeInk(){
+    const layer=document.createElement('div');
+    layer.className='living-ink-layer';
+    const measure=(source)=>{
+      const copy=cloneArt(source);
+      const rect=source.getBoundingClientRect();
+      copy.style.top=rect.top+'px';
+      copy.style.left=rect.left+'px';
+      copy.style.width=rect.width+'px';
+      copy.style.height=rect.height+'px';
+      copy.style.display=window.getComputedStyle(source).display;
+      copy.style.textAlign=window.getComputedStyle(source).textAlign;
+      copy.style.transform='none';
+      layer.appendChild(copy);
+      return copy;
+    };
+    measure(sourceHeader);
+    const intro=measure(sourceIntro);
+    const body=intro.querySelector('.body');
+    if(body){body.style.marginLeft='auto';body.style.marginRight='auto';}
+    const actions=intro.querySelector('.actions');
+    if(actions)actions.style.justifyContent='center';
+    measure(sourceFoot);
+    return layer;
+  }
 
   function createVisuals(){
     const stage=document.createElement('div');
@@ -86,9 +118,10 @@
 
     const rim=document.createElement('div');
     rim.className='living-rim';
-    stage.append(backdrop,arrival,art,rim);
+    const ink=makeInk();
+    stage.append(backdrop,arrival,art,rim,ink);
     document.body.appendChild(stage);
-    return {stage,arrival,art,shadow,contact,underside,paper,crease,rim,lipGradient};
+    return {stage,arrival,art,shadow,contact,underside,paper,crease,rim,ink,lipGradient};
   }
 
   // One material geometry function drives the uncovered Work boundary,
@@ -157,9 +190,12 @@
     const scale=lerp(portrait?.91:.87,1,approach);
     world.arrival.style.transform='translate3d(0,0,0) scale('+scale.toFixed(5)+')';
     world.rim.style.opacity=(.32*Math.sin(Math.PI*fold)).toFixed(3);
-    // At frame zero the real, interactive hero is completely unchanged;
-    // by the time its text retires the cream surface has begun to open.
-    world.stage.style.opacity=smooth(.065,.22,progress).toFixed(4);
+    // The original typographic composition remains legible while the crease
+    // first responds. The ink retires before Work is substantially exposed.
+    world.ink.style.opacity=(1-smooth(.085,.255,progress)).toFixed(4);
+    // The stage takes over almost instantly from the real hero to its
+    // measured full-layout print. No washed-out/blank cream anticipation.
+    world.stage.style.opacity=smooth(.005,.075,progress).toFixed(4);
   }
 
   const navigate=()=>{
@@ -231,7 +267,11 @@
     const onHash=()=>{if(window.location.hash && window.location.hash!=='#work')cleanup();};
     const onHidden=()=>{if(document.hidden)finish();};
     const onReduced=()=>{if(reduced.matches)finish();};
-    const onResize=()=>{if(!done)draw(world,clamp((performance.now()-started)/DURATION));};
+    const onResize=()=>{if(!done){
+      // On an actual resize, the old text-print geometry is stale. The
+      // visitor should reach usable Work rather than see a reflowing ghost.
+      finish();
+    }};
     running={finish};
     world.stage.addEventListener('click',finish);
     window.addEventListener('wheel',onInterrupt,{passive:true});
