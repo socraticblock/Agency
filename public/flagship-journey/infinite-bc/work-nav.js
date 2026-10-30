@@ -14,7 +14,7 @@
   if(!link || !destination || !journey || !sourceIntro || !sourceHeader || !sourceFoot)return;
 
   const reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
-  const DURATION=980; // First visual-prototype hypothesis, not founder-approved timing.
+  const DURATION=1080; // Cinematic timing hypothesis; tune from real browser footage.
   let active=null;
 
   // Clones are artwork: never duplicate document identities, navigation, or focus.
@@ -90,22 +90,30 @@
     // The visual copies are inert, but the stage itself can receive a tap to
     // immediately finish the journey rather than trapping the visitor.
 
+    const backdrop=document.createElement('div');
+    backdrop.className='dive-backdrop';
+    const radiance=document.createElement('div');
+    radiance.className='dive-radiance';
     const space=document.createElement('div');
     space.className='dive-space';
+    const arrival=document.createElement('div');
+    arrival.className='dive-arrival';
     const outer=document.createElement('div');
     outer.className='dive-frame outer';
     const inner=document.createElement('div');
     inner.className='dive-frame inner';
-    const arrival=document.createElement('div');
-    arrival.className='dive-arrival';
+    const wallLeft=document.createElement('div');
+    wallLeft.className='dive-wall left';
+    const wallRight=document.createElement('div');
+    wallRight.className='dive-wall right';
 
     // A precise visual copy of the REAL destination, not invented sample projects.
     const work=decorative(destination);
     work.style.scrollMarginTop='0';
     arrival.appendChild(work);
-    const next=destination.nextElementSibling;
-    if(next && next.classList.contains('work-preview'))arrival.appendChild(decorative(next));
-    space.append(outer,inner,arrival);
+    // Only the existing #work preview is used; its contents/layout are
+    // not modified, and there is no design work on the Work section here.
+    space.append(arrival,outer,inner,wallLeft,wallRight);
 
     const doors=document.createElement('div');
     doors.className='dive-doors';
@@ -122,9 +130,10 @@
       doors.appendChild(door);
       doorNodes.push(door);
     }
-    stage.append(space,doors);
+    stage.append(backdrop,radiance,space,doors);
     document.body.appendChild(stage);
-    return {stage,arrival,outer,inner,left:doorNodes[0],right:doorNodes[1]};
+    return {stage,radiance,arrival,outer,inner,wallLeft,wallRight,
+      left:doorNodes[0],right:doorNodes[1]};
   };
 
   const goToWork=()=>{
@@ -217,51 +226,85 @@
     };
 
     try{
-      // A pair of real perspective doors; the legible print is painted on them,
-      // and naturally travels away with their physical surfaces.
-      play(visuals.left,[
-        {offset:0,transform:'rotateY(0deg)',easing:'cubic-bezier(.65,0,.22,1)'},
-        {offset:.18,transform:'rotateY(-10deg)',easing:'cubic-bezier(.32,0,.12,1)'},
-        {offset:.67,transform:'rotateY(-101deg)',easing:'ease-out'},
-        {offset:1,transform:'rotateY(-111deg)'}
+      // One coordinated physical event: ivory leaves part, the existing
+      // Work plane becomes visible at once, and foreground architecture moves
+      // past the viewer faster than the far plane. No opaque 3D parent can
+      // occlude the destination and no root-snapshot crossfade is involved.
+      const left=play(visuals.left,[
+        {offset:0,transform:'translate3d(0,0,0) rotateY(0deg)',easing:'cubic-bezier(.48,0,.28,1)'},
+        {offset:.12,transform:'translate3d(0,0,0) rotateY(-7deg)',easing:'cubic-bezier(.42,0,.18,1)'},
+        {offset:.40,transform:'translate3d(0,0,0) rotateY(-76deg)',easing:'cubic-bezier(.32,0,.15,1)'},
+        {offset:.66,transform:'translate3d(-9%,0,70px) rotateY(-106deg)',easing:'ease-out'},
+        {offset:.91,transform:'translate3d(-32%,0,110px) rotateY(-114deg)'},
+        {offset:1,transform:'translate3d(-32%,0,110px) rotateY(-114deg)'}
       ]);
-      play(visuals.right,[
-        {offset:0,transform:'rotateY(0deg)',easing:'cubic-bezier(.65,0,.22,1)'},
-        {offset:.18,transform:'rotateY(10deg)',easing:'cubic-bezier(.32,0,.12,1)'},
-        {offset:.67,transform:'rotateY(101deg)',easing:'ease-out'},
-        {offset:1,transform:'rotateY(111deg)'}
-      ]);
-      // Preview of the existing #work section advances from deep within the
-      // evergreen geometry and resolves at exactly 1:1 viewport scale.
-      play(visuals.arrival,[
-        {offset:0,transform:'translate3d(0,0,-920px) scale(.86)',easing:'ease-in'},
-        {offset:.28,transform:'translate3d(0,0,-870px) scale(.86)',easing:'cubic-bezier(.25,0,.18,1)'},
-        {offset:.58,transform:'translate3d(0,0,-520px) scale(.94)',easing:'cubic-bezier(.22,.65,.25,1)'},
-        {offset:.89,transform:'translate3d(0,0,0) scale(1)',easing:'ease-out'},
-        {offset:1,transform:'translate3d(0,0,0) scale(1)'}
-      ]);
-      play(visuals.outer,[
-        {offset:0,transform:'translate(-50%,-50%) translateZ(-570px) scale(.88)',opacity:.65,easing:'cubic-bezier(.27,0,.22,1)'},
-        {offset:.63,transform:'translate(-50%,-50%) translateZ(170px) scale(1.06)',opacity:.75,easing:'ease-out'},
-        {offset:.91,transform:'translate(-50%,-50%) translateZ(420px) scale(1.15)',opacity:0},
-        {offset:1,transform:'translate(-50%,-50%) translateZ(420px) scale(1.15)',opacity:0}
-      ]);
-      play(visuals.inner,[
-        {offset:0,transform:'translate(-50%,-50%) translateZ(-670px) scale(.92)',opacity:.75,easing:'cubic-bezier(.3,0,.18,1)'},
-        {offset:.65,transform:'translate(-50%,-50%) translateZ(70px) scale(1.04)',opacity:.7,easing:'ease-out'},
-        {offset:.91,transform:'translate(-50%,-50%) translateZ(340px) scale(1.1)',opacity:0},
-        {offset:1,transform:'translate(-50%,-50%) translateZ(340px) scale(1.1)',opacity:0}
+      const right=play(visuals.right,[
+        {offset:0,transform:'translate3d(0,0,0) rotateY(0deg)',easing:'cubic-bezier(.48,0,.28,1)'},
+        {offset:.12,transform:'translate3d(0,0,0) rotateY(7deg)',easing:'cubic-bezier(.42,0,.18,1)'},
+        {offset:.40,transform:'translate3d(0,0,0) rotateY(76deg)',easing:'cubic-bezier(.32,0,.15,1)'},
+        {offset:.66,transform:'translate3d(9%,0,70px) rotateY(106deg)',easing:'ease-out'},
+        {offset:.91,transform:'translate3d(32%,0,110px) rotateY(114deg)'},
+        {offset:1,transform:'translate3d(32%,0,110px) rotateY(114deg)'}
       ]);
 
-      // Move the underlying document only once the full-frame visual preview
-      // has covered the old view; the final 10% is a seamless 1:1 handoff.
+      // Work copy is an opaque viewport-sized card. Scale stays entirely
+      // positive and its paint layer is above the background at every frame.
+      // It resolves to exactly scale(1) before the real Work page is exposed.
+      const arrivalMotion=play(visuals.arrival,[
+        {offset:0,transform:'scale(.24)',easing:'ease-out'},
+        {offset:.17,transform:'scale(.24)',easing:'cubic-bezier(.35,0,.18,1)'},
+        {offset:.39,transform:'scale(.36)',easing:'cubic-bezier(.22,.48,.14,1)'},
+        {offset:.66,transform:'scale(.75)',easing:'cubic-bezier(.18,.64,.17,1)'},
+        {offset:.89,transform:'scale(1)',easing:'ease-out'},
+        {offset:1,transform:'scale(1)'}
+      ]);
+
+      play(visuals.radiance,[
+        {offset:0,opacity:0,transform:'scale(.72)',easing:'ease-out'},
+        {offset:.20,opacity:.68,transform:'scale(.95)',easing:'ease-out'},
+        {offset:.48,opacity:.9,transform:'scale(1.1)',easing:'ease-out'},
+        {offset:.85,opacity:.22,transform:'scale(1.25)'},
+        {offset:1,opacity:0,transform:'scale(1.3)'}
+      ]);
+
+      // Two structural thresholds sweep past at different depths. Their
+      // scale and opacity are independent from the destination's.
+      play(visuals.outer,[
+        {offset:0,transform:'translate(-50%,-50%) scale(.62)',opacity:.95,easing:'ease-out'},
+        {offset:.34,transform:'translate(-50%,-50%) scale(.74)',opacity:.95,easing:'cubic-bezier(.22,.7,.19,1)'},
+        {offset:.66,transform:'translate(-50%,-50%) scale(1.65)',opacity:.87,easing:'cubic-bezier(.21,.7,.17,1)'},
+        {offset:.89,transform:'translate(-50%,-50%) scale(3.2)',opacity:0},
+        {offset:1,transform:'translate(-50%,-50%) scale(3.3)',opacity:0}
+      ]);
+      play(visuals.inner,[
+        {offset:0,transform:'translate(-50%,-50%) scale(.43)',opacity:.95,easing:'ease-out'},
+        {offset:.34,transform:'translate(-50%,-50%) scale(.56)',opacity:.95,easing:'cubic-bezier(.22,.7,.18,1)'},
+        {offset:.67,transform:'translate(-50%,-50%) scale(1.52)',opacity:.8,easing:'cubic-bezier(.22,.74,.18,1)'},
+        {offset:.90,transform:'translate(-50%,-50%) scale(3.5)',opacity:0},
+        {offset:1,transform:'translate(-50%,-50%) scale(3.5)',opacity:0}
+      ]);
+      play(visuals.wallLeft,[
+        {offset:0,transform:'translate3d(0,0,0) rotateY(14deg) scale(1)',opacity:.95,easing:'ease-out'},
+        {offset:.42,transform:'translate3d(-20%,0,0) rotateY(17deg) scale(1.1)',opacity:.9,easing:'cubic-bezier(.18,.7,.23,1)'},
+        {offset:.82,transform:'translate3d(-145%,0,0) rotateY(22deg) scale(1.5)',opacity:0},
+        {offset:1,transform:'translate3d(-150%,0,0) rotateY(22deg) scale(1.5)',opacity:0}
+      ]);
+      play(visuals.wallRight,[
+        {offset:0,transform:'translate3d(0,0,0) rotateY(-14deg) scale(1)',opacity:.95,easing:'ease-out'},
+        {offset:.42,transform:'translate3d(20%,0,0) rotateY(-17deg) scale(1.1)',opacity:.9,easing:'cubic-bezier(.18,.7,.23,1)'},
+        {offset:.82,transform:'translate3d(145%,0,0) rotateY(-22deg) scale(1.5)',opacity:0},
+        {offset:1,transform:'translate3d(150%,0,0) rotateY(-22deg) scale(1.5)',opacity:0}
+      ]);
+
+      // Move the underlying document only when the Work copy fills the view;
+      // the last tenth is a 1:1 pixel handoff, with the layer still present.
       const cue=visuals.stage.animate(
         [{opacity:1},{opacity:1}],
-        {duration:DURATION*.91,fill:'both'}
+        {duration:DURATION*.92,fill:'both'}
       );
       animations.push(cue);
       cue.finished.then(()=>{if(!finished)commit();}).catch(()=>{});
-      animations[2].finished.then(()=>complete()).catch(()=>{});
+      arrivalMotion.finished.then(()=>complete()).catch(()=>{});
       window.addEventListener('wheel',interrupt,{passive:true});
       window.addEventListener('touchstart',interrupt,{passive:true});
       window.addEventListener('keydown',onKeydown);
