@@ -6,7 +6,7 @@
 
 1. Read `AGENTS.md` and `docs/infinite-website/NORTH_STAR_v1.2.md` first. North Star controls if anything here conflicts.
 2. Read `VISITOR_FLOW_v1.2.md`, `ACCEPTANCE_GATES_v1.2.md`, the **current** `GATE_1_VISUAL_FOUNDATION_2026-10-30.md`, and the dated 29 October `HANDOFF_2026-10-29.md` and `LESSONS_2026-10-29.md` as historic evidence.
-3. For a **new or structurally failed cinematic interaction**, first read [Screen 01 cinematic blueprint](../../docs/infinite-website/SCREEN_01_CINEMATIC_BLUEPRINT_2026-10-30.md) as the **current CTA-specific shot plan**; apply the gated production process below for any comparable new cinematic scene. The blueprint is **proposed preproduction guidance**, not founder-approved storyboard art or permission to implement.
+3. For **Screen 01 clicked CTA**, first read [The Living Page creative direction](../../docs/infinite-website/SCREEN_01_LIVING_PAGE_CREATIVE_DIRECTION_2026-10-30.md), which is the current proposed shot, material and spatial-scale treatment and describes the AI creative-director role. Then read [Screen 01 cinematic blueprint](../../docs/infinite-website/SCREEN_01_CINEMATIC_BLUEPRINT_2026-10-30.md) as the **current CTA-specific shot plan**; apply the gated production process below for any comparable new cinematic scene. The blueprint is **preproduction guidance**; neither the Living Page treatment nor a written storyboard equals founder-approved high-fidelity artwork or permission to implement.
 4. Inspect the exact branch/worktree and full source. Never treat historic screenshots, isolated reconstructions, a prior SHA, or a passed synthetic test as proof that the currently served tunnel has the same code.
 5. Do not alter `main`, `preview-*`, production routes, deployment config or independent business-card features without explicit authorization. Do not expand Gate 2 or integrate the prototype into the genuine Next.js homepage unless separately authorized.
 
@@ -35,6 +35,18 @@ A scene is convincing when its **geometry, material, occlusion, parallax and cau
 - The **C headline may arrive while green architecture remains at the edge**. Guard its reveal against the actual moving clip boundary using its rendered text bounds, including mobile safety margin. Secondary copy and footer may wait until the entire dark background is established. Do not allow an empty dark hold.
 - Keep the finished C typography/layout and authentic Selected Work intact unless founder specifically requests their redesign.
 
+## Creative / motion director role and visual-scale contract
+
+For premium studio-homepage cinematic work, the **AI design collaborator leads creative direction and technical previsualization**, with the founder retaining final aesthetic, scope and release authority. The lead must **propose, anticipate, visualize, challenge and only then implement**; do not ask the founder to invent the missing visual solution or present a random menu of CSS effects.
+
+**Before coding, own these questions:** What exactly is the one distinctive brand idea? What must the audience see when the shot is paused at 0%, early fold, half-open, passage, and arrival? Which **editorial, architectural and temporal scales** make it feel world-class? What can break as a **second-order consequence**, and how will the storyboard/animatic prove the prevention? What does desktop *and* portrait framing look like? Which technical architecture faithfully delivers the approved shot without false animation claims?
+
+**Creative veto:** Reject a scene that is generic, derivative, physically incoherent, uses a substitute homepage, invents project imagery, hides Work behind a dark UI tunnel, deforms actual readable hero text, or only looks appealing at one keyframe. Smooth code and a shared easing curve are not enough. When the scene lacks art direction, **return to D0/D1/D2**, not to arbitrary transform tuning.
+
+**Scale contract:** Document one camera origin/projection, optical viewport framing, near/far material relationships, real source/destination layout match, responsive portrait variant and expected emotional velocity. Use the fewest coherent surfaces; apparent size and parallax follow geometry, not independently guessed `scale()` multipliers. Timings such as ~1–1.2s and 60fps are **hypotheses/goals**, never evidence or unconditional requirements.
+
+**Current Screen 01 creative candidate:** [The Living Page](../../docs/infinite-website/SCREEN_01_LIVING_PAGE_CREATIVE_DIRECTION_2026-10-30.md). The **previous symmetric two-door / framed green corridor composition and first generated five-frame storyboard are not accepted**. Do not resurrect them as an implementation target. Retain their recordings only for regression/failure analysis.
+
 ## Cinematic preproduction gates — mandatory before a new full effect
 
 **Why:** Repeated implementation-first iterations of the Screen 01 CTA produced large duplicate letterforms, premature folds, flat miniature Work previews, heavy green rectangles and incoherent apparent camera movement. Small code/easing edits cannot reliably fix a broken spatial composition. **Design the final frame sequence and predict the next failure before authoring more full-scene code.**
@@ -54,7 +66,7 @@ For a **new signature interaction, structural redesign, or repeated visual failu
 
 **Artifact provenance:** Always label documents **specified**, **storyboard artwork created**, **animatic created**, **technical proof browser-tested**, **coded**, **founder accepted**, **integrated**, and **released** separately. Never infer earlier stages from a green test suite or claim an uncreated storyboard exists.
 
-**Current Screen 01 state (30 October):** Prior CTA prototypes are **coded but visually rejected/incomplete**; several founder videos show the structural shortcomings. The [cinematic blueprint](../../docs/infinite-website/SCREEN_01_CINEMATIC_BLUEPRINT_2026-10-30.md) establishes the proposed five-keyframe shot and predictive risks. High-fidelity visual frames and an approved animatic **are not yet delivered**. **Next creative step is the storyboard/animatic, not another full CTA rewrite.** Continue to preserve `#work` and the scroll-driven B → C code.
+**Current Screen 01 state (30 October):** Prior CTA prototypes are **coded but visually rejected/incomplete**; several founder videos show the structural shortcomings. The [cinematic blueprint](../../docs/infinite-website/SCREEN_01_CINEMATIC_BLUEPRINT_2026-10-30.md) establishes the production gates, while [The Living Page](../../docs/infinite-website/SCREEN_01_LIVING_PAGE_CREATIVE_DIRECTION_2026-10-30.md) defines the **new** creative treatment. An older five-frame board was produced but **visually rejected**; no accepted Living Page high-fidelity storyboard or animatic exists. **Next creative step is the storyboard/animatic, not another full CTA rewrite.** Continue to preserve `#work` and the scroll-driven B → C code.
 
 ## Review loop — small, real, reversible
 
@@ -69,9 +81,10 @@ For a **new signature interaction, structural redesign, or repeated visual failu
 
 ## Clicked Work shortcut — separate from native-scroll motion (30 October)
 
-The founder selected the **Folding Project Dive** (fold → reveal Work-facing preview → forward dive → actual `#work`) as a **creative hypothesis to prototype**, not a finished transition. First read [current Gate 1 brief](../../docs/infinite-website/GATE_1_VISUAL_FOUNDATION_2026-10-30.md). The original `work-nav.js` 680 ms root-snapshot fade/scale was replaced in the first 30 October isolated prototype by `work-dive.css` and a Web Animations folding/dive controller; the first iterations have since been **reviewed in founder-recorded browser video and remain visually unaccepted**. Preserve `motion.js` scroll choreography and `#work` fallback.
+The initial **Folding Project Dive** (fold → reveal existing Work → forward travel → `#work`) was a historical creative hypothesis; **its symmetric-door/tunnel execution and first generic storyboard were rejected**. The currently proposed creative treatment is **The Living Page**, which reinterprets the fold as the actual cream editorial material becoming asymmetrical architecture. First read [current Gate 1 brief](../../docs/infinite-website/GATE_1_VISUAL_FOUNDATION_2026-10-30.md). The original `work-nav.js` 680 ms root-snapshot fade/scale was replaced in the first 30 October isolated prototype by `work-dive.css` and a Web Animations folding/dive controller; the first iterations have since been **reviewed in founder-recorded browser video and remain visually unaccepted**. Preserve `motion.js` scroll choreography and `#work` fallback.
 
 For this clicked shortcut:
+- **Read The Living Page treatment first**, including material, light, camera scale, the no-invented-portfolio rule, founder sign-off, and the CSS-versus-small-mesh decision criterion.
 - **Read the cinematic blueprint and pass D0–D3 before another full structural rewrite.** Source-level fixes already tried are failure evidence; do not continue to tweak the old half-width cloned-hero scene without a reviewed storyboard and animatic.
 - Use a temporary, decorative, noninteractive layer and the minimum credible site-derived geometry. Do not split or disable the actual anchor or accessible business text.
 - Validate *paused and in-between frames*: fold must be legible, occlusion truly solid, preview recognizably related to actual Work, and dive must feel forward rather than flat zoom.
@@ -93,5 +106,6 @@ State: current branch + SHA + PR status; **what changed** (brief); **what was pr
 - `docs/infinite-website/LESSONS_2026-10-29.md`
 - `docs/infinite-website/GATE_1_VISUAL_FOUNDATION_2026-10-30.md`
 - `docs/infinite-website/SCREEN_01_CINEMATIC_BLUEPRINT_2026-10-30.md`
+- `docs/infinite-website/SCREEN_01_LIVING_PAGE_CREATIVE_DIRECTION_2026-10-30.md`
 - `docs/DOCUMENTATION_AUDIT_2026-10-30.md`
 - Current source: `public/flagship-journey/infinite-bc/{index.html,styles.css,entrance.css,motion.js,work-nav.js,work-dive.css}`
