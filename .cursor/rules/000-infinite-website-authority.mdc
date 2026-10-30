@@ -4,15 +4,16 @@ globs: "*"
 alwaysApply: true
 ---
 
-# Genezisi Studio Homepage Authority (29 October 2026)
+# Genezisi Studio Homepage Authority (updated 30 October 2026)
 
 This repository has multiple products. **For studio homepage, journey, hero, studio positioning, or Infinite Website work only:**
 
-1. Read `AGENTS.md`, `docs/infinite-website/NORTH_STAR_v1.2.md`, `VISITOR_FLOW_v1.2.md` and `ACCEPTANCE_GATES_v1.2.md`. For the current 29 October Gate 1b draft, continue with `docs/infinite-website/HANDOFF_2026-10-29.md`, `LESSONS_2026-10-29.md` and repository-local `skills/infinite-website-motion-review/SKILL.md` (a playbook, not a runtime-installed tool).
+1. Read `AGENTS.md`, `docs/infinite-website/NORTH_STAR_v1.2.md`, `VISITOR_FLOW_v1.2.md` and `ACCEPTANCE_GATES_v1.2.md`. For active Gate 1b work, continue with `docs/infinite-website/GATE_1_VISUAL_FOUNDATION_2026-10-30.md`, `docs/DOCUMENTATION_AUDIT_2026-10-30.md`, and the preserved dated `HANDOFF_2026-10-29.md`, `LESSONS_2026-10-29.md` and repository-local `skills/infinite-website-motion-review/SKILL.md` (a playbook, not a runtime-installed tool).
 2. The **controlling current design** is **centered opening → B interface pushes headline left → complete B → website-derived forward depth and meaningful system story → centered C → genuine `SelectedWork` → normal site**. Genezisi sells independent Websites, Automation/Workflows/System Engineering, and AI Systems. It is NOT solely a digital business-card studio, AI agent reseller, or old turquoise Signal demo.
 3. Preserve and accurately distinguish current production code from opt-in prototypes. Gate 1b **is implemented in the isolated PR #15 prototype** (centered push, B-derived room, readable third stage, early C headline), but **is not yet visually accepted on the full served route**. Source implementation is not production integration. Do not implement Gate 2 story, integrate/release or merge solely on documentation authority. No unapproved `main` or `preview-*` push.
-4. Do not force glassmorphism, clay cards, turquoise accents, generic WebGL, visual dashboards or 3D for its own sake. Use the restrained founder-selected palette/composition. Real relative perspective/occlusion, native reversible scroll, readable live text, truthful fictional simulation, locale and accessible fallbacks are required. Rendering choice is evidence-led.
-5. Digital-card rules and docs apply to digital-card paths only. Do not rewrite or delete those features. Older Genezisi V2 and flagship specs are historical prototypes, **not** equal authorities.
-6. `package.json` and current source determine actual stack: Next.js 16.2.1, React 19.2.3, Tailwind CSS 4 at this recorded checkpoint. Recheck before implementation.
+4. **30 October screen policy:** Screen 01 selected Option D cream and plain-language copy; clicked Explore Work motion is a proposed *Folding Project Dive*, **not yet visually approved or implemented**. Review Screens 01 → 02/B → 03/interior → 04/C independently, then the complete Gate 1b journey. Do not confuse the clicked shortcut with the scroll-driven film or the static Work mirror with real Next.js `SelectedWork`.
+5. Do not force glassmorphism, clay cards, turquoise accents, generic WebGL, visual dashboards or 3D for its own sake. Use the restrained founder-selected palette/composition. Real relative perspective/occlusion, native reversible scroll, readable live text, truthful fictional simulation, locale and accessible fallbacks are required. Rendering choice is evidence-led.
+6. Digital-card rules and docs apply to digital-card paths only. Do not rewrite or delete those features. Older Genezisi V2 and flagship specs are historical prototypes, **not** equal authorities.
+7. `package.json` and current source determine actual stack: Next.js 16.2.1, React 19.2.3, Tailwind CSS 4 at this recorded checkpoint. Recheck before implementation.
 
 For unrelated work in this repository, follow the relevant existing product-specific instructions instead.
