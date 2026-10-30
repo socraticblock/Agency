@@ -1,231 +1,83 @@
-/* Screen 01 / Genezisi Folding Project Dive — CTA-only spatial overlay.
-   Deliberately independent of the 440svh native-scroll B → C motion system.
-   All replica artwork is noninteractive, transient, and removed on completion. */
-
-.work-dive {
-  --dive-cream:#e6ded2;
-  --dive-evergreen:#173327;
+/* Genezisi / Screen 01 clicked CTA: The Living Page
+   One continuous, asymmetric ivory material; no cloned split hero, doors,
+   framed green corridor, false project photography or production dependencies.
+   A temporary decorative layer; not the B→C native-scroll film. */
+.living-dive {
+  --living-ivory:#e6ded2;
+  --living-forest:#173327;
   position:fixed;
   inset:0;
   z-index:1000;
   width:100%;
   height:100vh;
   height:100dvh;
-  isolation:isolate;
   overflow:hidden;
-  background:#10251b;
+  isolation:isolate;
+  background:transparent;
+  opacity:0;
   pointer-events:auto;
+  overscroll-behavior:contain;
+  touch-action:none;
   contain:layout paint style;
 }
-
-/* Architectural light is a BACKGROUND LAYER, not the background of a
-   preserve-3d parent: a painted 3D parent previously covered descendants
-   at negative Z, causing the empty green gap in the founder's recording. */
-.work-dive .dive-backdrop {
+.living-dive .living-backdrop {
   position:absolute;
   inset:0;
-  z-index:0;
-  pointer-events:none;
   background:
-    radial-gradient(ellipse 70% 77% at 50% 47%,#45684d 0%,#244832 33%,#173628 60%,#0c1c15 93%);
+    radial-gradient(ellipse 85% 85% at 47% 46%,#385540 0%,#203d2c 54%,#11271c 100%);
 }
-.work-dive .dive-backdrop::after {
-  content:"";
+/* Exactly the existing #work and its unchanged continuation cloned in place.
+   The destination never becomes an invented portfolio or nested UI card. */
+.living-dive .living-destination {
   position:absolute;
   inset:0;
-  opacity:.42;
-  background:linear-gradient(90deg,#061810a8 0%,transparent 23% 77%,#061810a8 100%);
-}
-.work-dive .dive-radiance {
-  position:absolute;
-  inset:-20%;
-  z-index:1;
-  opacity:0;
-  pointer-events:none;
-  background:radial-gradient(ellipse 28% 44% at 50% 49%,#f2eaca8e 0%,#b0d1a83d 29%,transparent 75%);
-  will-change:opacity,transform;
-}
-/* This layer has NO solid background. The real #work replica must stay visible
-   throughout the fold and through the camera movement. */
-.work-dive .dive-space {
-  position:absolute;
-  inset:0;
-  z-index:2;
-  perspective:1200px;
-  perspective-origin:50% 50%;
-  transform-style:preserve-3d;
-  pointer-events:none;
-}
-.work-dive .dive-arrival {
-  position:absolute;
-  inset:0;
-  z-index:2;
   overflow:hidden;
-  color:#16251d;
   background:#f0ece5;
+  color:#16251d;
   transform-origin:50% 50%;
-  backface-visibility:hidden;
   will-change:transform;
-  box-shadow:0 0 0 1px #ded8caba,0 30px 110px #06170fa6;
+  backface-visibility:hidden;
 }
-/* The arrival copies the existing Work presentation unchanged, purely as art.
-   When it reaches scale(1), its top pixels match the real #work at scroll top. */
-.work-dive .dive-arrival .work-preview {scroll-margin-top:0}
-
-/* Two architectural thresholds pass the camera at *different* apparent
-   speeds; their opaque frame bodies occlude the card edges as we advance. */
-.work-dive .dive-frame {
-  position:absolute;
-  top:50%;
-  left:50%;
-  z-index:3;
-  border:solid #294e3c;
-  background:transparent;
-  box-sizing:border-box;
-  pointer-events:none;
-  will-change:transform,opacity;
+.living-dive .living-destination .work-preview {
+  scroll-margin-top:0;
 }
-.work-dive .dive-frame.outer {
-  width:82vw;
-  height:77dvh;
-  border-width:clamp(3px,.5vw,8px);
-  border-color:#335943;
-  box-shadow:inset 0 0 0 1px #c9dbc353,0 0 0 1px #8aaa8840,0 26px 70px #07150d65;
-}
-.work-dive .dive-frame.inner {
-  width:55vw;
-  height:62dvh;
-  border-width:clamp(1px,.24vw,3px);
-  border-color:#77987b;
-  box-shadow:inset 0 0 0 1px #c0d1ac4b,0 18px 44px #03120945;
-}
-.work-dive .dive-wall {
-  position:absolute;
-  top:-12%;
-  bottom:-12%;
-  width:24%;
-  z-index:4;
-  opacity:.88;
-  border:1px solid #91b39345;
-  background:linear-gradient(90deg,#0c2419 0%,#27523b 46%,#173b2a 100%);
-  box-shadow:10px 0 44px #07150d62,inset 0 0 65px #b5d8b50d;
-  will-change:transform,opacity;
-  pointer-events:none;
-}
-.work-dive .dive-wall.left {
-  left:0;
-  transform-origin:0% 50%;
-  background:linear-gradient(90deg,#112b20 0%,#2e573e 72%,#719477 100%);
-}
-.work-dive .dive-wall.right {
-  right:0;
-  transform-origin:100% 50%;
-  background:linear-gradient(270deg,#112b20 0%,#2e573e 72%,#719477 100%);
-}
-
-/* Two solid ivory folding leaves; cloned first-frame typography is painted
-   on each half, rather than fading between duplicate complete screenshots. */
-.work-dive .dive-doors {
+.living-dive .living-surface {
   position:absolute;
   inset:0;
-  z-index:7;
-  perspective:1200px;
-  perspective-origin:50% 50%;
-  transform-style:preserve-3d;
-  pointer-events:none;
-}
-.work-dive .dive-door {
-  position:absolute;
-  top:0;
-  width:50%;
+  width:100%;
   height:100%;
-  transform-style:preserve-3d;
-  backface-visibility:hidden;
-  will-change:transform;
-}
-.work-dive .dive-door.left {left:0;transform-origin:0% 50%}
-.work-dive .dive-door.right {right:0;transform-origin:100% 50%}
-.work-dive .dive-door-face {
-  position:absolute;
-  inset:0;
-  overflow:hidden;
-  background:var(--dive-cream);
-  backface-visibility:hidden;
-  box-shadow:inset 0 0 60px #17332706;
-}
-.work-dive .dive-door.left .dive-door-face {
-  border-right:1px solid #61715d46;
-}
-.work-dive .dive-door.right .dive-door-face {
-  border-left:1px solid #61715d46;
-}
-.work-dive .dive-door-face::after {
-  content:"";
-  position:absolute;
-  inset:0;
-  z-index:5;
+  overflow:visible;
   pointer-events:none;
+  shape-rendering:geometricPrecision;
+}
+.living-dive .living-surface .living-shadow {
+  fill:none;
+  stroke:#071c138c;
+  stroke-width:1;
+}
+.living-dive .living-surface .living-contact {
+  fill:none;
+  stroke:#092317;
+  stroke-opacity:.22;
+}
+.living-dive .living-surface .living-crease {
+  fill:none;
+  stroke:#fff7e8;
+  stroke-opacity:.68;
+  stroke-width:1.5;
+  vector-effect:non-scaling-stroke;
+}
+/* A very quiet material sheen. No glowing portal or UI frames. */
+.living-dive .living-rim {
+  position:absolute;
+  inset:0;
   opacity:0;
-  background:linear-gradient(90deg,#10291f30 0%,transparent 35%,#10291f0d 100%);
-}
-.work-dive .dive-door.right .dive-door-face::after {
-  background:linear-gradient(270deg,#10291f30 0%,transparent 35%,#10291f0d 100%);
-}
-.work-dive .dive-door-edge {
-  position:absolute;
-  top:0;
-  bottom:0;
-  width:12px;
-  background:linear-gradient(90deg,#596f5d 0%,#efe6d7 34%,#b9b4a2 70%,#344b3c 100%);
-  box-shadow:0 0 28px #0e211863;
-  backface-visibility:hidden;
-}
-.work-dive .dive-door.left .dive-door-edge {
-  right:0;
-  transform:translateX(50%) rotateY(90deg);
-}
-.work-dive .dive-door.right .dive-door-edge {
-  left:0;
-  transform:translateX(-50%) rotateY(90deg);
-}
-.work-dive .dive-print {
-  position:absolute;
-  top:0;
-  height:100%;
-  width:200%;
-  overflow:hidden;
-  background:var(--dive-cream);
-  color:var(--dive-evergreen);
   pointer-events:none;
+  background:radial-gradient(ellipse 42% 62% at 44% 45%,#dfefc414,transparent 77%);
   will-change:opacity;
 }
-.work-dive .dive-door.left .dive-print {left:0}
-.work-dive .dive-door.right .dive-print {left:-100%}
-.work-dive .dive-print .site-nav {
-  position:absolute;
-  inset:0 0 auto;
-  z-index:3;
-}
-.work-dive .dive-print .intro {
-  position:absolute;
-  z-index:2;
-  max-width:none;
-  margin:0;
-  transform:none!important;
-  text-align:center;
-}
-.work-dive .dive-print .intro .body {margin-left:auto;margin-right:auto}
-.work-dive .dive-print .intro .actions {justify-content:center}
-.work-dive .dive-print .opening-foot {position:absolute}
-.work-dive .dive-print .site-nav a,
-.work-dive .dive-print .intro a {pointer-events:none}
-
-@media (max-width:740px) {
-  .work-dive .dive-frame.outer {width:86vw;height:74dvh;border-width:3px}
-  .work-dive .dive-frame.inner {width:68vw;height:61dvh;border-width:2px}
-  .work-dive .dive-wall {width:19%}
-  .work-dive .dive-door-edge {width:7px}
-}
+/* A small light band that tracks the edge is rendered by the SVG rather than
+   a separate DOM plane. This keeps mobile clipping, scale and depth consistent. */
 @media (prefers-reduced-motion:reduce) {
-  .work-dive {display:none!important}
+  .living-dive {display:none!important}
 }
