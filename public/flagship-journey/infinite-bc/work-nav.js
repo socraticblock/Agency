@@ -128,8 +128,13 @@
   };
 
   const goToWork=()=>{
+    // The replicated arrival starts at viewport y=0. Ignore the ordinary
+    // Work anchor's 15px scroll-margin here so the final painted pixels line
+    // up with the real #work view instead of jumping at cleanup.
+    const exactTop=window.scrollY+destination.getBoundingClientRect().top;
     if(window.location.hash!=='#work')window.location.hash='work';
-    destination.scrollIntoView({behavior:'instant',block:'start'});
+    if(Number.isFinite(exactTop))window.scrollTo(0,Math.max(0,exactTop));
+    else destination.scrollIntoView({behavior:'auto',block:'start'});
   };
 
   link.addEventListener('click',(event)=>{
