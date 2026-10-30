@@ -6,8 +6,9 @@
 
 1. Read `AGENTS.md` and `docs/infinite-website/NORTH_STAR_v1.2.md` first. North Star controls if anything here conflicts.
 2. Read `VISITOR_FLOW_v1.2.md`, `ACCEPTANCE_GATES_v1.2.md`, the **current** `GATE_1_VISUAL_FOUNDATION_2026-10-30.md`, and the dated 29 October `HANDOFF_2026-10-29.md` and `LESSONS_2026-10-29.md` as historic evidence.
-3. Inspect the exact branch/worktree and full source. Never treat historic screenshots, isolated reconstructions, a prior SHA, or a passed synthetic test as proof that the currently served tunnel has the same code.
-4. Do not alter `main`, `preview-*`, production routes, deployment config or independent business-card features without explicit authorization. Do not expand Gate 2 or integrate the prototype into the genuine Next.js homepage unless separately authorized.
+3. For a **new or structurally failed cinematic interaction**, first read [Screen 01 cinematic blueprint](../../docs/infinite-website/SCREEN_01_CINEMATIC_BLUEPRINT_2026-10-30.md) as the **current CTA-specific shot plan**; apply the gated production process below for any comparable new cinematic scene. The blueprint is **proposed preproduction guidance**, not founder-approved storyboard art or permission to implement.
+4. Inspect the exact branch/worktree and full source. Never treat historic screenshots, isolated reconstructions, a prior SHA, or a passed synthetic test as proof that the currently served tunnel has the same code.
+5. Do not alter `main`, `preview-*`, production routes, deployment config or independent business-card features without explicit authorization. Do not expand Gate 2 or integrate the prototype into the genuine Next.js homepage unless separately authorized.
 
 ## Visual quality and story
 
@@ -34,11 +35,32 @@ A scene is convincing when its **geometry, material, occlusion, parallax and cau
 - The **C headline may arrive while green architecture remains at the edge**. Guard its reveal against the actual moving clip boundary using its rendered text bounds, including mobile safety margin. Secondary copy and footer may wait until the entire dark background is established. Do not allow an empty dark hold.
 - Keep the finished C typography/layout and authentic Selected Work intact unless founder specifically requests their redesign.
 
+## Cinematic preproduction gates — mandatory before a new full effect
+
+**Why:** Repeated implementation-first iterations of the Screen 01 CTA produced large duplicate letterforms, premature folds, flat miniature Work previews, heavy green rectangles and incoherent apparent camera movement. Small code/easing edits cannot reliably fix a broken spatial composition. **Design the final frame sequence and predict the next failure before authoring more full-scene code.**
+
+For a **new signature interaction, structural redesign, or repeated visual failure**, execute these gates *in order*. Each stage has a concrete artifact, reviewer and go/no-go state. Routine local bug fixes to an **already approved** storyboard do not require restarting the process; if a bug exposes a failed spatial assumption, return to the earliest broken gate.
+
+1. **D0 / Creative treatment:** Write the audience-visible effect in plain language, the emotional trajectory, the fixed scope, non-goals, accessibility and the reason the motion exists. Distinguish the interaction from normal scroll and content design. **Pass:** founder accepts the *intended shot*, not a technology list.
+2. **D1 / High-fidelity visual storyboard:** Produce at least five internally consistent paused states (source, anticipation, reveal, travel, destination), including desktop **and portrait mobile**, plus high-risk in-between frames. Compare the first frame with the actual source page and the last with the actual destination. **Pass:** believable continuity, legible destination, coherent materials and no invented Work, approved as visual direction. Do not call prose-only descriptions or schematic diagrams completed artwork.
+3. **D2 / Motion previsualization:** Produce a lightweight **moving animatic** separate from full production. Record camera axis, apparent scale, occlusion, phase pacing, easings and source-to-target continuity. Inspect normal speed and paused moments. **Pass:** founder can see the planned cinematic effect *before* investing in full application integration.
+4. **D3 / Technical architecture/feasibility:** Specify camera and world coordinate system, near/far positions, 3D hierarchy, clipping, text-retirement and target geometry. Verify a barebones browser spatial proof on desktop, narrow portrait and short viewport, including fallback navigation. **Pass:** no unsupported spatial illusion or hidden preview, real-browser source/target alignment evidence.
+5. **D4 / Production implementation:** Only after D0–D3, code on an isolated recoverable branch, preserving semantics, native-scroll source and existing Work. Derive object motion from coherent spatial relationships rather than independently scaling/rotating arbitrary parts. **Pass:** implementation matches approved previsualization without new scene inventions.
+6. **D5 / Visual + engineering acceptance:** Capture the actual complete served route, intermediate and edge frames, browsers/viewport/device provenance, slow/fast interaction, history/focus/reduced motion, and measured frame/performance characteristics when available. **Pass:** founder explicitly accepts the specific visual interaction; do not imply approval of an entire Screen 01/Gate 1b or production readiness.
+
+**Second-order failure check (required in D1–D3):** For every creative choice, fill **decision → desired visible effect → predictable next failure → prevention → evidence**. Examples: removing letters from folding material may introduce a blank cream dwell; adding real Z may bury Work behind opaque ancestors; using perspective on a half-width cloned hero may enlarge/split text; adding architecture may become a tunnel rather than a camera journey; matching an inert preview may still cause a 15px hash-scroll jump; shrinking desktop for mobile may destroy the aperture. Solve these *on paper and in the animatic* before production code.
+
+**Escalation / stop rule:** If two focused implementation corrections do not reproduce the approved motion, **do not keep tweaking timing and shadows**. Preserve attempts, cite source and founder video evidence, return to D1/D2/D3, and explain the failed assumption. Stronger rendering technology is a justified comparison only when actual browser evidence shows CSS 3D insufficient.
+
+**Artifact provenance:** Always label documents **specified**, **storyboard artwork created**, **animatic created**, **technical proof browser-tested**, **coded**, **founder accepted**, **integrated**, and **released** separately. Never infer earlier stages from a green test suite or claim an uncreated storyboard exists.
+
+**Current Screen 01 state (30 October):** Prior CTA prototypes are **coded but visually rejected/incomplete**; several founder videos show the structural shortcomings. The [cinematic blueprint](../../docs/infinite-website/SCREEN_01_CINEMATIC_BLUEPRINT_2026-10-30.md) establishes the proposed five-keyframe shot and predictive risks. High-fidelity visual frames and an approved animatic **are not yet delivered**. **Next creative step is the storyboard/animatic, not another full CTA rewrite.** Continue to preserve `#work` and the scroll-driven B → C code.
+
 ## Review loop — small, real, reversible
 
 1. Re-read current source, PR status and most recent founder recording. Identify **one exact visual failure**; avoid broad redesign from a single imperfection.
 2. Define the target paused keyframes and several **in-between states**. Write down what's visible at each point; annotate normalized scroll progress, not just video seconds.
-3. Implement one isolated, reversible code increment and commit it to the existing draft feature branch.
+3. **First identify which preproduction gate remains valid.** If the visual defect is a small code-level deviation from an approved shot, implement one isolated reversible increment on the draft branch. If the spatial model or design itself is unapproved/broken, return to D1–D3 and do **not** code another full scene.
 4. Verify JavaScript syntax and the actual served-route build, where available. Capture desktop `1440×900`, portrait `390×844`, narrow `320×568`, and a short-height viewport. Test both scroll directions, jumps, trackpad/wheel and touch where possible.
 5. Check: first-frame intro; B physical push; fully opaque B hold; B-derived chamber with correct depth; no stranded interface labels; third front arriving whole; no long stationary interval; third-to-C fold; early unclipped C title with remaining green; complete C; direct Work/Services/Contact links; real Work seam only when integrated.
 6. Check keyboard focus/inert for offscreen interactive elements, reduced-motion/static/no-JS behavior, locale and text scaling, responsive overflow, screenshot evidence and realistic performance claims.
@@ -50,6 +72,7 @@ A scene is convincing when its **geometry, material, occlusion, parallax and cau
 The founder selected the **Folding Project Dive** (fold → reveal Work-facing preview → forward dive → actual `#work`) as a **creative hypothesis to prototype**, not a finished transition. First read [current Gate 1 brief](../../docs/infinite-website/GATE_1_VISUAL_FOUNDATION_2026-10-30.md). The original `work-nav.js` 680 ms root-snapshot fade/scale was replaced in the first 30 October isolated prototype by `work-dive.css` and a Web Animations folding/dive controller; the new effect remains **unverified in real browser video and unaccepted**. Preserve `motion.js` scroll choreography and `#work` fallback.
 
 For this clicked shortcut:
+- **Read the cinematic blueprint and pass D0–D3 before another full structural rewrite.** Source-level fixes already tried are failure evidence; do not continue to tweak the old half-width cloned-hero scene without a reviewed storyboard and animatic.
 - Use a temporary, decorative, noninteractive layer and the minimum credible site-derived geometry. Do not split or disable the actual anchor or accessible business text.
 - Validate *paused and in-between frames*: fold must be legible, occlusion truly solid, preview recognizably related to actual Work, and dive must feel forward rather than flat zoom.
 - No compulsory intermediate card or tunnel hold: users click to see work. Keep duration as a tested hypothesis, not a fixed quality metric.
@@ -69,5 +92,6 @@ State: current branch + SHA + PR status; **what changed** (brief); **what was pr
 - `docs/infinite-website/HANDOFF_2026-10-29.md`
 - `docs/infinite-website/LESSONS_2026-10-29.md`
 - `docs/infinite-website/GATE_1_VISUAL_FOUNDATION_2026-10-30.md`
+- `docs/infinite-website/SCREEN_01_CINEMATIC_BLUEPRINT_2026-10-30.md`
 - `docs/DOCUMENTATION_AUDIT_2026-10-30.md`
-- Current source: `public/flagship-journey/infinite-bc/{index.html,styles.css,entrance.css,motion.js}`
+- Current source: `public/flagship-journey/infinite-bc/{index.html,styles.css,entrance.css,motion.js,work-nav.js,work-dive.css}`
