@@ -49,6 +49,16 @@ The founder has chosen to **refine and review each of the four visible compositi
 - [ ] Fully settled readable cards are pause points, not compulsory long motionless scrolling. Measure native physical scroll distance between meaningful changes; do not infer fixed motion duration from a trackpad recording's seconds.
 - [ ] C is visually complete and leads immediately into **genuine** Selected Work in the real app where integration is claimed. If only the static proof's verified portfolio preview is used, label **integration pending**, not passed.
 
+### CTA preproduction stop/go (added after repeated 30 October visual reviews)
+
+The current clicked CTA has been implemented in isolated source but **has not passed founder visual acceptance**. Before any **further full structural rewrite**, follow [Screen 01 Cinematic Blueprint](./SCREEN_01_CINEMATIC_BLUEPRINT_2026-10-30.md) and the [motion skill](../../skills/infinite-website-motion-review/SKILL.md). Required evidence is sequential: D0 creative treatment, D1 five high-fidelity desktop/mobile storyboard frames and risk in-betweens, D2 **moving animatic**, D3 real-browser geometry/source-to-target proof, D4 production code, D5 moving served-route QA/founder decision. The written blueprint **does not satisfy D1 or D2** by itself.
+
+- [ ] Founder-visible D1 storyboard shows continuity from existing intact hero through fold, reveal, forward passage and unchanged Work.
+- [ ] D2 animatic demonstrates believable depth and one camera trajectory at normal speed and paused halfway; no duplicated giant letters, empty green pause or heavy nested UI frames.
+- [ ] D3 feasibility proof establishes initial pixel alignment, occlusion, correct mobile spatial layout and exact existing `#work` handoff.
+- [ ] Document **decision → expected effect → likely second-order defect → prevention → evidence** for each high-risk animation mechanism.
+- [ ] Two failed code-only fixes trigger return to the earliest invalid design/geometry gate, not indefinite easing refinements.
+
 ### CTA-navigation specific acceptance (applies to the optional Screen 01 shortcut only)
 
 - [ ] Click activation does not alter ordinary native-scroll `motion.js` state machine or make the cinematic path mandatory.
