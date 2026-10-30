@@ -195,8 +195,8 @@ a:focus-visible,button:focus-visible {
 }
 
 .eyebrow {
-  font-size:10px;
-  letter-spacing:.18em;
+  font-size:11px;
+  letter-spacing:.15em;
   font-weight:900;
   color:#6d816e;
   text-transform:uppercase;
@@ -216,7 +216,9 @@ a:focus-visible,button:focus-visible {
   font-family:Georgia,'Times New Roman',serif;
   font-weight:400;
   letter-spacing:-.08em;
-  color:#6d816e
+  color:#6d816e;
+  display:inline-block;
+  transform:translateY(-.012em)
 }
 
 .intro .body {
@@ -403,7 +405,9 @@ a:focus-visible,button:focus-visible {
   letter-spacing:.16em;
   font-size:9px;
   font-weight:800;
-  color:#6d816e
+  color:#6d816e;
+  font-size:10px;
+  letter-spacing:.13em
 }
 
 .opening-foot span:nth-child(2) {
@@ -973,7 +977,7 @@ a:focus-visible,button:focus-visible {
 
   .eyebrow {
     margin-bottom:27px;
-    font-size:9px
+    font-size:10px
   }
 
   .intro h1 {
@@ -1338,4 +1342,41 @@ a:focus-visible,button:focus-visible {
     display:none!important
   }
 
+}
+
+
+/* Screen 01: restrained CTA arrow polish; no layout or camera changes. */
+.opening .button span,
+.site-nav .nav-cta span {
+  display:inline-block;
+  line-height:1;
+  transition:transform 180ms cubic-bezier(.22,1,.36,1)
+}
+.opening .button:hover span,
+.opening .button:focus-visible span,
+.site-nav .nav-cta:hover span,
+.site-nav .nav-cta:focus-visible span {
+  transform:translate(2px,-2px)
+}
+
+/* Progressive-enhancement shortcut from the opening to Work.
+   This transition snapshots two real page positions instead of racing through
+   the 440svh scroll story. All other navigation remains a normal anchor. */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) {
+    animation:genezisi-work-forward-out 680ms cubic-bezier(.22,1,.36,1) both;
+    transform-origin:50% 50%
+  }
+  ::view-transition-new(root) {
+    animation:genezisi-work-forward-in 680ms cubic-bezier(.22,1,.36,1) both;
+    transform-origin:50% 50%
+  }
+}
+@keyframes genezisi-work-forward-out {
+  from {opacity:1;transform:scale(1)}
+  to {opacity:0;transform:scale(1.14)}
+}
+@keyframes genezisi-work-forward-in {
+  from {opacity:0;transform:scale(.98)}
+  to {opacity:1;transform:scale(1)}
 }
