@@ -90,3 +90,25 @@ The founder preferred two concept-art directions: **C — The Folding Website** 
 Do not start Gate 2 (fictional enquiry / AI), real Next.js integration, merge, `main` / `preview-*` push or deployment without separately explicit founder authorization. Founder acceptance of the palette/copy/creative hybrid is **not** final Screen 01 or Gate 1b approval.
 
 **Next authorized work to discuss after this documentation audit:** an isolated Folding Project Dive visual proof on the existing Option D branch, with exact GitHub SHA and desktop/mobile footage. Coding that proof is a **separate next action**, not accomplished by this documentation update.
+
+## 5. First Folding Project Dive implementation checkpoint — 30 October 2026
+
+**Status:** **Coded for visual review; NOT founder accepted, NOT real-device QA verified, NOT deployed or merged.** This addendum is newer than the *pre-coding* baseline recorded above. Read the current GitHub HEAD before any further work.
+
+**Implementation branch:** `feature/infinite-gate1b-opening-option-d-cream-2026-10-30`, first CTA implementation checkpoints `0223c2c` (new style layer), `34a546e` (navigation controller), and corrective handoff checkpoint `f474956` (exact Work scroll alignment). Intervening commits link stylesheet, remove obsolete View Transition animation and improve interruption handling.
+
+**Files:**
+- `public/flagship-journey/infinite-bc/work-dive.css` — temporary opaque evergreen perspective chamber, two hinged cream print planes, measured on-screen hero replicas, portfolio frame and direct arrival.
+- `public/flagship-journey/infinite-bc/work-nav.js` — changed from 680 ms root snapshots to ~980 ms CSS 3D + Web Animations choreography. Real source `#work` DOM is cloned inertly for the preview; clean up on completion, navigation, interruption and errors. Preserve plain anchor fallbacks.
+- `public/flagship-journey/infinite-bc/index.html` — load the dedicated stylesheet.
+- `public/flagship-journey/infinite-bc/styles.css` — remove old root View Transition rules to prevent overlapping effects.
+- **Not changed:** `public/flagship-journey/infinite-bc/motion.js` and `entrance.css`, the rest of the scroll story, production Next.js components and other routes.
+
+**Checks run at this checkpoint:**
+- V8 parse of current `work-nav.js` and `motion.js` **passed**.
+- Stylesheets passed basic brace balance checks; new CSS link, `#work` source link and fallback paths present.
+- Lightweight simulated DOM click executed the full navigation/controller cleanup path; reduced-motion, static mode, no-animation-API, and modified-click simulated fallbacks preserved the native anchor. These are **not** real-browser visual tests.
+- GitHub source/readback comparisons verify old root-snapshot code is removed and existing scroll motion source remains unmodified.
+- **Not yet run or verified:** served full-route desktop/mobile animation footage, visual frame review, actual browser back history, device responsiveness, actual GPU/compositor performance, assistive technology, and Next.js integration. Do not mark the checklist in section 3 passed without this evidence.
+
+**Founder review target:** capture the complete ~980 ms click at normal speed and in slowed/intermediate frames on 1440×900, 390×844 and 320×568, plus reduced motion and browser back/forward. Look particularly at live-hero-to-door visual alignment, physical depth while doors fold, whether the preview is visually legible before arrival, and the final no-flash handoff. Revise **this prototype only** until approved. No Gate 2 / merge / deployment.
