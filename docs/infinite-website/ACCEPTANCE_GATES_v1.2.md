@@ -51,15 +51,17 @@ The founder has chosen to **refine and review each of the four visible compositi
 
 ### CTA preproduction stop/go (added after repeated 30 October visual reviews)
 
-The current clicked CTA has been implemented in isolated source but **has not passed founder visual acceptance**. Before any **further full structural rewrite**, follow [Screen 01 Cinematic Blueprint](./SCREEN_01_CINEMATIC_BLUEPRINT_2026-10-30.md) and the [motion skill](../../skills/infinite-website-motion-review/SKILL.md). Required evidence is sequential: D0 creative treatment, D1 five high-fidelity desktop/mobile storyboard frames and risk in-betweens, D2 **moving animatic**, D3 real-browser geometry/source-to-target proof, D4 production code, D5 moving served-route QA/founder decision. The written blueprint **does not satisfy D1 or D2** by itself.
+The earlier clicked CTA was implemented in isolated source, recorded and **visually rejected**; the first generic symmetric-door five-frame storyboard candidate was also **rejected**. The active proposed creative direction is [The Living Page](./SCREEN_01_LIVING_PAGE_CREATIVE_DIRECTION_2026-10-30.md), not a completed design approval. Before any **further full structural rewrite**, follow [Screen 01 Cinematic Blueprint](./SCREEN_01_CINEMATIC_BLUEPRINT_2026-10-30.md) and the [motion skill](../../skills/infinite-website-motion-review/SKILL.md). Required evidence is sequential: D0 creative treatment, D1 five high-fidelity desktop/mobile storyboard frames and risk in-betweens, D2 **moving animatic**, D3 real-browser geometry/source-to-target proof, D4 production code, D5 moving served-route QA/founder decision. The written blueprint **does not satisfy D1 or D2** by itself.
 
-- [ ] Founder-visible D1 storyboard shows continuity from existing intact hero through fold, reveal, forward passage and unchanged Work.
+- [ ] Founder-visible **new Living Page** D1 storyboard shows continuity from existing intact hero through **asymmetric cream-surface transformation** and unchanged Work; no split cloned text, tunnel, invented hero/project art or rejected generic doors.
 - [ ] D2 animatic demonstrates believable depth and one camera trajectory at normal speed and paused halfway; no duplicated giant letters, empty green pause or heavy nested UI frames.
 - [ ] D3 feasibility proof establishes initial pixel alignment, occlusion, correct mobile spatial layout and exact existing `#work` handoff.
 - [ ] Document **decision → expected effect → likely second-order defect → prevention → evidence** for each high-risk animation mechanism.
 - [ ] Two failed code-only fixes trigger return to the earliest invalid design/geometry gate, not indefinite easing refinements.
 
 ### CTA-navigation specific acceptance (applies to the optional Screen 01 shortcut only)
+
+**Quality-director veto:** The current proposed Living Page visual direction must have an explicit camera/scale diagram, coherent physical material and lighting, an art-directed K2 half-open image, a recognizable Work view through the aperture, and a clean pixel-matched K4 exit. **A generic folded door, small framed screenshot or merely passing animation tests is grounds for rejecting D1 or D5.** Human founder sign-off is always required.
 
 - [ ] Click activation does not alter ordinary native-scroll `motion.js` state machine or make the cinematic path mandatory.
 - [ ] Motion feels like credible **fold → work preview → forward dive → real arrival**; the scene's light/evergreen/ivory material and central axis match Genezisi.
