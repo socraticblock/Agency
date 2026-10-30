@@ -23,8 +23,9 @@
 .living-dive .living-backdrop {
   position:absolute;
   inset:0;
-  background:
-    radial-gradient(ellipse 85% 85% at 47% 46%,#385540 0%,#203d2c 54%,#11271c 100%);
+  /* Match the destination's editorial paper; do not frame it as an
+     isolated miniature card against a dark tunnel. */
+  background:linear-gradient(115deg,#e6ded2 0%,#ece9de 45%,#f0ece5 100%);
 }
 /* Exactly the existing #work and its unchanged continuation cloned in place.
    The destination never becomes an invented portfolio or nested UI card. */
