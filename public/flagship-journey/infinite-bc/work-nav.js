@@ -132,12 +132,12 @@
     const w=window.innerWidth,h=window.innerHeight;
     const portrait=w<=740;
     const approach=smooth(.19,.92,progress);
-    const fold=smooth(.045,.83,progress);
+    const fold=smooth(.02,.90,progress);
     const swell=Math.pow(Math.max(0,Math.sin(Math.PI*fold)),.8);
     const segments=32;
     const dimension=portrait?h:w;
     const breadth=portrait?w:h;
-    const center=lerp(-.21,1.21,fold);
+    const center=lerp(-.15,1.18,fold);
     const lip=dimension*(portrait?.047:.075)*(0.65+1.05*swell);
     const contour=(t)=>{
       // Asymmetric, continuous crease: no rigid symmetric hinge and no
@@ -192,7 +192,18 @@
     world.rim.style.opacity=(.32*Math.sin(Math.PI*fold)).toFixed(3);
     // The original typographic composition remains legible while the crease
     // first responds. The ink retires before Work is substantially exposed.
-    world.ink.style.opacity=(1-smooth(.085,.255,progress)).toFixed(4);
+    world.ink.style.opacity=(1-smooth(.16,.32,progress)).toFixed(4);
+    // Content stays attached to the ORIGINAL cream material: the reveal
+    // cannot expose a lingering hero ghost over the arriving Work page.
+    // This clipping is only needed during the short content-retirement beat.
+    if(progress<.35){
+      const polygon=front.map(q=>q[0].toFixed(2)+'px '+q[1].toFixed(2)+'px');
+      polygon.push(portrait?w+'px '+h+'px':w+'px '+h+'px');
+      polygon.push(portrait?'0px '+h+'px':w+'px 0px');
+      world.ink.style.clipPath='polygon('+polygon.join(',')+')';
+    }else{
+      world.ink.style.display='none';
+    }
     // The stage takes over almost instantly from the real hero to its
     // measured full-layout print. No washed-out/blank cream anticipation.
     world.stage.style.opacity=smooth(.005,.075,progress).toFixed(4);
