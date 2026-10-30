@@ -69,7 +69,7 @@ For a **new signature interaction, structural redesign, or repeated visual failu
 
 ## Clicked Work shortcut — separate from native-scroll motion (30 October)
 
-The founder selected the **Folding Project Dive** (fold → reveal Work-facing preview → forward dive → actual `#work`) as a **creative hypothesis to prototype**, not a finished transition. First read [current Gate 1 brief](../../docs/infinite-website/GATE_1_VISUAL_FOUNDATION_2026-10-30.md). The original `work-nav.js` 680 ms root-snapshot fade/scale was replaced in the first 30 October isolated prototype by `work-dive.css` and a Web Animations folding/dive controller; the new effect remains **unverified in real browser video and unaccepted**. Preserve `motion.js` scroll choreography and `#work` fallback.
+The founder selected the **Folding Project Dive** (fold → reveal Work-facing preview → forward dive → actual `#work`) as a **creative hypothesis to prototype**, not a finished transition. First read [current Gate 1 brief](../../docs/infinite-website/GATE_1_VISUAL_FOUNDATION_2026-10-30.md). The original `work-nav.js` 680 ms root-snapshot fade/scale was replaced in the first 30 October isolated prototype by `work-dive.css` and a Web Animations folding/dive controller; the first iterations have since been **reviewed in founder-recorded browser video and remain visually unaccepted**. Preserve `motion.js` scroll choreography and `#work` fallback.
 
 For this clicked shortcut:
 - **Read the cinematic blueprint and pass D0–D3 before another full structural rewrite.** Source-level fixes already tried are failure evidence; do not continue to tweak the old half-width cloned-hero scene without a reviewed storyboard and animatic.
