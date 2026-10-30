@@ -1,13 +1,13 @@
-# Genezisi — Screen 01 Cinematic Blueprint / Folding Project Dive
+# Genezisi — Screen 01 Cinematic Blueprint / The Living Page
 
 **Prepared:** 30 October 2026  
-**State:** **Preproduction framework and written shot plan only.** The five high-fidelity storyboard images, timed animatic, camera/geometry proof, real-browser QA and founder visual approval **do not yet exist**. No authorization to silently rewrite the implementation.  
+**State (late 30 October):** Written preproduction workflow and earlier five-frame storyboard **candidate**, which has been **rejected as insufficiently distinctive**. A new high-fidelity **Living Page** storyboard, timed animatic, camera/geometry proof, real-browser QA and founder approval **do not yet exist**. No authorization to silently rewrite the implementation.  
 **Authority:** [North Star v1.2](./NORTH_STAR_v1.2.md), [Visitor Flow](./VISITOR_FLOW_v1.2.md) and [Acceptance Gates](./ACCEPTANCE_GATES_v1.2.md) govern. This is a narrower working blueprint, not a replacement for those documents or a new release gate.  
-**Related records:** [Gate 1 visual foundation](./GATE_1_VISUAL_FOUNDATION_2026-10-30.md) and [motion-review skill](../../skills/infinite-website-motion-review/SKILL.md).
+**Active creative treatment:** [The Living Page — creative direction, scale and director responsibilities](./SCREEN_01_LIVING_PAGE_CREATIVE_DIRECTION_2026-10-30.md). This supersedes the **older symmetric folding-door visual proposal**, not the studio North Star or the useful technical lessons. Read also the [Gate 1 visual foundation](./GATE_1_VISUAL_FOUNDATION_2026-10-30.md) and [motion-review skill](../../skills/infinite-website-motion-review/SKILL.md).
 
 ## 1. Problem statement — why we stop patching
 
-Founder recordings of the click transition revealed a repeated failure pattern: implementation-first changes produced split/enlarged hero lettering, mismatched cream geometry, thick green frames around a small flat portfolio screenshot, an unconvincing camera approach, and visible discontinuity at arrival. Adjusting timing alone cannot resolve inconsistent spatial construction. Video can establish perceptual issues, **not** precise dropped-frame counts.
+The founder has reviewed **multiple** real recordings and a preliminary five-frame storyboard candidate. The **generic twin-panel / tunnel storyboard was rejected** as below the desired visual quality. Recordings of the click transition revealed a repeated failure pattern: implementation-first changes produced split/enlarged hero lettering, mismatched cream geometry, thick green frames around a small flat portfolio screenshot, an unconvincing camera approach, and visible discontinuity at arrival. Adjusting timing alone cannot resolve inconsistent spatial construction. Video can establish perceptual issues, **not** precise dropped-frame counts.
 
 **New operating rule:** **Concept → high-fidelity storyboard → motion previsualization → technical feasibility proof → production → evidence-led acceptance.** No full effect implementation before the required design and motion checks pass. When a defect is structural, go back to the storyboard or spatial model rather than adding animation layers.
 
@@ -24,7 +24,7 @@ The studio seeks the *craft* of a highly bespoke cinematic website; the "$50,000
 
 ## 3. Intended finished experience (the audience-facing shot)
 
-> The visitor clicks **Explore our work**. The actual cream hero remains precisely where it was. Its typography retires elegantly as the architectural cream surface develops a subtle seam and opens. A recognizable glimpse of the existing Work layout appears behind it. The visitor advances *through* the aperture, with near architecture moving past faster than the distant destination. The Work layout expands to exact viewport alignment; the overlay disappears with **no detectable jump, flash, broken focus or delay**.
+> The visitor clicks **Explore our work**. The actual cream hero remains precisely where it was. Its typography retires elegantly as the *same cream editorial surface* develops a subtle **asymmetric fold**, acquiring believable material geometry. The destination appears **through** the opening rather than inside a green corridor. The visitor advances through the fold along one coherent camera axis; nearby cream material passes faster than the destination. The existing Work layout reaches exact viewport alignment; the overlay disappears with **no detectable jump, flash, broken focus or delay**.
 
 Desired visual feelings: **calm anticipation → physical reveal → momentum and depth → effortless arrival**. Epic by *continuity, weight, light, spatial causality and precision*, not screen-filling visual noise.
 
@@ -38,7 +38,7 @@ These are **art-direction instructions**, not completed storyboard artwork or au
 |---|---|---|---|
 | **K0 — Hero intact / intent** | Exact selected Option D hero, current readable headline and CTAs. One coherent on-screen source. | Overlay first frame has altered type scale, nav placement, layout, or color. | Pixel/composition comparison to real source hero on desktop and mobile. |
 | **K1 — Anticipation / retire** | Typography retires cleanly, cream background remains visually continuous, subtle seam and early shadow indicate the fold. | Text fragments stretch, rotate, become enormous, or vanish into a blank static cream slide. | Still and moving 0–early phase frames; explain content-retirement order. |
-| **K2 — Physical unfold / glimpse** | Cream *architectural surfaces*, not duplicate page screenshots, hinge away; believable edges, lighting, occlusion. Existing Work geometry is already recognizable within the opening. | Two giant doors, disconnected panels, deep green void, fake portfolio imagery, perspective mismatch. | Half-open desktop/mobile stills and a geometry diagram showing hinges/occluders. |
+| **K2 — Living Page unfold / glimpse** | One coherent cream *editorial surface* transforms asymmetrically into believable folds/facets or a justified curved bend; soft material shading and true overlap. Existing Work geometry is already recognizable through the opening. | Two giant symmetric doors, disconnected panels, deep green void, fake portfolio imagery, perspective mismatch. | Half-open desktop/mobile stills, camera/crease/occlusion diagram and proof that chosen renderer supports the intended bend. |
 | **K3 — Through the aperture** | One camera axis and material world. Near edge passes outside frame, distant Work grows through perspective, lighting changes with orientation. No arbitrary second tunnel stop. | Work reads as a flat mini webpage with thick nested frames; camera and surfaces move with inconsistent trajectories. | Annotated mid-flight frames (at least 25/50/75%) and motion animatic. |
 | **K4 — Work arrival** | Animated destination matches **existing** `#work` position and layout exactly; normal page is immediately usable. | Preview-to-real cut, vertical 15px jump, focus loss, back/forward/history break, overlay remains. | Pre-handoff and post-handoff adjacent screenshots, DOM/focus/history checks. |
 
@@ -48,9 +48,9 @@ These are **art-direction instructions**, not completed storyboard artwork or au
 
 Build a minimal **separate visual animatic/proof** before touching production CTA code again. Low-detail solids are acceptable *for motion testing*, but the art-direction storyboard must be polished enough to reveal whether the proposed composition is worth engineering.
 
-1. **One coordinate system:** define a common virtual camera, viewport framing, near/hinge planes, occluding architectural edges, Work destination plane and a shared forward axis. A CSS transform implementation can emulate the camera with an inverse world transform; a literal 3D engine is not required.
+1. **One coordinate system:** define a common virtual camera, viewport framing, near material/fold plane, crease or curvature field, occluding cream architectural edges, Work destination plane and a shared forward axis. A CSS transform implementation can emulate the camera with an inverse world transform; a literal 3D engine is not required.
 2. **One progression:** camera and objects sample the same normalized timeline; their relative positions follow the spatial model. A shared easing curve by itself is **not proof** of coherent 3D. Avoid arbitrary scales for every object.
-3. **One intact source:** do not duplicate full-width hero content into two half-width `overflow:hidden` planes that compute different typography/layout. Separate semantic real hero (stays interactive) and decorative material surfaces; retire content before it can warp.
+3. **One intact source:** do not duplicate full-width hero content into two half-width `overflow:hidden` planes that compute different typography/layout. Separate the semantic real hero (stays interactive) from decorative **Living Page material**; retire content without creating a blank cream hold, before it can warp.
 4. **One destination reference:** for Gate 1b use a noninteractive visual of the existing Work markup, not a redesigned gallery. Match its viewport geometry. The later real integration can update only the end-seam mechanism.
 5. **Depth evidence:** demonstrate meaningful near/far relative motion, correct occlusion and panel orientation at K2 and K3. A flat scale-up of the preview is not enough.
 6. **Resizing:** recalculate framing for desktop, 390px portrait, 320px narrow, and short viewports. Mobile may fold vertically or use a simpler aperture if the horizontal solution does not read physically; do **not** merely shrink desktop.
@@ -92,8 +92,8 @@ A **known missing input** is real production Work layout: do not pretend the Gat
 
 Before D4 implementation, fill:
 
-- **Approved treatment / storyboard ref:** pending.
-- **Founder-reviewed keyframes (desktop and portrait):** pending.
+- **Lead proposed creative treatment:** [The Living Page](./SCREEN_01_LIVING_PAGE_CREATIVE_DIRECTION_2026-10-30.md), not yet founder storyboard-accepted. **Earlier panel/portal D1 candidate is rejected**, not approved artwork.
+- **Founder-approved new Living Page keyframes (desktop and portrait):** pending; earlier storyboard candidate not accepted.
 - **Animatic file and tested duration:** pending.
 - **Viewport coordinates and camera/plane depth model:** pending.
 - **Typography retirement plan without cloned halves:** pending.
@@ -104,7 +104,7 @@ Before D4 implementation, fill:
 - **Exact current branch, baseline SHA, worktree status and rollback:** recheck at coding start.
 - **Out-of-scope:** Work redesign, Screens 02–04, narrative Gate 2, production merge/deployment.
 
-**Current status as of this written blueprint:** Prior implementations and founder videos are useful **failure evidence**, not approved storyboards or production-ready animatics. **Next action is D1 visual storyboard**, after confirming the D0 creative treatment, then D2 motion preview. Do not jump directly to another full CTA code rewrite.
+**Current status after the 30 October art-direction reset:** Prior implementations, founder videos and the rejected five-frame panel/portal board are **failure evidence**, not approved production visuals. The active lead treatment is **The Living Page**, defined separately with a creative-director role, camera/scale/material contract and predictive risk table. **Next action is a new D1 Living Page storyboard**, then founder review, followed by D2 motion previsualization only when D1 succeeds. Do not jump directly to another full CTA code rewrite.
 
 ## 9. Reuse for future screens
 
