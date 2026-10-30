@@ -1,0 +1,178 @@
+/* Genezisi / Gate 1b / Screen 01 — clicked Work shortcut only.
+   The underlying opening, native-scroll journey and true #work DOM are not modified.
+   All pieces are ephemeral, inert decorative replicas removed after the shortcut.
+   Do not extend this layer into the normal B → C scroll film. */
+
+.work-dive {
+  --dive-cream:#e6ded2;
+  --dive-evergreen:#173327;
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  height:100vh;
+  height:100dvh;
+  width:100%;
+  overflow:hidden;
+  isolation:isolate;
+  pointer-events:auto;
+  background:#10251b;
+  contain:layout paint style;
+}
+
+/* The real, unchanged #work section is copied into this perspective viewport:
+   the duplicate is decorative, with no focus, action or semantic identity. */
+.work-dive .dive-space {
+  position:absolute;
+  inset:0;
+  perspective:1250px;
+  perspective-origin:50% 49%;
+  transform-style:preserve-3d;
+  background:
+    linear-gradient(90deg,#0e2019 0%,#183b2a 28%,#234632 50%,#183b2a 72%,#0e2019 100%);
+}
+.work-dive .dive-space::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  opacity:.4;
+  pointer-events:none;
+  background:linear-gradient(90deg,transparent calc(25% - .5px),#a0bda027 25%,transparent calc(25% + .5px),transparent calc(75% - .5px),#a0bda027 75%,transparent calc(75% + .5px));
+}
+.work-dive .dive-frame {
+  position:absolute;
+  top:50%;
+  left:50%;
+  box-sizing:border-box;
+  border:1px solid #abc7af72;
+  background:transparent;
+  pointer-events:none;
+  will-change:transform,opacity;
+  box-shadow:inset 0 0 36px #c2dbc609,0 0 32px #070f091a;
+}
+.work-dive .dive-frame.outer {
+  width:92vw;
+  height:89dvh;
+}
+.work-dive .dive-frame.inner {
+  width:78vw;
+  height:78dvh;
+  border-color:#d2e0cc72;
+}
+.work-dive .dive-arrival {
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  color:#16251d;
+  background:#f0ece5;
+  transform-origin:50% 50%;
+  will-change:transform,opacity;
+  backface-visibility:hidden;
+  box-shadow:0 18px 100px #06130c95,0 0 0 1px #d6dfcc55;
+}
+.work-dive .dive-arrival .work-preview {
+  scroll-margin-top:0;
+}
+
+/* Matched-color hero prints form two actual 3D leaves. Their complete-width
+   content is clipped separately inside each half: readable hero letters part
+   *with* the cream surface instead of cross-fading as a second ghost page. */
+.work-dive .dive-doors {
+  position:absolute;
+  inset:0;
+  perspective:1250px;
+  perspective-origin:50% 49%;
+  transform-style:preserve-3d;
+  pointer-events:none;
+}
+.work-dive .dive-door {
+  position:absolute;
+  top:0;
+  height:100%;
+  width:50%;
+  transform-style:preserve-3d;
+  backface-visibility:hidden;
+  will-change:transform;
+}
+.work-dive .dive-door.left {
+  left:0;
+  transform-origin:0% 50%;
+}
+.work-dive .dive-door.right {
+  right:0;
+  transform-origin:100% 50%;
+}
+.work-dive .dive-door-face {
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  background:var(--dive-cream);
+  border:0;
+  backface-visibility:hidden;
+  box-shadow:inset 0 0 55px #17332705;
+}
+.work-dive .dive-door.left .dive-door-face {
+  border-right:1px solid #17332712;
+}
+.work-dive .dive-door.right .dive-door-face {
+  border-left:1px solid #17332712;
+}
+.work-dive .dive-door-edge {
+  position:absolute;
+  top:0;
+  bottom:0;
+  width:10px;
+  background:linear-gradient(90deg,#aeae9f,#f1eadd 32%,#637967);
+  box-shadow:0 0 30px #0b171359;
+  backface-visibility:hidden;
+}
+.work-dive .dive-door.left .dive-door-edge {
+  right:0;
+  transform:translateX(50%) rotateY(90deg);
+}
+.work-dive .dive-door.right .dive-door-edge {
+  left:0;
+  transform:translateX(-50%) rotateY(90deg);
+}
+.work-dive .dive-print {
+  position:absolute;
+  top:0;
+  width:200%;
+  height:100%;
+  overflow:hidden;
+  background:var(--dive-cream);
+  color:var(--dive-evergreen);
+  pointer-events:none;
+}
+.work-dive .dive-door.left .dive-print {left:0}
+.work-dive .dive-door.right .dive-print {left:-100%}
+.work-dive .dive-print .site-nav {
+  position:absolute;
+  inset:0 0 auto;
+  z-index:3;
+}
+.work-dive .dive-print .intro {
+  position:absolute;
+  z-index:2;
+  max-width:none;
+  margin:0;
+  transform:none!important;
+  text-align:center;
+}
+.work-dive .dive-print .intro .body {
+  margin-left:auto;
+  margin-right:auto;
+}
+.work-dive .dive-print .intro .actions {
+  justify-content:center;
+}
+.work-dive .dive-print .opening-foot {
+  position:absolute;
+}
+.work-dive .dive-print .site-nav a,
+.work-dive .dive-print .intro a {pointer-events:none}
+
+/* On the 320px layout, source visibility is mirrored in JavaScript from the
+   actual computed style, so its hidden footer cannot reappear in the replica. */
+@media (prefers-reduced-motion:reduce) {
+  .work-dive {display:none!important}
+}
