@@ -1,6 +1,7 @@
 /* Genezisi Infinite Website / Gate 1b B→C visual proof. No frameworks. */
 :root {
   --paper:#f1eee7;
+  --opening-paper:#e6ded2; /* Gate 1b Screen 01 / Option D: richer cream */
   --ink:#173327;
   --dark:#101f1a;
   --dark2:#0b1713;
@@ -148,7 +149,7 @@ a:focus-visible,button:focus-visible {
   min-height:100svh;
   position:relative;
   overflow:hidden;
-  background:var(--paper)
+  background:var(--opening-paper)
 }
 
 .scene::after {
@@ -197,7 +198,7 @@ a:focus-visible,button:focus-visible {
   font-size:10px;
   letter-spacing:.18em;
   font-weight:900;
-  color:#718671;
+  color:#6d816e;
   text-transform:uppercase;
   margin:0 0 42px
 }
@@ -215,13 +216,13 @@ a:focus-visible,button:focus-visible {
   font-family:Georgia,'Times New Roman',serif;
   font-weight:400;
   letter-spacing:-.08em;
-  color:#718b72
+  color:#6d816e
 }
 
 .intro .body {
   font-size:clamp(14px,1.27vw,19px);
   line-height:1.58;
-  color:#637765;
+  color:#586a5b;
   max-width:510px;
   margin:38px 0 0
 }
@@ -244,6 +245,11 @@ a:focus-visible,button:focus-visible {
   justify-content:space-between;
   gap:23px;
   border:1px solid #a8b6a5
+}
+
+/* Keep the Option D secondary CTA border local to the opening. */
+.opening .button:not(.primary) {
+  border-color:#a3b29f
 }
 
 .button.primary {
@@ -397,7 +403,7 @@ a:focus-visible,button:focus-visible {
   letter-spacing:.16em;
   font-size:9px;
   font-weight:800;
-  color:#728974
+  color:#6d816e
 }
 
 .opening-foot span:nth-child(2) {
