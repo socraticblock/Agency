@@ -82,7 +82,8 @@
 .living-dive .living-ink-layer .intro,
 .living-dive .living-ink-layer .opening-foot {
   position:absolute!important;
-  inset:auto!important;
+  right:auto!important;
+  bottom:auto!important;
   transform:none!important;
   margin:0!important;
   max-width:none!important;
