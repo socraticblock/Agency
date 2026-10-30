@@ -1358,25 +1358,3 @@ a:focus-visible,button:focus-visible {
 .site-nav .nav-cta:focus-visible span {
   transform:translate(2px,-2px)
 }
-
-/* Progressive-enhancement shortcut from the opening to Work.
-   This transition snapshots two real page positions instead of racing through
-   the 440svh scroll story. All other navigation remains a normal anchor. */
-@media (prefers-reduced-motion: no-preference) {
-  ::view-transition-old(root) {
-    animation:genezisi-work-forward-out 680ms cubic-bezier(.22,1,.36,1) both;
-    transform-origin:50% 50%
-  }
-  ::view-transition-new(root) {
-    animation:genezisi-work-forward-in 680ms cubic-bezier(.22,1,.36,1) both;
-    transform-origin:50% 50%
-  }
-}
-@keyframes genezisi-work-forward-out {
-  from {opacity:1;transform:scale(1)}
-  to {opacity:0;transform:scale(1.14)}
-}
-@keyframes genezisi-work-forward-in {
-  from {opacity:0;transform:scale(.98)}
-  to {opacity:1;transform:scale(1)}
-}
