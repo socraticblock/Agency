@@ -11,16 +11,18 @@ The founder-selected **future** Genezisi studio homepage is a continuous, native
 
 The studio's independently commissionable work is **Websites & digital experiences**, **Automation / workflow / integration / system engineering**, and **AI systems / assistants where useful**. Clients can request one service or a complete solution.
 
-**Project state (30 October 2026):** Gate 1a selection is complete; the Gate 1b centered opening → green B → architectural interior → centered C is an **isolated, still-unaccepted visual proof**. A separate Option D branch contains the warmer cream opening and simplified copy, and the first Folding Project Dive Work CTA prototype is now **coded but awaiting real-browser visual review**. Four-screen individual polish and end-to-end Gate 1b acceptance remain ahead. Full fictional story, genuine Next.js Selected Work integration and production are later, separately authorized gates. No `main` merge or production deployment is implied.
+**Project state (30 October 2026):** Gate 1a selection is complete; the Gate 1b centered opening → green B → architectural interior → centered C is an **isolated, still-unaccepted visual proof**. A separate Option D branch contains the warmer cream opening and simplified copy, and the earlier Folding Project Dive prototype **was coded and reviewed in founder videos but rejected visually**, and the first generic five-frame panel/portal storyboard candidate was also rejected. **The Living Page** is now the lead proposed Screen 01 CTA treatment; its new storyboard/animatic and founder visual acceptance are pending. Four-screen individual polish and end-to-end Gate 1b acceptance remain ahead. Full fictional story, genuine Next.js Selected Work integration and production are later, separately authorized gates. No `main` merge or production deployment is implied.
 
 ### Read before any homepage development
 
 1. [Current North Star v1.2](docs/infinite-website/NORTH_STAR_v1.2.md) — authoritative.
 2. [Full Visitor Flow v1.2](docs/infinite-website/VISITOR_FLOW_v1.2.md) — companion storyboard; proposed on-screen copy.
 3. [Acceptance Gates v1.2](docs/infinite-website/ACCEPTANCE_GATES_v1.2.md) — implementation, visual and release checkpoints.
-4. [Gate 1 visual foundation and CTA brief — 30 October](docs/infinite-website/GATE_1_VISUAL_FOUNDATION_2026-10-30.md) — current four-screen review and next motion concept.
-5. [Documentation map and audits](docs/README.md) — active/historical specs and other products.
-6. [Coding-agent instructions](AGENTS.md) — context boundaries and source-of-truth policy.
+4. [The Living Page — creative direction](docs/infinite-website/SCREEN_01_LIVING_PAGE_CREATIVE_DIRECTION_2026-10-30.md) — current Screen 01 shot, quality scale, creative-director responsibility and material/camera plan (not final acceptance).
+5. [Screen 01 Cinematic Blueprint](docs/infinite-website/SCREEN_01_CINEMATIC_BLUEPRINT_2026-10-30.md) — storyboard → animatic → feasibility → coding → QA workflow.
+6. [Gate 1 visual foundation and CTA history — 30 October](docs/infinite-website/GATE_1_VISUAL_FOUNDATION_2026-10-30.md) — current four-screen boundaries and earlier CTA experiments.
+7. [Documentation map and audits](docs/README.md) — active/historical specs and other products.
+8. [Coding-agent instructions](AGENTS.md) — context boundaries and source-of-truth policy.
 
 **Existing prototypes are not the site.** Previous flagship comparison routes and the draft B → C proof are isolated review artifacts. The current real homepage is assembled through `src/app/[locale]/page.tsx` and `src/app/[locale]/_components/SignalHeroPrototype.tsx`; inspect the current code and deployed route before modifying. Preserve authentic `SelectedWork`, locales, navigation and contact methods.
 
