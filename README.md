@@ -11,15 +11,16 @@ The founder-selected **future** Genezisi studio homepage is a continuous, native
 
 The studio's independently commissionable work is **Websites & digital experiences**, **Automation / workflow / integration / system engineering**, and **AI systems / assistants where useful**. Clients can request one service or a complete solution.
 
-**Project state (29 October 2026):** Gate 1a creative selection completed; Gate 1b isolated B → C proof exists but **new centered opening, full-depth polish, visual acceptance and real-app integration remain incomplete**. The narrative beyond Gate 1b is a planned later gate. No production release or `main` merge is authorized by these documents.
+**Project state (30 October 2026):** Gate 1a selection is complete; the Gate 1b centered opening → green B → architectural interior → centered C is an **isolated, still-unaccepted visual proof**. A separate Option D branch contains the warmer cream opening and simplified copy, while its Folding Project Dive Work CTA is a **selected concept awaiting prototype/visual review**. Four-screen individual polish and end-to-end Gate 1b acceptance remain ahead. Full fictional story, genuine Next.js Selected Work integration and production are later, separately authorized gates. No `main` merge or production deployment is implied.
 
 ### Read before any homepage development
 
 1. [Current North Star v1.2](docs/infinite-website/NORTH_STAR_v1.2.md) — authoritative.
 2. [Full Visitor Flow v1.2](docs/infinite-website/VISITOR_FLOW_v1.2.md) — companion storyboard; proposed on-screen copy.
 3. [Acceptance Gates v1.2](docs/infinite-website/ACCEPTANCE_GATES_v1.2.md) — implementation, visual and release checkpoints.
-4. [Documentation map and legacy audit](docs/README.md) — historical specs and other products.
-5. [Coding-agent instructions](AGENTS.md) — context boundaries and source-of-truth policy.
+4. [Gate 1 visual foundation and CTA brief — 30 October](docs/infinite-website/GATE_1_VISUAL_FOUNDATION_2026-10-30.md) — current four-screen review and next motion concept.
+5. [Documentation map and audits](docs/README.md) — active/historical specs and other products.
+6. [Coding-agent instructions](AGENTS.md) — context boundaries and source-of-truth policy.
 
 **Existing prototypes are not the site.** Previous flagship comparison routes and the draft B → C proof are isolated review artifacts. The current real homepage is assembled through `src/app/[locale]/page.tsx` and `src/app/[locale]/_components/SignalHeroPrototype.tsx`; inspect the current code and deployed route before modifying. Preserve authentic `SelectedWork`, locales, navigation and contact methods.
 
