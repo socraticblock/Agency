@@ -8,9 +8,9 @@
 2. **[North Star v1.2](infinite-website/NORTH_STAR_v1.2.md)** — controlling vision, business positioning, implementation boundaries.
 3. **[Full visitor flow](infinite-website/VISITOR_FLOW_v1.2.md)** — detailed proposed centered B → C storyboard.
 4. **[Acceptance gates](infinite-website/ACCEPTANCE_GATES_v1.2.md)** — each gate's proof and founder sign-off requirements.
-5. **[30 October documentation audit and reconciliation](DOCUMENTATION_AUDIT_2026-10-30.md)** — current Screen 01/CTA decisions and provenance, supplementing the [29 October full audit](DOCUMENTATION_AUDIT_2026-10-29.md). — full disposition of legacy documents and editor rules.
+5. **[30 October documentation audit and reconciliation](DOCUMENTATION_AUDIT_2026-10-30.md)** — current Screen 01/CTA decisions and provenance, supplementing the [29 October full legacy-document audit](DOCUMENTATION_AUDIT_2026-10-29.md).
 6. **[Repository agent instructions](../AGENTS.md)** — work routing for Codex and other coding agents.
-7. **[Current Gate 1 visual foundation and CTA brief](infinite-website/GATE_1_VISUAL_FOUNDATION_2026-10-30.md)** — active four-screen refinement, Option D decisions and next click-transition prototype; [29 October handoff](infinite-website/HANDOFF_2026-10-29.md) remains a dated status snapshot.
+7. **[Current Gate 1 visual foundation and CTA brief](infinite-website/GATE_1_VISUAL_FOUNDATION_2026-10-30.md)** — four-screen refinement, Option D decisions and recorded CTA experiments; next step follows the separate cinematic blueprint; [29 October handoff](infinite-website/HANDOFF_2026-10-29.md) remains a dated status snapshot.
 8. **[Screen 01 Cinematic Blueprint](infinite-website/SCREEN_01_CINEMATIC_BLUEPRINT_2026-10-30.md)** — written five-keyframe shot plan and storyboard/animatic/feasibility gates before more CTA animation coding.
 9. **[29 October motion lessons](infinite-website/LESSONS_2026-10-29.md)** — defects, solutions, reusable QA.
 10. **[Repository-local motion-review skill](../skills/infinite-website-motion-review/SKILL.md)** — repeatable review/coding procedure, subordinated to the North Star.
