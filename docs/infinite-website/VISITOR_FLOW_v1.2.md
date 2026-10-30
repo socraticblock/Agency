@@ -15,7 +15,7 @@
 2. **ACT II — Discover the engineering:** A planned process → one fictional enquiry → ordinary automation → connected systems → useful AI interpretation → permitted availability → prepared reply and an appropriate human approval gate.
 3. **ACT III — Discover the studio:** Spatial structure folds forward into centered C → normal scrolling into actual Selected Work → clear individual services → working approach, studio and contact.
 
-These are conceptual moments, **not individual compulsory screens**. Native scroll drives one continuous, reversible journey. No forced waiting, autoplay, fake backend, or scroll interception.
+These are conceptual moments, **not individual compulsory screens**. The four Gate 1b **visual review compositions** (Opening, Green B, Architectural Interior, Centered C) are separate from these conceptual narrative beats. Native scroll drives one continuous, reversible journey. No forced waiting, autoplay, fake backend, or scroll interception.
 
 ---
 
@@ -26,9 +26,13 @@ These are conceptual moments, **not individual compulsory screens**. Native scro
 **What the visitor sees:** The genuine Genezisi brand, restrained warm paper background, generous negative space and a central headline. No right-hand interface card initially. Real navigation remains available on the first frame.
 
 **Headline (retained):** “Your website is only the beginning.”  
-**Proposed supporting copy:** “We build distinctive websites, dependable workflows and practical AI systems. Each works on its own—or together.”  
+**Selected Screen 01 supporting copy (30 October; language polish pending):** “We build websites, create AI systems, and automate everyday tasks. You can choose one service or combine them.”  
+**Eyebrow:** “DIGITAL SOLUTIONS STUDIO.”  
+**Selected opening palette:** Option D cream `#E6DED2` with deep evergreen `#173327`. This is the opening only; later scenes' exact values remain subject to visual approval.  
 **Visible service identifiers:** Websites · Automation · AI systems.  
-**Real controls:** Explore our work → real `#work`; Start a project → real contact; Services → real `#capabilities` or service anchor.  
+**Real controls:** Explore our work → real `#work`; Start a project → real contact; Services → real `#capabilities` or service anchor.
+
+**Optional click shortcut, distinct from native-scroll story (30 October concept, NOT coded/approved):** A short *Folding Project Dive* may fold the opening to expose an authentic Work preview, then travel forward to the actual `#work` destination. It must not replay scenes 01–13, make the user wait through a corridor, invent portfolio work or replace direct navigation. For Gate 1b this can reach only the explicitly labeled static Work preview; the real Next.js component is Gate 3. Source/acceptance: [Gate 1 visual foundation](./GATE_1_VISUAL_FOUNDATION_2026-10-30.md).  
 **Subtle invitation:** “Scroll to see what lies behind the experience.”
 
 **Meaning:** A polished studio that designs and engineers useful systems. The page still works commercially when motion is unavailable or skipped.
