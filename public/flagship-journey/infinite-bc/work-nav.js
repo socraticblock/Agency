@@ -1,199 +1,220 @@
-/* Gate 1b / Screen 01 — Folding Project Dive (founder concept C + D).
- * A clicked, optional, lightweight 3D visual shortcut; NOT the native-scroll film.
- * Source page remains real, linked and reversible. Decorative replicas are inert.
- * The #work proof here is a labeled mirror; true SelectedWork belongs to Gate 3. */
+/* GENEZISI / Screen 01 — The Living Page (isolated clicked CTA).
+ * The actual opening, scroll film and Work remain untouched. The temporary
+ * visual layer has ONE asymmetrically curling ivory surface; not two copies
+ * of the hero, two doors, a framed tunnel, or a different portfolio.
+ *
+ * Spatial art direction derives from an independent D1/D2 previsualization.
+ * CSS/SVG 2.5D is a deliberate lightweight first engineering proof:
+ * do not claim this is real nonrigid 3D geometry or final visual acceptance.
+ */
 (() => {
   'use strict';
-
-  const link=document.querySelector('.opening .actions a[href="#work"]');
-  const destination=document.getElementById('work');
+  const trigger=document.querySelector('.opening .actions a[href="#work"]');
+  const target=document.getElementById('work');
   const journey=document.getElementById('journey');
-  const sourceIntro=document.querySelector('.opening .intro');
-  const sourceHeader=document.getElementById('siteNav');
-  const sourceFoot=document.querySelector('.opening-foot');
-  if(!link || !destination || !journey || !sourceIntro || !sourceHeader || !sourceFoot)return;
+  if(!trigger || !target || !journey)return;
 
-  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
-  const DURATION=1120; // Screen 01 visual hypothesis; tune after full-route footage.
-  let active=null;
+  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+  const NS='http://www.w3.org/2000/svg';
+  const DURATION=1180; // Hypothesis to tune against the founder's real recording.
+  let running=null;
 
-  // Clones are artwork: never duplicate document identities, navigation, or focus.
-  const decorative=(element)=>{
-    const copy=element.cloneNode(true);
-    copy.setAttribute('aria-hidden','true');
-    copy.inert=true;
-    for(const node of [copy,...copy.querySelectorAll('*')]){
+  const clamp=(n)=>Math.max(0,Math.min(1,n));
+  const smooth=(a,b,n)=>{
+    const t=clamp((n-a)/(b-a));
+    return t*t*(3-2*t);
+  };
+  const lerp=(a,b,t)=>a+(b-a)*t;
+  const svgNode=(name,attrs={})=>{
+    const node=document.createElementNS(NS,name);
+    for(const [k,v] of Object.entries(attrs))node.setAttribute(k,String(v));
+    return node;
+  };
+  const cloneArt=(element)=>{
+    const clone=element.cloneNode(true);
+    clone.setAttribute('aria-hidden','true');
+    clone.inert=true;
+    for(const node of clone.querySelectorAll('*')){
       node.removeAttribute('id');
       node.removeAttribute('aria-labelledby');
       node.removeAttribute('aria-describedby');
       if(node.matches('a,button,input,select,textarea,[tabindex]'))node.tabIndex=-1;
     }
-    return copy;
+    clone.removeAttribute('id');
+    clone.removeAttribute('aria-labelledby');
+    clone.removeAttribute('aria-describedby');
+    return clone;
   };
 
-  const metricStyle=(original,copy)=>{
-    if(!original || !copy)return;
-    const computed=window.getComputedStyle(original);
-    for(const key of ['fontSize','fontFamily','fontWeight','lineHeight','letterSpacing',
-      'textAlign','color','marginTop','marginBottom','paddingTop','paddingBottom',
-      'maxWidth','gap','justifyContent','minHeight','borderColor','backgroundColor']){
-      copy.style[key]=computed[key];
-    }
-  };
-
-  // The 2D hero print is laid out from the *actual rendered DOM rectangles*.
-  // This permits a convincing page split while keeping the real DOM untouched.
-  const makeHeroPrint=()=>{
-    const print=document.createElement('div');
-    print.className='dive-print';
-
-    const nav=decorative(sourceHeader);
-    metricStyle(sourceHeader,nav);
-    const originalNavButton=sourceHeader.querySelector('.nav-cta');
-    const copyNavButton=nav.querySelector('.nav-cta');
-    metricStyle(originalNavButton,copyNavButton);
-    print.appendChild(nav);
-
-    const bounds=sourceIntro.getBoundingClientRect();
-    const intro=decorative(sourceIntro);
-    intro.style.position='absolute';
-    intro.style.top=`${bounds.top}px`;
-    intro.style.left=`${bounds.left}px`;
-    intro.style.width=`${bounds.width}px`;
-    intro.style.height=`${bounds.height}px`;
-    intro.style.maxWidth='none';
-    intro.style.transform='none';
-    metricStyle(sourceIntro,intro);
-    for(const selector of ['.eyebrow','h1','h1 em','.body','.actions',
-      '.button.primary','.button:not(.primary)','.button.primary span','.button:not(.primary) span']){
-      metricStyle(sourceIntro.querySelector(selector),intro.querySelector(selector));
-    }
-    // Entrance CSS gives this centered hero layout inside .journey only.
-    intro.style.textAlign=window.getComputedStyle(sourceIntro).textAlign;
-    const body=intro.querySelector('.body');
-    const actions=intro.querySelector('.actions');
-    if(body){body.style.marginLeft='auto';body.style.marginRight='auto';}
-    if(actions)actions.style.justifyContent='center';
-    print.appendChild(intro);
-
-    const foot=decorative(sourceFoot);
-    metricStyle(sourceFoot,foot);
-    foot.style.display=window.getComputedStyle(sourceFoot).display;
-    print.appendChild(foot);
-    return print;
-  };
-
-  const makeStage=()=>{
+  function createVisuals(){
     const stage=document.createElement('div');
-    stage.className='work-dive';
+    stage.className='living-dive';
     stage.setAttribute('aria-hidden','true');
-    // The visual copies are inert, but the stage itself can receive a tap to
-    // immediately finish the journey rather than trapping the visitor.
 
     const backdrop=document.createElement('div');
-    backdrop.className='dive-backdrop';
-    const radiance=document.createElement('div');
-    radiance.className='dive-radiance';
-    const space=document.createElement('div');
-    space.className='dive-space';
+    backdrop.className='living-backdrop';
     const arrival=document.createElement('div');
-    arrival.className='dive-arrival';
-    const outer=document.createElement('div');
-    outer.className='dive-frame outer';
-    const inner=document.createElement('div');
-    inner.className='dive-frame inner';
-    const wallLeft=document.createElement('div');
-    wallLeft.className='dive-wall left';
-    const wallRight=document.createElement('div');
-    wallRight.className='dive-wall right';
-
-    // A precise visual copy of the REAL destination, not invented sample projects.
-    const work=decorative(destination);
+    arrival.className='living-destination';
+    const work=cloneArt(target);
     work.style.scrollMarginTop='0';
     arrival.appendChild(work);
-    // Only the existing #work preview is used; its contents/layout are
-    // not modified, and there is no design work on the Work section here.
-    space.append(arrival,outer,inner,wallLeft,wallRight);
+    // The original Work can be shorter than the viewport. Copy its existing
+    // immediate continuation only so the final painted viewport matches.
+    const following=target.nextElementSibling;
+    if(following && following.classList.contains('work-preview'))
+      arrival.appendChild(cloneArt(following));
 
-    const doors=document.createElement('div');
-    doors.className='dive-doors';
-    const doorNodes=[];
-    for(const side of ['left','right']){
-      const door=document.createElement('div');
-      door.className=`dive-door ${side}`;
-      const face=document.createElement('div');
-      face.className='dive-door-face';
-      face.appendChild(makeHeroPrint());
-      const edge=document.createElement('div');
-      edge.className='dive-door-edge';
-      door.append(face,edge);
-      doors.appendChild(door);
-      doorNodes.push(door);
-    }
-    stage.append(backdrop,radiance,space,doors);
+    const art=svgNode('svg',{
+      class:'living-surface',xmlns:NS,
+      'aria-hidden':'true',preserveAspectRatio:'none'
+    });
+    const defs=svgNode('defs');
+    const lipGradient=svgNode('linearGradient',{
+      id:'living-page-lip',x1:'0%',y1:'0%',x2:'100%',y2:'0%'
+    });
+    for(const [offset,color] of [
+      ['0%','#516b52'],['15%','#b2ac97'],['32%','#f5ebd8'],
+      ['56%','#d8c6ad'],['78%','#fcf4e6'],['100%','#e6ded2']
+    ])lipGradient.appendChild(svgNode('stop',{offset,'stop-color':color}));
+    defs.appendChild(lipGradient);
+    const shadow=svgNode('path',{class:'living-shadow'});
+    const contact=svgNode('path',{class:'living-contact'});
+    const underside=svgNode('path',{fill:'url(#living-page-lip)'});
+    const paper=svgNode('path',{fill:'#e6ded2'});
+    const crease=svgNode('path',{class:'living-crease'});
+    art.append(defs,shadow,contact,underside,paper,crease);
+
+    const rim=document.createElement('div');
+    rim.className='living-rim';
+    stage.append(backdrop,arrival,art,rim);
     document.body.appendChild(stage);
-    return {stage,radiance,arrival,outer,inner,wallLeft,wallRight,
-      left:doorNodes[0],right:doorNodes[1]};
-  };
+    return {stage,arrival,art,shadow,contact,underside,paper,crease,rim,lipGradient};
+  }
 
-  const goToWork=()=>{
-    // The replicated arrival starts at viewport y=0. Ignore the ordinary
-    // Work anchor's 15px scroll-margin here so the final painted pixels line
-    // up with the real #work view instead of jumping at cleanup.
-    const exactTop=window.scrollY+destination.getBoundingClientRect().top;
+  // One material geometry function drives the uncovered Work boundary,
+  // shaded underside, physical crease and contact shadow in both orientations.
+  // 32 samples are enough for a clean quadratic-like line, without a GPU-heavy
+  // canvas renderer or independent per-object animation engines.
+  function draw(world,progress){
+    const w=window.innerWidth,h=window.innerHeight;
+    const portrait=w<=740;
+    const approach=smooth(.19,.92,progress);
+    const fold=smooth(.045,.83,progress);
+    const swell=Math.pow(Math.max(0,Math.sin(Math.PI*fold)),.8);
+    const segments=32;
+    const dimension=portrait?h:w;
+    const breadth=portrait?w:h;
+    const center=lerp(-.21,1.21,fold);
+    const lip=dimension*(portrait?.047:.075)*(0.65+1.05*swell);
+    const contour=(t)=>{
+      // Asymmetric, continuous crease: no rigid symmetric hinge and no
+      // viewport-size duplicate typography that can change its layout.
+      const curve=(.069*Math.sin(Math.PI*(1.12*t+.15))+
+        .018*Math.sin(3*Math.PI*t+.23)+.032*(t-.5))*swell;
+      return dimension*(center+curve);
+    };
+
+    const front=[],back=[];
+    for(let i=0;i<=segments;i++){
+      const t=i/segments;
+      const cross=contour(t);
+      const other=t*breadth;
+      front.push(portrait?[other,cross]:[cross,other]);
+      // A rolled lip extends into the revealed side of the same paper.
+      const offset=lip*(.88+.12*Math.cos(t*Math.PI*2));
+      back.push(portrait?[other,cross-offset]:[cross-offset,other]);
+    }
+    const coords=points=>points.map((q,i)=>
+      (i===0?'M':'L')+q[0].toFixed(2)+' '+q[1].toFixed(2)).join(' ');
+    const seam=coords(front);
+    const sheet=seam+(portrait?' L '+w+' '+h+' L 0 '+h+' Z':
+      ' L '+w+' '+h+' L '+w+' 0 Z');
+    const ribbon=coords(back)+' '+front.slice().reverse()
+      .map(q=>'L'+q[0].toFixed(2)+' '+q[1].toFixed(2)).join(' ')+' Z';
+
+    world.art.setAttribute('viewBox','0 0 '+w+' '+h);
+    world.paper.setAttribute('d',sheet);
+    world.underside.setAttribute('d',ribbon);
+    world.crease.setAttribute('d',seam);
+    world.shadow.setAttribute('d',seam);
+    world.contact.setAttribute('d',seam);
+    world.contact.setAttribute('stroke-width',Math.max(7,dimension*.018).toFixed(1));
+    world.contact.setAttribute('stroke-opacity',(.20*swell).toFixed(3));
+    world.shadow.setAttribute('stroke-width',Math.max(2,dimension*.006).toFixed(1));
+    world.shadow.setAttribute('opacity',swell.toFixed(3));
+    world.crease.setAttribute('opacity',(.60*swell).toFixed(3));
+    world.underside.setAttribute('opacity',(.90*swell).toFixed(3));
+    if(portrait){
+      world.lipGradient.setAttribute('x2','0%');
+      world.lipGradient.setAttribute('y2','100%');
+    }else{
+      world.lipGradient.setAttribute('x2','100%');
+      world.lipGradient.setAttribute('y2','0%');
+    }
+
+    // Advance the existing Work plane just enough to convey forward
+    // movement without becoming a tiny screenshot in a tunnel.
+    const scale=lerp(portrait?.91:.87,1,approach);
+    world.arrival.style.transform='translate3d(0,0,0) scale('+scale.toFixed(5)+')';
+    world.rim.style.opacity=(.32*Math.sin(Math.PI*fold)).toFixed(3);
+    // At frame zero the real, interactive hero is completely unchanged;
+    // by the time its text retires the cream surface has begun to open.
+    world.stage.style.opacity=smooth(.065,.22,progress).toFixed(4);
+  }
+
+  const navigate=()=>{
+    // Scroll to the exact top of the current, untouched #work; an ordinary
+    // fragment navigation includes its 15px scroll-margin and would jump.
+    const y=window.scrollY+target.getBoundingClientRect().top;
     if(window.location.hash!=='#work')window.location.hash='work';
-    if(Number.isFinite(exactTop))window.scrollTo(0,Math.max(0,exactTop));
-    else destination.scrollIntoView({behavior:'auto',block:'start'});
+    if(Number.isFinite(y))window.scrollTo(0,Math.max(0,y));
+    else target.scrollIntoView({behavior:'auto',block:'start'});
   };
 
-  link.addEventListener('click',(event)=>{
-    // Keep native fragment behavior for modified clicks, reduced motion,
-    // static/no-JS, unsupported animations and all non-hero Work links.
+  trigger.addEventListener('click',(event)=>{
     if(event.defaultPrevented || event.button!==0 ||
-      event.metaKey || event.ctrlKey || event.shiftKey || event.altKey ||
-      reduce.matches || journey.dataset.mode!=='motion' ||
-      typeof Element.prototype.animate!=='function')return;
-    if(active){event.preventDefault();active.complete();return;}
-
+       event.metaKey || event.ctrlKey || event.altKey || event.shiftKey ||
+       reduced.matches || journey.dataset.mode!=='motion' ||
+       typeof window.requestAnimationFrame!=='function')return;
     event.preventDefault();
-    const keyboardActivated=event.detail===0;
-    let visuals;
-    try {
-      visuals=makeStage();
-      // Do not run an invisible overlay if the isolated visual stylesheet
-      // failed to load in this browser/environment.
-      if(window.getComputedStyle(visuals.stage).position!=='fixed')throw Error('dive stylesheet unavailable');
-    }catch(_error){visuals?.stage.remove();goToWork();return;}
+    if(running){running.finish();return;}
 
-    let committed=false;
-    let finished=false;
-    const animations=[];
+    const keyboard=event.detail===0;
+    let world;
+    try {
+      world=createVisuals();
+      if(window.getComputedStyle(world.stage).position!=='fixed')
+        throw new Error('living transition CSS unavailable');
+    }catch(_error){
+      if(world)world.stage.remove();
+      navigate();return;
+    }
+    let done=false,frame=0,started=0;
+    const removeListeners=()=>{
+      window.removeEventListener('wheel',onInterrupt);
+      window.removeEventListener('touchstart',onInterrupt);
+      window.removeEventListener('keydown',onKey);
+      window.removeEventListener('popstate',onPop);
+      window.removeEventListener('hashchange',onHash);
+      window.removeEventListener('pagehide',onPop);
+      window.removeEventListener('resize',onResize);
+      document.removeEventListener('visibilitychange',onHidden);
+      if(reduced.removeEventListener)reduced.removeEventListener('change',onReduced);
+    };
     const cleanup=()=>{
-      if(finished)return;
-      finished=true;
-      for(const animation of animations)animation.cancel();
-      visuals.stage.remove();
-      window.removeEventListener('wheel',interrupt);
-      window.removeEventListener('touchstart',interrupt);
-      window.removeEventListener('keydown',onKeydown);
-      window.removeEventListener('popstate',onPopstate);
-      window.removeEventListener('hashchange',onHashchange);
-      window.removeEventListener('pagehide',onPagehide);
-      document.removeEventListener('visibilitychange',onVisibility);
-      if(reduce.removeEventListener)reduce.removeEventListener('change',onMotionPreference);
-      active=null;
+      if(done)return;
+      done=true;
+      if(frame)window.cancelAnimationFrame(frame);
+      removeListeners();
+      world.stage.remove();
+      running=null;
     };
-    const commit=()=>{
-      if(committed)return;
-      committed=true;
-      goToWork();
-    };
-    const complete=()=>{
-      if(finished)return;
-      try{commit();}finally{
+    const finish=()=>{
+      if(done)return;
+      try{navigate();}finally{
         cleanup();
-        if(keyboardActivated){
-          const heading=destination.querySelector('h2');
+        if(keyboard){
+          const heading=target.querySelector('h2');
           if(heading){
             heading.tabIndex=-1;
             heading.focus({preventScroll:true});
@@ -201,137 +222,41 @@
         }
       }
     };
-    const interrupt=()=>complete();
-    const onKeydown=(event)=>{
-      if(['Escape','Tab','Enter',' ','ArrowDown','ArrowUp','PageDown','PageUp'].includes(event.key))complete();
+    const onInterrupt=()=>finish();
+    const onKey=(e)=>{
+      if(['Escape','Tab','Enter',' ','ArrowUp','ArrowDown','PageUp','PageDown'].includes(e.key))
+        finish();
     };
-    // Navigation elsewhere should win; never force the visitor back to Work.
-    const onPopstate=()=>cleanup();
-    const onHashchange=()=>{if(!committed && window.location.hash!=='#work')cleanup();};
-    const onPagehide=()=>cleanup();
-    const onVisibility=()=>{if(document.hidden)complete();};
-    const onMotionPreference=()=>{if(reduce.matches)complete();};
-    active={complete};
-    visuals.stage.addEventListener('click',complete);
+    const onPop=()=>cleanup(); // never override history navigation
+    const onHash=()=>{if(window.location.hash && window.location.hash!=='#work')cleanup();};
+    const onHidden=()=>{if(document.hidden)finish();};
+    const onReduced=()=>{if(reduced.matches)finish();};
+    const onResize=()=>{if(!done)draw(world,clamp((performance.now()-started)/DURATION));};
+    running={finish};
+    world.stage.addEventListener('click',finish);
+    window.addEventListener('wheel',onInterrupt,{passive:true});
+    window.addEventListener('touchstart',onInterrupt,{passive:true});
+    window.addEventListener('keydown',onKey);
+    window.addEventListener('popstate',onPop);
+    window.addEventListener('hashchange',onHash);
+    window.addEventListener('pagehide',onPop);
+    window.addEventListener('resize',onResize);
+    document.addEventListener('visibilitychange',onHidden);
+    if(reduced.addEventListener)reduced.addEventListener('change',onReduced);
 
-    const play=(node,frames,options={})=>{
-      const animation=node.animate(frames,{
-        duration:DURATION,
-        fill:'both',
-        easing:'linear',
-        ...options
-      });
-      animations.push(animation);
-      return animation;
+    const animate=(stamp)=>{
+      if(done)return;
+      if(!started)started=stamp;
+      const p=clamp((stamp-started)/DURATION);
+      try{
+        draw(world,p);
+        if(p>=1){finish();return;}
+        frame=window.requestAnimationFrame(animate);
+      }catch(_error){finish();}
     };
-
-    try{
-      // Every moving surface samples ONE smooth progression. The previous
-      // staggered per-keyframe easings caused mismatched velocities: typography
-      // bent around huge doors while heavy green frames raced past a static card.
-      // The samples are computed once; the browser compositor runs the motion.
-      const clamp01=(value)=>Math.max(0,Math.min(1,value));
-      const smooth=(value)=>{
-        const t=clamp01(value);
-        return t*t*(3-2*t);
-      };
-      const phase=(progress,start,end)=>smooth((progress-start)/(end-start));
-      const framesFor=(sample)=>{
-        const frames=[];
-        for(let i=0;i<=32;i++){
-          const p=i/32;
-          frames.push({offset:p,...sample(p)});
-        }
-        return frames;
-      };
-      const fixed=(value)=>Number(value.toFixed(3));
-
-      const left=play(visuals.left,framesFor((p)=>{
-        const opening=phase(p,.07,.62);
-        const travel=phase(p,.28,.86);
-        return {transform:`translate3d(${fixed(-16*travel)}%,0,${fixed(65*travel)}px) rotateY(${fixed(-106*opening)}deg)`};
-      }));
-      const right=play(visuals.right,framesFor((p)=>{
-        const opening=phase(p,.07,.62);
-        const travel=phase(p,.28,.86);
-        return {transform:`translate3d(${fixed(16*travel)}%,0,${fixed(65*travel)}px) rotateY(${fixed(106*opening)}deg)`};
-      }));
-
-      // As the page physically folds, its printed typography disappears WITH
-      // the surface; avoid enlarged, warped chunks of headline at the sides.
-      for(const print of visuals.stage.querySelectorAll('.dive-print')){
-        play(print,framesFor((p)=>({opacity:fixed(1-phase(p,.18,.49))})));
-      }
-
-      // From the first opening slit the existing Work section is already
-      // visible. It then approaches in perspective without a premature cut.
-      // The backdrop is painted behind the Work plane, never over it.
-      const arrivalMotion=play(visuals.arrival,framesFor((p)=>{
-        const travel=phase(p,.24,.9);
-        return {
-          transform:`translate3d(0,0,${fixed(-110*(1-travel))}px) scale(${fixed(.38+.62*travel)})`
-        };
-      }));
-
-      // Light spills softly from behind the folding material, cresting as
-      // the opening becomes legible; it does not read as a neon tunnel.
-      play(visuals.radiance,framesFor((p)=>{
-        const light=Math.sin(Math.PI*phase(p,.1,.88));
-        const travel=phase(p,.24,.9);
-        return {opacity:fixed(.5*light),transform:`scale(${fixed(.86+.28*travel)})`};
-      }));
-
-      // Restrained site-derived architectural lines move past at different
-      // depths, with much lower contrast than the actual Work destination.
-      play(visuals.outer,framesFor((p)=>{
-        const rush=phase(p,.25,.83);
-        return {
-          transform:`translate(-50%,-50%) scale(${fixed(.72+2.22*rush)})`,
-          opacity:fixed(.56*(1-phase(p,.42,.79)))
-        };
-      }));
-      play(visuals.inner,framesFor((p)=>{
-        const rush=phase(p,.31,.85);
-        return {
-          transform:`translate(-50%,-50%) scale(${fixed(.53+2.04*rush)})`,
-          opacity:fixed(.25*(1-phase(p,.43,.77)))
-        };
-      }));
-      play(visuals.wallLeft,framesFor((p)=>{
-        const rush=phase(p,.23,.82);
-        return {
-          transform:`translate3d(${fixed(-135*rush)}%,0,0) rotateY(${fixed(15+9*rush)}deg) scale(${fixed(1+.28*rush)})`,
-          opacity:fixed(.78*(1-phase(p,.37,.81)))
-        };
-      }));
-      play(visuals.wallRight,framesFor((p)=>{
-        const rush=phase(p,.23,.82);
-        return {
-          transform:`translate3d(${fixed(135*rush)}%,0,0) rotateY(${fixed(-15-9*rush)}deg) scale(${fixed(1+.28*rush)})`,
-          opacity:fixed(.78*(1-phase(p,.37,.81)))
-        };
-      }));
-
-      // Move the underlying document only when the Work copy fills the view;
-      // the last tenth is a 1:1 pixel handoff, with the layer still present.
-      const cue=visuals.stage.animate(
-        [{opacity:1},{opacity:1}],
-        {duration:DURATION*.92,fill:'both'}
-      );
-      animations.push(cue);
-      cue.finished.then(()=>{if(!finished)commit();}).catch(()=>{});
-      arrivalMotion.finished.then(()=>complete()).catch(()=>{});
-      window.addEventListener('wheel',interrupt,{passive:true});
-      window.addEventListener('touchstart',interrupt,{passive:true});
-      window.addEventListener('keydown',onKeydown);
-      window.addEventListener('popstate',onPopstate);
-      window.addEventListener('hashchange',onHashchange);
-      window.addEventListener('pagehide',onPagehide);
-      document.addEventListener('visibilitychange',onVisibility);
-      if(reduce.addEventListener)reduce.addEventListener('change',onMotionPreference);
-    }catch(_error){
-      // Animation failure must never strand the click in a noninteractive layer.
-      complete();
-    }
+    try {
+      draw(world,0);
+      frame=window.requestAnimationFrame(animate);
+    }catch(_error){finish();}
   });
 })();
