@@ -272,14 +272,14 @@
       play(visuals.outer,[
         {offset:0,transform:'translate(-50%,-50%) scale(.62)',opacity:.95,easing:'ease-out'},
         {offset:.34,transform:'translate(-50%,-50%) scale(.74)',opacity:.95,easing:'cubic-bezier(.22,.7,.19,1)'},
-        {offset:.66,transform:'translate(-50%,-50%) scale(1.65)',opacity:.87,easing:'cubic-bezier(.21,.7,.17,1)'},
+        {offset:.66,transform:'translate(-50%,-50%) scale(1.65)',opacity:.56,easing:'cubic-bezier(.21,.7,.17,1)'},
         {offset:.89,transform:'translate(-50%,-50%) scale(3.2)',opacity:0},
         {offset:1,transform:'translate(-50%,-50%) scale(3.3)',opacity:0}
       ]);
       play(visuals.inner,[
         {offset:0,transform:'translate(-50%,-50%) scale(.43)',opacity:.95,easing:'ease-out'},
         {offset:.34,transform:'translate(-50%,-50%) scale(.56)',opacity:.95,easing:'cubic-bezier(.22,.7,.18,1)'},
-        {offset:.67,transform:'translate(-50%,-50%) scale(1.52)',opacity:.8,easing:'cubic-bezier(.22,.74,.18,1)'},
+        {offset:.67,transform:'translate(-50%,-50%) scale(1.52)',opacity:.52,easing:'cubic-bezier(.22,.74,.18,1)'},
         {offset:.90,transform:'translate(-50%,-50%) scale(3.5)',opacity:0},
         {offset:1,transform:'translate(-50%,-50%) scale(3.5)',opacity:0}
       ]);
