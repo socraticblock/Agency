@@ -19,6 +19,19 @@
 
 ## Gate 1b — Centered B opening / spatial proof / centered C (ACTIVE, NOT ACCEPTED)
 
+### Screen-by-screen founder review (30 October refinement, still inside Gate 1b)
+
+The founder has chosen to **refine and review each of the four visible compositions separately** before deciding whether Gate 1b as a whole is visually accepted. Approval of one color, copy line or animation increment **does not** accept the entire screen or gate.
+
+- [ ] **Screen 01 — Opening:** selected Option D cream `#E6DED2` and simple English/eyebrow have readable contrast and deliberate desktop/mobile hierarchy; exact headline and both useful CTAs work. Founder inspects the actual served Screen 01; final status recorded only with specific evidence.
+- [ ] **Screen 01 CTA shortcut — separate interaction:** review a real moving *Folding Project Dive* click → fold → reveal genuine Work-oriented preview → camera advance → usable `#work`. No duplicate ghosting, slow mandatory tunnel, disconnected preview or forced progress through Screens 02–04. Until coded/recorded/approved, the old 680 ms scale/fade is an **unaccepted placeholder**. The native-scroll film must not regress.
+- [ ] **Screen 02 — Green B:** fully opaque, independently legible Websites / Automation / AI systems, art-directed surfaces, type, spacing and materials; preserve its accepted working motion logic.
+- [ ] **Screen 03 — Architectural Interior:** B-derived depth, real near/far behavior, room coherence, integrated reading plane (not floating unrelated modal), readable center, no needless stationary scroll. Neutral Gate 1b content only; do not introduce Gate 2 narrative.
+- [ ] **Screen 04 — Centered C:** strong calm hierarchy, exact statement, restrained supporting elements, early unclipped typography and credible forward connection to Work.
+- [ ] After screen-level approvals, **retest the complete forward and reverse sequence** and record a separate founder Gate 1b decision. Screen-level status can be *selected*, *implemented*, *reviewed*, *approved*, *frozen pending integration*, or *not accepted*; do not conflate them.
+
+**Detailed current working brief:** [Gate 1 visual foundation and CTA concept (30 October)](./GATE_1_VISUAL_FOUNDATION_2026-10-30.md).
+
 ### Opening and interface push
 
 - [ ] At first paint the headline **“Your website is only the beginning.”** is centered, visually complete, and clear about websites, automation and AI systems being independently commissionable; authentic Work/Services/Contact links work.
@@ -35,6 +48,14 @@
 - [ ] The **main C headline begins appearing with some green architectural context still visible**, but only where the solid dark plane covers the full rendered glyphs at that scroll state. Verify the first visible letters and moving boundary on desktop **and** 390px / 320px mobile; no crop or empty dark hold. Secondary C content may follow after coverage.
 - [ ] Fully settled readable cards are pause points, not compulsory long motionless scrolling. Measure native physical scroll distance between meaningful changes; do not infer fixed motion duration from a trackpad recording's seconds.
 - [ ] C is visually complete and leads immediately into **genuine** Selected Work in the real app where integration is claimed. If only the static proof's verified portfolio preview is used, label **integration pending**, not passed.
+
+### CTA-navigation specific acceptance (applies to the optional Screen 01 shortcut only)
+
+- [ ] Click activation does not alter ordinary native-scroll `motion.js` state machine or make the cinematic path mandatory.
+- [ ] Motion feels like credible **fold → work preview → forward dive → real arrival**; the scene's light/evergreen/ivory material and central axis match Genezisi.
+- [ ] Work destination is ready to browse immediately after the effect, URL/fragment/back-forward behavior correct; no focus loss, inert overlay or scroll lock after interruption.
+- [ ] Test actual desktop and mobile footage, slow devices, rapid repeated clicks, browser back, modifier/open-in-new-tab, reduced-motion and no JS.
+- [ ] Gate 1b static Work mirror must be called a preview; **actual Next.js integration is pending**. Direct Work/skip links continue to work without cinematic shortcut.
 
 ### Interaction and evidence
 
