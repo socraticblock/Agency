@@ -127,3 +127,12 @@ Do not start Gate 2 (fictional enquiry / AI), real Next.js integration, merge, `
 **Verification limits:** Source-backed JavaScript syntax parse, CSS braces and smooth monotone phase checks passed. Local Chromium visual rehearsal for this iteration could not be run because browser navigation to the test file/localhost was blocked by the environment; **this is not browser QA**. The founder recording reviewed here shows the **previous** implementation, not the correction.
 
 **Next evidence:** Capture and review a new full-route desktop/narrow-mobile click recording on the new branch; audit visual continuity and actual responsiveness, then verify real browser history/keyboard/reduced-motion. Keep unapproved until founder visually accepts. No merge/deploy.
+
+
+## 7. Preproduction reset — founder decision, 30 October 2026
+
+After additional real-screen founder recordings, **repeated iteration by coding the full CTA first is suspended**. The current fold/dive code remains an **unapproved experiment** and failure evidence, not the art-direction source of truth. The founder requested the team to plan ahead and predict second-order failures instead of repeatedly patching CSS and JavaScript.
+
+**Active next-work contract:** [Screen 01 Cinematic Blueprint](./SCREEN_01_CINEMATIC_BLUEPRINT_2026-10-30.md). The reusable process lives in [motion-review skill](../../skills/infinite-website-motion-review/SKILL.md) and is reflected in [Acceptance Gates](./ACCEPTANCE_GATES_v1.2.md). Before more full structural implementation: prepare high-fidelity storyboard frames with desktop/portrait variants, create a moving animatic, verify a unified spatial camera and geometry proof, then code only against accepted visual evidence.
+
+**Evidence status:** Five written keyframe descriptions and anticipated failure modes now exist in the blueprint. **High-fidelity images, animatic and founder approval of those deliverables do not yet exist.** Do not claim a completed D1/D2 gate. Limit scope to the clicked Screen 01 CTA, preserve current opening, unchanged Work and all other scroll screens, do not merge or deploy.
