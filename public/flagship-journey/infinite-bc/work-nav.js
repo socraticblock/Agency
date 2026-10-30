@@ -132,7 +132,7 @@
     const w=window.innerWidth,h=window.innerHeight;
     const portrait=w<=740;
     const approach=smooth(.19,.92,progress);
-    const fold=smooth(.02,.90,progress);
+    const fold=smooth(.02,portrait?.82:.90,progress);
     const swell=Math.pow(Math.max(0,Math.sin(Math.PI*fold)),.8);
     const segments=32;
     const dimension=portrait?h:w;
