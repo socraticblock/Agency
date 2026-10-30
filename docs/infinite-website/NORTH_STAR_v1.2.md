@@ -9,6 +9,8 @@
 **Audience:** Founder, creative director, designer, motion engineer, front-end engineer, AI coding agents and reviewers.  
 **Purpose:** Authoritative product, visual, content, state, integration and acceptance contract. Supersedes v1.1 for subsequent work; retains the original v1.1 file as an archival snapshot, not a competing instruction. The companion [Full B → C Visitor Flow v1.2](./VISITOR_FLOW_v1.2.md) expands each scene. This document controls if there is a conflict.
 
+**30 October founder-decision update (not a new North Star version):** Gate 1b is now being refined as **four sequential visual compositions** (centered opening; green B; site-derived interior/third reading plane; centered C), each reviewed and provisionally frozen before one overall end-to-end Gate 1b visual decision. The founder selected **Option D** for the **opening only**, using warm cream `#E6DED2`, evergreen `#173327`, supporting copy/label below, and approved the direction of a short, sophisticated **Folding Project Dive** from `Explore our work` to `#work`. The hybrid (fold → preview → forward dive → genuine Work) is a **selected prototype concept, not approved implementation**; its prior 680 ms fade/scale attempt is not satisfactory. The aspirational "world-class / $50,000-quality" benchmark is **craft language, not an actual budget or sales claim**. Existing scrolling motion is the working foundation, not final founder acceptance. Current detailed status/acceptance contract: [Gate 1 visual foundation — 30 October](./GATE_1_VISUAL_FOUNDATION_2026-10-30.md); audit: [30 October reconciliation](../DOCUMENTATION_AUDIT_2026-10-30.md). This update supersedes older *first-screen copy/color* candidates only; Gate 2, real app integration and release remain unauthorised.
+
 **29 October implementation checkpoint (not a new design version):** Gate 1b's centered B push, solid B, B-derived 2.5D architectural chamber, complete third reading plane, short stationary scroll holds and early unclipped C headline were coded in the **isolated, still-draft PR #15**, with last reviewed application-code checkpoint `508db9001ed49532509ce79000b18b78e2d59ff6`. Later commits may update documentation; always inspect the latest PR head and coder's serving worktree. **No founder acceptance of the final served route, Gate 2 narrative, real Next.js Selected Work integration, merge, production release or deployment is implied.** Read [current handoff](./HANDOFF_2026-10-29.md) and [lessons](./LESSONS_2026-10-29.md) for operational status. The North Star below remains the controlling *destination*; this note describes partial implementation only.
 
 > **The North Star**  
@@ -127,9 +129,11 @@ The visitor need not remember any implementation term. What remains should be th
 
 > **Your website is only the beginning.**
 
-**Recommended supporting copy (candidate, to polish in every supported language):**
+**Selected Screen 01 supporting copy (founder reviewed 30 October; localization still requires a dedicated pass):**
 
-> We design distinctive websites and engineer dependable automation and intelligent AI systems. Each works on its own—or together.
+> We build websites, create AI systems, and automate everyday tasks. You can choose one service or combine them.
+
+**Eyebrow:** `DIGITAL SOLUTIONS STUDIO`. **Selected Screen 01 palette:** cream `#E6DED2`, primary evergreen `#173327`, body `#586A5B`, sage metadata `#6D816E`, secondary CTA border `#A3B29F`. These values are **not automatically approved for the later green/interior/C surfaces**.
 
 This explicitly prevents the false impression that AI/automation are add-ons available only with a website. Alternatives may be tested for rhythm, but must preserve that distinction and the broad engineering offer.
 
@@ -201,7 +205,7 @@ If the language, preferred time or available options change in any creative revi
 
 **Completed Gate 1a:** Three different desktop/portrait-mobile static explorations were produced: A / Editorial Aperture, B / Interface Strata, C / Typographic Architecture. The founder selected **B for the entry** and **C for the resolution**, then refined B's choreography: the centered headline is *pushed completely out of view* as the right interface moves inward and becomes the sole, large centered B keyframe.
 
-Do not continue comparing A/B/C as competing whole-page opening directions. A's editorial restraint is a useful quality benchmark; B's edges/columns supply the geometry; C's type/grid supplies the finale. The founder has **not** approved final color values, motion execution or application integration. The three studies and historical selected B art remain valuable comparison artifacts.
+Do not continue comparing A/B/C as competing whole-page opening directions. A's editorial restraint is a useful quality benchmark; B's edges/columns supply the geometry; C's type/grid supplies the finale. As of **29 October**, the founder had **not** approved final color values, motion execution or application integration. On **30 October**, Option D's exact **Screen 01** colors and simpler copy were selected; the overall animation, later screens and genuine application integration remain pending. The three studies and historical selected B art remain valuable comparison artifacts.
 
 **Gate 1b must add:** coherent movement into fully visible B, a readable stable full-B state, side-surface depth with opacity/occlusion, meaningful (not empty) interior staging, and a distinct spatial fold toward centered C. Keep the transformation anchored to real site geometry. Mobile uses a coordinated *vertical* rearrangement rather than a squeezed desktop side-to-side push.
 
@@ -760,7 +764,7 @@ Exact line breaks and non-headline copy require typography, localization and fou
 
 | Moment | Eyebrow (optional) | Main line | Supporting content | Decision |
 |---|---|---|---|---|
-| 00 Centered opening | GENEZISI | **Your website is only the beginning.** | “We build distinctive websites, dependable workflows and practical AI systems. Each works on its own—or together.” | Headline locked; body candidate |
+| 00 Centered opening | DIGITAL SOLUTIONS STUDIO | **Your website is only the beginning.** | “We build websites, create AI systems, and automate everyday tasks. You can choose one service or combine them.” | Screen 01 wording/colors selected 30 Oct; localized copy and final visual gate pending |
 | 01 Push / 02 Full B | THREE DISCIPLINES | Websites · Automation · AI systems | “Form and function, connected.” | Layout principle locked, secondary copy open |
 | 03 Enter | Optional | “Beyond the interface.” | Motion does primary work | Optional |
 | 04 Design | SYSTEM DESIGN | **First, we design how it should work.** | “Clear steps. Connected tools. Checks where they matter.” | Working |
@@ -1033,6 +1037,8 @@ No full-width hero background video, giant pre-rendered cinematic, fake terminal
 # APPENDIX F — V1.2 CHANGE RECORD, PROVENANCE AND HISTORY
 
 This is an **integrated revision of the complete v1.1 North Star**; its preserved technical constraints, performance/camera requirements, localization, accessibility and evidence standards remain in force unless directly revised here. The **original 29 October v1.1 source must remain archived unchanged**.
+
+**30 October 2026 refinement addendum:** Screen 01 Option D palette and simpler copy selected; four-screen Gate 1 art-direction sequence adopted; the optional CTA's **Folding Project Dive** concept selected for visual prototyping, not yet implemented or accepted. Do not confuse the separately clicked shortcut with the deterministic native-scroll journey or the static proof with authentic Next.js Work. Read the [dated active brief](./GATE_1_VISUAL_FOUNDATION_2026-10-30.md) and [new audit](../DOCUMENTATION_AUDIT_2026-10-30.md) for precise status and implementation boundaries.
 
 **Founder-led changes recorded 29 October 2026:**
 
