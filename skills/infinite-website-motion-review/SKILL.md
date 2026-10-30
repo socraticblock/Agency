@@ -47,7 +47,7 @@ A scene is convincing when its **geometry, material, occlusion, parallax and cau
 
 ## Clicked Work shortcut — separate from native-scroll motion (30 October)
 
-The founder selected the **Folding Project Dive** (fold → reveal Work-facing preview → forward dive → actual `#work`) as a **creative hypothesis to prototype**, not a finished transition. First read [current Gate 1 brief](../../docs/infinite-website/GATE_1_VISUAL_FOUNDATION_2026-10-30.md). The existing `work-nav.js` 680 ms root-snapshot fade/scale is an **unaccepted experiment**. Preserve `motion.js` scroll choreography and `#work` fallback.
+The founder selected the **Folding Project Dive** (fold → reveal Work-facing preview → forward dive → actual `#work`) as a **creative hypothesis to prototype**, not a finished transition. First read [current Gate 1 brief](../../docs/infinite-website/GATE_1_VISUAL_FOUNDATION_2026-10-30.md). The original `work-nav.js` 680 ms root-snapshot fade/scale was replaced in the first 30 October isolated prototype by `work-dive.css` and a Web Animations folding/dive controller; the new effect remains **unverified in real browser video and unaccepted**. Preserve `motion.js` scroll choreography and `#work` fallback.
 
 For this clicked shortcut:
 - Use a temporary, decorative, noninteractive layer and the minimum credible site-derived geometry. Do not split or disable the actual anchor or accessible business text.
