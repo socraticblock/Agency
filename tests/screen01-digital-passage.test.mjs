@@ -13,7 +13,7 @@ test('native Work anchor and actual destination remain the source of truth',()=>
   assert.match(html, /class="button primary" href="#work"/);
   assert.match(html, /id="work"/);
   assert.match(nav, /target\.scrollIntoView/);
-  assert.match(scene, /actual\s+Work\s+DOM/);
+  assert.match(scene, /Work DOM is revealed/);
   assert.doesNotMatch(scene, /CanvasTexture|drawTexture|cloneNode|captureStream/);
 });
 test('new CTA is wired without changing B-C scroll runtime',()=>{
