@@ -4,9 +4,20 @@
  */
 (() => {
   "use strict";
-  const trigger = document.querySelector('.opening .actions a[href="#work"]');
-  const target = document.getElementById("work");
-  if (!trigger || !target) return;
+  // Next's locale switch remounts the homepage without re-executing next/script.
+  // Bind only the current anchor; abort old listeners on replacement.
+  let binding = null;
+  function attach() {
+    const trigger = document.querySelector('.opening .actions a[href="#work"]');
+    const target = document.getElementById("work");
+    if (!trigger || !target) {
+      binding?.stop();
+      binding = null;
+      return;
+    }
+    if (binding?.trigger === trigger) return;
+    binding?.stop();
+    const controller = new AbortController();
 
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
   const canAnimate = () =>
@@ -31,9 +42,9 @@
 
   // Intent preloading avoids making everyone download a 3D engine.
   // The real link remains usable if modules, CDNs or WebGL are unavailable.
-  trigger.addEventListener("pointerenter", () => { if (canAnimate()) preload().catch(() => {}); }, { passive: true });
-  trigger.addEventListener("focus", () => { if (canAnimate()) preload().catch(() => {}); });
-  trigger.addEventListener("pointerdown", () => { if (canAnimate()) preload().catch(() => {}); }, { passive: true });
+  trigger.addEventListener("pointerenter", () => { if (canAnimate()) preload().catch(() => {}); }, { passive: true, signal: controller.signal });
+  trigger.addEventListener("focus", () => { if (canAnimate()) preload().catch(() => {}); }, { signal: controller.signal });
+  trigger.addEventListener("pointerdown", () => { if (canAnimate()) preload().catch(() => {}); }, { passive: true, signal: controller.signal });
 
   function land() {
     if (location.hash !== "#work") history.pushState(null, "", "#work");
@@ -91,7 +102,7 @@
       clearTimeout(timer);
       document.documentElement.classList.remove("genezisi-passage-pending");
     }
-  });
+  }, { signal: controller.signal });
 
   window.addEventListener("popstate", () => {
     // Back/Forward is user authority, never restart the Work transition.
@@ -99,19 +110,40 @@
     ++ticket;
     active?.dispose();
     active = null;
-  });
+  }, { signal: controller.signal });
   reduced.addEventListener?.("change", () => {
     if (reduced.matches && active) {
       active.dispose();
       active = null;
       land();
     }
-  });
+  }, { signal: controller.signal });
 
   window.addEventListener("pagehide", () => {
     document.documentElement.classList.remove("genezisi-passage-pending");
     ++ticket;
     active?.dispose();
     active = null;
-  });
+  }, { signal: controller.signal });
+
+    binding = {
+      trigger,
+      stop() {
+        controller.abort();
+        ++ticket;
+        active?.dispose();
+        active = null;
+        document.documentElement.classList.remove("genezisi-passage-pending");
+      }
+    };
+  }
+
+  attach();
+  const observer = new MutationObserver(attach);
+  observer.observe(document.body, { childList: true, subtree: true });
+  window.addEventListener("pagehide", () => {
+    observer.disconnect();
+    binding?.stop();
+    binding = null;
+  }, { once: true });
 })();

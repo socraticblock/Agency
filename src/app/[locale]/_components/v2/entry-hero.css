@@ -352,3 +352,19 @@
   .genezisi-entry-home .opening .button,
   .genezisi-entry-home .opening .button span { transition: none !important; }
 }
+
+/* Georgian uses its real loaded font and independently authored sizing;
+   a synthesized Latin italic face must never clip Georgian letterforms. */
+.genezisi-entry-home[lang^="ka"] .opening h1 em {
+  font-family: var(--font-noto-georgian), sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: -.055em;
+}
+@media (max-width: 740px) {
+  .genezisi-entry-home[lang^="ka"] .opening h1 {
+    font-size: clamp(36px, 9.5vw, 59px);
+    letter-spacing: -.045em;
+    line-height: 1.06;
+  }
+}
