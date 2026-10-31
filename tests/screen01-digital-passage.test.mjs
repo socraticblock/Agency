@@ -7,7 +7,7 @@ const root=process.cwd();
 const at=name=>readFileSync(join(root,'public/flagship-journey/infinite-bc',name),'utf8');
 const html=at('index.html');
 const nav=at('digital-passage-nav.js');
-const scene=at('digital-passage-scene-v3.js');
+const scene=at('digital-passage-scene-v4.js');
 
 test('native Work anchor and actual destination remain the source of truth',()=>{
   assert.match(html, /class="button primary" href="#work"/);
@@ -44,7 +44,7 @@ test('three-act direction and DOM aperture are explicit',()=>{
   assert.doesNotMatch(scene,/stage\.style\.opacity=/);
 });
 test('module is lazy, direct Work fallback exists, and stale Back does not force navigation',()=>{
-  assert.match(nav,/import\("\.\/digital-passage-scene-v3\.js"\)/);
+  assert.match(nav,/import\("\.\/digital-passage-scene-v4\.js"\)/);
   assert.match(nav,/if \(token !== ticket\) return/);
   assert.match(nav,/genezisi-passage-pending/);
   assert.match(nav,/scene load timeout/i);
@@ -58,5 +58,19 @@ test('locked concept: CTA transforms to threshold then Work approaches before re
   assert.match(scene,/alpha:true/);
   assert.match(scene,/scene\.background=null/);
   assert.match(scene,/DURATION=2140/);
-  assert.match(scene,/if\(prog<\.94\)/);
+  assert.match(scene,/if\(prog<\.885\)/);
+});
+
+test('V4 camera and portal precisely derive from clicked CTA',()=>{
+  for(const token of ['trigger.closest(".opening")','endZoom','opening.style.transform','opening.style.transformOrigin','restoreHero()','rect.width*s','rect.height*s']) {
+    assert.ok(scene.includes(token), 'missing CTA-origin camera behavior: '+token);
+  }
+  assert.match(scene,/if\(prog>=\.31\)/);
+});
+test('V4 Work appears only inside camera-projected portal, never viewport-wide',()=>{
+  for(const token of ['work-window','portalCorners','project(camera)','workWindow.style.clipPath','workPlane.style.transform','portalDepth=-129']) {
+    assert.ok(scene.includes(token), 'missing perspective matte: '+token);
+  }
+  assert.doesNotMatch(scene,/workPlane\.style\.opacity=/);
+  assert.match(scene,/const settle=ease\(\.82,\.945,prog\)/);
 });
