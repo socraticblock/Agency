@@ -25,7 +25,7 @@ test('fallback, history, interrupted journeys and GPU cleanup are explicit',()=>
   for(const needle of ['prefers-reduced-motion','saveData','pushState','popstate','pagehide','Promise.race']) {
     assert.ok(nav.includes(needle), 'missing navigation guard: '+needle);
   }
-  for(const needle of ['webglcontextlost','onInterrupt','visibilitychange','dispose()','forceContextLoss','renderer.dispose()']) {
+  for(const needle of ['webglcontextlost','function interrupt()','visibilitychange','dispose()','forceContextLoss','renderer.dispose()']) {
     assert.ok(scene.includes(needle), 'missing renderer guard: '+needle);
   }
 });
