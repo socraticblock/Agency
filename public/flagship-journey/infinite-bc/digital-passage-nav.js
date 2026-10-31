@@ -89,6 +89,20 @@
     }
   });
 
+  window.addEventListener("popstate", () => {
+    // Back/Forward is user authority, never restart the Work transition.
+    ++ticket;
+    active?.dispose();
+    active = null;
+  });
+  reduced.addEventListener?.("change", () => {
+    if (reduced.matches && active) {
+      active.dispose();
+      active = null;
+      land();
+    }
+  });
+
   window.addEventListener("pagehide", () => {
     ++ticket;
     active?.dispose();
