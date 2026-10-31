@@ -312,8 +312,9 @@ test('V6.5 changes only the late optical Work approach, not the CTA entry',()=>{
     'const workSettleStart=.68',
     'function cameraTrackBase(prog)',
     'if(prog<=workSettleStart)return cameraTrackBase(prog)',
-    'const fraction=hermiteDepth(workFractionStart,1,workFractionVelocity,0,',
+    'const fullySmoothed=hermiteDepth(workFractionStart,1,workFractionVelocity,0,',
     'return portalDepth+exitCameraDistance*',
+    'const fraction=mix(original,fullySmoothed,.72)',
     'halfRad(finalFov)/(fraction*halfRad(passageFov(prog)))',
     'function passageFov(prog)',
     'const cameraX=approachXFactor*d',
@@ -359,8 +360,11 @@ test('projected Work growth starts C1-matched and approaches full viewport smoot
     const apparent=(z,p)=>exitDist/(z-portalDepth)*halfRad(finalFov)/halfRad(fov(p));
     const s0=apparent(base(pivot),pivot),eps=.0001;
     const v0=(apparent(base(pivot+eps),pivot+eps)-apparent(base(pivot-eps),pivot-eps))/(2*eps);
-    const fraction=p=>p<=pivot?apparent(base(p),p):
-      hermite(s0,1,v0,0,(p-pivot)/(exitAt-pivot),exitAt-pivot);
+    const fraction=p=>{
+      if(p<=pivot)return apparent(base(p),p);
+      const newIdeal=hermite(s0,1,v0,0,(p-pivot)/(exitAt-pivot),exitAt-pivot);
+      return .28*apparent(base(p),p)+.72*newIdeal;
+    };
     const track=p=>p<=pivot?base(p):
       p>=exitAt?z2:portalDepth+exitDist*halfRad(finalFov)/(fraction(p)*halfRad(fov(p)));
     assert.ok(Math.abs(track(pivot)-base(pivot))<1e-7,'preserve position at settle start');
@@ -377,7 +381,7 @@ test('projected Work growth starts C1-matched and approaches full viewport smoot
     }
     assert.ok(fraction(.80)>apparent(base(.80),.80)+.15,
       'Work should occupy more of viewport before the final beat');
-    assert.ok(fraction(.85)>.75,'Work is mostly in view before the final beat');
+    assert.ok(fraction(.85)>.70,'Work is mostly in view before the final beat');
     assert.ok(Math.abs(fraction(exitAt)-1)<1e-10);
   }
 });
