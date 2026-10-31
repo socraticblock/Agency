@@ -30,7 +30,6 @@ export function createDigitalPassage({trigger,onCover,onFinish,onError}) {
   const stage = document.createElement("div");
   stage.className = "genezisi-passage";
   stage.setAttribute("aria-hidden","true");
-  stage.inert = true;
   stage.innerHTML = [
     '<canvas class="genezisi-passage-canvas"></canvas>',
     '<div class="genezisi-passage-grain"></div>',
