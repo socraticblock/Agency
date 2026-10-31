@@ -1,6 +1,8 @@
 # Genezisi — repository instructions for coding agents
 
 
+> **V5 checkpoint (31 October):** `feature/screen01-digital-passage-locked-v5-continuity-2026-10-31` is the new frozen review candidate. See [V5 frozen review specification](docs/infinite-website/SCREEN_01_DIGITAL_PASSAGE_V5_FROZEN_REVIEW_2026-10-31.md). The approved concept is unchanged; do not creatively replace it. Real-browser visual and GPU acceptance are still pending. No merge/deploy authorization.
+
 > **31 October founder lock — Screen 01 CTA:** The Digital Passage concept is now explicitly frozen. Read [locked Digital Passage direction](docs/infinite-website/SCREEN_01_DIGITAL_PASSAGE_LOCKED_DIRECTION_2026-10-31.md) before any Screen 01 CTA work on this branch. The user authorized direct real-site CTA implementation and review; prior D1/D2 storyboard prerequisites are historical for this narrow CTA. Only refine CTA camera-to-button entry, smoothness/speed, Work visibly approaching inside the existing digital-architectural passage, and seamless actual Work arrival. Do not substitute a new idea, reopen rejected doors/page curl, edit Screens 02–04 or merge/deploy without explicit authorization.
 
 
