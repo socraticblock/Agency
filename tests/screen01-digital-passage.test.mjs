@@ -7,14 +7,16 @@ const root=process.cwd();
 const at=name=>readFileSync(join(root,'public/flagship-journey/infinite-bc',name),'utf8');
 const html=at('index.html');
 const nav=at('digital-passage-nav.js');
-const scene=at('digital-passage-scene-v2.js');
+const scene=at('digital-passage-scene-v3.js');
 
 test('native Work anchor and actual destination remain the source of truth',()=>{
   assert.match(html, /class="button primary" href="#work"/);
   assert.match(html, /id="work"/);
   assert.match(nav, /target\.scrollIntoView/);
   assert.match(scene, /actual #work DOM/);
-  assert.doesNotMatch(scene, /CanvasTexture|drawTexture|cloneNode|captureStream/);
+  assert.doesNotMatch(scene, /CanvasTexture|drawTexture|captureStream/);
+  assert.match(scene, /mountCopy\(actualWork\)/);
+  assert.match(scene, /clone\.inert=true/);
 });
 test('new CTA is wired without changing B-C scroll runtime',()=>{
   assert.match(html, /src="\.\/motion\.js"/);
@@ -46,4 +48,15 @@ test('module is lazy, direct Work fallback exists, and stale Back does not force
   assert.match(nav,/if \(token !== ticket\) return/);
   assert.match(nav,/genezisi-passage-pending/);
   assert.match(nav,/scene load timeout/i);
+});
+
+test('locked concept: CTA transforms to threshold then Work approaches before reveal',()=>{
+  assert.match(scene,/buttonEdges\.radius/);
+  assert.match(scene,/inset\(/);
+  assert.match(scene,/function approachWork\(/);
+  assert.match(scene,/approachWork\(p,z\)/);
+  assert.match(scene,/alpha:true/);
+  assert.match(scene,/scene\.background=null/);
+  assert.match(scene,/DURATION=2140/);
+  assert.match(scene,/if\(prog<\.94\)/);
 });
