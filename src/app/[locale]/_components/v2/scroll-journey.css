@@ -1290,21 +1290,21 @@ html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .interfac
   html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .window-foot, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .window-foot{font-size:7px;}
 }
 /* Guard against grid min-content overflow inside the short mobile interface. */
-.genezisi-entry-home @media (max-width:380px){
-  .bc-motion-ready .journey[data-mode="motion"] .site-window,
-  .bc-motion-ready .journey:not([data-mode]) .site-window {grid-template-rows:13% minmax(0,1fr) 10%;}
-  .bc-motion-ready .journey[data-mode="motion"] .window-core,
-  .bc-motion-ready .journey:not([data-mode]) .window-core,
-  .bc-motion-ready .journey[data-mode="motion"] .disciplines,
-  .bc-motion-ready .journey:not([data-mode]) .disciplines {min-height:0;}
-  .bc-motion-ready .journey[data-mode="motion"] .window-copy,
-  .bc-motion-ready .journey:not([data-mode]) .window-copy {min-height:0;overflow:hidden;padding:7px;}
-  .bc-motion-ready .journey[data-mode="motion"] .window-copy strong,
-  .bc-motion-ready .journey:not([data-mode]) .window-copy strong {font-size:17px;}
-  .bc-motion-ready .journey[data-mode="motion"] .discipline,
-  .bc-motion-ready .journey:not([data-mode]) .discipline {min-height:0;padding:5px 8px;gap:3px;}
-  .bc-motion-ready .journey[data-mode="motion"] .discipline b,
-  .bc-motion-ready .journey:not([data-mode]) .discipline b {font-size:13px;}
+@media (max-width:380px){
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .site-window,
+  html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .site-window {grid-template-rows:13% minmax(0,1fr) 10%;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .window-core,
+  html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .window-core,
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .disciplines,
+  html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .disciplines {min-height:0;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .window-copy,
+  html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .window-copy {min-height:0;overflow:hidden;padding:7px;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .window-copy strong,
+  html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .window-copy strong {font-size:17px;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .discipline,
+  html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .discipline {min-height:0;padding:5px 8px;gap:3px;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .discipline b,
+  html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .discipline b {font-size:13px;}
 }
 
 /* The interface, not the introductory headline, is the full-size B keyframe.
