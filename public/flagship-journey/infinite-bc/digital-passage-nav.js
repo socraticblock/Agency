@@ -38,7 +38,7 @@
     if (location.hash !== "#work") history.pushState(null, "", "#work");
     const oldScroll = document.documentElement.style.scrollBehavior;
     document.documentElement.style.scrollBehavior = "auto";
-    try { target.scrollIntoView({ block: "start", behavior: "instant" }); }
+    try { target.scrollIntoView({ block: "start", behavior: "auto" }); }
     finally { document.documentElement.style.scrollBehavior = oldScroll; }
   }
 
