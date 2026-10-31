@@ -88,7 +88,9 @@ export function createDigitalPassage({trigger,onCover,onFinish,onError}){
   // The destination is a single perspective plane behind the 3D structure,
   // not a viewport-sized sheet leaking white through every transparent pixel.
   const portalDepth=-129;
-  const portalHalfH=7.3;
+  // The distant Work plane must fit INSIDE the far architectural mouth.
+  // A large viewport-sized quad leaks through the void between 3D beams.
+  const portalHalfH=Math.min(3.5,4.6/(baseW/baseH));
   const portalHalfW=portalHalfH*(baseW/baseH);
   const screenCorners=[[0,0],[baseW,0],[baseW,baseH],[0,baseH]];
   const portalCorners=[
