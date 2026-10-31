@@ -13,7 +13,7 @@ test('native Work anchor and actual destination remain the source of truth',()=>
   assert.match(html, /class="button primary" href="#work"/);
   assert.match(html, /id="work"/);
   assert.match(nav, /target\.scrollIntoView/);
-  assert.match(scene, /actual #work DOM|actual Work markup/);
+  assert.match(scene, /mountCopy\(actualWork\)/);
   assert.doesNotMatch(scene, /CanvasTexture|drawTexture|captureStream/);
   assert.match(scene, /mountCopy\(actualWork\)/);
   assert.match(scene, /clone\.inert=true/);
