@@ -44,7 +44,7 @@ test('three-act direction and DOM aperture are explicit',()=>{
   assert.doesNotMatch(scene,/stage\.style\.opacity=/);
 });
 test('module is lazy, direct Work fallback exists, and stale Back does not force navigation',()=>{
-  assert.match(nav,/import\("\.\/digital-passage-scene-v2\.js"\)/);
+  assert.match(nav,/import\("\.\/digital-passage-scene-v3\.js"\)/);
   assert.match(nav,/if \(token !== ticket\) return/);
   assert.match(nav,/genezisi-passage-pending/);
   assert.match(nav,/scene load timeout/i);
