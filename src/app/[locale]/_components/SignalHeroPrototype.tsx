@@ -1,10 +1,13 @@
+import "./v2/scroll-journey.css";
 import "./v2/entry-hero.css";
 import "./v2/digital-passage.css";
+import Script from "next/script";
 import { WHATSAPP_INTAKE } from "@/constants/content";
 import { HOME_HTML_LANG, type HomeLocale } from "@/lib/home-i18n";
 import { getV2Copy } from "./v2/hero.copy";
 import { StudioHeader } from "./v2/StudioHeader";
 import { V2Hero } from "./v2/V2Hero";
+import { JourneyScenes } from "./v2/JourneyScenes";
 import { SelectedWork } from "./v2/SelectedWork";
 import { Capabilities } from "./v2/Capabilities";
 import { V2Lab } from "./v2/V2Lab";
@@ -28,7 +31,14 @@ export function SignalHeroPrototype({ locale }: { locale: HomeLocale }) {
         Without JavaScript the ordinary static hero remains readable. */}
     <script dangerouslySetInnerHTML={{ __html: 'if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches) document.documentElement.classList.add("bc-motion-ready");' }} />
     <StudioHeader locale={locale} copy={copy} contactHref={waHref} />
-    <V2Hero locale={locale} copy={copy} contactHref={waHref} />
+
+    <div id="journey" className="journey" data-beat="opening">
+      <div id="scene" className="scene">
+        <V2Hero locale={locale} copy={copy} contactHref={waHref} />
+        <JourneyScenes locale={locale} />
+      </div>
+    </div>
+    <Script src="/flagship-journey/infinite-bc/motion.js" strategy="afterInteractive" />
     <SelectedWork copy={copy} />
     <Capabilities copy={copy} />
     <section className="bg-[#02060b] px-5 py-20 sm:px-8 lg:py-28"><div className="mx-auto max-w-[92rem] border-t border-white/10 pt-14"><V2Lab copy={copy} /></div></section>
