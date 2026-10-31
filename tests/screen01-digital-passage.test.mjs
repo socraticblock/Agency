@@ -7,7 +7,7 @@ const root=process.cwd();
 const at=name=>readFileSync(join(root,'public/flagship-journey/infinite-bc',name),'utf8');
 const html=at('index.html');
 const nav=at('digital-passage-nav.js');
-const scene=at('digital-passage-scene-v5.js');
+const scene=at('digital-passage-scene-v6.js');
 const css=at('digital-passage.css');
 
 test('native Work anchor, original section, and B-to-C runtime are preserved',()=>{
@@ -20,7 +20,7 @@ test('native Work anchor, original section, and B-to-C runtime are preserved',()
 });
 
 test('V5 lazy loads on intent with robust native navigation fallbacks',()=>{
-  assert.match(nav,/import\("\.\/digital-passage-scene-v5\.js"\)/);
+  assert.match(nav,/import\("\.\/digital-passage-scene-v6\.js"\)/);
   for(const needle of ['prefers-reduced-motion','saveData','pushState','popstate','pagehide','Promise.race','if (token !== ticket) return']) {
     assert.ok(nav.includes(needle), 'missing navigation guard: '+needle);
   }
@@ -32,7 +32,9 @@ test('V5 only transforms the clicked CTA aperture — never the page or headline
   }
   assert.doesNotMatch(scene,/opening\.style\.transform/);
   assert.doesNotMatch(scene,/restoreHero\(\)/);
-  assert.doesNotMatch(scene,/trigger\.style\.transform/);
+  assert.match(scene,/trigger\.style\.transform/);
+  assert.match(scene,/trigger\.style\.opacity/);
+  assert.match(scene,/restoreFocus\(\)/);
   assert.match(scene,/if\(prog>=\.235\)/);
 });
 
@@ -59,7 +61,8 @@ test('Work converges to camera perspective with no late arbitrary enlargement',(
   assert.doesNotMatch(scene,/const settle=ease\(\.82,\.945,prog\)/);
   assert.doesNotMatch(scene,/maskImage|webkitMaskImage/);
   assert.match(scene,/const align=ease\(\.77,\.925,p\)/);
-  assert.match(scene,/stage\.style\.opacity=String\(ease\(0,\.045,prog\)\*\(1-ease\(\.955,1,prog\)\)\)/);
+  assert.match(scene,/const enter=ease\(\.070,\.178,prog\)/);
+  assert.match(scene,/stage\.style\.opacity=String\(enter\*leave\)/);
 });
 
 test('perspective solution fills viewport at exit for desktop and portrait FOV',()=>{
@@ -72,4 +75,27 @@ test('perspective solution fills viewport at exit for desktop and portrait FOV',
     assert.ok(Math.abs(halfHeight/visibleHalfHeight-1)<1e-10);
     assert.ok(Math.abs(halfHeight*aspect/visibleHalfWidth-1)<1e-10);
   }
+});
+
+test('V6 isolates real CTA as a sharp subject without blurring the ancestor',()=>{
+  for(const token of [
+    'trigger.style.transformOrigin="center center"',
+    'trigger.style.transform=',
+    'trigger.style.opacity=String(1-ease(.090,.175,prog))',
+    'root.classList.add("genezisi-passage-focus")',
+    'root.style.setProperty("--genezisi-focus-blur"',
+    'root.style.setProperty("--genezisi-focus-dim"',
+    'restoreFocus(); // Also covers Escape, context loss, Back and resize.'
+  ]) assert.ok(scene.includes(token), 'missing focus contract: '+token);
+  assert.doesNotMatch(scene,/opening\.style\.transform|opening\.style\.filter/);
+  assert.match(css,/html\.genezisi-passage-focus \.opening \.intro > :not\(\.actions\)/);
+  assert.match(css,/html\.genezisi-passage-focus \.opening \.actions > \.button\.primary/);
+});
+
+test('V6 preserves short travel time and focuses before threshold entry',()=>{
+  assert.match(scene,/DURATION=2080/);
+  assert.match(scene,/const t=ease\(\.006,\.235,prog\)/);
+  assert.match(scene,/const focus=ease\(\.005,\.070,prog\)\*\(1-ease\(\.135,\.235,prog\)\)/);
+  assert.match(scene,/const enter=ease\(\.070,\.178,prog\)/);
+  assert.match(nav,/import\("\.\/digital-passage-scene-v6\.js"\)/);
 });
