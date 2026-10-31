@@ -1,0 +1,1630 @@
+/* Scoped port of Gate 1b's reversible B → room → C scroll sequence.
+ * Source: approved Screen 01 prototype branch ce8eae2.
+ * Intentionally scoped to the homepage; no body-wide CSS resets. */
+.genezisi-entry-home {
+ --paper:#f1eee7; --opening-paper:#e6ded2; --ink:#173327;
+ --dark:#101f1a; --dark2:#0b1713; --muted:#667c6c;
+ --edge:rgba(27,55,41,.16); --ivory:#f1f1e7; --mint:#b8d0b6;
+ --c:0; --e:0; --h:0; --f:0; --p:0;
+}
+
+.genezisi-entry-home .journey{
+  position:relative;
+  isolation:isolate
+}
+
+.genezisi-entry-home .scene{
+  min-height:100svh;
+  position:relative;
+  overflow:hidden;
+  background:var(--opening-paper)
+}
+
+.genezisi-entry-home .scene::after{
+  content:"";
+  pointer-events:none;
+  position:absolute;
+  inset:0;
+  background:var(--dark2);
+  opacity:var(--night,0);
+  z-index:3
+}
+
+.genezisi-entry-home .scene>*{
+  z-index:4
+}
+
+.genezisi-entry-home .scene>.site-nav{
+  z-index:100
+}
+
+.genezisi-entry-home .scene .opening{
+  z-index:5
+}
+
+.genezisi-entry-home .opening{
+  min-height:100svh;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  align-items:center;
+  gap:clamp(16px,3.5vw,60px);
+  padding:102px clamp(20px,5vw,72px) 72px;
+  position:absolute;
+  inset:0;
+  will-change:opacity,transform;
+  opacity:var(--bAlpha,1);
+  pointer-events:var(--bPointer,auto)
+}
+
+.genezisi-entry-home .intro{
+  position:relative;
+  z-index:3;
+  max-width:680px
+}
+
+.genezisi-entry-home .eyebrow{
+  font-size:11px;
+  letter-spacing:.15em;
+  font-weight:900;
+  color:#6d816e;
+  text-transform:uppercase;
+  margin:0 0 42px
+}
+
+.genezisi-entry-home .intro h1{
+  font-size:clamp(59px,5.9vw,95px);
+  letter-spacing:-.075em;
+  line-height:.93;
+  margin:0;
+  font-weight:900;
+  max-width:700px
+}
+
+.genezisi-entry-home .intro h1 em{
+  font-family:Georgia,'Times New Roman',serif;
+  font-weight:400;
+  letter-spacing:-.08em;
+  color:#6d816e;
+  display:inline-block;
+  transform:translateY(-.012em)
+}
+
+.genezisi-entry-home .intro .body{
+  font-size:clamp(14px,1.27vw,19px);
+  line-height:1.58;
+  color:#586a5b;
+  max-width:510px;
+  margin:38px 0 0
+}
+
+.genezisi-entry-home .intro .actions{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:30px
+}
+
+.genezisi-entry-home .button{
+  border-radius:100px;
+  font-size:12px;
+  font-weight:800;
+  min-height:48px;
+  padding:0 21px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:23px;
+  border:1px solid #a8b6a5
+}
+
+/* Keep the Option D secondary CTA border local to the opening. */
+.genezisi-entry-home .opening .button:not(.primary){
+  border-color:#a3b29f
+}
+
+.genezisi-entry-home .button.primary{
+  background:var(--ink);
+  color:white;
+  border-color:var(--ink)
+}
+
+.genezisi-entry-home .button span{
+  font-size:17px
+}
+
+.genezisi-entry-home .interface-wrap{
+  position:relative;
+  aspect-ratio:1.16;
+  min-height:300px;
+  display:grid;
+  place-items:center;
+  perspective:1050px;
+  transform-style:preserve-3d
+}
+
+.genezisi-entry-home .stack{
+  position:relative;
+  width:94%;
+  height:80%;
+  max-height:570px;
+  transform-style:preserve-3d;
+  will-change:transform;
+  transform:translate3d(calc(var(--shiftX,0)*1px),calc(var(--shiftY,0)*1px),0) scale(var(--artScale,1))
+}
+
+.genezisi-entry-home .sheet{
+  position:absolute;
+  inset:0;
+  border:1px solid #a6bda6;
+  background:#d1d9ce;
+  transform:translate3d(-12px,18px,-80px) rotateY(0deg);
+  box-shadow:1px 15px 38px #12221a15
+}
+
+.genezisi-entry-home .sheet.two{
+  background:#c5d1c1;
+  transform:translate3d(20px,-22px,-36px)
+}
+
+.genezisi-entry-home .site-window{
+  position:absolute;
+  inset:4% 5% 6% 1%;
+  background:#183528;
+  color:#f5f1e8;
+  box-shadow:0 12px 29px #0e251d2b;
+  display:grid;
+  grid-template-rows:13% 1fr 10%;
+  overflow:hidden;
+  transform:translateZ(12px)
+}
+
+.genezisi-entry-home .window-head, .genezisi-entry-home .window-foot{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid #f5f1e829;
+  padding:0 20px;
+  font-size:12px;
+  font-weight:850
+}
+
+.genezisi-entry-home .window-head small, .genezisi-entry-home .window-foot{
+  font-size:8px;
+  letter-spacing:.11em;
+  color:#a0b4a2
+}
+
+.genezisi-entry-home .window-foot{
+  border-bottom:0;
+  border-top:1px solid #f5f1e829
+}
+
+.genezisi-entry-home .window-core{
+  display:grid;
+  grid-template-columns:1fr 1fr
+}
+
+.genezisi-entry-home .window-copy{
+  border-right:1px solid #f5f1e829;
+  padding:clamp(10px,2.2vw,35px);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between
+}
+
+.genezisi-entry-home .window-copy small{
+  font-size:9px;
+  letter-spacing:.17em;
+  color:#98b29f
+}
+
+.genezisi-entry-home .window-copy strong{
+  font:italic clamp(30px,3.8vw,57px)/1.06 Georgia,'Times New Roman',serif;
+  letter-spacing:-.06em
+}
+
+.genezisi-entry-home .window-copy p{
+  font-size:10px;
+  line-height:1.6;
+  opacity:.78;
+  max-width:220px
+}
+
+.genezisi-entry-home .disciplines{
+  display:grid;
+  grid-template-rows:repeat(3,1fr)
+}
+
+.genezisi-entry-home .discipline{
+  border-bottom:1px solid #f5f1e829;
+  padding:clamp(8px,1.7vw,25px);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:11px
+}
+
+.genezisi-entry-home .discipline:last-child{
+  border:0
+}
+
+.genezisi-entry-home .discipline span{
+  font-size:8px;
+  letter-spacing:.14em;
+  color:#91ac94
+}
+
+.genezisi-entry-home .discipline b{
+  font-size:clamp(15px,1.5vw,24px);
+  font-weight:500;
+  letter-spacing:-.04em
+}
+
+.genezisi-entry-home .opening-foot{
+  position:absolute;
+  left:clamp(20px,5vw,72px);
+  right:clamp(20px,5vw,72px);
+  bottom:22px;
+  padding-top:18px;
+  border-top:1px solid var(--edge);
+  display:flex;
+  justify-content:space-between;
+  text-transform:uppercase;
+  letter-spacing:.16em;
+  font-size:9px;
+  font-weight:800;
+  color:#6d816e;
+  font-size:10px;
+  letter-spacing:.13em
+}
+
+.genezisi-entry-home .opening-foot span:nth-child(2){
+  margin:auto
+}
+
+/* A single projected path. The early framing is inherited from the opening interface. */
+.genezisi-entry-home .depth{
+  position:absolute;
+  inset:0;
+  z-index:6;
+  perspective:900px;
+  perspective-origin:50% 48%;
+  pointer-events:none;
+  opacity:var(--depthAlpha,0);
+  overflow:hidden;
+  background:radial-gradient(ellipse at 50% 47%,#244f3d 0%,#183427 36%,#0b1b15 89%)
+}
+
+.genezisi-entry-home .depth::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg,#0c1b18b0 0%,transparent 22% 78%,#0c1b18b0 100%)
+}
+
+.genezisi-entry-home .depth-space{
+  position:absolute;
+  inset:0;
+  transform-style:preserve-3d;
+  perspective:900px;
+  perspective-origin:50% 48%
+}
+
+.genezisi-entry-home .rails{
+  position:absolute;
+  inset:0;
+  transform-style:preserve-3d
+}
+
+.genezisi-entry-home .rail{
+  position:absolute;
+  top:0;
+  height:100%;
+  width:28%;
+  border:1px solid #c1ead35e;
+  background:linear-gradient(95deg,#83b7a437,#296b5225);
+  box-shadow:inset 0 0 90px #8bcba90d;
+  will-change:transform
+}
+
+.genezisi-entry-home .rail.left{
+  left:0;
+  transform-origin:0% 50%;
+  transform:translate3d(calc(var(--leftX,0)*1px),0,calc(var(--nearZ,0)*1px)) rotateY(32deg)
+}
+
+.genezisi-entry-home .rail.right{
+  right:0;
+  transform-origin:100% 50%;
+  transform:translate3d(calc(var(--rightX,0)*1px),0,calc(var(--nearZ,0)*1px)) rotateY(-32deg)
+}
+
+.genezisi-entry-home .rail.far{
+  opacity:.5;
+  filter:brightness(.78);
+  width:20%;
+  border-color:#acd2ba67
+}
+
+.genezisi-entry-home .rail.far.left{
+  transform:translate3d(calc(var(--farLeft,0)*1px),0,-550px) rotateY(31deg)
+}
+
+.genezisi-entry-home .rail.far.right{
+  transform:translate3d(calc(var(--farRight,0)*1px),0,-550px) rotateY(-31deg)
+}
+
+.genezisi-entry-home .ground-lines{
+  position:absolute;
+  inset:0;
+  transform:rotateX(69deg) translate3d(0,34%,calc(var(--groundZ,0)*1px));
+  background:repeating-linear-gradient(0deg,transparent 0 88px,#b2d1b640 89px 90px),repeating-linear-gradient(90deg,transparent 0 120px,#b2d1b63d 121px 122px);
+  -webkit-mask-image:linear-gradient(to top,#000,transparent 95%);
+  mask-image:linear-gradient(to top,#000,transparent 95%)
+}
+
+.genezisi-entry-home .fold-planes{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  opacity:var(--foldAlpha,0);
+  perspective:900px;
+  perspective-origin:50% 48%
+}
+
+.genezisi-entry-home .fold-pane{
+  position:absolute;
+  top:7%;
+  bottom:7%;
+  width:33.3%;
+  border:1px solid #b5d3b875;
+  background:linear-gradient(140deg,#60877136,#22443212);
+  backdrop-filter:blur(1px);
+  transform-style:preserve-3d;
+  box-shadow:inset 0 0 60px #c5e8c21a
+}
+
+.genezisi-entry-home .fold-pane:before, .genezisi-entry-home .fold-pane:after{
+  position:absolute;
+  content:'';
+  left:13%;
+  right:13%;
+  border-top:1px solid #aed1b980
+}
+
+.genezisi-entry-home .fold-pane:before{
+  top:17%
+}
+
+.genezisi-entry-home .fold-pane:after{
+  bottom:17%
+}
+
+.genezisi-entry-home .fold-pane.left{
+  left:0;
+  transform-origin:left center;
+  transform:translateX(calc(var(--foldLeftX,0)*1px)) rotateY(calc(var(--foldRotL,-48)*1deg))
+}
+
+.genezisi-entry-home .fold-pane.right{
+  right:0;
+  transform-origin:right center;
+  transform:translateX(calc(var(--foldRightX,0)*1px)) rotateY(calc(var(--foldRotR,48)*1deg))
+}
+
+.genezisi-entry-home .depth-tag{
+  position:absolute;
+  left:7%;
+  top:17%;
+  color:#bcd4bb8a;
+  font-size:9px;
+  letter-spacing:.18em;
+  text-transform:uppercase
+}
+
+.genezisi-entry-home .depth-tag.right{
+  left:auto;
+  right:7%;
+  top:auto;
+  bottom:17%
+}
+
+.genezisi-entry-home .reading{
+  position:absolute;
+  z-index:2;
+  top:49%;
+  left:50%;
+  width:min(560px,72vw);
+  transform:translate(-50%,-50%) translateZ(0);
+  padding:clamp(25px,3vw,44px);
+  border:1px solid #adcdb15e;
+  background:#e8efe4;
+  color:#193627;
+  box-shadow:0 30px 110px #0008;
+  opacity:var(--holdAlpha,0)
+}
+
+.genezisi-entry-home .reading small{
+  display:block;
+  font-size:9px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  font-weight:900;
+  color:#738a77;
+  margin-bottom:26px
+}
+
+.genezisi-entry-home .reading h2{
+  margin:0;
+  font-size:clamp(32px,3.35vw,50px);
+  letter-spacing:-.058em;
+  line-height:1.05
+}
+
+.genezisi-entry-home .reading p{
+  font-size:clamp(13px,1.22vw,16px);
+  line-height:1.6;
+  max-width:440px;
+  color:#496554;
+  margin:21px 0 0
+}
+
+.genezisi-entry-home .reading-bottom{
+  border-top:1px solid #1936272e;
+  margin-top:31px;
+  padding-top:14px;
+  font-size:10px;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  color:#6e8874;
+  display:flex;
+  justify-content:space-between
+}
+
+/* C: a page-native editorial composition, not another onboarding hero. */
+.genezisi-entry-home .reveal{
+  position:absolute;
+  inset:0;
+  z-index:9;
+  opacity:var(--cAlpha,0);
+  pointer-events:var(--cPointer,none);
+  color:var(--ivory);
+  background:#0f1d18;
+  overflow:hidden;
+  padding:110px clamp(20px,5vw,72px) 44px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  transform:translate3d(0,calc(var(--cOffset,0)*1px),0)
+}
+
+.genezisi-entry-home .reveal::before{
+  content:"";
+  inset:0;
+  position:absolute;
+  pointer-events:none;
+  background:linear-gradient(90deg,transparent calc(33.333% - .5px),#c6dcc111 33.333% calc(33.333% + .5px),transparent calc(33.333% + .5px) calc(66.666% - .5px),#c6dcc111 66.666% calc(66.666% + .5px),transparent calc(66.666% + .5px));
+  opacity:.65
+}
+
+.genezisi-entry-home .reveal::after{
+  content:'G.';
+  position:absolute;
+  top:17%;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:min(50vw,620px);
+  font-weight:900;
+  line-height:1;
+  letter-spacing:-.1em;
+  color:#cbdac10a;
+  pointer-events:none
+}
+
+.genezisi-entry-home .c-topline, .genezisi-entry-home .c-lastline{
+  position:relative;
+  z-index:1;
+  display:flex;
+  justify-content:space-between;
+  border-bottom:1px solid #cfddcc40;
+  padding:0 0 22px;
+  text-transform:uppercase;
+  font-size:10px;
+  font-weight:850;
+  letter-spacing:.2em;
+  color:#b0c5b3
+}
+
+.genezisi-entry-home .c-lastline{
+  border:0;
+  border-top:1px solid #cfddcc40;
+  padding:18px 0 0
+}
+
+.genezisi-entry-home .c-center{
+  position:relative;
+  z-index:1;
+  text-align:center;
+  padding:16px 0 0
+}
+
+.genezisi-entry-home .c-kicker{
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.24em;
+  color:#bad3b8;
+  margin-bottom:24px
+}
+
+.genezisi-entry-home .c-center h2{
+  font-size:clamp(52px,7.2vw,116px);
+  font-weight:900;
+  line-height:.89;
+  letter-spacing:-.079em;
+  margin:0
+}
+
+.genezisi-entry-home .c-center h2 em{
+  font-family:Georgia,'Times New Roman',serif;
+  font-weight:400;
+  color:#bcd7b7;
+  letter-spacing:-.085em
+}
+
+.genezisi-entry-home .c-description{
+  font-size:clamp(14px,1.25vw,18px);
+  color:#b2c7b6;
+  line-height:1.5;
+  margin:30px auto 0;
+  max-width:550px
+}
+
+.genezisi-entry-home .c-bands{
+  width:min(1160px,100%);
+  margin:28px auto 0;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  border:1px solid #c9ddc755;
+  text-align:left
+}
+
+.genezisi-entry-home .c-bands>div{
+  padding:18px 24px;
+  min-height:105px;
+  border-right:1px solid #c9ddc755;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between
+}
+
+.genezisi-entry-home .c-bands>div:last-child{
+  border:0
+}
+
+.genezisi-entry-home .c-bands span{
+  font-size:9px;
+  color:#96b39d;
+  letter-spacing:.14em
+}
+
+.genezisi-entry-home .c-bands b{
+  font:italic 25px/1 Georgia,'Times New Roman',serif;
+  letter-spacing:-.04em
+}
+
+.genezisi-entry-home .c-bands small{
+  font-size:11px;
+  color:#adc6b1
+}
+
+.genezisi-entry-home .c-lastline a{
+  text-decoration:underline;
+  text-underline-offset:5px
+}
+
+/* Source-verified project names and destinations, standalone QA preview only. Production uses existing SelectedWork React component. */
+.genezisi-entry-home .work-preview{
+  background:#f0ece5;
+  color:#16251d;
+  padding:95px clamp(20px,5vw,72px) 125px;
+  scroll-margin-top:15px
+}
+
+.genezisi-entry-home .work-preview>.overline{
+  color:#718472;
+  text-transform:uppercase;
+  letter-spacing:.22em;
+  font-size:11px;
+  font-weight:900
+}
+
+.genezisi-entry-home .work-title{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:30px;
+  border-bottom:1px solid #18342738;
+  padding-bottom:34px
+}
+
+.genezisi-entry-home .work-title h2{
+  font-size:clamp(48px,6vw,90px);
+  letter-spacing:-.07em;
+  line-height:.95;
+  margin:22px 0 0
+}
+
+.genezisi-entry-home .work-title p{
+  max-width:380px;
+  font-size:16px;
+  color:#718472;
+  line-height:1.6
+}
+
+.genezisi-entry-home .projects{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:22px;
+  margin-top:36px
+}
+
+.genezisi-entry-home .project{
+  display:block;
+  border-top:1px solid #18342740;
+  padding-top:23px
+}
+
+.genezisi-entry-home .project b{
+  display:block;
+  font-size:clamp(24px,2vw,35px);
+  letter-spacing:-.05em;
+  margin-bottom:10px
+}
+
+.genezisi-entry-home .project span{
+  font-size:13px;
+  color:#627566
+}
+
+.genezisi-entry-home .project:hover b{
+  text-decoration:underline;
+  text-underline-offset:6px
+}
+
+.genezisi-entry-home .work-note{
+  font-size:11px;
+  line-height:1.5;
+  opacity:.6;
+  margin-top:32px
+}
+
+/* Static is the default no-JS and reduced-motion path. Motion is an opt-in enhancement. */
+.genezisi-entry-home .journey:not([data-mode="motion"]) .scene{
+  min-height:100svh;
+  overflow:visible
+}
+
+.genezisi-entry-home .journey:not([data-mode="motion"]) .opening{
+  position:relative;
+  min-height:100svh;
+  opacity:1;
+  pointer-events:auto
+}
+
+.genezisi-entry-home .journey:not([data-mode="motion"]) .depth{
+  display:none
+}
+
+.genezisi-entry-home .journey:not([data-mode="motion"]) .reveal{
+  position:relative;
+  min-height:100svh;
+  opacity:1;
+  pointer-events:auto;
+  transform:none
+}
+
+.genezisi-entry-home .journey:not([data-mode="motion"]) .scene::after{
+  display:none
+}
+
+.genezisi-entry-home .journey[data-mode="motion"]{
+  height:440svh
+}
+
+.genezisi-entry-home .journey[data-mode="motion"] .scene{
+  position:sticky;
+  top:0;
+  height:100svh;
+  min-height:100svh
+}
+
+.genezisi-entry-home .journey[data-mode="motion"] .opening{
+  inset:0
+}
+
+.genezisi-entry-home .journey[data-mode="motion"] .scene{
+  --night:var(--n,0)
+}
+
+.genezisi-entry-home .journey[data-mode="motion"] .opening{
+  --bAlpha:var(--b,1);
+  --bPointer:none
+}
+
+.genezisi-entry-home .journey[data-mode="motion"] .depth{
+  --depthAlpha:var(--d,0)
+}
+
+.genezisi-entry-home .journey[data-mode="motion"] .reading{
+  --holdAlpha:var(--h,0)
+}
+
+.genezisi-entry-home .journey[data-mode="motion"] .reveal{
+  --cAlpha:var(--c,0);
+  --cPointer:auto
+}
+
+/* During the motion, keep links navigable at start and C links at finish via pointer-events on active layers. */
+.genezisi-entry-home .journey[data-mode="motion"][data-beat="opening"] .opening{
+  pointer-events:auto
+}
+
+.genezisi-entry-home .journey[data-mode="motion"] .reveal{
+  pointer-events:none
+}
+
+.genezisi-entry-home .journey[data-mode="motion"][data-beat="reveal"] .reveal{
+  pointer-events:auto
+}
+
+@media(max-width:1000px) {
+  .genezisi-entry-home .opening{
+    gap:14px
+  }
+
+  .genezisi-entry-home .intro h1{
+    font-size:clamp(54px,6.5vw,73px)
+  }
+
+  .genezisi-entry-home .window-copy strong{
+    font-size:clamp(26px,3.2vw,38px)
+  }
+
+  .genezisi-entry-home .interface-wrap{
+    min-height:280px
+  }
+
+  .genezisi-entry-home .window-copy p{
+    display:none
+  }
+
+  .genezisi-entry-home .window-head small{
+    display:none
+  }
+
+}
+
+@media(max-width:740px) {
+  .genezisi-entry-home .site-nav{
+    height:64px;
+    padding:0 20px
+  }
+
+  .genezisi-entry-home .wordmark{
+    font-size:20px
+  }
+
+  .genezisi-entry-home .nav-links{
+    gap:10px
+  }
+
+  .genezisi-entry-home .nav-links .nav-service{
+    display:none
+  }
+
+  .genezisi-entry-home .nav-cta{
+    min-height:41px;
+    padding:0 13px;
+    gap:12px;
+    font-size:11px
+  }
+
+  .genezisi-entry-home .opening{
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    gap:0;
+    padding:94px 20px 67px;
+    align-items:stretch
+  }
+
+  .genezisi-entry-home .intro{
+    max-width:540px
+  }
+
+  .genezisi-entry-home .eyebrow{
+    margin-bottom:27px;
+    font-size:10px
+  }
+
+  .genezisi-entry-home .intro h1{
+    font-size:clamp(48px,12vw,78px);
+    max-width:580px
+  }
+
+  .genezisi-entry-home .intro .body{
+    font-size:15px;
+    line-height:1.5;
+    max-width:410px;
+    margin:24px 0 0
+  }
+
+  .genezisi-entry-home .intro .actions{
+    margin-top:22px;
+    gap:9px
+  }
+
+  .genezisi-entry-home .button{
+    min-height:46px;
+    font-size:11px;
+    padding:0 15px;
+    gap:12px
+  }
+
+  .genezisi-entry-home .interface-wrap{
+    width:100%;
+    min-height:0;
+    aspect-ratio:1.68;
+    max-height:31svh;
+    margin:24px auto 0
+  }
+
+  .genezisi-entry-home .stack{
+    height:95%;
+    width:91%
+  }
+
+  .genezisi-entry-home .window-head{
+    padding:0 12px;
+    font-size:9px
+  }
+
+  .genezisi-entry-home .window-copy{
+    padding:10px
+  }
+
+  .genezisi-entry-home .window-copy small{
+    font-size:7px
+  }
+
+  .genezisi-entry-home .window-copy strong{
+    font-size:clamp(22px,6vw,34px)
+  }
+
+  .genezisi-entry-home .discipline{
+    padding:9px
+  }
+
+  .genezisi-entry-home .discipline span{
+    font-size:7px
+  }
+
+  .genezisi-entry-home .discipline b{
+    font-size:clamp(14px,3.6vw,20px)
+  }
+
+  .genezisi-entry-home .window-foot{
+    padding:0 11px;
+    font-size:7px
+  }
+
+  .genezisi-entry-home .opening-foot{
+    left:20px;
+    right:20px;
+    bottom:18px;
+    padding-top:14px
+  }
+
+  .genezisi-entry-home .opening-foot span:nth-child(2){
+    display:none
+  }
+
+  .genezisi-entry-home .reading{
+    width:min(420px,84vw);
+    padding:28px
+  }
+
+  .genezisi-entry-home .reading h2{
+    font-size:clamp(29px,7vw,38px)
+  }
+
+  .genezisi-entry-home .rail{
+    width:43%
+  }
+
+  .genezisi-entry-home .rail.far{
+    width:34%
+  }
+
+  .genezisi-entry-home .depth-tag{
+    left:6%;
+    top:13%
+  }
+
+  .genezisi-entry-home .depth-tag.right{
+    right:6%;
+    bottom:11%
+  }
+
+  .genezisi-entry-home .reveal{
+    padding:88px 20px 20px
+  }
+
+  .genezisi-entry-home .c-topline, .genezisi-entry-home .c-lastline{
+    font-size:8px;
+    padding-bottom:14px;
+    letter-spacing:.12em
+  }
+
+  .genezisi-entry-home .c-topline span:last-child{
+    display:none
+  }
+
+  .genezisi-entry-home .c-center{
+    padding:8px 0 0
+  }
+
+  .genezisi-entry-home .c-kicker{
+    font-size:9px;
+    margin-bottom:24px
+  }
+
+  .genezisi-entry-home .c-center h2{
+    font-size:clamp(56px,12.5vw,84px)
+  }
+
+  .genezisi-entry-home .c-description{
+    font-size:14px;
+    max-width:375px;
+    margin-top:25px
+  }
+
+  .genezisi-entry-home .c-bands{
+    grid-template-columns:1fr;
+    margin-top:27px
+  }
+
+  .genezisi-entry-home .c-bands>div{
+    min-height:0;
+    display:grid;
+    grid-template-columns:70px 1fr;
+    align-items:center;
+    gap:10px;
+    padding:13px 16px;
+    border-right:0;
+    border-bottom:1px solid #c9ddc755
+  }
+
+  .genezisi-entry-home .c-bands>div:last-child{
+    border:0
+  }
+
+  .genezisi-entry-home .c-bands b{
+    font-size:20px
+  }
+
+  .genezisi-entry-home .c-bands small{
+    display:none
+  }
+
+  .genezisi-entry-home .work-title{
+    display:block
+  }
+
+  .genezisi-entry-home .work-title p{
+    margin-top:25px
+  }
+
+  .genezisi-entry-home .projects{
+    grid-template-columns:1fr;
+    gap:19px
+  }
+
+  .genezisi-entry-home .project{
+    padding-top:18px
+  }
+
+}
+
+@media(max-width:380px) {
+  .genezisi-entry-home .opening{
+    padding:80px 16px 52px
+  }
+
+  .genezisi-entry-home .intro h1{
+    font-size:clamp(44px,12.15vw,51px)
+  }
+
+  .genezisi-entry-home .intro .body{
+    font-size:13px;
+    margin-top:16px
+  }
+
+  .genezisi-entry-home .eyebrow{
+    margin-bottom:18px
+  }
+
+  .genezisi-entry-home .intro .actions{
+    margin-top:14px
+  }
+
+  .genezisi-entry-home .button{
+    font-size:10px;
+    min-height:42px;
+    padding:0 12px
+  }
+
+  .genezisi-entry-home .interface-wrap{
+    margin-top:13px;
+    aspect-ratio:1.85;
+    max-height:24svh
+  }
+
+  .genezisi-entry-home .opening-foot{
+    bottom:11px;
+    left:16px;
+    right:16px
+  }
+
+  .genezisi-entry-home .window-copy strong{
+    font-size:20px
+  }
+
+  .genezisi-entry-home .c-center h2{
+    font-size:clamp(44px,12.8vw,55px)
+  }
+
+  .genezisi-entry-home .reveal{
+    padding:80px 16px 12px
+  }
+
+  .genezisi-entry-home .c-bands>div{
+    padding:10px
+  }
+
+  .genezisi-entry-home .c-description{
+    font-size:13px;
+    margin-top:18px
+  }
+
+  .genezisi-entry-home .c-kicker{
+    margin-bottom:16px
+  }
+
+  .genezisi-entry-home .c-lastline span:first-child{
+    display:none
+  }
+
+  .genezisi-entry-home .nav-links .nav-work{
+    display:none
+  }
+
+  .genezisi-entry-home .nav-cta{
+    font-size:10px;
+    gap:8px
+  }
+
+  .genezisi-entry-home .site-nav{
+    padding:0 16px
+  }
+
+}
+
+@media(max-height:650px) {
+  .genezisi-entry-home .opening{
+    padding-top:84px;
+    padding-bottom:36px
+  }
+
+  .genezisi-entry-home .eyebrow{
+    margin-bottom:16px
+  }
+
+  .genezisi-entry-home .intro .body{
+    margin-top:18px
+  }
+
+  .genezisi-entry-home .intro .actions{
+    margin-top:16px
+  }
+
+  .genezisi-entry-home .interface-wrap{
+    max-height:23svh;
+    margin-top:13px
+  }
+
+  .genezisi-entry-home .opening-foot{
+    display:none
+  }
+
+  .genezisi-entry-home .reveal{
+    padding-top:77px;
+    padding-bottom:12px
+  }
+
+  .genezisi-entry-home .c-kicker{
+    margin-bottom:12px
+  }
+
+  .genezisi-entry-home .c-description{
+    margin-top:18px
+  }
+
+  .genezisi-entry-home .c-bands{
+    margin-top:16px
+  }
+
+  .genezisi-entry-home .c-bands>div{
+    padding-top:9px;
+    padding-bottom:9px
+  }
+
+}
+
+@media(prefers-reduced-motion:reduce) {
+  .genezisi-entry-home{
+    scroll-behavior:auto
+  }
+
+  .genezisi-entry-home *, .genezisi-entry-home *::before, .genezisi-entry-home *::after{
+    animation:none!important;
+    transition:none!important
+  }
+
+  .genezisi-entry-home .journey{
+    height:auto!important
+  }
+
+  .genezisi-entry-home .journey .scene{
+    height:auto!important;
+    position:relative!important;
+    min-height:100svh!important;
+    overflow:visible!important
+  }
+
+  .genezisi-entry-home .journey .opening{
+    position:relative!important;
+    opacity:1!important;
+    pointer-events:auto!important
+  }
+
+  .genezisi-entry-home .journey .reveal{
+    position:relative!important;
+    opacity:1!important;
+    pointer-events:auto!important;
+    transform:none!important
+  }
+
+  .genezisi-entry-home .journey .depth, .genezisi-entry-home .journey .scene::after{
+    display:none!important
+  }
+
+}
+
+
+/* Screen 01: restrained CTA arrow polish; no layout or camera changes. */
+.genezisi-entry-home .opening .button span, .genezisi-entry-home .site-nav .nav-cta span{
+  display:inline-block;
+  line-height:1;
+  transition:transform 180ms cubic-bezier(.22,1,.36,1)
+}
+.genezisi-entry-home .opening .button:hover span, .genezisi-entry-home .opening .button:focus-visible span, .genezisi-entry-home .site-nav .nav-cta:hover span, .genezisi-entry-home .site-nav .nav-cta:focus-visible span{
+  transform:translate(2px,-2px)
+}
+
+/* Gate 1b increment: opening-to-B only. The original 3D journey and C rules stay in styles.css. */
+.genezisi-entry-home .opening{ --opening-gap:clamp(16px,3.5vw,60px); }
+
+/* Only active in the scroll-driven experience. Static/reduced-motion layouts use the
+   original normal-flow composition, including working anchors and controls. */
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .intro, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .intro{
+  width:100%;
+  text-align:center;
+  transform:translate3d(var(--introOffset,calc(50% + var(--opening-gap)/2)),var(--introVertical,0px),0);
+  transform-origin:center center;
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .intro .body, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .intro .body{margin-left:auto;margin-right:auto;}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .intro .actions, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .intro .actions{justify-content:center;}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .interface-wrap, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .interface-wrap{
+  transform:translate3d(var(--panelOffsetX,110vw),var(--panelOffsetY,0px),0) scale(var(--panelScale,1));
+  transform-style:preserve-3d;
+}
+/* The visual must remain visible in full once B resolves; entrance does not scale,
+   mask, or alpha-fade the contents of the existing editorial interface. */
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .interface-wrap .stack{transform-style:preserve-3d;}
+
+@media (min-width:741px) {
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .opening, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .opening{gap:var(--opening-gap);}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .intro, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .intro{max-width:none;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .intro h1, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .intro h1{font-size:clamp(53px,5.55vw,89px);line-height:.94;letter-spacing:-.071em;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .eyebrow, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .eyebrow{margin-bottom:clamp(22px,3vh,36px);}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .intro .body, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .intro .body{margin-top:clamp(19px,3vh,32px);max-width:44ch;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .intro .actions, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .intro .actions{margin-top:clamp(18px,2.8vh,29px);}
+}
+
+@media (max-width:740px) {
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .intro, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .intro{
+    transform:translate3d(var(--introOffset,0px),var(--introVertical,calc(51svh - 50% - 94px)),0);
+    margin-left:auto;margin-right:auto;
+  }
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .interface-wrap, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .interface-wrap{
+    transform:translate3d(var(--panelOffsetX,0px),var(--panelOffsetY,105svh),0) scale(var(--panelScale,1));
+    aspect-ratio:1.20;
+    max-height:37svh;
+    margin:14px auto 0;
+  }
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .opening, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .opening{justify-content:space-between;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .intro h1, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .intro h1{font-size:clamp(43px,11.6vw,67px);line-height:.94;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .intro .body, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .intro .body{max-width:39ch;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .interface-wrap .stack, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .interface-wrap .stack{width:94%;height:94%;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .window-head, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .window-head{font-size:10px;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .window-copy strong, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .window-copy strong{font-size:clamp(22px,6vw,32px);}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .discipline b, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .discipline b{font-size:clamp(15px,3.8vw,19px);}
+}
+
+@media (max-width:380px) {
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .opening, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .opening{padding-top:77px;padding-bottom:18px;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .intro, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .intro{transform:translate3d(var(--introOffset,0px),var(--introVertical,calc(51svh - 50% - 77px)),0);}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .intro h1, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .intro h1{font-size:clamp(39px,11.4vw,44px);}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .eyebrow, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .eyebrow{font-size:8px;letter-spacing:.115em;margin-bottom:13px;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .intro .body, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .intro .body{font-size:12px;line-height:1.42;margin-top:13px;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .intro .actions, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .intro .actions{gap:6px;margin-top:12px;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .button, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .button{min-height:40px;gap:6px;padding:0 10px;font-size:10px;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .interface-wrap, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .interface-wrap{aspect-ratio:1.46;max-height:33svh;margin-top:8px;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .window-copy strong, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .window-copy strong{font-size:20px;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .opening-foot, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .opening-foot{display:none;}
+}
+@media (max-width:740px) and (max-height:650px) {
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .interface-wrap, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .interface-wrap{max-height:34svh;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .window-foot, html.bc-motion-ready .genezisi-entry-home .journey:not([data-mode]) .window-foot{font-size:7px;}
+}
+/* Guard against grid min-content overflow inside the short mobile interface. */
+.genezisi-entry-home @media (max-width:380px){
+  .bc-motion-ready .journey[data-mode="motion"] .site-window,
+  .bc-motion-ready .journey:not([data-mode]) .site-window {grid-template-rows:13% minmax(0,1fr) 10%;}
+  .bc-motion-ready .journey[data-mode="motion"] .window-core,
+  .bc-motion-ready .journey:not([data-mode]) .window-core,
+  .bc-motion-ready .journey[data-mode="motion"] .disciplines,
+  .bc-motion-ready .journey:not([data-mode]) .disciplines {min-height:0;}
+  .bc-motion-ready .journey[data-mode="motion"] .window-copy,
+  .bc-motion-ready .journey:not([data-mode]) .window-copy {min-height:0;overflow:hidden;padding:7px;}
+  .bc-motion-ready .journey[data-mode="motion"] .window-copy strong,
+  .bc-motion-ready .journey:not([data-mode]) .window-copy strong {font-size:17px;}
+  .bc-motion-ready .journey[data-mode="motion"] .discipline,
+  .bc-motion-ready .journey:not([data-mode]) .discipline {min-height:0;padding:5px 8px;gap:3px;}
+  .bc-motion-ready .journey[data-mode="motion"] .discipline b,
+  .bc-motion-ready .journey:not([data-mode]) .discipline b {font-size:13px;}
+}
+
+/* The interface, not the introductory headline, is the full-size B keyframe.
+   All B surfaces and caption text stay opaque until the later scene begins. */
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .site-window, html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .sheet{opacity:1;backface-visibility:hidden;}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .site-window{background:#183528;}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .window-copy p{opacity:1;color:#d1dfd0;}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .window-copy small, html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .discipline span{color:#bbd3bc;}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .window-head small, html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .window-foot{color:#c0d5c1;}
+
+/* At close-up, opaque depth geometry emerges through B's central visual field.
+   A centered crop expands only after the camera has enlarged the solid B card;
+   no premature opacity fade or right-to-left cover. Deeper scene is unchanged. */
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .depth{
+  opacity:1;
+  clip-path:inset(var(--depthTop,50%) var(--depthRight,50%) var(--depthBottom,50%) var(--depthLeft,50%));
+}
+
+/* Gate 1b: B itself supplies the first architectural planes. The two solid
+   backing sheets swing to the sides as the camera advances; the existing
+   corridor continues their geometry instead of introducing unrelated props.
+   Deliberately opt-in; static/reduced-motion keep the original flat layout. */
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .interface-wrap .sheet{
+  transform:translate3d(calc(-12px - var(--wingSpread,0px)),18px,-80px)
+    rotateY(calc(0deg - var(--wingAngle,0deg)));
+  transform-origin:right center;
+  backface-visibility:hidden;
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .interface-wrap .sheet.two{
+  transform:translate3d(calc(20px + var(--wingSpread,0px)),-22px,-36px)
+    rotateY(var(--wingAngle,0deg));
+  transform-origin:left center;
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .interface-wrap .sheet::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(115deg,#2e6249,#163b2b);
+  opacity:var(--wingProgress,0);
+  pointer-events:none;
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .depth .rail{
+  border-color:#9dc2a27a;
+  background:linear-gradient(108deg,#26543f 0%,#204b37 25%,#123024 100%);
+  box-shadow:inset 0 0 0 1px #d7e9d008,inset 0 0 60px #071a1369,0 12px 45px #06191052;
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .depth .rail.far{
+  opacity:.76;
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .depth .rail::after{
+  content:"";
+  position:absolute;
+  inset:11% 9%;
+  border:1px solid #a1c4aa24;
+  background:repeating-linear-gradient(0deg,transparent 0 100px,#a2c8a72e 101px 102px);
+  pointer-events:none;
+}
+/* The existing third reading plane is placed far down the shared camera axis
+   and approaches smoothly; its contents and semantics remain unchanged. */
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .depth .reading{
+  transform:translate(-50%,-50%) translateZ(var(--readZ,-780px));
+  backface-visibility:hidden;
+  border-color:#afc9b0;
+  box-shadow:0 0 0 12px #153d2d,0 0 0 13px #a2c8ac65,0 24px 100px #07160fd6;
+}
+
+/* The site-window's actual text columns move into the left/right architecture
+   instead of remaining as ghost typography under the third surface. Opacity is
+   only used on the retiring text, never on the solid green window material. */
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .window-copy{
+  transform:translate3d(calc(0px - var(--contentSlide,0px)),0,0);
+  opacity:var(--contentAlpha,1);
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .disciplines{
+  transform:translate3d(var(--contentSlide,0px),0,0);
+  opacity:var(--contentAlpha,1);
+}
+
+
+/* Gate 1b founder review: B's own frame opens into a restrained chamber.
+   This architecture exists only in motion mode; reduced-motion retains
+   ordinary readable sections. All materials derive from the opaque B palette.
+   No glowing sci-fi portal, opacity crossfade, or detached third-card fragment. */
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .room-architecture{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  transform-style:preserve-3d;
+  /* overflow:hidden forces 3D descendants to flatten. The outer .depth
+     already clips the whole viewport; preserve Z and side-wall occlusion here. */
+  overflow:visible;
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .room-ceiling, html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .room-floor, html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .room-wall, html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .room-frame{
+  position:absolute;
+  pointer-events:none;
+  backface-visibility:hidden;
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .room-ceiling{
+  inset:0 0 76%;
+  clip-path:polygon(0 0,100% 0,68% 100%,32% 100%);
+  background:linear-gradient(180deg,#294c3a,#173729 64%,#0e281d);
+  box-shadow:inset 0 -1px #a8c6a64b;
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .room-floor{
+  inset:74% 0 0;
+  clip-path:polygon(32% 0,68% 0,100% 100%,0 100%);
+  background:linear-gradient(0deg,#10291f,#254a36 72%,#173729);
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .room-floor::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(90deg,transparent 49.8%,#b9d0b239 50%,transparent 50.2%),
+    repeating-linear-gradient(0deg,transparent 0 46px,#9bb99e26 47px 48px);
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .room-wall{
+  top:0;
+  bottom:0;
+  width:43%;
+  background:linear-gradient(100deg,#1c402f,#24523b 35%,#102a1e 100%);
+  box-shadow:inset 0 0 0 1px #a2c5a549,inset 0 0 70px #0719117d;
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .room-wall.left{
+  left:0;
+  clip-path:polygon(0 0,100% 23%,100% 77%,0 100%);
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .room-wall.right{
+  right:0;
+  clip-path:polygon(0 23%,100% 0,100% 100%,0 77%);
+  background:linear-gradient(260deg,#214331,#204a37 35%,#102a1e 100%);
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .room-wall::after{
+  content:"";
+  position:absolute;
+  inset:10% 10%;
+  border:1px solid #b4d2b03d;
+  background:
+    repeating-linear-gradient(0deg,transparent 0 92px,#abc6ad25 93px 94px),
+    linear-gradient(90deg,transparent 49.8%,#c2d9b82b 50%,transparent 50.2%);
+  opacity:.9;
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .room-frame{
+  left:50%;
+  top:50%;
+  border:1px solid #a8c5a16f;
+  box-shadow:0 0 0 8px #0d281d50,inset 0 0 0 2px #d8edce0c;
+  transform-style:preserve-3d;
+  transform-origin:center center;
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .room-frame.near{
+  width:72%;
+  height:86%;
+  transform:translate(-50%,-50%) translateZ(calc(-220px + var(--roomAdvance,0px)));
+  border-color:#9dc2a45e;
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .room-frame.far{
+  width:59%;
+  height:76%;
+  transform:translate(-50%,-50%) translateZ(calc(-670px + var(--roomAdvance,0px)));
+  border-color:#afd0af73;
+  background:linear-gradient(90deg,#08241b13,transparent 20% 80%,#08241b13);
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .room-frame::before, html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .room-frame::after{
+  content:"";
+  position:absolute;
+  height:1px;
+  left:10%;
+  right:10%;
+  background:#b9d5b35a;
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .room-frame::before{top:9%;}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .room-frame::after{bottom:9%;}
+
+/* Remove all original facade labels, not only the two columns. The window,
+   sheets and green architecture remain solid during the whole transition. */
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .window-head{
+  opacity:var(--facadeMetaAlpha,1);
+  transform:translateY(var(--facadeMetaLift,0px));
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .window-foot{
+  opacity:var(--facadeMetaAlpha,1);
+  transform:translateY(calc(0px - var(--facadeMetaLift,0px)));
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .opening-foot{
+  opacity:var(--facadeMetaAlpha,1);
+}
+
+/* One solid stage enters along the center-axis. The surface appears whole and
+   from afar; only after it is large enough is its real HTML text introduced.
+   The frame visually belongs to the surrounding architectural bay. */
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .depth .reading{
+  background:#e8efe4;
+  border:1px solid #9bb69d;
+  box-shadow:0 0 0 11px #112f22,0 0 0 12px #9fbca474,0 28px 80px #04190f9c;
+  transform:translate(-50%,-50%) translateZ(var(--readZ,-1120px));
+  transform-origin:center center;
+  overflow:hidden;
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .depth .reading::before{
+  content:"";
+  position:absolute;
+  inset:8px;
+  border:1px solid #244b3332;
+  pointer-events:none;
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .depth .reading-ink{
+  opacity:var(--readInk,0);
+  transform:translateY(calc((1 - var(--readInk,0)) * 12px));
+}
+@media (max-width:740px) {
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .room-wall{width:39%;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .room-frame.near{width:86%;height:82%;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .room-frame.far{width:78%;height:72%;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .room-floor{inset:80% 0 0;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .room-ceiling{inset:0 0 81%;}
+}
+@media (max-width:380px), (max-height:650px) {
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .depth .reading{padding:17px;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .depth .reading small{margin-bottom:13px;font-size:8px;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .depth .reading h2{font-size:clamp(25px,6.6vw,35px);}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .depth .reading p{margin-top:12px;font-size:12px;}
+  html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .depth .reading-bottom{margin-top:15px;padding-top:10px;}
+}
+
+/* The light-to-room handoff takes its ambient hue from B, avoiding a neutral
+   gray wash around the interface before the architectural chamber expands.
+   Does not alter the solid facade, cards, or final C composition. */
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .scene::after{
+  background:radial-gradient(ellipse at 50% 48%,#285840 0%,#183c2c 55%,#0b1713 100%);
+}
+
+/* Third card -> C: the complete cream reading surface folds modestly
+   into its own room; a full-height C plane advances from the same side.
+   No competing triangular fold props, detached dark rectangle or faded
+   layers. C copy appears as soon as the solid plane covers the viewport. */
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .depth .reading{
+  transform-origin:left center;
+  transform:translate(-50%,-50%) translateZ(var(--readZ,-1120px))
+    rotateY(var(--readingTurn,0deg));
+  backface-visibility:hidden;
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .depth .fold-pane{
+  background:linear-gradient(127deg,#345c43,#1c4634 52%,#102d22);
+  border:1px solid #a7c7a36d;
+  box-shadow:inset 0 0 0 1px #d1e2c410,0 12px 65px #061b1380;
+  backdrop-filter:none;
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .reveal{
+  /* One full-height, solid C plane with a shallow architectural leading
+     edge. It advances from the left as the reading card folds behind it.
+     The clipped geometry never becomes a floating centered dark rectangle. */
+  opacity:1;
+  clip-path:polygon(
+    0 0,
+    var(--cFrontTop,0%) 0,
+    var(--cFrontBottom,0%) 100%,
+    0 100%
+  );
+  transform:none;
+}
+/* The existing giant editorial G. belongs to the *completed* C layout.
+   Suppress it during transition so it cannot become a foreground object. */
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .reveal::after{
+  opacity:var(--cWatermark,0);
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .reveal .c-center, html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .reveal .c-topline, html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .reveal .c-lastline{
+  opacity:var(--cInk,0);
+  transform:translate3d(0,var(--cInkRise,12px),0);
+}
+/* C's final positions, typography, contrast and responsive rules are
+   inherited unchanged from styles.css. Keep reduced-motion unmasked. */
+
+/* Founder refinement: the main C message is allowed to resolve *while* the
+   adjacent evergreen chamber is still visible. We measure the actual
+   rendered headline against the moving cover edge before revealing it:
+   no clipped letters on desktop or narrow portrait layouts. Secondary C
+   content remains deferred until the background has fully expanded.
+   Motion-only; static/reduced-motion and final C composition are unchanged. */
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .reveal .c-center{
+  opacity:1;
+  transform:translate3d(0,var(--cHeadlineRise,8px),0)
+    scale(var(--cEntranceScale,1));
+  transform-origin:center center;
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .reveal .c-center .c-kicker, html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .reveal .c-center h2{
+  opacity:var(--cHeadlineInk,0);
+}
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .reveal .c-center .c-description, html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .reveal .c-center .c-bands{
+  opacity:var(--cInk,0);
+}
+
+/* The site header must remain fixed across the scrolling story and Work. */
+.genezisi-entry-home .site-nav {
+ position:fixed !important;
+ inset:0 0 auto !important;
+ width:100%;
+ height:64px;
+ z-index:100 !important;
+ color:#173327;
+ background:#e6ded2 !important;
+}
+/* The source HTML was absolute; this React integration uses the real sticky scene. */
+.genezisi-entry-home .scene > .opening { z-index:5; }
+.genezisi-entry-home .scene > .depth { z-index:6; }
+.genezisi-entry-home .scene > .reveal { z-index:9; }
+.genezisi-entry-home .journey[data-mode="motion"][data-beat="interior"] .site-nav,
+.genezisi-entry-home .journey[data-mode="motion"][data-beat="reveal"] .site-nav {
+ background:#0f1d18 !important;
+ border-color:rgba(220,235,216,.2) !important;
+}
+.genezisi-entry-home .journey[data-mode="motion"][data-beat="interior"] .site-nav a,
+.genezisi-entry-home .journey[data-mode="motion"][data-beat="reveal"] .site-nav a {
+ color:#f1f1e7 !important;
+}
+.genezisi-entry-home .journey[data-mode="motion"][data-beat="interior"] .site-nav a[href^="https://wa.me/"],
+.genezisi-entry-home .journey[data-mode="motion"][data-beat="reveal"] .site-nav a[href^="https://wa.me/"] {
+ color:#173327 !important;
+ background:#f1f1e7 !important;
+}
+/* No separate source-preview Work section: use the existing Next.js Work section. */
+.genezisi-entry-home .journey:not([data-mode="motion"]) .depth { display:none; }
+.genezisi-entry-home .journey[data-mode="motion"] .scene { overflow:hidden; }

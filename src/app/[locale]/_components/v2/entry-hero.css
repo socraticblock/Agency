@@ -368,3 +368,59 @@
     line-height: 1.06;
   }
 }
+
+/* Nav follows the reversible journey without inheriting the prototype's
+   absolute positioning or its global theme variables. */
+.genezisi-entry-home[data-beat="interior"] .site-nav,
+.genezisi-entry-home[data-beat="reveal"] .site-nav,
+.genezisi-entry-home[data-beat="work"] .site-nav {
+  background:#0f1d18 !important;
+  border-color:rgba(220,235,216,.19) !important;
+}
+.genezisi-entry-home[data-beat="interior"] .site-nav a,
+.genezisi-entry-home[data-beat="reveal"] .site-nav a,
+.genezisi-entry-home[data-beat="work"] .site-nav a {
+  color:#f1f1e7 !important;
+}
+.genezisi-entry-home[data-beat="interior"] .site-nav a[href^="https://wa.me/"],
+.genezisi-entry-home[data-beat="reveal"] .site-nav a[href^="https://wa.me/"],
+.genezisi-entry-home[data-beat="work"] .site-nav a[href^="https://wa.me/"] {
+  color:#173327 !important;
+  background:#f1f1e7 !important;
+}
+/* Motion is explicitly opt-in. The static page is intentionally readable
+   when JavaScript is disabled or reduced motion is requested. */
+.genezisi-entry-home .journey:not([data-mode="motion"]) .scene {
+  height:auto;
+  min-height:100svh;
+}
+.genezisi-entry-home .journey:not([data-mode="motion"]) .opening {
+  position:relative;
+  min-height:100svh;
+}
+.genezisi-entry-home .journey:not([data-mode="motion"]) .reveal {
+  position:relative;
+  min-height:100svh;
+}
+/* Prevent new page global utility layers from overtaking the scene. */
+.genezisi-entry-home .journey[data-mode="motion"] .scene { isolation:isolate; }
+
+/* The three locales need individually legible closing frames, not English
+   headline metrics forced onto Georgian and Dutch words. */
+.genezisi-entry-home[lang^="ka"] .reveal .c-center h2,
+.genezisi-entry-home[lang^="ka"] .reveal .c-center h2 em {
+  font-family:var(--font-noto-georgian),sans-serif;
+  font-style:normal;
+  font-weight:800;
+  letter-spacing:-.045em;
+  line-height:1.06;
+}
+@media (max-width:740px) {
+  .genezisi-entry-home[lang^="ka"] .reveal .c-center h2 {
+    font-size:clamp(31px,7.2vw,54px);
+  }
+  .genezisi-entry-home[lang^="nl"] .reveal .c-center h2 {
+    font-size:clamp(35px,8.6vw,64px);
+    line-height:.96;
+  }
+}

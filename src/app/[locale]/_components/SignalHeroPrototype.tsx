@@ -24,6 +24,9 @@ export function SignalHeroPrototype({ locale }: { locale: HomeLocale }) {
   const copy = getV2Copy(locale);
   const waHref = "https://wa.me/" + WHATSAPP_INTAKE + "?text=" + encodeURIComponent(V2_WHATSAPP_MESSAGE[locale]);
   return <main lang={HOME_HTML_LANG[locale]} className="genezisi-entry-home v2-home bg-[#02060b] text-white">
+    {/* Apply the native-scroll opening pose before the first browser paint.
+        Without JavaScript the ordinary static hero remains readable. */}
+    <script dangerouslySetInnerHTML={{ __html: 'if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches) document.documentElement.classList.add("bc-motion-ready");' }} />
     <StudioHeader locale={locale} copy={copy} contactHref={waHref} />
     <V2Hero locale={locale} copy={copy} contactHref={waHref} />
     <SelectedWork copy={copy} />
