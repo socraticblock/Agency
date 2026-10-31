@@ -19,7 +19,7 @@ test('native CTA and Work DOM, and B-to-C motion runtime remain unchanged',()=>{
 });
 
 test('current V6.3 module is loaded on intent; navigation safely degrades',()=>{
-  assert.match(nav,/import\("\.\/digital-passage-scene-v6-2\.js"\)/);
+  assert.match(nav,/import\("\.\/digital-passage-scene-v6-3\.js"\)/);
   for(const item of ['prefers-reduced-motion','saveData','pushState','popstate','pagehide','Promise.race','if (token !== ticket) return']) {
     assert.ok(nav.includes(item), 'missing fallback '+item);
   }
