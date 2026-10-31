@@ -2,7 +2,8 @@
 
 **Decision date:** 31 October 2026  
 **Approval level:** Founder **locks the core creative concept** after reviewing the recorded V2 passage. The implementation, timing, rendering, mobile composition, usability and final visual quality remain subject to refinement and acceptance. Concept approval is **not** production/deployment approval.  
-**Current iteration:** `feature/screen01-digital-passage-locked-v3-2026-10-31`  
+**Historical iteration at concept lock:** `feature/screen01-digital-passage-locked-v3-2026-10-31` (not the active foundation).  
+**Later acceptance update (31 October):** Founder accepted the final isolated V6.5 Digital Passage prototype as a sufficient foundation and stopped further visual iteration. Canonical SHA `ce8eae22f1d3500674265d529cdcb793d23b538b`; see [V6.5 acceptance record](SCREEN_01_DIGITAL_PASSAGE_V6_5_WORK_ARRIVAL_REVIEW_2026-10-31.md). This updates **implementation status only**, not the originally locked concept, and confers no merge/deploy or integrated-site approval.  
 **Source recording:** founder-uploaded `20261031-0523-30.9419563.mp4` (4.23-second clip, multiple review states; do not infer a single uninterrupted 4.23-second travel).
 
 ## The non-negotiable concept — frozen
