@@ -18,17 +18,28 @@
   contain:layout paint style;
   clip-path:circle(0px at 50% 50%);
 }
-.genezisi-passage-work-plane {
+.genezisi-passage-work-window {
   position:absolute;
   inset:0;
   z-index:1;
-  overflow:hidden;
-  background:#f0ece5;
-  pointer-events:none;
   opacity:0;
-  transform-origin:50% 50%;
+  overflow:hidden;
+  pointer-events:none!important;
+  clip-path:polygon(50% 50%,50% 50%,50% 50%,50% 50%);
+  contain:layout paint style;
+}
+.genezisi-passage-work-plane {
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  min-height:100%;
+  background:#f0ece5;
+  overflow:hidden;
+  pointer-events:none!important;
+  transform-origin:0 0;
   backface-visibility:hidden;
-  will-change:transform,opacity;
+  will-change:transform;
 }
 .genezisi-passage-work-plane .work-preview {
   width:100%;
