@@ -51,10 +51,10 @@ test('module is lazy, direct Work fallback exists, and stale Back does not force
 });
 
 test('locked concept: CTA transforms to threshold then Work approaches before reveal',()=>{
-  assert.match(scene,/buttonEdges\.radius/);
+  assert.match(scene,/buttonRadius/);
   assert.match(scene,/inset\(/);
   assert.match(scene,/function approachWork\(/);
-  assert.match(scene,/approachWork\(p,z\)/);
+  assert.match(scene,/approachWork\(p\)/);
   assert.match(scene,/alpha:true/);
   assert.match(scene,/scene\.background=null/);
   assert.match(scene,/DURATION=2140/);
