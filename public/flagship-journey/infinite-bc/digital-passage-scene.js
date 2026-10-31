@@ -24,7 +24,7 @@ export function createDigitalPassage({trigger,onCover,onFinish,onError}) {
   const ox = source.left + source.width * .50;
   const oy = source.top + source.height * .50;
   let disposed = false, running = false, raf=0, started=0, progress=0, covered=false;
-  let quietFrames = 0, lastFrame = 0;
+  
   const debug = new URLSearchParams(location.search).has("passageDebug");
   const stage = document.createElement("div");
   stage.className = "genezisi-passage";
@@ -57,7 +57,7 @@ export function createDigitalPassage({trigger,onCover,onFinish,onError}) {
   scene.background=VOLUME;
   scene.fog=new THREE.FogExp2(VOLUME, mobile?.016:.0128);
   const camera = new THREE.PerspectiveCamera(mobile?77:69,window.innerWidth/window.innerHeight,.08,195);
-  camera.position.set(0,0,9.5);
+  camera.position.set(0,0,3.1);
   camera.lookAt(0,0,-40);
 
   const ambient=new THREE.HemisphereLight(0x8ad8ae,0x03120d,1.25);
@@ -82,10 +82,6 @@ export function createDigitalPassage({trigger,onCover,onFinish,onError}) {
   const ivoryMaterial = new THREE.MeshStandardMaterial({
     color:PAPER,metalness:.12,roughness:.42,emissive:0x14221b,
     emissiveIntensity:.20,flatShading:true
-  });
-  const lineMaterial = new THREE.MeshBasicMaterial({
-    color:MINT,transparent:true,opacity:.72,depthWrite:false,
-    blending:THREE.AdditiveBlending,toneMapped:false
   });
   const hazeMaterial = new THREE.ShaderMaterial({
     uniforms:{uStrength:{value:.50},uTime:{value:0}},
@@ -266,7 +262,7 @@ export function createDigitalPassage({trigger,onCover,onFinish,onError}) {
     if(disposed) return;
     progress=clamp(p);
     const travel=smooth(.13,.91,progress);
-    const z=lerp(9.5,-103.0,travel);
+    const z=lerp(3.1,-103.0,travel);
     const drift=Math.sin(travel*PI);
     camera.position.set(
       centerX(travel*14)*.60 + .29*drift,
@@ -327,15 +323,15 @@ export function createDigitalPassage({trigger,onCover,onFinish,onError}) {
     stage.removeEventListener("pointerdown",onInterrupt);
     document.documentElement.classList.remove("genezisi-passage-active");
     if(debug) delete window.__genezisiPassage;
+    const geometries=new Set(),materials=new Set();
     scene.traverse(obj=>{
-      if(obj.geometry)obj.geometry.dispose();
+      if(obj.geometry)geometries.add(obj.geometry);
       if(obj.material) {
-        const mats=Array.isArray(obj.material)?obj.material:[obj.material];
-        for(const m of mats)m.dispose();
+        for(const m of (Array.isArray(obj.material)?obj.material:[obj.material])) materials.add(m);
       }
     });
-    unitBox.dispose();
-    hazeMaterial.dispose();
+    for(const g of geometries)g.dispose();
+    for(const m of materials)m.dispose();
     renderer.dispose();
     renderer.forceContextLoss();
     stage.remove();
