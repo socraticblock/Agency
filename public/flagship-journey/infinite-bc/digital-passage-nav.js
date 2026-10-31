@@ -21,7 +21,7 @@
 
   function preload() {
     if (!loading) {
-      loading = import("./digital-passage-scene.js").catch(error => {
+      loading = import("./digital-passage-scene-v2.js").catch(error => {
         loading = null;
         throw error;
       });
@@ -33,6 +33,7 @@
   // The real link remains usable if modules, CDNs or WebGL are unavailable.
   trigger.addEventListener("pointerenter", () => { if (canAnimate()) preload().catch(() => {}); }, { passive: true });
   trigger.addEventListener("focus", () => { if (canAnimate()) preload().catch(() => {}); });
+  trigger.addEventListener("pointerdown", () => { if (canAnimate()) preload().catch(() => {}); }, { passive: true });
 
   function land() {
     if (location.hash !== "#work") history.pushState(null, "", "#work");
@@ -50,13 +51,14 @@
     ) return;
     if (active) { event.preventDefault(); return; }
     event.preventDefault();
+    document.documentElement.classList.add("genezisi-passage-pending");
     const token = ++ticket;
     const fromKeyboard = event.detail === 0;
 
     // Hard timeout: an optional cinematic effect must never block navigation.
     let timer;
     const gate = new Promise((_, reject) => {
-      timer = setTimeout(() => reject(new Error("Scene load timeout")), 2200);
+      timer = setTimeout(() => reject(new Error("Scene load timeout")), 1500);
     });
 
     try {
@@ -80,17 +82,19 @@
         onFinish: finish,
         onError: error => { console.warn("[Genezisi Passage] graceful fallback", error); finish(); }
       });
-      active.start();
+      try { active.start(); } catch (error) { active?.dispose(); active = null; throw error; }
     } catch (error) {
       console.warn("[Genezisi Passage] direct Work fallback", error);
       if (token === ticket) land();
     } finally {
       clearTimeout(timer);
+      document.documentElement.classList.remove("genezisi-passage-pending");
     }
   });
 
   window.addEventListener("popstate", () => {
     // Back/Forward is user authority, never restart the Work transition.
+    document.documentElement.classList.remove("genezisi-passage-pending");
     ++ticket;
     active?.dispose();
     active = null;
@@ -104,6 +108,7 @@
   });
 
   window.addEventListener("pagehide", () => {
+    document.documentElement.classList.remove("genezisi-passage-pending");
     ++ticket;
     active?.dispose();
     active = null;
