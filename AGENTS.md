@@ -1,6 +1,6 @@
 # Genezisi — repository instructions for coding agents
 
-**Updated:** 30 October 2026. **Scope:** `socraticblock/Agency`. This file routes work to the current authority; it is not permission to change production.
+**Updated:** 31 October 2026 for the isolated mesh experiment branch. **Scope:** `socraticblock/Agency`. This file routes work to the current authority; it is not permission to change production.
 
 ## First decide which product the task concerns
 
@@ -9,6 +9,8 @@ This repository contains both the **Genezisi studio website** and **legacy/ongoi
 ### Studio homepage / Infinite Website (current target)
 
 Read in this order:
+
+**Latest current-state addendum:** [Screen 01 Status and Decisions — 31 October](docs/infinite-website/SCREEN_01_STATUS_AND_DECISIONS_2026-10-31.md). Read this **before** interpreting earlier dated CTA or storyboard status; it does not supersede the North Star.
 
 1. [Infinite Website North Star v1.2](docs/infinite-website/NORTH_STAR_v1.2.md) — controlling business, creative, engineering and release contract.
 2. [Full Visitor Flow v1.2](docs/infinite-website/VISITOR_FLOW_v1.2.md) — proposed scene copy and B → C storyboard; subordinate where wording is not yet visually accepted.
