@@ -10,6 +10,20 @@
 <script>
 (()=>{'use strict';
 const canvas=document.getElementById('scene'),play=document.getElementById('play'),scrub=document.getElementById('progress'),value=document.getElementById('value'),reset=document.getElementById('reset');
+function showRenderError(error){
+  // Never present a silent black canvas as though the lab were playing.
+  const message=error instanceof Error?error.message:String(error);
+  console.error('Living Page mesh proof rendering error:',error);
+  document.body.classList.remove('ready');
+  const fallback=document.querySelector('.fallback p');
+  if(fallback)fallback.textContent='The 3D preview failed to render: '+message+'. This experiment has not changed the actual website CTA.';
+  play.disabled=true;
+  scrub.disabled=true;
+  reset.disabled=true;
+}
+window.addEventListener('error',(event)=>{
+  showRenderError(event.error||new Error(event.message||'Unknown browser error'));
+});
 const gl=canvas.getContext('webgl2',{antialias:true,alpha:false,depth:true,premultipliedAlpha:false,preserveDrawingBuffer:true,powerPreference:'high-performance'});
 if(!gl){play.disabled=true;scrub.disabled=true;return;}
 document.body.classList.add('ready');
@@ -160,13 +174,18 @@ gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,false);gl.texImage2D(gl.TEXTURE_2D,0,gl.RG
 let textures=[null,null],aspect=1,p=0,playing=false,previous=0,raf=0;
 function perspective(a){const z=4.6,f=1/Math.tan(Math.atan(1/z));const near=.1,far=30;return new Float32Array([f/a,0,0,0,0,f,0,0,0,0,(far+near)/(near-far),-1,0,0,(2*far*near)/(near-far),0]);}
 function rebuild(){const rect=canvas.getBoundingClientRect(),w=Math.max(1,Math.round(rect.width)),h=Math.max(1,Math.round(rect.height));const dpr=Math.min(window.devicePixelRatio||1,1.5);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);aspect=w/h;textures.forEach(t=>t&&gl.deleteTexture(t));textures=[makeTex(drawTexture(w,h,'hero')),makeTex(drawTexture(w,h,'work'))];draw();}
-function draw(){gl.viewport(0,0,canvas.width,canvas.height);
+function draw(){
+ // Define all frame functions before their first use. The prior version
+ // called s() while it was still in the temporal dead zone, aborting the
+ // first paint and leaving a black WebGL canvas with usable-looking controls.
+ const s=(a,b,x)=>{const t=Math.max(0,Math.min(1,(x-a)/(b-a)));return t*t*(3-2*t)};
+ gl.viewport(0,0,canvas.width,canvas.height);
  // The work plane illuminates the otherwise dark aperture as we approach;
  // this prevents a static green card/tunnel frame around the landing.
  const light=s(.40,.88,p);
  const bg0=[.075,.16,.11], bg1=[.94,.926,.90];
  gl.clearColor(...bg0.map((v,i)=>v+(bg1[i]-v)*light),1);
- gl.clearDepth(1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);gl.disable(gl.CULL_FACE);gl.useProgram(program);gl.uniform1f(loc.aspect,aspect);gl.uniform1f(loc.progress,p);gl.uniformMatrix4fv(loc.proj,false,perspective(aspect));const s=(a,b,x)=>{const t=Math.max(0,Math.min(1,(x-a)/(b-a)));return t*t*(3-2*t)};const travel=s(.34,.95,p);
+ gl.clearDepth(1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);gl.disable(gl.CULL_FACE);gl.useProgram(program);gl.uniform1f(loc.aspect,aspect);gl.uniform1f(loc.progress,p);gl.uniformMatrix4fv(loc.proj,false,perspective(aspect));const travel=s(.34,.95,p);
 // True camera dolly (not per-object scale): Work Z=-3.4 and final camera
 // Z=1.2 yield the exact same 4.6-unit framing as the opening at Z=0.
 gl.uniform1f(loc.cam,4.6-3.4*travel);
