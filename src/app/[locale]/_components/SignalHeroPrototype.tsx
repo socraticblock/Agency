@@ -1,3 +1,5 @@
+import "./v2/entry-hero.css";
+import "./v2/digital-passage.css";
 import { WHATSAPP_INTAKE } from "@/constants/content";
 import { HOME_HTML_LANG, type HomeLocale } from "@/lib/home-i18n";
 import { getV2Copy } from "./v2/hero.copy";
@@ -21,9 +23,9 @@ const V2_WHATSAPP_MESSAGE: Record<HomeLocale, string> = {
 export function SignalHeroPrototype({ locale }: { locale: HomeLocale }) {
   const copy = getV2Copy(locale);
   const waHref = "https://wa.me/" + WHATSAPP_INTAKE + "?text=" + encodeURIComponent(V2_WHATSAPP_MESSAGE[locale]);
-  return <main lang={HOME_HTML_LANG[locale]} className="v2-home bg-[#02060b] text-white">
+  return <main lang={HOME_HTML_LANG[locale]} className="genezisi-entry-home v2-home bg-[#02060b] text-white">
     <StudioHeader locale={locale} copy={copy} contactHref={waHref} />
-    <V2Hero copy={copy} contactHref={waHref} />
+    <V2Hero locale={locale} copy={copy} contactHref={waHref} />
     <SelectedWork copy={copy} />
     <Capabilities copy={copy} />
     <section className="bg-[#02060b] px-5 py-20 sm:px-8 lg:py-28"><div className="mx-auto max-w-[92rem] border-t border-white/10 pt-14"><V2Lab copy={copy} /></div></section>

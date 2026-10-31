@@ -1,0 +1,354 @@
+/* Screen 01 integration: editorial ivory opening only.
+   All styles are scoped to the Genezisi homepage to protect other routes. */
+.genezisi-entry-home {
+  --entry-paper: #e6ded2;
+  --entry-ink: #173327;
+  --entry-muted: #6d816e;
+  --entry-line: rgba(27,55,41,.17);
+}
+
+/* Keep the existing site navigation and language controls, but harmonize
+   them with the approved Screen 01 palette. The header remains persistent. */
+.genezisi-entry-home .site-nav {
+  background: var(--entry-paper) !important;
+  border-bottom: 1px solid var(--entry-line) !important;
+  color: var(--entry-ink);
+}
+.genezisi-entry-home .site-nav a:not([href^="https://wa.me/"]) {
+  color: var(--entry-ink) !important;
+}
+.genezisi-entry-home .site-nav nav span[aria-hidden] {
+  color: var(--entry-muted) !important;
+}
+.genezisi-entry-home .site-nav a[href^="https://wa.me/"] {
+  background: var(--entry-ink) !important;
+  color: #fff !important;
+}
+.genezisi-entry-home .site-nav > div > a:first-child {
+  font-weight: 900;
+  letter-spacing: -.035em;
+}
+.genezisi-entry-home .site-nav a:focus-visible {
+  outline: 2px solid #236047;
+  outline-offset: 3px;
+}
+
+.genezisi-entry-home .opening {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(20px, 3.5vw, 60px);
+  width: 100%;
+  min-height: 100svh;
+  padding: 115px clamp(20px, 5vw, 72px) 82px;
+  background: var(--entry-paper);
+  color: var(--entry-ink);
+  overflow: clip;
+}
+.genezisi-entry-home .opening .intro {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+  max-width: 680px;
+}
+.genezisi-entry-home .opening .eyebrow {
+  margin: 0 0 clamp(22px, 3vw, 42px);
+  color: var(--entry-muted);
+  font-size: 11px;
+  line-height: 1.4;
+  font-weight: 900;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+.genezisi-entry-home .opening h1 {
+  margin: 0;
+  color: var(--entry-ink);
+  font-size: clamp(55px, 5.9vw, 95px);
+  font-weight: 900;
+  letter-spacing: -.075em;
+  line-height: .93;
+  overflow-wrap: normal;
+}
+.genezisi-entry-home .opening h1 em {
+  color: var(--entry-muted);
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -.08em;
+}
+.genezisi-entry-home .opening .body {
+  max-width: 510px;
+  margin: 36px 0 0;
+  color: #586a5b;
+  font-size: clamp(14px, 1.27vw, 19px);
+  line-height: 1.58;
+}
+.genezisi-entry-home .opening .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 30px;
+}
+.genezisi-entry-home .opening .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  min-height: 48px;
+  padding: 0 21px;
+  border: 1px solid #a3b29f;
+  border-radius: 999px;
+  color: var(--entry-ink);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.2;
+  text-decoration: none;
+  transition: background-color 180ms ease, color 180ms ease;
+}
+.genezisi-entry-home .opening .button.primary {
+  border-color: var(--entry-ink);
+  background: var(--entry-ink);
+  color: #fff;
+}
+.genezisi-entry-home .opening .button.primary:hover {
+  background: #2b5941;
+}
+.genezisi-entry-home .opening .button:not(.primary):hover {
+  background: #d8dfd2;
+}
+.genezisi-entry-home .opening .button span {
+  display: inline-block;
+  font-size: 17px;
+  line-height: 1;
+  transition: transform 180ms cubic-bezier(.22,1,.36,1);
+}
+.genezisi-entry-home .opening .button:hover span,
+.genezisi-entry-home .opening .button:focus-visible span {
+  transform: translate(2px, -2px);
+}
+.genezisi-entry-home .opening a:focus-visible {
+  outline: 3px solid #278a67;
+  outline-offset: 4px;
+}
+
+.genezisi-entry-home .opening .interface-wrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 300px;
+  aspect-ratio: 1.16;
+  perspective: 1050px;
+  transform-style: preserve-3d;
+}
+.genezisi-entry-home .opening .stack {
+  position: relative;
+  width: 94%;
+  height: 80%;
+  max-height: 570px;
+  transform-style: preserve-3d;
+}
+.genezisi-entry-home .opening .sheet {
+  position: absolute;
+  inset: 0;
+  border: 1px solid #a6bda6;
+  background: #d1d9ce;
+  transform: translate3d(-12px, 18px, -80px);
+  box-shadow: 1px 15px 38px #12221a15;
+}
+.genezisi-entry-home .opening .sheet.two {
+  background: #c5d1c1;
+  transform: translate3d(20px, -22px, -36px);
+}
+.genezisi-entry-home .opening .site-window {
+  position: absolute;
+  inset: 4% 5% 6% 1%;
+  display: grid;
+  grid-template-rows: 13% minmax(0, 1fr) 10%;
+  overflow: hidden;
+  transform: translateZ(12px);
+  background: #183528;
+  color: #f5f1e8;
+  box-shadow: 0 12px 29px #0e251d2b;
+}
+.genezisi-entry-home .opening .window-head,
+.genezisi-entry-home .opening .window-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+  padding: 0 20px;
+  border-bottom: 1px solid #f5f1e829;
+  font-size: 12px;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+.genezisi-entry-home .opening .window-head small,
+.genezisi-entry-home .opening .window-foot {
+  color: #b6cab7;
+  font-size: 8px;
+  letter-spacing: .10em;
+}
+.genezisi-entry-home .opening .window-head small {
+  text-align: right;
+}
+.genezisi-entry-home .opening .window-foot {
+  border-top: 1px solid #f5f1e829;
+  border-bottom: 0;
+}
+.genezisi-entry-home .opening .window-core {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+  min-height: 0;
+}
+.genezisi-entry-home .opening .window-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+  min-height: 0;
+  padding: clamp(10px, 2.2vw, 35px);
+  border-right: 1px solid #f5f1e829;
+}
+.genezisi-entry-home .opening .window-copy small {
+  color: #b0c6b2;
+  font-size: 9px;
+  letter-spacing: .17em;
+  text-transform: uppercase;
+}
+.genezisi-entry-home .opening .window-copy strong {
+  display: block;
+  white-space: pre-line;
+  font: italic clamp(25px, 3.4vw, 54px)/1.06 Georgia, "Times New Roman", serif;
+  letter-spacing: -.06em;
+  overflow-wrap: anywhere;
+}
+.genezisi-entry-home .opening .window-copy p {
+  max-width: 220px;
+  margin: 0;
+  color: #d1dfd0;
+  font-size: 10px;
+  line-height: 1.6;
+}
+.genezisi-entry-home .opening .disciplines {
+  display: grid;
+  grid-template-rows: repeat(3, minmax(0,1fr));
+  min-width: 0;
+  min-height: 0;
+}
+.genezisi-entry-home .opening .discipline {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  min-width: 0;
+  padding: clamp(8px, 1.7vw, 25px);
+  border-bottom: 1px solid #f5f1e829;
+}
+.genezisi-entry-home .opening .discipline:last-child { border-bottom: 0; }
+.genezisi-entry-home .opening .discipline span {
+  color: #adcaaf;
+  font-size: 8px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.genezisi-entry-home .opening .discipline b {
+  font-size: clamp(15px, 1.5vw, 24px);
+  font-weight: 500;
+  letter-spacing: -.04em;
+  overflow-wrap: anywhere;
+}
+
+.genezisi-entry-home .opening .opening-foot {
+  position: absolute;
+  right: clamp(20px, 5vw, 72px);
+  bottom: 22px;
+  left: clamp(20px, 5vw, 72px);
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 18px;
+  border-top: 1px solid var(--entry-line);
+  color: var(--entry-muted);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+.genezisi-entry-home .opening .opening-foot span:nth-child(2) { margin: 0 auto; }
+
+/* Separate breakpoints for tablet, phone, and very short screens. */
+@media (max-width: 1120px) and (min-width: 741px) {
+  .genezisi-entry-home .opening { gap: 18px; }
+  .genezisi-entry-home .opening h1 { font-size: clamp(49px, 6.3vw, 73px); }
+  .genezisi-entry-home .opening .interface-wrap { min-height: 280px; }
+  .genezisi-entry-home .opening .window-copy p,
+  .genezisi-entry-home .opening .window-head small { display: none; }
+  .genezisi-entry-home .opening .window-copy strong { font-size: clamp(24px, 3.2vw, 38px); }
+}
+@media (max-width: 740px) {
+  .genezisi-entry-home .opening {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 0;
+    padding: 97px 20px 68px;
+  }
+  .genezisi-entry-home .opening .intro { width: 100%; max-width: 540px; }
+  .genezisi-entry-home .opening .eyebrow { margin-bottom: 26px; font-size: 10px; }
+  .genezisi-entry-home .opening h1 { font-size: clamp(45px, 11.5vw, 76px); }
+  .genezisi-entry-home .opening .body { max-width: 410px; margin-top: 23px; font-size: 15px; line-height: 1.5; }
+  .genezisi-entry-home .opening .actions { gap: 9px; margin-top: 22px; }
+  .genezisi-entry-home .opening .button { gap: 12px; min-height: 46px; padding: 0 15px; font-size: 11px; }
+  .genezisi-entry-home .opening .interface-wrap {
+    width: 100%;
+    min-height: 0;
+    max-height: 31svh;
+    margin: 24px auto 0;
+    aspect-ratio: 1.68;
+  }
+  .genezisi-entry-home .opening .stack { width: 91%; height: 95%; }
+  .genezisi-entry-home .opening .window-head { padding: 0 12px; font-size: 9px; }
+  .genezisi-entry-home .opening .window-copy { padding: 10px; }
+  .genezisi-entry-home .opening .window-copy small { font-size: 7px; }
+  .genezisi-entry-home .opening .window-copy strong { font-size: clamp(22px, 6vw, 34px); }
+  .genezisi-entry-home .opening .window-copy p,
+  .genezisi-entry-home .opening .window-head small { display: none; }
+  .genezisi-entry-home .opening .discipline { gap: 5px; padding: 7px 12px; }
+  .genezisi-entry-home .opening .discipline span { font-size: 7px; }
+  .genezisi-entry-home .opening .discipline b { font-size: clamp(13px, 3.8vw, 19px); }
+  .genezisi-entry-home .opening .window-foot { padding: 0 10px; font-size: 7px; }
+  .genezisi-entry-home .opening .opening-foot { bottom: 13px; right: 20px; left: 20px; font-size: 8px; }
+  .genezisi-entry-home .opening .opening-foot span:nth-child(2) { display: none; }
+}
+@media (max-width: 380px) {
+  .genezisi-entry-home .opening { padding: 82px 16px 58px; }
+  .genezisi-entry-home .opening .eyebrow { margin-bottom: 16px; font-size: 9px; }
+  .genezisi-entry-home .opening h1 { font-size: clamp(39px, 11.4vw, 48px); }
+  .genezisi-entry-home .opening .body { margin-top: 15px; font-size: 13px; line-height: 1.44; }
+  .genezisi-entry-home .opening .actions { margin-top: 14px; gap: 7px; }
+  .genezisi-entry-home .opening .button { min-height: 44px; padding: 0 11px; font-size: 10px; gap: 7px; }
+  .genezisi-entry-home .opening .interface-wrap { max-height: 24svh; margin-top: 15px; aspect-ratio: 1.83; }
+  .genezisi-entry-home .opening .window-copy { padding: 7px; }
+  .genezisi-entry-home .opening .window-copy strong { font-size: 19px; }
+  .genezisi-entry-home .opening .discipline { padding: 5px 8px; }
+  .genezisi-entry-home .opening .discipline b { font-size: 12px; }
+  .genezisi-entry-home .opening .window-foot span:last-child { display: none; }
+  .genezisi-entry-home .opening .opening-foot { left: 16px; right: 16px; }
+}
+@media (max-height: 650px) {
+  .genezisi-entry-home .opening { padding-top: 80px; }
+  .genezisi-entry-home .opening .eyebrow { margin-bottom: 15px; }
+  .genezisi-entry-home .opening .body { margin-top: 16px; }
+  .genezisi-entry-home .opening .actions { margin-top: 16px; }
+  .genezisi-entry-home .opening .interface-wrap { max-height: 23svh; margin-top: 12px; }
+  .genezisi-entry-home .opening .opening-foot { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .genezisi-entry-home .opening .button,
+  .genezisi-entry-home .opening .button span { transition: none !important; }
+}

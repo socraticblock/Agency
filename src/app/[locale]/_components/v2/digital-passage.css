@@ -1,0 +1,133 @@
+/* GENEZISI — Digital Passage / director's cut.
+   One transient world-space scene, not an overlay of invented site content.
+   No sitewide typography, Work, or native scroll changes. */
+.genezisi-passage {
+  position:fixed;
+  inset:0;
+  z-index:1200;
+  width:100%;
+  height:100vh;
+  height:100dvh;
+  overflow:hidden;
+  isolation:isolate;
+  background:#06140f;
+  color:#ecf5e7;
+  overscroll-behavior:contain;
+  touch-action:none;
+  pointer-events:auto;
+  contain:layout paint style;
+  clip-path:circle(0px at 50% 50%);
+}
+.genezisi-passage-work-window {
+  position:absolute;
+  inset:0;
+  z-index:1;
+  opacity:0;
+  overflow:hidden;
+  pointer-events:none!important;
+  clip-path:polygon(50% 50%,50% 50%,50% 50%,50% 50%);
+  contain:layout paint style;
+}
+.genezisi-passage-work-plane {
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  min-height:100%;
+  background:#f0ece5;
+  overflow:hidden;
+  pointer-events:none!important;
+  transform-origin:0 0;
+  backface-visibility:hidden;
+  will-change:transform;
+}
+.genezisi-passage-work-plane .work-preview {
+  width:100%;
+  scroll-margin-top:0!important;
+  pointer-events:none!important;
+}
+.genezisi-passage-work-plane a,
+.genezisi-passage-work-plane button {
+  pointer-events:none!important;
+}
+.genezisi-passage-canvas {
+  position:absolute;
+  inset:0;
+  z-index:2;
+  display:block;
+  width:100%;
+  height:100%;
+  outline:0;
+}
+.genezisi-passage-atmosphere {
+  position:absolute;
+  inset:0;
+  z-index:3;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse 62% 67% at 49% 48%,transparent 29%,rgba(3,12,8,.17) 75%,rgba(2,8,6,.49) 100%),
+    linear-gradient(180deg,rgba(6,20,14,.12) 0%,transparent 18%,transparent 75%,rgba(6,20,14,.16) 100%);
+  mix-blend-mode:multiply;
+}
+html.genezisi-passage-active { cursor:progress; }
+html.genezisi-passage-pending .opening .actions .button.primary {
+  box-shadow:0 0 0 3px rgba(139,210,168,.19),0 0 30px rgba(23,51,39,.13);
+  transition:box-shadow 120ms ease;
+}
+@media (max-width:699px) {
+  .genezisi-passage-atmosphere {
+    background:radial-gradient(ellipse 82% 66% at 50% 52%,transparent 22%,rgba(2,8,6,.22) 73%,rgba(2,8,6,.42) 100%);
+  }
+}
+@media (prefers-reduced-motion:reduce) {
+  .genezisi-passage {display:none!important}
+  html.genezisi-passage-pending .opening .actions .button.primary {box-shadow:none}
+}
+
+/* V6: focus is opt-in, bounded to the first ~0.49s of a CTA click.
+   Blur *siblings*, never the CTA or its parent (filtering a parent would
+   blur the button too). The rest of the site never gets zoomed. */
+html.genezisi-passage-focus .site-nav,
+html.genezisi-passage-focus .opening > :not(.intro),
+html.genezisi-passage-focus .opening .intro > :not(.actions),
+html.genezisi-passage-focus .opening .actions > :not(.primary) {
+  filter: blur(var(--genezisi-focus-blur,0px));
+  opacity: var(--genezisi-focus-dim,1);
+  transition: none!important;
+}
+html.genezisi-passage-focus .opening .actions > .button.primary {
+  position: relative;
+  z-index: 10;
+  filter: none!important;
+  transition: none!important;
+  backface-visibility: hidden;
+}
+/* Disabled-motion navigation never receives the V6 focus treatment. */
+@media (prefers-reduced-motion: reduce) {
+  html.genezisi-passage-focus .site-nav,
+  html.genezisi-passage-focus .opening > :not(.intro),
+  html.genezisi-passage-focus .opening .intro > :not(.actions),
+  html.genezisi-passage-focus .opening .actions > :not(.primary) {
+    filter:none!important;
+    opacity:1!important;
+  }
+}
+
+
+/* V6.5 — approved V6.4 entrance untouched. A soft, temporary foreground
+   vignette stays over the approaching Work preview until its final settle.
+   No actual #work DOM, contrast or interaction is modified. */
+.genezisi-passage-v6-5 .genezisi-passage-arrival-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  opacity: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 76% 84% at 50% 49%,
+    rgba(6,20,15,0) 35%,
+    rgba(6,20,15,.06) 61%,
+    rgba(6,20,15,.32) 83%,
+    rgba(6,20,15,.68) 100%
+  );
+}
