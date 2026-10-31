@@ -42,6 +42,8 @@ export function createDigitalPassage({trigger,onCover,onFinish,onError}){
   // the expanding visual aperture. Never transform the enclosing hero:
   // scaling the page made headlines enormous in V4.
   const buttonCenter={x:rect.left+rect.width*.5,y:rect.top+rect.height*.5};
+  // Exact optical scale required for this one button to cover the viewport.
+  const endZoom=Math.max((baseW+36)/rect.width,(baseH+36)/rect.height);
   // The approaching destination is cloned from the ACTUAL Work markup.
   // It is a temporary, inert optical preview, never invented project content.
   const actualWork=document.getElementById("work");
