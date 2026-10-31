@@ -7,7 +7,7 @@ const root=process.cwd();
 const at=name=>readFileSync(join(root,'public/flagship-journey/infinite-bc',name),'utf8');
 const html=at('index.html');
 const nav=at('digital-passage-nav.js');
-const scene=at('digital-passage-scene-v6-3.js');
+const scene=at('digital-passage-scene-v6-4.js');
 const css=at('digital-passage.css');
 
 test('native CTA and Work DOM, and B-to-C motion runtime remain unchanged',()=>{
@@ -18,14 +18,14 @@ test('native CTA and Work DOM, and B-to-C motion runtime remain unchanged',()=>{
   assert.doesNotMatch(html,/src="\.\/work-nav\.js"/);
 });
 
-test('current V6.3 module is loaded on intent; navigation safely degrades',()=>{
-  assert.match(nav,/import\("\.\/digital-passage-scene-v6-3\.js"\)/);
+test('current V6.4 module is loaded on intent; navigation safely degrades',()=>{
+  assert.match(nav,/import\("\.\/digital-passage-scene-v6-4\.js"\)/);
   for(const item of ['prefers-reduced-motion','saveData','pushState','popstate','pagehide','Promise.race','if (token !== ticket) return']) {
     assert.ok(nav.includes(item), 'missing fallback '+item);
   }
 });
 
-test('V6.3 uses an actual camera and a 3D doorway matched to clicked CTA',()=>{
+test('V6.4 uses an actual camera and a 3D doorway matched to clicked CTA',()=>{
   for(const item of [
     'const entranceZ=-7.25','const entranceWorldH=1.7',
     'const entranceWorldW=entranceWorldH*',
@@ -153,7 +153,7 @@ test('CTA and aperture crossfade in one bounded early interval, never a duplicat
   assert.match(scene,/DURATION=2080/);
 });
 
-test('V6.3 mask is derived from the same rounded world-space doorway geometry',()=>{
+test('V6.4 mask is derived from the same rounded world-space doorway geometry',()=>{
   for(const token of [
     'function doorContour(z,offset=0)',
     'const curve=new THREE.CatmullRomCurve3(doorContour(z,offset),true',
@@ -192,6 +192,8 @@ test('rounded projected entrance covers all viewport corners BEFORE removing mas
     const worldH=1.7,worldW=worldH*bw/bh,offset=.065;
     const hw=worldW*.5+offset,hh=worldH*.5+offset;
     const radius=Math.min(hh-.018,worldH*Math.min(bh/2,30)/bh+offset);
+    const cxCTA=w===1440?262:w===1920?260:w===390?110:90;
+    const cyCTA=h===900?619:h===1080?720:h===844?650:432;
     const projected=[],k=h/(2*.48*Math.tan(fov*Math.PI/360));
     for(const [cx,cy,deg] of [
       [hw-radius,hh-radius,0],[-hw+radius,hh-radius,90],
@@ -199,8 +201,8 @@ test('rounded projected entrance covers all viewport corners BEFORE removing mas
     ]){
       for(let step=0;step<=8;step++){
         const a=(deg+step*90/8)*Math.PI/180;
-        projected.push([w*.5+(cx+Math.cos(a)*radius)*k,
-                        h*.5-(cy+Math.sin(a)*radius)*k]);
+        projected.push([cxCTA+(cx+Math.cos(a)*radius)*k,
+                        cyCTA-(cy+Math.sin(a)*radius)*k]);
       }
     }
     const points=[[-12,-12],[w+12,-12],[w+12,h+12],[-12,h+12]];
@@ -214,5 +216,92 @@ test('CTA overlap and original visual state remain intact if interrupted',()=>{
   assert.match(scene,/trigger\.style\.opacity=originalCTAOpacity/);
   assert.match(scene,/restoreFocus\(\); \/\/ Also covers Escape, context loss, Back and resize/);
   assert.match(scene,/stage\.style\.opacity=String\(enter\*leave\)/);
+  assert.match(scene,/DURATION=2080/);
+});
+
+
+test('V6.4 camera flies diagonally toward fixed CTA with zero screen-position drift',()=>{
+  assert.match(scene,/const approachXFactor=\(baseW\*\.5-buttonCenter\.x\)\*worldPerPixelPerDepth/);
+  assert.match(scene,/const approachYFactor=\(buttonCenter\.y-baseH\*\.5\)\*worldPerPixelPerDepth/);
+  assert.match(scene,/const cameraX=approachXFactor\*d/);
+  assert.match(scene,/const cameraY=approachYFactor\*d/);
+  assert.doesNotMatch(scene,/const cx=mix\(buttonCenter\.x,baseW\*\.5/);
+  assert.doesNotMatch(scene,/const cy=mix\(buttonCenter\.y,baseH\*\.5/);
+  for(const v of [
+    {w:1440,h:900,cx:262,cy:619,bw:210,bh:48,fov:71},
+    {w:390,h:844,cx:110,cy:650,bw:170,bh:44,fov:79},
+    {w:320,h:568,cx:90,cy:432,bw:148,bh:42,fov:79},
+  ]){
+    const tan=Math.tan(v.fov*Math.PI/360);
+    const dStart=1.7*v.h/(2*tan*v.bh);
+    const xFactor=(v.w*.5-v.cx)*2*tan/v.h;
+    const yFactor=(v.cy-v.h*.5)*2*tan/v.h;
+    let previousX=Math.abs(xFactor*dStart),previousY=Math.abs(yFactor*dStart);
+    for(let i=0;i<=50;i++){
+      const distance=dStart+(.48-dStart)*i/50;
+      const cameraX=xFactor*distance;
+      const cameraY=yFactor*distance;
+      const wpp=2*distance*tan/v.h;
+      const screenX=v.w*.5-cameraX/wpp;
+      const screenY=v.h*.5+cameraY/wpp;
+      assert.ok(Math.abs(screenX-v.cx)<1e-8,'CTA must not travel horizontally');
+      assert.ok(Math.abs(screenY-v.cy)<1e-8,'CTA must not travel vertically');
+      assert.ok(Math.abs(cameraX)<=previousX+1e-8,
+        'physical camera X should approach target axis');
+      assert.ok(Math.abs(cameraY)<=previousY+1e-8,
+        'physical camera Y should approach target axis');
+      previousX=Math.abs(cameraX);previousY=Math.abs(cameraY);
+    }
+  }
+});
+
+test('camera XY bridge is continuous in value and velocity at threshold and rejoins tunnel',()=>{
+  assert.match(scene,/function cameraBridge\(prog\)/);
+  assert.match(scene,/const bridgeEnd=\.39,bridgeSpan=bridgeEnd-thresholdAt/);
+  assert.match(scene,/approachXFactor\*velocityAtThreshold,0,u,bridgeSpan/);
+  assert.match(scene,/approachYFactor\*velocityAtThreshold,0,u,bridgeSpan/);
+  assert.match(scene,/camera\.position\.set\(lateral\*\(1-align\)\+bridge\.x/);
+  assert.match(scene,/if\(p<bridgeEnd\)camera\.lookAt/);
+  const h=(a,b,v0,v1,t,span)=>{
+    const t2=t*t,t3=t2*t;
+    return (2*t3-3*t2+1)*a+(t3-2*t2+t)*v0*span+
+      (-2*t3+3*t2)*b+(t3-t2)*v1*span;
+  };
+  for(const v of [{w:1440,h:900,cx:262,cy:619},{w:390,h:844,cx:110,cy:650}]){
+    const fov=v.w<700?79:71,tan=Math.tan(fov*Math.PI/360);
+    const xFactor=(v.w*.5-v.cx)*2*tan/v.h;
+    const yFactor=(v.cy-v.h*.5)*2*tan/v.h;
+    const x0=xFactor*.48,y0=yFactor*.48,velocity=-24.2,span=.39-.235,dt=1e-6;
+    for(const [factor,start] of [[xFactor,x0],[yFactor,y0]]){
+      const slope=factor*velocity;
+      const bridge=(p)=>h(start,0,slope,0,p/span,span);
+      assert.ok(Math.abs(bridge(0)-start)<1e-10);
+      assert.ok(Math.abs(bridge(span))<1e-10);
+      const nearVelocity=(bridge(dt)-bridge(0))/dt;
+      assert.ok(Math.abs(nearVelocity-slope)<.0015,
+        'bridge must match physical lateral velocity at entrance');
+      const endVelocity=(bridge(span)-bridge(span-dt))/dt;
+      assert.ok(Math.abs(endVelocity)<.0015,
+        'bridge must end at zero, handing off to the original tunnel');
+    }
+  }
+});
+
+test('subtle background parallax is isolated, capped and restored',()=>{
+  for(const token of [
+    'const parallaxLayers=[',
+    '".opening .intro > h1"',
+    '".opening .interface-wrap"',
+    'originalTranslate:el.style.translate',
+    'Math.max(-9,Math.min(9,',
+    'function parallaxAt(prog)',
+    'item.el.style.translate=',
+    'item.el.style.translate=item.originalTranslate',
+    'parallaxAt(prog)'
+  ])assert.ok(scene.includes(token),'missing reversible parallax '+token);
+  assert.doesNotMatch(scene,/trigger\.style\.translate/);
+  assert.doesNotMatch(scene,/opening\.style\.transform/);
+  assert.match(scene,/const originalCTAOpacity=trigger\.style\.opacity/);
+  assert.match(scene,/trigger\.style\.opacity=originalCTAOpacity/);
   assert.match(scene,/DURATION=2080/);
 });
