@@ -450,12 +450,12 @@ export function createDigitalPassage({trigger,onCover,onFinish,onError}){
     workPlane.style.transform=`translate3d(${xmin}px,${ymin}px,0) scale(${width/baseW},${height/baseH})`;
   }
   function revealWork(prog){
-    if(prog<.94){
+    if(prog<.885){
       stage.style.maskImage="none";
       stage.style.webkitMaskImage="none";
       return;
     }
-    const t=ease(.94,.997,prog);
+    const t=ease(.885,.995,prog);
     const radius=Math.hypot(baseW,baseH)*1.22*t;
     const inner=Math.max(0,radius-38),outer=radius+38;
     const gradient=`radial-gradient(circle at ${arrival.x}px ${arrival.y}px,
