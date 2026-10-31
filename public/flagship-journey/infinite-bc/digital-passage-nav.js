@@ -21,7 +21,7 @@
 
   function preload() {
     if (!loading) {
-      loading = import("./digital-passage-scene-v4.js").catch(error => {
+      loading = import("./digital-passage-scene-v5.js").catch(error => {
         loading = null;
         throw error;
       });
