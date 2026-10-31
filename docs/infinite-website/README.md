@@ -1,5 +1,9 @@
 # Genezisi Infinite Website — Documentation Index (v1.2)
 
+
+> **31 October 2026 — New founder-approved concept lock, isolated branch only:** [Screen 01 Digital Passage — locked direction](./SCREEN_01_DIGITAL_PASSAGE_LOCKED_DIRECTION_2026-10-31.md). This supersedes earlier *proposed* Screen 01 CTA creative treatments without changing the North Star business constraints or other screens. The real CTA is being refined directly; acceptance, production integration and deployment remain pending.
+
+
 **Updated:** 30 October 2026  
 **Documentation only.** This index does not authorize the next coding gate, merge, preview deployment or production release.
 
