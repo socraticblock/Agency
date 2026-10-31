@@ -1,5 +1,9 @@
 # Genezisi — repository instructions for coding agents
 
+
+> **31 October founder lock — Screen 01 CTA:** The Digital Passage concept is now explicitly frozen. Read [locked Digital Passage direction](docs/infinite-website/SCREEN_01_DIGITAL_PASSAGE_LOCKED_DIRECTION_2026-10-31.md) before any Screen 01 CTA work on this branch. The user authorized direct real-site CTA implementation and review; prior D1/D2 storyboard prerequisites are historical for this narrow CTA. Only refine CTA camera-to-button entry, smoothness/speed, Work visibly approaching inside the existing digital-architectural passage, and seamless actual Work arrival. Do not substitute a new idea, reopen rejected doors/page curl, edit Screens 02–04 or merge/deploy without explicit authorization.
+
+
 **Updated:** 30 October 2026. **Scope:** `socraticblock/Agency`. This file routes work to the current authority; it is not permission to change production.
 
 ## First decide which product the task concerns
