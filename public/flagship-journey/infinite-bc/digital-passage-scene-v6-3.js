@@ -522,29 +522,29 @@ export function createDigitalPassage({trigger,onCover,onFinish,onError}){
   }
 
   function revealSource(prog){
-    // V6.3 owns one optical surface: the 3D door and clipped scene share
-    // the *same actual world-space rounded contour and camera projection*.
-    // No separately calculated rectangle, and no time-based release.
-    if(apertureUnlocked){
-      stage.style.clipPath="none";
-      if(prog>=thresholdAt)restoreFocus();
-      return;
+    // V6.3 owns one optical surface: both the 3D rim and the DOM matte
+    // come from the same actual world-space contour and camera projection.
+    // Release only after physical viewport coverage, never by a percent cut.
+    if(!apertureUnlocked){
+      if(prog>=thresholdAt){
+        // Also handles debug seeking directly past the threshold or a frame
+        // skip on a slow device; threshold coverage was solved separately.
+        if(!canClearAtThreshold)
+          throw new Error("CTA doorway cannot safely cover this viewport");
+        apertureUnlocked=true;
+        stage.style.clipPath="none";
+      }else{
+        const polygon=projectAperture();
+        if(apertureCoversViewport(polygon)){
+          apertureUnlocked=true;
+          stage.style.clipPath="none";
+        }else{
+          stage.style.clipPath="polygon("+polygon.map(
+            ([x,y])=>`${x.toFixed(2)}px ${y.toFixed(2)}px`
+          ).join(",")+")";
+        }
+      }
     }
-    if(prog>=thresholdAt&&!canClearAtThreshold){
-      // Never expose geometry outside the real doorway just to keep time.
-      // Native Work fallback is preferable to a hard visual seam.
-      throw new Error("CTA doorway cannot safely cover this viewport");
-    }
-    const polygon=projectAperture();
-    if(apertureCoversViewport(polygon)){
-      apertureUnlocked=true;
-      stage.style.clipPath="none";
-    }else{
-      stage.style.clipPath="polygon("+polygon.map(
-        ([x,y])=>`${x.toFixed(2)}px ${y.toFixed(2)}px`
-      ).join(",")+")";
-    }
-
     if(prog>=thresholdAt){
       restoreFocus();
       return;
