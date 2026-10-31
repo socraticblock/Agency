@@ -63,7 +63,8 @@
 
     try {
       const scene = await Promise.race([preload(), gate]);
-      if (token !== ticket || document.hidden || !canAnimate()) { land(); return; }
+      if (token !== ticket) return; // Abandoned request: never undo Back/Forward.
+      if (document.hidden || !canAnimate()) { land(); return; }
       let covered = false;
       const finish = () => {
         if (!covered) { covered = true; land(); }
