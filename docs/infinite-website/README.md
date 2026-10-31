@@ -1,9 +1,11 @@
 # Genezisi Infinite Website — Documentation Index (v1.2)
 
-**Updated:** 30 October 2026  
+**Updated:** 31 October 2026 on the separate WebGL mesh experiment branch  
 **Documentation only.** This index does not authorize the next coding gate, merge, preview deployment or production release.
 
 ## Read these in order
+
+**Latest dated Screen 01 state:** **[31 October Status and Decisions](./SCREEN_01_STATUS_AND_DECISIONS_2026-10-31.md)** — records founder videos, SVG/mesh technical failures, black-screen fix, creative drift back toward a meaningful architectural passage, experiment and PR isolation, and what must be checked next. It updates **status**, not the governing North Star.
 
 1. **[North Star v1.2](./NORTH_STAR_v1.2.md)** — the **authoritative** creative, technical, business, accessibility, content and incremental execution contract. Supersedes v1.1 where decisions changed.
 2. **[Full B → C Visitor Flow v1.2](./VISITOR_FLOW_v1.2.md)** — companion three-act, 18-conceptual-moment storyboard and proposed on-screen wording. Not eighteen full-page steps; semantic details are subordinate to the North Star and may be polished in their authorized gates.
