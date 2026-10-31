@@ -1,58 +1,49 @@
-/* Genezisi — Digital Passage. Isolated, optional Screen 01 CTA only.
-   The source/target are real DOM. No duplicated semantic text or fake Work. */
+/* GENEZISI — Digital Passage / director's cut.
+   One transient world-space scene, not an overlay of invented site content.
+   No sitewide typography, Work, or native scroll changes. */
 .genezisi-passage {
-  position:fixed;inset:0;width:100%;height:100dvh;z-index:1200;
-  background:#07160f;overflow:hidden;isolation:isolate;
-  pointer-events:auto;overscroll-behavior:contain;touch-action:none;
-  contain:strict;clip-path:circle(0px at 50% 50%);
-  color:#dbe9d6;font-family:Arial,Helvetica,sans-serif;
+  position:fixed;
+  inset:0;
+  z-index:1200;
+  width:100%;
+  height:100vh;
+  height:100dvh;
+  overflow:hidden;
+  isolation:isolate;
+  background:#06140f;
+  color:#ecf5e7;
+  overscroll-behavior:contain;
+  touch-action:none;
+  pointer-events:auto;
+  contain:layout paint style;
+  clip-path:circle(0px at 50% 50%);
 }
 .genezisi-passage-canvas {
-  display:block;width:100%;height:100%;outline:0;
+  display:block;
+  width:100%;
+  height:100%;
+  outline:0;
 }
-.genezisi-passage-grain {
-  position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(ellipse 63% 71% at 50% 48%, transparent 28%,rgba(2,8,5,.22) 75%,rgba(1,7,4,.55) 100%);
+.genezisi-passage-atmosphere {
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse 62% 67% at 49% 48%,transparent 29%,rgba(3,12,8,.17) 75%,rgba(2,8,6,.49) 100%),
+    linear-gradient(180deg,rgba(6,20,14,.12) 0%,transparent 18%,transparent 75%,rgba(6,20,14,.16) 100%);
   mix-blend-mode:multiply;
 }
-.genezisi-passage-top,
-.genezisi-passage-bottom {
-  position:absolute;left:clamp(18px,4.4vw,76px);right:clamp(18px,4.4vw,76px);
-  z-index:2;display:flex;align-items:center;justify-content:space-between;
-  gap:16px;pointer-events:none;user-select:none;
-  font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
-  color:#d3e9d5;text-shadow:0 1px 12px rgba(0,0,0,.8);
-}
-.genezisi-passage-top {
-  top:clamp(23px,4.5vh,42px);padding-bottom:16px;
-  border-bottom:1px solid rgba(190,236,200,.18);
-}
-.genezisi-passage-bottom {
-  bottom:clamp(23px,4vh,40px);
-  justify-content:initial;color:#c5e3cc;
-}
-.genezisi-passage-bottom i {
-  flex:1;min-width:30px;height:1px;position:relative;
-  background:rgba(184,226,192,.18);overflow:hidden;
-}
-.genezisi-passage-bottom i::before {
-  content:"";position:absolute;inset:0;background:#b3f8d7;
-  transform-origin:0 50%;
-  transform:scaleX(var(--passage-p,0));
-  box-shadow:0 0 18px rgba(160,255,211,.75);
-}
-.genezisi-passage-number {
-  min-width:2.5ch;font-variant-numeric:tabular-nums;text-align:right;
-  color:#f3e8d1;
-}
 html.genezisi-passage-active { cursor:progress; }
-@media(max-width:699px) {
-  .genezisi-passage-top,.genezisi-passage-bottom {
-    font-size:9px;letter-spacing:.12em;
+html.genezisi-passage-pending .opening .actions .button.primary {
+  box-shadow:0 0 0 3px rgba(139,210,168,.19),0 0 30px rgba(23,51,39,.13);
+  transition:box-shadow 120ms ease;
+}
+@media (max-width:699px) {
+  .genezisi-passage-atmosphere {
+    background:radial-gradient(ellipse 82% 66% at 50% 52%,transparent 22%,rgba(2,8,6,.22) 73%,rgba(2,8,6,.42) 100%);
   }
-  .genezisi-passage-top span:last-child {max-width:60%;text-align:right}
-  .genezisi-passage-bottom span:first-child{max-width:42%}
 }
 @media (prefers-reduced-motion:reduce) {
   .genezisi-passage {display:none!important}
+  html.genezisi-passage-pending .opening .actions .button.primary {box-shadow:none}
 }
