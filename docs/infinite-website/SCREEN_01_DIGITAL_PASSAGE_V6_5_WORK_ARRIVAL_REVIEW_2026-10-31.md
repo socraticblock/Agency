@@ -1,7 +1,7 @@
 # Genezisi — Digital Passage V6.5: Smoother Work Arrival
 
 **31 October 2026**  
-**Status:** Isolated, source-verified implementation; **founder visual approval pending**.  
+**Status (updated 31 October):** **Founder accepted V6.5 as the sufficient Screen 01 clicked-CTA visual foundation** following normal-speed viewing. Scope is the standalone Digital Passage prototype only; this is **not** final visual polish, full Screen 01/Gate 1b approval, production integration, merge, deployment or release authorization.  
 **Branch:** `feature/screen01-digital-passage-locked-v6-5-work-arrival-2026-10-31`  
 **Parent V6.4 approved entrance:** `b732fdd23a3186a827afaabfc44ada2a35f1992d` (unchanged).
 
@@ -22,7 +22,10 @@ Reference recording: `20261031-0937-53.2347937.mp4` (5.17 s, desktop), with Work
 - JS source parsing succeeded.
 - No real browser run or mobile device rendering has yet verified this visual outcome.
 
-## Founder acceptance
-Serve in a separate worktree at `/flagship-journey/infinite-bc/index.html`. At full speed, does the Work card now appear a little sooner and grow progressively, without the old last-second pop? Do the softened dark corners persist until the card nearly settles, then fade naturally into the real Work page? Does the approved camera-to-CTA entrance still feel exactly as before? Confirm no white leakage outside the existing Work window, no top-border jump, no obvious delay, and no console/WebGL errors. Repeat at desktop and narrow/portrait widths.
+## Founder decision and stop point — 31 October 2026
 
-Do not merge, deploy, redesign, or adjust the approved entrance without further founder instruction.
+After reviewing the V6.5 recording `20261031-1001-04.3886368.mp4`, the founder accepted the transition as **foundationally OK** and explicitly instructed the team to **stop spending time iterating on it**. The prior V6.4 CTA entrance approval remains valid. Small imperfections visible only under frame stepping do not justify reopening the effect when normal-speed viewing is acceptable.
+
+**Current checkpoint:** `feature/screen01-digital-passage-locked-v6-5-work-arrival-2026-10-31` at `ce8eae22f1d3500674265d529cdcb793d23b538b`. Preserve earlier V1–V6.4 versions and this SHA. No source changes, Work-content edits, unsolicited visual polish, new design proposals or additional review gates follow automatically from this approval.
+
+**Acceptance boundaries:** This is a founder-approved **prototype foundation**, not a merge/deploy instruction or acceptance of the integrated Next.js homepage, all Screen 01 scroll scenes, other screens, mobile performance, accessibility in production or Gate 2. The 20 source/math checks and JS parsing documented above remain valid at their limited evidence level; they are not browser/device QA. Any later integration or functional hardening needs a fresh, specific request.
