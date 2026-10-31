@@ -7,7 +7,7 @@ const root=process.cwd();
 const at=name=>readFileSync(join(root,'public/flagship-journey/infinite-bc',name),'utf8');
 const html=at('index.html');
 const nav=at('digital-passage-nav.js');
-const scene=at('digital-passage-scene-v6-4.js');
+const scene=at('digital-passage-scene-v6-5.js');
 const css=at('digital-passage.css');
 
 test('native CTA and Work DOM, and B-to-C motion runtime remain unchanged',()=>{
@@ -18,14 +18,14 @@ test('native CTA and Work DOM, and B-to-C motion runtime remain unchanged',()=>{
   assert.doesNotMatch(html,/src="\.\/work-nav\.js"/);
 });
 
-test('current V6.4 module is loaded on intent; navigation safely degrades',()=>{
-  assert.match(nav,/import\("\.\/digital-passage-scene-v6-4\.js"\)/);
+test('current V6.5 module is loaded on intent; navigation safely degrades',()=>{
+  assert.match(nav,/import\("\.\/digital-passage-scene-v6-5\.js"\)/);
   for(const item of ['prefers-reduced-motion','saveData','pushState','popstate','pagehide','Promise.race','if (token !== ticket) return']) {
     assert.ok(nav.includes(item), 'missing fallback '+item);
   }
 });
 
-test('V6.4 uses an actual camera and a 3D doorway matched to clicked CTA',()=>{
+test('V6.5 uses an actual camera and a 3D doorway matched to clicked CTA',()=>{
   for(const item of [
     'const entranceZ=-7.25','const entranceWorldH=1.7',
     'const entranceWorldW=entranceWorldH*',
@@ -153,7 +153,7 @@ test('CTA and aperture crossfade in one bounded early interval, never a duplicat
   assert.match(scene,/DURATION=2080/);
 });
 
-test('V6.4 mask is derived from the same rounded world-space doorway geometry',()=>{
+test('V6.5 mask is derived from the same rounded world-space doorway geometry',()=>{
   for(const token of [
     'function doorContour(z,offset=0)',
     'const curve=new THREE.CatmullRomCurve3(doorContour(z,offset),true',
@@ -220,7 +220,7 @@ test('CTA overlap and original visual state remain intact if interrupted',()=>{
 });
 
 
-test('V6.4 camera flies diagonally toward fixed CTA with zero screen-position drift',()=>{
+test('V6.5 camera flies diagonally toward fixed CTA with zero screen-position drift',()=>{
   assert.match(scene,/const approachXFactor=\(baseW\*\.5-buttonCenter\.x\)\*worldPerPixelPerDepth/);
   assert.match(scene,/const approachYFactor=\(buttonCenter\.y-baseH\*\.5\)\*worldPerPixelPerDepth/);
   assert.match(scene,/const cameraX=approachXFactor\*d/);
@@ -304,4 +304,101 @@ test('subtle background parallax is isolated, capped and restored',()=>{
   assert.match(scene,/const originalCTAOpacity=trigger\.style\.opacity/);
   assert.match(scene,/trigger\.style\.opacity=originalCTAOpacity/);
   assert.match(scene,/DURATION=2080/);
+});
+
+
+test('V6.5 changes only the late optical Work approach, not the CTA entry',()=>{
+  for(const marker of [
+    'const workSettleStart=.68',
+    'function cameraTrackBase(prog)',
+    'if(prog<=workSettleStart)return cameraTrackBase(prog)',
+    'const fraction=hermiteDepth(workFractionStart,1,workFractionVelocity,0,',
+    'return portalDepth+exitCameraDistance*',
+    'halfRad(finalFov)/(fraction*halfRad(passageFov(prog)))',
+    'function passageFov(prog)',
+    'const cameraX=approachXFactor*d',
+    'const cameraY=approachYFactor*d',
+    'const bridgeEnd=.39',
+    'const thresholdDistance=.48'
+  ])assert.ok(scene.includes(marker),'missing controlled optical camera '+marker);
+  assert.match(nav,/import\("\.\/digital-passage-scene-v6-5\.js"\)/);
+  assert.doesNotMatch(scene,/workPlane\.style\.transform=.*ease/);
+  assert.match(scene,/DURATION=2080/);
+});
+
+test('projected Work growth starts C1-matched and approaches full viewport smoothly',()=>{
+  const hermite=(a,b,v0,v1,u,span)=>{
+    const t=Math.max(0,Math.min(1,u)),t2=t*t,t3=t2*t;
+    return (2*t3-3*t2+1)*a+(t3-2*t2+t)*v0*span+
+      (-2*t3+3*t2)*b+(t3-t2)*v1*span;
+  };
+  for(const v of [
+    {w:1906,h:966,ctaH:48,fov:71},
+    {w:1440,h:900,ctaH:48,fov:71},
+    {w:390,h:844,ctaH:44,fov:79},
+    {w:320,h:568,ctaH:42,fov:79}
+  ]){
+    const exitAt=.925,pivot=.68,entranceZ=-7.25;
+    const portalDepth=-129;
+    const finalFov=v.fov-5;
+    const halfRad=deg=>Math.tan(deg*Math.PI/360);
+    const ease=(a,b,p)=>{const t=Math.max(0,Math.min(1,(p-a)/(b-a)));return t*t*(3-2*t)};
+    const fov=p=>v.fov-5*ease(.67,exitAt,p);
+    const cameraDist=1.7*v.h/(2*halfRad(v.fov)*v.ctaH);
+    const z0=entranceZ+cameraDist,z1=entranceZ+.48;
+    const workHalfHeight=Math.min(3.5,4.6/(v.w/v.h));
+    const exitDist=workHalfHeight/halfRad(finalFov);
+    const z2=portalDepth+exitDist;
+    const va=-Math.min(1.08*(z0-z1)/(.235-.006),.78*(z1-z2)/(exitAt-.235));
+    const base=p=>{
+      if(p<=.006)return z0;
+      if(p<.235)return hermite(z0,z1,0,va,(p-.006)/(.235-.006),.235-.006);
+      if(p<exitAt)return hermite(z1,z2,va,0,(p-.235)/(exitAt-.235),exitAt-.235);
+      return z2;
+    };
+    const apparent=(z,p)=>exitDist/(z-portalDepth)*halfRad(finalFov)/halfRad(fov(p));
+    const s0=apparent(base(pivot),pivot),eps=.0001;
+    const v0=(apparent(base(pivot+eps),pivot+eps)-apparent(base(pivot-eps),pivot-eps))/(2*eps);
+    const fraction=p=>p<=pivot?apparent(base(p),p):
+      hermite(s0,1,v0,0,(p-pivot)/(exitAt-pivot),exitAt-pivot);
+    const track=p=>p<=pivot?base(p):
+      p>=exitAt?z2:portalDepth+exitDist*halfRad(finalFov)/(fraction(p)*halfRad(fov(p)));
+    assert.ok(Math.abs(track(pivot)-base(pivot))<1e-7,'preserve position at settle start');
+    const slopeLeft=(track(pivot)-track(pivot-.00001))/.00001;
+    const slopeRight=(track(pivot+.00001)-track(pivot))/.00001;
+    assert.ok(Math.abs(slopeLeft-slopeRight)<.25,
+      'avoid a visual camera-speed kink at settle start');
+    assert.ok(Math.abs(track(exitAt)-z2)<1e-8,'exact optical destination');
+    let old=track(pivot);
+    for(let i=1;i<=500;i++){
+      const next=track(pivot+(exitAt-pivot)*i/500);
+      assert.ok(next<=old+1e-6,'camera must never reverse in Work tunnel');
+      old=next;
+    }
+    assert.ok(fraction(.80)>apparent(base(.80),.80)+.15,
+      'Work should occupy more of viewport before the final beat');
+    assert.ok(fraction(.85)>.75,'Work is mostly in view before the final beat');
+    assert.ok(Math.abs(fraction(exitAt)-1)<1e-10);
+  }
+});
+
+test('soft corner vignette persists through arrival but never stains real Work',()=>{
+  for(const marker of [
+    'genezisi-passage-arrival-vignette',
+    'arrivalVignette.style.opacity=String(arrive*dissolve)',
+    'const arrive=ease(.70,.83,prog)',
+    'const dissolve=1-ease(.925,1,prog)',
+    'arrivalVignette.style.opacity="0"',
+    'stage.style.opacity=String(enter*leave)'
+  ])assert.ok(scene.includes(marker),'missing vignette handoff: '+marker);
+  assert.match(css,/\.genezisi-passage-v6-5 \.genezisi-passage-arrival-vignette/);
+  assert.match(css,/pointer-events: none/);
+  assert.match(css,/ellipse 76% 84%/);
+  assert.doesNotMatch(css,/#work\s*\{[^}]*filter:/);
+  // Fade is bounded; at the end, the overlay must be fully transparent.
+  const ease=(a,b,p)=>{const t=Math.max(0,Math.min(1,(p-a)/(b-a)));return t*t*(3-2*t)};
+  const alpha=p=>ease(.70,.83,p)*(1-ease(.925,1,p));
+  assert.ok(alpha(.90)>.99);
+  assert.ok(alpha(.96)>0&&alpha(.96)<1);
+  assert.equal(alpha(1),0);
 });
