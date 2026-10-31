@@ -7,7 +7,7 @@ const root=process.cwd();
 const at=name=>readFileSync(join(root,'public/flagship-journey/infinite-bc',name),'utf8');
 const html=at('index.html');
 const nav=at('digital-passage-nav.js');
-const scene=at('digital-passage-scene-v6-2.js');
+const scene=at('digital-passage-scene-v6-3.js');
 const css=at('digital-passage.css');
 
 test('native CTA and Work DOM, and B-to-C motion runtime remain unchanged',()=>{
@@ -18,25 +18,25 @@ test('native CTA and Work DOM, and B-to-C motion runtime remain unchanged',()=>{
   assert.doesNotMatch(html,/src="\.\/work-nav\.js"/);
 });
 
-test('current V6.2 module is loaded on intent; navigation safely degrades',()=>{
+test('current V6.3 module is loaded on intent; navigation safely degrades',()=>{
   assert.match(nav,/import\("\.\/digital-passage-scene-v6-2\.js"\)/);
   for(const item of ['prefers-reduced-motion','saveData','pushState','popstate','pagehide','Promise.race','if (token !== ticket) return']) {
     assert.ok(nav.includes(item), 'missing fallback '+item);
   }
 });
 
-test('V6.2 uses an actual camera and a 3D doorway matched to clicked CTA',()=>{
+test('V6.3 uses an actual camera and a 3D doorway matched to clicked CTA',()=>{
   for(const item of [
     'const entranceZ=-7.25','const entranceWorldH=1.7',
     'const entranceWorldW=entranceWorldH*',
     'const entryDistance=entranceWorldH*baseH/',
-    'new THREE.CatmullRomCurve3(points,true,"centripetal")',
+    'new THREE.CatmullRomCurve3(doorContour(z,offset),true,"centripetal")',
     'roundedOutline(entranceZ,.018)',
     'roundedOutline(entranceZ-.60,.12)',
     'hermiteDepth(entryStartZ,entryEndZ,0,velocityAtThreshold,',
     'camera.position.set(cameraX,cameraY,z)',
     'camera.lookAt(cameraX,cameraY,z-20)',
-    'camera.position.x/worldPerPixel',
+    'projectAperture()',
     'stage.style.clipPath'
   ]) assert.ok(scene.includes(item), 'missing 3D camera doorway '+item);
   assert.doesNotMatch(scene,/trigger\.style\.transform/);
@@ -98,7 +98,7 @@ test('physical camera projects to the exact CTA size on desktop and portrait',()
     assert.ok(Math.abs(projectedCy-cy)<1e-8,'entry Y must hit CTA');
     assert.ok(Math.abs(ww/wpp-rect.w)<1e-8,'entry width must hit CTA');
     assert.ok(Math.abs(wh/wpp-rect.h)<1e-8,'entry height must hit CTA');
-    assert.ok(d>.62,'entry camera must start before door');
+    assert.ok(d>.48,'entry camera must start before door');
   }
 });
 
@@ -116,7 +116,7 @@ test('new Hermite camera trajectory is monotonic with matching velocity at doorw
     {h:568,fov:79,ctaHeight:42}
   ]){
     const entryDistance=1.7*h/(2*Math.tan(fov*Math.PI/360)*ctaHeight);
-    const z0=-7.25+entryDistance,z1=-7.25+.62;
+    const z0=-7.25+entryDistance,z1=-7.25+.48;
     const portalHalfH=Math.min(3.5,4.6/(h===900?1440/900:h===844?390/844:320/568));
     const z2=-129+portalHalfH/Math.tan((fov-5)*Math.PI/360);
     const va=-(Math.min(1.08*(z0-z1)/(t1-t0),.78*(z1-z2)/(t2-t1)));
@@ -149,6 +149,70 @@ test('CTA and aperture crossfade in one bounded early interval, never a duplicat
   assert.match(scene,/trigger\.style\.opacity=originalCTAOpacity/);
   assert.doesNotMatch(scene,/trigger\.style\.transform/);
   assert.match(scene,/restoreFocus\(\); \/\/ Also covers Escape, context loss, Back and resize\./);
-  assert.match(scene,/if\(prog>=\.235\)/);
+  assert.match(scene,/if\(prog>=thresholdAt\)/);
+  assert.match(scene,/DURATION=2080/);
+});
+
+test('V6.3 mask is derived from the same rounded world-space doorway geometry',()=>{
+  for(const token of [
+    'function doorContour(z,offset=0)',
+    'const curve=new THREE.CatmullRomCurve3(doorContour(z,offset),true',
+    'const apertureContour=doorContour(entranceZ,.065)',
+    'function projectAperture()',
+    'point.clone().project(camera)',
+    'function apertureCoversViewport(polygon)',
+    'pointInPolygon(x,y,polygon)',
+    'if(apertureCoversViewport(polygon))',
+    'apertureUnlocked=true',
+    'stage.style.clipPath="polygon("',
+    'const canClearAtThreshold=apertureCoversViewport(contourAtDoorway)'
+  ]) assert.ok(scene.includes(token), 'missing projected doorway contract: '+token);
+  assert.doesNotMatch(scene,/rounded=Math\.max\(0,buttonRadius/);
+  assert.doesNotMatch(scene,/stage\.style\.clipPath=\`inset\(\$\{top\}/);
+  assert.doesNotMatch(scene,/if\(prog>=\.235\)\{\s*stage\.style\.clipPath="none"/);
+  assert.match(scene,/const thresholdDistance=\.48/);
+});
+
+test('rounded projected entrance covers all viewport corners BEFORE removing mask',()=>{
+  const cases=[
+    {w:1440,h:900,bw:220,bh:48,fov:71},
+    {w:1920,h:1080,bw:220,bh:48,fov:71},
+    {w:390,h:844,bw:170,bh:44,fov:79},
+    {w:320,h:568,bw:148,bh:42,fov:79}
+  ];
+  function isInside(x,y,poly){
+    let inside=false;
+    for(let i=0,j=poly.length-1;i<poly.length;j=i++){
+      const a=poly[i],b=poly[j];
+      if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])inside=!inside;
+    }
+    return inside;
+  }
+  for(const {w,h,bw,bh,fov} of cases){
+    const worldH=1.7,worldW=worldH*bw/bh,offset=.065;
+    const hw=worldW*.5+offset,hh=worldH*.5+offset;
+    const radius=Math.min(hh-.018,worldH*Math.min(bh/2,30)/bh+offset);
+    const projected=[],k=h/(2*.48*Math.tan(fov*Math.PI/360));
+    for(const [cx,cy,deg] of [
+      [hw-radius,hh-radius,0],[-hw+radius,hh-radius,90],
+      [-hw+radius,-hh+radius,180],[hw-radius,-hh+radius,270]
+    ]){
+      for(let step=0;step<=8;step++){
+        const a=(deg+step*90/8)*Math.PI/180;
+        projected.push([w*.5+(cx+Math.cos(a)*radius)*k,
+                        h*.5-(cy+Math.sin(a)*radius)*k]);
+      }
+    }
+    const points=[[-12,-12],[w+12,-12],[w+12,h+12],[-12,h+12]];
+    assert.ok(points.every(([x,y])=>isInside(x,y,projected)),
+      'physical contour must cover '+w+'x'+h+' before unclipping');
+  }
+});
+
+test('CTA overlap and original visual state remain intact if interrupted',()=>{
+  assert.match(scene,/trigger\.style\.opacity=String\(1-ease\(\.025,\.075,prog\)\)/);
+  assert.match(scene,/trigger\.style\.opacity=originalCTAOpacity/);
+  assert.match(scene,/restoreFocus\(\); \/\/ Also covers Escape, context loss, Back and resize/);
+  assert.match(scene,/stage\.style\.opacity=String\(enter\*leave\)/);
   assert.match(scene,/DURATION=2080/);
 });
