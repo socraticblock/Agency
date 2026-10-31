@@ -21,6 +21,7 @@ export function createDigitalPassage({trigger,onCover,onFinish,onError}) {
   const desktop = () => window.innerWidth >= 700;
   let mobile = !desktop();
   const source = trigger.getBoundingClientRect();
+  const initialWidth=window.innerWidth, initialHeight=window.innerHeight;
   const ox = source.left + source.width * .50;
   const oy = source.top + source.height * .50;
   let disposed = false, running = false, raf=0, started=0, progress=0, covered=false;
@@ -346,7 +347,7 @@ export function createDigitalPassage({trigger,onCover,onFinish,onError}) {
   function onContextLost(e){e.preventDefault();crash(new Error("WebGL context lost"));}
   function onResize(){
     if(disposed)return;
-    if(Math.abs(window.innerWidth-canvas.clientWidth)>150){finish();return;}
+    if(Math.abs(window.innerWidth-initialWidth)>48 || Math.abs(window.innerHeight-initialHeight)>90){finish();return;}
     mobile=!desktop();
     renderer.setPixelRatio(measure());
     renderer.setSize(window.innerWidth,window.innerHeight,false);
