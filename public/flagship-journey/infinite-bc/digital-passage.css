@@ -83,3 +83,32 @@ html.genezisi-passage-pending .opening .actions .button.primary {
   .genezisi-passage {display:none!important}
   html.genezisi-passage-pending .opening .actions .button.primary {box-shadow:none}
 }
+
+/* V6: focus is opt-in, bounded to the first ~0.49s of a CTA click.
+   Blur *siblings*, never the CTA or its parent (filtering a parent would
+   blur the button too). The rest of the site never gets zoomed. */
+html.genezisi-passage-focus .site-nav,
+html.genezisi-passage-focus .opening > :not(.intro),
+html.genezisi-passage-focus .opening .intro > :not(.actions),
+html.genezisi-passage-focus .opening .actions > :not(.primary) {
+  filter: blur(var(--genezisi-focus-blur,0px));
+  opacity: var(--genezisi-focus-dim,1);
+  transition: none!important;
+}
+html.genezisi-passage-focus .opening .actions > .button.primary {
+  position: relative;
+  z-index: 10;
+  filter: none!important;
+  transition: none!important;
+  backface-visibility: hidden;
+}
+/* Disabled-motion navigation never receives the V6 focus treatment. */
+@media (prefers-reduced-motion: reduce) {
+  html.genezisi-passage-focus .site-nav,
+  html.genezisi-passage-focus .opening > :not(.intro),
+  html.genezisi-passage-focus .opening .intro > :not(.actions),
+  html.genezisi-passage-focus .opening .actions > :not(.primary) {
+    filter:none!important;
+    opacity:1!important;
+  }
+}
