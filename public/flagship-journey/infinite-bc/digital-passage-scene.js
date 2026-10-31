@@ -89,11 +89,11 @@ export function createDigitalPassage({trigger,onCover,onFinish,onError}) {
   });
   const hazeMaterial = new THREE.ShaderMaterial({
     uniforms:{uStrength:{value:.50},uTime:{value:0}},
-    vertexShader:/* glsl */ '
+    vertexShader:/* glsl */ `
       varying vec2 vUv;
       void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}
-    ',
-    fragmentShader:/* glsl */ '
+    `,
+    fragmentShader:/* glsl */ `
       varying vec2 vUv;
       uniform float uStrength;
       uniform float uTime;
@@ -105,7 +105,7 @@ export function createDigitalPassage({trigger,onCover,onFinish,onError}) {
         float a=core*edge*wave*uStrength;
         gl_FragColor=vec4(.22,.84,.58,a);
       }
-    ',
+    `,
     transparent:true,depthWrite:false,side:THREE.DoubleSide,
     blending:THREE.AdditiveBlending
   });
