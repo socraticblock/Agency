@@ -579,8 +579,12 @@ export function createDigitalPassage({trigger,onCover,onFinish,onError}){
     // velocity. Solve the required real camera Z from perspective.
     // Position/velocity match at .68, Work fills at .925 with zero velocity.
     const span=exitAt-workSettleStart;
-    const fraction=hermiteDepth(workFractionStart,1,workFractionVelocity,0,
+    const fullySmoothed=hermiteDepth(workFractionStart,1,workFractionVelocity,0,
       (prog-workSettleStart)/span,span);
+    // Retain some of the approved original travel: a conservative 72%
+    // optical correction, not a completely new accelerated finale.
+    const original=apparentWorkFraction(cameraTrackBase(prog),prog);
+    const fraction=mix(original,fullySmoothed,.72);
     return portalDepth+exitCameraDistance*
       halfRad(finalFov)/(fraction*halfRad(passageFov(prog)));
   }
