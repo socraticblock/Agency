@@ -5,7 +5,7 @@
  let binding=null;
  function boot(){
  const root=document.getElementById('journey'),scene=document.getElementById('scene');
- if(!root||!scene)return;
+ if(!root||!scene){binding?.stop();binding=null;return;}
  if(binding?.root===root)return;
  binding?.stop();
  const controller=new AbortController();

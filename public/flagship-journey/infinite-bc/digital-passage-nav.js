@@ -32,7 +32,7 @@
 
   function preload() {
     if (!loading) {
-      loading = import("./digital-passage-scene-v6-5.js").catch(error => {
+      loading = import("/flagship-journey/infinite-bc/digital-passage-scene-v6-5.js").catch(error => {
         loading = null;
         throw error;
       });
