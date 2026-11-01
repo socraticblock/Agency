@@ -75,7 +75,7 @@
      wingProgress:smooth(.345,.445,p),
      readZ:mix(-1120,0,smooth(.46,.56,p)),
      roomAdvance:mix(0,155,smooth(.44,.565,p)),
-     readInk:smooth(.507,.543,p),
+     readInk:smooth(.465,.505,p),
      leftX:-e*Math.min(w*.17,230)+f*Math.min(w*.13,180),rightX:e*Math.min(w*.17,230)-f*Math.min(w*.13,180),
      nearZ:300*e+180*f,farLeft:e*-Math.min(w*.13,170),farRight:e*Math.min(w*.13,170),groundZ:550*e+250*f,
      cOffset:mix(20,0,c),handoff,fold,cInk,cWatermark
@@ -134,13 +134,24 @@
    // As the B surface opens, its two readable columns retire into the
    // corresponding architectural wings; only the third plane remains centered.
    // The green facade itself stays opaque until its depth scene covers it.
-   const split=smooth(.42,.495,p);
+   const split=smooth(.421,.482,p);
    root.style.setProperty('--contentSlide',(cardFace.offsetWidth*.64*split)+'px');
-   root.style.setProperty('--contentAlpha',String(1-smooth(.408,.429,p)));
-   // The header/footer are also *interface contents*: they must retreat with
-   // the two columns. The green structural plane stays solid underneath.
-   root.style.setProperty('--facadeMetaAlpha',String(1-smooth(.408,.429,p)));
-   root.style.setProperty('--facadeMetaLift',(-26*smooth(.408,.429,p))+'px');
+   // The interface retires as its own perimeter becomes room architecture.
+   // Keeping the text into the first visible depth beat prevents a vacant facade.
+   const retire=1-smooth(.424,.465,p);
+   root.style.setProperty('--contentAlpha',String(retire));
+   root.style.setProperty('--facadeMetaAlpha',String(retire));
+   root.style.setProperty('--facadeMetaLift',(-26*smooth(.425,.468,p))+'px');
+   // Source-derived ribs bridge the facade and the established room. Their
+   // opacity is a pure function of scroll position, including reverse/jumps.
+   root.style.setProperty('--thresholdInk',String(smooth(.417,.475,p)*(1-smooth(.535,.612,p))));
+   root.style.setProperty('--roomText',String(1-smooth(.49,.555,p)));
+   // The illustrative interface shows what a connected solution *could* do.
+   // No network work or real-world business operations occur in this demo.
+   root.style.setProperty('--c3First',String(smooth(.484,.522,p)));
+   root.style.setProperty('--c3Second',String(smooth(.532,.579,p)));
+   root.style.setProperty('--c3Third',String(smooth(.578,.622,p)));
+   root.style.setProperty('--c3Progress',String(smooth(.49,.628,p)));
    // Update every geometry variable *before* reading the transformed face.
    // This removes dependence on the previous scroll sample on jump/reversal.
    const map={p:v.p,e:v.e,h:v.h,f:v.f,c:v.c,d:v.d,b:v.b,n:v.n,shiftX:v.shiftX,shiftY:v.shiftY,artScale:v.artScale,leftX:v.leftX,rightX:v.rightX,nearZ:v.nearZ,farLeft:v.farLeft,farRight:v.farRight,groundZ:v.groundZ,cOffset:v.cOffset,foldAlpha:v.foldAlpha,foldLeftX:v.foldLeftX,foldRightX:v.foldRightX,foldRotL:v.foldRotL,foldRotR:v.foldRotR};
@@ -151,9 +162,11 @@
    // horizontal green card. Grow to the card's proportions first, then fill
    // the viewport only after the facade's labels have cleared.
    const facade=cardFace.getBoundingClientRect();
-   const enter=smooth(.415,.47,p),expand=smooth(.47,.515,p);
-   const cropW=mix(facade.width*enter,w,expand);
-   const cropH=mix(facade.height*enter,h,expand);
+   // Begin with a materially wide B-derived opening, not a pinhole. The
+   // interface frame and grid retain an observable parent-to-room connection.
+   const enter=smooth(.415,.46,p),expand=smooth(.46,.51,p);
+   const cropW=mix(mix(facade.width*.44,facade.width,enter),w,expand);
+   const cropH=mix(mix(facade.height*.44,facade.height,enter),h,expand);
    const cropX=mix(facade.left+facade.width/2,w/2,expand);
    const cropY=mix(facade.top+facade.height/2,h/2,expand);
    root.style.setProperty('--depthTop',Math.max(0,cropY-cropH/2)+'px');
