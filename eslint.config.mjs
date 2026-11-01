@@ -8,9 +8,20 @@ const eslintConfig = defineConfig([
   {
     rules: {
       "react-hooks/set-state-in-effect": "warn",
-      "react-hooks/refs": "warn",
       "react/no-unescaped-entities": "warn",
       "@typescript-eslint/no-explicit-any": "warn",
+    },
+  },
+  // eslint-config-next 16.4.3 ships a stricter react-hooks plugin whose new
+  // "refs" rule errors on four ref-mirror lines in HeroSegment.tsx only, where
+  // zoom/style/pointer refs are mirrored during render so pointer handlers read
+  // the latest value without re-attaching listeners. Scoped to that file: every
+  // other component keeps the rule at its default error severity. Tracked as
+  // LINT-01 in docs/security/2026-11-dependency-patch-and-open-findings.md.
+  {
+    files: ["**/start/components/segments/HeroSegment.tsx"],
+    rules: {
+      "react-hooks/refs": "warn",
     },
   },
   // Override default ignores of eslint-config-next.

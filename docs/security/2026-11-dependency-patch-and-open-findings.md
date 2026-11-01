@@ -16,7 +16,7 @@
 | `source-map-js` | 1.2.1 (via postcss) | 1.2.2 override | GHSA-68fv-2mgg-jv7q |
 | `ws` | 8.19.0 (via @supabase/realtime-js) | 8.21.0 override | GHSA-96hv-2xvq-fx4p |
 | `fflate` | 0.6.10 (three-stdlib) / 0.8.2 (@types/three) | 0.6.11 / 0.8.3 overrides | GHSA-px8p-9vwx-vf98 |
-| `eslint.config.mjs` | — | `react-hooks/refs: "warn"` | see §4 |
+| `eslint.config.mjs` | — | `react-hooks/refs: "warn"`, scoped to `HeroSegment.tsx` only | see §4 |
 
 Each override stays inside the version range the parent package already declares (`postcss ^1.2.1`, `realtime-js ^8.18.2`, `three-stdlib ^0.6.9`, `@types/three ~0.8.2`), so no parent's contract is widened. None of the four is imported by application code; `ws` is reachable only through `@supabase/realtime-js`, and the app builds a plain Supabase client with no `.channel()` subscription, so the websocket transport is never instantiated.
 
@@ -93,7 +93,17 @@ These are **not fixed here**. Fixing them means overriding the internals of the 
 
 `eslint-config-next` 16.4.3 bundles a stricter `react-hooks` plugin whose new `react-hooks/refs` rule errors on four sites in `src/app/[locale]/(site)/start/components/segments/HeroSegment.tsx` (lines 78, 80, 117, 118), where zoom/style/pointer refs are deliberately mirrored during render so pointer handlers read the latest value without re-attaching listeners.
 
-Measured: baseline lints 237 warnings / 0 errors (exit 0); with 16.4.3 alone it is 238 warnings / **4 errors** (exit 1). The rule is downgraded to `warn` in `eslint.config.mjs`, next to `react-hooks/set-state-in-effect`, which is already `warn` in this file. No component code was touched: rewriting those refs affects a live pointer-drag interaction that this branch cannot visually verify.
+Measured: baseline lints 237 warnings / 0 errors (exit 0); with 16.4.3 alone it is 238 warnings / **4 errors** (exit 1). The rule is downgraded to `warn` by a **file-scoped** override on `**/start/components/segments/HeroSegment.tsx` only — every other component keeps the rule at its default error severity. No component code was touched: rewriting those refs affects a live pointer-drag interaction that this branch cannot visually verify.
+
+Scope verified with `eslint --print-config`, which reports the effective severity per file:
+
+| File | `react-hooks/refs` |
+|---|---|
+| `…/segments/HeroSegment.tsx` | `[1]` — warn |
+| `…/v2/V2Hero.tsx` | `[2]` — error |
+| `…/_components/SignalHeroPrototype.tsx` | `[2]` — error |
+
+A future component that mirrors refs during render will still fail lint.
 
 **Open finding LINT-01:** the four ref-mirror sites should be restructured (or the rule re-enabled per file) once the pointer interaction has browser acceptance coverage.
 
@@ -123,6 +133,7 @@ All commands executed in a throwaway worktree at `~/hermes-workspace/agency-sec-
 | clean install | `npm ci` | exit 0, 457 packages, resolved `next 16.4.3`, `zod 4.6.7` |
 | types | `npm run typecheck` | exit 0 |
 | lint | `npm run lint` | exit 0 — 242 warnings, 0 errors (baseline: 237 / 0) |
+| lint scope | `npx eslint --print-config <file>` | HeroSegment.tsx `warn`, V2Hero.tsx / SignalHeroPrototype.tsx `error` |
 | build | `npm run build` | exit 0 |
 | four-frame port | `node --test tests/approved-four-frame-integration.test.mjs tests/home-i18n/content.test.mjs` | 22 pass / 0 fail |
 | mapped host | `node --test tests/home-i18n/mapped-host.test.mjs` | 5 pass / 0 fail |
