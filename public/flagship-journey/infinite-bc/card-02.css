@@ -294,3 +294,63 @@
 }
 /* Reduced-motion and non-JS modes keep the exact same visible portrait
    content without requiring the animated entrance to reveal it. */
+
+/* 1 November focused refinement: avoid repeating commissioning copy and the
+   external Screen 01 scroll prompt. Retain the structural footer as quiet
+   editorial linework, not a second instruction. */
+.card2-window .card2-foot {
+  justify-content:flex-end;
+}
+.card2-window .card2-foot-motif {
+  display:flex;
+  width:auto;
+  gap:5px;
+  align-items:center;
+}
+.card2-window .card2-foot-motif i {
+  display:block;
+  width:clamp(17px,2vw,28px);
+  height:1px;
+  background:#adc7af82;
+}
+.card2-window .card2-foot-motif i:nth-child(2) {
+  width:clamp(30px,4vw,54px);
+  background:#d1e2c6bd;
+}
+@media (max-width:740px) {
+  /* Only the backing planes shrink; the measured face, scroll distances,
+     panel transform and existing wing choreography stay untouched. */
+  .opening .interface-wrap .sheet,
+  .opening .interface-wrap .sheet.two {
+    inset:3% 4.5%;
+  }
+  /* The only independent/together statement must remain legible on mobile. */
+  .card2-window .card2-head small {
+    display:block;
+    white-space:nowrap;
+    font-size:clamp(7px,1.3vw,9px);
+    letter-spacing:.015em;
+  }
+  .card2-window .card2-foot-motif i {
+    width:clamp(13px,3.5vw,20px);
+  }
+  .card2-window .card2-foot-motif i:nth-child(2) {
+    width:clamp(20px,5.5vw,35px);
+  }
+}
+@media (max-width:480px) {
+  .card2-window .card2-head small {
+    display:block;
+    font-size:clamp(6.25px,1.7vw,8px);
+    letter-spacing:0;
+  }
+}
+@media (max-width:380px) {
+  .opening .interface-wrap .sheet,
+  .opening .interface-wrap .sheet.two {
+    inset:4% 6%;
+  }
+  .card2-window .card2-head small {
+    font-size:6.5px;
+  }
+}
