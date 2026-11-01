@@ -25,15 +25,18 @@ test('Card 3 is a source-derived room with a meaningful DOM destination',()=>{
     'class="threshold-lintel"',
     'class="threshold-seam first"',
     'class="reading card3-stage"',
-    'ONE IDEA / A CONNECTED SOLUTION',
-    'WEBSITE / PREVIEW',
-    'card3-preview-landscape',
-    'card3-step-web',
-    'card3-step-flow',
-    'card3-step-ai',
-    'FICTIONAL EXAMPLE — NO ACTIONS TAKEN',
-    'ILLUSTRATIVE / NOT A LIVE SYSTEM'
+    'G. / OUR APPROACH',
+    'From idea to a',
+    'working solution.',
+    'class="card3-process"',
+    'card3-step-understand',
+    'card3-step-create',
+    'card3-step-real',
+    'Understand',
+    'Create',
+    'Make it real'
   ]) assert.ok(html.includes(token),'missing Card 3 proof: '+token);
+  assert.doesNotMatch(html,/BRIGHTSIDE|WEBSITE \/ PREVIEW|card3-preview-landscape|FICTIONAL EXAMPLE/);
   assert.doesNotMatch(html,/fetch\(|XMLHttpRequest|WebSocket/);
 });
 
@@ -90,7 +93,7 @@ test('narrow-window Card 2 alignment and Card 3 words survive hidden line breaks
   // Card 2 keeps the original 6% total horizontal face inset, now symmetric.
   // Its centered wrapper therefore yields equal side margins in portrait.
   assert.match(card2,/\.site-window\.card2-window \{inset:4% 3% 6% 3%\}/);
-  assert.match(html,/From idea<br> to a <em>working<br> solution\.<\/em>/);
+  assert.match(html,/<h2><span>From idea to a<\/span> <em>working solution\.<\/em><\/h2>/);
   assert.doesNotMatch(html,/From idea<br>to a|working<br>solution\./);
 });
 
@@ -102,7 +105,9 @@ test('Card 3 mobile, short-screen and static mode keep content available',()=>{
     '@media(max-height:650px)',
     '.journey:not([data-mode="motion"]) .depth:has(.card3-stage)',
     '.reading.card3-stage',
-    '.card3-progress'
+    '.card3-progress',
+    '.card3-process',
+    '.card3-hero'
   ]) assert.ok(css.includes(token),'missing responsive behavior: '+token);
 });
 
