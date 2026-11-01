@@ -763,3 +763,16 @@ html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .depth{vi
 /* Ensure Card 2's backdrop remains the approved dark material even under
    the homepage's existing specificity-qualified baseline styles. */
 html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .site-window.card2-window{background:#173629}
+
+/* Browser chrome can retract during a mobile swipe. The previous 100svh
+   sticky scene stopped short of the expanded viewport and revealed the black
+   page behind it. Give the scene and its scroll track stable, matching large
+   viewport dimensions; native touch scrolling is unchanged. Interior content
+   keeps the conservative svh-based typography and spacing constraints. */
+@media (max-width:740px) {
+  .genezisi-entry-home .journey[data-mode="motion"] { height:360lvh; }
+  .genezisi-entry-home .journey[data-mode="motion"] .scene {
+    height:100lvh;
+    min-height:100lvh;
+  }
+}

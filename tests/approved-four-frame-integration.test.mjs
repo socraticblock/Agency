@@ -62,7 +62,7 @@ test('Card 3 approach and Card 4 reveal reuse approved scroll geometry', () => {
 
 test('only the final Card 4 hold is shortened', () => {
   assert.match(css, /journey\[data-mode="motion"\]\{height:360svh\}/);
-  assert.match(motion, /originalTravel=Math\.max\(1,4\.4\*scene\.offsetHeight-window\.innerHeight\)/);
+  assert.match(motion, /originalTravel=Math\.max\(1,3\.4\*scene\.offsetHeight\)/);
   assert.match(motion, /finalStart=Math\.min\(\.715\*originalTravel,\.99\*newTravel\)/);
   assert.match(motion, /originalStoryProgress\(distance\/originalTravel\)/);
   // Fully readable C at original raw .682; with 360svh release the
@@ -94,4 +94,42 @@ test('styles are scoped to the real homepage and safe without scroll motion', ()
   const opens=(css.match(/\{/g)||[]).length,closes=(css.match(/\}/g)||[]).length;
   assert.equal(opens,closes);
   assert.doesNotMatch(css, /@import|url\(['"]?https?:/);
+});
+
+test('mobile viewport stays covered as the browser toolbar collapses', () => {
+  assert.match(css, /@media \(max-width:740px\)\s*\{\s*\.genezisi-entry-home \.journey\[data-mode="motion"\] \{ height:360lvh; \}/);
+  assert.match(css, /\.journey\[data-mode="motion"\] \.scene \{\s*height:100lvh;\s*min-height:100lvh;/);
+  assert.match(motion, /newTravel=Math\.max\(1,root\.offsetHeight-scene\.offsetHeight\)/);
+  assert.match(motion, /const h=scene\.offsetHeight/);
+  assert.doesNotMatch(motion, /root\.offsetHeight-window\.innerHeight/);
+  assert.match(motion, /const invalidate=\(\)=>\{metrics=null;dirty=true;queue\(\);\}/);
+  assert.match(motion, /raw===lastRaw&&w===lastWidth&&h===lastHeight/);
+});
+
+test('scroll timeline is deterministic across browser toolbar height changes', () => {
+  // Execute ONLY the pure timeline function from the checked-in controller.
+  // Its original keyframes remain unchanged; native scroll remains untouched.
+  const start = motion.indexOf(' const scrollStops=');
+  const end = motion.indexOf(' const panelScaleFor=', start);
+  assert.ok(start > 0 && end > start, 'scroll mapping must be present');
+  const scene = { offsetHeight: 800 };
+  const root = { offsetHeight: 2880 };
+  const clamp = value => Math.max(0, Math.min(1, value));
+  const mix = (a, b, t) => a + (b - a) * t;
+  const timeline = Function('scene', 'root', 'window', 'clamp', 'mix', motion.slice(start, end) + '\nreturn storyProgress;');
+  const browser = { innerHeight: 680 };
+  const progress = timeline(scene, root, browser, clamp, mix);
+
+  const before = Array.from({ length: 101 }, (_, i) => progress(i / 100));
+  for (let i = 1; i < before.length; i++) {
+    assert.ok(before[i] >= before[i - 1], 'scroll progress must be reversible/monotonic');
+    assert.ok(before[i] - before[i - 1] < 0.07, 'no single-frame mapping jump');
+  }
+  assert.equal(progress(0), 0);
+  assert.equal(progress(1), 1);
+  // A browser bar can change window.innerHeight without changing CSS lvh;
+  // scroll-to-progress must therefore keep its original mapping.
+  browser.innerHeight = 800;
+  const unchanged = Array.from({ length: 101 }, (_, i) => progress(i / 100));
+  assert.deepEqual(unchanged, before);
 });
