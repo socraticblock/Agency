@@ -1,6 +1,7 @@
 import "./v2/scroll-journey.css";
 import "./v2/entry-hero.css";
 import "./v2/digital-passage.css";
+import "./v2/approved-four-frame.css";
 import Script from "next/script";
 import { WHATSAPP_INTAKE } from "@/constants/content";
 import { HOME_HTML_LANG, type HomeLocale } from "@/lib/home-i18n";

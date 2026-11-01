@@ -13,19 +13,6 @@ const ENTRY: Record<HomeLocale, {
   intro: string;
   explore: string;
   contact: string;
-  visualTop: string;
-  visualNote: string;
-  visualSurface: string;
-  visualTitle: string;
-  visualBody: string;
-  design: string;
-  connect: string;
-  intelligence: string;
-  websites: string;
-  automation: string;
-  aiSystems: string;
-  visualBottom: string;
-  visualExplore: string;
   footer: string;
   scroll: string;
 }> = {
@@ -34,19 +21,6 @@ const ENTRY: Record<HomeLocale, {
     intro: "We build websites, create AI systems, and automate everyday tasks. You can choose one service or combine them.",
     explore: "Explore our work",
     contact: "Start a project",
-    visualTop: "Three disciplines",
-    visualNote: "Built to work independently / together",
-    visualSurface: "The surface",
-    visualTitle: "Form and\nfunction,\nconnected.",
-    visualBody: "Thoughtfully composed digital experiences — with purposeful systems behind them.",
-    design: "01 / Design",
-    connect: "02 / Connection",
-    intelligence: "03 / Intelligence",
-    websites: "Websites",
-    automation: "Automation",
-    aiSystems: "AI systems",
-    visualBottom: "Beyond the interface",
-    visualExplore: "Explore the depth",
     footer: "Websites · Automation · AI systems",
     scroll: "Explore below",
   },
@@ -55,19 +29,6 @@ const ENTRY: Record<HomeLocale, {
     intro: "ვქმნით ვებსაიტებსა და AI სისტემებს და ვახორციელებთ ყოველდღიური პროცესების ავტომატიზაციას. შეგიძლიათ აირჩიოთ ერთი სერვისი ან მათი კომბინაცია.",
     explore: "ნახეთ ჩვენი ნამუშევრები",
     contact: "დავიწყოთ პროექტი",
-    visualTop: "სამი მიმართულება",
-    visualNote: "ცალ-ცალკე ან ერთად",
-    visualSurface: "პირველი შთაბეჭდილება",
-    visualTitle: "ფორმა და\nფუნქცია,\nერთად.",
-    visualBody: "გააზრებული ციფრული გამოცდილება პრაქტიკული სისტემებით.",
-    design: "01 / დიზაინი",
-    connect: "02 / კავშირი",
-    intelligence: "03 / ინტელექტი",
-    websites: "ვებსაიტები",
-    automation: "ავტომატიზაცია",
-    aiSystems: "AI სისტემები",
-    visualBottom: "ინტერფეისის მიღმა",
-    visualExplore: "მეტი სიღრმე",
     footer: "ვებსაიტები · ავტომატიზაცია · AI სისტემები",
     scroll: "გაიგეთ მეტი",
   },
@@ -76,22 +37,42 @@ const ENTRY: Record<HomeLocale, {
     intro: "We bouwen websites, ontwikkelen AI-systemen en automatiseren dagelijkse taken. Kies één dienst of combineer ze.",
     explore: "Ontdek ons werk",
     contact: "Start een project",
-    visualTop: "Drie disciplines",
-    visualNote: "Afzonderlijk of samen",
-    visualSurface: "De buitenkant",
-    visualTitle: "Vorm en\nfunctie,\nverbonden.",
-    visualBody: "Doordachte digitale ervaringen met doelgerichte systemen erachter.",
-    design: "01 / Ontwerp",
-    connect: "02 / Verbinding",
-    intelligence: "03 / Intelligentie",
-    websites: "Websites",
-    automation: "Automatisering",
-    aiSystems: "AI-systemen",
-    visualBottom: "Meer dan de interface",
-    visualExplore: "Ontdek de diepte",
     footer: "Websites · Automatisering · AI-systemen",
     scroll: "Ontdek meer",
   },
+};
+
+/** Approved four-frame Card 2 composition, localized independently of Screen 01. */
+const CARD2: Record<HomeLocale,{
+  availabilityLong:string;availabilityShort:string;concept:string;
+  built:string;around:string;ideas:string;intro:string;
+  serviceLabels:[string,string,string];titles:[string,string,string];
+  summaries:[string,string,string];
+}> = {
+ en:{
+  availabilityLong:"INDEPENDENT OR CONNECTED",availabilityShort:"SEPARATE OR TOGETHER",
+  concept:"YOUR IDEA / OUR CRAFT",built:"Built",around:"around",ideas:"your ideas.",
+  intro:"Create something new. Improve what exists. Make everyday work easier.",
+  serviceLabels:["01 / DIGITAL EXPERIENCES","02 / CONNECTED WORK","03 / USEFUL INTELLIGENCE"],
+  titles:["Websites","Automation","AI systems"],
+  summaries:["Thoughtful sites & applications","Workflows that connect your tools","Assistants built for real tasks"]
+ },
+ ka:{
+  availabilityLong:"დამოუკიდებლად ან ერთად",availabilityShort:"ცალ-ცალკე ან ერთად",
+  concept:"თქვენი იდეა / ჩვენი საქმე",built:"შექმნილი",around:"თქვენი",ideas:"იდეებისთვის.",
+  intro:"შევქმნათ ახალი, გავაუმჯობესოთ არსებული და გავამარტივოთ ყოველდღიური სამუშაო.",
+  serviceLabels:["01 / ციფრული გამოცდილება","02 / დაკავშირებული პროცესები","03 / სასარგებლო ინტელექტი"],
+  titles:["ვებსაიტები","ავტომატიზაცია","AI სისტემები"],
+  summaries:["გააზრებული საიტები და აპლიკაციები","პროცესები, რომლებიც თქვენს ხელსაწყოებს აკავშირებს","რეალურ ამოცანებზე მორგებული ასისტენტები"]
+ },
+ nl:{
+  availabilityLong:"AFZONDERLIJK OF VERBONDEN",availabilityShort:"APART OF SAMEN",
+  concept:"JOUW IDEE / ONS VAKMANSCHAP",built:"Gebouwd",around:"rond",ideas:"jouw ideeën.",
+  intro:"Creëer iets nieuws. Verbeter wat bestaat. Maak dagelijks werk eenvoudiger.",
+  serviceLabels:["01 / DIGITALE ERVARINGEN","02 / VERBONDEN WERK","03 / BRUIKBARE INTELLIGENTIE"],
+  titles:["Websites","Automatisering","AI-systemen"],
+  summaries:["Doordachte sites en applicaties","Workflows die je tools verbinden","Assistenten voor echte taken"]
+ }
 };
 
 export function V2Hero({
@@ -104,6 +85,7 @@ export function V2Hero({
   contactHref: string;
 }) {
   const entry = ENTRY[locale];
+  const card = CARD2[locale];
   const lines = copy.heroDesktop.split("\n");
   return (
     <>
@@ -133,26 +115,45 @@ export function V2Hero({
           <div className="stack">
             <div className="sheet" />
             <div className="sheet two" />
-            <div className="site-window">
-              <div className="window-head">
-                <span>{entry.visualTop}</span>
-                <small>{entry.visualNote}</small>
+            <div className="site-window card2-window">
+              <div className="window-head card2-head">
+                <span>{locale==="en"?"THREE DISCIPLINES":locale==="ka"?"სამი მიმართულება":"DRIE DISCIPLINES"}</span>
+                <small>
+                  <span className="card2-availability-long">{card.availabilityLong}</span>
+                  <span className="card2-availability-short">{card.availabilityShort}</span>
+                </small>
               </div>
-              <div className="window-core">
-                <div className="window-copy">
-                  <small>{entry.visualSurface}</small>
-                  <strong>{entry.visualTitle}</strong>
-                  <p>{entry.visualBody}</p>
+              <div className="window-core card2-core">
+                <div className="window-copy card2-intro">
+                  <small>{card.concept}</small>
+                  <strong>{card.built}<br />{" "}{card.around}<br /><em>{card.ideas}</em></strong>
+                  <p>{card.intro}</p>
                 </div>
-                <div className="disciplines">
-                  <div className="discipline"><span>{entry.design}</span><b>{entry.websites}</b></div>
-                  <div className="discipline"><span>{entry.connect}</span><b>{entry.automation}</b></div>
-                  <div className="discipline"><span>{entry.intelligence}</span><b>{entry.aiSystems}</b></div>
+                <div className="disciplines card2-disciplines">
+                  {card.titles.map((title,i)=>(
+                    <div key={title} className="discipline card2-discipline">
+                      <div className="card2-service">
+                        <span>{card.serviceLabels[i]}</span><b>{title}</b><p>{card.summaries[i]}</p>
+                      </div>
+                      {i===0 ? (
+                        <svg className="card2-mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.3" aria-hidden="true" focusable="false">
+                          <rect x="5" y="9" width="38" height="29" rx="1"/><path d="M5 16H43M12 12.5h2M18 12.5h2M24 22h13M24 28h10"/><rect x="11" y="22" width="9" height="10" rx=".5"/>
+                        </svg>
+                      ):i===1 ? (
+                        <svg className="card2-mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.3" aria-hidden="true" focusable="false">
+                          <rect x="4" y="18" width="11" height="12" rx="1"/><rect x="33" y="18" width="11" height="12" rx="1"/><rect x="20" y="4" width="8" height="9" rx="1"/><rect x="20" y="35" width="8" height="9" rx="1"/><path d="M15 24h5m8 0h5M24 13v7m0 8v7"/><circle cx="24" cy="24" r="4"/>
+                        </svg>
+                      ):(
+                        <svg className="card2-mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" aria-hidden="true" focusable="false">
+                          <path d="M24 5 40 14.5v19L24 43 8 33.5v-19Z"/><path d="m24 14 9 5.4v9.2L24 34l-9-5.4v-9.2Z"/><path d="M24 14v20M15 19.4l18 9.2M33 19.4l-18 9.2"/><circle cx="24" cy="24" r="2.2" fill="currentColor" stroke="none"/>
+                        </svg>
+                      )}
+                    </div>
+                  ))}
                 </div>
               </div>
-              <div className="window-foot">
-                <span>{entry.visualBottom}</span>
-                <span>{entry.visualExplore} ↓</span>
+              <div className="window-foot card2-foot" aria-hidden="true">
+                <span className="card2-foot-motif"><i/><i/><i/></span>
               </div>
             </div>
           </div>
