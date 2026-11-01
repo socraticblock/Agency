@@ -1,6 +1,8 @@
 # GENEZISI — THE INFINITE WEBSITE
 ## Complete B → C Visitor Journey / Creative Storyboard v1.2
 
+**Current creative supersession — 1 November 2026:** For the **hero's four primary frames**, use [Hero Four-Frame Direction and Blocking Contract](./HERO_FOUR_FRAME_DIRECTION_2026-11-01.md). The specific Acts II enquiry-to-reply storyboard below is retained as historical narrative exploration and possible separate later-page example; it is **not required inside Card 3**. The founder selected a coherent custom-digital-solution signature experience (specific business problem and storyboard still pending) while keeping existing transitions. Card 4 has **no repeated three-discipline grid and no Selected Work CTA**; real Selected Work follows immediately. All other lasting truthful, accessible and commercial principles continue to apply.
+
 **Date:** 29 October 2026  
 **Status:** Founder-endorsed complete narrative **direction and sequence**; exact scene copy, animation treatment, integration, production readiness and gate sign-offs are still subject to staged review. Not a claim that the full story is implemented.  
 **Basis:** The consolidated [North Star v1.2](./NORTH_STAR_v1.2.md) and founder decisions on 29 October: **centered opening → interface pushes the opening left → fully settled B → forward spatial journey → centered C reveal → genuine Selected Work**. This supersedes the old static B opening while retaining the controlling North Star's essential business, accessibility, truthfulness and handoff constraints. If details conflict, North Star v1.2 controls.

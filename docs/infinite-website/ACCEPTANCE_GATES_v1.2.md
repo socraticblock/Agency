@@ -1,5 +1,7 @@
 # Genezisi Infinite Website — Acceptance Gates v1.2
 
+**Current scoped gate update — 1 November 2026:** The [Hero Four-Frame Direction and Blocking Contract](./HERO_FOUR_FRAME_DIRECTION_2026-11-01.md) updates the *content/art direction* for the four hero compositions. Card 1's V6.5 clicked-CTA foundation is accepted and closed to further polish; this does **not** approve Gate 1b as a whole. Card 2 blocking is the next founder review. Card 3's newer bespoke-solution story is **storyboard-pending**, not authorization to implement the historical Gate 2 enquiry-to-reply sequence. Card 4 removes repeated service bands and the redundant Work CTA. Keep the established entrance/room/fold/scroll transitions, mobile/accessibility obligations, separate per-card sign-off, and release restrictions. Historical checklists remain useful only where consistent with these newer decisions.
+
 **Date:** 29 October 2026  
 **Status:** Development QA and founder approval contract. **Not itself an approval record.**  
 **Authority:** [North Star v1.2](./NORTH_STAR_v1.2.md) (controlling) and [Full B→C Visitor Flow v1.2](./VISITOR_FLOW_v1.2.md) (companion).  
