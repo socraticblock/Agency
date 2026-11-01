@@ -116,8 +116,9 @@ test('scroll timeline is deterministic across browser toolbar height changes', (
   const root = { offsetHeight: 2880 };
   const clamp = value => Math.max(0, Math.min(1, value));
   const mix = (a, b, t) => a + (b - a) * t;
-  const timeline = Function('scene', 'root', 'clamp', 'mix', motion.slice(start, end) + '\nreturn storyProgress;');
-  const progress = timeline(scene, root, clamp, mix);
+  const timeline = Function('scene', 'root', 'window', 'clamp', 'mix', motion.slice(start, end) + '\nreturn storyProgress;');
+  const browser = { innerHeight: 680 };
+  const progress = timeline(scene, root, browser, clamp, mix);
 
   const before = Array.from({ length: 101 }, (_, i) => progress(i / 100));
   for (let i = 1; i < before.length; i++) {
@@ -128,6 +129,7 @@ test('scroll timeline is deterministic across browser toolbar height changes', (
   assert.equal(progress(1), 1);
   // A browser bar can change window.innerHeight without changing CSS lvh;
   // scroll-to-progress must therefore keep its original mapping.
+  browser.innerHeight = 800;
   const unchanged = Array.from({ length: 101 }, (_, i) => progress(i / 100));
   assert.deepEqual(unchanged, before);
 });
