@@ -153,6 +153,32 @@ test('Card 3 mobile, short-screen and static mode keep content available',()=>{
   ]) assert.ok(css.includes(token),'missing responsive behavior: '+token);
 });
 
+test('Card 4 headline is uncovered by C plane itself without delayed text timing',()=>{
+  const entrance=at('entrance.css');
+  assert.match(entrance,/clip-path:polygon\(\s*0 0,\s*var\(--cFrontTop,0%\) 0,\s*var\(--cFrontBottom,0%\) 100%,\s*0 100%\s*\)/);
+  assert.match(entrance,/\.reveal \.c-center \.c-kicker,[\s\S]*?\.reveal \.c-center h2 \{\s*opacity:var\(--cHeadlineInk,0\)/);
+  assert.ok(motion.includes("root.style.setProperty('--cEntranceScale','1')"));
+  assert.ok(motion.includes("root.style.setProperty('--cHeadlineInk','1')"));
+  assert.ok(motion.includes("root.style.setProperty('--cHeadlineRise','0px')"));
+  assert.doesNotMatch(motion,/cTextBounds|getClientRects\(\)|inkSafe|earlyHeadline/);
+  assert.match(motion,/const handoff=smooth\(\.658,\.706,p\)/);
+  assert.match(motion,/const fold=smooth\(\.647,\.707,p\)/);
+  assert.match(motion,/root\.style\.setProperty\('--cFrontTop',edgeTop\+'%'\)/);
+  assert.match(motion,/root\.style\.setProperty\('--cFrontBottom',edgeBottom\+'%'\)/);
+  const sm=(a,b,p)=>{const t=Math.max(0,Math.min(1,(p-a)/(b-a)));return t*t*(3-2*t)};
+  const edge=p=>{
+    const handoff=sm(.658,.706,p);
+    const slant=8*4*handoff*(1-handoff);
+    return [Math.max(0,Math.min(100,100*handoff+slant)),Math.max(0,Math.min(100,100*handoff-slant))];
+  };
+  assert.deepEqual(edge(.655),[0,0]);
+  const mid=edge(.682);
+  assert.ok(mid[0]>0&&mid[0]<100&&mid[1]>0&&mid[1]<100);
+  assert.deepEqual(edge(.706),[100,100]);
+  assert.deepEqual(edge(.682),mid);
+  assert.deepEqual(edge(.655),[0,0]);
+});
+
 test('Card 4 retains its closing headline, removes category repetition and preserves actual Work',()=>{
   const card=html.match(/<section class="reveal card4-resolution"[\s\S]*?<\/section>/)?.[0];
   assert.ok(card,'Card 4 missing');

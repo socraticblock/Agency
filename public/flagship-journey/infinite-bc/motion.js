@@ -6,9 +6,6 @@
  const opening=root.querySelector('.opening'),intro=opening.querySelector('.intro'),panel=opening.querySelector('.interface-wrap');
  const cardFace=panel.querySelector('.site-window');
  const reveal=root.querySelector('.reveal'),reading=root.querySelector('.reading');
- const cHeading=reveal.querySelector('.c-center h2');
- const cTextBounds=document.createRange();
- cTextBounds.selectNodeContents(cHeading);
  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
  const clamp=v=>Math.max(0,Math.min(1,v));
  const smooth=(a,b,v)=>{const t=clamp((v-a)/(b-a));return t*t*(3-2*t)};
@@ -54,10 +51,9 @@
    const f=smooth(.60,.88,p),c=smooth(.715,.77,p);
    const handoff=smooth(.658,.706,p);
    const fold=smooth(.647,.707,p);
-   // The final message begins as soon as it *fits* on the covered C surface
-   // while the green architecture is still visible at the edge. Supporting
-   // details resolve after full coverage, keeping the moving frontier clean.
-   // The decorative G. waits until the real C message is legible.
+   // C's headline is fully present behind the same diagonal surface mask:
+   // its letters become visible as that surface reaches them. Supporting
+   // furniture stays deferred until the surface has fully crossed.
    const cInk=smooth(.706,.738,p);
    const cWatermark=smooth(.755,.83,p);
    // Keep the site facade solid until the same-color spatial room has fully
@@ -207,26 +203,12 @@
    const edgeBottom=Math.max(0,Math.min(100,100*v.handoff-slant));
    root.style.setProperty('--cFrontTop',edgeTop+'%');
    root.style.setProperty('--cFrontBottom',edgeBottom+'%');
-   // The actual headline appears *before* the viewport is entirely covered,
-   // but only after the leading edge has moved past every rendered glyph.
-   // A modest early scale gives the text a safe margin on portrait screens.
-   // Set scale before measuring: jump and reverse scroll must read the exact
-   // same typography bounds regardless of the preceding frame.
-   const entryScale=mix(.76,1,smooth(.692,.713,p));
-   root.style.setProperty('--cEntranceScale',String(entryScale));
-   let earlyHeadline=0;
-   if(p>=.714)earlyHeadline=1;
-   else if(p>=.655){
-     const inkRects=Array.from(cTextBounds.getClientRects()).filter(r=>r.width>1&&r.height>1);
-     let rightmost=0,lowest=0;
-     for(const r of inkRects){rightmost=Math.max(rightmost,r.right);lowest=Math.max(lowest,r.bottom)}
-     const edgeAtInk=(edgeTop+(edgeBottom-edgeTop)*clamp(lowest/Math.max(1,h)))*w/100;
-     const margin=isMobile?4:10,fadeDistance=isMobile?18:24;
-     const inkSafe=smooth(rightmost+margin,rightmost+margin+fadeDistance,edgeAtInk);
-     earlyHeadline=Math.min(smooth(.68,.709,p),inkSafe);
-   }
-   root.style.setProperty('--cHeadlineInk',String(earlyHeadline));
-   root.style.setProperty('--cHeadlineRise',(8*(1-earlyHeadline))+'px');
+   // C's headline sits at its final position behind the advancing C surface.
+   // The parent's existing clip-path alone reveals those parts of each glyph
+   // already covered by the same edge. No separate fade or bounding-box gate.
+   root.style.setProperty('--cEntranceScale','1');
+   root.style.setProperty('--cHeadlineInk','1');
+   root.style.setProperty('--cHeadlineRise','0px');
    // The remaining page furniture waits until C fills the screen. The
    // original final positions, copy and typography are unchanged.
    root.style.setProperty('--cInk',String(v.cInk));
