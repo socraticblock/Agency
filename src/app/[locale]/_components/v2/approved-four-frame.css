@@ -755,7 +755,11 @@ html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .depth-ta
 /* Explicit production port for the prototype's 440→360svh release fix.
     Current Next.js stylesheet is preserved and overridden only on this page. */
 .genezisi-entry-home .journey[data-mode="motion"]{height:360svh}
-html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .depth{visibility:var(--depthVisibility,hidden)}
+/* Legacy cached motion.js lacks --depthVisibility. In that case leave the
+   room eligible to render: the existing zero-area clip and --d opacity still
+   prevent premature exposure over settled Card 2. The current controller
+   explicitly sets hidden/visible from its aperture geometry as before. */
+html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .depth{visibility:var(--depthVisibility,visible)}
 /* Ensure Card 2's backdrop remains the approved dark material even under
    the homepage's existing specificity-qualified baseline styles. */
 html.bc-motion-ready .genezisi-entry-home .journey[data-mode="motion"] .site-window.card2-window{background:#173629}
