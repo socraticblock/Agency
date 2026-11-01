@@ -150,43 +150,145 @@
   .card2-window .card2-mark {width:31px}
   .card2-window .card2-service>p {font-size:9px}
 }
-@media(max-width:740px) {
-  .card2-window .card2-core {grid-template-columns:minmax(0,.94fr) minmax(0,1.06fr)}
-  .card2-window .card2-head {padding-inline:10px;font-size:9px}
-  .card2-window .card2-head small {display:none}
-  .card2-window .card2-intro {padding:clamp(8px,2.4vw,12px);gap:8px}
-  .card2-window .card2-intro::after {width:6px;height:6px;right:9px;top:9px}
-  .card2-window .card2-intro>small {font-size:7px;letter-spacing:.08em}
-  .card2-window .card2-intro>strong {font-size:clamp(20px,5.7vw,28px);line-height:1.06}
-  .card2-window .card2-service {gap:3px}
-  .card2-window .card2-discipline {padding:6px 7px;gap:4px}
-  .card2-window .card2-service>span {font-size:7px;letter-spacing:.05em}
-  .card2-window .card2-service>b {font-size:clamp(14px,3.75vw,19px)}
-  .card2-window .card2-service>p {font-size:clamp(8px,1.7vw,10px);line-height:1.17}
-  .card2-window .card2-mark {display:none}
-  .card2-window .card2-foot {font-size:7px;padding-inline:8px;letter-spacing:.02em}
-  .card2-window .card2-foot>span:first-child {max-width:52%}
+/* Portrait Card 2: the desktop two-column face cannot be squeezed into a
+   200px-tall horizontal slot. Give the existing measured .interface-wrap a
+   tall portrait silhouette. The scroll controller still measures its real
+   rectangle; its transitions/timing are unchanged. */
+@media (max-width:740px) {
+  .opening .interface-wrap,
+  .bc-motion-ready .journey[data-mode="motion"] .opening .interface-wrap,
+  .bc-motion-ready .journey:not([data-mode]) .opening .interface-wrap {
+    flex:0 0 auto;
+    width:100%;
+    aspect-ratio:.60;
+    max-height:72svh;
+    min-height:0;
+    margin:10px auto 0;
+  }
+  .card2-window .card2-core {
+    grid-template-columns:minmax(0,1fr);
+    grid-template-rows:minmax(0,.40fr) minmax(0,.60fr);
+    min-height:0;
+  }
+  .card2-window .card2-head {
+    padding-inline:clamp(11px,3vw,20px);
+    font-size:clamp(9px,2.2vw,11px);
+    letter-spacing:.10em;
+  }
+  .card2-window .card2-head small {
+    display:block;
+    font-size:clamp(7px,1.3vw,9px);
+    letter-spacing:.055em;
+  }
+  .card2-window .card2-intro {
+    min-height:0;
+    overflow:hidden;
+    border-right:0;
+    border-bottom:1px solid #c8e1c52d;
+    padding:clamp(10px,2.5vw,20px) clamp(13px,3.4vw,24px);
+    gap:clamp(5px,1vw,11px);
+    justify-content:center;
+  }
+  .card2-window .card2-intro>small {
+    font-size:clamp(8px,1.55vw,10px);
+  }
+  .card2-window .card2-intro>strong {
+    margin:0;
+    font-size:clamp(21px,5.5vw,32px);
+    line-height:1.03;
+    letter-spacing:-.065em;
+  }
+  .card2-window .card2-intro>p {
+    display:block;
+    max-width:36ch;
+    font-size:clamp(10px,1.8vw,12px);
+    line-height:1.38;
+  }
+  .card2-window .card2-disciplines {
+    min-height:0;
+    grid-template-rows:repeat(3,minmax(0,1fr));
+  }
+  .card2-window .card2-discipline {
+    min-height:0;
+    padding:clamp(7px,1.3svh,12px) clamp(12px,3.2vw,22px);
+    column-gap:clamp(6px,2vw,14px);
+  }
+  .card2-window .card2-service {gap:clamp(3px,.55svh,6px)}
+  .card2-window .card2-service>span {
+    font-size:clamp(7px,1.4vw,9px);
+    letter-spacing:.075em;
+  }
+  .card2-window .card2-service>b {
+    font-size:clamp(17px,4.2vw,24px);
+    line-height:1.06;
+  }
+  .card2-window .card2-service>p {
+    font-size:clamp(10px,1.75vw,12px);
+    line-height:1.25;
+  }
+  .card2-window .card2-mark {
+    display:block;
+    width:clamp(24px,5.5vw,36px);
+  }
+  .card2-window .card2-foot {
+    padding-inline:clamp(10px,2.6vw,18px);
+    font-size:clamp(7px,1.4vw,9px);
+    letter-spacing:.045em;
+  }
+  /* Original entrance.css has more specific typography selectors; match
+     specificity only for Card 2 and do not override transform/scroll values. */
+  .bc-motion-ready .journey[data-mode="motion"] .card2-window .card2-intro>strong,
+  .bc-motion-ready .journey:not([data-mode]) .card2-window .card2-intro>strong {
+    font-size:clamp(21px,5.5vw,32px);
+  }
+  .bc-motion-ready .journey[data-mode="motion"] .card2-window .card2-service>b,
+  .bc-motion-ready .journey:not([data-mode]) .card2-window .card2-service>b {
+    font-size:clamp(17px,4.2vw,24px);
+  }
 }
-@media(max-width:380px) {
-  .card2-window .card2-intro {padding:7px}
-  .card2-window .card2-intro>strong {font-size:19px}
-  .card2-window .card2-intro>small {font-size:6px}
-  .card2-window .card2-discipline {padding:5px 7px}
-  .card2-window .card2-service>b {font-size:14px}
-  .card2-window .card2-service>span {font-size:6.5px}
-  .card2-window .card2-service>p {display:none}
+@media (max-width:480px) {
+  .card2-window .card2-head small {display:none}
   .card2-window .card2-foot>span:first-child {display:none}
   .card2-window .card2-foot {justify-content:flex-end}
 }
-/* entrance.css has longer motion-mode selectors; these override only B's type
-   at very narrow widths, never the entrance transformations or scroll map. */
-@media(max-width:740px) {
- .bc-motion-ready .journey[data-mode="motion"] .card2-intro>strong,
- .bc-motion-ready .journey:not([data-mode]) .card2-intro>strong {
-   font-size:clamp(20px,5.7vw,28px);
- }
+@media (max-width:380px) {
+  .card2-window .card2-core {
+    grid-template-rows:minmax(0,.40fr) minmax(0,.60fr);
+  }
+  .card2-window .card2-intro {
+    padding:6px 12px;
+    gap:4px;
+  }
+  .card2-window .card2-intro>strong,
+  .bc-motion-ready .journey[data-mode="motion"] .card2-window .card2-intro>strong,
+  .bc-motion-ready .journey:not([data-mode]) .card2-window .card2-intro>strong {
+    font-size:clamp(19px,6vw,23px);
+    line-height:1.02;
+  }
+  .card2-window .card2-intro>p {display:none}
+  .card2-window .card2-mark {width:24px}
+  .card2-window .card2-discipline,
+  .bc-motion-ready .journey[data-mode="motion"] .card2-window .card2-discipline,
+  .bc-motion-ready .journey:not([data-mode]) .card2-window .card2-discipline {
+    padding:4px 10px;
+  }
+  .card2-window .card2-service {gap:3px}
+  .card2-window .card2-service>span {font-size:7px}
+  .card2-window .card2-service>b,
+  .bc-motion-ready .journey[data-mode="motion"] .card2-window .card2-service>b,
+  .bc-motion-ready .journey:not([data-mode]) .card2-window .card2-service>b {
+    font-size:clamp(15px,4.8vw,18px);
+  }
+  .card2-window .card2-service>p {display:none}
 }
-@media(max-width:380px) {
- .bc-motion-ready .journey[data-mode="motion"] .card2-intro>strong,
- .bc-motion-ready .journey:not([data-mode]) .card2-intro>strong {font-size:19px}
+@media (max-width:740px) and (max-height:650px) {
+  .opening .interface-wrap,
+  .bc-motion-ready .journey[data-mode="motion"] .opening .interface-wrap,
+  .bc-motion-ready .journey:not([data-mode]) .opening .interface-wrap {
+    max-height:72svh;
+  }
+  .card2-window .card2-intro>p {display:none}
+  .card2-window .card2-intro {gap:5px}
 }
+/* Reduced-motion and non-JS modes keep the exact same visible portrait
+   content without requiring the animated entrance to reveal it. */
