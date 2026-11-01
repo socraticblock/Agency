@@ -283,18 +283,33 @@
   .card3-step {min-height:30px}
   .card3-bottom {padding-block:4px}
 }
-/* Static/reduced-motion: present the illustrative content as a regular
-   readable section rather than trapping it behind invisible cinematic depth. */
-@media(prefers-reduced-motion:reduce) {
-  .journey .depth:has(.card3-stage) {
-    display:block!important;position:relative!important;min-height:0!important;
-    opacity:1!important;overflow:visible!important;background:#123123!important;
+/* Static, no-JS and reduced-motion mode: the same real content stays in
+   document flow rather than being trapped in an invisible cinematic layer. */
+.journey:not([data-mode="motion"]) .depth:has(.card3-stage) {
+  display:block!important;position:relative!important;min-height:0!important;
+  opacity:1!important;overflow:visible!important;background:#123123!important;
+}
+.journey:not([data-mode="motion"]) .depth .depth-space {display:none!important}
+.journey:not([data-mode="motion"]) .depth .reading.card3-stage {
+  position:relative!important;inset:auto!important;transform:none!important;
+  opacity:1!important;width:min(930px,94vw)!important;
+  max-height:none!important;margin:30px auto!important;
+}
+.journey:not([data-mode="motion"]) .depth .reading-ink {
+  opacity:1!important;transform:none!important;
+}
+/* Short landscape viewports need actual compact geometry, not clipped cards. */
+@media (max-height:650px) and (min-width:741px) {
+  .depth .reading.card3-stage,
+  .bc-motion-ready .journey[data-mode="motion"] .depth .reading.card3-stage {
+    max-height:calc(100svh - 106px);
   }
-  .journey .depth .depth-space {display:none!important}
-  .journey .depth .reading.card3-stage {
-    position:relative!important;inset:auto!important;transform:none!important;
-    opacity:1!important;width:min(930px,94vw)!important;
-    max-height:none!important;margin:30px auto!important;
-  }
-  .journey .depth .reading-ink {opacity:1!important;transform:none!important}
+  .card3-topbar {min-height:30px;padding-block:6px}
+  .card3-story {padding:14px 18px;gap:6px}
+  .depth .card3-story h2 {font-size:clamp(29px,3vw,35px)}
+  .card3-story-foot {display:none}
+  .card3-preview {margin:9px 12px}
+  .card3-preview-screen {min-height:84px;max-height:104px}
+  .card3-system .card3-step {min-height:60px;padding:9px 12px}
+  .card3-bottom {min-height:23px;padding:5px 12px}
 }
