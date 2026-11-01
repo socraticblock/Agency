@@ -123,15 +123,23 @@ export function KineticHero({ locale }: { locale: Locale }) {
     let cancelled = false;
 
     void (async () => {
-      const { default: Hls } = await import("hls.js");
-      if (cancelled || !Hls.isSupported()) return;
-      player = new Hls();
-      player.loadSource(hlsUrl);
-      player.attachMedia(video);
-      video.playbackRate = 0.6;
-      player.on(Hls.Events.MANIFEST_PARSED, () => {
-        video.play().catch((e) => console.error("HLS Play error:", e));
-      });
+      try {
+        const { default: Hls } = await import("hls.js");
+        if (cancelled || !Hls.isSupported()) return;
+        player = new Hls();
+        player.loadSource(hlsUrl);
+        player.attachMedia(video);
+        video.playbackRate = 0.6;
+        player.on(Hls.Events.MANIFEST_PARSED, () => {
+          video.play().catch((e) => console.error("HLS Play error:", e));
+        });
+      } catch (error) {
+        // A failed dynamic import (offline, blocked chunk, deploy skew between
+        // the HTML and the chunk) must not surface as an unhandled rejection.
+        // The <video> still has its mp4 <source> and poster, so the hero
+        // degrades to the same fallback as a browser without MSE support.
+        console.error("HLS module load failed:", error);
+      }
     })();
 
     return () => {
