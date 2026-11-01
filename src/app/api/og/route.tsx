@@ -52,29 +52,6 @@ function reject(message: string) {
   });
 }
 
-/**
- * Best-effort, per-instance abuse guard. Edge instances are ephemeral and
- * per-region, so this is a speed bump and not a rate limiter: real throttling
- * belongs at the platform edge (Vercel WAF / firewall rules), which is not
- * configurable from this repository. A limiter failure must never break a
- * legitimate render, so every call is wrapped by the caller.
- */
-const hits = new Map<string, { n: number; reset: number }>();
-const WINDOW_MS = 60_000;
-const MAX_HITS = 120;
-
-function overLimit(key: string): boolean {
-  const now = Date.now();
-  const cur = hits.get(key);
-  if (!cur || now > cur.reset) {
-    if (hits.size > 5000) hits.clear(); // bound memory under key spraying
-    hits.set(key, { n: 1, reset: now + WINDOW_MS });
-    return false;
-  }
-  cur.n += 1;
-  return cur.n > MAX_HITS;
-}
-
 /** Minimal, caller-independent card used when a render throws. */
 function fallbackCard(accent: string) {
   return new ImageResponse(
@@ -123,21 +100,6 @@ export async function GET(req: NextRequest) {
   for (const [key, max] of Object.entries(MAX_LEN)) {
     const raw = searchParams.get(key);
     if (raw !== null && raw.length > max) return reject(`${key} exceeds ${max} characters`);
-  }
-
-  try {
-    const ip =
-      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-      req.headers.get("x-real-ip") ||
-      "unknown";
-    if (overLimit(ip)) {
-      return new Response(JSON.stringify({ error: "Too many requests" }), {
-        status: 429,
-        headers: { "content-type": "application/json", "Cache-Control": "no-store" },
-      });
-    }
-  } catch {
-    /* a limiter failure must never block a legitimate render */
   }
 
   // --- render ---------------------------------------------------------------
@@ -473,8 +435,13 @@ export async function GET(req: NextRequest) {
     );
 
   } catch (e) {
-    // No unhandled renderer exception reaches the caller: log, then serve a
-    // caller-independent card. If even that fails, return a controlled 500.
+    // Best-effort only. A throw here is logged and answered with a
+    // caller-independent card, but this is a defensive path, not a guaranteed
+    // recovery: the exceptional branch is not exercised by any automated test
+    // (doing so would need a fault-injection hook inside a production route),
+    // and a failure that happens after headers are already flushed cannot be
+    // recovered by it at all. If even the fallback throws, a controlled 500
+    // with no-store is returned rather than an unhandled rejection.
     console.error("og render failed:", e instanceof Error ? e.message : String(e));
     try {
       return fallbackCard(accent);

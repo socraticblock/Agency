@@ -187,3 +187,71 @@ test("O17 an emoji-only and empty name still render a card", async () => {
   assert.equal((await get("type=card&name=%F0%9F%92%A9")).status, 200);
   assert.equal((await get("type=card&name=")).status, 200);
 });
+
+// --- the URLs the site actually publishes ------------------------------------
+// These are read from the served homepage metadata, not hand-written, so a
+// change to home-seo.ts or a longer translated string is caught here. Georgian
+// is the interesting case: percent-encoding roughly triples its length, so the
+// query bound is exercised for real rather than assumed.
+
+async function publishedOgUrl(locale) {
+  const res = await fetch(`${BASE}/${locale}`);
+  assert.equal(res.status, 200, `/${locale} did not render`);
+  const html = await res.text();
+  const m = html.match(/<meta property="og:image" content="([^"]+)"/);
+  assert.ok(m, `/${locale} publishes no og:image`);
+  return m[1].replace(/&amp;/g, "&");
+}
+
+for (const locale of ["en", "ka", "nl"]) {
+  test(`O18 the published /${locale} og:image URL renders a 1200x630 PNG`, async () => {
+    const published = await publishedOgUrl(locale);
+    const url = new URL(published);
+    assert.equal(url.pathname, "/api/og");
+    assert.equal(url.searchParams.get("type"), "home");
+
+    // the bound is on the whole request URL, so check it in production shape
+    const productionLength = `https://genezisi.com${url.pathname}${url.search}`.length;
+    assert.ok(
+      productionLength <= 1600,
+      `/${locale} og URL is ${productionLength} chars in production shape, over the 1600 bound`
+    );
+
+    const r = await fetch(`${BASE}${url.pathname}${url.search}`);
+    assert.equal(r.status, 200, `/${locale} og image returned ${r.status}`);
+    assert.match(r.headers.get("content-type") || "", /^image\/png/);
+    const buf = Buffer.from(await r.arrayBuffer());
+    assert.deepEqual(pngSize(buf), { width: 1200, height: 630 });
+  });
+}
+
+test("O19 the three locales publish distinct share cards", async () => {
+  const urls = await Promise.all(["en", "ka", "nl"].map(publishedOgUrl));
+  const taglines = urls.map((u) => new URL(u).searchParams.get("tagline"));
+  assert.equal(new Set(urls).size, 3, "two locales publish the same og:image URL");
+  assert.equal(new Set(taglines).size, 3, "two locales publish the same tagline");
+});
+
+test("O20 a published URL stays under the bound even with a maximal query", async () => {
+  // Worst case the copy could reach: every text field at its limit.
+  const q = new URLSearchParams({
+    type: "home",
+    name: "N".repeat(80),
+    title: "T".repeat(80),
+    company: "C".repeat(80),
+    tagline: "A".repeat(140),
+    subline: "B".repeat(140),
+    services: "S".repeat(140),
+    category: "K".repeat(40),
+    readTime: "R".repeat(24),
+    tier: "I".repeat(32),
+    price: "P".repeat(24),
+    features: "F".repeat(180),
+    cta: "X".repeat(140),
+    accent: "#a5f3fc",
+    theme: "dark",
+  }).toString();
+  const full = `https://genezisi.com/api/og?${q}`;
+  assert.ok(full.length <= 1600, `maximal query renders a ${full.length}-char URL`);
+  assert.equal((await get(q)).status, 200);
+});
