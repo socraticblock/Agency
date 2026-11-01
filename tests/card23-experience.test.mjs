@@ -43,7 +43,7 @@ test('B-to-room transition stays native-scroll sampled and reversible',()=>{
     'readInk:smooth(.465,.505,p)',
     'const cropW=mix(facade.width*enter,w,expand)',
     'const cropH=mix(facade.height*enter,h,expand)',
-    "'--depthVisibility',"
+    "'--depthVisibility',",
     '--thresholdInk',
     '--c3First',
     '--c3Second',
