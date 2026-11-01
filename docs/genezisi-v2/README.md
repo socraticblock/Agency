@@ -1,6 +1,8 @@
 # Genezisi V2
 
-Status: implementation prototype under review on PR #4. Production `main` is not replaced.
+**Historical documentation (4–10 October 2026).** The original V2/Signal design and PR #4 status below are preserved as history, **not current production status**. For the approved four-card homepage merged on 1 November 2026, read the [current four-frame handoff](./HANDOFF_2026-11-01_FOUR_FRAME.md) and [development release workflow](../development/BRANCHING_INTEGRATION_RELEASE.md).
+
+Original status at the time: implementation prototype under review on PR #4. Production `main` was not replaced at that earlier point.
 
 > **Update — 2026-10-10:** the V2 homepage is merged to `main`
 > (`879b5b7e9ea5c16681b56b5e176f127830692918`) and is what `genezisi.com/en` serves. The
