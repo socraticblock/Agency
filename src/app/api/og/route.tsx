@@ -3,36 +3,121 @@ import { NextRequest } from "next/server";
 
 export const runtime = "edge";
 
+/**
+ * /api/og — social share cards (1200x630 PNG).
+ *
+ * SSRF-01: this route used to accept `photo=<url>` and render it as <img src>,
+ * which made the Edge renderer fetch any URL a caller supplied. No caller ever
+ * set it (seo.ts exposes photoUrl but no page passes it; the digital-card page
+ * does not either), so the parameter is removed rather than allowlisted. The
+ * renderer now consumes only text and colours — there is no remote input left
+ * to point anywhere, so no URL parsing, no DNS, no redirect handling and no
+ * fetch timeouts are needed, and no private-IP heuristic can be wrong.
+ *
+ * If a card ever needs its owner's photo in the share image, it must arrive as
+ * a server-resolved reference (e.g. `?card=<slug>` resolved against the stored
+ * row) — never as a caller-supplied URL.
+ */
+
+const OG_TYPES = ["home", "pricing", "blog", "card"] as const;
+const OG_THEMES = ["dark", "light"] as const;
+
+/** Hard per-parameter bounds. Over-length input is rejected, never truncated. */
+const MAX_LEN = {
+  name: 80,
+  title: 80,
+  company: 80,
+  tagline: 140,
+  subline: 140,
+  services: 140,
+  category: 40,
+  readTime: 24,
+  tier: 32,
+  price: 24,
+  features: 180,
+  cta: 140,
+} as const;
+
+const MAX_URL_LENGTH = 1600;
+const ACCENT_RE = /^#[0-9a-fA-F]{6}$/;
+
+const CACHE_HEADERS = {
+  "Cache-Control": "public, max-age=0, s-maxage=86400, stale-while-revalidate=604800",
+};
+
+function reject(message: string) {
+  return new Response(JSON.stringify({ error: message }), {
+    status: 400,
+    headers: { "content-type": "application/json", "Cache-Control": "no-store" },
+  });
+}
+
+/** Minimal, caller-independent card used when a render throws. */
+function fallbackCard(accent: string) {
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          height: "100%",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "#030712",
+          color: "#ffffff",
+          fontSize: "88px",
+          fontWeight: 800,
+          letterSpacing: "-0.04em",
+          borderBottom: `16px solid ${accent}`,
+        }}
+      >
+        Genezisi
+      </div>
+    ),
+    { width: 1200, height: 630, headers: CACHE_HEADERS }
+  );
+}
+
 export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+
+  // --- validation -----------------------------------------------------------
+  if (req.url.length > MAX_URL_LENGTH) return reject("URL too long");
+
+  if (searchParams.has("photo")) {
+    return reject("photo is not supported: share cards are built from server-side values only");
+  }
+
+  const type = searchParams.get("type") ?? "home";
+  if (!(OG_TYPES as readonly string[]).includes(type)) return reject("Unsupported type");
+
+  const theme = searchParams.get("theme") ?? "dark";
+  if (!(OG_THEMES as readonly string[]).includes(theme)) return reject("Unsupported theme");
+
+  const accent = searchParams.get("accent") ?? "#a5f3fc";
+  if (!ACCENT_RE.test(accent)) return reject("accent must be a 6-digit hex colour");
+
+  for (const [key, max] of Object.entries(MAX_LEN)) {
+    const raw = searchParams.get(key);
+    if (raw !== null && raw.length > max) return reject(`${key} exceeds ${max} characters`);
+  }
+
+  // --- render ---------------------------------------------------------------
   try {
-    const { searchParams } = new URL(req.url);
-
-    // Universal
-    const type = searchParams.get("type") || "home";
-    const theme = searchParams.get("theme") || "dark";
-    const accent = searchParams.get("accent") || "#a5f3fc";
-    
-    // Type: home
-    const tagline = searchParams.get("tagline") || "Your website is only the beginning.";
-    const subline = searchParams.get("subline") || "Websites, AI systems and automation.";
-    const services = searchParams.get("services") || "Websites  ·  AI systems  ·  Automation";
-
-    // Type: pricing
-    const tier = searchParams.get("tier") || "Professional";
-    const price = searchParams.get("price") || "999 ₾";
-    const features = searchParams.get("features") || "4 sections · Full SEO · 45-day warranty";
-    const cta = searchParams.get("cta") || "Want more? → Command Center  ·  E-Commerce HQ";
-
-    // Type: blog
-    const category = searchParams.get("category") || "Web Design";
-    const title = searchParams.get("title") || "How to Choose a Website Developer in Tbilisi";
-    const readTime = searchParams.get("readTime") || "5 min read";
-
-    // Type: card
-    const name = searchParams.get("name") || "Genezisi Client";
-    const jobTitle = searchParams.get("title") || "Professional";
-    const company = searchParams.get("company") || "Genezisi";
-    const photo = searchParams.get("photo");
+    // Bounded and validated above; these are the original defaults verbatim.
+    const tagline = searchParams.get("tagline") ?? "Your website is only the beginning.";
+    const subline = searchParams.get("subline") ?? "Websites, AI systems and automation.";
+    const services = searchParams.get("services") ?? "Websites  ·  AI systems  ·  Automation";
+    const tier = searchParams.get("tier") ?? "Professional";
+    const price = searchParams.get("price") ?? "999 ₾";
+    const features = searchParams.get("features") ?? "4 sections · Full SEO · 45-day warranty";
+    const cta = searchParams.get("cta") ?? "Want more? → Command Center  ·  E-Commerce HQ";
+    const category = searchParams.get("category") ?? "Web Design";
+    const title = searchParams.get("title") ?? "How to Choose a Website Developer in Tbilisi";
+    const readTime = searchParams.get("readTime") ?? "5 min read";
+    const name = searchParams.get("name") ?? "Genezisi Client";
+    const jobTitle = searchParams.get("title") ?? "Professional";
+    const company = searchParams.get("company") ?? "Genezisi";
 
     const isDark = theme === "dark";
     const bgPrimary = isDark ? "#030712" : "#f8fafc";
@@ -292,13 +377,9 @@ export async function GET(req: NextRequest) {
                     boxShadow: `0 0 40px ${accent}30`,
                   }}
                 >
-                  {photo ? (
-                    <img src={photo} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                  ) : (
-                    <div style={{ fontSize: "120px", fontWeight: "900", color: accent, letterSpacing: "-0.05em" }}>
-                      {name.charAt(0)}
-                    </div>
-                  )}
+                  <div style={{ fontSize: "120px", fontWeight: "900", color: accent, letterSpacing: "-0.05em" }}>
+                    {name.charAt(0)}
+                  </div>
                 </div>
               </div>
 
@@ -349,13 +430,27 @@ export async function GET(req: NextRequest) {
       {
         width: 1200,
         height: 630,
+        headers: CACHE_HEADERS,
       }
     );
 
-  } catch (e: any) {
-    console.log(`${e.message}`);
-    return new Response(`Failed to generate the image`, {
-      status: 500,
-    });
+  } catch (e) {
+    // Best-effort only. A throw here is logged and answered with a
+    // caller-independent card, but this is a defensive path, not a guaranteed
+    // recovery: the exceptional branch is not exercised by any automated test
+    // (doing so would need a fault-injection hook inside a production route),
+    // and a failure that happens after headers are already flushed cannot be
+    // recovered by it at all. If even the fallback throws, a controlled 500
+    // with no-store is returned rather than an unhandled rejection.
+    console.error("og render failed:", e instanceof Error ? e.message : String(e));
+    try {
+      return fallbackCard(accent);
+    } catch (fallbackError) {
+      console.error(
+        "og fallback failed:",
+        fallbackError instanceof Error ? fallbackError.message : String(fallbackError)
+      );
+      return new Response(null, { status: 500, headers: { "Cache-Control": "no-store" } });
+    }
   }
 }
