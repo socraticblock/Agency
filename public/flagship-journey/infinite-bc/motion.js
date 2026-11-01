@@ -13,26 +13,37 @@
  const opening=root.querySelector('.opening'),intro=opening.querySelector('.intro'),panel=opening.querySelector('.interface-wrap');
  const cardFace=panel.querySelector('.site-window');
  const reveal=root.querySelector('.reveal'),reading=root.querySelector('.reading');
- const cHeading=reveal.querySelector('.c-center h2');
- const cTextBounds=document.createRange();
- cTextBounds.selectNodeContents(cHeading);
  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
  const clamp=v=>Math.max(0,Math.min(1,v));
  const smooth=(a,b,v)=>{const t=clamp((v-a)/(b-a));return t*t*(3-2*t)};
  const mix=(a,b,t)=>a+(b-a)*t;
  // Native scroll is a continuous, reversible film; a reader pauses by
  // stopping, not by being forced through long stationary scroll bands.
- // Re-map physical scroll distance to the original authored keyframes so
- // their poses and B -> room -> C geometry stay unchanged.
+ // Original authored keyframes and native-scroll pacing are frozen
+ // through the completed C composition. Shorten ONLY the stationary release
+ // after Card 4, without accelerating Card 1, 2, 3, or the C wipe.
  const scrollStops=[[0,0],[.20,.20],[.24,.32],[.33,.415],[.42,.50],
    [.48,.56],[.505,.62],[.715,.76],[.93,.93],[1,1]];
- const storyProgress=(raw)=>{
+ const originalStoryProgress=(raw)=>{
    const x=clamp(raw);
    for(let i=1;i<scrollStops.length;i++){
      const [x0,y0]=scrollStops[i-1],[x1,y1]=scrollStops[i];
      if(x<=x1)return mix(y0,y1,(x-x0)/(x1-x0));
    }
    return 1;
+ };
+ const storyProgress=(raw)=>{
+   // The former 440svh scene's physical scroll distance is the reference.
+   // scene.offsetHeight is the actual 100svh size, including mobile browser
+   // chrome; window.innerHeight determines the native sticky release point.
+   const originalTravel=Math.max(1,4.4*scene.offsetHeight-window.innerHeight);
+   const newTravel=Math.max(1,root.offsetHeight-window.innerHeight);
+   const distance=clamp(raw)*newTravel;
+   const finalStart=Math.min(.715*originalTravel,.99*newTravel);
+   if(distance<=finalStart)return originalStoryProgress(distance/originalTravel);
+   // Once the full C composition is established (original raw .715 / p=.76),
+   // consume only the short remaining stretch before the real #work follows.
+   return mix(.76,1,clamp((distance-finalStart)/Math.max(1,newTravel-finalStart)));
  };
  // Fit the actual opaque green face inside the viewport at the camera's nearest
  // approach. Unlike a fixed 2.25x multiplier, this leaves visible margins so
@@ -61,10 +72,9 @@
    const f=smooth(.60,.88,p),c=smooth(.715,.77,p);
    const handoff=smooth(.658,.706,p);
    const fold=smooth(.647,.707,p);
-   // The final message begins as soon as it *fits* on the covered C surface
-   // while the green architecture is still visible at the edge. Supporting
-   // details resolve after full coverage, keeping the moving frontier clean.
-   // The decorative G. waits until the real C message is legible.
+   // The Card 4 message lives behind the same advancing diagonal mask as the
+   // surface itself; the corresponding letters appear as the plane reaches them.
+   // The remaining page furniture waits for complete coverage.
    const cInk=smooth(.706,.738,p);
    const cWatermark=smooth(.755,.83,p);
    // Keep the site facade solid until the same-color spatial room has fully
@@ -82,7 +92,7 @@
      wingProgress:smooth(.345,.445,p),
      readZ:mix(-1120,0,smooth(.46,.56,p)),
      roomAdvance:mix(0,155,smooth(.44,.565,p)),
-     readInk:smooth(.507,.543,p),
+     readInk:smooth(.465,.505,p),
      leftX:-e*Math.min(w*.17,230)+f*Math.min(w*.13,180),rightX:e*Math.min(w*.17,230)-f*Math.min(w*.13,180),
      nearZ:300*e+180*f,farLeft:e*-Math.min(w*.13,170),farRight:e*Math.min(w*.13,170),groundZ:550*e+250*f,
      cOffset:mix(20,0,c),handoff,fold,cInk,cWatermark
@@ -141,13 +151,36 @@
    // As the B surface opens, its two readable columns retire into the
    // corresponding architectural wings; only the third plane remains centered.
    // The green facade itself stays opaque until its depth scene covers it.
-   const split=smooth(.42,.495,p);
+   const split=smooth(.421,.482,p);
    root.style.setProperty('--contentSlide',(cardFace.offsetWidth*.64*split)+'px');
-   root.style.setProperty('--contentAlpha',String(1-smooth(.408,.429,p)));
-   // The header/footer are also *interface contents*: they must retreat with
-   // the two columns. The green structural plane stays solid underneath.
-   root.style.setProperty('--facadeMetaAlpha',String(1-smooth(.408,.429,p)));
-   root.style.setProperty('--facadeMetaLift',(-26*smooth(.408,.429,p))+'px');
+   // The interface retires as its own perimeter becomes room architecture.
+   // Keeping the text into the first visible depth beat prevents a vacant facade.
+   const retire=1-smooth(.424,.465,p);
+   root.style.setProperty('--contentAlpha',String(retire));
+   root.style.setProperty('--facadeMetaAlpha',String(retire));
+   root.style.setProperty('--facadeMetaLift',(-26*smooth(.425,.468,p))+'px');
+   // Source-derived ribs bridge the facade and the established room. Their
+   // opacity is a pure function of scroll position, including reverse/jumps.
+   root.style.setProperty('--thresholdInk',String(smooth(.417,.475,p)*(1-smooth(.535,.612,p))));
+   root.style.setProperty('--roomText',String(1-smooth(.49,.555,p)));
+   // Card 3's internal story starts WHILE the existing camera is approaching
+   // (.46-.56), after the reading plane and ink are already becoming visible.
+   // The headline makes room first; three gentle, overlapping stage reveals
+   // then build the composition without changing the total native-scroll map,
+   // depth geometry, camera trajectory or C fold at .647.
+   // Every sampled pose is reversible and independent of prior frames.
+   const story=smooth(.500,.548,p);
+   const first=smooth(.512,.560,p),second=smooth(.548,.596,p),third=smooth(.584,.632,p);
+   root.style.setProperty('--c3Story',String(story));
+   root.style.setProperty('--c3HeroShift',(-Math.min(isMobile?h*.165:h*.10,isMobile?112:96)*story)+'px');
+   root.style.setProperty('--c3HeroScale',String(mix(1.06,isMobile?.84:.85,story)));
+   root.style.setProperty('--c3First',String(first));
+   root.style.setProperty('--c3Second',String(second));
+   root.style.setProperty('--c3Third',String(third));
+   root.style.setProperty('--c3FirstRise',(16*(1-first))+'px');
+   root.style.setProperty('--c3SecondRise',(16*(1-second))+'px');
+   root.style.setProperty('--c3ThirdRise',(16*(1-third))+'px');
+   root.style.setProperty('--c3Progress',String(smooth(.512,.632,p)));
    // Update every geometry variable *before* reading the transformed face.
    // This removes dependence on the previous scroll sample on jump/reversal.
    const map={p:v.p,e:v.e,h:v.h,f:v.f,c:v.c,d:v.d,b:v.b,n:v.n,shiftX:v.shiftX,shiftY:v.shiftY,artScale:v.artScale,leftX:v.leftX,rightX:v.rightX,nearZ:v.nearZ,farLeft:v.farLeft,farRight:v.farRight,groundZ:v.groundZ,cOffset:v.cOffset,foldAlpha:v.foldAlpha,foldLeftX:v.foldLeftX,foldRightX:v.foldRightX,foldRotL:v.foldRotL,foldRotR:v.foldRotR};
@@ -158,9 +191,12 @@
    // horizontal green card. Grow to the card's proportions first, then fill
    // the viewport only after the facade's labels have cleared.
    const facade=cardFace.getBoundingClientRect();
-   const enter=smooth(.415,.47,p),expand=smooth(.47,.515,p);
+   const enter=smooth(.415,.46,p),expand=smooth(.46,.51,p);
    const cropW=mix(facade.width*enter,w,expand);
    const cropH=mix(facade.height*enter,h,expand);
+   // Prevent the higher-z-index Card 3 scene from covering settled Card 2.
+   // Visibility depends only on scroll and the real measured aperture size.
+   root.style.setProperty('--depthVisibility',p>.415&&cropW>1&&cropH>1?'visible':'hidden');
    const cropX=mix(facade.left+facade.width/2,w/2,expand);
    const cropY=mix(facade.top+facade.height/2,h/2,expand);
    root.style.setProperty('--depthTop',Math.max(0,cropY-cropH/2)+'px');
@@ -184,26 +220,12 @@
    const edgeBottom=Math.max(0,Math.min(100,100*v.handoff-slant));
    root.style.setProperty('--cFrontTop',edgeTop+'%');
    root.style.setProperty('--cFrontBottom',edgeBottom+'%');
-   // The actual headline appears *before* the viewport is entirely covered,
-   // but only after the leading edge has moved past every rendered glyph.
-   // A modest early scale gives the text a safe margin on portrait screens.
-   // Set scale before measuring: jump and reverse scroll must read the exact
-   // same typography bounds regardless of the preceding frame.
-   const entryScale=mix(.76,1,smooth(.692,.713,p));
-   root.style.setProperty('--cEntranceScale',String(entryScale));
-   let earlyHeadline=0;
-   if(p>=.714)earlyHeadline=1;
-   else if(p>=.655){
-     const inkRects=Array.from(cTextBounds.getClientRects()).filter(r=>r.width>1&&r.height>1);
-     let rightmost=0,lowest=0;
-     for(const r of inkRects){rightmost=Math.max(rightmost,r.right);lowest=Math.max(lowest,r.bottom)}
-     const edgeAtInk=(edgeTop+(edgeBottom-edgeTop)*clamp(lowest/Math.max(1,h)))*w/100;
-     const margin=isMobile?4:10,fadeDistance=isMobile?18:24;
-     const inkSafe=smooth(rightmost+margin,rightmost+margin+fadeDistance,edgeAtInk);
-     earlyHeadline=Math.min(smooth(.68,.709,p),inkSafe);
-   }
-   root.style.setProperty('--cHeadlineInk',String(earlyHeadline));
-   root.style.setProperty('--cHeadlineRise',(8*(1-earlyHeadline))+'px');
+   // C's headline sits at its final position behind the advancing C surface.
+   // The parent's existing clip-path alone reveals those parts of each glyph
+   // already covered by the same edge. No separate fade or bounding-box gate.
+   root.style.setProperty('--cEntranceScale','1');
+   root.style.setProperty('--cHeadlineInk','1');
+   root.style.setProperty('--cHeadlineRise','0px');
    // The remaining page furniture waits until C fills the screen. The
    // original final positions, copy and typography are unchanged.
    root.style.setProperty('--cInk',String(v.cInk));
