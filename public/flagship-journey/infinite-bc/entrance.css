@@ -129,6 +129,9 @@
    no premature opacity fade or right-to-left cover. Deeper scene is unchanged. */
 .bc-motion-ready .journey[data-mode="motion"] .depth {
   opacity:1;
+  /* A higher-z-index depth scene must not cover settled Card 2. The
+     visibility gate also protects the first paint before JS samples scroll. */
+  visibility:var(--depthVisibility,hidden);
   clip-path:inset(var(--depthTop,50%) var(--depthRight,50%) var(--depthBottom,50%) var(--depthLeft,50%));
 }
 

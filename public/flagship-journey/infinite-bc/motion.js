@@ -162,11 +162,16 @@
    // horizontal green card. Grow to the card's proportions first, then fill
    // the viewport only after the facade's labels have cleared.
    const facade=cardFace.getBoundingClientRect();
-   // Begin with a materially wide B-derived opening, not a pinhole. The
-   // interface frame and grid retain an observable parent-to-room connection.
+   // B must be wholly unobstructed through its settled pose. The room's
+   // B-derived aperture starts with ZERO area, then grows only as the actual
+   // transition advances; the old 44%-wide initial opening leaked over B.
    const enter=smooth(.415,.46,p),expand=smooth(.46,.51,p);
-   const cropW=mix(mix(facade.width*.44,facade.width,enter),w,expand);
-   const cropH=mix(mix(facade.height*.44,facade.height,enter),h,expand);
+   const cropW=mix(facade.width*enter,w,expand);
+   const cropH=mix(facade.height*enter,h,expand);
+   // Clip-path alone can render a one-pixel seam at a collapsed edge.
+   // Keep the higher-z-index depth completely hidden until it has a real
+   // aperture. Visibility remains a deterministic function of scroll.
+   root.style.setProperty('--depthVisibility',p>.415&&cropW>1&&cropH>1?'visible':'hidden');
    const cropX=mix(facade.left+facade.width/2,w/2,expand);
    const cropY=mix(facade.top+facade.height/2,h/2,expand);
    root.style.setProperty('--depthTop',Math.max(0,cropY-cropH/2)+'px');

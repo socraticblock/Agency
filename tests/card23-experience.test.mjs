@@ -8,6 +8,7 @@ const at=name=>readFileSync(join(base,name),'utf8');
 const html=at('index.html');
 const css=at('card-03.css');
 const motion=at('motion.js');
+const entrance=at('entrance.css');
 
 test('Card 2 and V6.5 click shortcut stay wired',()=>{
   assert.match(html,/class="site-window card2-window"/);
@@ -40,7 +41,9 @@ test('B-to-room transition stays native-scroll sampled and reversible',()=>{
     'const scrollStops=[[0,0],[.20,.20]',
     'const retire=1-smooth(.424,.465,p)',
     'readInk:smooth(.465,.505,p)',
-    'facade.width*.44',
+    'const cropW=mix(facade.width*enter,w,expand)',
+    'const cropH=mix(facade.height*enter,h,expand)',
+    "'--depthVisibility',"
     '--thresholdInk',
     '--c3First',
     '--c3Second',
@@ -50,6 +53,36 @@ test('B-to-room transition stays native-scroll sampled and reversible',()=>{
     'window.__GENEZISI_BC_TEST__'
   ]) assert.ok(motion.includes(token),'missing motion behavior: '+token);
   assert.doesNotMatch(motion,/wheel.*preventDefault|touchmove.*preventDefault/);
+});
+
+
+test('Card 3 is fully occluded until Card 2 deliberately starts transforming',()=>{
+  assert.match(entrance,/visibility:var\(--depthVisibility,hidden\)/);
+  assert.match(motion,/--depthVisibility',p>\.415&&cropW>1&&cropH>1\?'visible':'hidden'/);
+  assert.doesNotMatch(motion,/facade\.(?:width|height)\*\.44/);
+
+  // Test desktop and portrait dimensions at pre-threshold, threshold and
+  // forward transition progress; the same formulas are asserted above.
+  const clamp=x=>Math.max(0,Math.min(1,x));
+  const smooth=(a,b,v)=>{const t=clamp((v-a)/(b-a));return t*t*(3-2*t)};
+  const mix=(a,b,t)=>a+(b-a)*t;
+  for(const {w,h,fw,fh} of [
+    {w:1440,h:900,fw:890,fh:600},
+    {w:390,h:844,fw:340,fh:570},
+    {w:320,h:568,fw:282,fh:450}
+  ]) {
+    for(const p of [0,.2,.32,.4,.4149,.415]) {
+      const enter=smooth(.415,.46,p),expand=smooth(.46,.51,p);
+      const width=mix(fw*enter,w,expand),height=mix(fh*enter,h,expand);
+      assert.equal(width,0,'early room aperture width at p='+p);
+      assert.equal(height,0,'early room aperture height at p='+p);
+    }
+    for(const p of [.44,.47,.5,.51,.56]) {
+      const enter=smooth(.415,.46,p),expand=smooth(.46,.51,p);
+      const width=mix(fw*enter,w,expand),height=mix(fh*enter,h,expand);
+      assert.ok(width>1&&height>1,'room opening should be visible at p='+p);
+    }
+  }
 });
 
 test('Card 3 mobile, short-screen and static mode keep content available',()=>{
