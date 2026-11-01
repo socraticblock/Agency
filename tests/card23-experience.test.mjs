@@ -100,7 +100,7 @@ test('narrow-window Card 2 alignment and Card 3 words survive hidden line breaks
 test('Card 3 internal story is staged after arrival and completed before the existing fold',()=>{
   for(const token of [
     'const story=smooth(.542,.575,p)',
-    'const first=smooth(.559,.577,p),second=smooth(.584,.603,p),third=smooth(.610,.628,p)',
+    'const first=smooth(.559,.590,p),second=smooth(.582,.613,p),third=smooth(.605,.636,p)',
     "'--c3HeroShift'",
     "'--c3HeroScale'",
     "'--c3FirstRise'",
@@ -114,14 +114,21 @@ test('Card 3 internal story is staged after arrival and completed before the exi
   // Progress stays pure and reversible. Before first reveal there are no
   // panels; after stage three all are visible and there is a readable hold.
   const sm=(a,b,p)=>{const t=Math.max(0,Math.min(1,(p-a)/(b-a)));return t*t*(3-2*t)};
-  const states=p=>[sm(.559,.577,p),sm(.584,.603,p),sm(.610,.628,p)];
+  const states=p=>[sm(.559,.590,p),sm(.582,.613,p),sm(.605,.636,p)];
   assert.deepEqual(states(.55),[0,0,0]);
   assert.ok(states(.57)[0]>0&&states(.57)[1]===0&&states(.57)[2]===0);
-  assert.ok(states(.59)[0]===1&&states(.59)[1]>0&&states(.59)[2]===0);
-  assert.ok(states(.617)[0]===1&&states(.617)[1]===1&&states(.617)[2]>0);
-  assert.deepEqual(states(.635),[1,1,1]);
-  assert.deepEqual(states(.65),[1,1,1]);
-  for(const p of [.62,.60,.57,.54]) assert.deepEqual(states(p),states(p));
+  assert.ok(states(.587)[0]>0&&states(.587)[0]<1&&states(.587)[1]>0&&states(.587)[2]===0);
+  assert.ok(states(.610)[0]===1&&states(.610)[1]>0&&states(.610)[1]<1&&states(.610)[2]>0);
+  assert.ok(states(.626)[0]===1&&states(.626)[1]===1&&states(.626)[2]>0&&states(.626)[2]<1);
+  assert.deepEqual(states(.640),[1,1,1]);
+  assert.deepEqual(states(.645),[1,1,1]);
+  // Poses depend only on scroll position, even when returning from later frames.
+  for(const p of [.640,.610,.587,.55,.610]) assert.deepEqual(states(p),states(p));
+  for(const token of [
+    "'--c3FirstRise',(16*(1-first))",
+    "'--c3SecondRise',(16*(1-second))",
+    "'--c3ThirdRise',(16*(1-third))"
+  ]) assert.ok(motion.includes(token),'missing restrained stage rise: '+token);
 });
 
 test('Card 3 mobile, short-screen and static mode keep content available',()=>{

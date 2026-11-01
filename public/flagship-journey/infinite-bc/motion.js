@@ -152,16 +152,18 @@
    // appear in order. All states derive only from p; reverse/jumps are exact.
    // Complete composition settles ahead of the unchanged C fold at .647.
    const story=smooth(.542,.575,p);
-   const first=smooth(.559,.577,p),second=smooth(.584,.603,p),third=smooth(.610,.628,p);
+   // Give each stage a gentler 0.031-progress rise/fade, with slight overlap;
+   // the complete composition still resolves before the unchanged .647 fold.
+   const first=smooth(.559,.590,p),second=smooth(.582,.613,p),third=smooth(.605,.636,p);
    root.style.setProperty('--c3Story',String(story));
    root.style.setProperty('--c3HeroShift',(-Math.min(isMobile?h*.165:h*.10,isMobile?112:96)*story)+'px');
    root.style.setProperty('--c3HeroScale',String(mix(1.06,isMobile?.84:.85,story)));
    root.style.setProperty('--c3First',String(first));
    root.style.setProperty('--c3Second',String(second));
    root.style.setProperty('--c3Third',String(third));
-   root.style.setProperty('--c3FirstRise',(22*(1-first))+'px');
-   root.style.setProperty('--c3SecondRise',(22*(1-second))+'px');
-   root.style.setProperty('--c3ThirdRise',(22*(1-third))+'px');
+   root.style.setProperty('--c3FirstRise',(16*(1-first))+'px');
+   root.style.setProperty('--c3SecondRise',(16*(1-second))+'px');
+   root.style.setProperty('--c3ThirdRise',(16*(1-third))+'px');
    root.style.setProperty('--c3Progress',String(smooth(.554,.632,p)));
    // Update every geometry variable *before* reading the transformed face.
    // This removes dependence on the previous scroll sample on jump/reversal.
