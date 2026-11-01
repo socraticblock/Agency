@@ -90,11 +90,11 @@ Recommendation: start the V2 hero with **DOM + SVG + CSS/Framer/GSAP-style trans
 
 ## Video / asset warning
 
-`public/hero-bg-animation.mp4` is approximately **22.5 MB**.
+`public/hero-bg-animation.mp4` (previously approximately **22.5 MB**) has been **removed** - the owner confirmed it was unused. The site served its hero video from Mux, not from this file.
 
 The unused/experimental kinetic hero also depends on Mux/HLS background video.
 
-For V2, hero video must not be required for first paint. A 22.5 MB local hero asset is not an acceptable mobile baseline for the new flagship homepage.
+For V2, hero video must not be required for first paint. A local hero asset of this size was not an acceptable mobile baseline for the new flagship homepage, and keeping one in the deployment payload only added to Deployment Storage.
 
 ## Contact
 
