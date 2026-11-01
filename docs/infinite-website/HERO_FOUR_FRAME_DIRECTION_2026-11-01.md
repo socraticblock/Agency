@@ -103,3 +103,53 @@ Use **few logical commits on this same branch**, rather than one branch per fram
 ## 7. Immediate next action
 
 **Start with Card 2**, using the full-site recording and current B source/layout as the baseline. Propose a precise textual/visual composition and editorial copy alternatives that communicate independently commissionable Websites, Automation and AI systems. Confirm the design with the founder before changing implementation. **Card 1 foundation is retained, not reopened.**
+
+
+## 8. Card 2 → Card 3 transition treatment (D0 proposal, 1 November 2026)
+
+**Status: proposed creative treatment and source-backed diagnosis — NOT an approved visual storyboard, animatic, code change, final Card 3 blocking, or final animation.** Founder has approved proceeding to the transition design after reviewing Card 2 desktop and narrow-browser screenshots. Keep Card 2's accepted composition and the V6.5 clicked-CTA shortcut intact.
+
+**Visual evidence:** founder recording \`20261101-0537-31.6319372.mp4\` (38.57 seconds at 1910×1046, including a narrower resized desktop-browser window in the later portion; not a physical mobile capture). Elapsed video seconds are recording observations, not normalized scroll durations or performance measurements.
+
+**Observed from recording:**
+
+1. Complete green Card 2 is readable and well-composed at the start.
+2. Around the first transition (e.g. ~8–10 s), card text and service hierarchy disappear, exposing a large flat dark-green facade with a small central opening; the relationship between the former grid and the room becomes weak.
+3. Later (~12–16 s), a geometric room establishes credible architectural perspective, but a blank pale reading surface sits in the center before its text arrives.
+4. On narrow-browser footage after ~26 s, the same generic chamber-to-white-surface pattern occurs; this does not certify 390px/320px or physical-phone behavior.
+5. Card 3's current copy repeats Card 4's design-plus-function sentiment; content is still a placeholder and must not dictate the permanent transition design.
+
+**Source-based mechanism** (verified against branch motion.js at revision \`b6e815ed0b75660bebcd9d2e0624095b73c8c558\`): Card 2 content opacity falls over authored progress ~0.408–0.429; the depth crop opens across ~0.415–0.515; the reading plane travels from Z −1120 toward its settled pose during ~0.46–0.56; reading ink resolves at ~0.507–0.543. These differently timed stages create a visually underfilled interval even though their individual mathematical tracks are continuous. The source uses measured Card 2 facade bounds, sheet-wing transforms and CSS room geometry already; preserve their proven foundations while correcting the perceived sequence. Do **not** equate normalized scroll progress to seconds.
+
+### Proposed shot — “The interface becomes the environment”
+
+**Single visual idea:** The three-discipline website interface is the first architectural object in a bespoke digital world. As the visitor continues scrolling, the interface's grid, seams, thickness and backing surfaces develop into a convincing nearby frame, layered walls and a much deeper space. The visitor advances **through the constructed interface** and discovers the setting of Card 3. This is not a green tunnel cutaway, a flat screenshot enlarged in place, a generic door or a separate unrelated room.
+
+**Proposed paused poses (D0 written specification, not completed D1 visual art):**
+
+- **K0 / Source:** Existing fully settled, readable Card 2. No redesign of approved copy, type hierarchy, three service zones, or portrait layout.
+- **K1 / Anticipation:** Card 2's physical perimeter, central division and discipline row seams begin to show thickness and parallax. Typography retires cleanly **in step with structural motion**, without leaving a dead flat screen. Retiring live copy must never fragment into giant ghost characters.
+- **K2 / Threshold:** The visual opening is substantial and recognizably derived from the B geometry; the visitor sees meaningful near/far surfaces beyond it. Avoid the current tiny dark central aperture set in a giant blank facade. Backing sheets remain coherent structural wings, not competing diagonal protrusions.
+- **K3 / Travel:** Camera advances on one forward axis through credible floor/ceiling/wall relationships with graduated parallax, clear occlusion, material consistency and restrained light. Architecture fills enough of the frame to carry the scene without long stationary empty scroll.
+- **K4 / Destination sightline:** The far/central Card 3 interface is visible as an **architectural member** of the room, not a detached floating white modal. It can be perceived at distance and becomes legible when physically large enough; it should not sit as a lengthy blank glowing rectangle awaiting copy.
+- **K5 / Arrival:** The Card 3 central demonstration's actual content and interaction plane are fully readable within the same spatial world; native scroll may pause here and reverse predictably. **Its precise content, business problem and visual storyboard have not yet been approved**. Do not lock a generic white panel as the final stage.
+
+### Design constraints and predicted second-order defects
+
+| Design move | Desired effect | Likely failure | Prevention / evidence required |
+| --- | --- | --- | --- |
+| Coordinate text retirement with first visible depth | No empty dark facade | Overlapping illegible labels, split typography | D1 intermediate screenshots, actual animated DOM text visibility; no ghost copies |
+| Turn B seams into structural depth | One continuous designed object | Fake mini-door; unrelated corridor; flat scaled rectangle | Source-to-room geometry map, 25/50/75% spatial storyboard and in-betweens |
+| Respect the portrait B silhouette | Same experience on mobile | Narrow dark slit, clipped labels or overhanging background | Independently framed 390×844 and 320×568 visual poses, plus short-height layout |
+| Bring Card 3 content in coherently | Meaningful arrival | Long blank white stage or floating modal | Design the actual Card 3 interface destination first; readable preview at K4–K5 |
+| Preserve native scroll control | Natural interactive film | Fast wheel jump, reverse flicker, forced hold | Test both directions, jumps, slow/fast scroll, keyboard, reduced-motion and no-JS |
+| Preserve the accepted Card 1 click shortcut | No regressions | Accidental shared CSS/camera/controller changes | Scope changes to B→interior only; compare exact V6.5 files and branch diffs |
+
+### Stop/go and immediate next increment
+
+1. **D0 proposed now**: review the six poses and one-shot causal logic against the video and current code. This addendum is a proposal, not founder acceptance.
+2. **D1 next**: produce actual high-fidelity *desktop and portrait* storyboard frames, including risk in-betweens, that visually demonstrate K0–K5 and map Card 2's architecture into Card 3. The **Card 3 content/central interface must be sufficiently defined before K4/K5 can be treated as final**. Do not call textual K0–K5 a completed visual storyboard.
+3. D2 animatic and D3 minimal real-browser geometry proof if we materially redesign the spatial transition; follow \`skills/infinite-website-motion-review/SKILL.md\`. When accepted, implement on this **same** feature branch in a few logical commits, retaining native-scroll source semantics and the accepted CTA code.
+4. No production merge, preview deployment, changed Work destination or unrequested Card 4 changes. Founder reviews the actual moving desktop/narrow/mobile result before accepting this transition.
+
+**Decision needed before D1 is finalized:** choose the single concrete custom digital experience or business problem that Card 3 will visually embody, so the destination is not another generic white panel. The creative proposition remains: Genezisi demonstrates breadth of integrated design and engineering via *one understandable, believable experience*, not three unrelated demo dashboards and not the already-present enquiry-reply walkthrough repeated.
