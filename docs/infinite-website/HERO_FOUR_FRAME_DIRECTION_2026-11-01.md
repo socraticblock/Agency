@@ -105,6 +105,20 @@ Use **few logical commits on this same branch**, rather than one branch per fram
 **Start with Card 2**, using the full-site recording and current B source/layout as the baseline. Propose a precise textual/visual composition and editorial copy alternatives that communicate independently commissionable Websites, Automation and AI systems. Confirm the design with the founder before changing implementation. **Card 1 foundation is retained, not reopened.**
 
 
+## 9. Card 2 → Card 3 code candidate (1 November 2026; awaiting founder review)
+
+**Status: implemented on the one feature branch as an opt-in/static-route candidate, not visually approved, merged or deployed.** Following the founder's explicit instruction to build the storyboard concept in code, the branch now includes:
+- \`public/flagship-journey/infinite-bc/index.html\`: new architecturally integrated Card 3 **illustrative** workspace (fictional Brightside service launch) and source-derived B→room threshold structure.
+- \`public/flagship-journey/infinite-bc/card-03.css\`: evergreen/cream live DOM typography, original inline-SVG landscape, small interface detail, responsive desktop/portrait and short-height layouts, static/no-JS/reduced-motion visibility.
+- \`public/flagship-journey/infinite-bc/motion.js\`: earlier depth architecture/typography synchronization and wider B-derived aperture; scroll-reversible staged emphasis of design → connected workflow → human-reviewed AI suggestion. Native scroll stop mapping, start-of-page arrival and the C fold schedule remain unchanged.
+- \`tests/card23-experience.test.mjs\`: source regression tests for content, continuity, native scroll, fallbacks, and Work anchors.
+
+**Truthful scope:** All depicted business/project/workflow states are fictional static illustration and scroll-sampled UI state; no live website builder, CRM, real AI process, customer updates, calendar integrations or outbound actions. The separate lower-page enquiry demonstration has not been changed. The example is a designed hypothesis for visual review, not a claim of real client work or a permanently approved Card 3 narrative.
+
+**Review required:** Founder must inspect the actual served branch at normal speed on desktop and portrait, especially B's exit → spatial threshold, narrow viewport, Card 3's first readable frame, short-height clipping, reverse scroll, and existing Card 3→C handoff. Code source checks alone do not establish browser performance, physical-mobile compatibility, or visual fidelity to generated concepts. Preserve V6.5 clicked CTA; do not modify Card 4 or merge/deploy based on this candidate.
+
+---
+
 ## 8. Card 2 → Card 3 transition treatment (D0 proposal, 1 November 2026)
 
 **Status: proposed creative treatment and source-backed diagnosis — NOT an approved visual storyboard, animatic, code change, final Card 3 blocking, or final animation.** Founder has approved proceeding to the transition design after reviewing Card 2 desktop and narrow-browser screenshots. Keep Card 2's accepted composition and the V6.5 clicked-CTA shortcut intact.
