@@ -71,6 +71,20 @@ test('only the final Card 4 hold is shortened', () => {
   assert.ok(remaining>.2 && remaining<.35);
 });
 
+test('Card 3 cannot disappear when browser caches a pre-integration motion controller', () => {
+  // A previous production controller used the same static URL but never set
+  // --depthVisibility. The new versioned src forces a fresh HTTP cache key.
+  assert.match(home, /motion\.js\?hero=approved-four-frame-2026-11-01/);
+  assert.doesNotMatch(home, /src="\/flagship-journey\/infinite-bc\/motion\.js" strategy/);
+  // If old JS still executes while a tab transitions across deployments,
+  // depth falls back to visible, gated by the original clip-path/opacity.
+  assert.match(css, /depth\{visibility:var\(--depthVisibility,visible\)\}/);
+  const baseStyles = read('src/app/[locale]/_components/v2/scroll-journey.css');
+  assert.match(baseStyles, /clip-path:inset\(var\(--depthTop,50%\)/);
+  assert.match(baseStyles, /opacity:var\(--depthAlpha,0\)/);
+  assert.match(motion, /root\.style\.setProperty\('--depthVisibility',p>\.415&&cropW>1&&cropH>1\?'visible':'hidden'\)/);
+});
+
 test('styles are scoped to the real homepage and safe without scroll motion', () => {
   assert.match(home, /approved-four-frame\.css/);
   assert.match(css, /\.genezisi-entry-home \.card3-story-content/);

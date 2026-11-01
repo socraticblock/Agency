@@ -39,7 +39,10 @@ export function SignalHeroPrototype({ locale }: { locale: HomeLocale }) {
         <JourneyScenes locale={locale} />
       </div>
     </div>
-    <Script src="/flagship-journey/infinite-bc/motion.js" strategy="afterInteractive" />
+    {/* The original public motion.js URL existed before Card 3's visibility gate.
+        A versioned URL prevents a stale cached controller from hiding Card 3
+        behind the new stylesheet after release. Keep the same controller. */}
+    <Script src="/flagship-journey/infinite-bc/motion.js?hero=approved-four-frame-2026-11-01" strategy="afterInteractive" />
     <SelectedWork copy={copy} />
     <Capabilities copy={copy} />
     <section className="bg-[#02060b] px-5 py-20 sm:px-8 lg:py-28"><div className="mx-auto max-w-[92rem] border-t border-white/10 pt-14"><V2Lab copy={copy} /></div></section>
