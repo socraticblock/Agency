@@ -185,7 +185,7 @@ test('Card 4 releases quickly to genuine Selected Work without accelerating earl
   assert.match(pageCss,/\.journey\[data-mode="motion"\] \.scene\s*\{\s*position:sticky/);
   assert.ok(motion.includes('const originalTravel=Math.max(1,4.4*scene.offsetHeight-window.innerHeight)'));
   assert.ok(motion.includes('const newTravel=Math.max(1,root.offsetHeight-window.innerHeight)'));
-  assert.ok(motion.includes('const finalStart=Math.min(.715*originalTravel,.94*newTravel)'));
+  assert.ok(motion.includes('const finalStart=Math.min(.715*originalTravel,.99*newTravel)'));
   assert.ok(motion.includes('return originalStoryProgress(distance/originalTravel)'));
   assert.ok(motion.includes('return mix(.76,1,clamp((distance-finalStart)/Math.max(1,newTravel-finalStart)))'));
   assert.match(html,/<\/section>\s*<\/div><\/div>\s*<section class="work-preview" id="work"/);
@@ -201,7 +201,7 @@ test('Card 4 releases quickly to genuine Selected Work without accelerating earl
   };
   const remapped=(distance,sceneH,windowH)=>{
     const oldDistance=4.4*sceneH-windowH,newDistance=3.6*sceneH-windowH;
-    const end=Math.min(.715*oldDistance,.94*newDistance);
+    const end=Math.min(.715*oldDistance,.99*newDistance);
     if(distance<=end)return original(distance/oldDistance);
     return .76+.24*Math.max(0,Math.min(1,(distance-end)/(newDistance-end)));
   };

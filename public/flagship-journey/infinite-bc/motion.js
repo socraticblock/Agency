@@ -32,7 +32,7 @@
    const originalTravel=Math.max(1,4.4*scene.offsetHeight-window.innerHeight);
    const newTravel=Math.max(1,root.offsetHeight-window.innerHeight);
    const distance=clamp(raw)*newTravel;
-   const finalStart=Math.min(.715*originalTravel,.94*newTravel);
+   const finalStart=Math.min(.715*originalTravel,.99*newTravel);
    if(distance<=finalStart)return originalStoryProgress(distance/originalTravel);
    // Once the full C composition is established (original raw .715 / p=.76),
    // consume only the short remaining stretch before the real #work follows.
