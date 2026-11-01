@@ -1,0 +1,71 @@
+/* Card 4: quiet typographic conclusion. The current C plane/fold/scroll
+   choreography remains governed by entrance.css + motion.js, untouched. */
+.reveal.card4-resolution {
+  padding:clamp(92px,11svh,126px) clamp(22px,5vw,80px) clamp(23px,4svh,48px);
+  background:radial-gradient(ellipse at 50% 48%,#172e22 0%,#101f18 48%,#0b1914 100%);
+}
+.reveal.card4-resolution::before {
+  background:linear-gradient(90deg,transparent 5.5%,#b9cfb112 5.5%,#b9cfb112 calc(5.5% + 1px),transparent calc(5.5% + 1px) 94.5%,#b9cfb112 94.5%,#b9cfb112 calc(94.5% + 1px),transparent calc(94.5% + 1px)),radial-gradient(ellipse at 50% 49%,#71977a12,transparent 56%);
+  opacity:.8;
+}
+.reveal.card4-resolution::after {content:none}
+.reveal.card4-resolution .c-topline,
+.reveal.card4-resolution .c-lastline {
+  width:100%;max-width:1600px;margin-inline:auto;
+  border-color:#b6cdb33d;font-size:clamp(9px,.68vw,11px);
+  letter-spacing:.16em;
+}
+.reveal.card4-resolution .c-center {
+  align-self:stretch;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  min-height:0;width:100%;padding:0 0 1.8svh;
+}
+.reveal.card4-resolution .c-kicker {
+  margin:0 0 clamp(28px,4svh,55px);
+  color:#b3cab2;font-size:clamp(10px,.78vw,12px);letter-spacing:.2em;
+}
+.reveal.card4-resolution .c-center h2 {
+  margin:0;max-width:100%;color:#f4f0e5;
+  font-size:clamp(58px,7.2vw,123px);font-weight:900;
+  line-height:.95;letter-spacing:-.076em;text-wrap:balance;
+}
+.reveal.card4-resolution .c-center h2 em {
+  display:inline-block;font-weight:400;letter-spacing:-.078em;
+  color:#c1d9b9;line-height:1.07;
+}
+.reveal.card4-resolution .c-lastline {align-items:center;padding:16px 0 0}
+.card4-signature {display:inline-flex;flex:none;align-items:center;gap:6px}
+.card4-signature i {display:block;width:24px;height:1px;background:#a6c0a482}
+.card4-signature i:nth-child(2) {width:52px;background:#c5d8b6}
+@media(max-width:740px) {
+  .reveal.card4-resolution {padding:clamp(80px,11.5svh,104px) 20px 23px}
+  .reveal.card4-resolution .c-center {padding:0 0 2svh}
+  .reveal.card4-resolution .c-kicker {
+    margin-bottom:clamp(25px,4.6svh,39px);
+    font-size:9px;letter-spacing:.15em;
+  }
+  .reveal.card4-resolution .c-center h2 {
+    font-size:clamp(42px,11.3vw,78px);
+    line-height:.97;letter-spacing:-.075em;
+  }
+  .reveal.card4-resolution .c-topline,
+  .reveal.card4-resolution .c-lastline {font-size:8px;letter-spacing:.085em}
+  .reveal.card4-resolution .c-topline {padding-bottom:15px}
+  .reveal.card4-resolution .c-lastline {padding-top:15px}
+  .card4-signature i {width:14px}
+  .card4-signature i:nth-child(2) {width:27px}
+}
+@media(max-width:380px) {
+  .reveal.card4-resolution {padding:80px 16px 16px}
+  .reveal.card4-resolution .c-center h2 {
+    font-size:clamp(39px,11.15vw,46px);line-height:1;
+  }
+  .reveal.card4-resolution .c-kicker {font-size:8px;margin-bottom:20px}
+  .reveal.card4-resolution .c-lastline span:first-child {display:inline}
+  .reveal.card4-resolution .c-lastline {font-size:7px}
+}
+@media(max-height:650px) {
+  .reveal.card4-resolution {padding-top:77px;padding-bottom:16px}
+  .reveal.card4-resolution .c-kicker {margin-bottom:16px}
+  .reveal.card4-resolution .c-center h2 {font-size:clamp(38px,6.45vw,99px)}
+}

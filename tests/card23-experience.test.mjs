@@ -8,6 +8,7 @@ const at=name=>readFileSync(join(base,name),'utf8');
 const html=at('index.html');
 const css=at('card-03.css');
 const card2=at('card-02.css');
+const card4=at('card-04.css');
 const motion=at('motion.js');
 const entrance=at('entrance.css');
 
@@ -152,8 +153,17 @@ test('Card 3 mobile, short-screen and static mode keep content available',()=>{
   ]) assert.ok(css.includes(token),'missing responsive behavior: '+token);
 });
 
-test('Card 4 and authentic Work anchors remain in the prototype',()=>{
-  assert.match(html,/Made to be seen\.<br><em>Built to work\.<\/em>/);
-  assert.match(html,/id="work"/);
+test('Card 4 retains its closing headline, removes category repetition and preserves actual Work',()=>{
+  const card=html.match(/<section class="reveal card4-resolution"[\s\S]*?<\/section>/)?.[0];
+  assert.ok(card,'Card 4 missing');
+  assert.match(card,/Made to be seen\.<br><em>Built to work\.<\/em>/);
+  assert.doesNotMatch(card,/c-bands|c-description|Websites|Automation|AI systems|<a\b|SELECTED WORK/);
+  assert.match(html,/href="\.\/card-04\.css"/);
+  assert.match(card4,/\.reveal\.card4-resolution/);
+  assert.match(card4,/@media\(max-width:740px\)/);
+  assert.match(card4,/@media\(max-width:380px\)/);
+  assert.match(card4,/@media\(max-height:650px\)/);
+  assert.doesNotMatch(card4,/animation\s*:|transition\s*:/);
+  assert.match(html,/<\/section>\s*<\/div><\/div>\s*<section class="work-preview" id="work"/);
   for(const token of ['TK Counsel','Frankencoin Desk','Her House Pilates']) assert.ok(html.includes(token));
 });
