@@ -11,7 +11,6 @@ import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 import { memo, useMemo } from "react";
 import { MagneticButton } from "./MagneticButton";
-import Script from "next/script";
 import { WHATSAPP_INTAKE, WHATSAPP_DEFAULT_MESSAGE } from "@/constants/content";
 
 const Typewriter = memo(({ phrases }: { phrases: string[] }) => {
@@ -109,33 +108,40 @@ export function KineticHero({ locale }: { locale: Locale }) {
 
   const words = useMemo(() => t.hero.headline.split(" "), [t.hero.headline]);
   const h2Phrases = useMemo(() => t.hero.h2.split(". ").map((p: string) => p.endsWith(".") ? p : p + "."), [t.hero.h2]);
+  const hlsUrl = "https://stream.mux.com/01yW6GoUz01OTXk5w1Rt1MHkJWlCGIwj46SUONJZ4DJUE.m3u8";
+
   useEffect(() => {
-    const video = document.getElementById('hero-video') as HTMLVideoElement;
-    if (video) video.playbackRate = 0.6;
+    const video = document.getElementById("hero-video") as HTMLVideoElement | null;
+    if (!video) return;
+    video.playbackRate = 0.6;
+
+    // hls.js is a pinned, audited local dependency (was: an unversioned
+    // https://cdn.jsdelivr.net/npm/hls.js@latest script). The dynamic import
+    // keeps the previous afterInteractive timing: the chunk is only fetched
+    // once this component mounts, never on the critical path.
+    let player: import("hls.js").default | null = null;
+    let cancelled = false;
+
+    void (async () => {
+      const { default: Hls } = await import("hls.js");
+      if (cancelled || !Hls.isSupported()) return;
+      player = new Hls();
+      player.loadSource(hlsUrl);
+      player.attachMedia(video);
+      video.playbackRate = 0.6;
+      player.on(Hls.Events.MANIFEST_PARSED, () => {
+        video.play().catch((e) => console.error("HLS Play error:", e));
+      });
+    })();
+
+    return () => {
+      cancelled = true;
+      player?.destroy();
+    };
   }, []);
 
   return (
     <>
-      <Script 
-        src="https://cdn.jsdelivr.net/npm/hls.js@latest" 
-        strategy="afterInteractive"
-        onLoad={() => {
-          const video = document.getElementById('hero-video') as HTMLVideoElement;
-          if (!video) return;
-          const hlsUrl = "https://stream.mux.com/01yW6GoUz01OTXk5w1Rt1MHkJWlCGIwj46SUONJZ4DJUE.m3u8";
-          // @ts-expect-error hls.js is loaded onto window by the CDN script.
-          const Hls = window.Hls;
-          if (Hls && Hls.isSupported()) {
-            const hls = new Hls();
-            hls.loadSource(hlsUrl);
-            hls.attachMedia(video);
-            video.playbackRate = 0.6;
-            hls.on(Hls.Events.MANIFEST_PARSED, () => {
-              video.play().catch(e => console.error("HLS Play error:", e));
-            });
-          }
-        }}
-      />
       <section
         ref={sectionRef}
         onMouseMove={handleSectionMove}
