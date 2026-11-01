@@ -7,6 +7,13 @@ alwaysApply: true
 # Project Structure
 
 - App Router: src/app/[locale]/
+- Shipping homepage composition: src/app/[locale]/_components/SignalHeroPrototype.tsx
+- Four-frame hero components: src/app/[locale]/_components/v2/{V2Hero,JourneyScenes}.tsx
+- Real homepage scene styles: src/app/[locale]/_components/v2/scroll-journey.css and approved-four-frame.css
+- Motion controller: public/flagship-journey/infinite-bc/motion.js (coordinate its cache key and CSS variables)
+- Standalone public/flagship-journey/infinite-bc/index.html is historical proof, not the shipping React homepage.
+- Read docs/development/BRANCHING_INTEGRATION_RELEASE.md for branch and QA policy.
+- For multi-feature integration, branch from latest main, then branch dependent features from integration, not separately from main.
 - Components: src/app/[locale]/start/components/
 - Types: src/app/[locale]/start/lib/types.ts
 - Presets: src/app/[locale]/start/lib/presets.ts

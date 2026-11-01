@@ -1,0 +1,17 @@
+---
+description: Always-on branch, integration, application architecture, and release QA guardrails for Genezisi
+globs: "*"
+alwaysApply: true
+---
+
+# Branching & Production-Architecture Guard
+
+For all website feature work, use the current [Branching, Integration and Release Workflow](../../docs/development/BRANCHING_INTEGRATION_RELEASE.md). For the current homepage read the [Four-Frame Handoff](../../docs/genezisi-v2/HANDOFF_2026-11-01_FOUR_FRAME.md).
+
+1. Never assume the chat's stored SHA is the current branch head. Inspect live `main`, open PRs and the intended target before writing.
+2. **No feature-per-edit branching.** Keep related changes on their existing coherent task branch. Independent features branch from current `main`; dependent tasks branch from the current integration branch. A release integration branch starts from `main` and is kept synchronized with new `main` changes.
+3. Build **shipping code in the real Next.js/React/TypeScript app** (including locale routing and existing CSS/JS contracts). Standalone HTML studies and proofs remain non-production references unless explicitly converted. Never call them ready-to-merge implementations.
+4. Push work to non-production branches; use a draft PR early. Do not merge old experimental history or cherry-pick everything. Keep diffs scoped and development deployments economical.
+5. The automated gate must include the actual app's typecheck, build, pertinent tests and where possible runtime/browser checks for DOM visibility, motion, navigation, cache/coherency, reverse scroll, reduced motion and locales. Mark unrun checks **not run**, never "passed".
+6. A successful build or source-level test ≠ founder approval. Founder owns actual visual acceptance. Final merge to `main` requires explicit approval for the integrated version, not the standalone proof.
+7. For the current hero, preserve the accepted Card 1–4 art direction and V6.5 shortcut unless instructed otherwise. Check PR #19's Card 3 visibility fix in a real browser before claiming it resolved.
