@@ -37,5 +37,15 @@
     "eslint-config-next": "16.4.3",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "overrides": {
+    "source-map-js": "1.2.2",
+    "ws": "8.21.0",
+    "three-stdlib": {
+      "fflate": "0.6.11"
+    },
+    "@types/three": {
+      "fflate": "0.8.3"
+    }
   }
 }
