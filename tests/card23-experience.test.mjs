@@ -99,8 +99,8 @@ test('narrow-window Card 2 alignment and Card 3 words survive hidden line breaks
 
 test('Card 3 internal story is staged after arrival and completed before the existing fold',()=>{
   for(const token of [
-    'const story=smooth(.542,.575,p)',
-    'const first=smooth(.559,.590,p),second=smooth(.582,.613,p),third=smooth(.605,.636,p)',
+    'const story=smooth(.500,.548,p)',
+    'const first=smooth(.512,.560,p),second=smooth(.548,.596,p),third=smooth(.584,.632,p)',
     "'--c3HeroShift'",
     "'--c3HeroScale'",
     "'--c3FirstRise'",
@@ -111,19 +111,26 @@ test('Card 3 internal story is staged after arrival and completed before the exi
   assert.match(css,/opacity:var\(--stepActive,0\)/);
   assert.match(css,/\.journey:not\(\[data-mode="motion"\]\) \.card3-process \.card3-step/);
   assert.match(html,/class="card3-story-content"/);
-  // Progress stays pure and reversible. Before first reveal there are no
-  // panels; after stage three all are visible and there is a readable hold.
+  // Card 3 is still approaching until p=.56. Its story begins BEFORE
+  // then; completed panels hold until the unchanged C fold begins at .647.
   const sm=(a,b,p)=>{const t=Math.max(0,Math.min(1,(p-a)/(b-a)));return t*t*(3-2*t)};
-  const states=p=>[sm(.559,.590,p),sm(.582,.613,p),sm(.605,.636,p)];
-  assert.deepEqual(states(.55),[0,0,0]);
-  assert.ok(states(.57)[0]>0&&states(.57)[1]===0&&states(.57)[2]===0);
-  assert.ok(states(.587)[0]>0&&states(.587)[0]<1&&states(.587)[1]>0&&states(.587)[2]===0);
-  assert.ok(states(.610)[0]===1&&states(.610)[1]>0&&states(.610)[1]<1&&states(.610)[2]>0);
-  assert.ok(states(.626)[0]===1&&states(.626)[1]===1&&states(.626)[2]>0&&states(.626)[2]<1);
-  assert.deepEqual(states(.640),[1,1,1]);
-  assert.deepEqual(states(.645),[1,1,1]);
-  // Poses depend only on scroll position, even when returning from later frames.
-  for(const p of [.640,.610,.587,.55,.610]) assert.deepEqual(states(p),states(p));
+  const states=p=>[sm(.512,.560,p),sm(.548,.596,p),sm(.584,.632,p)];
+  const headline=p=>sm(.500,.548,p);
+  assert.deepEqual(states(.505),[0,0,0]);
+  assert.ok(headline(.51)>0&&states(.51)[0]===0);
+  assert.ok(headline(.52)>0&&states(.52)[0]>0&&states(.52)[0]<1);
+  assert.ok(states(.54)[0]>0&&states(.54)[1]===0&&states(.54)[2]===0);
+  assert.ok(states(.554)[0]>0&&states(.554)[1]>0&&states(.554)[2]===0);
+  assert.ok(states(.59)[0]===1&&states(.59)[1]>0&&states(.59)[2]>0);
+  assert.ok(states(.608)[0]===1&&states(.608)[1]===1&&states(.608)[2]>0);
+  assert.deepEqual(states(.634),[1,1,1]);
+  assert.deepEqual(states(.646),[1,1,1]);
+  // No autoplay or timing history: a backward scroll restores the exact pose.
+  for(const p of [.646,.60,.54,.52,.60,.634]) {
+    const snapshot=states(p);
+    assert.deepEqual(states(p),snapshot);
+  }
+  assert.ok(motion.includes("root.style.setProperty('--c3Progress',String(smooth(.512,.632,p)))"));
   for(const token of [
     "'--c3FirstRise',(16*(1-first))",
     "'--c3SecondRise',(16*(1-second))",

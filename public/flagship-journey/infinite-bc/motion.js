@@ -146,15 +146,14 @@
    // opacity is a pure function of scroll position, including reverse/jumps.
    root.style.setProperty('--thresholdInk',String(smooth(.417,.475,p)*(1-smooth(.535,.612,p))));
    root.style.setProperty('--roomText',String(1-smooth(.49,.555,p)));
-   // Card 3 contains its own scroll-sampled story, *after* the external
-   // camera has nearly finished its approach (.46-.56). Keep the complete
-   // headline centered first, then move its actual text upward as the steps
-   // appear in order. All states derive only from p; reverse/jumps are exact.
-   // Complete composition settles ahead of the unchanged C fold at .647.
-   const story=smooth(.542,.575,p);
-   // Give each stage a gentler 0.031-progress rise/fade, with slight overlap;
-   // the complete composition still resolves before the unchanged .647 fold.
-   const first=smooth(.559,.590,p),second=smooth(.582,.613,p),third=smooth(.605,.636,p);
+   // Card 3's internal story starts WHILE the existing camera is approaching
+   // (.46-.56), after the reading plane and ink are already becoming visible.
+   // The headline makes room first; three gentle, overlapping stage reveals
+   // then build the composition without changing the total native-scroll map,
+   // depth geometry, camera trajectory or C fold at .647.
+   // Every sampled pose is reversible and independent of prior frames.
+   const story=smooth(.500,.548,p);
+   const first=smooth(.512,.560,p),second=smooth(.548,.596,p),third=smooth(.584,.632,p);
    root.style.setProperty('--c3Story',String(story));
    root.style.setProperty('--c3HeroShift',(-Math.min(isMobile?h*.165:h*.10,isMobile?112:96)*story)+'px');
    root.style.setProperty('--c3HeroScale',String(mix(1.06,isMobile?.84:.85,story)));
@@ -164,7 +163,7 @@
    root.style.setProperty('--c3FirstRise',(16*(1-first))+'px');
    root.style.setProperty('--c3SecondRise',(16*(1-second))+'px');
    root.style.setProperty('--c3ThirdRise',(16*(1-third))+'px');
-   root.style.setProperty('--c3Progress',String(smooth(.554,.632,p)));
+   root.style.setProperty('--c3Progress',String(smooth(.512,.632,p)));
    // Update every geometry variable *before* reading the transformed face.
    // This removes dependence on the previous scroll sample on jump/reversal.
    const map={p:v.p,e:v.e,h:v.h,f:v.f,c:v.c,d:v.d,b:v.b,n:v.n,shiftX:v.shiftX,shiftY:v.shiftY,artScale:v.artScale,leftX:v.leftX,rightX:v.rightX,nearZ:v.nearZ,farLeft:v.farLeft,farRight:v.farRight,groundZ:v.groundZ,cOffset:v.cOffset,foldAlpha:v.foldAlpha,foldLeftX:v.foldLeftX,foldRightX:v.foldRightX,foldRotL:v.foldRotL,foldRotR:v.foldRotR};
