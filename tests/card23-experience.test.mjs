@@ -179,6 +179,47 @@ test('Card 4 headline is uncovered by C plane itself without delayed text timing
   assert.deepEqual(edge(.655),[0,0]);
 });
 
+test('Card 4 releases quickly to genuine Selected Work without accelerating earlier scenes',()=>{
+  const pageCss=at('styles.css');
+  assert.match(pageCss,/\.journey\[data-mode="motion"\]\s*\{[\s\S]*?height:360svh/);
+  assert.match(pageCss,/\.journey\[data-mode="motion"\] \.scene\s*\{\s*position:sticky/);
+  assert.ok(motion.includes('const originalTravel=Math.max(1,4.4*scene.offsetHeight-window.innerHeight)'));
+  assert.ok(motion.includes('const newTravel=Math.max(1,root.offsetHeight-window.innerHeight)'));
+  assert.ok(motion.includes('const finalStart=Math.min(.715*originalTravel,.94*newTravel)'));
+  assert.ok(motion.includes('return originalStoryProgress(distance/originalTravel)'));
+  assert.ok(motion.includes('return mix(.76,1,clamp((distance-finalStart)/Math.max(1,newTravel-finalStart)))'));
+  assert.match(html,/<\/section>\s*<\/div><\/div>\s*<section class="work-preview" id="work"/);
+
+  const points=[[0,0],[.20,.20],[.24,.32],[.33,.415],[.42,.50],
+    [.48,.56],[.505,.62],[.715,.76],[.93,.93],[1,1]];
+  const original=x=>{
+    for(let i=1;i<points.length;i++) {
+      const [a,y0]=points[i-1],[b,y1]=points[i];
+      if(x<=b)return y0+(y1-y0)*(x-a)/(b-a);
+    }
+    return 1;
+  };
+  const remapped=(distance,sceneH,windowH)=>{
+    const oldDistance=4.4*sceneH-windowH,newDistance=3.6*sceneH-windowH;
+    const end=Math.min(.715*oldDistance,.94*newDistance);
+    if(distance<=end)return original(distance/oldDistance);
+    return .76+.24*Math.max(0,Math.min(1,(distance-end)/(newDistance-end)));
+  };
+  for(const [sceneH,windowH] of [[900,900],[844,844],[720,780],[568,568]]) {
+    const oldTotal=4.4*sceneH-windowH,newTotal=3.6*sceneH-windowH;
+    const oldCompletion=.682*oldTotal; // p=.738: all supporting C ink is visible.
+    const releaseAfter=(newTotal-oldCompletion)/sceneH;
+    assert.ok(releaseAfter>=.15&&releaseAfter<.35,'Card 4 tail too short/long');
+    for(const oldRaw of [0,.20,.24,.33,.42,.48,.505,.634,.682,.715]){
+      const distance=oldRaw*oldTotal;
+      assert.ok(Math.abs(remapped(distance,sceneH,windowH)-original(oldRaw))<1e-9,
+        'preserved scene shifted at original raw '+oldRaw);
+    }
+    assert.equal(remapped(newTotal,sceneH,windowH),1,'release must complete at work');
+    assert.equal(remapped(0,sceneH,windowH),0,'reverse to opening');
+  }
+});
+
 test('Card 4 retains its closing headline, removes category repetition and preserves actual Work',()=>{
   const card=html.match(/<section class="reveal card4-resolution"[\s\S]*?<\/section>/)?.[0];
   assert.ok(card,'Card 4 missing');

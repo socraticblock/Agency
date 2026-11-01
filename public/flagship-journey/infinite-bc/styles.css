@@ -861,7 +861,9 @@ a:focus-visible,button:focus-visible {
 }
 
 .journey[data-mode="motion"] {
-  height:440svh
+  /* Shorter final Card 4 → Selected Work release. Earlier physical beats are
+     preserved by motion.js rather than being sped up by this shorter scene. */
+  height:360svh
 }
 
 .journey[data-mode="motion"] .scene {

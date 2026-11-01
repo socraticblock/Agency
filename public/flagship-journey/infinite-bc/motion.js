@@ -12,17 +12,31 @@
  const mix=(a,b,t)=>a+(b-a)*t;
  // Native scroll is a continuous, reversible film; a reader pauses by
  // stopping, not by being forced through long stationary scroll bands.
- // Re-map physical scroll distance to the original authored keyframes so
- // their poses and B -> room -> C geometry stay unchanged.
+ // Original authored keyframes and native-scroll pacing are frozen
+ // through the completed C composition. Shorten ONLY the stationary release
+ // after Card 4, without accelerating Card 1, 2, 3, or the C wipe.
  const scrollStops=[[0,0],[.20,.20],[.24,.32],[.33,.415],[.42,.50],
    [.48,.56],[.505,.62],[.715,.76],[.93,.93],[1,1]];
- const storyProgress=(raw)=>{
+ const originalStoryProgress=(raw)=>{
    const x=clamp(raw);
    for(let i=1;i<scrollStops.length;i++){
      const [x0,y0]=scrollStops[i-1],[x1,y1]=scrollStops[i];
      if(x<=x1)return mix(y0,y1,(x-x0)/(x1-x0));
    }
    return 1;
+ };
+ const storyProgress=(raw)=>{
+   // The former 440svh scene's physical scroll distance is the reference.
+   // scene.offsetHeight is the actual 100svh size, including mobile browser
+   // chrome; window.innerHeight determines the native sticky release point.
+   const originalTravel=Math.max(1,4.4*scene.offsetHeight-window.innerHeight);
+   const newTravel=Math.max(1,root.offsetHeight-window.innerHeight);
+   const distance=clamp(raw)*newTravel;
+   const finalStart=Math.min(.715*originalTravel,.94*newTravel);
+   if(distance<=finalStart)return originalStoryProgress(distance/originalTravel);
+   // Once the full C composition is established (original raw .715 / p=.76),
+   // consume only the short remaining stretch before the real #work follows.
+   return mix(.76,1,clamp((distance-finalStart)/Math.max(1,newTravel-finalStart)));
  };
  // Fit the actual opaque green face inside the viewport at the camera's nearest
  // approach. Unlike a fixed 2.25x multiplier, this leaves visible margins so
