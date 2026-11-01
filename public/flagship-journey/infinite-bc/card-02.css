@@ -250,7 +250,6 @@
 }
 @media (max-width:480px) {
   .card2-window .card2-head small {display:none}
-  .card2-window .card2-foot>span:first-child {display:none}
   .card2-window .card2-foot {justify-content:flex-end}
 }
 @media (max-width:380px) {
@@ -341,7 +340,7 @@
 @media (max-width:480px) {
   .card2-window .card2-head small {
     display:block;
-    font-size:clamp(6.25px,1.7vw,8px);
+    font-size:clamp(8px,2vw,9px);
     letter-spacing:0;
   }
 }
@@ -350,7 +349,12 @@
   .opening .interface-wrap .sheet.two {
     inset:4% 6%;
   }
-  .card2-window .card2-head small {
-    font-size:6.5px;
-  }
+}
+
+/* One accessible header statement: compact text replaces, never stacks over,
+   the desktop label at phone widths. This follows the final mobile overrides. */
+.card2-window .card2-availability-short {display:none}
+@media(max-width:480px) {
+  .card2-window .card2-availability-long {display:none}
+  .card2-window .card2-availability-short {display:inline}
 }
