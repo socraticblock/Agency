@@ -63,6 +63,7 @@
 - **065** — Professional domain optional at checkout (advisory); `AdminOrdersRunbook` on admin orders; copy updated
 - **066** — Admin auth: HttpOnly signed session cookie (`ADMIN_PASSWORD` secret); `/api/admin/login|logout|session`; orders/publish APIs use `verifyAdminRequest()`; removed `NEXT_PUBLIC_ADMIN_PASSWORD`
 - **067** — Pricing tier deck cards restructured into buyer-first sections (promise, best-for, deliverables, timeline/warranty, good-to-know)
+- **068** — Release discipline: production-architecture feature branches, synchronized integration branches, live-browser acceptance; 2026-11-01 four-card handoff
 
 ## Current Status
 - Phase 1 (Foundation): Complete
@@ -387,6 +388,11 @@
 - **Context:** Pricing cards on `/pricing` were feature-heavy and harder to scan quickly; product direction required a consistent buyer-friendly card anatomy.
 - **Decision:** Updated `PricingTierDeck` to use per-tier copy blocks with explicit sections in fixed order: promise, `Best for`, `You get` deliverables, `Timeline` + `Warranty`, and `Good to know`, while preserving existing package buttons and “Most Popular” emphasis.
 - **Impact:** Package comparison is clearer in 5-second scans on desktop/mobile; cards now front-load decision-critical context instead of dense mixed bullet phrasing.
+
+### 068
+- **Context:** The accepted four-frame hero was perfected in a standalone HTML proof on a heavily diverged branch; integration into Next.js required recoding, and source checks missed a disappearing Card 3 in the rendered page.
+- **Decision:** Codify one coherent branch per feature (not edit), dependent task branches from integration, periodic main synchronization, real Next.js architecture from the start, draft PRs, local/code checks plus founder browser acceptance. Record the current merged status and pending Card 3 verification in `docs/genezisi-v2/HANDOFF_2026-11-01_FOUR_FRAME.md`.
+- **Impact:** Long-running development may stay off production while merge scope stays clear, browser/runtime integration failures are more likely to be caught before release, and future agents can follow `docs/development/BRANCHING_INTEGRATION_RELEASE.md` and `skills/genezisi-production-integration/SKILL.md`.
 
 ## Architecture Decisions
 - Zero backend for card features
