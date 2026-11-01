@@ -198,9 +198,11 @@
     line-height:1.03;
     letter-spacing:-.065em;
   }
+  /* Two deliberately composed lines in portrait; three on desktop. */
+  .card2-window .card2-intro>strong br:first-of-type {display:none}
   .card2-window .card2-intro>p {
     display:block;
-    max-width:36ch;
+    max-width:none;
     font-size:clamp(10px,1.8vw,12px);
     line-height:1.38;
   }
