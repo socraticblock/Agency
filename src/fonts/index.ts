@@ -12,6 +12,12 @@ export const inter = Inter({
   weight: ["400", "500", "600", "700", "800", "900"],
   variable: "--font-inter",
   display: "swap",
+  // Not used by any element on the homepages (measured 2026-11-01: the hero H1,
+  // nav and body all resolve to the ui-sans-serif stack), but still referenced
+  // by the /start card presets. Without preload the face is fetched only by the
+  // routes that actually render it; the 49 KB download leaves the homepage
+  // critical path. Typography is unchanged: no rendered element resolves to it.
+  preload: false,
 });
 
 export const spaceGrotesk = Space_Grotesk({
