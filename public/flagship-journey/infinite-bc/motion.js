@@ -33,11 +33,11 @@
    return 1;
  };
  const storyProgress=(raw)=>{
-   // The former 440svh scene's physical scroll distance is the reference.
-   // scene.offsetHeight is the actual 100svh size, including mobile browser
-   // chrome; window.innerHeight determines the native sticky release point.
-   const originalTravel=Math.max(1,4.4*scene.offsetHeight-window.innerHeight);
-   const newTravel=Math.max(1,root.offsetHeight-window.innerHeight);
+   // Use stable stage dimensions, rather than browser innerHeight, to measure
+   // original 440-viewport pacing. Android toolbars change innerHeight
+   // mid-swipe, otherwise changing scroll progress under the user's finger.
+   const originalTravel=Math.max(1,3.4*scene.offsetHeight);
+   const newTravel=Math.max(1,root.offsetHeight-scene.offsetHeight);
    const distance=clamp(raw)*newTravel;
    const finalStart=Math.min(.715*originalTravel,.99*newTravel);
    if(distance<=finalStart)return originalStoryProgress(distance/originalTravel);
@@ -51,10 +51,10 @@
  const panelScaleFor=(w,h,pw,ph)=>w<=740
    ?Math.min(1.08,(w-28)/Math.max(1,pw))
    :Math.max(1,Math.min(1.68,(w-96)/Math.max(1,pw),(h-195)/Math.max(1,ph*.8)));
- const cameraScaleFor=(w,h,panelScale)=>Math.max(1,Math.min(
+ const cameraScaleFor=(w,h,panelScale,faceWidth,faceHeight)=>Math.max(1,Math.min(
    2.25,
-   (w-(w<=740?32:96))/Math.max(1,cardFace.offsetWidth*panelScale),
-   (h-(w<=740?148:140))/Math.max(1,cardFace.offsetHeight*panelScale)
+   (w-(w<=740?32:96))/Math.max(1,faceWidth*panelScale),
+   (h-(w<=740?148:140))/Math.max(1,faceHeight*panelScale)
  ));
  // All scene state, including the entrance, is a pure function of scroll progress.
  // Full B remains a legible stop; only the physical scroll distance of its hold is shortened.
@@ -98,23 +98,38 @@
      cOffset:mix(20,0,c),handoff,fold,cInk,cWatermark
    };
  };
+ // Scroll frames reuse layout measurements; refresh only on geometry changes.
+ let metrics=null,lastRaw=-1,lastWidth=-1,lastHeight=-1,dirty=true;
+ const geometry=()=>{
+   if(metrics)return metrics;
+   const ix=opening.offsetLeft+intro.offsetLeft,iy=opening.offsetTop+intro.offsetTop;
+   const px=opening.offsetLeft+panel.offsetLeft,py=opening.offsetTop+panel.offsetTop;
+   return metrics={
+     ix,iy,px,py,
+     iw:intro.offsetWidth,ih:intro.offsetHeight,
+     pw:panel.offsetWidth,ph:panel.offsetHeight,
+     faceWidth:cardFace.offsetWidth,faceHeight:cardFace.offsetHeight
+   };
+ };
  let raf=0;
  const apply=()=>{
    raf=0;if(!root.isConnected || root.dataset.mode!=='motion')return;
-   const rect=root.getBoundingClientRect(),total=root.offsetHeight-window.innerHeight;
-   const raw=clamp(-rect.top/Math.max(1,total)),p=storyProgress(raw),w=window.innerWidth;
-   // All bounds below come from *layout*, not animated rectangles. Both tracks
-   // are driven by the same arrival progress, with a shared non-overlap edge.
-   const isMobile=w<=740,h=window.innerHeight;
-   const ix=opening.offsetLeft+intro.offsetLeft,iy=opening.offsetTop+intro.offsetTop;
-   const px=opening.offsetLeft+panel.offsetLeft,py=opening.offsetTop+panel.offsetTop;
-   const iw=intro.offsetWidth,ih=intro.offsetHeight,pw=panel.offsetWidth,ph=panel.offsetHeight;
+   const h=scene.offsetHeight;
+   const rect=root.getBoundingClientRect(),total=root.offsetHeight-h;
+   const raw=clamp(-rect.top/Math.max(1,total)),w=window.innerWidth;
+   // Prevent costly style rewrites after the pinned sequence has completed.
+   if(!dirty&&raw===lastRaw&&w===lastWidth&&h===lastHeight)return;
+   lastRaw=raw;lastWidth=w;lastHeight=h;dirty=false;
+   const p=storyProgress(raw);
+   // Both entrance tracks use cached stable layout, not animated rectangles.
+   const isMobile=w<=740;
+   const {ix,iy,px,py,iw,ih,pw,ph,faceWidth,faceHeight}=geometry();
    const startIntroX=w/2-(ix+iw/2);
    const startIntroY=h*.51-(iy+ih/2);
    // Desktop B is deliberately larger, centered and fully opaque at rest.
    // Scale is capped by both viewport width and the actual visible stack height.
    const panelScale=panelScaleFor(w,h,pw,ph);
-   const v=sample(p,w,cameraScaleFor(w,h,panelScale));
+   const v=sample(p,w,cameraScaleFor(w,h,panelScale,faceWidth,faceHeight));
    const finalPanelX=w/2-(px+pw/2),finalPanelY=isMobile?h*.52-(py+ph/2):0;
    const startPanelX=w+(pw*panelScale)/2+55-(px+pw/2);
    const startPanelY=h+(ph*panelScale)/2+48-(py+ph/2);
@@ -152,7 +167,7 @@
    // corresponding architectural wings; only the third plane remains centered.
    // The green facade itself stays opaque until its depth scene covers it.
    const split=smooth(.421,.482,p);
-   root.style.setProperty('--contentSlide',(cardFace.offsetWidth*.64*split)+'px');
+   root.style.setProperty('--contentSlide',(faceWidth*.64*split)+'px');
    // The interface retires as its own perimeter becomes room architecture.
    // Keeping the text into the first visible depth beat prevents a vacant facade.
    const retire=1-smooth(.424,.465,p);
@@ -245,28 +260,31 @@
    opening.inert=p>=.515;reveal.inert=p<.75;reading.inert=p<.515||p>.75;
  };
  const queue=()=>{if(!raf)raf=requestAnimationFrame(apply)};
+ const invalidate=()=>{metrics=null;dirty=true;queue();};
  const enable=()=>{
    const motion=!reduce.matches;
    document.documentElement.classList.toggle('bc-motion-ready',motion);
    root.dataset.mode=motion?'motion':'static';root.style.cssText='';
+   metrics=null;dirty=true;lastRaw=-1;
    intro.inert=false;panel.setAttribute('aria-hidden','true');
    opening.inert=false;reveal.inert=false;reading.inert=false;
    // This runs before the next paint, avoiding a one-frame approximate layout
    // when the stylesheet is already active but CSS variables are not sampled.
    if(motion)apply();
  };
- window.addEventListener('scroll',queue,{passive:true,signal});window.addEventListener('resize',queue,{passive:true,signal});
- window.addEventListener('pageshow',queue,{signal});
- if(document.fonts)document.fonts.ready.then(queue);
+ window.addEventListener('scroll',queue,{passive:true,signal});window.addEventListener('resize',invalidate,{passive:true,signal});
+ window.addEventListener('pageshow',invalidate,{signal});
+ if(document.fonts)document.fonts.ready.then(()=>{if(!signal.aborted)invalidate();});
  if(reduce.addEventListener)reduce.addEventListener('change',enable,{signal});
  else {reduce.addListener(enable);signal.addEventListener('abort',()=>reduce.removeListener(enable),{once:true});}
  enable();
  // Named development hook: sample and seek never run on their own.
  const inspect=p=>{
-   const w=window.innerWidth,h=window.innerHeight;
-   return sample(storyProgress(p),w,cameraScaleFor(w,h,panelScaleFor(w,h,panel.offsetWidth,panel.offsetHeight)));
+   const w=window.innerWidth,h=scene.offsetHeight;
+   const {pw,ph,faceWidth,faceHeight}=geometry();
+   return sample(storyProgress(p),w,cameraScaleFor(w,h,panelScaleFor(w,h,pw,ph),faceWidth,faceHeight));
  };
- window.__GENEZISI_BC_TEST__={sample:inspect,seek:p=>{const total=root.offsetHeight-window.innerHeight;window.scrollTo(0,root.offsetTop+clamp(p)*total);apply();return inspect(p)}};
+ window.__GENEZISI_BC_TEST__={sample:inspect,seek:p=>{const total=root.offsetHeight-scene.offsetHeight;window.scrollTo(0,root.offsetTop+clamp(p)*total);apply();return inspect(p)}};
  binding={root,stop(){
    controller.abort();
    if(raf)cancelAnimationFrame(raf);
