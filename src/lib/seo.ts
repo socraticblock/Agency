@@ -13,7 +13,6 @@ interface LocalBusinessOptions {
   addressCountry?: string;
   jobTitle?: string;
   accentColor?: string;
-  photoUrl?: string;
   theme?: "light" | "dark";
   ogType?: "home" | "pricing" | "blog" | "card";
   ogTier?: string;
@@ -58,7 +57,6 @@ export function createLocalBusinessSeo(options: LocalBusinessOptions): SeoResult
     addressCountry = "GE",
     jobTitle = "Expert",
     accentColor = "#10b981", // Changed default to emerald
-    photoUrl,
     theme = "dark",
     ogType = "home",
     ogTier,
@@ -90,7 +88,8 @@ export function createLocalBusinessSeo(options: LocalBusinessOptions): SeoResult
     theme,
   });
 
-  if (photoUrl) ogParams.set("photo", photoUrl);
+  // No photo parameter: /api/og does not fetch remote images (SSRF-01). A card
+  // that needs its owner's photo in the share image must resolve it server-side.
   if (ogCategory) ogParams.set("category", ogCategory);
   if (ogReadTime) ogParams.set("readTime", ogReadTime);
   if (ogTier) ogParams.set("tier", ogTier);
