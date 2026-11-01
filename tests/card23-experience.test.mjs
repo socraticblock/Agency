@@ -25,7 +25,7 @@ test('Card 3 is a source-derived room with a meaningful DOM destination',()=>{
     'class="threshold-lintel"',
     'class="threshold-seam first"',
     'class="reading card3-stage"',
-    'G. / OUR APPROACH',
+    'G<span class="card3-dot">.</span> / OUR APPROACH',
     'From idea to a',
     'working solution.',
     'class="card3-process"',
