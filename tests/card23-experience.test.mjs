@@ -97,6 +97,33 @@ test('narrow-window Card 2 alignment and Card 3 words survive hidden line breaks
   assert.doesNotMatch(html,/From idea<br>to a|working<br>solution\./);
 });
 
+test('Card 3 internal story is staged after arrival and completed before the existing fold',()=>{
+  for(const token of [
+    'const story=smooth(.542,.575,p)',
+    'const first=smooth(.559,.577,p),second=smooth(.584,.603,p),third=smooth(.610,.628,p)',
+    "'--c3HeroShift'",
+    "'--c3HeroScale'",
+    "'--c3FirstRise'",
+    "'--c3SecondRise'",
+    "'--c3ThirdRise'"
+  ]) assert.ok(motion.includes(token),'missing nested storytelling: '+token);
+  assert.match(css,/\.journey\[data-mode="motion"\] \.depth \.card3-process/);
+  assert.match(css,/opacity:var\(--stepActive,0\)/);
+  assert.match(css,/\.journey:not\(\[data-mode="motion"\]\) \.card3-process \.card3-step/);
+  assert.match(html,/class="card3-story-content"/);
+  // Progress stays pure and reversible. Before first reveal there are no
+  // panels; after stage three all are visible and there is a readable hold.
+  const sm=(a,b,p)=>{const t=Math.max(0,Math.min(1,(p-a)/(b-a)));return t*t*(3-2*t)};
+  const states=p=>[sm(.559,.577,p),sm(.584,.603,p),sm(.610,.628,p)];
+  assert.deepEqual(states(.55),[0,0,0]);
+  assert.ok(states(.57)[0]>0&&states(.57)[1]===0&&states(.57)[2]===0);
+  assert.ok(states(.59)[0]===1&&states(.59)[1]>0&&states(.59)[2]===0);
+  assert.ok(states(.617)[0]===1&&states(.617)[1]===1&&states(.617)[2]>0);
+  assert.deepEqual(states(.635),[1,1,1]);
+  assert.deepEqual(states(.65),[1,1,1]);
+  for(const p of [.62,.60,.57,.54]) assert.deepEqual(states(p),states(p));
+});
+
 test('Card 3 mobile, short-screen and static mode keep content available',()=>{
   assert.match(html,/href="\.\/card-03\.css"/);
   for(const token of [

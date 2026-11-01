@@ -337,3 +337,100 @@
   }
   .card3-bottom {min-height:23px;padding-block:5px}
 }
+
+/* Card 3 internal storytelling, 2026-11-01.
+   Its shell stays a stable physical object during the already accepted camera
+   journey. Only its editorial text and stage explanations are reorganized. */
+.journey[data-mode="motion"] .depth .reading.card3-stage {
+  height:min(542px,calc(100svh - 126px));
+}
+.journey[data-mode="motion"] .depth .card3-ink {
+  position:relative;display:block;width:100%;height:100%;min-width:0;overflow:hidden;
+}
+.journey[data-mode="motion"] .depth .card3-topbar {
+  position:absolute;top:0;left:0;right:0;z-index:3;
+}
+.journey[data-mode="motion"] .depth .card3-hero {
+  position:absolute;top:43px;left:0;right:0;bottom:34px;
+  min-height:0;gap:0;z-index:1;
+  /* The background, borders, and architectural cornerwork never scale. */
+}
+.card3-story-content {
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  width:100%;max-width:100%;
+  gap:clamp(10px,1.1vw,17px);
+  transform-origin:50% 50%;
+}
+.journey[data-mode="motion"] .card3-story-content {
+  transform:translate3d(0,var(--c3HeroShift,0px),0)
+    scale(var(--c3HeroScale,1.06));
+  will-change:transform;
+}
+.journey[data-mode="motion"] .depth .card3-process {
+  position:absolute;left:0;right:0;bottom:34px;z-index:2;
+  background:transparent;border-top:0;
+  pointer-events:none;
+}
+.journey[data-mode="motion"] .card3-process .card3-step {
+  opacity:var(--stepActive,0);
+  /* Each step is its own material surface; the other two are fully absent
+     until the visitor scrolls to them, rather than three empty outlines. */
+  background:linear-gradient(180deg,#1f4a35,#133225 82%);
+  border-top:1px solid #bad7af65;
+  box-shadow:inset 0 10px 24px #86b88b0b;
+  will-change:opacity,transform;
+}
+.journey[data-mode="motion"] .card3-process .card3-step-understand {
+  transform:translate3d(0,var(--c3FirstRise,22px),0);
+}
+.journey[data-mode="motion"] .card3-process .card3-step-create {
+  transform:translate3d(0,var(--c3SecondRise,22px),0);
+}
+.journey[data-mode="motion"] .card3-process .card3-step-real {
+  transform:translate3d(0,var(--c3ThirdRise,22px),0);
+}
+.journey[data-mode="motion"] .depth .card3-bottom {
+  position:absolute;bottom:0;left:0;right:0;z-index:3;
+}
+@media (max-width:740px) {
+  .journey[data-mode="motion"] .depth .reading.card3-stage {
+    height:min(542px,calc(100svh - 138px));
+  }
+  .journey[data-mode="motion"] .depth .card3-hero {
+    top:28px;bottom:22px;
+  }
+  .card3-story-content {gap:8px}
+  .journey[data-mode="motion"] .depth .card3-process {bottom:22px}
+}
+@media (max-width:380px) {
+  .journey[data-mode="motion"] .depth .reading.card3-stage {
+    height:min(510px,calc(100svh - 115px));
+  }
+  .journey[data-mode="motion"] .depth .card3-hero {
+    top:25px;bottom:18px;
+  }
+  .card3-story-content {gap:6px}
+  .journey[data-mode="motion"] .depth .card3-process {bottom:18px}
+}
+@media (max-height:650px) {
+  .journey[data-mode="motion"] .depth .reading.card3-stage {
+    height:calc(100svh - 108px);
+  }
+  .journey[data-mode="motion"] .card3-story-content {gap:5px}
+}
+@media (prefers-reduced-motion:reduce) {
+  .card3-story-content {transform:none!important;will-change:auto}
+  .card3-process .card3-step {opacity:1!important;transform:none!important;will-change:auto}
+}
+/* The no-JS/static layout uses natural document flow and presents all three
+   stages at once, never requiring motion for understanding. */
+.journey:not([data-mode="motion"]) .depth .reading.card3-stage {
+  height:auto!important;
+}
+.journey:not([data-mode="motion"]) .card3-story-content {
+  transform:none!important;
+}
+.journey:not([data-mode="motion"]) .card3-process .card3-step {
+  opacity:1!important;transform:none!important;
+}

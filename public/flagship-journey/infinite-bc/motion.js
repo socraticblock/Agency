@@ -146,12 +146,23 @@
    // opacity is a pure function of scroll position, including reverse/jumps.
    root.style.setProperty('--thresholdInk',String(smooth(.417,.475,p)*(1-smooth(.535,.612,p))));
    root.style.setProperty('--roomText',String(1-smooth(.49,.555,p)));
-   // The illustrative interface shows what a connected solution *could* do.
-   // No network work or real-world business operations occur in this demo.
-   root.style.setProperty('--c3First',String(smooth(.484,.522,p)));
-   root.style.setProperty('--c3Second',String(smooth(.532,.579,p)));
-   root.style.setProperty('--c3Third',String(smooth(.578,.622,p)));
-   root.style.setProperty('--c3Progress',String(smooth(.49,.628,p)));
+   // Card 3 contains its own scroll-sampled story, *after* the external
+   // camera has nearly finished its approach (.46-.56). Keep the complete
+   // headline centered first, then move its actual text upward as the steps
+   // appear in order. All states derive only from p; reverse/jumps are exact.
+   // Complete composition settles ahead of the unchanged C fold at .647.
+   const story=smooth(.542,.575,p);
+   const first=smooth(.559,.577,p),second=smooth(.584,.603,p),third=smooth(.610,.628,p);
+   root.style.setProperty('--c3Story',String(story));
+   root.style.setProperty('--c3HeroShift',(-Math.min(isMobile?h*.165:h*.10,isMobile?112:96)*story)+'px');
+   root.style.setProperty('--c3HeroScale',String(mix(1.06,isMobile?.84:.85,story)));
+   root.style.setProperty('--c3First',String(first));
+   root.style.setProperty('--c3Second',String(second));
+   root.style.setProperty('--c3Third',String(third));
+   root.style.setProperty('--c3FirstRise',(22*(1-first))+'px');
+   root.style.setProperty('--c3SecondRise',(22*(1-second))+'px');
+   root.style.setProperty('--c3ThirdRise',(22*(1-third))+'px');
+   root.style.setProperty('--c3Progress',String(smooth(.554,.632,p)));
    // Update every geometry variable *before* reading the transformed face.
    // This removes dependence on the previous scroll sample on jump/reversal.
    const map={p:v.p,e:v.e,h:v.h,f:v.f,c:v.c,d:v.d,b:v.b,n:v.n,shiftX:v.shiftX,shiftY:v.shiftY,artScale:v.artScale,leftX:v.leftX,rightX:v.rightX,nearZ:v.nearZ,farLeft:v.farLeft,farRight:v.farRight,groundZ:v.groundZ,cOffset:v.cOffset,foldAlpha:v.foldAlpha,foldLeftX:v.foldLeftX,foldRightX:v.foldRightX,foldRotL:v.foldRotL,foldRotR:v.foldRotR};
