@@ -316,18 +316,24 @@
 .journey:not([data-mode="motion"]) .depth .reading-ink {
   opacity:1!important;transform:none!important;
 }
-/* Short landscape viewports need actual compact geometry, not clipped cards. */
+/* Tight landscape viewports: preserve the centered editorial message and
+   three substantive stages, without the deleted preview's dimensions. */
 @media (max-height:650px) and (min-width:741px) {
   .depth .reading.card3-stage,
   .bc-motion-ready .journey[data-mode="motion"] .depth .reading.card3-stage {
     max-height:calc(100svh - 106px);
   }
-  .card3-topbar {min-height:30px;padding-block:6px}
-  .card3-story {padding:14px 18px;gap:6px}
-  .depth .card3-story h2 {font-size:clamp(29px,3vw,35px)}
-  .card3-story-foot {display:none}
-  .card3-preview {margin:9px 12px}
-  .card3-preview-screen {min-height:84px;max-height:104px}
-  .card3-system .card3-step {min-height:60px;padding:9px 12px}
-  .card3-bottom {min-height:23px;padding:5px 12px}
+  .card3-topbar {min-height:29px;padding-block:6px}
+  .card3-hero {min-height:133px;gap:7px;padding-block:20px}
+  .depth .reading.card3-stage .card3-hero h2,
+  .bc-motion-ready .journey[data-mode="motion"] .depth .reading.card3-stage .card3-hero h2 {
+    font-size:clamp(29px,3vw,42px);
+  }
+  .card3-process .card3-step {min-height:82px;padding:10px 14px;gap:5px}
+  .card3-process .card3-step>strong {font-size:16px}
+  .depth .reading.card3-stage .card3-step p,
+  .bc-motion-ready .journey[data-mode="motion"] .depth .reading.card3-stage .card3-step p {
+    font-size:10px;line-height:1.3;
+  }
+  .card3-bottom {min-height:23px;padding-block:5px}
 }

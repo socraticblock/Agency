@@ -28,7 +28,7 @@ test('Card 3 is a source-derived room with a meaningful DOM destination',()=>{
     'G<span class="card3-dot">.</span> / OUR APPROACH',
     'From idea to a',
     'working solution.',
-    'class="card3-process"',
+    'class="card3-system card3-process"',
     'card3-step-understand',
     'card3-step-create',
     'card3-step-real',
