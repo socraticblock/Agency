@@ -7,6 +7,7 @@ const base=join(process.cwd(),'public/flagship-journey/infinite-bc');
 const at=name=>readFileSync(join(base,name),'utf8');
 const html=at('index.html');
 const css=at('card-03.css');
+const card2=at('card-02.css');
 const motion=at('motion.js');
 const entrance=at('entrance.css');
 
@@ -83,6 +84,14 @@ test('Card 3 is fully occluded until Card 2 deliberately starts transforming',()
       assert.ok(width>1&&height>1,'room opening should be visible at p='+p);
     }
   }
+});
+
+test('narrow-window Card 2 alignment and Card 3 words survive hidden line breaks',()=>{
+  // Card 2 keeps the original 6% total horizontal face inset, now symmetric.
+  // Its centered wrapper therefore yields equal side margins in portrait.
+  assert.match(card2,/\.site-window\.card2-window \{inset:4% 3% 6% 3%\}/);
+  assert.match(html,/From idea<br> to a <em>working<br> solution\.<\/em>/);
+  assert.doesNotMatch(html,/From idea<br>to a|working<br>solution\./);
 });
 
 test('Card 3 mobile, short-screen and static mode keep content available',()=>{

@@ -155,6 +155,11 @@
    tall portrait silhouette. The scroll controller still measures its real
    rectangle; its transitions/timing are unchanged. */
 @media (max-width:740px) {
+  /* The parent .stack is already centered. The original global window face
+     uses asymmetric horizontal insets (1% left / 5% right), visibly shifting
+     Card 2 off-center in narrow desktop windows and phone layouts. Preserve
+     the same combined inset and the full existing transition geometry. */
+  .site-window.card2-window {inset:4% 3% 6% 3%}
   .opening .interface-wrap,
   .bc-motion-ready .journey[data-mode="motion"] .opening .interface-wrap,
   .bc-motion-ready .journey:not([data-mode]) .opening .interface-wrap {
