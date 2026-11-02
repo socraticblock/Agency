@@ -74,12 +74,12 @@
    const arrival=smooth(.012,.20,p),e=smooth(.345,.54,p);
    // B reaches its stable camera pose at .41. A *complete*, distant third
    // surface appears inside the formed room, then comes forward as a unit.
-   // Desktop: surface arrives with B's aperture, its apparent size bound to that opening.
-   // Typography is tied to its rendered width; mobile retains approved pacing.
+   // The surface arrives with B's aperture on both desktop and mobile.
+   // Typography is tied to the card's projected width, with responsive thresholds.
    // The third reading stays fully solid as it folds and recedes. C arrives
    // as a full-height architectural surface along the direction of that fold,
    // not a detached rectangular panel floating in front of the chamber.
-   const h=smooth(w<=740?.462:.418,w<=740?.484:.445,p)*(1-smooth(.718,.744,p));
+   const h=smooth(.418,.445,p)*(1-smooth(.718,.744,p));
    const f=smooth(.60,.88,p),c=smooth(.715,.77,p);
    const handoff=smooth(.658,.706,p);
    const fold=smooth(.647,.707,p);
@@ -101,9 +101,9 @@
      // next surface travels in from depth: independent "settle -> enter" beats.
      shiftX:mix(0,-Math.min(w*.23,320),smooth(.54,.64,p)),shiftY:mix(0,-24,smooth(.54,.64,p)),artScale:mix(1,zoomCap,smooth(.32,.41,p)),
      wingProgress:smooth(.345,.445,p),
-     readZ:mix(w<=740?-1120:-760,0,smooth(w<=740?.46:.422,w<=740?.56:.540,p)),
+     readZ:mix(-760,0,smooth(.422,.540,p)),
      roomAdvance:mix(0,155,smooth(.44,.565,p)),
-     readInk:smooth(w<=740?.465:.472,w<=740?.505:.512,p),
+     readInk:smooth(.472,.512,p),
      leftX:-e*Math.min(w*.17,230)+f*Math.min(w*.13,180),rightX:e*Math.min(w*.17,230)-f*Math.min(w*.13,180),
      nearZ:300*e+180*f,farLeft:e*-Math.min(w*.13,170),farRight:e*Math.min(w*.13,170),groundZ:550*e+250*f,
      cOffset:mix(20,0,c),handoff,fold,cInk,cWatermark
@@ -179,11 +179,10 @@
    // The green facade itself stays opaque until its depth scene covers it.
    const split=smooth(.421,.482,p);
    root.style.setProperty('--contentSlide',(faceWidth*.64*split)+'px');
-   // Desktop keeps its outgoing labels longer while the incoming surface grows.
-   // Mobile retains its existing timing, which already reads more continuously.
+   // Both layouts keep their outgoing labels longer while Card 3 grows in the opening.
    // The interface retires as its own perimeter becomes room architecture.
    // Keeping the text into the first visible depth beat prevents a vacant facade.
-   const retire=1-smooth(isMobile?.424:.440,isMobile?.465:.485,p);
+   const retire=1-smooth(.440,.485,p);
    root.style.setProperty('--contentAlpha',String(retire));
    root.style.setProperty('--facadeMetaAlpha',String(retire));
    root.style.setProperty('--facadeMetaLift',(-26*smooth(.425,.468,p))+'px');
@@ -197,7 +196,7 @@
    // then build the composition without changing the total native-scroll map,
    // depth geometry, camera trajectory or C fold at .647.
    // Every sampled pose is reversible and independent of prior frames.
-   const story=smooth(isMobile?.500:.492,isMobile?.548:.540,p);
+   const story=smooth(.492,.540,p);
    const first=smooth(.512,.560,p),second=smooth(.548,.596,p),third=smooth(.584,.632,p);
    root.style.setProperty('--c3Story',String(story));
    root.style.setProperty('--c3HeroShift',(-Math.min(isMobile?h*.165:h*.10,isMobile?112:96)*story)+'px');
@@ -232,13 +231,17 @@
    root.style.setProperty('--depthBottom',Math.max(0,h-cropY-cropH/2)+'px');
    root.style.setProperty('--depthLeft',Math.max(0,cropX-cropW/2)+'px');
    const depthOpen=smooth(.415,.515,p);
-   // Desktop: the third card starts appearing inside B's opening, then grows
-   // with the real crop rather than waiting for an unrelated depth timeline.
-   // Preserve the existing mobile choreography and the later Card 4 fold.
-   const depthZ=isMobile?v.readZ:fitReadingDepth(v.readZ,cropW,cropH,reading.offsetWidth,reading.offsetHeight);
-   const visibleReadingWidth=Math.min(cropW,reading.offsetWidth*900/(900-depthZ));
-   const readableInk=isMobile?v.readInk:
-     smooth(.418,.448,p)*smooth(190,350,visibleReadingWidth);
+   // Card 3 is a real surface inside B's measured aperture on both layouts.
+   // Constrain its projected size to the moving crop as the doorway expands.
+   // Mobile keeps its portrait dimensions and stable lvh/svh geometry.
+   const readingWidth=reading.offsetWidth,readingHeight=reading.offsetHeight;
+   const depthZ=fitReadingDepth(v.readZ,cropW,cropH,readingWidth,readingHeight);
+   const visibleReadingWidth=Math.min(cropW,readingWidth*900/(900-depthZ));
+   // A fixed desktop 350px threshold would never fully reveal text on a
+   // 320-390px phone. Scale the legibility gate to the actual mobile card.
+   const inkStart=isMobile?Math.min(145,readingWidth*.55):190;
+   const inkEnd=isMobile?Math.min(260,readingWidth*.76):350;
+   const readableInk=smooth(.418,.448,p)*smooth(inkStart,inkEnd,visibleReadingWidth);
    root.style.setProperty('--readZ',(depthZ-155*v.fold)+'px');
    // A modest turn retains recognizable card geometry until the solid C
    // cover overtakes it. No near-edge-on white triangles or hard flips.

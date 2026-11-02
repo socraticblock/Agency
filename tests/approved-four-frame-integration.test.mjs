@@ -134,9 +134,11 @@ test('scroll timeline is deterministic across browser toolbar height changes', (
   assert.deepEqual(unchanged, before);
 });
 
-test('desktop Card 3 grows within the actual Card 2 aperture while mobile keeps its own motion', () => {
-  assert.match(motion, /const depthZ=isMobile\?v\.readZ:fitReadingDepth\(/);
-  assert.match(motion, /const readableInk=isMobile\?v\.readInk:/);
+test('Card 3 grows within the actual aperture on desktop and portrait mobile', () => {
+  assert.match(motion, /const depthZ=fitReadingDepth\(/);
+  assert.match(motion, /const inkStart=isMobile\?Math\.min\(145,readingWidth\*\.55\):190/);
+  assert.match(motion, /const inkEnd=isMobile\?Math\.min\(260,readingWidth\*\.76\):350/);
+  assert.doesNotMatch(motion, /const depthZ=isMobile\?v\.readZ:/);
   const start=motion.indexOf(' const fitReadingDepth=');
   const end=motion.indexOf(' // All scene state',start);
   assert.ok(start>0 && end>start,'aperture geometry must be isolated');
@@ -147,4 +149,19 @@ test('desktop Card 3 grows within the actual Card 2 aperture while mobile keeps 
   assert.ok(z0<z1 && z1<=z2,'Card 3 should grow as the opening grows');
   assert.ok(z2<=-760,'opening must never force the card past its authored camera depth');
   assert.equal(fit(-760,2000,1200,910,542),-760);
+  // Portrait phone: the same perspective fit applies, but within a much
+  // narrower card and its taller B doorway. The projected card must stay
+  // within the crop at every sampled size, never jumping in or out.
+  const phone=[ [80,120], [180,260], [280,440], [360,700] ];
+  let last=-Infinity;
+  for (const [w,h] of phone) {
+    const z=fit(-760,w,h,335,542);
+    const projectedW=335*900/(900-z);
+    const projectedH=542*900/(900-z);
+    assert.ok(z>=last, 'aperture expansion must not shrink the card');
+    assert.ok(z<=-760, 'geometry must not exceed the authored depth pose');
+    assert.ok(projectedW<=Math.max(0,w-20)+1 && projectedH<=Math.max(0,h-20)+1);
+    last=z;
+  }
+  assert.equal(fit(-760,600,900,335,542),-760);
 });
