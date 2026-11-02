@@ -52,6 +52,7 @@ export type V2Copy = {
   proof: string;
   workIntro: string;
   viewWebsite: string;
+  explorePrototype: string;
   tkStatus: string;
   frankStatus: string;
   pilatesStatus: string;
@@ -109,6 +110,7 @@ const EN: V2Copy = {
   proof: "Proof, not promises.",
   workIntro: "Websites, products and prototypes built around real business needs.",
   viewWebsite: "View website",
+  explorePrototype: "Explore prototype",
   tkStatus: "Live website",
   frankStatus: "Live product",
   pilatesStatus: "Prototype",
@@ -194,6 +196,7 @@ const KA: V2Copy = {
   proof: "საქმე, არა დაპირებები.",
   workIntro: "ვებსაიტები, პროდუქტები და პროტოტიპები, შექმნილი რეალური ბიზნეს საჭიროებების გარშემო.",
   viewWebsite: "ნახეთ ვებსაიტი",
+  explorePrototype: "ნახეთ პროტოტიპი",
   tkStatus: "ცოცხალი ვებსაიტი",
   frankStatus: "ცოცხალი პროდუქტი",
   pilatesStatus: "პროტოტიპი",
@@ -294,6 +297,7 @@ const NL: V2Copy = {
   proof: "Bewijs, geen beloftes.",
   workIntro: "Websites, producten en prototypes gebouwd voor echte zakelijke behoeften.",
   viewWebsite: "Bekijk het project",
+  explorePrototype: "Bekijk het prototype",
   tkStatus: "Live website",
   frankStatus: "Live product",
   pilatesStatus: "Prototype",
