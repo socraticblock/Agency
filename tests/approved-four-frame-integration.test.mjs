@@ -74,7 +74,7 @@ test('only the final Card 4 hold is shortened', () => {
 test('Card 3 cannot disappear when browser caches a pre-integration motion controller', () => {
   // A previous production controller used the same static URL but never set
   // --depthVisibility. The new versioned src forces a fresh HTTP cache key.
-  assert.match(home, /motion\.js\?hero=card3-aperture-2026-11-02/);
+  assert.match(home, /motion\.js\?hero=card3-aperture-mobile-2026-11-02/);
   assert.doesNotMatch(home, /src="\/flagship-journey\/infinite-bc\/motion\.js" strategy/);
   // If old JS still executes while a tab transitions across deployments,
   // depth falls back to visible, gated by the original clip-path/opacity.
