@@ -140,7 +140,7 @@ test('desktop Card 3 grows within the actual Card 2 aperture while mobile keeps 
   const start=motion.indexOf(' const fitReadingDepth=');
   const end=motion.indexOf(' // All scene state',start);
   assert.ok(start>0 && end>start,'aperture geometry must be isolated');
-  const fit=Function(motion.slice(start,end)+'\\nreturn fitReadingDepth;')();
+  const fit=Function(motion.slice(start,end)+'\nreturn fitReadingDepth;')();
   const z0=fit(-760,220,160,910,542);
   const z1=fit(-760,440,320,910,542);
   const z2=fit(-760,880,600,910,542);
