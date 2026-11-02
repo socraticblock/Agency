@@ -64,11 +64,12 @@
    const arrival=smooth(.012,.20,p),e=smooth(.345,.54,p);
    // B reaches its stable camera pose at .41. A *complete*, distant third
    // surface appears inside the formed room, then comes forward as a unit.
-   // Its typography is delayed separately so no letter fragments can lead it.
+   // Desktop: let the recognizable surface arrive earlier; retain mobile's approved pacing.
+   // Typography remains gated until the incoming surface is large enough to read.
    // The third reading stays fully solid as it folds and recedes. C arrives
    // as a full-height architectural surface along the direction of that fold,
    // not a detached rectangular panel floating in front of the chamber.
-   const h=smooth(w<=740?.462:.452,.484,p)*(1-smooth(.718,.744,p));
+   const h=smooth(w<=740?.462:.445,w<=740?.484:.480,p)*(1-smooth(.718,.744,p));
    const f=smooth(.60,.88,p),c=smooth(.715,.77,p);
    const handoff=smooth(.658,.706,p);
    const fold=smooth(.647,.707,p);
@@ -90,9 +91,9 @@
      // next surface travels in from depth: independent "settle -> enter" beats.
      shiftX:mix(0,-Math.min(w*.23,320),smooth(.54,.64,p)),shiftY:mix(0,-24,smooth(.54,.64,p)),artScale:mix(1,zoomCap,smooth(.32,.41,p)),
      wingProgress:smooth(.345,.445,p),
-     readZ:mix(-1120,0,smooth(.46,.56,p)),
+     readZ:mix(w<=740?-1120:-930,0,smooth(w<=740?.46:.445,w<=740?.56:.545,p)),
      roomAdvance:mix(0,155,smooth(.44,.565,p)),
-     readInk:smooth(.465,.505,p),
+     readInk:smooth(w<=740?.465:.472,w<=740?.505:.512,p),
      leftX:-e*Math.min(w*.17,230)+f*Math.min(w*.13,180),rightX:e*Math.min(w*.17,230)-f*Math.min(w*.13,180),
      nearZ:300*e+180*f,farLeft:e*-Math.min(w*.13,170),farRight:e*Math.min(w*.13,170),groundZ:550*e+250*f,
      cOffset:mix(20,0,c),handoff,fold,cInk,cWatermark
@@ -168,9 +169,11 @@
    // The green facade itself stays opaque until its depth scene covers it.
    const split=smooth(.421,.482,p);
    root.style.setProperty('--contentSlide',(faceWidth*.64*split)+'px');
+   // Desktop keeps its outgoing labels longer while the incoming surface grows.
+   // Mobile retains its existing timing, which already reads more continuously.
    // The interface retires as its own perimeter becomes room architecture.
    // Keeping the text into the first visible depth beat prevents a vacant facade.
-   const retire=1-smooth(.424,.465,p);
+   const retire=1-smooth(isMobile?.424:.440,isMobile?.465:.485,p);
    root.style.setProperty('--contentAlpha',String(retire));
    root.style.setProperty('--facadeMetaAlpha',String(retire));
    root.style.setProperty('--facadeMetaLift',(-26*smooth(.425,.468,p))+'px');
@@ -184,8 +187,8 @@
    // then build the composition without changing the total native-scroll map,
    // depth geometry, camera trajectory or C fold at .647.
    // Every sampled pose is reversible and independent of prior frames.
-   const story=smooth(.500,.548,p);
-   const first=smooth(.512,.560,p),second=smooth(.548,.596,p),third=smooth(.584,.632,p);
+   const story=smooth(isMobile?.500:.492,isMobile?.548:.540,p);
+   const first=smooth(isMobile?.512:.508,isMobile?.560:.556,p),second=smooth(.548,.596,p),third=smooth(.584,.632,p);
    root.style.setProperty('--c3Story',String(story));
    root.style.setProperty('--c3HeroShift',(-Math.min(isMobile?h*.165:h*.10,isMobile?112:96)*story)+'px');
    root.style.setProperty('--c3HeroScale',String(mix(1.06,isMobile?.84:.85,story)));
@@ -195,7 +198,7 @@
    root.style.setProperty('--c3FirstRise',(16*(1-first))+'px');
    root.style.setProperty('--c3SecondRise',(16*(1-second))+'px');
    root.style.setProperty('--c3ThirdRise',(16*(1-third))+'px');
-   root.style.setProperty('--c3Progress',String(smooth(.512,.632,p)));
+   root.style.setProperty('--c3Progress',String(smooth(isMobile?.512:.508,.632,p)));
    // Update every geometry variable *before* reading the transformed face.
    // This removes dependence on the previous scroll sample on jump/reversal.
    const map={p:v.p,e:v.e,h:v.h,f:v.f,c:v.c,d:v.d,b:v.b,n:v.n,shiftX:v.shiftX,shiftY:v.shiftY,artScale:v.artScale,leftX:v.leftX,rightX:v.rightX,nearZ:v.nearZ,farLeft:v.farLeft,farRight:v.farRight,groundZ:v.groundZ,cOffset:v.cOffset,foldAlpha:v.foldAlpha,foldLeftX:v.foldLeftX,foldRightX:v.foldRightX,foldRotL:v.foldRotL,foldRotR:v.foldRotR};
