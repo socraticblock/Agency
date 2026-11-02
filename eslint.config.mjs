@@ -34,7 +34,6 @@ const eslintConfig = defineConfig([
     "fix_tooltip.js",
     "test-pricing.js",
     "test_gemini.js",
-    "fix_wrap.mjs",
   ]),
 ]);
 
