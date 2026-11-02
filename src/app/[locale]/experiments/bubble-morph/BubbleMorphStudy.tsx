@@ -80,13 +80,15 @@ export function BubbleMorphStudy() {
   const contentRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const dropRef = useRef<HTMLDivElement>(null);
+  const faceRef = useRef<HTMLDivElement>(null);
+  const skinRef = useRef<HTMLDivElement>(null);
   const bubbleRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const activeRef = useRef<number | null>(null);
   const busyRef = useRef(false);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const startRef = useRef<Rect | null>(null);
   const animationRef = useRef<Animation | null>(null);
-  const timerRef = useRef<number | null>(null);
+
   const prefersReduced = useCallback(() => window.matchMedia("(prefers-reduced-motion: reduce)").matches, []);
 
   const targetRect = useCallback((): Rect => {
@@ -120,42 +122,111 @@ export function BubbleMorphStudy() {
     });
   }, []);
 
+  /**
+   * One choreography controls the continuous surface, retained bubble lettering,
+   * incoming explanation and soap-like highlight. No delayed React timer can
+   * expose an empty expanded panel. The source bubble is visually duplicated
+   * in the overlay before it is hidden.
+   */
   const morph = useCallback(async (source: Rect, dest: Rect, opening: boolean) => {
     const root = rootRef.current;
-    if (!root || prefersReduced()) return;
+    const face = faceRef.current;
+    const skin = skinRef.current;
+    const copy = contentRef.current;
+    if (!root || !face || !skin || !copy) return;
+
+    const reduced = prefersReduced();
+    const duration = opening ? 1080 : 840;
     const from = morphTransform(source, dest);
-    const frames: Keyframe[] = opening ? [
-      { transform: from, borderRadius: "50%", offset: 0, easing: "cubic-bezier(.23,.68,.23,1)" },
-      { transform: "translate3d(0,-7px,0) scale(1.017,.987)", borderRadius: "34px", offset: .72, easing: "cubic-bezier(.26,.7,.3,1)" },
-      { transform: "translate3d(0,3px,0) scale(.992,1.007)", borderRadius: "28px", offset: .88, easing: "ease-out" },
-      { transform: "none", borderRadius: "30px", offset: 1 },
-    ] : [
-      { transform: "none", borderRadius: "30px", offset: 0, easing: "cubic-bezier(.4,0,.3,.76)" },
-      { transform: "translate3d(0,4px,0) scale(1.009,.993)", borderRadius: "33px", offset: .22, easing: "cubic-bezier(.2,.5,.3,1)" },
-      { transform: from, borderRadius: "50%", offset: 1 },
-    ];
-    const animation = root.animate(frames, { duration: opening ? 860 : 710, easing: "linear", fill: "both" });
-    animationRef.current = animation;
-    try { await animation.finished; } catch { /* Cancelled during unmount. */ }
-    if (animationRef.current === animation) animationRef.current = null;
-    animation.cancel();
+    const facialScale = Math.max(1, Math.min(2.05, (dest.width / Math.max(1, source.width)) * .78));
+    const timing: KeyframeAnimationOptions = { duration, easing: "linear", fill: "both" };
+    const motionTiming = reduced ? { ...timing, duration: 1 } : timing;
+    const animations: Animation[] = [];
+
+    const play = (element: Element, frames: Keyframe[]) => {
+      const animation = element.animate(frames, motionTiming);
+      animations.push(animation);
+      return animation;
+    };
+
+    if (opening) {
+      play(root, [
+        { transform: from, borderRadius: "50%", offset: 0, easing: "cubic-bezier(.31,.08,.2,1)" },
+        { transform: "translate3d(0,-5px,0) scale(1.026,.969)", borderRadius: "25%", offset: .69, easing: "cubic-bezier(.2,.75,.23,1)" },
+        { transform: "translate3d(0,3px,0) scale(.988,1.012)", borderRadius: "29px", offset: .82, easing: "cubic-bezier(.25,.65,.35,1)" },
+        { transform: "translate3d(0,-1px,0) scale(1.004,.996)", borderRadius: "31px", offset: .93, easing: "ease-out" },
+        { transform: "none", borderRadius: "30px", offset: 1 },
+      ]);
+      play(face, [
+        { opacity: 1, transform: `scale(${facialScale})`, offset: 0 },
+        { opacity: 1, transform: "scale(1.04)", offset: .24 },
+        { opacity: .9, transform: "scale(1)", offset: .4 },
+        { opacity: 0, transform: "scale(.985)", offset: .64 },
+        { opacity: 0, transform: "scale(.985)", offset: 1 },
+      ]);
+      play(skin, [
+        { opacity: 1, offset: 0 },
+        { opacity: .88, offset: .23 },
+        { opacity: .25, offset: .53 },
+        { opacity: 0, offset: .74 },
+        { opacity: 0, offset: 1 },
+      ]);
+      play(copy, [
+        { opacity: 0, transform: "translateY(11px)", offset: 0 },
+        { opacity: 0, transform: "translateY(11px)", offset: .24 },
+        { opacity: .5, transform: "translateY(5px)", offset: .43 },
+        { opacity: 1, transform: "none", offset: .68 },
+        { opacity: 1, transform: "none", offset: 1 },
+      ]);
+    } else {
+      play(root, [
+        { transform: "none", borderRadius: "30px", offset: 0, easing: "cubic-bezier(.38,0,.34,.65)" },
+        { transform: "translate3d(0,3px,0) scale(1.006,.991)", borderRadius: "32px", offset: .2, easing: "cubic-bezier(.3,.55,.4,1)" },
+        { transform: from, borderRadius: "50%", offset: 1 },
+      ]);
+      play(copy, [
+        { opacity: 1, transform: "none", offset: 0 },
+        { opacity: .75, transform: "translateY(3px)", offset: .16 },
+        { opacity: 0, transform: "translateY(9px)", offset: .48 },
+        { opacity: 0, transform: "translateY(9px)", offset: 1 },
+      ]);
+      play(face, [
+        { opacity: 0, transform: "scale(.985)", offset: 0 },
+        { opacity: 0, transform: "scale(.985)", offset: .2 },
+        { opacity: 1, transform: "scale(1.04)", offset: .55 },
+        { opacity: 1, transform: `scale(${facialScale})`, offset: 1 },
+      ]);
+      play(skin, [
+        { opacity: 0, offset: 0 },
+        { opacity: .08, offset: .21 },
+        { opacity: .8, offset: .66 },
+        { opacity: 1, offset: 1 },
+      ]);
+    }
+
+    animationRef.current = animations[0] ?? null;
+    try { await Promise.all(animations.map(a => a.finished.catch(() => {}))); }
+    finally {
+      if (animationRef.current === animations[0]) animationRef.current = null;
+      animations.forEach(a => a.cancel());
+    }
   }, [prefersReduced]);
 
   const droplets = useCallback((source: Rect) => {
     if (prefersReduced() || !dropRef.current) return;
     const cx = source.left + source.width / 2, cy = source.top + source.height / 2;
-    const particles = [[-.85, -.5], [-.15, -1], [.7, -.6], [.96, .1], [.26, .85]];
+    const particles = [[-.68, -.75], [.78, -.53], [.98, .15]];
     particles.forEach(([dx, dy], i) => {
       const el = document.createElement("span");
       el.className = styles.drop;
-      const size = 4 + (i % 3) * 2;
+      const size = 6 + i * 2;
       Object.assign(el.style, { width: `${size}px`, height: `${size}px`, left: `${cx + dx * source.width * .44}px`, top: `${cy + dy * source.height * .44}px` });
       dropRef.current?.appendChild(el);
       const a = el.animate([
         { opacity: 0, transform: "translate(0,0) scale(.4)" },
-        { opacity: .85, offset: .18, transform: `translate(${dx * 11}px,${dy * 9}px) scale(1)` },
-        { opacity: 0, transform: `translate(${dx * (20 + i * 5)}px,${dy * (15 + i * 6)}px) scale(.5)` },
-      ], { duration: 470 + i * 48, easing: "cubic-bezier(.16,.66,.35,1)", fill: "forwards" });
+        { opacity: .73, offset: .24, transform: `translate(${dx * 11}px,${dy * 9}px) scale(1)` },
+        { opacity: 0, transform: `translate(${dx * (27 + i * 8)}px,${dy * (23 + i * 7)}px) scale(.5)` },
+      ], { duration: 680 + i * 65, easing: "cubic-bezier(.16,.66,.35,1)", fill: "forwards" });
       a.finished.then(() => el.remove()).catch(() => el.remove());
     });
   }, [prefersReduced]);
@@ -177,29 +248,27 @@ export function BubbleMorphStudy() {
     if (contentRef.current) contentRef.current.scrollTop = 0;
     applyRect(dest);
     droplets(source);
+    // CSS supplies the final state; WAAPI overrides it for the entire opening.
+    setReadable(true);
     const work = morph(source, dest, true);
-    timerRef.current = window.setTimeout(() => {
-      setReadable(true);
-      closeRef.current?.focus({ preventScroll: true });
-    }, prefersReduced() ? 0 : 560);
     void work.then(() => {
       if (activeRef.current === active) {
         applyRect(targetRect());
         busyRef.current = false;
+        closeRef.current?.focus({ preventScroll: true });
       }
     });
-    // One opening animation per selected service. Content visibility is separate.
-  }, [active, applyRect, droplets, morph, prefersReduced, targetRect]);
+  }, [active, applyRect, droplets, morph, targetRect]);
 
   const closeCard = useCallback(async () => {
     const index = activeRef.current;
     if (index === null || busyRef.current) return;
     busyRef.current = true;
-    setReadable(false);
     const start = targetRect();
     const target = bubbleRefs.current[index]?.getBoundingClientRect();
     applyRect(start);
     if (target) await morph(target, start, false);
+    setReadable(false);
     activeRef.current = null;
     setActive(null);
     busyRef.current = false;
@@ -232,7 +301,6 @@ export function BubbleMorphStudy() {
   }, [active, applyRect, closeCard, targetRect]);
 
   useEffect(() => () => {
-    if (timerRef.current !== null) window.clearTimeout(timerRef.current);
     animationRef.current?.cancel();
   }, []);
 
@@ -343,6 +411,12 @@ export function BubbleMorphStudy() {
       </main>
       <div className={`${styles.backdrop} ${active !== null ? styles.visible : ""}`} aria-hidden="true" onClick={() => void closeCard()} />
       <section ref={rootRef} className={`${styles.reveal} ${active !== null ? styles["is-active"] : ""} ${readable ? styles["is-readable"] : ""}`} role="dialog" aria-modal={active !== null} aria-labelledby="bubble-card-title" aria-hidden={active === null} tabIndex={-1}>
+        <div ref={skinRef} className={styles["liquid-skin"]} aria-hidden="true" />
+        <div ref={faceRef} className={styles["liquid-face"]} aria-hidden="true">
+          <span className={styles["liquid-index"]}>{service.index}</span>
+          <span className={styles["liquid-title"]}>{service.title}</span>
+          <span className={styles["liquid-short"]}>{service.short}</span>
+        </div>
         <div className={styles["card-content"]} ref={contentRef}>
           <div className={styles["card-top"]}>
             <span className={styles["card-index"]}>{service.index}</span>
