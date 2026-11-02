@@ -56,6 +56,16 @@
    (w-(w<=740?32:96))/Math.max(1,faceWidth*panelScale),
    (h-(w<=740?148:140))/Math.max(1,faceHeight*panelScale)
  ));
+ // Match the reading plane to the actual facade aperture. The outer depth
+ // scene is clipped to the opening; the reading plane must not grow beyond it.
+ // CSS perspective on .depth is 900px: scale = 900 / (900 - translateZ).
+ // This is geometry, not an independent scroll animation or opacity overlay.
+ const fitReadingDepth=(depth,cropW,cropH,readingW,readingH)=>{
+   const fit=Math.max(.04,Math.min(1,
+     Math.max(0,cropW-20)/Math.max(1,readingW),
+     Math.max(0,cropH-20)/Math.max(1,readingH)));
+   return Math.min(depth,900*(1-1/fit));
+ };
  // All scene state, including the entrance, is a pure function of scroll progress.
  // Full B remains a legible stop; only the physical scroll distance of its hold is shortened.
  const sample=(p,w,zoomCap=2.25)=>{
@@ -64,11 +74,12 @@
    const arrival=smooth(.012,.20,p),e=smooth(.345,.54,p);
    // B reaches its stable camera pose at .41. A *complete*, distant third
    // surface appears inside the formed room, then comes forward as a unit.
-   // Its typography is delayed separately so no letter fragments can lead it.
+   // The surface arrives with B's aperture on both desktop and mobile.
+   // Typography is tied to the card's projected width, with responsive thresholds.
    // The third reading stays fully solid as it folds and recedes. C arrives
    // as a full-height architectural surface along the direction of that fold,
    // not a detached rectangular panel floating in front of the chamber.
-   const h=smooth(w<=740?.462:.452,.484,p)*(1-smooth(.718,.744,p));
+   const h=smooth(.418,.445,p)*(1-smooth(.718,.744,p));
    const f=smooth(.60,.88,p),c=smooth(.715,.77,p);
    const handoff=smooth(.658,.706,p);
    const fold=smooth(.647,.707,p);
@@ -90,9 +101,9 @@
      // next surface travels in from depth: independent "settle -> enter" beats.
      shiftX:mix(0,-Math.min(w*.23,320),smooth(.54,.64,p)),shiftY:mix(0,-24,smooth(.54,.64,p)),artScale:mix(1,zoomCap,smooth(.32,.41,p)),
      wingProgress:smooth(.345,.445,p),
-     readZ:mix(-1120,0,smooth(.46,.56,p)),
+     readZ:mix(-760,0,smooth(.422,.540,p)),
      roomAdvance:mix(0,155,smooth(.44,.565,p)),
-     readInk:smooth(.465,.505,p),
+     readInk:smooth(.472,.512,p),
      leftX:-e*Math.min(w*.17,230)+f*Math.min(w*.13,180),rightX:e*Math.min(w*.17,230)-f*Math.min(w*.13,180),
      nearZ:300*e+180*f,farLeft:e*-Math.min(w*.13,170),farRight:e*Math.min(w*.13,170),groundZ:550*e+250*f,
      cOffset:mix(20,0,c),handoff,fold,cInk,cWatermark
@@ -168,9 +179,10 @@
    // The green facade itself stays opaque until its depth scene covers it.
    const split=smooth(.421,.482,p);
    root.style.setProperty('--contentSlide',(faceWidth*.64*split)+'px');
+   // Both layouts keep their outgoing labels longer while Card 3 grows in the opening.
    // The interface retires as its own perimeter becomes room architecture.
    // Keeping the text into the first visible depth beat prevents a vacant facade.
-   const retire=1-smooth(.424,.465,p);
+   const retire=1-smooth(.440,.485,p);
    root.style.setProperty('--contentAlpha',String(retire));
    root.style.setProperty('--facadeMetaAlpha',String(retire));
    root.style.setProperty('--facadeMetaLift',(-26*smooth(.425,.468,p))+'px');
@@ -178,13 +190,13 @@
    // opacity is a pure function of scroll position, including reverse/jumps.
    root.style.setProperty('--thresholdInk',String(smooth(.417,.475,p)*(1-smooth(.535,.612,p))));
    root.style.setProperty('--roomText',String(1-smooth(.49,.555,p)));
-   // Card 3's internal story starts WHILE the existing camera is approaching
+   // Card 3's three-step story starts WHILE the existing camera is approaching
    // (.46-.56), after the reading plane and ink are already becoming visible.
    // The headline makes room first; three gentle, overlapping stage reveals
    // then build the composition without changing the total native-scroll map,
    // depth geometry, camera trajectory or C fold at .647.
    // Every sampled pose is reversible and independent of prior frames.
-   const story=smooth(.500,.548,p);
+   const story=smooth(.492,.540,p);
    const first=smooth(.512,.560,p),second=smooth(.548,.596,p),third=smooth(.584,.632,p);
    root.style.setProperty('--c3Story',String(story));
    root.style.setProperty('--c3HeroShift',(-Math.min(isMobile?h*.165:h*.10,isMobile?112:96)*story)+'px');
@@ -219,11 +231,22 @@
    root.style.setProperty('--depthBottom',Math.max(0,h-cropY-cropH/2)+'px');
    root.style.setProperty('--depthLeft',Math.max(0,cropX-cropW/2)+'px');
    const depthOpen=smooth(.415,.515,p);
-   root.style.setProperty('--readZ',(v.readZ-155*v.fold)+'px');
+   // Card 3 is a real surface inside B's measured aperture on both layouts.
+   // Constrain its projected size to the moving crop as the doorway expands.
+   // Mobile keeps its portrait dimensions and stable lvh/svh geometry.
+   const readingWidth=reading.offsetWidth,readingHeight=reading.offsetHeight;
+   const depthZ=fitReadingDepth(v.readZ,cropW,cropH,readingWidth,readingHeight);
+   const visibleReadingWidth=Math.min(cropW,readingWidth*900/(900-depthZ));
+   // A fixed desktop 350px threshold would never fully reveal text on a
+   // 320-390px phone. Scale the legibility gate to the actual mobile card.
+   const inkStart=isMobile?Math.min(145,readingWidth*.55):190;
+   const inkEnd=isMobile?Math.min(260,readingWidth*.76):350;
+   const readableInk=smooth(.418,.448,p)*smooth(inkStart,inkEnd,visibleReadingWidth);
+   root.style.setProperty('--readZ',(depthZ-155*v.fold)+'px');
    // A modest turn retains recognizable card geometry until the solid C
    // cover overtakes it. No near-edge-on white triangles or hard flips.
    root.style.setProperty('--readingTurn',(-36*v.fold)+'deg');
-   root.style.setProperty('--readInk',String(v.readInk));
+   root.style.setProperty('--readInk',String(readableInk));
    root.style.setProperty('--roomAdvance',v.roomAdvance+'px');
    root.style.setProperty('--roomReveal',String(depthOpen));
    // C is a full-height architectural continuation of the reading plane:

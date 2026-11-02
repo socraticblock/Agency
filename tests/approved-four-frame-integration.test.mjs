@@ -74,7 +74,7 @@ test('only the final Card 4 hold is shortened', () => {
 test('Card 3 cannot disappear when browser caches a pre-integration motion controller', () => {
   // A previous production controller used the same static URL but never set
   // --depthVisibility. The new versioned src forces a fresh HTTP cache key.
-  assert.match(home, /motion\.js\?hero=approved-four-frame-2026-11-01/);
+  assert.match(home, /motion\.js\?hero=card3-aperture-mobile-2026-11-02/);
   assert.doesNotMatch(home, /src="\/flagship-journey\/infinite-bc\/motion\.js" strategy/);
   // If old JS still executes while a tab transitions across deployments,
   // depth falls back to visible, gated by the original clip-path/opacity.
@@ -132,4 +132,36 @@ test('scroll timeline is deterministic across browser toolbar height changes', (
   browser.innerHeight = 800;
   const unchanged = Array.from({ length: 101 }, (_, i) => progress(i / 100));
   assert.deepEqual(unchanged, before);
+});
+
+test('Card 3 grows within the actual aperture on desktop and portrait mobile', () => {
+  assert.match(motion, /const depthZ=fitReadingDepth\(/);
+  assert.match(motion, /const inkStart=isMobile\?Math\.min\(145,readingWidth\*\.55\):190/);
+  assert.match(motion, /const inkEnd=isMobile\?Math\.min\(260,readingWidth\*\.76\):350/);
+  assert.doesNotMatch(motion, /const depthZ=isMobile\?v\.readZ:/);
+  const start=motion.indexOf(' const fitReadingDepth=');
+  const end=motion.indexOf(' // All scene state',start);
+  assert.ok(start>0 && end>start,'aperture geometry must be isolated');
+  const fit=Function(motion.slice(start,end)+'\nreturn fitReadingDepth;')();
+  const z0=fit(-760,220,160,910,542);
+  const z1=fit(-760,440,320,910,542);
+  const z2=fit(-760,880,600,910,542);
+  assert.ok(z0<z1 && z1<=z2,'Card 3 should grow as the opening grows');
+  assert.ok(z2<=-760,'opening must never force the card past its authored camera depth');
+  assert.equal(fit(-760,2000,1200,910,542),-760);
+  // Portrait phone: the same perspective fit applies, but within a much
+  // narrower card and its taller B doorway. The projected card must stay
+  // within the crop at every sampled size, never jumping in or out.
+  const phone=[ [80,120], [180,260], [280,440], [360,700] ];
+  let last=-Infinity;
+  for (const [w,h] of phone) {
+    const z=fit(-760,w,h,335,542);
+    const projectedW=335*900/(900-z);
+    const projectedH=542*900/(900-z);
+    assert.ok(z>=last, 'aperture expansion must not shrink the card');
+    assert.ok(z<=-760, 'geometry must not exceed the authored depth pose');
+    assert.ok(projectedW<=Math.max(0,w-20)+1 && projectedH<=Math.max(0,h-20)+1);
+    last=z;
+  }
+  assert.equal(fit(-760,600,900,335,542),-760);
 });
