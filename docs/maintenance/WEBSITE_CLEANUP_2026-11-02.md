@@ -17,21 +17,22 @@
 | `src/app/[locale]/_components/HomeLandingPage.tsx` | Previous homepage implementation; current homepage renders `SignalHeroPrototype`, not this component. |
 | `src/app/[locale]/_components/KineticHero.tsx` | Previous kinetic hero; current homepage renders `V2Hero`. Keep `MagneticButton` (used in `/stop-renting`). |
 | `src/app/[locale]/_components/StickyCardStack.tsx` | Earlier scrolling persuasion section; not part of the current homepage or audited route entry points. |
-| `src/app/[locale]/_components/SovereignVisualizers.tsx` | Earlier large visualizer module; not part of the current homepage or audited route entry points. |
 
-All 49 route `page`, `layout`, and `route` entry points were inspected for their direct imports, together with the homepage composition and primary pricing/partner/stop-renting child compositions. This is **not** a complete transitive dependency scan. The files above are proposed removal candidates, not browser-verified deletions.
+**Independent review correction:** The original draft also removed `SovereignVisualizers.tsx`; that was incorrect. `SovereignTriptych.tsx` contains six `next/dynamic` imports of named visualizers from this file. It has been restored before validation. This is why direct route import auditing is insufficient: dynamic imports and imports in otherwise inactive TypeScript modules can break the build.
+
+All 49 route `page`, `layout`, and `route` entry points were inspected for their direct imports, together with the homepage composition and primary pricing/partner/stop-renting child compositions. This is **not** a complete transitive dependency scan. Remaining deletions are proposed removal candidates, not browser-verified deletions.
 
 ## Items for a second cleanup pass, not yet removed
-- Other old homepage sections (`Sovereign*`, `Trust*`, `PackageGrid`, `RoadmapTimeline`, old standalone visualizers, old lead-gen islands) **only after a full import/reachability graph and build**.
+- Other old homepage sections (`Sovereign*`, `Trust*`, `PackageGrid`, `RoadmapTimeline`, `SovereignTriptych` with its dynamically imported `SovereignVisualizers`, old standalone visualizers, old lead-gen islands) **only after a full import/reachability graph and build**.
 - Placeholder assets `public/{file,globe,next,vercel,window}.svg` after checking CSS, markup, public URL references and any externally linked assets.
 - Old `/v2-prototype` and testing routes only after confirming they are not used for release diagnostics and checking SEO/robots.
-- Duplicate or abandoned docs: mark old iterations **historical/superseded** and keep the approved Infinite Website north star and current handoff easily discoverable. There is already an open docs-only PR #20, so avoid making competing README/AGENTS changes in this PR.
+- Duplicate or abandoned docs: mark old iterations **historical/superseded**, do not lose the accepted direction or current handoff. The proposed Infinite Website North Star documentation is on separate unmerged PR #12, and the production handoff/branching guidelines are on open PR #20; they are **not** part of current `main`. Coordinate documentation authority rather than overwriting it in this runtime-cleanup PR.
 - Heavy dependencies (GSAP, Three/R3F, Lenis, video-related libraries, etc.) only after checking the entire codebase, build-time configuration, and package lockfile. Do not infer absence of usage from the current homepage alone.
 - Legacy CSS selectors and assets only after repository-wide usage analysis.
 
 ## Validation required before merge
 1. Run `npm ci`, `npm run typecheck`, `npm run lint`, `npm run build` and targeted regression tests, including `tests/approved-four-frame-integration.test.mjs` and the existing route/locale suites.
-2. Resolve any missing-import errors **without restoring abandoned features unless genuinely still used**.
+2. Search the whole repository for static, dynamic, re-exported and test references to each deleted module; verify all imports including orphaned TypeScript modules. If any remaining reference requires a deleted file, preserve the dependency or deliberately remove the entire unreachable group after validating route reachability. Do not mask compiler errors.
 3. In the built Next.js application, check `/en`, `/ka`, `/nl`, Card 2 → Card 3 → Card 4 (forward/reverse/fast scroll and reduced motion), genuine Work destination and passage shortcut.
 4. Smoke-test `/pricing`, `/partner`, `/start`, `/c/[slug]`, `/work` and `/stop-renting` plus key forms/actions before release.
 5. Obtain founder visual acceptance. Do not merge to `main` or create a `preview-*` branch without explicit approval.
