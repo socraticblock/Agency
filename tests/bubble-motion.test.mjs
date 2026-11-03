@@ -1,7 +1,7 @@
 // Run with: node --experimental-strip-types tests/bubble-motion.test.mjs
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { clamp, springStep, contourPoints, contourPath, morphContour, geometryProgress, contentOpacity, SHAPE_POINTS } from '../src/app/[locale]/experiments/bubble-morph/bubbleMotion.ts';
+import { clamp, springStep, contourPoints, contourPath, morphContour, geometryProgress, contentOpacity, bubbleDetailOpacity, SHAPE_POINTS } from '../src/app/[locale]/experiments/bubble-morph/bubbleMotion.ts';
 
 const from = { left: 130, top: 180, width: 260, height: 260 };
 const to = { left: 24, top: 20, width: 780, height: 690 };
@@ -57,18 +57,38 @@ test('tiny and extreme viewport shapes remain finite',()=>{
   assert.equal(clamp(1.2),1);
   approx(geometryProgress(1.1),1,.001);
 });
-test('close clears body copy before the shrinking surface becomes small', () => {
-  assert.ok(contentOpacity(.8, true, .34) > .25);
-  assert.equal(contentOpacity(.6, false, .13), 0);
-  assert.equal(contentOpacity(1, false, 0), 1);
+
+test('closing explanation clears before the silhouette contracts; opening does not wait for the final frame', () => {
+  assert.ok(contentOpacity(0.8, true, .34) > .25, 'readable content begins during expansion');
+  assert.equal(contentOpacity(0.6, false, .13), 0, 'card copy clears in the first 130ms of closing');
+  assert.equal(contentOpacity(1, false, 0), 1, 'closing starts without a flash');
 });
-test('one SVG path clips all outgoing text and the membrane resets', async () => {
+
+test('React clipping follows the same generated contour as fill and rim', async () => {
   const { readFileSync } = await import('node:fs');
-  const s = readFileSync(new URL('../src/app/[locale]/experiments/bubble-morph/BubbleMorphStudy.tsx', import.meta.url), 'utf8');
-  assert.match(s, /clipRef\.current\?\.setAttribute\("d", path\)/);
-  assert.match(s, /shape\.setAttribute\("d", path\)/);
-  assert.match(s, /light\.setAttribute\("d", path\)/);
-  assert.match(s, /id="genezisi-bubble-copy-clip"/);
-  assert.match(s, /ghostOpacity = opening \?/);
-  assert.match(s, /resetMembraneRef\.current\(index\)/);
+  const source = readFileSync(new URL('../src/app/[locale]/experiments/bubble-morph/BubbleMorphStudy.tsx', import.meta.url), 'utf8');
+  assert.match(source, /clipRef\.current\?\.setAttribute\("d", path\)/);
+  assert.match(source, /shape\.setAttribute\("d", path\)/);
+  assert.match(source, /light\.setAttribute\("d", path\)/);
+  assert.match(source, /id="genezisi-bubble-copy-clip"/);
+  assert.match(source, /clipPath: "url\(#genezisi-bubble-copy-clip\)"/);
+  assert.match(source, /ghostOpacity = bubbleDetailOpacity\(normalized, opening\)/);
+  assert.match(source, /resetMembraneRef\.current\(index\)/);
+});
+
+test('bubble details return progressively before the final close handoff', () => {
+  assert.equal(bubbleDetailOpacity(1, false), 0);
+  assert.equal(bubbleDetailOpacity(0, false), 1);
+  assert.ok(bubbleDetailOpacity(.16, false) > 0 && bubbleDetailOpacity(.16, false) < 1);
+  assert.equal(bubbleDetailOpacity(0, true), 1);
+  assert.equal(bubbleDetailOpacity(.24, true), 0);
+});
+
+test('travelling heading copies original font metrics instead of line-box scaling', async () => {
+  const { readFileSync } = await import('node:fs');
+  const source = readFileSync(new URL('../src/app/[locale]/experiments/bubble-morph/BubbleMorphStudy.tsx', import.meta.url), 'utf8');
+  assert.match(source,/session\.sourceFontSize \/ session\.targetFontSize/);
+  assert.match(source,/title\.style\.lineHeight/);
+  assert.match(source,/title\.style\.letterSpacing/);
+  assert.match(source,/bubbleDetailOpacity\(normalized, opening\)/);
 });

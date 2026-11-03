@@ -97,3 +97,10 @@ export function contentOpacity(progress: number, opening: boolean, seconds: numb
 
 /** Prefer the shorter closed-state geometry for reduced-motion users. */
 export const MORPH_SECONDS = { open: 1.06, close: .88 } as const;
+
+/** Closed-state index, subtitle and affordance fade back onto the original
+ * measured bubble positions before React swaps the overlay for its source.
+ * This prevents the last-frame text pop observed in the founder recording. */
+export function bubbleDetailOpacity(opened: number, opening: boolean): number {
+  return 1 - smoothStep(clamp(opened) / (opening ? .24 : .32));
+}

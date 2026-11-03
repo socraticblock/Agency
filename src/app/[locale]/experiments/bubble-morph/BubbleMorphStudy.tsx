@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   clamp, contourPath, contourPoints, contentOpacity, geometryProgress,
-  mix, morphContour, MORPH_SECONDS, SHAPE_POINTS, type Rect,
+  mix, morphContour, MORPH_SECONDS, SHAPE_POINTS, bubbleDetailOpacity, type Rect,
 } from "./bubbleMotion";
 import styles from "./BubbleMorphStudy.module.css";
 
@@ -70,6 +70,12 @@ type MorphSession = {
   sourceShort: DOMRect;
   sourceMore: DOMRect;
   titleTarget: DOMRect;
+  sourceFontSize: number;
+  targetFontSize: number;
+  sourceLineHeight: number;
+  targetLineHeight: number;
+  sourceLetterSpacing: number;
+  targetLetterSpacing: number;
 };
 
 function motionDisabled() {
@@ -94,8 +100,6 @@ function orbPath(offset: number[]): string {
   });
   return contourPath(p);
 }
-
-const STATIC_ORB_PATH = orbPath(Array(SHAPE_POINTS).fill(0));
 
 export function BubbleMorphStudy() {
   const [active, setActive] = useState<number | null>(null);
@@ -164,13 +168,27 @@ export function BubbleMorphStudy() {
     const source = sourceRefs.current[index];
     const slot = titleSlotRef.current;
     if (!source || !slot) return null;
+    const sourceHeading = source.querySelector<HTMLElement>(`.${styles.orbTitle}`);
+    const travellingHeading = titleRef.current;
+    if (!sourceHeading || !travellingHeading) return null;
+    const sourceStyle = window.getComputedStyle(sourceHeading);
+    const targetStyle = window.getComputedStyle(travellingHeading);
+    const sourceFontSize = parseFloat(sourceStyle.fontSize);
+    const targetFontSize = parseFloat(targetStyle.fontSize);
+    const sourceLineHeight = parseFloat(sourceStyle.lineHeight) / sourceFontSize;
+    const targetLineHeight = parseFloat(targetStyle.lineHeight) / targetFontSize;
+    const sourceLetterSpacing = parseFloat(sourceStyle.letterSpacing) / sourceFontSize;
+    const targetLetterSpacing = parseFloat(targetStyle.letterSpacing) / targetFontSize;
     return {
       source: sourceCircle(source), destination,
-      sourceTitle: sourceTextRect(source, `.${styles.orbTitle}`),
+      sourceTitle: sourceHeading.getBoundingClientRect(),
       sourceIndex: sourceTextRect(source, `.${styles.orbIndex}`),
       sourceShort: sourceTextRect(source, `.${styles.orbShort}`),
       sourceMore: sourceTextRect(source, `.${styles.orbMore}`),
       titleTarget: slot.getBoundingClientRect(),
+      sourceFontSize, targetFontSize,
+      sourceLineHeight, targetLineHeight,
+      sourceLetterSpacing, targetLetterSpacing,
     };
   }, []);
 
@@ -183,13 +201,18 @@ export function BubbleMorphStudy() {
     const p = opened; // May overshoot by ~2%, as a real damped spring does.
     const final = session.titleTarget;
     const source = session.sourceTitle;
-    const naturalHeight = Math.max(1, title.offsetHeight);
-    const sourceScale = clamp(source.height / Math.max(1, naturalHeight), .3, 1.4);
+    // Match the original bubble's actual font metrics at the exact handoff.
+    // Scaling by line-box height inflated the travelling glyphs by roughly 8%
+    // and the source heading visibly snapped smaller when React restored it.
+    const normalized = clamp(p);
+    const sourceScale = clamp(session.sourceFontSize / session.targetFontSize, .3, 1.4);
     const dx = source.left - final.left;
     const dy = source.top - final.top;
     const scale = mix(sourceScale, 1, p);
     title.style.left = `${final.left}px`;
     title.style.top = `${final.top}px`;
+    title.style.lineHeight = String(mix(session.sourceLineHeight, session.targetLineHeight, normalized));
+    title.style.letterSpacing = `${mix(session.sourceLetterSpacing, session.targetLetterSpacing, normalized)}em`;
     title.style.transform = `translate3d(${(dx * (1 - p)).toFixed(2)}px,${(dy * (1 - p)).toFixed(2)}px,0) scale(${scale.toFixed(5)})`;
     title.dataset.scale = String(scale);
     const place = (element: HTMLElement, original: DOMRect, opacity: number) => {
@@ -198,9 +221,10 @@ export function BubbleMorphStudy() {
       element.style.width = `${original.width}px`;
       element.style.opacity = opacity.toFixed(3);
     };
-    // Only the single title travels home on close. The resting bubble restores
-    // secondary labels when the animated surface has fully returned.
-    const ghostOpacity = opening ? 1 - clamp(p / .24) : 0;
+    // Restore the full bubble composition *before* the source is unhidden.
+    // Its category, description, and affordance fade into their final measured
+    // positions instead of popping in as React removes the morph layer.
+    const ghostOpacity = bubbleDetailOpacity(normalized, opening);
     place(index, session.sourceIndex, ghostOpacity);
     place(short, session.sourceShort, ghostOpacity);
     place(more, session.sourceMore, ghostOpacity);
@@ -217,7 +241,8 @@ export function BubbleMorphStudy() {
     shape.setAttribute("d", path);
     light.setAttribute("d", path);
     base.setAttribute("d", path);
-    // Clip all readable HTML with the same contour as fill, reflection and rim.
+    // Exactly the same geometry clips typography and the readable HTML.
+    // No content can project outside the contracting membrane on close.
     clipRef.current?.setAttribute("d", path);
     const progress = geometryProgress(seconds, reduced);
     const opened = opening ? progress : 1 - progress;
@@ -290,6 +315,8 @@ export function BubbleMorphStudy() {
     pendingCloseRef.current = false;
     openerRef.current = source;
     chosenRef.current = index;
+    // A cursor may have left a displaced perimeter before click. The resting
+    // bubble must always be a perfect circle when the overlay returns to it.
     resetMembraneRef.current(index);
     setReady(false);
     setClosing(false);
@@ -491,8 +518,8 @@ export function BubbleMorphStudy() {
                     <radialGradient id={`service-${i}-fill`} cx="29%" cy="19%" r="87%"><stop offset="0" stopColor="#70a675" stopOpacity=".87"/><stop offset=".38" stopColor="#285e3d" stopOpacity=".95"/><stop offset=".82" stopColor="#0d2f1e"/><stop offset="1" stopColor="#07170f"/></radialGradient>
                     <radialGradient id={`service-${i}-light`} cx="27%" cy="15%" r="78%"><stop offset="0" stopColor="#e8ffdd" stopOpacity=".24"/><stop offset=".35" stopColor="#b9eeb5" stopOpacity=".055"/><stop offset="1" stopColor="#d7ffd3" stopOpacity=".07"/></radialGradient>
                   </defs>
-                  <path data-bubble-outline d={STATIC_ORB_PATH} fill={`url(#service-${i}-fill)`} stroke="rgba(220,246,209,.71)" strokeWidth="1.5" />
-                  <path data-bubble-light d={STATIC_ORB_PATH} fill={`url(#service-${i}-light)`} pointerEvents="none" />
+                  <path data-bubble-outline fill={`url(#service-${i}-fill)`} stroke="rgba(220,246,209,.71)" strokeWidth="1.5" />
+                  <path data-bubble-light fill={`url(#service-${i}-light)`} pointerEvents="none" />
                 </svg>
                 <span className={styles.orbContents}>
                   <span className={styles.orbIndex}>{v.index}</span>
@@ -524,7 +551,7 @@ export function BubbleMorphStudy() {
           <div ref={copyMaskRef} className={styles.copyMask} style={{ clipPath: "url(#genezisi-bubble-copy-clip)", WebkitClipPath: "url(#genezisi-bubble-copy-clip)" }}>
           <span ref={indexGhostRef} className={styles.ghostIndex} aria-hidden="true">{service.index}</span>
           <span ref={shortGhostRef} className={styles.ghostShort} aria-hidden="true">{service.short}</span>
-          <span ref={moreGhostRef} className={styles.ghostMore} aria-hidden="true">Explore ↗</span>
+          <span ref={moreGhostRef} className={styles.ghostMore} aria-hidden="true">Explore <span>↗</span></span>
           <h2 ref={titleRef} className={styles.morphTitle} id="bubble-card-title">{service.title}</h2>
           <section className={styles.cardContent} ref={incomingRef}>
             <div className={styles.cardTop}>
