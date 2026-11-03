@@ -95,6 +95,8 @@ function orbPath(offset: number[]): string {
   return contourPath(p);
 }
 
+const STATIC_ORB_PATH = orbPath(Array(SHAPE_POINTS).fill(0));
+
 export function BubbleMorphStudy() {
   const [active, setActive] = useState<number | null>(null);
   const [ready, setReady] = useState(false);
@@ -462,8 +464,8 @@ export function BubbleMorphStudy() {
                     <radialGradient id={`service-${i}-fill`} cx="29%" cy="19%" r="87%"><stop offset="0" stopColor="#70a675" stopOpacity=".87"/><stop offset=".38" stopColor="#285e3d" stopOpacity=".95"/><stop offset=".82" stopColor="#0d2f1e"/><stop offset="1" stopColor="#07170f"/></radialGradient>
                     <radialGradient id={`service-${i}-light`} cx="27%" cy="15%" r="78%"><stop offset="0" stopColor="#e8ffdd" stopOpacity=".24"/><stop offset=".35" stopColor="#b9eeb5" stopOpacity=".055"/><stop offset="1" stopColor="#d7ffd3" stopOpacity=".07"/></radialGradient>
                   </defs>
-                  <path data-bubble-outline fill={`url(#service-${i}-fill)`} stroke="rgba(220,246,209,.71)" strokeWidth="1.5" />
-                  <path data-bubble-light fill={`url(#service-${i}-light)`} pointerEvents="none" />
+                  <path data-bubble-outline d={STATIC_ORB_PATH} fill={`url(#service-${i}-fill)`} stroke="rgba(220,246,209,.71)" strokeWidth="1.5" />
+                  <path data-bubble-light d={STATIC_ORB_PATH} fill={`url(#service-${i}-light)`} pointerEvents="none" />
                 </svg>
                 <span className={styles.orbContents}>
                   <span className={styles.orbIndex}>{v.index}</span>
