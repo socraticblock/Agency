@@ -524,7 +524,7 @@ export function BubbleMorphStudy({ locale = "en", embedded = false }: { locale?:
         {!embedded && <footer className={styles.bottom}><span>GENEZISI / Experimental preview</span><span>SVG contour · Spring physics · Reduced motion</span></footer>}
       </section>
       {portalHost && createPortal(
-        <div className={styles.portal}>
+        <div className={styles.portal} lang={locale}>
           <div className={`${styles.backdrop} ${active !== null ? (closing ? styles.backdropClosing : styles.backdropVisible) : ""}`} aria-hidden="true" onClick={closeService}/>
       {active !== null && (
         <div ref={overlayRef} tabIndex={-1} className={styles.morphLayer} role="dialog" aria-modal="true" aria-labelledby="bubble-card-title" aria-describedby="bubble-card-description">
