@@ -41,9 +41,11 @@ test('Card 4 has the accepted conclusion and no duplicate services or Work CTA',
 
 test('actual Next.js work, navigation and locale remount lifecycle survive', () => {
   assert.match(home, /<SelectedWork copy=\{copy\} \/>/);
-  assert.match(home, /<Capabilities copy=\{copy\} \/>/);
+  // The approved bubble experience replaces both previous lower-page sections.
+  assert.match(home, /<BubbleMorphStudy locale=\{locale\} embedded \/>/);
+  assert.doesNotMatch(home, /<Capabilities copy=\{copy\} \/>/);
+  assert.doesNotMatch(home, /<V2Lab copy=\{copy\} \/>/);
   assert.match(home, /<StudioHeader locale=\{locale\}/);
-  assert.match(home, /<V2Lab copy=\{copy\} \/>/);
   assert.match(hero, /digital-passage-nav\.js/);
   assert.match(motion, /new MutationObserver\(boot\)/);
   assert.match(motion, /new AbortController\(\)/);

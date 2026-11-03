@@ -10,8 +10,7 @@ import { StudioHeader } from "./v2/StudioHeader";
 import { V2Hero } from "./v2/V2Hero";
 import { JourneyScenes } from "./v2/JourneyScenes";
 import { SelectedWork } from "./v2/SelectedWork";
-import { Capabilities } from "./v2/Capabilities";
-import { V2Lab } from "./v2/V2Lab";
+import { BubbleMorphStudy } from "../experiments/bubble-morph/BubbleMorphStudy";
 import { FounderClose, StudioFooter } from "./v2/FounderClose";
 
 /**
@@ -44,8 +43,10 @@ export function SignalHeroPrototype({ locale }: { locale: HomeLocale }) {
         behind the new stylesheet after release. Keep the same controller. */}
     <Script src="/flagship-journey/infinite-bc/motion.js?hero=card3-aperture-mobile-2026-11-02" strategy="afterInteractive" />
     <SelectedWork copy={copy} />
-    <Capabilities copy={copy} />
-    <section className="bg-[#02060b] px-5 py-20 sm:px-8 lg:py-28"><div className="mx-auto max-w-[92rem] border-t border-white/10 pt-14"><V2Lab copy={copy} /></div></section>
+    {/* The approved three-bubble section replaces both former service cards
+        and the separate five-step System in Action homepage demo. Their source
+        remains available for rollback, but neither is rendered. */}
+    <BubbleMorphStudy locale={locale} embedded />
     <FounderClose copy={copy} contactHref={waHref} />
     <StudioFooter copy={copy} locale={locale} />
   </main>;
