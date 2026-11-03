@@ -50,3 +50,19 @@ The desktop bubbles sit side-by-side and gently overlap. Mobile stacks the same 
 - [ ] Founder visual approval and separate decision on homepage integration
 
 **No change to the existing What I Do, Selected Work, hero or System in Action on the live homepage has been made by this PR.**
+
+## 2026-11-03 — closing-continuity fix (PR #30)
+
+The founder's closing video revealed body copy spilling outside the contracting green surface and transient duplicate labels. The reverse animation also sometimes restored a displaced source-bubble outline.
+
+Implemented:
+- A shared SVG `clipPath` uses the exact same per-frame `d` as the bubble fill, reflection and rim, and clips the entire HTML text layer during both directions.
+- The card's explanatory text now fades out within the first 120 ms of closing; the original service index and subtitle are not duplicated during reverse travel.
+- The single heading remains on its trajectory until the overlay unmounts, when the original bubble is restored.
+- The source perimeter is reset to a perfect circle on opening and just before reappearance, removing residual pointer deformation.
+- The backdrop fades down on closing, and opening copy begins earlier to reduce the apparently empty intermediate card.
+- A prefixed clip-path declaration is included for WebKit.
+
+Verification: seven local Node regression tests passed, local strict TypeScript validation with dependency stubs passed, and Chromium harness checking SVG clipping/clickability and reopen/close was exercised at desktop and mobile widths. These harness checks do **not** replace real Next.js browser QA; the preview route, full Next.js production build, mobile hardware frame timing, localization, and founder visual approval remain **unverified release gates**.
+
+**Scope:** review route only; the approved live homepage is unchanged.
