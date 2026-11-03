@@ -92,3 +92,13 @@ test('travelling heading copies original font metrics instead of line-box scalin
   assert.match(source,/title\.style\.letterSpacing/);
   assert.match(source,/bubbleDetailOpacity\(normalized, opening\)/);
 });
+test('scrollbar gutter stays reserved while card scroll lock toggles', async () => {
+  const { readFileSync } = await import('node:fs');
+  const source = readFileSync(new URL('../src/app/[locale]/experiments/bubble-morph/BubbleMorphStudy.tsx', import.meta.url), 'utf8');
+  assert.match(source, /root\.style\.scrollbarGutter = "stable"/);
+  assert.match(source, /root\.style\.scrollbarGutter = previousGutter/);
+  assert.match(source, /useLayoutEffect\(\(\) => \{\s*if \(active === null\) return;\s*const body = document\.body;/);
+  assert.match(source, /body\.style\.overflow = "hidden"/);
+  assert.match(source, /body\.style\.overflow = previousOverflow/);
+  assert.match(source, /\}, \[active\]\);/);
+});
