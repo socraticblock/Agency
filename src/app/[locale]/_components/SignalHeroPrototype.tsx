@@ -3,7 +3,7 @@ import "./v2/entry-hero.css";
 import "./v2/digital-passage.css";
 import "./v2/approved-four-frame.css";
 import Script from "next/script";
-import { WHATSAPP_INTAKE } from "@/constants/content";
+import { whatsappIntakeFor } from "@/constants/content";
 import { HOME_HTML_LANG, type HomeLocale } from "@/lib/home-i18n";
 import { getV2Copy } from "./v2/hero.copy";
 import { StudioHeader } from "./v2/StudioHeader";
@@ -14,8 +14,9 @@ import { BubbleMorphStudy } from "../experiments/bubble-morph/BubbleMorphStudy";
 import { FounderClose, StudioFooter } from "./v2/FounderClose";
 
 /**
- * The one WhatsApp message each language opens with. Same destination for all
- * three — only the pre-filled text differs, and `encodeURIComponent` runs once.
+ * The one WhatsApp message each language opens with. The pre-filled text differs
+ * per language and `encodeURIComponent` runs once. The intake number is also
+ * per language: Dutch is answered from the Belgian line.
  */
 const V2_WHATSAPP_MESSAGE: Record<HomeLocale, string> = {
   en: "Hi Genezisi, I have something I'd like to build. Can we talk?",
@@ -25,7 +26,7 @@ const V2_WHATSAPP_MESSAGE: Record<HomeLocale, string> = {
 
 export function SignalHeroPrototype({ locale }: { locale: HomeLocale }) {
   const copy = getV2Copy(locale);
-  const waHref = "https://wa.me/" + WHATSAPP_INTAKE + "?text=" + encodeURIComponent(V2_WHATSAPP_MESSAGE[locale]);
+  const waHref = "https://wa.me/" + whatsappIntakeFor(locale) + "?text=" + encodeURIComponent(V2_WHATSAPP_MESSAGE[locale]);
   return <main lang={HOME_HTML_LANG[locale]} className="genezisi-entry-home v2-home bg-[#02060b] text-white">
     {/* Apply the native-scroll opening pose before the first browser paint.
         Without JavaScript the ordinary static hero remains readable. */}

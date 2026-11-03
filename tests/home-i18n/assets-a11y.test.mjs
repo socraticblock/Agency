@@ -112,7 +112,10 @@ test("§17.1 every outbound link is safely opened and points at one WhatsApp num
     const whatsapp = external.map((t) => attr(t, "href")).filter((h) => h.startsWith("https://wa.me/"));
     assert.equal(whatsapp.length, 3, `${locale}: expected three WhatsApp CTAs`);
     assert.equal(new Set(whatsapp).size, 1, `${locale}: WhatsApp CTAs drifted apart`);
-    assert.match(whatsapp[0], /^https:\/\/wa\.me\/995579723564\?text=/);
+    // The Dutch page is answered from the Belgian line; the other two keep the
+    // Georgian intake number.
+    const intake = locale === "nl" ? "32475608743" : "995579723564";
+    assert.match(whatsapp[0], new RegExp(`^https://wa\\.me/${intake}\\?text=`));
     // encoded exactly once: no double-encoded octet left in the query
     const text = new URL(whatsapp[0]).searchParams.get("text");
     assert.ok(text && text.length > 0, `${locale}: empty WhatsApp prefill`);
@@ -131,7 +134,7 @@ test("§23 S21 the Dutch page is complete without JavaScript", async () => {
     "Websites, AI-systemen en automatisering", // bubble section intro
     "Kies een dienst voor meer informatie",    // screen-reader hint
     "Rechtstreeks met de oprichter", // founder
-    "wa.me/995579723564",          // contact
+    "wa.me/32475608743",           // contact
     "Hoofdnavigatie",              // nav label
     "Taalkeuze",                   // language label
   ]) {

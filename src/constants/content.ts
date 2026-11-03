@@ -28,6 +28,19 @@ export const ANIMATION_OVERRIDES: Record<string, { whatItIs: string; howItHelps:
 /** WhatsApp intake number used across bespoke components */
 export const WHATSAPP_INTAKE = "995579723564";
 
+/**
+ * Language-specific intake lines. The Dutch page is answered from the Belgian
+ * number; every other language keeps `WHATSAPP_INTAKE`.
+ */
+export const WHATSAPP_INTAKE_BY_LOCALE: Record<string, string> = {
+  nl: "32475608743",
+};
+
+/** Intake number for a page language, falling back to the Georgian line. */
+export function whatsappIntakeFor(locale?: string): string {
+  return (locale && WHATSAPP_INTAKE_BY_LOCALE[locale]) || WHATSAPP_INTAKE;
+}
+
 /** Default message for WhatsApp links */
 export const WHATSAPP_DEFAULT_MESSAGE = "Hi Genezisi, I’m interested in a premium website for my business. Can we talk?";
 
