@@ -121,7 +121,7 @@
  .morphSvg{filter:none}.orb svg{filter:none}
 }
 /* Homepage integration: no duplicated masthead or prototype footer. */
-.embedded{scroll-margin-top:64px}
+.embedded .stage{scroll-margin-top:64px}
 .embedded .stage{padding-top:clamp(42px,6vw,76px);padding-bottom:clamp(50px,6vw,82px)}
 .embedded .intro{margin-top:clamp(12px,3vw,36px)}
 /* The dialog escapes section and header stacking contexts through a body portal. */
