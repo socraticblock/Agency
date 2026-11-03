@@ -127,8 +127,9 @@ test("§23 S21 the Dutch page is complete without JavaScript", async () => {
   for (const needed of [
     "nog maar het begin",          // hero
     "Geselecteerd werk",           // work section
-    "Wat ik doe",                  // capabilities
-    "Het systeem in actie",        // system demo
+    "Wat ik doe",                  // bubble capabilities eyebrow
+    "Websites, AI-systemen en automatisering", // bubble section intro
+    "Kies een dienst voor meer informatie",    // screen-reader hint
     "Rechtstreeks met de oprichter", // founder
     "wa.me/995579723564",          // contact
     "Hoofdnavigatie",              // nav label
@@ -136,6 +137,13 @@ test("§23 S21 the Dutch page is complete without JavaScript", async () => {
   ]) {
     assert.ok(text.includes(needed) || body.includes(needed), `no-JS Dutch page is missing: ${needed}`);
   }
+  // The approved bubble section replaced the separate five-step System in
+  // Action demo on the homepage, so that demo's eyebrow must no longer be
+  // part of the server-rendered page. Its source stays for rollback.
+  assert.ok(
+    !text.includes("Het systeem in actie") && !body.includes("Het systeem in actie"),
+    "the removed System in Action demo is still rendered on the homepage",
+  );
 });
 
 test("§16/§18.1 the page loads no third-party script, style, image or font", async () => {
