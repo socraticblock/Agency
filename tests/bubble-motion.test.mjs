@@ -57,3 +57,18 @@ test('tiny and extreme viewport shapes remain finite',()=>{
   assert.equal(clamp(1.2),1);
   approx(geometryProgress(1.1),1,.001);
 });
+test('close clears body copy before the shrinking surface becomes small', () => {
+  assert.ok(contentOpacity(.8, true, .34) > .25);
+  assert.equal(contentOpacity(.6, false, .13), 0);
+  assert.equal(contentOpacity(1, false, 0), 1);
+});
+test('one SVG path clips all outgoing text and the membrane resets', async () => {
+  const { readFileSync } = await import('node:fs');
+  const s = readFileSync(new URL('../src/app/[locale]/experiments/bubble-morph/BubbleMorphStudy.tsx', import.meta.url), 'utf8');
+  assert.match(s, /clipRef\.current\?\.setAttribute\("d", path\)/);
+  assert.match(s, /shape\.setAttribute\("d", path\)/);
+  assert.match(s, /light\.setAttribute\("d", path\)/);
+  assert.match(s, /id="genezisi-bubble-copy-clip"/);
+  assert.match(s, /ghostOpacity = opening \?/);
+  assert.match(s, /resetMembraneRef\.current\(index\)/);
+});

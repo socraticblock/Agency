@@ -87,12 +87,12 @@ export function geometryProgress(seconds: number, reducedMotion = false): number
 export function contentOpacity(progress: number, opening: boolean, seconds: number): number {
   if (opening) {
     // Shape first, explanation second. Continuous title remains on screen.
-    const enoughRoom = smoothStep((clamp(progress) - .78) / .22);
-    const reveal = smoothStep((seconds - .21) / .35);
+    const enoughRoom = smoothStep((clamp(progress) - .64) / .36);
+    const reveal = smoothStep((seconds - .14) / .30);
     return enoughRoom * reveal;
   }
   // Outgoing text clears before the contour becomes smaller than the copy.
-  return 1 - smoothStep(seconds / .17);
+  return 1 - smoothStep(seconds / .12);
 }
 
 /** Prefer the shorter closed-state geometry for reduced-motion users. */

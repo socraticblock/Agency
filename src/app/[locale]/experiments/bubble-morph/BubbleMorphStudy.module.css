@@ -49,8 +49,11 @@
    one shared path; no scaled modal background or detached outline can appear. */
 .backdrop{position:fixed;inset:0;z-index:30;background:rgba(2,12,7,.37);backdrop-filter:blur(2.5px);-webkit-backdrop-filter:blur(2.5px);opacity:0;pointer-events:none;transition:opacity .3s ease}
 .backdropVisible{opacity:1;pointer-events:auto}
+.backdropClosing{opacity:.12;pointer-events:auto;transition-duration:.45s}
 .morphLayer{position:fixed;inset:0;z-index:31;pointer-events:none;isolation:isolate}
 .morphSvg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;filter:drop-shadow(0 26px 38px rgba(0,12,7,.35))}
+/* One full-screen text layer is clipped by the exact SVG contour at every frame. */
+.copyMask{position:fixed;inset:0;z-index:2;pointer-events:none;will-change:clip-path}
 .morphTitle{
   position:fixed;z-index:34;display:block;pointer-events:none;
   width:max-content;max-width:calc(100vw - 52px);margin:0;will-change:transform;

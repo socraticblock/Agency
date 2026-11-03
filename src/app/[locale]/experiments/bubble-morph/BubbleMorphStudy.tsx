@@ -100,18 +100,21 @@ const STATIC_ORB_PATH = orbPath(Array(SHAPE_POINTS).fill(0));
 export function BubbleMorphStudy() {
   const [active, setActive] = useState<number | null>(null);
   const [ready, setReady] = useState(false);
+  const [closing, setClosing] = useState(false);
   const hostRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const sourceRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const svgRef = useRef<SVGSVGElement>(null);
   const shapeRef = useRef<SVGPathElement>(null);
   const reflectionRef = useRef<SVGPathElement>(null);
+  const clipRef = useRef<SVGPathElement>(null);
   const underlayRef = useRef<SVGPathElement>(null);
   const highStopRef = useRef<SVGStopElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const titleSlotRef = useRef<HTMLDivElement>(null);
   const incomingRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const copyMaskRef = useRef<HTMLDivElement>(null);
   const indexGhostRef = useRef<HTMLSpanElement>(null);
   const shortGhostRef = useRef<HTMLSpanElement>(null);
   const moreGhostRef = useRef<HTMLSpanElement>(null);
@@ -123,6 +126,7 @@ export function BubbleMorphStudy() {
   const pendingCloseRef = useRef(false);
   const closeServiceRef = useRef<() => void>(() => {});
   const sessionRef = useRef<MorphSession | null>(null);
+  const resetMembraneRef = useRef<(index: number) => void>(() => {});
 
   const readCardRect = useCallback((): Rect => {
     const content = incomingRef.current, host = hostRef.current;
@@ -172,7 +176,7 @@ export function BubbleMorphStudy() {
 
   /** The subtitle/index disappear gently, but the service title remains ONE
    * visible DOM heading throughout the transition. No duplicate crossfade. */
-  const renderText = useCallback((session: MorphSession, opened: number) => {
+  const renderText = useCallback((session: MorphSession, opened: number, opening: boolean) => {
     const title = titleRef.current;
     const index = indexGhostRef.current, short = shortGhostRef.current, more = moreGhostRef.current;
     if (!title || !index || !short || !more) return;
@@ -194,7 +198,9 @@ export function BubbleMorphStudy() {
       element.style.width = `${original.width}px`;
       element.style.opacity = opacity.toFixed(3);
     };
-    const ghostOpacity = 1 - clamp(p / .31);
+    // Only the single title travels home on close. The resting bubble restores
+    // secondary labels when the animated surface has fully returned.
+    const ghostOpacity = opening ? 1 - clamp(p / .24) : 0;
     place(index, session.sourceIndex, ghostOpacity);
     place(short, session.sourceShort, ghostOpacity);
     place(more, session.sourceMore, ghostOpacity);
@@ -211,6 +217,8 @@ export function BubbleMorphStudy() {
     shape.setAttribute("d", path);
     light.setAttribute("d", path);
     base.setAttribute("d", path);
+    // Clip all readable HTML with the same contour as fill, reflection and rim.
+    clipRef.current?.setAttribute("d", path);
     const progress = geometryProgress(seconds, reduced);
     const opened = opening ? progress : 1 - progress;
     const density = clamp((opened - .28) / .64);
@@ -223,7 +231,7 @@ export function BubbleMorphStudy() {
       const blue = Math.round(mix(117, 88, density));
       highStopRef.current.setAttribute("stop-color", `rgb(${lightness},${green},${blue})`);
     }
-    renderText(session, opened);
+    renderText(session, opened, opening);
     const opacity = contentOpacity(progress, opening, seconds);
     content.style.opacity = opacity.toFixed(3);
     content.style.transform = `translate3d(0,${(9 * (1 - opacity)).toFixed(2)}px,0)`;
@@ -282,7 +290,9 @@ export function BubbleMorphStudy() {
     pendingCloseRef.current = false;
     openerRef.current = source;
     chosenRef.current = index;
+    resetMembraneRef.current(index);
     setReady(false);
+    setClosing(false);
     setActive(index);
   }, []);
 
@@ -322,6 +332,7 @@ export function BubbleMorphStudy() {
     busyRef.current = true;
     if (incomingRef.current) incomingRef.current.style.pointerEvents = "none";
     setReady(false);
+    setClosing(true);
     const destination = readCardRect();
     positionContent(destination);
     const session = makeSession(index, destination) ?? old;
@@ -329,7 +340,10 @@ export function BubbleMorphStudy() {
     animateSurface(session, false, () => {
       chosenRef.current = null;
       sessionRef.current = null;
+      resetMembraneRef.current(index);
       setActive(null);
+      setClosing(false);
+      pendingCloseRef.current = false;
       busyRef.current = false;
       requestAnimationFrame(() => openerRef.current?.focus({ preventScroll: true }));
     });
@@ -414,6 +428,15 @@ export function BubbleMorphStudy() {
       if (moving) tick(); else lastFrame = 0;
     }
     const release = (state: Perimeter) => { state.contact = null; state.lastRadius = null; state.lastDirection = 0; tick(); };
+    resetMembraneRef.current = (index: number) => {
+      const state = perimeters[index];
+      if (!state) return;
+      state.contact = null; state.lastRadius = null; state.lastDirection = 0;
+      state.offset.fill(0); state.velocity.fill(0);
+      const circle = orbPath(state.offset);
+      state.outline.setAttribute("d", circle);
+      state.light.setAttribute("d", circle);
+    };
     const removers = buttons.map((button, i) => {
       const state = perimeters[i];
       const move = (event: PointerEvent) => {
@@ -442,7 +465,11 @@ export function BubbleMorphStudy() {
       };
     });
     draw(0);
-    return () => { removers.forEach(fn => fn()); if (frameId) cancelAnimationFrame(frameId); };
+    return () => {
+      resetMembraneRef.current = () => {};
+      removers.forEach(fn => fn());
+      if (frameId) cancelAnimationFrame(frameId);
+    };
   }, []);
 
   const service = SERVICES[active ?? 0];
@@ -481,11 +508,12 @@ export function BubbleMorphStudy() {
         <p className={styles.guidance}>Move across a bubble&apos;s rim to feel its membrane. Tap or click to discover the service.</p>
         <footer className={styles.bottom}><span>GENEZISI / Experimental preview</span><span>SVG contour · Spring physics · Reduced motion</span></footer>
       </main>
-      <div className={`${styles.backdrop} ${active !== null ? styles.backdropVisible : ""}`} aria-hidden="true" onClick={closeService}/>
+      <div className={`${styles.backdrop} ${active !== null ? (closing ? styles.backdropClosing : styles.backdropVisible) : ""}`} aria-hidden="true" onClick={closeService}/>
       {active !== null && (
         <div ref={overlayRef} tabIndex={-1} className={styles.morphLayer} role="dialog" aria-modal="true" aria-labelledby="bubble-card-title" aria-describedby="bubble-card-description">
           <svg ref={svgRef} className={styles.morphSvg} viewBox="0 0 100 100" aria-hidden="true" focusable="false" preserveAspectRatio="none">
             <defs>
+              <clipPath id="genezisi-bubble-copy-clip" clipPathUnits="userSpaceOnUse"><path ref={clipRef} /></clipPath>
               <radialGradient id="genezisi-morph-fill" cx="29%" cy="19%" r="87%"><stop ref={highStopRef} offset="0" stopColor="#70a675" stopOpacity=".87"/><stop offset=".38" stopColor="#285e3d" stopOpacity=".95"/><stop offset=".82" stopColor="#0d2f1e"/><stop offset="1" stopColor="#07170f"/></radialGradient>
               <radialGradient id="genezisi-morph-light" cx="27%" cy="15%" r="78%"><stop offset="0" stopColor="#e8ffdd" stopOpacity=".24"/><stop offset=".35" stopColor="#b9eeb5" stopOpacity=".055"/><stop offset="1" stopColor="#d7ffd3" stopOpacity=".07"/></radialGradient>
             </defs>
@@ -493,6 +521,7 @@ export function BubbleMorphStudy() {
             <path ref={shapeRef} fill="url(#genezisi-morph-fill)" stroke="rgba(220,246,209,.71)" strokeWidth="1.25" vectorEffect="non-scaling-stroke"/>
             <path ref={reflectionRef} fill="url(#genezisi-morph-light)" pointerEvents="none"/>
           </svg>
+          <div ref={copyMaskRef} className={styles.copyMask} style={{ clipPath: "url(#genezisi-bubble-copy-clip)", WebkitClipPath: "url(#genezisi-bubble-copy-clip)" }}>
           <span ref={indexGhostRef} className={styles.ghostIndex} aria-hidden="true">{service.index}</span>
           <span ref={shortGhostRef} className={styles.ghostShort} aria-hidden="true">{service.short}</span>
           <span ref={moreGhostRef} className={styles.ghostMore} aria-hidden="true">Explore ↗</span>
@@ -514,6 +543,7 @@ export function BubbleMorphStudy() {
             </div>
             <p className={styles.cardCaption}>Illustrative capabilities · Tailored to your project</p>
           </section>
+          </div>
         </div>
       )}
       <div className={styles.dropletLayer} ref={dropletsRef} aria-hidden="true" />
