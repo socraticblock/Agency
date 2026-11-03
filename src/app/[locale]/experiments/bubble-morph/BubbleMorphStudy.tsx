@@ -1,49 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import type { HomeLocale } from "@/lib/home-i18n";
+import { getBubbleCopy } from "./bubble.copy";
 import {
   clamp, contourPath, contourPoints, contentOpacity, geometryProgress,
   mix, morphContour, MORPH_SECONDS, SHAPE_POINTS, bubbleDetailOpacity, type Rect,
 } from "./bubbleMotion";
 import styles from "./BubbleMorphStudy.module.css";
-
-type Service = {
-  index: string;
-  category: string;
-  title: string;
-  short: string;
-  strap: string;
-  lead: string;
-  items: string[];
-  result: string;
-};
-
-const SERVICES: Service[] = [
-  {
-    index: "01 / DIGITAL EXPERIENCES", category: "Digital experiences", title: "Websites.",
-    short: "A distinctive presence, carefully built for your business.",
-    strap: "Your digital first impression, considered from every angle.",
-    lead: "We design and develop distinctive websites and web applications built around the people who use them. Clear communication, purposeful interaction and responsive performance matter as much as appearance.",
-    items: ["Professional and business websites", "Landing pages and digital experiences", "Custom web applications", "Mobile-responsive interfaces"],
-    result: "Visitors understand what you offer, trust what they see, and can take the next step with confidence.",
-  },
-  {
-    index: "02 / USEFUL INTELLIGENCE", category: "Useful intelligence", title: "AI systems.",
-    short: "Make information easier to understand and use.",
-    strap: "Information that works harder for your team.",
-    lead: "We build practical AI-assisted tools that can work with business information, interpret requests, and help people find answers or prepare useful outputs—with human judgment retained where it matters.",
-    items: ["AI assistants for defined tasks", "Knowledge and document search", "Request and information analysis", "Drafting and review workflows"],
-    result: "Less time searching and sorting; more time spent making informed decisions and helping customers.",
-  },
-  {
-    index: "03 / CONNECTED WORK", category: "Connected work", title: "Automation.",
-    short: "Less routine work. More room for what matters.",
-    strap: "Better flow, with fewer repetitive steps.",
-    lead: "We connect everyday tools and processes so repeatable work can happen more consistently. From receiving requests to updating records and notifying your team, the workflow is designed around how your business operates.",
-    items: ["Forms and enquiry handling", "Notifications and follow-ups", "Data movement between tools", "Scheduling and task workflows"],
-    result: "Important steps are easier to follow, information travels to the right place, and your team keeps control.",
-  },
-];
 
 /** Source bubble is drawn in a 400-square viewbox with a radius of 173. */
 const C = 200, R = 173, EDGE = 18, TAU = Math.PI * 2;
@@ -101,7 +66,11 @@ function orbPath(offset: number[]): string {
   return contourPath(p);
 }
 
-export function BubbleMorphStudy() {
+export function BubbleMorphStudy({ locale = "en", embedded = false }: { locale?: HomeLocale; embedded?: boolean }) {
+  const copy = getBubbleCopy(locale);
+  const services = copy.services;
+  const [portalHost, setPortalHost] = useState<HTMLElement | null>(null);
+  useEffect(() => { setPortalHost(document.body); }, []);
   const [active, setActive] = useState<number | null>(null);
   const [ready, setReady] = useState(false);
   const [closing, setClosing] = useState(false);
@@ -516,20 +485,21 @@ export function BubbleMorphStudy() {
     };
   }, []);
 
-  const service = SERVICES[active ?? 0];
+  const service = services[active ?? 0];
   return (
-    <div className={styles.study} ref={hostRef}>
-      <main className={styles.stage} inert={active !== null}>
-        <header className={styles.top}><span className={styles.brand}>GENEZISI</span><span className={styles.prototypeLabel}>What I do / Contour motion study</span></header>
+    <div className={`${styles.study} ${embedded ? styles.embedded : ""}`} lang={locale} ref={hostRef}>
+      <section id={embedded ? "capabilities" : undefined} className={styles.stage} inert={active !== null} aria-labelledby={embedded ? "genezisi-capabilities-title" : undefined}>
+        {!embedded && <header className={styles.top}><span className={styles.brand}>GENEZISI</span><span className={styles.prototypeLabel}>What I do / Contour motion study</span></header>}
         <div className={styles.intro}>
-          <div className={styles.eyebrow}>What I do</div>
-          <h1>Built around what<br /><em>your business needs.</em></h1>
-          <p>Websites, AI systems, and automation. Each can stand on its own—or work together when it makes sense.</p>
+          <div className={styles.eyebrow}>{copy.eyebrow}</div>
+          {embedded ? <h2 id="genezisi-capabilities-title">{copy.headlineLead}<br /><em>{copy.headlineEm}</em></h2>
+            : <h1>{copy.headlineLead}<br /><em>{copy.headlineEm}</em></h1>}
+          <p>{copy.intro}</p>
         </div>
-        <section className={styles.orbit} aria-label="Explore Genezisi services">
-          {SERVICES.map((v, i) => (
+        <section className={styles.orbit} aria-label={copy.exploreServices}>
+          {services.map((v, i) => (
             <div className={`${styles.orbWrap} ${active === i ? styles.orbHidden : ""}`} key={v.index}>
-              <button ref={(node: HTMLButtonElement | null) => { sourceRefs.current[i] = node; }} className={styles.orb} type="button" aria-label={`Explore ${v.title.replace(".", "")}`} aria-haspopup="dialog" onClick={(e: { currentTarget: HTMLButtonElement }) => openService(i, e.currentTarget)}>
+              <button ref={(node: HTMLButtonElement | null) => { sourceRefs.current[i] = node; }} className={styles.orb} type="button" aria-label={`${copy.explore} ${v.title}`} aria-haspopup="dialog" onClick={(e: { currentTarget: HTMLButtonElement }) => openService(i, e.currentTarget)}>
                 <svg viewBox="0 0 400 400" aria-hidden="true" focusable="false">
                   <defs>
                     <radialGradient id={`service-${i}-fill`} cx="29%" cy="19%" r="87%"><stop offset="0" stopColor="#70a675" stopOpacity=".87"/><stop offset=".38" stopColor="#285e3d" stopOpacity=".95"/><stop offset=".82" stopColor="#0d2f1e"/><stop offset="1" stopColor="#07170f"/></radialGradient>
@@ -542,17 +512,20 @@ export function BubbleMorphStudy() {
                   <span className={styles.orbIndex}>{v.index}</span>
                   <span className={styles.orbTitle}>{v.title}</span>
                   <span className={styles.orbShort}>{v.short}</span>
-                  <span className={styles.orbMore}>Explore <span aria-hidden="true">↗</span></span>
+                  <span className={styles.orbMore}>{copy.explore} <span aria-hidden="true">↗</span></span>
                 </span>
               </button>
             </div>
           ))}
         </section>
-        <div className={styles.footnote}>Independent when needed. Connected when useful.</div>
-        <p className={styles.guidance}>Move across a bubble&apos;s rim to feel its membrane. Tap or click to discover the service.</p>
-        <footer className={styles.bottom}><span>GENEZISI / Experimental preview</span><span>SVG contour · Spring physics · Reduced motion</span></footer>
-      </main>
-      <div className={`${styles.backdrop} ${active !== null ? (closing ? styles.backdropClosing : styles.backdropVisible) : ""}`} aria-hidden="true" onClick={closeService}/>
+        <div className={styles.footnote}>{copy.footnote}</div>
+        {embedded ? <p className={styles.srOnly}>{copy.screenReaderHint}</p>
+          : <p className={styles.guidance}>{copy.guidance}</p>}
+        {!embedded && <footer className={styles.bottom}><span>GENEZISI / Experimental preview</span><span>SVG contour · Spring physics · Reduced motion</span></footer>}
+      </section>
+      {portalHost && createPortal(
+        <div className={styles.portal} lang={locale}>
+          <div className={`${styles.backdrop} ${active !== null ? (closing ? styles.backdropClosing : styles.backdropVisible) : ""}`} aria-hidden="true" onClick={closeService}/>
       {active !== null && (
         <div ref={overlayRef} tabIndex={-1} className={styles.morphLayer} role="dialog" aria-modal="true" aria-labelledby="bubble-card-title" aria-describedby="bubble-card-description">
           <svg ref={svgRef} className={styles.morphSvg} viewBox="0 0 100 100" aria-hidden="true" focusable="false" preserveAspectRatio="none">
@@ -568,12 +541,12 @@ export function BubbleMorphStudy() {
           <div ref={copyMaskRef} className={styles.copyMask} style={{ clipPath: "url(#genezisi-bubble-copy-clip)", WebkitClipPath: "url(#genezisi-bubble-copy-clip)" }}>
           <span ref={indexGhostRef} className={styles.ghostIndex} aria-hidden="true">{service.index}</span>
           <span ref={shortGhostRef} className={styles.ghostShort} aria-hidden="true">{service.short}</span>
-          <span ref={moreGhostRef} className={styles.ghostMore} aria-hidden="true">Explore <span>↗</span></span>
+          <span ref={moreGhostRef} className={styles.ghostMore} aria-hidden="true">{copy.explore} <span>↗</span></span>
           <h2 ref={titleRef} className={styles.morphTitle} id="bubble-card-title">{service.title}</h2>
           <section className={styles.cardContent} ref={incomingRef}>
             <div className={styles.cardTop}>
               <span className={styles.cardIndex}>{service.index}</span>
-              <button ref={closeRef} type="button" className={styles.close} aria-label="Close service details" onClick={closeService}>
+              <button ref={closeRef} type="button" className={styles.close} aria-label={copy.close} onClick={closeService}>
                 <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19" fill="none" stroke="currentColor" strokeWidth="1.5"/></svg>
               </button>
             </div>
@@ -582,15 +555,17 @@ export function BubbleMorphStudy() {
             <p className={styles.cardLead} id="bubble-card-description">{service.lead}</p>
             <div className={styles.cardRule}/>
             <div className={styles.cardColumns}>
-              <div><div className={styles.cardLabel}>What we can build</div><ul className={styles.cardList}>{service.items.map(item => <li key={item}>{item}</li>)}</ul></div>
-              <div><div className={styles.cardLabel}>Why it matters</div><p className={styles.cardResult}>{service.result}</p></div>
+              <div><div className={styles.cardLabel}>{copy.whatWeBuild}</div><ul className={styles.cardList}>{service.items.map(item => <li key={item}>{item}</li>)}</ul></div>
+              <div><div className={styles.cardLabel}>{copy.whyItMatters}</div><p className={styles.cardResult}>{service.result}</p></div>
             </div>
-            <p className={styles.cardCaption}>Illustrative capabilities · Tailored to your project</p>
+            <p className={styles.cardCaption}>{copy.caption}</p>
           </section>
           </div>
         </div>
       )}
       <div className={styles.dropletLayer} ref={dropletsRef} aria-hidden="true" />
+        </div>, portalHost
+      )}
     </div>
   );
 }
