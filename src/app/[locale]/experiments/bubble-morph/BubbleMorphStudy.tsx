@@ -378,10 +378,28 @@ export function BubbleMorphStudy() {
 
   useEffect(() => { closeServiceRef.current = closeService; }, [closeService]);
 
+  // Keep the viewport's scrollbar gutter reserved for the entire experiment.
+  // Otherwise the page becomes wider when the dialog locks scrolling and
+  // snaps sideways again when the scrollbar returns on close.
+  useLayoutEffect(() => {
+    const root = document.documentElement;
+    const previousGutter = root.style.scrollbarGutter;
+    root.style.scrollbarGutter = "stable";
+    return () => { root.style.scrollbarGutter = previousGutter; };
+  }, []);
+
+  // Scroll locking must not restart when 'ready' or animation callbacks change:
+  // a cleanup/relock cycle can itself cause a visible layout shift.
+  useLayoutEffect(() => {
+    if (active === null) return;
+    const body = document.body;
+    const previousOverflow = body.style.overflow;
+    body.style.overflow = "hidden";
+    return () => { body.style.overflow = previousOverflow; };
+  }, [active]);
+
   useEffect(() => {
     if (active === null) return;
-    const oldOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
     const keydown = (event: KeyboardEvent) => {
       if (event.key === "Escape") { event.preventDefault(); closeService(); return; }
       if (event.key !== "Tab") return;
@@ -404,7 +422,6 @@ export function BubbleMorphStudy() {
     document.addEventListener("keydown", keydown);
     window.addEventListener("resize", resize);
     return () => {
-      document.body.style.overflow = oldOverflow;
       document.removeEventListener("keydown", keydown);
       window.removeEventListener("resize", resize);
     };
