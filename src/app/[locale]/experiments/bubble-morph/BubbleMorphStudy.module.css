@@ -25,8 +25,8 @@
 .prototypeLabel{font-size:10px;color:#b2c7b3;text-transform:uppercase;letter-spacing:.16em}
 .intro{position:relative;text-align:center;max-width:890px;margin:clamp(55px,7vh,92px) auto 0}
 .eyebrow{font-size:11px;letter-spacing:.23em;text-transform:uppercase;color:#c0d5bf;font-weight:700}
-.intro h1{font:400 clamp(43px,6vw,86px)/1.02 Georgia,'Times New Roman',serif;letter-spacing:-.051em;margin:19px 0}
-.intro h1 em{font-style:italic;color:#d0e1ca}
+.intro h1,.intro h2{font:400 clamp(43px,6vw,86px)/1.02 Georgia,'Times New Roman',serif;letter-spacing:-.051em;margin:19px 0}
+.intro h1 em,.intro h2 em{font-style:italic;color:#d0e1ca}
 .intro p{margin:0 auto;max-width:610px;font-size:clamp(14px,1.2vw,17px);color:#c6d7c6;line-height:1.65}
 .orbit{max-width:1080px;margin:clamp(42px,5vh,68px) auto 0;display:flex;align-items:center;justify-content:center;isolation:isolate}
 .orbWrap{position:relative;width:clamp(225px,27vw,342px);aspect-ratio:1;flex:none;margin-inline:-9px}
@@ -119,4 +119,43 @@
 @media(prefers-reduced-motion:reduce){
  .study *,.study *:before,.study *:after{transition:none!important;animation:none!important}
  .morphSvg{filter:none}.orb svg{filter:none}
+}
+/* Homepage integration: no duplicated masthead or prototype footer. */
+.embedded{scroll-margin-top:64px}
+.embedded .stage{padding-top:clamp(42px,6vw,76px);padding-bottom:clamp(50px,6vw,82px)}
+.embedded .intro{margin-top:clamp(12px,3vw,36px)}
+/* The dialog escapes section and header stacking contexts through a body portal. */
+.portal{
+  --cream:#e6ded2;--paper:#f4eee5;--green:#091e15;
+  position:fixed;inset:0;z-index:1000;pointer-events:none;
+  font:400 16px/1.5 Arial,Helvetica,sans-serif;color:var(--paper);
+  color-scheme:dark;
+}
+.portal *{box-sizing:border-box}
+.portal button{font:inherit}
+.portal button:focus-visible{outline:2px solid var(--cream);outline-offset:5px}
+.srOnly{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0,0,0,0);white-space:nowrap;border:0;
+}
+/* Georgian text needs its actual font family, not fallback glyphs in Georgia.
+   Modulate heading scale so both the circle and expanded card are legible. */
+.study[lang="ka"]{font-family:var(--font-noto-georgian),"Noto Sans Georgian",system-ui,sans-serif}
+.study[lang="ka"] .intro h2,
+.study[lang="ka"] .intro h1,
+.study[lang="ka"] .orbTitle,
+.study[lang="ka"] .cardStrap{
+  font-family:var(--font-noto-georgian),"Noto Sans Georgian",system-ui,sans-serif;
+  letter-spacing:-.028em;
+}
+.study[lang="ka"] .orbTitle{font-size:clamp(27px,2.9vw,38px);line-height:1.14}
+.study[lang="ka"] .intro h2{font-size:clamp(34px,5vw,70px);line-height:1.12}
+.study[lang="nl"] .orbTitle{font-size:clamp(29px,2.9vw,41px)}
+@media(max-width:820px){
+  .study[lang="ka"] .orbTitle{font-size:clamp(27px,7.4vw,36px)}
+  .study[lang="ka"] .orbContents{gap:8px}
+  .study[lang="ka"] .orbShort{font-size:clamp(11px,3vw,12px);max-width:25ch}
+  .study[lang="nl"] .orbTitle{font-size:clamp(30px,8.2vw,38px)}
+  .embedded .stage{padding-top:40px;padding-bottom:58px}
+  .embedded .intro{margin-top:22px}
 }
