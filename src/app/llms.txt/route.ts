@@ -20,6 +20,12 @@ export function GET() {
 - [Bespoke projects and enquiries](${base}/en/pricing)
 - [ინდივიდუალური პროექტები](${base}/ka/pricing)
 
+## Practical journal (English)
+- [Genezisi Journal](${base}/en/blog)
+- [Custom website vs website builder](${base}/en/blog/custom-website-vs-website-builder)
+- [AI automation: where to start](${base}/en/blog/ai-automation-small-business-where-to-start)
+- [Website redesign checklist](${base}/en/blog/website-redesign-checklist-before-hiring)
+
 ## Website expertise
 - [Websites](${base}/en/websites)
 - [Service business websites](${base}/en/service-websites)
