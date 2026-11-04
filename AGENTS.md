@@ -39,3 +39,10 @@ If these conflict, stop and report the conflict; never silently restore an old b
 
 ## Explicit blockers
 Founder decision required for route retirement targets, live customer/card/domain status, any public offer/positioning change beyond approved direction, and release. If evidence is missing, document the blocker rather than guessing.
+
+## SEO and editorial direction (4 November 2026)
+- Primary acquisition audience: **international English-speaking businesses**; Georgian and Dutch are supporting homepage languages.
+- Journal is an ongoing growth channel. Preserve useful historical article URLs, update outdated claims, and prioritize original, evidence-based English guides for websites, practical AI and automation.
+- Do not create unnecessary US/UK/other English country duplicates or misleading localized hreflang.
+- Details: `docs/seo/INTERNATIONAL_ENGLISH_CONTENT_STRATEGY_2026-11-04.md`.
+- **Do not add GitHub Actions workflows.** Founder uses manual development, build, route and browser verification.
