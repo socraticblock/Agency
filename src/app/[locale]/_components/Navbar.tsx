@@ -34,6 +34,7 @@ export function Navbar({ locale }: { locale: Locale }) {
     { href: `/${locale}`, label: locale === "ka" ? "მთავარი" : "Home" },
     { href: `/${locale}/work`, label: locale === "ka" ? "ნამუშევრები" : "Work" },
     { href: `/${locale}/pricing`, label: locale === "ka" ? "სერვისები" : "Services" },
+    { href: "/en/blog", label: locale === "ka" ? "სტატიები (EN)" : "Journal" },
   ];
 
   if (hideForPreview) return null;
