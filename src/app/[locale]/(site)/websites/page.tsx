@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
+import { legacyServiceMetadata } from "@/lib/legacy-service-metadata";
 import type { Locale } from "@/lib/i18n";
 import { ServiceSeoPage } from "../../_components/ServiceSeoPage";
 
-export const metadata: Metadata = {
-  title: "Premium Website Design in Georgia | Genezisi",
-  description:
-    "Founder-led premium website design and development for Georgian businesses that need a serious online presence, clear packages, and fast delivery.",
-};
+export const metadata: Metadata = legacyServiceMetadata("/websites", "Premium Website Design in Georgia | Genezisi", "Founder-led premium website design and development for Georgian businesses that need a serious online presence, individual project scoping and clear communication.");
 
 export default async function WebsitesPage({
   params,
