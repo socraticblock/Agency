@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { getAllSlugs } from "@/lib/blog";
 
 /**
  * Only indexable, canonical marketing URLs belong in the sitemap.
@@ -16,6 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
   const retainedEnglishPages = [
     "/work",
+    "/blog",
     "/websites",
     "/service-websites",
     "/booking-websites",
@@ -26,10 +28,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "monthly" as const,
     priority: path === "/pricing" ? 0.85 : 0.7,
   }));
+  // Canonical English-only articles, including four preserved historic slugs.
+  const journalArticles = getAllSlugs().map(slug => ({
+    url: `${base}/en/blog/${slug}`,
+    changeFrequency: "monthly" as const,
+    priority: 0.65,
+  }));
   // The bespoke scoping page is genuinely localized in Georgian.
   return [
     ...localizedHomes,
     ...retainedEnglishPages,
+    ...journalArticles,
     { url: `${base}/ka/pricing`, changeFrequency: "monthly", priority: 0.8 },
   ];
 }
