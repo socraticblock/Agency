@@ -91,10 +91,33 @@ test("Outdated partner and editorial claims are no longer marketed", async () =>
   assert.match(partner.head, /name="robots"[^>]*noindex/);
   assert.doesNotMatch(partner.html, /30% on every sale/);
   const blog = await headHtml("/en/blog");
-  assert.match(blog.head, /name="robots"[^>]*noindex/);
-  assert.equal((await response("/en/blog/website-cost-georgia-2026")).status, 404);
+  assert.match(blog.head, /rel="canonical" href="https:\/\/genezisi\\.com\/en\/blog"/);
+  assert.match(blog.html, /Custom Website vs Website Builder/);
+  assert.doesNotMatch(blog.html, /Transparent website and e-commerce packages/);
   const oldGuide = await headHtml("/en/stop-renting");
   assert.match(oldGuide.head, /name="robots"[^>]*noindex/);
+});
+
+test("International articles and rewritten regional URLs remain available", async () => {
+  for (const slug of [
+    "custom-website-vs-website-builder",
+    "ai-automation-small-business-where-to-start",
+    "website-redesign-checklist-before-hiring",
+    "website-cost-georgia-2026",
+    "digital-business-card-vs-paper",
+    "facebook-page-costing-customers-georgia",
+    "georgian-businesses-invisible-online",
+  ]) {
+    const { head, html } = await headHtml(`/en/blog/${slug}`);
+    assert.match(head, new RegExp(`rel="canonical" href="https://genezisi\\.com/en/blog/${slug}"`));
+    assert.ok(html.includes("Genezisi Journal"));
+  }
+  const nonEnglish = await response("/ka/blog");
+  assert.equal(nonEnglish.status, 308);
+  assert.equal(destination(nonEnglish), "/en/blog");
+  const article = await response("/ka/blog/digital-business-card-vs-paper");
+  assert.equal(article.status, 308);
+  assert.equal(destination(article), "/en/blog/digital-business-card-vs-paper");
 });
 
 test("Legacy service pages have correct English canonical, not homepage canonical", async () => {
@@ -111,10 +134,10 @@ test("Sitemap lists retained indexable canonical pages only", async () => {
   const res = await response("/sitemap.xml");
   assert.equal(res.status, 200);
   const xml = await res.text();
-  for (const path of ["/en", "/ka", "/nl", "/en/pricing", "/ka/pricing", "/en/websites", "/en/work"]) {
+  for (const path of ["/en", "/ka", "/nl", "/en/pricing", "/ka/pricing", "/en/websites", "/en/work", "/en/blog", "/en/blog/custom-website-vs-website-builder", "/en/blog/digital-business-card-vs-paper"]) {
     assert.ok(xml.includes(`<loc>https://genezisi.com${path}</loc>`), path + " missing");
   }
-  for (const retired of ["/en/start", "/en/partner", "/en/blog", "/en/pricing/professional", "/en/pricing/command-center", "/en/pricing/e-commerce", "/onboarding"]) {
+  for (const retired of ["/en/start", "/en/partner", "/en/pricing/professional", "/en/pricing/command-center", "/en/pricing/e-commerce", "/onboarding"]) {
     assert.ok(!xml.includes(retired), retired + " must not be advertised");
   }
 });
