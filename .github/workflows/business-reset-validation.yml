@@ -1,6 +1,8 @@
 name: Genezisi business-reset validation
 
 on:
+  push:
+    branches: ["audit/genezisi-business-reset-2026-11-04"]
   pull_request:
     branches: [main]
     paths:
