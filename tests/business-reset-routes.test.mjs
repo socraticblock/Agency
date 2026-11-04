@@ -89,6 +89,21 @@ test("Discontinued card sales are closed across UI and API", async () => {
   assert.equal(read.status, 401, "admin list must still reject unauthenticated users");
 });
 
+test("Unused onboarding is closed until signed invitations exist", async () => {
+  const res = await response("/api/onboarding", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      session_id: "untrusted-public-input",
+      form_data: { brandColor: "#ffffff" },
+      step: 1,
+    }),
+  });
+  assert.equal(res.status, 410);
+  assert.equal(res.headers.get("cache-control"), "no-store");
+  assert.equal((await response("/onboarding/untrusted-public-input")).status, 404);
+});
+
 test("Outdated partner and editorial claims are no longer marketed", async () => {
   const partner = await headHtml("/en/partner");
   assert.match(partner.head, /name="robots"[^>]*noindex/);
