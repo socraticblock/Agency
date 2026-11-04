@@ -482,8 +482,8 @@ export const en = {
     sectionSubheading: "Select the foundation that best fits your current stage of growth. We're here to help you build a business you truly own.",
   },
   footer: {
-    headline: "Ready to build your permanent home?",
-    subheadline: "Let's create a beautiful, professional digital space that you completely control.",
+    headline: "Ready to discuss your project?",
+    subheadline: "Websites, practical AI systems and automation, scoped around your business.",
     cta: "Get Started",
     disclaimer: "No pressure, no aggressive sales. We'll just have a conversation about your goals and see if we're the right fit to help you reach them.",
   },
