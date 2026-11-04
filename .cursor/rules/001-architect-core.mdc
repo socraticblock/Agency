@@ -1,29 +1,16 @@
 ---
-description: Core operating system for the AI. Enforces Token Economy, Context Surgery, React 19, and Next 15 boundaries.
-globs: *
+description: Engineering quality and source-of-truth protocol for Genezisi.
+globs: "*"
 alwaysApply: true
 ---
 
-# 001: THE ARCHITECT CORE PROTOCOL
+# Current Engineering Protocol
 
-## 1. Context Surgery & Token Economy
-- **Never read the whole project.** Only analyze files strictly necessary for the logic chain.
-- **Never rewrite untouched logic.** Provide exact line numbers and diff-style outputs. 
-- **The "Cheap" Constraint:** Always prioritize the most token-efficient logic.
-
-## 2. Mandatory Workflow
-Before executing a code change, you must:
-1. **Memory Check:** Read the `docs/MEMORY.md` Index. Expand IDs only if relevant.
-2. **Context Report:** Explicitly state targeted files vs. ignored files.
-3. **Execution:** Provide the architectural rationale, then the diff/code.
-
-## 3. The Bridge (Next.js 15 & React 19)
-- **Server Default:** Exploit React Server Components and Next.js Partial Prerendering (PPR). Use Server Actions instead of API routes.
-- **Modern State:** Use React 19's `use`, `useOptimistic`, and `useActionState`. DO NOT use `useEffect` for data fetching.
-- **Client Isolation:** Heavy physics, WebGL, and high-frequency DOM manipulation must be strictly `"use client"`.
-- **SSR Hydration Safety:** Do not nest Framer Motion `<motion.div>` dynamic `initial` animations loaded inside nested layouts directly beneath parent component animations like `<ScrollReveal>`, to eliminate SSR Hydration Divergence Exceptions (Digest triggers).
-
-## 4. Deterministic Server Actions
-- **Response Shape:** All Server Actions must conform to a predictable structure: `{ success: boolean; data?: T; error?: { message: string; code: string } }`.
-- **Inference Stability:** Ensure React 19 standard hooks like `useActionState` receive consistent type structures so client handlers don't crash from dynamic object payloads during state transitions.
-
+- Read `AGENTS.md` before work. Explicit founder decisions, current source, real data obligations and verified tests override historical briefs.
+- Inspect the full dependency chain needed to make a safe decision. For audits, repository-wide discovery is appropriate; never mistake a small file slice for proof of safety.
+- Use Next.js and React versions from `package.json` (currently Next.js 16 and React 19). Do not force optional framework features or API patterns without requirement.
+- Prefer maintainable, accessible, testable changes; token count and novelty are not architectural goals.
+- Preserve approved homepage visual/interaction behavior unless change is specifically approved.
+- Plan reversible changes on a feature branch and document scope, assumptions and rollback.
+- Verify rendered behavior, mobile interaction, security boundaries, static/dynamic assets and data contracts in addition to types, lint and build.
+- Never merge, deploy, change production configuration, or delete customer records without founder approval.
