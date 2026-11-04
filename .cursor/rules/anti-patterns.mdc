@@ -1,18 +1,18 @@
 ---
-description: Critical anti-patterns and performance blockers to avoid
+description: Safety and maintainability anti-patterns for current Genezisi.
 globs: "*"
 alwaysApply: true
 ---
 
-# Anti-Patterns
+# Anti-patterns to Avoid
 
-- ❌ Never let components exceed 200 lines
-- ❌ Never add backend dependencies for card features
-- ❌ Never use CSS variables as Framer Motion key values
-- ❌ Never hardcode OG tags in client components
-- ❌ Never try to hide web elements for print — use dedicated print container
-- ❌ Never add animations that require JavaScript when CSS can do it
-- ❌ Never use overflow:hidden on ancestors of sticky elements
-- ✅ Always run npm run build after changes
-- ✅ Always use @media print with @page { size: 3.5in 2in; margin: 0; }
-- ✅ Always test on Samsung Internet for mobile features
+- Do not resurrect discontinued fixed-price website packages or new digital-business-card sales.
+- Do not delete or break existing published cards, mapped domains, orders, admin or onboarding data.
+- Do not infer 'unused' from a direct-import scan; account for dynamic imports, CSS assets, runtime scripts, tests and external URLs.
+- Do not use arbitrary redesign trends to override approved homepage behavior.
+- Do not publish fake or unsourced reviews, client results, prices, guarantees, local offices, speed metrics or conversion statistics.
+- Do not blanket-redirect unrelated retired pages to the homepage or advertise non-equivalent hreflang variants.
+- Do not force file-splitting solely to satisfy an arbitrary line-count threshold.
+- Do not introduce dependencies or services without evaluating their maintenance and security burden.
+- Do not treat build success as proof of working routes, SEO tags, accessibility or visual quality.
+- Validate typecheck, lint, build and relevant served-build tests; document anything not run.
