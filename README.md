@@ -38,3 +38,13 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ---
 
 More from me: **[socraticblock.com](https://www.socraticblock.com/)** — portfolio, case studies and engineering notes.
+
+## Current website engineering workflow (2026-11-01)
+
+The shipping site uses Next.js/React/TypeScript under `src/app/[locale]/`. For new features, work on non-production branches in the **real application**, synchronize coordinated work through an integration branch, and require full integrated browser acceptance before merging.
+
+- [Branching, integration and release policy](docs/development/BRANCHING_INTEGRATION_RELEASE.md)
+- [Latest four-frame website status and next-session handoff](docs/genezisi-v2/HANDOFF_2026-11-01_FOUR_FRAME.md)
+- [Coding agent guidance](AGENTS.md) and [production-integration skill](skills/genezisi-production-integration/SKILL.md)
+
+Historical V2 design documents remain for reference; the linked handoff is the current-state summary. The PR #19 Card 3 fix has been merged but needs a fresh founder browser review.

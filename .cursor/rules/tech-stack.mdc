@@ -6,10 +6,14 @@ alwaysApply: true
 
 # Tech Stack
 
-- Next.js 15 App Router
+- Next.js 16 App Router (verify against package.json before planning)
+- React 19
 - Tailwind CSS 4
 - Framer Motion (lightweight use only)
 - TypeScript strict mode
 - Vercel deployment
 - No backend database for digital card features
 - All card features must work client-side only
+
+- Shipping website changes must use the real Next.js architecture; standalone HTML only for disposable experiments.
+- Branch and integrated browser acceptance protocol: docs/development/BRANCHING_INTEGRATION_RELEASE.md
