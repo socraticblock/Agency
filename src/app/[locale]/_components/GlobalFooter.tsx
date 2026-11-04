@@ -18,6 +18,7 @@ export function GlobalFooter({ locale }: { locale: Locale }) {
         <Link href={`/${locale}`} className="hover:text-emerald-300">{locale === "ka" ? "მთავარი" : "Home"}</Link>
         <Link href={`/${locale}/work`} className="hover:text-emerald-300">{locale === "ka" ? "ნამუშევრები" : "Work"}</Link>
         <Link href={`/${locale}/pricing`} className="hover:text-emerald-300">{locale === "ka" ? "სერვისები" : "Services"}</Link>
+        <Link href="/en/blog" className="hover:text-emerald-300">{locale === "ka" ? "სტატიები (EN)" : "Journal"}</Link>
       </nav>
       <a href={contact} target="_blank" rel="noopener noreferrer" className="mt-9 inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-emerald-400/50 px-6 text-sm font-semibold text-emerald-300 hover:border-emerald-300 hover:text-emerald-200">
         <MessageSquare className="h-4 w-4" aria-hidden />
