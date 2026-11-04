@@ -1,15 +1,15 @@
 ---
-description: Project structure and directory rules
+description: Actual project structure and preservation boundaries.
 globs: "*"
 alwaysApply: true
 ---
 
 # Project Structure
 
-- App Router: src/app/[locale]/
-- Components: src/app/[locale]/start/components/
-- Types: src/app/[locale]/start/lib/types.ts
-- Presets: src/app/[locale]/start/lib/presets.ts
-- Constants: src/constants/
-- Max 200 lines per component file
-- No new dependencies without explicit approval
+- Application routes live in `src/app/`, including localized public routes, non-localized client utilities and API endpoints.
+- The homepage is `src/app/[locale]/page.tsx` with `SignalHeroPrototype` and `v2/` components.
+- Legacy marketing and customer-card routes are grouped under `src/app/[locale]/(site)/`; route groups do not appear in the URL.
+- Dynamic published cards use `/[locale]/c/[slug]`, mapped domains in `middleware.ts`, and Turso operations in `src/lib/db.ts`.
+- Supabase onboarding uses `/onboarding/[id]` and `/api/onboarding`.
+- Tests live in `tests/`. Static runtime assets in `public/` may be referenced by URL rather than TypeScript imports.
+- Preserve data contracts and operational routes during marketing cleanup. No arbitrary file-length rule.
