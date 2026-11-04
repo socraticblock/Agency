@@ -13,3 +13,7 @@ alwaysApply: true
 - Respect Georgian language quality: ask for human review of substantive public Georgian commercial copy where possible.
 - Design mobile-first but do not cite unsourced market-share statistics.
 - WhatsApp is an existing contact channel, not proof that every customer prefers it.
+
+- **Audience priority (Nov 2026): international English-speaking business clients.** The studio's Georgia base does not limit service geography. The old rule title is historical only.
+- Prioritize evidence-based international English content and meaningful internal links. Georgian/Dutch support remains without assuming translated versions of every English page.
+- No GitHub Actions; use manual test and release gates.
