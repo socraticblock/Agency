@@ -169,6 +169,8 @@ test("Site index no longer advertises fixed-price offers", async () => {
 });
 
 test("Client utility pages discourage search indexing", async () => {
+  const onboarding = await headHtml("/onboarding");
+  assert.match(onboarding.html, /Client onboarding is not currently available\./);
   for (const path of ["/onboarding", "/onboarding-brief", "/success"]) {
     const { head } = await headHtml(path);
     assert.match(head, /name="robots"[^>]*noindex/);
