@@ -1,0 +1,117 @@
+{
+  "task": "incomplete-history-scan",
+  "tree": "/home/socraticblock/.hermes/profiles/assistant-4/cache/scratch/pe-diff3-2026-10-15/public-tree",
+  "revision": "c9c3790410969d3e9917e231f7bad3bf16b49b93",
+  "cases": [
+    {
+      "id": "mid-batch-exit",
+      "fault": "the object read exits non-zero after one record",
+      "injection_reached": true,
+      "surface": "history.scanned_completely()",
+      "expected": "refuse: an incomplete read is not a complete scan",
+      "observed": {
+        "is_repository": true,
+        "scan_failed": false,
+        "blobs_scanned": 0,
+        "blob_count": 12,
+        "truncated": false,
+        "oversized_skipped": 0,
+        "unreadable": [],
+        "complete": true,
+        "why_not": ""
+      },
+      "escaped": true,
+      "timed_out": false,
+      "test_command": "/usr/bin/python3 escape_probe.py --mode mid-batch-exit <tree>"
+    },
+    {
+      "id": "malformed-header",
+      "fault": "a batch header carries no type or size",
+      "injection_reached": true,
+      "surface": "history.scanned_completely()",
+      "expected": "refuse: an incomplete read is not a complete scan",
+      "observed": {
+        "is_repository": true,
+        "scan_failed": false,
+        "blobs_scanned": 0,
+        "blob_count": 12,
+        "truncated": false,
+        "oversized_skipped": 0,
+        "unreadable": [],
+        "complete": true,
+        "why_not": ""
+      },
+      "escaped": true,
+      "timed_out": false,
+      "test_command": "/usr/bin/python3 escape_probe.py --mode malformed-header <tree>"
+    },
+    {
+      "id": "short-body",
+      "fault": "the declared size exceeds the bytes delivered",
+      "injection_reached": true,
+      "surface": "history.scanned_completely()",
+      "expected": "refuse: an incomplete read is not a complete scan",
+      "observed": {
+        "is_repository": true,
+        "scan_failed": false,
+        "blobs_scanned": 1,
+        "blob_count": 12,
+        "truncated": false,
+        "oversized_skipped": 0,
+        "unreadable": [],
+        "complete": true,
+        "why_not": ""
+      },
+      "escaped": true,
+      "timed_out": false,
+      "test_command": "/usr/bin/python3 escape_probe.py --mode short-body <tree>"
+    },
+    {
+      "id": "no-newline",
+      "fault": "a record ends without its newline",
+      "injection_reached": true,
+      "surface": "history.scanned_completely()",
+      "expected": "refuse: an incomplete read is not a complete scan",
+      "observed": {
+        "is_repository": true,
+        "scan_failed": false,
+        "blobs_scanned": 1,
+        "blob_count": 12,
+        "truncated": false,
+        "oversized_skipped": 0,
+        "unreadable": [],
+        "complete": true,
+        "why_not": ""
+      },
+      "escaped": true,
+      "timed_out": false,
+      "test_command": "/usr/bin/python3 escape_probe.py --mode no-newline <tree>"
+    },
+    {
+      "id": "empty-store",
+      "fault": "the object read exits non-zero having delivered nothing",
+      "injection_reached": true,
+      "surface": "history.scanned_completely()",
+      "expected": "refuse: an incomplete read is not a complete scan",
+      "observed": {
+        "is_repository": true,
+        "scan_failed": false,
+        "blobs_scanned": 0,
+        "blob_count": 12,
+        "truncated": false,
+        "oversized_skipped": 0,
+        "unreadable": [],
+        "complete": true,
+        "why_not": ""
+      },
+      "escaped": true,
+      "timed_out": false,
+      "test_command": "/usr/bin/python3 escape_probe.py --mode empty-store <tree>"
+    }
+  ],
+  "valid_cases": 5,
+  "invalid_cases": [],
+  "escaped_cases": 5,
+  "escape_rate": 1.0,
+  "interpretation": "lower is better; zero is the target for this failure class. An invalid case (the injection never fired) is not a containment win and is excluded."
+}
