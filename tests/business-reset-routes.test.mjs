@@ -47,7 +47,10 @@ test("Bespoke project pages replace tier price menu and self-canonicalize", asyn
   const en = await headHtml("/en/pricing");
   assert.match(en.html, /Every project has its own shape\./);
   assert.match(en.head, /rel="canonical" href="https:\/\/genezisi\.com\/en\/pricing"/);
-  assert.match(en.head, /hreflang="ka-GE"/);
+  // React serialises the attribute as `hrefLang`; HTML attribute names are
+  // case-insensitive, so crawlers read it as `hreflang`. Match case-insensitively
+  // instead of pinning React's casing.
+  assert.match(en.head, /hreflang="ka-GE"/i);
   const ka = await headHtml("/ka/pricing");
   assert.match(ka.html, /ყოველი პროექტი განსხვავებულია|ყოველი პროექტი განსხვავებულია\./i);
   assert.match(ka.head, /rel="canonical" href="https:\/\/genezisi\.com\/ka\/pricing"/);
@@ -124,7 +127,7 @@ test("Legacy service pages have correct English canonical, not homepage canonica
   for (const page of ["websites", "service-websites", "booking-websites", "online-stores", "work"]) {
     const { head } = await headHtml("/en/" + page);
     assert.match(head, new RegExp(`rel="canonical" href="https://genezisi\\.com/en/${page}"`));
-    assert.doesNotMatch(head, /hreflang="ka-GE"[^>]*href="https:\/\/genezisi\.com\/ka"/);
+    assert.doesNotMatch(head, /hreflang="ka-GE"[^>]*href="https:\/\/genezisi\.com\/ka"/i);
   }
   const ka = await headHtml("/ka/websites");
   assert.match(ka.head, /rel="canonical" href="https:\/\/genezisi\.com\/en\/websites"/);

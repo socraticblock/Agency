@@ -3,13 +3,19 @@ import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import { Navbar } from "../../../_components/Navbar";
 import { GlobalFooter } from "../../../_components/GlobalFooter";
-import { getArticleBySlug, getAllSlugs } from "@/lib/blog";
+import { getArticleBySlug } from "@/lib/blog";
 import type { BlogBlock, BlogSection } from "@/lib/blog";
 import { legacyServiceMetadata } from "@/lib/legacy-service-metadata";
 
-export function generateStaticParams() {
-  return getAllSlugs().map(slug => ({ slug }));
-}
+/*
+ * No `generateStaticParams` here on purpose.
+ *
+ * The root layout (`src/app/layout.tsx`) reads `headers()` to set the document
+ * language, so every page is dynamic. A child page that still declares static
+ * params is advertised as prerendered but produces zero paths at build time, and
+ * the on-demand render then fails with DYNAMIC_SERVER_USAGE (HTTP 500) for every
+ * article URL. Dropping the declaration keeps the route honestly dynamic.
+ */
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const article = getArticleBySlug(slug);

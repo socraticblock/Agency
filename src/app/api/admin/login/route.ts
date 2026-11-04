@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
-import { createAdminSessionToken, ADMIN_SESSION_COOKIE, adminPasswordConfigured } from "@/lib/admin-auth";
+import {
+  createAdminSessionToken,
+  ADMIN_SESSION_COOKIE,
+  adminPasswordConfigured,
+  passwordMatches,
+} from "@/lib/admin-auth";
 
 export const dynamic = "force-dynamic";
 
@@ -19,8 +24,7 @@ export async function POST(request: Request) {
   }
 
   const password = typeof body.password === "string" ? body.password.trim() : "";
-  const expected = process.env.ADMIN_PASSWORD?.trim() ?? "";
-  if (!password || password !== expected) {
+  if (!password || !passwordMatches(password)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

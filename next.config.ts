@@ -50,6 +50,55 @@ const nextConfig: NextConfig = {
     return [
       { source: "/games", destination: GAME_URL, permanent: false },
       { source: "/games/:path*", destination: `${GAME_URL}/:path*`, permanent: false },
+
+      /*
+       * Business reset (2026-11-04): the fixed-price tiers and the audit
+       * application funnel are retired in favour of bespoke project scoping.
+       *
+       * These live in `redirects()` rather than `permanentRedirect()` inside the
+       * page components, because those components render inside the root layout,
+       * which reads `headers()`. That makes the response streamed, so Next cannot
+       * set a 308 status line any more and falls back to a 200 + <meta refresh>.
+       * A meta refresh is not a real redirect for crawlers, so the status must be
+       * decided here, before any rendering happens.
+       */
+      {
+        source: "/:locale(en|ka)/pricing/professional",
+        destination: "/:locale/pricing",
+        permanent: true,
+      },
+      {
+        source: "/:locale(en|ka)/pricing/command-center",
+        destination: "/:locale/pricing",
+        permanent: true,
+      },
+      {
+        source: "/:locale(en|ka)/pricing/e-commerce",
+        destination: "/:locale/pricing",
+        permanent: true,
+      },
+      {
+        source: "/:locale(en|ka)/apply",
+        destination: "/:locale/pricing",
+        permanent: true,
+      },
+
+      /*
+       * The journal is English-only. `/ka` is a first-class locale, so the
+       * retirement of Georgian journal URLs is permanent (308). `/nl` is
+       * homepage-only and every `/nl/*` path falls through to middleware's
+       * temporary 307 -> `/en/*` rule, which stays as it is.
+       */
+      {
+        source: "/ka/blog",
+        destination: "/en/blog",
+        permanent: true,
+      },
+      {
+        source: "/ka/blog/:slug",
+        destination: "/en/blog/:slug",
+        permanent: true,
+      },
     ];
   },
 };

@@ -3,7 +3,7 @@
  * Set `ADMIN_PASSWORD` in Vercel env.
  */
 
-import { createHmac, timingSafeEqual } from "crypto";
+import { createHash, createHmac, timingSafeEqual } from "crypto";
 import { cookies } from "next/headers";
 
 export const ADMIN_SESSION_COOKIE = "genezisi_admin_session";
@@ -55,4 +55,24 @@ export async function verifyAdminRequest(): Promise<boolean> {
 
 export function adminPasswordConfigured(): boolean {
   return adminSecret().length > 0;
+}
+
+/**
+ * Constant-time admin password check.
+ *
+ * `a !== b` short-circuits on the first differing byte, which leaks the length of
+ * the matching prefix through response timing. Compare fixed-length digests
+ * instead so the comparison time does not depend on the input. Behaviour for
+ * callers is unchanged: true only for an exact match against the configured
+ * password, and always false when no password is configured.
+ */
+export function passwordMatches(candidate: string): boolean {
+  const expected = adminSecret();
+  try {
+    const a = createHash("sha256").update(candidate, "utf8").digest();
+    const b = createHash("sha256").update(expected, "utf8").digest();
+    return timingSafeEqual(a, b) && expected.length > 0;
+  } catch {
+    return false;
+  }
 }
