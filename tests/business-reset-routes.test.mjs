@@ -26,7 +26,8 @@ function destination(res) {
   return location ? new URL(location, BASE).pathname : null;
 }
 async function headHtml(path) {
-  const res = await response(path);
+  // Ask Next.js for crawler-compatible in-head metadata (no streaming-to-body).
+  const res = await response(path, { headers: { "User-Agent": "facebookexternalhit/1.1" } });
   assert.equal(res.status, 200, path);
   const html = await res.text();
   return {
