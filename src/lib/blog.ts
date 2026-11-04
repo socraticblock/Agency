@@ -1,8 +1,8 @@
-/**
- * Blog system for genezisi.com
- * Lightweight, file-based blog registry with full SEO support.
+/** Editorial registry for the Genezisi journal.
+ * International English-language articles are the primary acquisition focus.
+ * Original Georgian-market URLs are retained for user value and search continuity.
+ * New claims must be sourced or verifiable before publication.
  */
-
 export interface BlogArticle {
   slug: string;
   title: string;
@@ -11,615 +11,698 @@ export interface BlogArticle {
   lastUpdated: string;
   primaryKeyword: string;
   tags: string[];
-  /** ISO date for sorting / sitemap */
+  audience: "international" | "georgia";
   publishedAt: string;
-  heroStat?: { value: string; label: string };
-  /** Sections — each has an H2 heading and an array of content blocks */
   sections: BlogSection[];
 }
-
-export interface BlogSection {
-  heading: string;
-  blocks: BlogBlock[];
-}
-
+export interface BlogSection { heading: string; blocks: BlogBlock[]; }
 export type BlogBlock =
   | { type: "paragraph"; text: string }
   | { type: "list"; items: string[] }
   | { type: "callout"; text: string }
-  | { type: "comparisonTable"; headers: string[]; rows: string[][] }
-  | { type: "cta"; text: string; href: string; label: string };
-
-/* -------------------------------------------------------------------------- */
-/*  Article Registry                                                          */
-/* -------------------------------------------------------------------------- */
+  | { type: "source"; label: string; href: string };
 
 const articles: BlogArticle[] = [
   {
-    slug: "website-cost-georgia-2026",
-    title: "Website Cost in Georgia 2026 — Real Prices from Georgian Agencies",
-    metaDescription:
-      "How much does a website cost in Georgia? We researched real quotes from Tbilisi agencies — landing pages from ₾300, corporate sites ₾1,500-5,000, e-commerce ₾3,000-15,000. See where Genezisi fits.",
-    readingTime: "5 min read",
-    lastUpdated: "April 2026",
-    primaryKeyword: "website cost Georgia",
-    tags: [
-      "website cost Georgia",
-      "Georgian web design price",
-      "Tbilisi web agency",
-      "e-commerce price Tbilisi",
-      "GEL pricing",
+    "slug": "custom-website-vs-website-builder",
+    "title": "Custom Website vs Website Builder: A Decision Framework for Businesses",
+    "metaDescription": "Should you use a website builder or commission a custom website? Compare ownership, integrations, accessibility, maintenance and lifetime cost before choosing.",
+    "readingTime": "6 min read",
+    "lastUpdated": "November 2026",
+    "primaryKeyword": "custom website vs website builder",
+    "tags": [
+      "Websites",
+      "Buying decisions",
+      "International"
     ],
-    publishedAt: "2026-04-17",
-    heroStat: { value: "₾300", label: "floor for a professional landing page" },
-    sections: [
+    "audience": "international",
+    "publishedAt": "2026-11-04",
+    "sections": [
       {
-        heading: "Why Website Pricing in Georgia Is a Black Box",
-        blocks: [
+        "heading": "Start with the job the website must do",
+        "blocks": [
           {
-            type: "paragraph",
-            text: "Try searching \"how much does a website cost in Georgia\" and you'll find almost nothing. Unlike the US or UK, Georgian agencies rarely publish pricing. The result: business owners either overpay for a simple site or go to a freelancer at ₾200 and get something that damages their brand. This guide fixes that.",
+            "type": "paragraph",
+            "text": "The right platform follows the business requirement, not the other way around. A basic brochure site, a booking workflow, a regulated-client intake portal and an integrated product dashboard have very different requirements. A builder can be the rational choice when speed and low operational overhead matter more than customization."
           },
           {
-            type: "paragraph",
-            text: "This guide compares visible market ranges, public examples, and typical project scopes in Georgia so business owners can understand where a serious website budget usually lands.",
-          },
-        ],
+            "type": "paragraph",
+            "text": "Define the visitor action first: request a consultation, book, buy, compare, apply, or manage an account. Then identify what must happen after that action. The workflow behind a button often determines the architecture more than the appearance of the homepage."
+          }
+        ]
       },
       {
-        heading: "Landing Pages: ₾300–700",
-        blocks: [
+        "heading": "Where a website builder is a strong option",
+        "blocks": [
           {
-            type: "paragraph",
-            text: "A landing page is a single-page website — one scroll, one clear action (call, book, WhatsApp). Good for local service businesses that just need to be findable.",
+            "type": "list",
+            "items": [
+              "You need a small, relatively standard site and can adapt the design to a proven template.",
+              "You want nontechnical staff to make routine content changes without developer help.",
+              "You can accept the platform's supported integrations, subscription model and export limitations.",
+              "You prefer predictable platform maintenance over maintaining application infrastructure."
+            ]
           },
           {
-            type: "comparisonTable",
-            headers: ["Provider", "Price", "What's Included"],
-            rows: [
-              ["Freelancers", "₾200–500", "Basic, no support, inconsistent quality"],
-              ["TbilisiWeb", "From ₾300", "Budget-friendly, established studio"],
-              ["Wevosoft (2026 guide)", "₾300–800", "Modern approach, more pages"],
-              ["Web Tbilisi", "$500–700", "USD-denominated; GEL equivalent depends on current exchange rate"],
-            ],
-          },
-          {
-            type: "callout",
-            text: "₾300 GEL is the real floor for a professional landing page from an established studio. Freelancers at ₾200-300 exist but often deliver template-quality work with no ongoing support.",
-          },
-        ],
+            "type": "paragraph",
+            "text": "These are real advantages. Choosing a builder is not a compromise when it meets your requirements. The critical question is whether the future workflow stays inside the platform's capabilities."
+          }
+        ]
       },
       {
-        heading: "Corporate & Multi-Page Sites: ₾1,500–5,000",
-        blocks: [
+        "heading": "When custom development earns its cost",
+        "blocks": [
           {
-            type: "paragraph",
-            text: "A proper multi-page website — Home, About, Services, Contact — for a small business or professional practice (lawyer, consultant, clinic). This is where most Georgian SMEs need to be.",
+            "type": "list",
+            "items": [
+              "Your site needs substantial integrations with internal tools, role-based access, or a custom workflow.",
+              "The experience depends on domain-specific interactions rather than standard landing-page blocks.",
+              "You need more control over performance-sensitive content, security boundaries or data handling.",
+              "The website is the front end of a larger business system rather than a standalone brochure."
+            ]
           },
           {
-            type: "comparisonTable",
-            headers: ["Provider", "Price", "Notes"],
-            rows: [
-              ["TbilisiWeb", "₾1,500–5,000", "Depends on pages and features"],
-              ["Wevosoft", "₾1,500–5,000", "2026 pricing guide"],
-              ["Web Tbilisi", "$700–1,500", "USD-denominated; GEL equivalent depends on current exchange rate"],
-              ["DEL-OPS", "Custom", "Full-service, higher-end"],
-            ],
-          },
-          {
-            type: "callout",
-            text: "The ₾1,500–5,000 range is the \"honest mid-market\" for Georgian web design. Below ₾1,500 you're in freelancer territory. Above ₾5,000 you're paying for premium branding agencies.",
-          },
-        ],
+            "type": "paragraph",
+            "text": "Custom code also creates continuing responsibilities: monitoring, dependency upgrades, backups, security review, accessibility testing and hosting decisions. Ask who owns these responsibilities after launch."
+          }
+        ]
       },
       {
-        heading: "E-Commerce Sites: ₾3,000–15,000+",
-        blocks: [
+        "heading": "Compare total ownership, not only launch price",
+        "blocks": [
           {
-            type: "paragraph",
-            text: "A full online store with product pages, shopping cart, checkout, and payment integration. For Georgian businesses ready to sell online, the goal is simple: make products easy to understand, buy, and manage.",
+            "type": "paragraph",
+            "text": "A useful comparison covers discovery, design, development, content migration, accessibility work, integrations, hosting, subscriptions, maintenance, analytics, support and the cost of future changes. A cheaper initial quote can be expensive if basic integrations require recurring plugins; conversely, a custom build is wasteful if a modest template would suffice."
           },
           {
-            type: "comparisonTable",
-            headers: ["Provider", "Price", "Notes"],
-            rows: [
-              ["TbilisiWeb", "₾3,000–15,000+", "Full e-commerce capability"],
-              ["DEL-OPS", "Custom", "Complex builds"],
-              ["Web Tbilisi", "Custom, from $200/mo", "Monthly retainer model"],
-              ["Market range", "₾3,000–15,000", "Basic to advanced"],
-            ],
-          },
-          {
-            type: "paragraph",
-            text: "Georgian e-commerce is becoming more mature, and local payment options like TBC and Bank of Georgia make online selling realistic for more businesses. A clear, fast store can help a business build trust and capture search demand earlier.",
-          },
-        ],
+            "type": "list",
+            "items": [
+              "Ask what files, content, source code and domains you can export if you leave.",
+              "Ask who controls the analytics property, search account, DNS and deployment credentials.",
+              "Ask for a clear change process and a maintenance budget instead of a vague support promise.",
+              "List features that are necessary on day one separately from ideas that can wait."
+            ]
+          }
+        ]
       },
       {
-        heading: "Where Genezisi Fits",
-        blocks: [
+        "heading": "A simple decision exercise",
+        "blocks": [
           {
-            type: "paragraph",
-            text: "Genezisi sits below the traditional agency mid-market while offering more structure and reliability than freelancers:",
+            "type": "paragraph",
+            "text": "Write down your five highest-value customer journeys. Rate each as standard or highly tailored, and note every outside system involved. If nearly everything is standard and supported by a builder, test a builder first. If the central journeys require custom logic and multiple integrations, commission discovery before choosing a stack."
           },
           {
-            type: "comparisonTable",
-            headers: ["Product", "Price", "vs. Market"],
-            rows: [
-              ["Digital Business Card", "from ₾150 + ₾120/yr", "Fast digital presence for professionals"],
-              ["Professional Website", "₾999", "Below ₾1,500 agency floor"],
-              ["Command Center", "₾1,999", "Below ₾1,500–5,000 agency range"],
-              ["E-Commerce HQ", "From ₾3,999", "At the lower end of ₾3,000–15,000 range"],
-            ],
-          },
-          {
-            type: "paragraph",
-            text: "All Genezisi websites include: 100% custom design, full SEO suite, Google Analytics 4, source code ownership, and warranty coverage (45 days Professional, 75 days Command Center, 100 days E-Commerce). No monthly platform fees. One language is included; Georgian/English bilingual setup is available as an add-on. TBC/BOG payment integration available as paid add-on.",
-          },
-        ],
+            "type": "callout",
+            "text": "A bespoke proposal should explain why each custom feature is necessary. More code is not automatically more value."
+          }
+        ]
       },
       {
-        heading: "How to Choose the Right Website Type",
-        blocks: [
+        "heading": "Sources for further reading",
+        "blocks": [
           {
-            type: "list",
-            items: [
-              "<strong>Just need to be findable?</strong> A Digital Business Card from ₾150 is the fastest path. Shareable via link, QR code, and WhatsApp. No maintenance needed.",
-              "<strong>Solicitors, doctors, consultants:</strong> Professional Website at ₾999 — custom landing page, professional design, contact forms, SEO-optimized for Google.",
-              "<strong>High-volume or e-commerce ready:</strong> Command Center (₾1,999) with CRM integrations, or E-Commerce HQ from ₾3,999 with full online store.",
-              "<strong>Not sure?</strong> Message Genezisi on <a href='https://wa.me/995579723564' target='_blank' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>WhatsApp</a>. I usually reply quickly and will tell you honestly what you need.",
-            ],
+            "type": "source",
+            "label": "Google Search Central — helpful, people-first content",
+            "href": "https://developers.google.com/search/docs/fundamentals/creating-helpful-content"
           },
           {
-            type: "cta",
-            text: "Get a professional website at Georgian prices.",
-            href: "/en/pricing",
-            label: "View All Pricing →",
-          },
-        ],
-      },
-    ],
+            "type": "source",
+            "label": "web.dev — Core Web Vitals explained",
+            "href": "https://web.dev/articles/vitals"
+          }
+        ]
+      }
+    ]
   },
   {
-    slug: "digital-business-card-vs-paper",
-    title: "Digital Business Card vs Paper — Why Georgian Professionals Are Switching",
-    metaDescription:
-      "Paper business cards are lost, outdated, and invisible online. Here's why thousands of Georgian professionals — lawyers, doctors, consultants — are switching to digital cards from ₾150.",
-    readingTime: "4 min read",
-    lastUpdated: "April 2026",
-    primaryKeyword: "digital business card Georgia",
-    tags: [
-      "digital business card Georgia",
-      "electronic business card",
-      "QR code card Tbilisi",
-      "professional networking Tbilisi",
-      "Genezisi card",
+    "slug": "ai-automation-small-business-where-to-start",
+    "title": "AI Automation for Small Businesses: Where to Start Without Creating Risk",
+    "metaDescription": "A practical approach to choosing your first AI automation: select a repeatable workflow, define approvals, measure errors and begin with a limited pilot.",
+    "readingTime": "6 min read",
+    "lastUpdated": "November 2026",
+    "primaryKeyword": "AI automation for small business",
+    "tags": [
+      "AI",
+      "Automation",
+      "Operations",
+      "International"
     ],
-    publishedAt: "2026-04-17",
-    heroStat: { value: "0", label: "paper cards shared on WhatsApp" },
-    sections: [
+    "audience": "international",
+    "publishedAt": "2026-11-04",
+    "sections": [
       {
-        heading: "The Problem with Paper Cards in 2026",
-        blocks: [
+        "heading": "Choose a workflow, not an AI product",
+        "blocks": [
           {
-            type: "paragraph",
-            text: "You hand someone a paper business card. They put it in their wallet — next to 47 other cards. Three weeks later, they can't find it. Or they photograph it, forget to save the number, and it disappears into their camera roll. Meanwhile, your carefully designed card is sitting at the bottom of a drawer somewhere in Saburtalo.",
+            "type": "paragraph",
+            "text": "An effective first automation has a clear trigger, repeatable steps and an observable outcome. Examples include sorting incoming enquiries, preparing a draft reply, extracting structured fields from supplier documents, or creating a follow-up task in a CRM. Start with one workflow where people already understand what a correct result looks like."
           },
           {
-            type: "paragraph",
-            text: "Paper cards have three fatal flaws in the digital age: they can't be updated, they can't be shared instantly, and they have zero online presence. When someone receives your card and wants to look up your business on Google — they can't.",
-          },
-          {
-            type: "list",
-            items: [
-              "<strong>Lost</strong> — Paper cards end up in drawers, get thrown away, or stay in wallets for years after you've changed jobs.",
-              "<strong>Outdated</strong> — Change your number or move offices? Print new cards. At ₾20–50 per card for 100, that's real money every time something changes.",
-              "<strong>Invisible</strong> — Your paper card has no Google presence. When a potential client searches for your business, they find nothing.",
-              "<strong>Unshareable</strong> — You can't send a paper card via WhatsApp. In Georgia, where WhatsApp is the dominant business communication tool, this is a serious limitation.",
-            ],
-          },
-        ],
+            "type": "paragraph",
+            "text": "A chatbot that can discuss everything is usually harder to assess than a tool that handles one bounded task. The latter can be compared with current work, tested against real examples and stopped safely when it cannot determine the next action."
+          }
+        ]
       },
       {
-        heading: "What Is a Digital Business Card?",
-        blocks: [
+        "heading": "Map the current process before adding a model",
+        "blocks": [
           {
-            type: "paragraph",
-            text: "A digital business card is a web page — optimized for mobile — that contains all your professional information. Instead of handing over paper, you share a link or QR code. The recipient opens it on their phone, instantly saves your contact, clicks through to your website or Instagram, and can WhatsApp you in one tap.",
+            "type": "list",
+            "items": [
+              "Trigger: what starts the work, and where does the input arrive?",
+              "Inputs: which documents, records or tools provide the required facts?",
+              "Rules: what decisions are deterministic and should be regular code?",
+              "Exceptions: which cases need human judgment, consent or legal review?",
+              "Output: what artifact, update or action marks completion?",
+              "Evidence: what audit log allows someone to explain what happened?"
+            ]
           },
           {
-            type: "paragraph",
-            text: "Genezisi digital cards include: your photo, name, title, company, phone, email, website, social links, services, and a personal message. All in Georgian and English. From ₾150 setup + ₾120/year hosting.",
-          },
-        ],
+            "type": "paragraph",
+            "text": "This map exposes opportunities for ordinary automation as well. A scheduling rule, form validation or API connection may solve part of the problem without any generative AI."
+          }
+        ]
       },
       {
-        heading: "Paper vs Digital: Side by Side",
-        blocks: [
+        "heading": "Start with reversible, human-reviewed actions",
+        "blocks": [
           {
-            type: "comparisonTable",
-            headers: ["Feature", "Paper Card", "Genezisi Digital Card"],
-            rows: [
-              ["Share via WhatsApp", "❌ Impossible", "✅ One tap"],
-              ["Update contact info", "❌ Reprint cards", "✅ Edit instantly"],
-              ["Appears on Google", "❌ No", "✅ Yes — indexed automatically"],
-              ["QR code", "✅ Static, dull", "✅ Animated, scannable"],
-              ["Includes photo/bio", "❌ Name + number only", "✅ Full profile"],
-              ["Works internationally", "❌ Useless abroad", "✅ Any phone, any country"],
-              ["Year 1 cost (100 cards)", "₾20–50", "₾150 + ₾120/yr hosting"],
-              ["Multi-language", "❌ One language only", "✅ Georgian + English"],
-            ],
+            "type": "paragraph",
+            "text": "In a safe first pilot, the system can classify a request, assemble relevant context and produce a draft; a person approves sending, charging, deleting or changing a customer record. Separate reading from writing permissions. Limit which folders, accounts and records an automation can access, and make every material action traceable."
           },
-        ],
+          {
+            "type": "paragraph",
+            "text": "Do not enter confidential client information into a third-party tool without checking the service's contractual terms, retention controls and permitted uses. Data handling requirements vary by business and location."
+          }
+        ]
       },
       {
-        heading: "Why Georgian Professionals Are Making the Switch",
-        blocks: [
+        "heading": "Define success before testing",
+        "blocks": [
           {
-            type: "paragraph",
-            text: "Georgia's business culture is evolving fast. The influx of remote workers, digital nomads, and international investors has raised expectations. A paper card handed to an expat or foreign investor signals: \"this person is not digitally native.\"",
+            "type": "list",
+            "items": [
+              "Time saved per completed task, including human review time.",
+              "Accuracy on a representative test set and frequency of unhandled exceptions.",
+              "False positives or incorrect actions, especially when the costs differ from false negatives.",
+              "Time to recover from a failure, ability to undo a change and quality of logs.",
+              "Maintenance cost and what happens when an external API or model changes."
+            ]
           },
           {
-            type: "paragraph",
-            text: "Meanwhile, WhatsApp has become the default business communication tool in Georgia. A digital card that opens directly into a WhatsApp chat — that's the interaction Georgian professionals actually want.",
-          },
-          {
-            type: "list",
-            items: [
-              "<strong>Georgian + English</strong> — Serve both local and international clients. Paper cards can't do this.",
-              "<strong>TBC & BOG Payments</strong> — Genezisi cards can include your payment links. Paper cards never could.",
-              "<strong>₾150 — No Georgian competitor</strong> — There is no other Georgian digital card platform. International tools (Blinq, Popl) don't support Georgian language or TBC/BOG payments.",
-              "<strong>One card, lifetime updates</strong> — Change your number? Update once. Your card is always current.",
-            ],
-          },
-        ],
+            "type": "paragraph",
+            "text": "Run a time-limited pilot with held-back examples. Compare the new process with the baseline and record failures instead of only showing the most convincing demonstration."
+          }
+        ]
       },
       {
-        heading: "Who Should Get a Digital Card?",
-        blocks: [
+        "heading": "An example: incoming website enquiries",
+        "blocks": [
           {
-            type: "list",
-            items: [
-              "<strong>Freelancers and consultants</strong> — Architects, lawyers, therapists, tutors. You're always networking. A digital card means every conversation ends with an instant follow-up.",
-              "<strong>Real estate agents</strong> — Property listings change daily. Your digital card can link to current inventory. Paper can't.",
-              "<strong>Small business owners</strong> — Café owners, shop managers, restaurant operators. Put your card on the counter as a QR code. Customers scan and save.",
-              "<strong>Job seekers and students</strong> — Make a strong first impression at career fairs and networking events.",
-            ],
+            "type": "paragraph",
+            "text": "A bounded workflow might receive an enquiry, check whether contact details are present, classify the request as website, AI system or automation, attach relevant background information, and draft a suggested reply. An owner then confirms scope, availability and next steps. If the request concerns sensitive or unfamiliar matters, it goes to a person without an automated commitment."
           },
           {
-            type: "callout",
-            text: "Genezisi is the only Georgian platform offering digital business cards with Georgian language support, TBC/BOG payment links, and WhatsApp-native sharing. Starting at ₾150.",
-          },
-          {
-            type: "cta",
-            text: "Create your digital business card today.",
-            href: "/en/start",
-            label: "Get Started →",
-          },
-        ],
+            "type": "callout",
+            "text": "Treat every AI-generated recommendation as a suggestion until the necessary validation and authority checks are complete."
+          }
+        ]
       },
-    ],
+      {
+        "heading": "Questions to ask a developer",
+        "blocks": [
+          {
+            "type": "list",
+            "items": [
+              "What exactly does the system do when it is uncertain?",
+              "Which actions can happen automatically, and which require approval?",
+              "Where are credentials stored, and who can revoke them?",
+              "How are errors reported and changes rolled back?",
+              "Who maintains prompts, integrations, models and quality checks after delivery?"
+            ]
+          }
+        ]
+      },
+      {
+        "heading": "Reference",
+        "blocks": [
+          {
+            "type": "source",
+            "label": "Google Search Central — explaining who, how and why content is produced",
+            "href": "https://developers.google.com/search/docs/fundamentals/creating-helpful-content"
+          }
+        ]
+      }
+    ]
   },
   {
-    slug: "facebook-page-costing-customers-georgia",
-    title: "Why Your Facebook Page Is Costing You Customers in Georgia",
-    metaDescription:
-      "Only 7% of Georgian SMEs have a website. Here's the uncomfortable truth about relying on Facebook or Instagram for your business — and the simple fix that starts from ₾150.",
-    readingTime: "5 min read",
-    lastUpdated: "April 2026",
-    primaryKeyword: "Facebook page vs website Georgia",
-    tags: [
-      "Georgian business website",
-      "Facebook page Georgia",
-      "digital presence Tbilisi",
-      "SME website Georgia",
-      "GEL 299 website",
+    "slug": "website-redesign-checklist-before-hiring",
+    "title": "Website Redesign Checklist: What to Prepare Before Hiring a Developer",
+    "metaDescription": "A practical redesign brief covering goals, content, user journeys, analytics, integrations, SEO preservation, ownership and launch checks.",
+    "readingTime": "6 min read",
+    "lastUpdated": "November 2026",
+    "primaryKeyword": "website redesign checklist",
+    "tags": [
+      "Websites",
+      "Briefing",
+      "International"
     ],
-    publishedAt: "2026-04-17",
-    heroStat: { value: "93%", label: "of Georgian SMEs have no website" },
-    sections: [
+    "audience": "international",
+    "publishedAt": "2026-11-04",
+    "sections": [
       {
-        heading: "The Uncomfortable Truth About Facebook in Georgia",
-        blocks: [
+        "heading": "Define the business problem",
+        "blocks": [
           {
-            type: "paragraph",
-            text: "Walk through any neighborhood in Tbilisi — Saburtalo, Vake, Old Town — and count the businesses that have a proper website. A dental clinic, a law firm, a furniture shop, a café. Search for any of them on Google. More often than not: a Facebook page. Maybe an Instagram. Often nothing at all.",
-          },
-          {
-            type: "paragraph",
-            text: "The numbers are striking. According to ISET Policy Institute research, only 7% of Georgian small and medium enterprises have a dedicated website. That means 93% of Georgian SMEs are essentially invisible to the 60%+ of potential customers who use Google to find local businesses every day.",
-          },
-          {
-            type: "callout",
-            text: "Facebook is rented land. You don't own your audience, you can't control the algorithm, and a single policy change can erase years of content overnight. Your Facebook page can be suspended. Your Instagram can be hacked. Your Google Business Profile can be disputed. Your website — you own it.",
-          },
-        ],
+            "type": "paragraph",
+            "text": "A redesign should solve a specific problem: customers cannot find the right service, the mobile site is difficult to use, staff cannot update content, or new operations require integrations. Write down the problem and what improvement would count as success. Better-looking is a preference; clearer bookings or fewer support enquiries are outcomes that can be examined."
+          }
+        ]
       },
       {
-        heading: "5 Ways Your Facebook Page Is Losing You Customers",
-        blocks: [
+        "heading": "Collect the essentials in one brief",
+        "blocks": [
           {
-            type: "list",
-            items: [
-              "<strong>Google Can't Index Your Facebook Page Properly</strong> — When someone searches \"best dentist Vake Tbilisi,\" Google shows websites and Google Business Profiles — not Facebook pages buried in the social graph. Your potential clients find your competitors instead.",
-              "<strong>The Algorithm Controls Your Visibility</strong> — In 2024-2025, Facebook's organic reach for business pages dropped to 2-5%. You are paying to play in your own digital house. A website's visibility, by contrast, compounds over time through SEO.",
-              "<strong>No Professional Credibility Signal</strong> — 75% of consumers judge a business's credibility based on its website design. A Facebook page with a cover photo and \"contact us for prices\" tells customers nothing. A professional website with your services, testimonials, and portfolio says: \"we're legitimate.\"",
-              "<strong>You Can't Own the Customer Relationship</strong> — On Facebook, Mark Zuckerberg owns the data. On your website, you do. Email signups, contact form submissions, booking requests — these are your customers, not Facebook's.",
-              "<strong>International Clients Can't Find You</strong> — Georgia's expat community (digital nomads, remote workers, foreign investors) doesn't browse Georgian Facebook groups. They search Google. If your business isn't there, you don't exist to them.",
-            ],
+            "type": "list",
+            "items": [
+              "Current domain and pages, plus any sites or applications that depend on them.",
+              "Primary audiences and their top three tasks.",
+              "The core offer, supporting evidence and content owner for each page.",
+              "A list of required integrations, forms, payment methods, booking flows and CRM connections.",
+              "Existing brand assets, imagery, legal notices and accessibility requirements.",
+              "Budget range, key dates, decision maker and how approvals will happen."
+            ]
           },
-        ],
+          {
+            "type": "paragraph",
+            "text": "Separate 'must have at launch' from 'possible later'. This makes a phased delivery easier to scope and prevents the design from becoming a substitute for prioritization."
+          }
+        ]
       },
       {
-        heading: "What You Lose Every Day Without a Website",
-        blocks: [
+        "heading": "Do not lose working search traffic",
+        "blocks": [
           {
-            type: "paragraph",
-            text: "For a Georgian professional — a lawyer, dentist, accountant, or consultant — every day without a website means:",
+            "type": "paragraph",
+            "text": "Before changing URLs, export the current page inventory and identify which pages have visitors, rankings or valuable incoming links. Match old URLs to equivalent replacement pages, maintain accurate canonical tags, and update internal links and XML sitemaps. Do not redirect unrelated content to the homepage just to hide it. If a genuinely retired page has no successor, decide whether to return an appropriate 404 or 410."
           },
           {
-            type: "list",
-            items: [
-              "<strong>Lost search traffic</strong> — Someone in Vake searches \"family lawyer near me.\" Your competitor's website appears. Yours doesn't. You lost a client before they even knew you existed.",
-              "<strong>No 24/7 sales presence</strong> — Your website works while you sleep. It answers questions, shows your portfolio, collects leads. Your Facebook page just sits there.",
-              "<strong>Price shoppers have nothing to compare</strong> — Georgian clients who want to compare options need something to compare. No website = no comparison = they go with whoever appears first on Google.",
-              "<strong>No local SEO foundation</strong> — The only local SEO tools available without a website are Google Business Profile and Facebook. These are useful but insufficient — they don't give you control over your narrative.",
-            ],
+            "type": "paragraph",
+            "text": "A redesign is also a chance to check titles, headings, crawlability and language alternatives. If you serve multiple languages, only annotate pages that really provide equivalent translated content."
           },
-        ],
+          {
+            "type": "source",
+            "label": "Google Search Central — site moves with URL changes",
+            "href": "https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes"
+          }
+        ]
       },
       {
-        heading: "The Fastest Path to a Real Digital Presence",
-        blocks: [
+        "heading": "Make quality observable",
+        "blocks": [
           {
-            type: "paragraph",
-            text: "You don't need a ₾10,000 budget to go digital. Here's what actually works for Georgian businesses in 2026:",
+            "type": "list",
+            "items": [
+              "Check real mobile behavior with touch, keyboard and screen readers where possible.",
+              "Measure load performance using the actual page and device context rather than an unverified speed promise.",
+              "Verify every important form, email route, payment step and analytics event.",
+              "Test empty states, errors, loading states, privacy consent and reduced-motion preferences.",
+              "Check whether staff can actually edit the content they are expected to maintain."
+            ]
           },
           {
-            type: "comparisonTable",
-            headers: ["Product", "Price", "Best For"],
-            rows: [
-              ["Digital Business Card", "From ₾150 + ₾120/yr", "Instant, shareable professional identity"],
-              ["Professional Website", "₾999", "Multi-page, SEO-ready business site"],
-              ["Command Center", "₾1,999", "CRM, booking, multi-language"],
-              ["E-Commerce HQ", "From ₾3,999", "Selling products online"],
-            ],
-          },
-          {
-            type: "paragraph",
-            text: "The fastest move: a Genezisi Digital Business Card at ₾150. It takes minutes to create, gives you a shareable link and QR code, appears on Google when someone searches your name, and signals that you're a modern, professional operation.",
-          },
-          {
-            type: "paragraph",
-            text: "From there, the upgrade path is clear: ₾999 for a full professional website when you're ready to compete on Google search.",
-          },
-          {
-            type: "cta",
-            text: "Stop renting Facebook's land. Own your digital presence.",
-            href: "/en/start",
-            label: "Get Started from ₾150 →",
-          },
-        ],
+            "type": "paragraph",
+            "text": "An approved mockup is not an accepted release. Keep a staging environment and a written acceptance checklist that describes functional outcomes."
+          }
+        ]
       },
-    ],
+      {
+        "heading": "Plan ownership and the first month after launch",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "text": "Document who controls the domain, hosting account, source repository, analytics, search console, backups and third-party services. Decide who monitors forms and error logs, handles dependency updates, restores backups and responds when something stops working."
+          },
+          {
+            "type": "paragraph",
+            "text": "The most useful handoff is not a PDF full of screenshots; it is a tested, recoverable system with clear ownership and a short operating guide."
+          }
+        ]
+      },
+      {
+        "heading": "Further references",
+        "blocks": [
+          {
+            "type": "source",
+            "label": "web.dev — Web Vitals",
+            "href": "https://web.dev/articles/vitals"
+          },
+          {
+            "type": "source",
+            "label": "Google Search Central — sitemap guidance",
+            "href": "https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap"
+          }
+        ]
+      }
+    ]
   },
   {
-    slug: "georgian-businesses-invisible-online",
-    title:
-      "Why 93% of Georgian Businesses Are Invisible Online (And How to Fix It in 2026)",
-    metaDescription:
-      "Only 7% of Georgian SMEs have a website. Here's why your Tbilisi business is losing clients — and the fastest ways to build your digital presence starting from 999 GEL.",
-    readingTime: "6 min read",
-    lastUpdated: "April 2026",
-    primaryKeyword: "Georgian business website",
-    tags: [
-      "Georgian business website",
-      "Tbilisi web design",
-      "digital presence Georgia",
-      "small business website Georgia",
-      "GEL pricing",
+    "slug": "website-cost-georgia-2026",
+    "title": "Website Costs in Georgia in 2026: How to Compare Quotes Fairly",
+    "metaDescription": "How to evaluate website development quotes in Georgia without relying on misleading universal price lists. Scope, ownership, content, integrations and support explained.",
+    "readingTime": "6 min read",
+    "lastUpdated": "November 2026",
+    "primaryKeyword": "website cost Georgia 2026",
+    "tags": [
+      "Georgia",
+      "Websites",
+      "Budgeting"
     ],
-    publishedAt: "2026-04-17",
-    heroStat: { value: "93%", label: "of Georgian SMEs lack a website" },
-    sections: [
+    "audience": "georgia",
+    "publishedAt": "2026-04-17",
+    "sections": [
       {
-        heading: "The Digital Reality of Georgian Small Business",
-        blocks: [
+        "heading": "Why a single market price is misleading",
+        "blocks": [
           {
-            type: "paragraph",
-            text: "Walk through any neighbourhood in Tbilisi — Saburtalo, Vake, Vera — and you'll see the same pattern. A dental clinic, a law firm, a real estate agency, a beauty salon. Each one serves dozens of clients a week. Yet search for any of them on Google and you'll find… a Facebook page. Maybe an Instagram account. Often nothing at all.",
+            "type": "paragraph",
+            "text": "Two website quotations can describe very different work. A template landing page with client-supplied copy is not equivalent to a multilingual site with custom design, booking, content migration, analytics and business integrations. In Georgia, as elsewhere, ask for comparable scope before comparing final amounts."
           },
           {
-            type: "paragraph",
-            text: "The numbers tell the story. 97.5% of Georgian small businesses rely exclusively on Facebook or Instagram for their online presence. Only 7% have a dedicated website. In a country where digital adoption is accelerating — especially with the influx of remote workers, expats, and tourists — this gap is a competitive disadvantage that compounds every month.",
-          },
-          {
-            type: "callout",
-            text: "Facebook is rented land. You don't own your audience, you can't control the algorithm, and a single policy change can erase years of content and customer relationships overnight.",
-          },
-          {
-            type: "paragraph",
-            text: "For a Georgian professional — a lawyer in Saburtalo, a real estate agent in Vake, a clinic director in Vera — this isn't just a marketing problem. It's a revenue problem. Every month without a proper digital presence means lost clients who are actively searching for exactly the services you offer.",
-          },
-        ],
+            "type": "paragraph",
+            "text": "This updated guide intentionally does not present unsourced agency price ranges as verified market facts. Supplier prices and project terms change. Obtain dated, written quotations for the same requirements before making a budget decision."
+          }
+        ]
       },
       {
-        heading: "What Your Business Is Losing Without a Website",
-        blocks: [
+        "heading": "What should appear in a quote",
+        "blocks": [
           {
-            type: "paragraph",
-            text: "If you're a Georgian professional relying solely on social media, here's what you're giving up every single day:",
-          },
-          {
-            type: "list",
-            items: [
-              "<strong>Google Search Traffic</strong> — When someone searches 'best lawyer in Tbilisi' or 'apartment for sale in Vake,' Google can't show your Facebook page. Websites rank. Social pages don't. That's thousands of potential clients going to competitors who invested in a proper site.",
-              "<strong>Professional Credibility</strong> — A custom domain (yourbusiness.ge or yourbusiness.com) signals permanence and trust. Studies show 75% of consumers judge a business's credibility based on its website. No website = 'are they still operating?'",
-              "<strong>Data Ownership</strong> — On social media, the platform owns your customer data. With your own website, you capture leads, build an email list, and own the relationship. This is your business's digital asset.",
-              "<strong>Expat and International Clients</strong> — Georgia's growing expat community (remote workers, digital nomads, foreign investors) doesn't browse Georgian Facebook groups. They search Google. They visit websites. They expect professional digital experiences.",
-              "<strong>24/7 Sales Representative</strong> — Your website works around the clock — answering questions, showcasing your work, collecting leads, even booking appointments — while you sleep.",
-            ],
-          },
-        ],
+            "type": "list",
+            "items": [
+              "Discovery: meetings, page inventory, requirements and content responsibilities.",
+              "Design: templates versus original layouts, number of revisions and mobile treatment.",
+              "Build: forms, CMS, payment, booking or CRM connections and any ongoing licenses.",
+              "Search: redirects, metadata, structured data when appropriate, sitemap and analytics setup.",
+              "Handover: domain ownership, source files, account access, training, warranties and support.",
+              "Operation: annual hosting, maintenance and realistic future-change costs."
+            ]
+          }
+        ]
       },
       {
-        heading: "4 Ways to Establish Your Digital Presence",
-        blocks: [
+        "heading": "Compare three comparable proposals",
+        "blocks": [
           {
-            type: "paragraph",
-            text: "You don't need a Fortune 500 budget to go online. Here are four paths, from the fastest to the most powerful:",
+            "type": "paragraph",
+            "text": "Give each provider the same brief, then ask them to mark inclusions, exclusions, assumptions and delivery responsibilities. Check which fees are recurring. If a quote includes unusually fast delivery, ask what is already designed and what testing is included. Request examples with similar complexity rather than unrelated visual showpieces."
           },
           {
-            type: "list",
-            items: [
-              "<strong>Digital Business Card — from 150 ₾</strong> (+ 120 ₾/yr hosting) — A shareable, interactive digital card with your contact info, services, and social links. Perfect for professionals who need a polished online identity today. <a href='/en/start' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>Create yours →</a>",
-              "<strong>Professional Site — 999 ₾</strong> — A clean, professional custom website that covers your services, about section, testimonials, and contact form. Ideal for lawyers, consultants, clinics, and freelancers. <a href='/en/pricing' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>See pricing →</a>",
-              "<strong>Professional Custom Site — 999 ₾</strong> — A clean, professional custom website with advanced SEO, booking integrations, and conversion-optimized layout. <a href='/en/pricing' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>See pricing →</a>",
-              "<strong>Command Center (1,999 ₾) & E-Commerce HQ (starting 3,999 ₾)</strong> — For businesses ready to dominate. The Command Center adds advanced dashboards, CRM integration, and multi-language support. The E-Commerce HQ is a full online store with payment processing, inventory management, and Georgian bank integrations. <a href='/en/pricing' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>Explore tiers →</a>",
-            ],
-          },
-          {
-            type: "callout",
-            text: "Every Genezisi website package includes full ownership of your code, no monthly platform fees forever, and hosting you control. The Digital Business Card has a separate annual hosting fee of 120 ₾/year.",
-          },
-        ],
+            "type": "paragraph",
+            "text": "A developer using a website builder may be the most economical choice for a straightforward page. Custom engineering becomes valuable when business logic and integrations create requirements a builder cannot reasonably satisfy."
+          }
+        ]
       },
       {
-        heading: "Why Georgian Professionals Choose Genezisi",
-        blocks: [
+        "heading": "Genezisi's approach",
+        "blocks": [
           {
-            type: "paragraph",
-            text: "Genezisi was built specifically for the Georgian market. We understand the unique needs of Tbilisi businesses because we are one. Here's what sets us apart:",
+            "type": "paragraph",
+            "text": "Genezisi no longer advertises predefined website prices. Projects are scoped individually: we first establish the business need, then define an appropriate implementation, deliverables and support responsibilities. We can discuss websites independently of AI or automation work."
           },
           {
-            type: "list",
-            items: [
-              "<strong>Pay in GEL</strong> — All pricing is in Georgian Lari. No exchange rate surprises, no foreign transaction fees. What you see is what you pay.",
-              "<strong>TBC & Bank of Georgia Payments</strong> — We integrate directly with Georgia's two largest banks for seamless payment processing on your site.",
-              "<strong>RS.ge Integration</strong> — Your business registration and legal compliance, connected directly to Georgia's Revenue Service portal.",
-              "<strong>Tri-Lingual by Default</strong> — Georgian, English, and Russian. Your site speaks to every audience in Georgia — locals, expats, and international clients.",
-              "<strong>Full Ownership</strong> — You own 100% of your code, domain, and data. No vendor lock-in. No monthly subscriptions that increase every year.",
-              "<strong>Built in Tbilisi</strong> — Local support, in-person consultations, and a team that understands Georgian business culture and regulations.",
-            ],
-          },
-        ],
+            "type": "callout",
+            "text": "Budgeting takeaway: compare the same scope, verify ongoing costs, and insist on ownership and maintenance terms in writing."
+          }
+        ]
       },
       {
-        heading: "Real-World Examples",
-        blocks: [
+        "heading": "Related reading",
+        "blocks": [
           {
-            type: "callout",
-            text: "The following before-and-after scenarios are illustrative examples showing the typical transformation Georgian businesses experience when moving from social-only to a professional website.",
-          },
-          {
-            type: "paragraph",
-            text: "<strong>Mariam — Lawyer, Saburtalo</strong>",
-          },
-          {
-            type: "comparisonTable",
-            headers: ["Before (Facebook only)", "After (Genezisi website)"],
-            rows: [
-              [
-                "Found through word-of-mouth only",
-                "Appears on Google for 'lawyer Tbilisi' searches",
-              ],
-              [
-                "Sends PDF portfolio via Messenger",
-                "Professional case studies on her website",
-              ],
-              [
-                "No way to book online",
-                "Online booking with calendar integration",
-              ],
-              [
-                "Invisible to expat clients",
-                "English-language version attracts international clients",
-              ],
-              [
-                "~8 new inquiries/month",
-                "~35 new inquiries/month within 90 days",
-              ],
-            ],
-          },
-          {
-            type: "paragraph",
-            text: "<strong>Giorgi — Real Estate Agent, Vake</strong>",
-          },
-          {
-            type: "comparisonTable",
-            headers: ["Before (Instagram only)", "After (Genezisi website)"],
-            rows: [
-              [
-                "Posts listings on Instagram stories (disappear in 24h)",
-                "Permanent property listings with search and filters",
-              ],
-              [
-                "Clients message for details one-by-one",
-                "Automated property details, maps, and virtual tours",
-              ],
-              [
-                "No lead capture system",
-                "Contact forms and WhatsApp integration",
-              ],
-              [
-                "Only Georgian-speaking clients",
-                "Tri-lingual site serves local, expat, and Russian buyers",
-              ],
-              [
-                "~5 serious leads/month",
-                "~28 qualified leads/month within 60 days",
-              ],
-            ],
-          },
-        ],
-      },
-      {
-        heading: "How to Get Started Today",
-        blocks: [
-          {
-            type: "paragraph",
-            text: "Your competitors are already online. Every day you wait is another day of lost revenue. Here's how to take the first step:",
-          },
-          {
-            type: "list",
-            items: [
-              "<strong>Need something today?</strong> — Create your <a href='/en/start' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>Digital Business Card in 5 minutes</a>. From 150 ₾.",
-              "<strong>Ready for a real website?</strong> — Explore our <a href='/en/pricing' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>transparent pricing in GEL</a>. Professional sites from 999 ₾.",
-              "<strong>Want a custom build?</strong> — Explore our <a href='/en/pricing' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2'>pricing tiers</a> or message us on <a href='https://wa.me/995579723564' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2' target='_blank'>WhatsApp</a>.",
-              "<strong>Prefer to talk?</strong> — Message us on <a href='https://wa.me/995579723564' class='text-emerald-400 hover:text-emerald-300 underline underline-offset-2' target='_blank'>WhatsApp</a>. We respond within the hour.",
-            ],
-          },
-          {
-            type: "paragraph",
-            text: "Georgia's digital economy is growing fast. The businesses that invest in their online presence today will dominate search results, attract the best clients, and build lasting digital assets. Don't let another month go by being invisible online.",
-          },
-          {
-            type: "cta",
-            text: "Start building your digital presence today.",
-            href: "/en/start",
-            label: "Get Started →",
-          },
-        ],
-      },
-    ],
+            "type": "source",
+            "label": "How to choose between a website builder and custom development",
+            "href": "/en/blog/custom-website-vs-website-builder"
+          }
+        ]
+      }
+    ]
   },
+  {
+    "slug": "digital-business-card-vs-paper",
+    "title": "Digital Business Cards vs Paper Cards: Practical Trade-offs",
+    "metaDescription": "Compare physical and digital business cards for networking, accessibility, cost, privacy and long-term maintenance. No product sales pitch.",
+    "readingTime": "6 min read",
+    "lastUpdated": "November 2026",
+    "primaryKeyword": "digital business card vs paper",
+    "tags": [
+      "Networking",
+      "Digital identity",
+      "Georgia"
+    ],
+    "audience": "georgia",
+    "publishedAt": "2026-04-17",
+    "sections": [
+      {
+        "heading": "The two formats solve different moments",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "text": "Paper works without internet access or a smartphone, is easy to hand across a table and does not depend on a service provider keeping a URL live. Digital cards can hold richer contact information, links and updated details, and may support phone-friendly sharing through a QR code or message."
+          },
+          {
+            "type": "paragraph",
+            "text": "There is no universal winner. For formal networking or audiences with limited connectivity, paper may be reliable. For teams that change contact details often or maintain current profiles, digital distribution can simplify updates."
+          }
+        ]
+      },
+      {
+        "heading": "Consider permanence and privacy",
+        "blocks": [
+          {
+            "type": "list",
+            "items": [
+              "Who owns the web address and can continue hosting the card if a vendor closes?",
+              "Will a QR code still work in a year, and does it redirect through a third party?",
+              "Which contact details are publicly visible or searchable?",
+              "Can a recipient save the information without creating an account?",
+              "Can the information be exported to a standard format if needed?"
+            ]
+          }
+        ]
+      },
+      {
+        "heading": "A sensible hybrid",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "text": "A small printed card can display a name, a basic contact method and a QR code pointing to a maintained web profile. The printed information remains usable if the code is unavailable. The online profile can provide supplementary information and links."
+          }
+        ]
+      },
+      {
+        "heading": "About Genezisi's former product",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "text": "Genezisi previously offered digital-business-card creation. It no longer accepts new digital-card orders, but existing published customer links remain operational under their applicable arrangements. This article is a comparison guide, not a sales page."
+          },
+          {
+            "type": "callout",
+            "text": "If you already rely on a hosted digital card, confirm the renewal terms, backup plan and ownership of its address."
+          }
+        ]
+      },
+      {
+        "heading": "Related reading",
+        "blocks": [
+          {
+            "type": "source",
+            "label": "How to compare website costs and contracts",
+            "href": "/en/blog/website-cost-georgia-2026"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "facebook-page-costing-customers-georgia",
+    "title": "Is a Facebook Page Enough for a Georgian Business?",
+    "metaDescription": "Understand when social profiles are sufficient and when a website helps with search visibility, ownership, booking and customer journeys.",
+    "readingTime": "6 min read",
+    "lastUpdated": "November 2026",
+    "primaryKeyword": "facebook page vs website Georgia",
+    "tags": [
+      "Georgia",
+      "Websites",
+      "Social media"
+    ],
+    "audience": "georgia",
+    "publishedAt": "2026-04-17",
+    "sections": [
+      {
+        "heading": "Social networks and websites do different jobs",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "text": "A Facebook or Instagram page can be useful for discovery, community and direct messages. A website gives the business greater control over service descriptions, page structure, search-accessible content and integrations. Many businesses benefit from both instead of abandoning either one."
+          }
+        ]
+      },
+      {
+        "heading": "When social-only can be sufficient",
+        "blocks": [
+          {
+            "type": "list",
+            "items": [
+              "Customers mainly return from existing relationships and direct referrals.",
+              "You have a simple offer and a reliable messaging process.",
+              "Your team can keep operating within the platform's communication and commerce limitations."
+            ]
+          },
+          {
+            "type": "paragraph",
+            "text": "There is no evidence that simply launching a website guarantees additional leads. It must answer real questions and provide a clear next step."
+          }
+        ]
+      },
+      {
+        "heading": "Signals you may need a website",
+        "blocks": [
+          {
+            "type": "list",
+            "items": [
+              "People repeatedly ask the same questions about services, location, pricing approach or availability.",
+              "Appointments or orders require information that is awkward to handle in messages.",
+              "You need structured product/service pages accessible through search.",
+              "You want to connect forms with calendars, CRM software, email or internal workflows.",
+              "You want an independently controlled home for documentation, policies or customer support."
+            ]
+          }
+        ]
+      },
+      {
+        "heading": "A practical first site",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "text": "Start with the minimum useful set of pages: a clear offer, evidence of work, common questions and a dependable contact or booking route. Use the social profile to drive visitors to the relevant page. Measure which enquiries come through each channel and improve the handoff."
+          }
+        ]
+      },
+      {
+        "heading": "Avoid artificial performance claims",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "text": "Do not assume a generic conversion uplift or a fixed lead multiple. Outcomes depend on demand, competition, content quality, search visibility and how enquiries are handled. Test the actual journey before investing in complex automation."
+          }
+        ]
+      },
+      {
+        "heading": "Related reading",
+        "blocks": [
+          {
+            "type": "source",
+            "label": "Website redesign checklist for international teams",
+            "href": "/en/blog/website-redesign-checklist-before-hiring"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "georgian-businesses-invisible-online",
+    "title": "Why Some Georgian Businesses Are Hard to Find Online",
+    "metaDescription": "A useful visibility checklist for Georgian businesses: accurate details, helpful service pages, navigation, indexing and customer enquiry routes.",
+    "readingTime": "6 min read",
+    "lastUpdated": "November 2026",
+    "primaryKeyword": "Georgian business online visibility",
+    "tags": [
+      "Georgia",
+      "Local visibility",
+      "Websites"
+    ],
+    "audience": "georgia",
+    "publishedAt": "2026-04-17",
+    "sections": [
+      {
+        "heading": "Discoverability is more than having an account",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "text": "A business can have an active social page yet still be hard to find when someone searches for a specific service. The issue may be unclear naming, missing service descriptions, inconsistent contact details, unindexed pages or no answer to the searcher's actual question."
+          }
+        ]
+      },
+      {
+        "heading": "Start by checking the basics",
+        "blocks": [
+          {
+            "type": "list",
+            "items": [
+              "Can people find your business name and principal service without already knowing your social handle?",
+              "Are your contact, location and opening details accurate wherever you publish them?",
+              "Does the main website clearly describe what you offer and where you operate?",
+              "Can a visitor complete the intended action on a phone without hunting through menus?",
+              "Do important pages return valid HTTP responses and have descriptive titles?"
+            ]
+          }
+        ]
+      },
+      {
+        "heading": "Make services understandable",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "text": "Create distinct, useful explanations for materially different services. Avoid filling pages with repeated location keywords. Include what the service involves, who it is for, the normal next step, and genuine examples where possible."
+          },
+          {
+            "type": "paragraph",
+            "text": "If the business serves English-speaking visitors as well as Georgian-speaking customers, translate the important content properly. A language switch that only translates a menu does not create a complete localized service page."
+          }
+        ]
+      },
+      {
+        "heading": "Measure the whole journey",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "text": "Check search visibility alongside real enquiries, bookings and sales, rather than focusing solely on rankings. Review which pages visitors reach, whether contact paths work, and what questions remain unanswered. Treat every number as a measurement to verify, not a marketing claim."
+          }
+        ]
+      },
+      {
+        "heading": "Genezisi's current scope",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "text": "Genezisi works with businesses internationally on bespoke websites, AI systems and automation. These recommendations are equally useful for businesses outside Georgia; the checklist is written with the original Georgian search audience in mind."
+          }
+        ]
+      },
+      {
+        "heading": "Reference",
+        "blocks": [
+          {
+            "type": "source",
+            "label": "Google Search Central — Search Essentials",
+            "href": "https://developers.google.com/search/docs/essentials"
+          }
+        ]
+      }
+    ]
+  }
 ];
 
-/* -------------------------------------------------------------------------- */
-/*  Helpers                                                                    */
-/* -------------------------------------------------------------------------- */
-
 export function getAllArticles(): BlogArticle[] {
-  return [...articles].sort(
-    (a, b) =>
-      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
-  );
+  return [...articles].sort((a, b) => {
+    if (a.audience !== b.audience) return a.audience === "international" ? -1 : 1;
+    return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+  });
 }
-
 export function getArticleBySlug(slug: string): BlogArticle | undefined {
-  return articles.find((a) => a.slug === slug);
+  return articles.find(article => article.slug === slug);
 }
-
-export function getAllSlugs(): string[] {
-  return articles.map((a) => a.slug);
-}
+export function getAllSlugs(): string[] { return articles.map(article => article.slug); }
