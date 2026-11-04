@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Navbar } from "../../../_components/Navbar";
 import { GlobalFooter } from "../../../_components/GlobalFooter";
 import type { Locale } from "@/lib/i18n";
 
@@ -19,7 +18,6 @@ export default async function CardOrdersClosed({ params }: { params: Promise<{ l
   const ka = lang === "ka";
   return (
     <>
-      <Navbar locale={lang} />
       <main className="flex min-h-[65vh] items-center justify-center bg-[#050505] px-5 py-20 text-white">
         <div className="max-w-2xl">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-300">Genezisi</p>
