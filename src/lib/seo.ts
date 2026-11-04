@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { defaultLocale, type Locale } from "@/lib/i18n";
+import type { Locale } from "@/lib/i18n";
 
 interface LocalBusinessOptions {
   name: string;
@@ -122,14 +122,10 @@ export function createLocalBusinessSeo(options: LocalBusinessOptions): SeoResult
     title,
     description,
     metadataBase: new URL(baseUrl),
-    alternates: {
-      canonical: url,
-      languages: {
-        "x-default": `${baseUrl}/${defaultLocale}`,
-        "en-US": `${baseUrl}/en`,
-        "ka-GE": `${baseUrl}/ka`,
-      },
-    },
+    // Only the homepage has a verified multilingual equivalence cluster.
+    // Legacy content and published cards are not necessarily translated,
+    // so do not advertise EN/KA home URLs as alternate translations.
+    alternates: { canonical: url },
     openGraph: {
       title,
       description,
