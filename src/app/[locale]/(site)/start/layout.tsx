@@ -1,3 +1,7 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { robots: { index: false, follow: false } };
+
 import { Inter } from "next/font/google";
 import { Navbar } from "../../_components/Navbar";
 import type { Locale } from "@/lib/i18n";

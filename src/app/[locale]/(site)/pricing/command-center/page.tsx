@@ -1,12 +1,7 @@
-import type { Metadata } from "next";
-import { CommandCenterPageClient } from "./CommandCenterPageClient";
+import { permanentRedirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Command Center Package | Genezisi",
-  description:
-    "Multi-page business website with an editable dashboard, CMS, analytics, and priority support.",
-};
-
-export default function CommandCenterPage() {
-  return <CommandCenterPageClient />;
+/** Superseded fixed-price tier; consolidated into bespoke project scoping. */
+export default async function FormerPackage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  permanentRedirect(`/${locale === "ka" ? "ka" : "en"}/pricing`);
 }

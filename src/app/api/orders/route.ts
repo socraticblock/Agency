@@ -6,108 +6,22 @@
  */
 
 import { NextResponse } from "next/server";
-import { createCard, getCardById, listCards } from "@/lib/db";
+import { listCards } from "@/lib/db";
 import { verifyAdminRequest } from "@/lib/admin-auth";
-import { computeOrderPublishIntent } from "@/lib/order-publish-intent";
+import { serverError } from "@/lib/api-error";
 
 export const dynamic = "force-dynamic";
 
 // ---------------------------------------------------------------------------
-// POST — Create a new card order
+// POST — Retired new-card sales are deliberately closed, including direct API calls.
+// GET /api/orders and existing published-card/admin APIs remain supported.
 // ---------------------------------------------------------------------------
 
-export async function POST(request: Request) {
-  try {
-    let body: {
-      id: string;
-      state: unknown;
-      tier: string;
-      digitalCardUrlHint?: string;
-    };
-
-    try {
-      body = await request.json();
-    } catch {
-      return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-    }
-
-    const { id, state, tier } = body;
-
-    if (!id || typeof id !== "string" || !id.startsWith("gc-")) {
-      return NextResponse.json(
-        { error: "Valid order ID required (must start with gc-)" },
-        { status: 400 }
-      );
-    }
-
-    if (!state || typeof state !== "object") {
-      return NextResponse.json(
-        { error: "state (Lane1CustomizerState) required" },
-        { status: 400 }
-      );
-    }
-
-    if (!tier || !["subdomain", "professional", "executive"].includes(tier)) {
-      return NextResponse.json(
-        { error: "Valid tier required: subdomain | professional | executive" },
-        { status: 400 }
-      );
-    }
-
-    const existing = await getCardById(id);
-    if (existing) {
-      return NextResponse.json({
-        ok: true,
-        id,
-        status: existing.status,
-        slug: existing.publishSlug ?? existing.slug ?? undefined,
-        publishSlug: existing.publishSlug ?? existing.slug ?? undefined,
-      });
-    }
-
-    const stateObj = state as Record<string, unknown>;
-    const name = String(stateObj.name ?? "");
-    const company = String(stateObj.company ?? "");
-    const hint = typeof body.digitalCardUrlHint === "string" ? body.digitalCardUrlHint : "";
-
-    const intent = computeOrderPublishIntent(
-      tier as "subdomain" | "professional" | "executive",
-      id,
-      hint,
-      name,
-      company
-    );
-
-    const result = await createCard({
-      id,
-      tier,
-      name: name || null,
-      company: company || null,
-      phone: (stateObj.phone as string) ?? null,
-      email: (stateObj.email as string) ?? null,
-      stateJson: JSON.stringify(state),
-      publishSlug: intent.publishSlug,
-      requestedDomain: intent.requestedDomain,
-      domainStatus: intent.domainStatus,
-    });
-
-    if (!result.ok) {
-      console.error("Failed to create card order:", result.error);
-      return NextResponse.json(
-        { error: "Failed to save order", detail: result.error },
-        { status: 500 }
-      );
-    }
-
-    return NextResponse.json({ ok: true, id, slug: intent.publishSlug });
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err);
-    console.error("Orders API Critical Crash:", msg);
-    return NextResponse.json(
-      { error: "Database or server configuration error.", detail: msg },
-      { status: 500 }
-    );
-  }
+export async function POST() {
+  return NextResponse.json(
+    { error: "New digital business card orders are no longer accepted." },
+    { status: 410, headers: { "Cache-Control": "no-store" } }
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -140,7 +54,6 @@ export async function GET() {
       })),
     });
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : String(err);
-    return NextResponse.json({ error: "Database error", detail: message }, { status: 500 });
+    return serverError("orders.list", err);
   }
 }

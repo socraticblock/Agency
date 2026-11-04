@@ -1,15 +1,14 @@
 ---
-description: Tech stack and core technologies rules
+description: Verified repository technology, not old product constraints.
 globs: "*"
 alwaysApply: true
 ---
 
 # Tech Stack
 
-- Next.js 15 App Router
-- Tailwind CSS 4
-- Framer Motion (lightweight use only)
-- TypeScript strict mode
-- Vercel deployment
-- No backend database for digital card features
-- All card features must work client-side only
+- Check `package.json` and lockfile for installed versions: Next.js 16, React 19, TypeScript and Tailwind CSS 4.
+- Deployment target: Vercel. Deployment and production edits require founder approval.
+- Existing digital-card storage and domain lookup use Turso-backed APIs; these must remain functional for existing customers.
+- Onboarding uses Supabase with a server-held service-role credential and requires strict privacy/access review.
+- The approved homepage uses existing page components and public runtime motion scripts. Preserve without redesign.
+- Use security and operational decisions from current source and `AGENTS.md`; older claims about 'client-only, no database' no longer apply.

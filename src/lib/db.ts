@@ -347,20 +347,50 @@ export async function getPublishedSlugByMappedHost(host: string): Promise<string
   return typeof slug === "string" && slug.length > 0 ? slug : null;
 }
 
+export type DomainMappingResult =
+  | { ok: true }
+  | { ok: false; code: "invalid" | "conflict" | "db"; error: string };
+
+/**
+ * Map a custom host to a card.
+ *
+ * The statement is a conditional upsert: a row for the same card is a no-op, a
+ * different card's existing mapping is left untouched. `INSERT OR REPLACE` used
+ * to reassign a host to whichever card was saved last, which silently took a
+ * live customer domain away from its owner on a typo or a stale admin form.
+ * Callers get `code: "conflict"` so they can answer 409 instead of "saved".
+ */
 export async function upsertCardDomainHost(
   cardId: string,
   host: string
-): Promise<{ ok: true } | { ok: false; error: string }> {
+): Promise<DomainMappingResult> {
   const h = normalizeHostHeader(host);
   if (!h || !/^[a-z0-9.-]+$/.test(h)) {
-    return { ok: false, error: "Invalid host" };
+    return { ok: false, code: "invalid", error: "Invalid host" };
   }
   try {
-    await tursoExec("INSERT OR REPLACE INTO card_domains (host, card_id) VALUES (?, ?)", [h, cardId]);
+    const rows = await tursoQuery<{ card_id: string }>(
+      "SELECT card_id FROM card_domains WHERE host = ?",
+      [h]
+    );
+    const owner = rows[0]?.card_id;
+    if (owner && owner !== cardId) {
+      return {
+        ok: false,
+        code: "conflict",
+        error: `Host "${h}" is already mapped to another card`,
+      };
+    }
+    await tursoExec(
+      `INSERT INTO card_domains (host, card_id) VALUES (?, ?)
+       ON CONFLICT(host) DO UPDATE SET card_id = excluded.card_id
+       WHERE card_domains.card_id = excluded.card_id`,
+      [h, cardId]
+    );
     return { ok: true };
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err);
-    return { ok: false, error: message };
+    return { ok: false, code: "db", error: message };
   }
 }
 

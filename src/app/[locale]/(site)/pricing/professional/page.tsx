@@ -1,11 +1,7 @@
-import { Metadata } from "next";
-import { ProfessionalPageClient } from "./ProfessionalPageClient";
+import { permanentRedirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Professional Package | Genezisi",
-  description: "One-page custom landing website. Built in 7-10 business days.",
-};
-
-export default function ProfessionalPage() {
-  return <ProfessionalPageClient />;
+/** Superseded fixed-price tier; consolidated into bespoke project scoping. */
+export default async function FormerPackage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  permanentRedirect(`/${locale === "ka" ? "ka" : "en"}/pricing`);
 }

@@ -1,13 +1,10 @@
 import type { Metadata } from "next";
+import { legacyServiceMetadata } from "@/lib/legacy-service-metadata";
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Website Work and Previews | Genezisi",
-  description:
-    "Preview websites built by Genezisi for professional services, SaaS, wellness studios, and civic projects.",
-};
+export const metadata: Metadata = legacyServiceMetadata("/work", "Website Work and Previews | Genezisi", "Preview websites built by Genezisi for professional services, SaaS, wellness studios, and civic projects.");
 
 const workItems = [
   {

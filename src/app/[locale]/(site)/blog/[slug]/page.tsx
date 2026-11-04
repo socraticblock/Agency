@@ -1,249 +1,104 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { Navbar } from "../../../_components/Navbar";
 import { GlobalFooter } from "../../../_components/GlobalFooter";
-import { getArticleBySlug, getAllSlugs } from "@/lib/blog";
-import type { Locale } from "@/lib/i18n";
-import { createLocalBusinessSeo } from "@/lib/seo";
-import type { BlogSection, BlogBlock } from "@/lib/blog";
-import { ArrowLeft } from "lucide-react";
+import { getArticleBySlug } from "@/lib/blog";
+import type { BlogBlock, BlogSection } from "@/lib/blog";
+import { legacyServiceMetadata } from "@/lib/legacy-service-metadata";
 
-function normalizeLocale(locale: string | undefined): Locale {
-  if (locale && (locale === "en" || locale === "ka")) return locale;
-  return "en";
-}
-
-/* -------------------------------------------------------------------------- */
-/*  Static Params                                                              */
-/* -------------------------------------------------------------------------- */
-
-export async function generateStaticParams() {
-  return getAllSlugs().map((slug) => ({ slug }));
-}
-
-/* -------------------------------------------------------------------------- */
-/*  Metadata                                                                   */
-/* -------------------------------------------------------------------------- */
-
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string; slug: string }>;
-}): Promise<Metadata> {
-  const { locale, slug } = await params;
-  const lang = normalizeLocale(locale);
+/*
+ * No `generateStaticParams` here on purpose.
+ *
+ * The root layout (`src/app/layout.tsx`) reads `headers()` to set the document
+ * language, so every page is dynamic. A child page that still declares static
+ * params is advertised as prerendered but produces zero paths at build time, and
+ * the on-demand render then fails with DYNAMIC_SERVER_USAGE (HTTP 500) for every
+ * article URL. Dropping the declaration keeps the route honestly dynamic.
+ */
+export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
   const article = getArticleBySlug(slug);
-  if (!article) return {};
-
-  const { metadata } = createLocalBusinessSeo({
-    name: article.title,
-    description: article.metaDescription,
-    locale: lang,
-    path: `/blog/${slug}`,
-  });
-  return metadata;
+  if (!article) return { robots: { index: false, follow: false } };
+  return legacyServiceMetadata(`/blog/${slug}`, article.title, article.metaDescription);
 }
 
-/* -------------------------------------------------------------------------- */
-/*  Block Renderer                                                             */
-/* -------------------------------------------------------------------------- */
-
-function renderBlock(block: BlogBlock, idx: number) {
-  switch (block.type) {
-    case "paragraph":
-      return (
-        <p
-          key={idx}
-          className="mb-5 text-base leading-[1.8] text-slate-300 sm:text-lg sm:leading-[1.85]"
-          dangerouslySetInnerHTML={{ __html: block.text }}
-        />
-      );
-
-    case "list":
-      return (
-        <ul key={idx} className="mb-6 list-none space-y-3 pl-0">
-          {block.items.map((item, i) => (
-            <li
-              key={i}
-              className="relative pl-6 text-base leading-[1.8] text-slate-300 before:absolute before:left-0 before:top-[0.6em] before:h-1.5 before:w-1.5 before:rounded-full before:bg-emerald-400/60 sm:text-lg"
-              dangerouslySetInnerHTML={{ __html: item }}
-            />
-          ))}
-        </ul>
-      );
-
-    case "callout":
-      return (
-        <div
-          key={idx}
-          className="mb-6 rounded-xl border border-emerald-500/10 bg-emerald-500/[0.04] px-5 py-4 text-sm leading-relaxed text-emerald-200/80 sm:text-base"
-        >
-          <span className="mr-2 text-emerald-400">💡</span>
-          {block.text}
-        </div>
-      );
-
-    case "comparisonTable":
-      return (
-        <div
-          key={idx}
-          className="mb-6 overflow-hidden rounded-xl border border-white/[0.06]"
-        >
-          <table className="w-full text-sm sm:text-base">
-            <thead>
-              <tr className="border-b border-white/[0.06] bg-white/[0.03]">
-                {block.headers.map((h, i) => (
-                  <th
-                    key={i}
-                    className="px-4 py-3 text-left font-bold text-slate-300"
-                  >
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {block.rows.map((row, i) => (
-                <tr
-                  key={i}
-                  className="border-b border-white/[0.03] last:border-0"
-                >
-                  {row.map((cell, j) => (
-                    <td
-                      key={j}
-                      className={`px-4 py-3 text-slate-400 ${j === 1 ? "text-emerald-300/80" : ""}`}
-                    >
-                      {cell}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      );
-
-    case "cta":
-      return (
-        <div
-          key={idx}
-          className="my-10 flex flex-col items-center gap-4 rounded-2xl border border-emerald-500/15 bg-emerald-500/[0.04] px-6 py-8 text-center"
-        >
-          <p className="text-lg font-semibold text-white">{block.text}</p>
-          <Link
-            href={block.href}
-            className="inline-flex items-center gap-2 rounded-full border border-emerald-400/60 bg-emerald-500/10 px-6 py-2.5 text-sm font-bold text-emerald-100 shadow-[0_0_30px_rgba(16,185,129,0.2)] transition-all hover:bg-emerald-500/20 hover:shadow-[0_0_50px_rgba(16,185,129,0.3)]"
-          >
-            {block.label}
-          </Link>
-        </div>
-      );
-
-    default:
-      return null;
+function ArticleBlock({ block }: { block: BlogBlock }) {
+  if (block.type === "paragraph") {
+    return <p className="mt-4 text-base leading-8 text-white/75 sm:text-lg">{block.text}</p>;
   }
+  if (block.type === "list") {
+    return (
+      <ul className="mt-5 list-disc space-y-3 pl-6 text-base leading-8 text-white/75 marker:text-emerald-300">
+        {block.items.map(item => <li key={item}>{item}</li>)}
+      </ul>
+    );
+  }
+  if (block.type === "callout") {
+    return <aside className="mt-6 rounded-xl border border-emerald-300/20 bg-emerald-300/[0.06] p-5 text-sm leading-7 text-emerald-100 sm:text-base">{block.text}</aside>;
+  }
+  if (block.type === "source") {
+    const local = block.href.startsWith("/");
+    return <p className="mt-3 text-sm leading-7">
+      {local
+        ? <Link href={block.href} className="text-emerald-300 underline underline-offset-4 hover:text-emerald-200">{block.label}</Link>
+        : <a href={block.href} target="_blank" rel="noopener noreferrer" className="text-emerald-300 underline underline-offset-4 hover:text-emerald-200">{block.label}</a>}
+    </p>;
+  }
+  return null;
 }
 
-/* -------------------------------------------------------------------------- */
-/*  Page                                                                       */
-/* -------------------------------------------------------------------------- */
-
-export default async function BlogArticlePage({
-  params,
-}: {
-  params: Promise<{ locale: string; slug: string }>;
-}) {
+export default async function BlogArticlePage({ params }: { params: Promise<{ locale: string; slug: string }> }) {
   const { locale, slug } = await params;
-  const lang = normalizeLocale(locale);
+  if (locale !== "en") permanentRedirect(`/en/blog/${slug}`);
   const article = getArticleBySlug(slug);
-
   if (!article) notFound();
-
+  const articleUrl = `https://genezisi.com/en/blog/${article.slug}`;
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.title,
+    description: article.metaDescription,
+    mainEntityOfPage: articleUrl,
+    datePublished: article.publishedAt,
+    dateModified: "2026-11-04",
+    author: { "@type": "Organization", name: "Genezisi" },
+    publisher: { "@type": "Organization", name: "Genezisi", url: "https://genezisi.com" },
+    inLanguage: "en",
+  };
   return (
     <>
-      <Navbar locale={lang} />
-      <main className="relative min-h-screen bg-[#050505] text-slate-100 selection:bg-emerald-500/30">
-        {/* Article header */}
-        <header className="mx-auto max-w-3xl px-4 pt-24 pb-8 sm:px-6 sm:pt-32">
-          <Link
-            href={`/${lang}/blog`}
-            className="mb-8 inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition-colors hover:text-emerald-400"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Back to Blog
-          </Link>
-
-          <div className="mb-4 flex flex-wrap items-center gap-3 text-xs text-slate-500">
-            <span className="rounded-full bg-emerald-500/10 px-2.5 py-0.5 font-bold text-emerald-400">
-              {article.readingTime}
-            </span>
-            <span>Updated {article.lastUpdated}</span>
-            <span className="rounded-full bg-white/[0.04] px-2.5 py-0.5 font-semibold uppercase tracking-wider">
-              {article.primaryKeyword}
-            </span>
+      <Navbar locale="en" />
+      <main className="min-h-screen bg-[#050505] text-white">
+        <article className="mx-auto max-w-3xl px-5 pb-24 pt-16 sm:px-8 sm:pt-24">
+          <nav aria-label="Breadcrumb" className="mb-8 text-sm text-white/50">
+            <Link href="/en/blog" className="hover:text-emerald-300">Journal</Link>
+            <span aria-hidden className="mx-2">/</span>
+            <span>{article.audience === "international" ? "Business guide" : "Regional guide"}</span>
+          </nav>
+          <header>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-300">Genezisi Journal · {article.readingTime}</p>
+            <h1 className="mt-5 text-[clamp(2rem,4.5vw,3.8rem)] font-black leading-[1.08] tracking-[-0.045em]">{article.title}</h1>
+            <p className="mt-7 text-lg leading-8 text-white/65">{article.metaDescription}</p>
+            <p className="mt-4 text-xs text-white/50">By Genezisi · Updated {article.lastUpdated}</p>
+          </header>
+          <div className="mt-12 border-t border-white/10 pt-3">
+            {article.sections.map((section: BlogSection, i) => (
+              <section key={section.heading} className="mt-11">
+                <h2 className="text-2xl font-bold tracking-tight">{section.heading}</h2>
+                {section.blocks.map((block, j) => <ArticleBlock key={j} block={block} />)}
+              </section>
+            ))}
           </div>
-
-          <h1 className="text-2xl font-black leading-tight tracking-tight text-white sm:text-3xl md:text-4xl md:leading-[1.2]">
-            {article.title}
-          </h1>
-
-          {article.heroStat && (
-            <div className="mt-6 inline-flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-5 py-3">
-              <span className="text-3xl font-black text-emerald-400">
-                {article.heroStat.value}
-              </span>
-              <span className="text-sm font-semibold text-slate-400">
-                {article.heroStat.label}
-              </span>
-            </div>
-          )}
-        </header>
-
-        {/* Article body */}
-        <article className="mx-auto max-w-3xl px-4 pb-24 sm:px-6">
-          {article.sections.map((section: BlogSection, sIdx: number) => (
-            <section key={sIdx} className="mb-12">
-              <h2 className="mb-5 text-xl font-bold text-white sm:text-2xl">
-                {section.heading}
-              </h2>
-              {section.blocks.map((block: BlogBlock, bIdx: number) =>
-                renderBlock(block, bIdx),
-              )}
-            </section>
-          ))}
-
-          {/* Bottom CTA band */}
-          <div className="mt-16 flex flex-col items-center gap-4 border-t border-white/[0.06] pt-10 text-center">
-            <p className="text-lg font-semibold text-white">
-              Ready to build a serious website?
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              <Link
-                href="/en/start"
-                className="rounded-full border border-emerald-400/60 bg-emerald-500/10 px-5 py-2 text-sm font-bold text-emerald-100 transition-all hover:bg-emerald-500/20"
-              >
-                Digital Business Card →
-              </Link>
-              <Link
-                href="/en/pricing"
-                className="rounded-full border border-white/10 bg-white/[0.03] px-5 py-2 text-sm font-bold text-slate-300 transition-all hover:bg-white/[0.06]"
-              >
-                View Pricing
-              </Link>
-              <a
-                href="https://wa.me/995579723564"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full border border-white/10 bg-white/[0.03] px-5 py-2 text-sm font-bold text-slate-300 transition-all hover:bg-white/[0.06]"
-              >
-                WhatsApp me
-              </a>
-            </div>
-          </div>
+          <aside className="mt-16 rounded-2xl border border-white/10 bg-white/[0.035] p-7">
+            <h2 className="text-xl font-bold">Planning a project?</h2>
+            <p className="mt-3 text-base leading-7 text-white/70">Genezisi scopes websites, AI systems and automation around what your business actually needs—without fixed-price packages.</p>
+            <Link href="/en/pricing" className="mt-5 inline-flex min-h-12 items-center rounded-full bg-white px-6 text-sm font-bold text-black hover:bg-emerald-100">Discuss a bespoke project</Link>
+          </aside>
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, "\\u003c") }} />
         </article>
       </main>
-      <GlobalFooter locale={lang} />
+      <GlobalFooter locale="en" />
     </>
   );
 }

@@ -1,14 +1,13 @@
 ---
-description: React component structure and performance rules
-globs: "*.tsx, *.ts"
+description: React component safety and maintainability.
+globs: "**/*.{ts,tsx}"
 alwaysApply: true
 ---
 
-# Component Rules
+# Component Guidance
 
-- Max 200 lines per component file
-- Sub-components in same directory as parent
-- Props passed down — no direct global state access in children
-- CSS custom properties for all dynamic styling
-- Use CSS animations over Framer Motion when possible (performance)
-- @media (hover: hover) for all hover effects (touch device safety)
+- Default to server components where appropriate, keep client bundles small and isolate stateful interaction.
+- Favor clear component responsibility and meaningful extraction, not arbitrary maximum file length.
+- Preserve accessible names, focus visibility, keyboard behavior and reduced-motion support.
+- Avoid touch-only hover behavior and avoid unnecessary layout shift.
+- Test with the current React 19/Next.js 16 setup and existing runtime-motion scripts before replacing animation systems.

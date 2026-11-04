@@ -8,6 +8,7 @@
 import { NextResponse } from "next/server";
 import { getCardById, publishCard, slugTakenByOther } from "@/lib/db";
 import { verifyAdminRequest } from "@/lib/admin-auth";
+import { serverError } from "@/lib/api-error";
 
 export async function POST(
   request: Request,
@@ -71,10 +72,7 @@ export async function POST(
     const result = await publishCard(body.id, slug);
 
     if (!result.ok) {
-      return NextResponse.json(
-        { error: "Failed to publish", detail: result.error },
-        { status: 500 }
-      );
+      return serverError("cards.publish", result.error);
     }
 
     return NextResponse.json({
@@ -84,7 +82,6 @@ export async function POST(
       url: `https://genezisi.com/en/c/${slug}`,
     });
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : String(err);
-    return NextResponse.json({ error: "Database error", detail: message }, { status: 500 });
+    return serverError("cards.publish", err);
   }
 }

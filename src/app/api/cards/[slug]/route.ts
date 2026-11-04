@@ -6,6 +6,7 @@
 
 import { NextResponse } from "next/server";
 import { getPublishedCardBySlug } from "@/lib/db";
+import { serverError } from "@/lib/api-error";
 import type { Lane1CustomizerState } from "@/app/[locale]/(site)/start/lib/types";
 
 export async function GET(
@@ -42,7 +43,6 @@ export async function GET(
       state,
     });
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : String(err);
-    return NextResponse.json({ error: "Database error", detail: message }, { status: 500 });
+    return serverError("cards.get", err);
   }
 }

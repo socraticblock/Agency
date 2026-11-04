@@ -13,14 +13,15 @@ const STEPS = [
 
 type Props = { sessionId?: string };
 
+/** Returns true only when the answers reached storage (or when there is no session to store). */
 async function saveOnboarding(
   sessionId: string | undefined,
   formData: Record<string, string>,
   step: number
-) {
-  if (!sessionId) return;
+): Promise<boolean> {
+  if (!sessionId) return true;
   try {
-    await fetch("/api/onboarding", {
+    const res = await fetch("/api/onboarding", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -29,28 +30,44 @@ async function saveOnboarding(
         step,
       }),
     });
+    // A 4xx/5xx used to look like success: fetch only rejects on transport
+    // errors, so the customer was sent to /success with nothing saved.
+    return res.ok;
   } catch {
-    // Non-blocking; form still works without storage
+    return false;
   }
 }
+
+const SAVE_ERROR =
+  "We could not save your answers. Your entries are still on this page — check your connection and try again.";
+
 
 export default function OnboardingPortal({ sessionId }: Props) {
   const router = useRouter();
   const [step, setStep] = useState(0);
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [isCompleting, setIsCompleting] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   const nextStep = useCallback(() => {
     const next = Math.min(step + 1, STEPS.length - 1);
     setStep(next);
-    saveOnboarding(sessionId, formData, next);
+    void saveOnboarding(sessionId, formData, next).then((ok) =>
+      setSaveError(ok ? null : SAVE_ERROR)
+    );
   }, [step, formData, sessionId]);
 
   const prevStep = () => setStep((s) => Math.max(0, s - 1));
 
   const handleComplete = useCallback(async () => {
     setIsCompleting(true);
-    await saveOnboarding(sessionId, formData, STEPS.length - 1);
+    const saved = await saveOnboarding(sessionId, formData, STEPS.length - 1);
+    if (!saved) {
+      setSaveError(SAVE_ERROR);
+      setIsCompleting(false);
+      return;
+    }
+    setSaveError(null);
     router.push("/success");
   }, [sessionId, formData, router]);
 
@@ -184,6 +201,15 @@ export default function OnboardingPortal({ sessionId }: Props) {
                   Locking Sovereign Vault...
                 </p>
               </div>
+            )}
+
+            {saveError && (
+              <p
+                role="alert"
+                className="mt-10 rounded-xl border border-red-400/30 bg-red-500/10 p-4 text-sm leading-6 text-red-200"
+              >
+                {saveError}
+              </p>
             )}
 
             <div className="mt-12 flex justify-between">
