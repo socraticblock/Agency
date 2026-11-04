@@ -20,17 +20,17 @@ Genezisi is a bespoke founder-led studio for websites, AI systems and automation
 | `POST /api/orders` | HTTP 410, no-store. **Only new orders are blocked.** The authenticated `GET /api/orders`, published-card and admin APIs are untouched |
 | `/[locale]/partner` | Replaces obsolete commission promises with individual partnership information; noindex |
 | `/[locale]/stop-renting` | Replaces unsourced comparison metrics with balanced ownership guidance; noindex pending editorial review |
-| `/[locale]/blog` | Noindex notice while old articles are revised; historical source retained in `src/lib/blog.ts` |
-| `/[locale]/blog/[slug]` | HTTP 404 rather than serving misleading historic prices; reversible editorial retirement |
+| `/en/blog` | Restored international English-first journal; Georgian blog URLs redirect to English until genuinely translated |
+| `/en/blog/[slug]` | Seven review-stage articles: four substantially revised original-slug guides plus three new international articles. Canonical EN URLs and credited sources, no obsolete card-sales links |
 | Legacy navbar/footer | No promotional links for discontinued card sales, fixed tiers, or unverified partner offers; contact framed as a project conversation |
-| `/sitemap.xml` | Lists retained canonical marketing URLs only (EN/KA/NL homes; EN selected work/service pages; EN/KA bespoke scoping) |
+| `/sitemap.xml` | Lists retained canonical marketing URLs and all seven English journal articles, alongside EN/KA/NL homes and EN/KA bespoke scoping |
 | `/llms.txt` | Current service index; not a search-ranking mechanism |
 | Legacy SEO helper and layout | Prevent inherited homepage canonical on unrelated pages; do not invent equivalent KA home hreflang for legacy pages |
 | Retained EN service pages and work | Canonical `/en/<path>`; corresponding `/ka` paths are English content and canonicalize to EN until fully localized |
 | Client/admin utility pages | Noindex on onboarding, success, card-start/preview, and admin layouts |
 | Repository rules and docs | README, AGENTS and active Cursor rules align with current stack, business, and preservation constraints |
 | `src/constants/content.ts` | Removes unsupported conversion percentages and artificial audit-analysis claims |
-| Regression tests and CI workflow | Added served-build routes/SEO test suite for manual execution. **GitHub Actions is expressly not used. No passing build/test run has been observed.** |
+| Regression tests and manual verification | Added served-build route/SEO checks for article URLs, sitemap, content and redirects. **No GitHub Actions; no passing manual build/test run has been observed.** |
 
 ## Safety evidence
 
@@ -63,7 +63,7 @@ The founder does not use GitHub Actions. The workflow introduced earlier was rem
 2. **Onboarding authorization:** `/api/onboarding` accepts a client-supplied session identifier and uses a Supabase service-role client. Session-ID issuance, entropy, ownership and access policy need review before introducing a potentially breaking authentication change. This branch makes only metadata changes to onboarding pages.
 3. **Admin-login abuse protection:** Current code has no application-level distributed rate limiter. Verify edge/WAF throttling, password policy and monitoring before considering additional protection. This branch did not modify authentication.
 4. **Other public write APIs:** Assess `/api/partner-applications` need and abuse controls. Do not disable existing partner obligations without an owner decision.
-5. **Blog migration and backlinks — release blocker:** The temporary branch behavior returns 404 for four legacy article URLs. Founder intends to update existing articles and expand the blog for organic search. **Do not merge with those 404 responses unless founder expressly elects permanent retirement**. Preserve existing slugs and article equity where possible, replace unsourced/outdated claims with reviewed, useful content, check Search Console/backlinks, and add updated posts to the sitemap. Do not blanket-redirect to homepage.
+5. **Journal editorial and search validation — release blocker:** All four original article URLs are now retained and their content rewritten. Three new international English articles are staged. Review factual accuracy, references, originality, claims and language quality before release. Verify Search Console indexing/backlinks where available. Review the new article schema, actual rendered head and user experience. Do not fabricate metrics or describe staged content as already published.
 6. **Localized accuracy:** Validate Georgian page copy with a human reviewer. Review `/ka` legacy route content and Canadian/Belgian market claims before making new alternate clusters.
 7. **Runtime and design:** Run full typecheck, lint, build, served-route tests, Android and desktop browser checks and compare homepage pixels/behavior to approved `main`.
 8. **Founder approval:** No merge, deployment, destructive operations or production domain/config changes without explicit review and release approval.
@@ -80,4 +80,5 @@ After release, inspect actual indexed pages, redirects, canonical selection and 
 ## Founder clarifications (4 November 2026)
 - Do not use GitHub Actions (cost/workflow preference); run checks manually.
 - Blog is an intended acquisition channel. Update existing articles and add useful new ones over time; avoid sacrificing worthwhile indexed URLs.
-- Questions awaiting founder input: priority audience/market and whether any currently published blog articles must be retained at their exact existing URLs during content revision.
+- **Audience direction confirmed:** prioritize international English-speaking clients for SEO and articles. Georgian and Dutch remain supporting languages. Preserve existing article URLs wherever useful; four retained and rewritten here. No US/UK country-duplicate pages.
+- Homepage Organization metadata updated to remove a Georgia-only `areaServed` claim; physical base remains Tbilisi, Georgia.
