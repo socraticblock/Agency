@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
-/** Operational/customer flow, not a public search landing page. */
+/**
+ * No onboarding invitations are active. Retain the historical portal
+ * component for possible future development, but do not serve an interactive
+ * form that cannot safely save to the retired API.
+ */
 export const metadata: Metadata = {
   robots: { index: false, follow: false, noarchive: true },
   alternates: { canonical: null },
 };
 
-import OnboardingPortal from "./OnboardingPortal";
-
-type Props = { params: Promise<{ id: string }> };
-
-export default async function OnboardingPage({ params }: Props) {
-  const { id } = await params;
-  return <OnboardingPortal sessionId={id} />;
+export default function OnboardingUnavailable() {
+  notFound();
 }
