@@ -165,10 +165,9 @@ export function getHomeJsonLd(locale: HomeLocale): Record<string, unknown> {
       addressLocality: "Tbilisi",
       addressCountry: "GE",
     },
-    areaServed: {
-      "@type": "Country",
-      name: "Georgia",
-    },
+    // The studio is based in Georgia but works with English-speaking clients
+    // internationally. Do not restrict this Organization to Georgia via
+    // areaServed or invent a country-specific office/coverage claim.
     knowsLanguage: ["en", "ka", "nl"],
     image: homeOgImageUrl(locale),
   };
