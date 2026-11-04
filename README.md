@@ -27,3 +27,9 @@ Read [AGENTS.md](AGENTS.md) before making changes. Inventory public routes, API 
 Some documents in `docs/` and `.cursor/rules/` predate the business reset; verify their applicability rather than treating them as current.
 
 Production: https://genezisi.com
+
+## Content and market direction
+Genezisi primarily targets **international English-speaking businesses**. English articles are the core acquisition channel; Georgian and Dutch content supplement the studio's international positioning. The journal preserves updated regional article URLs and adds practical English guides on websites, AI and automation. See `docs/seo/INTERNATIONAL_ENGLISH_CONTENT_STRATEGY_2026-11-04.md`.
+
+## Testing policy
+GitHub Actions are not used. Run typecheck, lint, build, served-route tests and mobile/desktop QA manually before founder release review.
