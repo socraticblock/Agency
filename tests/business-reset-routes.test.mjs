@@ -63,6 +63,14 @@ test("Old package tiers redirect to the relevant bespoke page", async () => {
   }
 });
 
+test("Old digital-audit application redirects to bespoke scoping", async () => {
+  for (const locale of ["en", "ka"]) {
+    const res = await response(`/${locale}/apply`);
+    assert.equal(res.status, 308);
+    assert.equal(destination(res), `/${locale}/pricing`);
+  }
+});
+
 test("Discontinued card sales are closed across UI and API", async () => {
   const page = await headHtml("/en/start");
   assert.match(page.html, /Digital card ordering is closed\./);
