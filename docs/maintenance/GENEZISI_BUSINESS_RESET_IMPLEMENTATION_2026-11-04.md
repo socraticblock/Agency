@@ -3,7 +3,7 @@
 **Branch:** `audit/genezisi-business-reset-2026-11-04`  
 **Base:** `main` at `8043ec4218aa31a8fd4fac883c6768120a5abb00`  
 **PR:** https://github.com/socraticblock/Agency/pull/32 (draft)  
-**Status:** CODE COMMITTED, NOT VALIDATED OR RELEASED.
+**Status:** VERIFIED ON A LOCAL PRODUCTION BUILD (4 Nov 2026, `8b7aaefe4a4497bd03e3241deb27edebf946d417`). NOT MERGED, NOT DEPLOYED. Awaiting founder visual review.
 
 ## Business boundaries
 
@@ -67,6 +67,50 @@ The founder does not use GitHub Actions. The workflow introduced earlier was rem
 6. **Localized accuracy:** Validate Georgian page copy with a human reviewer. Review `/ka` legacy route content and Canadian/Belgian market claims before making new alternate clusters.
 7. **Runtime and design:** Run full typecheck, lint, build, served-route tests, Android and desktop browser checks and compare homepage pixels/behavior to approved `main`.
 8. **Founder approval:** No merge, deployment, destructive operations or production domain/config changes without explicit review and release approval.
+
+## Verification record — 4 November 2026
+
+Run on a clean worktree at `8b7aaef`, Node 22.22.2, npm 10.9.7, from an empty `.next`.
+
+```
+npm ci            exit 0 (463 packages; npm audit reports 20 pre-existing advisories)
+npm run typecheck exit 0
+npm run lint      exit 0 — 0 errors, 237 warnings (pre-existing any/unused-var)
+npm run build     exit 0
+npm run start -- -p 3100
+```
+
+Served-build suites (all against `http://127.0.0.1:3100`):
+
+- `business-reset-routes` 11/11
+- `home-i18n/assets-a11y` 10/10
+- `home-i18n/content` 14/14
+- `home-i18n/head` 17/17
+- `home-i18n/mapped-host` 5/5 (canned Turso stub, no real data)
+- `home-i18n/routes` 25/25
+- `og-safety` 30/30
+- `approved-four-frame-integration` 11/11
+- `bubble-home-integration` 6/6
+- `bubble-motion` 10/10 (`--experimental-strip-types`)
+
+**139/139 pass.** Ad-hoc served-output sweep 20/20: seven articles 200 with self-canonical + Article JSON-LD (`inLanguage: en`), journal index links all seven, article internal links resolve, sitemap has every article and no retired URL, robots.txt advertises the sitemap, llms.txt free of price strings, and no retired fixed-price copy on `/en`, `/ka`, `/nl`, `/en/pricing`, `/ka/pricing`, `/en/blog`, `/en/partner`, `/en/work`.
+
+Admin auth probed with a temporary local password (no production secret): wrong 401, correct 200 + HttpOnly cookie, session true, logout clears, `/api/orders` 401 unauthenticated.
+
+### Defects found and fixed during verification
+
+1. **Every journal article returned HTTP 500 in a production build.** `blog/[slug]/page.tsx` declared `generateStaticParams` while the root layout reads `headers()`; Next advertised the route as prerendered with zero paths, then aborted the on-demand render with `DYNAMIC_SERVER_USAGE`. Declaration removed — the route is now dynamic like every other route in this app. This also broke the html-limited-bot metadata behaviour described above.
+2. **Retired tiers and `/apply` returned 200 + `<meta refresh>`, not 308.** `permanentRedirect()` inside a page cannot set a status line once the streamed response has begun. They now redirect from `next.config.ts`.
+3. `/ka/blog` and `/ka/blog/:slug` now 308 to the English journal; `/nl` keeps the existing temporary 307 contract.
+4. Decorative hero SVG icons carry `aria-hidden` on the element itself (this also failed on `main`).
+5. Admin password comparison is now constant time (`createHash` + `timingSafeEqual`); behaviour unchanged.
+6. `hreflang` assertion in the reset suite is case-insensitive (React serialises `hrefLang`).
+
+### Still open
+
+Items 1–8 in "Explicit release blockers" remain owner decisions. Item 2 (onboarding session authorization) and item 3 (admin-login throttling) were reviewed and deliberately **not** changed: a fix requires knowing how session ids are issued and needs distributed rate limiting, both of which are production-behaviour changes. See the PR body for the current list of documented risks.
+
+Visual QA — four-frame journey, service bubbles, selected work, motion, mobile — remains the founder's gate. Response-level tests do not replace it.
 
 ## SEO guidance and rationale
 Google documents canonical tags as hints rather than guarantees, recommends only relevant site-move redirects, and advises 404/410 when a page truly has no replacement. See:
