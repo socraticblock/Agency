@@ -14,9 +14,26 @@ const partnerApplicationSchema = z.object({
   referralSource: z.string().max(200).optional().default(""),
 });
 
+/** Public intake is small: a handful of short fields. Reject oversized bodies
+ *  before they reach JSON.parse, without changing what a real applicant can send. */
+const MAX_BODY_BYTES = 32 * 1024;
+
 export async function POST(request: Request) {
+  const contentType = request.headers.get("content-type") || "";
+  if (!contentType.includes("application/json")) {
+    return NextResponse.json({ error: "Expected application/json" }, { status: 415 });
+  }
+  const declared = Number(request.headers.get("content-length") || "0");
+  if (declared > MAX_BODY_BYTES) {
+    return NextResponse.json({ error: "Payload too large" }, { status: 413 });
+  }
+
   try {
-    const body = await request.json();
+    const raw = await request.text();
+    if (raw.length > MAX_BODY_BYTES) {
+      return NextResponse.json({ error: "Payload too large" }, { status: 413 });
+    }
+    const body = JSON.parse(raw);
     const parsed = partnerApplicationSchema.safeParse(body);
 
     if (!parsed.success) {
@@ -53,7 +70,10 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ success: true, id }, { status: 201 });
-  } catch (error: any) {
+  } catch (error) {
+    if (error instanceof SyntaxError) {
+      return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+    }
     console.error("Partner application error:", error);
     return NextResponse.json(
       { error: "An unexpected error occurred." },

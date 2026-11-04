@@ -6,6 +6,7 @@
 import { NextResponse } from "next/server";
 import { getCardById, updateCardDomainStatus, upsertCardDomainHost } from "@/lib/db";
 import { verifyAdminRequest } from "@/lib/admin-auth";
+import { serverError } from "@/lib/api-error";
 import type { DomainStatus } from "@/lib/order-publish-intent";
 import type { Lane1CustomizerState } from "@/app/[locale]/(site)/start/lib/types";
 
@@ -96,13 +97,19 @@ export async function PATCH(
     }
     const r = await updateCardDomainStatus(id, ds);
     if (!r.ok) {
-      return NextResponse.json({ error: r.error }, { status: 500 });
+      return serverError("orders.patch.domain-status", r.error);
     }
   }
 
   if (body.mapHost !== undefined && typeof body.mapHost === "string" && body.mapHost.trim()) {
     const r = await upsertCardDomainHost(id, body.mapHost.trim());
     if (!r.ok) {
+      if (r.code === "conflict") {
+        return NextResponse.json({ error: r.error }, { status: 409 });
+      }
+      if (r.code === "db") {
+        return serverError("orders.patch.map-host", r.error);
+      }
       return NextResponse.json({ error: r.error }, { status: 400 });
     }
   }

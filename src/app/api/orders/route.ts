@@ -8,6 +8,7 @@
 import { NextResponse } from "next/server";
 import { listCards } from "@/lib/db";
 import { verifyAdminRequest } from "@/lib/admin-auth";
+import { serverError } from "@/lib/api-error";
 
 export const dynamic = "force-dynamic";
 
@@ -53,7 +54,6 @@ export async function GET() {
       })),
     });
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : String(err);
-    return NextResponse.json({ error: "Database error", detail: message }, { status: 500 });
+    return serverError("orders.list", err);
   }
 }
