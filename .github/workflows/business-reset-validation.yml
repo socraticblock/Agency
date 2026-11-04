@@ -1,0 +1,52 @@
+name: Genezisi business-reset validation
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/business-reset-validation.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-serve:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
+      - name: Served-route regression tests
+        run: |
+          npm run start -- -p 3100 > /tmp/genezisi-next.log 2>&1 &
+          for i in $(seq 1 40); do
+            if curl -fsS -o /dev/null http://127.0.0.1:3100/en; then break; fi
+            sleep 2
+          done
+          curl -fsS http://127.0.0.1:3100/en > /dev/null
+          BASE_URL=http://127.0.0.1:3100 node --test \
+            tests/business-reset-routes.test.mjs \
+            tests/home-i18n/routes.test.mjs \
+            tests/home-i18n/head.test.mjs \
+            tests/home-i18n/content.test.mjs \
+            tests/home-i18n/assets-a11y.test.mjs \
+            tests/og-safety.test.mjs
+      - name: Upload server logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: genezisi-next-server-log
+          path: /tmp/genezisi-next.log
+          if-no-files-found: ignore
