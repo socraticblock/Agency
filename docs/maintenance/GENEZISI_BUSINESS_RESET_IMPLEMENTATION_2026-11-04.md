@@ -30,7 +30,7 @@ Genezisi is a bespoke founder-led studio for websites, AI systems and automation
 | Client/admin utility pages | Noindex on onboarding, success, card-start/preview, and admin layouts |
 | Repository rules and docs | README, AGENTS and active Cursor rules align with current stack, business, and preservation constraints |
 | `src/constants/content.ts` | Removes unsupported conversion percentages and artificial audit-analysis claims |
-| Regression tests and CI workflow | Added served-build routes/SEO test suite and GitHub Actions workflow. **No successful run has been observed.** |
+| Regression tests and CI workflow | Added served-build routes/SEO test suite for manual execution. **GitHub Actions is expressly not used. No passing build/test run has been observed.** |
 
 ## Safety evidence
 
@@ -55,7 +55,7 @@ node --test tests/approved-four-frame-integration.test.mjs tests/bubble-home-int
 
 Check dynamic page metadata with an HTML-limited bot user-agent as well as normal browsers; Next.js can stream metadata into the body for regular clients. Inspect EN/KA/NL page HTML and custom-domain routing. Run mobile/reduced-motion and keyboard navigation QA. Verify no unexpected source-level route conflict for `start/(editor)` and `start/page.tsx`.
 
-The branch includes a GitHub Actions workflow. At authoring time no new run appeared in the repository Actions feed; **CI must not be assumed green**. Environment-specific checks and Vercel previews remain unverified.
+The founder does not use GitHub Actions. The workflow introduced earlier was removed. Testing must run manually on a local checkout or other founder-approved environment, with captured command output. **No passing manual run has been observed**. Environment-specific checks and Vercel previews remain unverified.
 
 ## Explicit release blockers
 
@@ -63,7 +63,7 @@ The branch includes a GitHub Actions workflow. At authoring time no new run appe
 2. **Onboarding authorization:** `/api/onboarding` accepts a client-supplied session identifier and uses a Supabase service-role client. Session-ID issuance, entropy, ownership and access policy need review before introducing a potentially breaking authentication change. This branch makes only metadata changes to onboarding pages.
 3. **Admin-login abuse protection:** Current code has no application-level distributed rate limiter. Verify edge/WAF throttling, password policy and monitoring before considering additional protection. This branch did not modify authentication.
 4. **Other public write APIs:** Assess `/api/partner-applications` need and abuse controls. Do not disable existing partner obligations without an owner decision.
-5. **Blog migration and backlinks:** Article URLs now return 404. Check Search Console traffic/backlinks and decide which articles merit sourced rewrites before release; no blanket homepage redirects.
+5. **Blog migration and backlinks — release blocker:** The temporary branch behavior returns 404 for four legacy article URLs. Founder intends to update existing articles and expand the blog for organic search. **Do not merge with those 404 responses unless founder expressly elects permanent retirement**. Preserve existing slugs and article equity where possible, replace unsourced/outdated claims with reviewed, useful content, check Search Console/backlinks, and add updated posts to the sitemap. Do not blanket-redirect to homepage.
 6. **Localized accuracy:** Validate Georgian page copy with a human reviewer. Review `/ka` legacy route content and Canadian/Belgian market claims before making new alternate clusters.
 7. **Runtime and design:** Run full typecheck, lint, build, served-route tests, Android and desktop browser checks and compare homepage pixels/behavior to approved `main`.
 8. **Founder approval:** No merge, deployment, destructive operations or production domain/config changes without explicit review and release approval.
@@ -76,3 +76,8 @@ Google documents canonical tags as hints rather than guarantees, recommends only
 - https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag
 
 After release, inspect actual indexed pages, redirects, canonical selection and sitemap acceptance in Search Console; these cannot be inferred from source code.
+
+## Founder clarifications (4 November 2026)
+- Do not use GitHub Actions (cost/workflow preference); run checks manually.
+- Blog is an intended acquisition channel. Update existing articles and add useful new ones over time; avoid sacrificing worthwhile indexed URLs.
+- Questions awaiting founder input: priority audience/market and whether any currently published blog articles must be retained at their exact existing URLs during content revision.
