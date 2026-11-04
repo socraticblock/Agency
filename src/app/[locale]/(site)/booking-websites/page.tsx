@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
+import { legacyServiceMetadata } from "@/lib/legacy-service-metadata";
 import type { Locale } from "@/lib/i18n";
 import { ServiceSeoPage } from "../../_components/ServiceSeoPage";
 
-export const metadata: Metadata = {
-  title: "Booking Website Design in Tbilisi | Genezisi",
-  description:
-    "Custom booking websites for studios, clinics, coaches, beauty businesses, and appointment-based local services in Georgia.",
-};
+export const metadata: Metadata = legacyServiceMetadata("/booking-websites", "Booking Website Design in Tbilisi | Genezisi", "Custom booking websites for studios, clinics, coaches, beauty businesses, and appointment-based local services in Georgia.");
 
 export default async function BookingWebsitesPage({
   params,
