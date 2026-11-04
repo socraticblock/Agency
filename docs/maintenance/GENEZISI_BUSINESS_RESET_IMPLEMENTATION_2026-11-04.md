@@ -112,6 +112,27 @@ Items 1–8 in "Explicit release blockers" remain owner decisions. Item 2 (onboa
 
 Visual QA — four-frame journey, service bubbles, selected work, motion, mobile — remains the founder's gate. Response-level tests do not replace it.
 
+### Security review follow-up — 4 November 2026 (commit `528405c`)
+
+An independent read-only security review of this PR raised eight items. Landed
+the ones that could be fixed without guessing at production behaviour:
+
+| Item | Action |
+|---|---|
+| Dependency pin | `next` and `eslint-config-next` 16.4.3 → **16.4.5** (published 2026-11-03, seven moderate security fixes). `npm audit --omit=dev` → 0 advisories; full tree 3 high + 17 moderate, all in the lint/dev chain |
+| Customer domain reassignment | `upsertCardDomainHost` no longer uses `INSERT OR REPLACE`. A host owned by another card returns **409** and is left untouched; the write is a conditional upsert, so a race cannot steal a live domain |
+| Silent save failure | `OnboardingPortal` checks `response.ok`; a 4xx/5xx shows an alert and keeps the customer on the form instead of navigating to `/success` with nothing stored |
+| Internal error leakage | Public card/order/publish/domain routes return a generic 500 + `requestId`; the real error is logged server-side only |
+| Partner endpoint abuse | Content-type check, `Content-Length` and post-read size bound before `JSON.parse`, 400 on malformed JSON. Endpoint stays open — retiring it is an owner decision |
+
+Verified at runtime: `/api/cards/<slug>` error body is `{"error":"Request failed","requestId":"…"}`; partner POST returns 415 / 400 / 413 / 500 as expected; new served-build test `tests/domain-mapping-conflict.test.mjs` passes 4/4 (401 unauthenticated, 409 cross-card, 200 same-card, 200 new host) against a canned Turso stub.
+
+Deliberately **not** changed:
+
+- **`POST /api/onboarding` authorization.** It still upserts on a caller-supplied `session_id` with service-role writes. The repository contains no issuer for those ids, so any ownership check is a guess that could break live customer links. This is the top open risk; it needs the issuer and the customer contract, not a code edit.
+- **Admin-login throttling.** Application-level limiting without shared storage is theatre on a multi-instance deployment; this belongs at the edge/WAF and needs the founder's hosting access.
+- **CSP / frame-ancestors.** Not added: a blanket CSP risks the approved homepage and its dynamic scripts. Needs a nonce-compatible policy tested against the real page.
+
 ## SEO guidance and rationale
 Google documents canonical tags as hints rather than guarantees, recommends only relevant site-move redirects, and advises 404/410 when a page truly has no replacement. See:
 - https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls
