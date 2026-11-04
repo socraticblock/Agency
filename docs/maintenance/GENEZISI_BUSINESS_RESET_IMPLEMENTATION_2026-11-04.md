@@ -147,3 +147,18 @@ After release, inspect actual indexed pages, redirects, canonical selection and 
 - Blog is an intended acquisition channel. Update existing articles and add useful new ones over time; avoid sacrificing worthwhile indexed URLs.
 - **Audience direction confirmed:** prioritize international English-speaking clients for SEO and articles. Georgian and Dutch remain supporting languages. Preserve existing article URLs wherever useful; four retained and rewritten here. No US/UK country-duplicate pages.
 - Homepage Organization metadata updated to remove a Georgia-only `areaServed` claim; physical base remains Tbilisi, Georgia.
+
+## Security disposition — unused onboarding closed (4 November 2026)
+
+The founder confirmed there are **no current customers**. This does not assert that the production database has no historical records. To eliminate an unneeded public write surface without inventing authorization semantics, this draft branch now:
+
+- Returns **410 Gone** with `Cache-Control: no-store` from `POST /api/onboarding`, without accessing Supabase or parsing caller-provided session IDs.
+- Returns **404** from `/onboarding/[id]` rather than showing an unusable customer form. The `OnboardingPortal` component is retained for a future, secured invitation flow.
+- Adds a served-build regression test for the closed API and session page.
+- Leaves all Supabase schema and records unchanged; does not touch Turso customer cards, custom domains, or admin tools.
+
+To reopen onboarding, implement server-issued, expiring, unguessable invitation capabilities and enforce ownership/scope on the server before allowing service-role writes. Re-review CSRF, replay, audit logging and data retention.
+
+**Verification reset:** The earlier coder report of 143/143 tests pertains to commit `2655a664ef6d0fb6ee0d2642f315238f8bc483ea`, *before* this closure. Build/typecheck/lint and all tests must be rerun manually against the new branch head. GitHub Actions must not be used. No merge or deployment is authorized.
+
+**Remaining operational security tasks:** Verify whether admin-login throttling is configured in Vercel's firewall and use a strong unique `ADMIN_PASSWORD`; consider closing the unused public partner-application endpoint if no outstanding partner agreements require it. These are not assumed resolved by having no customers.
