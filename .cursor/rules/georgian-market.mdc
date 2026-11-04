@@ -1,15 +1,15 @@
 ---
-description: Georgian market and target audience rules
+description: Current business and localization requirements; avoid unsupported market assumptions.
 globs: "*"
 alwaysApply: true
 ---
 
-# Georgian Market
+# Market and Localization
 
-- Primary market: Tbilisi, Georgia
-- Mobile-first (80%+ traffic on mobile)
-- Must test on Samsung Internet browser
-- Primary language: English (Standard)
-- Georgian Translation: Use human translation later (no automated / AI Georgian)
-- WhatsApp is the primary communication platform
-- Product is a premium digital business card: from 150₾ setup + 120₾/yr hosting (Subdomain / Professional / Executive tiers)
+- Genezisi is a founder-led bespoke studio offering websites, AI systems and automation.
+- No fixed website packages and no new digital-card sales. Existing customers and domains remain supported.
+- The studio is based in Georgia and can work remotely. Do not invent foreign offices or claim unsupported geographic coverage.
+- The homepage has English, Georgian and Belgian-Dutch editions. Other legacy routes may not have equivalent translations; check the actual content before adding hreflang.
+- Respect Georgian language quality: ask for human review of substantive public Georgian commercial copy where possible.
+- Design mobile-first but do not cite unsourced market-share statistics.
+- WhatsApp is an existing contact channel, not proof that every customer prefers it.
