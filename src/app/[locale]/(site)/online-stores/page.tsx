@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
+import { legacyServiceMetadata } from "@/lib/legacy-service-metadata";
 import type { Locale } from "@/lib/i18n";
 import { ServiceSeoPage } from "../../_components/ServiceSeoPage";
 
-export const metadata: Metadata = {
-  title: "Online Store Development in Georgia | Genezisi",
-  description:
-    "Custom online stores for Georgian businesses with product management, fast storefront UX, analytics, and local payment integration options.",
-};
+export const metadata: Metadata = legacyServiceMetadata("/online-stores", "Online Store Development in Georgia | Genezisi", "Custom online stores for Georgian businesses with product management, fast storefront UX, analytics, and local payment integration options.");
 
 export default async function OnlineStoresPage({
   params,
