@@ -1,35 +1,31 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
-/** Operational/customer flow, not a public search landing page. */
+/** No client onboarding sessions are being issued; do not suggest otherwise. */
 export const metadata: Metadata = {
+  title: "Client onboarding unavailable | Genezisi",
   robots: { index: false, follow: false, noarchive: true },
   alternates: { canonical: null },
 };
 
-import Link from "next/link";
-
 export default function OnboardingGatePage() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-[#050505] px-6 text-center">
-      <div className="noise-overlay" aria-hidden />
+    <main className="flex min-h-screen flex-col items-center justify-center bg-[#050505] px-6 text-center">
       <div className="relative z-10 max-w-md">
-        <h1 className="text-2xl font-black uppercase tracking-tight text-white">
-          Sovereign Vault
+        <h1 className="text-3xl font-bold tracking-tight text-white">
+          Client onboarding is not currently available.
         </h1>
-        <p className="mt-4 font-mono text-sm text-zinc-400">
-          Your personal Vault link was sent to your email. Use that link to
-          complete your brand assets and access details.
-        </p>
-        <p className="mt-6 text-xs text-zinc-500">
-          If you didn’t receive it, check spam or reply to your welcome email.
+        <p className="mt-5 text-base leading-7 text-zinc-400">
+          Genezisi is not issuing onboarding invitations at this time.
+          Please contact us directly to discuss a project.
         </p>
         <Link
-          href="/onboarding-brief"
-          className="mt-8 inline-block text-sm font-semibold uppercase tracking-[0.2em] text-emerald-400 hover:text-emerald-300"
+          href="/en/pricing"
+          className="mt-8 inline-flex min-h-12 items-center rounded-full border border-emerald-400/50 px-6 text-sm font-bold text-emerald-300 hover:border-emerald-200"
         >
-          View your Onboarding Brief
+          Discuss a project
         </Link>
       </div>
-    </div>
+    </main>
   );
 }
