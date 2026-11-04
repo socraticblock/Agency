@@ -91,7 +91,7 @@ test("Outdated partner and editorial claims are no longer marketed", async () =>
   assert.match(partner.head, /name="robots"[^>]*noindex/);
   assert.doesNotMatch(partner.html, /30% on every sale/);
   const blog = await headHtml("/en/blog");
-  assert.match(blog.head, /rel="canonical" href="https:\/\/genezisi\\.com\/en\/blog"/);
+  assert.ok(blog.head.includes('rel="canonical" href="https://genezisi.com/en/blog"'));
   assert.match(blog.html, /Custom Website vs Website Builder/);
   assert.doesNotMatch(blog.html, /Transparent website and e-commerce packages/);
   const oldGuide = await headHtml("/en/stop-renting");
